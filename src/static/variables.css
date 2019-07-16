@@ -1,0 +1,23 @@
+:root {
+  --bg-color: #050e1c;
+  --text-color: #fff;
+  --text-color-additional: #b1c4e3;
+  --bg-element: #121a28;
+  --pin-border-color: #494f59;
+  --bg-block: #0f1827;
+  --bg-well-pasport: #161f2c;
+  --white-color-semi: rgba(255, 255, 255, 0.05);
+  --border-radius: 4px;
+  --color-important: #5592ff;
+  --color-warning: #ffdb1f;
+  --color-danger: #ca1d32;
+  --color-success: #86ffa0;
+  --main-font-family: 'Roboto Condensed', sans-serif;
+  --main-font-size: 14px;
+  --font-size-medium: 16px;
+  --progress-gradient: linear-gradient(
+    rgba(var(--color-important), 0) 10%,
+    rgba(var(--color-important), 0.1) 70%
+  );
+  --progress-transition: left 0.5s ease;
+}

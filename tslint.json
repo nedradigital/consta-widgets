@@ -1,0 +1,64 @@
+{
+  "extends": [
+    "tslint:recommended",
+    "tslint-react",
+    "tslint-react-hooks",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier"
+  ],
+  "jsRules": {
+    "object-literal-sort-keys": [false]
+  },
+  "rules": {
+    "prettier": true,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-first",
+        "module-source-path": "full",
+        "grouped-imports": true,
+        "groups": [
+          {
+            "match": "^react",
+            "order": 1
+          },
+          {
+            "name": "Parent dir",
+            "match": "^[.][.]",
+            "order": 100
+          },
+          {
+            "name": "Current dir",
+            "match": "^[.]",
+            "order": 110
+          },
+          {
+            "match": "^[^\\.]",
+            "order": 10
+          }
+        ]
+      }
+    ],
+    "object-literal-sort-keys": [false],
+    "variable-name": {
+      "options": ["ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"]
+    },
+    "react-hooks-nesting": [true],
+    "jsx-boolean-value": [false],
+    "jsx-no-lambda": [false],
+    "no-default-export": [true],
+    "member-access": [true, "no-public"],
+    "file-name-casing": [
+      true,
+      {
+        "index.tsx": "camel-case",
+        "stories.tsx": "kebab-case",
+        ".tsx": "pascal-case",
+        ".ts": "kebab-case"
+      }
+    ],
+    // Для .tsx двойные кавычки потому что prettier будет форсить их
+    // https://github.com/prettier/prettier/pull/126
+    "quotemark": [true, "single", "jsx-double"]
+  }
+}

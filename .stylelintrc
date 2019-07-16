@@ -1,0 +1,31 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recommended",
+    "stylelint-config-prettier"
+  ],
+  "rules": {
+    "declaration-colon-newline-after": null,
+    "declaration-empty-line-before": null,
+    "at-rule-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested",
+          "blockless-after-same-name-blockless"
+        ]
+      }
+    ],
+    "declaration-block-no-duplicate-properties": true,
+    "value-list-comma-newline-after": null,
+    "selector-type-case": null,
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignoreTypes": [
+          "$dummyValue"
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "name": "tsub_front",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "NODE_ENV=production node scripts/run.js",
+    "start": "NODE_ENV=development node scripts/run.js",
+    "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
+    "lint": "npm run lint:ts && npm run lint:js && npm run lint:css",
+    "lint:ts": "tslint '{src,types}/**/*.ts{,x}' --fix",
+    "lint:js": "eslint '{src,scripts,config}/**/*.js' --fix",
+    "lint:css": "stylelint 'src/**/*.css'",
+    "checktypes": "tsc --noEmit --extendedDiagnostics",
+    "storybook": "NODE_ENV=development start-storybook -c config/storybook -p 6006",
+    "storybook:build": "NODE_ENV=production build-storybook -c config/storybook -o build/storybook",
+    "test": "TZ=Europe/Moscow jest"
+  },
+  "browserslist": [
+    "Chrome >= 75"
+  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run checktypes"
+    }
+  },
+  "lint-staged": {
+    "{src,types}/**/*.{ts,tsx}": [
+      "tslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "{src}/**/*.css": [
+      "stylelint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "{src,scripts,config}/**/*.{json,js}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "kcors": "2.2.2",
+    "koa": "2.7.0",
+    "koa-router": "7.4.0",
+    "lodash": "4.17.11",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
+    "react-router-dom": "5.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.5",
+    "@babel/plugin-proposal-class-properties": "7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "7.4.4",
+    "@babel/plugin-transform-react-constant-elements": "7.2.0",
+    "@babel/plugin-transform-react-inline-elements": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.4.4",
+    "@babel/preset-env": "7.4.5",
+    "@babel/preset-react": "7.0.0",
+    "@hot-loader/react-dom": "16.8.6",
+    "@storybook/addon-actions": "5.1.9",
+    "@storybook/addon-knobs": "5.1.9",
+    "@storybook/react": "5.1.9",
+    "@types/enzyme": "3.10.2",
+    "@types/jest": "24.0.15",
+    "@types/lodash": "4.14.135",
+    "@types/lodash-es": "4.17.3",
+    "@types/react": "16.8.22",
+    "@types/react-dom": "16.8.4",
+    "@types/react-hot-loader": "4.1.0",
+    "@types/react-router-dom": "4.3.4",
+    "@types/storybook__addon-actions": "3.4.3",
+    "@types/storybook__addon-knobs": "5.0.2",
+    "@types/storybook__react": "4.0.2",
+    "babel-loader": "8.0.6",
+    "babel-plugin-named-asset-import": "0.3.2",
+    "chalk": "2.4.2",
+    "clean-webpack-plugin": "3.0.0",
+    "copy-webpack-plugin": "5.0.3",
+    "css-loader": "3.0.0",
+    "cssnano": "4.1.10",
+    "enzyme": "3.10.0",
+    "enzyme-adapter-react-16": "1.14.0",
+    "eslint": "6.0.1",
+    "file-loader": "4.0.0",
+    "fork-ts-checker-webpack-plugin": "1.3.7",
+    "html-webpack-plugin": "3.2.0",
+    "husky": "3.0.0",
+    "jest": "24.8.0",
+    "jest-enzyme": "7.0.2",
+    "koa-webpack": "5.2.3",
+    "lint-staged": "9.0.1",
+    "mini-css-extract-plugin": "0.7.0",
+    "ora": "3.4.0",
+    "postcss-loader": "3.0.0",
+    "postcss-preset-env": "6.6.0",
+    "prettier": "1.18.2",
+    "react-hot-loader": "4.12.0",
+    "stylelint": "10.1.0",
+    "stylelint-config-prettier": "5.2.0",
+    "stylelint-config-recommended": "2.2.0",
+    "stylelint-config-standard": "18.3.0",
+    "svgo": "1.2.2",
+    "svgo-loader": "2.2.1",
+    "terser-webpack-plugin": "1.3.0",
+    "ts-jest": "24.0.2",
+    "ts-loader": "6.0.4",
+    "tslint": "5.18.0",
+    "tslint-config-prettier": "1.18.0",
+    "tslint-plugin-prettier": "2.0.1",
+    "tslint-react": "4.0.0",
+    "tslint-react-hooks": "2.1.1",
+    "typescript": "3.5.2",
+    "webpack": "4.35.2",
+    "webpack-merge": "4.2.1"
+  }
+}
