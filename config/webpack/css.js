@@ -35,6 +35,7 @@ function* css() {
           ident: 'postcss',
           plugins() {
             return [
+              require('postcss-nested'),
               require('postcss-preset-env')({
                 stage: 2,
                 features: {

@@ -96,6 +96,7 @@
     "mini-css-extract-plugin": "0.7.0",
     "ora": "3.4.0",
     "postcss-loader": "3.0.0",
+    "postcss-nested": "4.1.2",
     "postcss-preset-env": "6.6.0",
     "prettier": "1.18.2",
     "react-hot-loader": "4.12.0",
