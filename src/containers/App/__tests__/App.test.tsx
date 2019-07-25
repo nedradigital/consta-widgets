@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { shallow } from 'enzyme';
 
-interface ITestComponentProps {
+type TestComponentProps = {
   onButtonClick: () => void;
-}
+};
 
-function TestComponent(props: ITestComponentProps) {
+function TestComponent(props: TestComponentProps) {
   return (
     <div className="TestComponent">
       <button className="TestComponent__button" onClick={props.onButtonClick}>

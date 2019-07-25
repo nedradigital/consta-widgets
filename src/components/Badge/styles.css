@@ -1,0 +1,24 @@
+.badge {
+  background-color: var(--text-color-additional-semi);
+  border-radius: 2px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  padding: 2px 4px 0;
+  position: relative;
+
+  &_status_normal {
+    background-color: var(--color-normal);
+  }
+
+  &_status_warning {
+    background-color: var(--color-warning);
+    color: #000;
+  }
+
+  &_status_danger {
+    background-color: var(--color-danger);
+  }
+}

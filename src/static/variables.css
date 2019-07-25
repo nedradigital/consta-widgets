@@ -2,6 +2,7 @@
   --bg-color: #050e1c;
   --text-color: #fff;
   --text-color-additional: #b1c4e3;
+  --text-color-additional-semi: rgba(177, 196, 227, 0.5);
   --bg-element: #121a28;
   --pin-border-color: #494f59;
   --white-border: 1px solid rgba(255, 255, 255, 0.1);
@@ -10,6 +11,7 @@
   --white-color-semi: rgba(255, 255, 255, 0.05);
   --border-radius: 4px;
   --color-important: #5592ff;
+  --color-normal: #1d8042;
   --color-warning: #ffdb1f;
   --color-danger: #ca1d32;
   --color-success: #86ffa0;
