@@ -8,8 +8,6 @@
 ## Установка зависимостей
 
 ```bash
-$ npm install
-# или
 $ yarn install
 ```
  

@@ -7,14 +7,15 @@
     "build": "NODE_ENV=production node scripts/run.js",
     "start": "NODE_ENV=development node scripts/run.js",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
-    "lint": "npm run lint:ts && npm run lint:js && npm run lint:css",
+    "lint": "yarn run lint:ts && yarn run lint:js && yarn run lint:css",
     "lint:ts": "tslint '{src,types}/**/*.ts{,x}' --fix",
     "lint:js": "eslint '{src,scripts,config}/**/*.js' --fix",
     "lint:css": "stylelint 'src/**/*.css'",
     "checktypes": "tsc --noEmit --extendedDiagnostics",
     "storybook": "NODE_ENV=development start-storybook -c config/storybook -p 6006",
     "storybook:build": "NODE_ENV=production build-storybook -c config/storybook -o build/storybook",
-    "test": "TZ=Europe/Moscow jest"
+    "unit": "TZ=Europe/Moscow jest",
+    "test": "yarn run lint && yarn run checktypes && yarn run unit"
   },
   "browserslist": [
     "Chrome >= 75"
@@ -22,7 +23,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "npm run checktypes"
+      "pre-push": "yarn run checktypes"
     }
   },
   "lint-staged": {

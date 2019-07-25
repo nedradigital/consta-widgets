@@ -57,6 +57,7 @@
         ".ts": "kebab-case"
       }
     ],
+    "interface-over-type-literal": [false],
     // Для .tsx двойные кавычки потому что prettier будет форсить их
     // https://github.com/prettier/prettier/pull/126
     "quotemark": [true, "single", "jsx-double"]
