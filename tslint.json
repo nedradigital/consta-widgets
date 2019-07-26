@@ -23,6 +23,11 @@
             "order": 1
           },
           {
+            "name": "Root",
+            "match": "^@",
+            "order": 99
+          },
+          {
             "name": "Parent dir",
             "match": "^[.][.]",
             "order": 100
@@ -51,7 +56,7 @@
     "file-name-casing": [
       true,
       {
-        "index.tsx": "camel-case",
+        "index.*\\.tsx": "camel-case",
         "stories.tsx": "kebab-case",
         ".tsx": "pascal-case",
         ".ts": "kebab-case"
