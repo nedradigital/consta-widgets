@@ -23,4 +23,11 @@
     rgba(var(--color-important), 0.1) 70%
   );
   --progress-transition: left 0.5s ease;
+
+  /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
+  --bg-widget: #0d2337;
+  --bg-dashboard: #061e31;
+  --bg-menu: #2d70ae;
+  --widget-border: #213849;
+  --color-dashboard: #506573;
 }

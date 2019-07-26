@@ -42,6 +42,7 @@
     "no-unused-expressions": "error",
     "no-useless-call": "error",
     "no-useless-catch": "error",
+    "eol-last": ["error", "always"],
     "radix": "error",
     "vars-on-top": "error",
     "wrap-iife": [ "error", "any" ]
