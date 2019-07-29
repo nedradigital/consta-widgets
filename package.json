@@ -44,13 +44,15 @@
     ]
   },
   "dependencies": {
+    "d3": "5.9.7",
     "kcors": "2.2.2",
     "koa": "2.7.0",
     "koa-router": "7.4.0",
     "lodash": "4.17.11",
     "react": "16.8.6",
     "react-dom": "16.8.6",
-    "react-router-dom": "5.0.1"
+    "react-router-dom": "5.0.1",
+    "react-uid": "2.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.4.5",
@@ -65,6 +67,7 @@
     "@storybook/addon-actions": "5.1.9",
     "@storybook/addon-knobs": "5.1.9",
     "@storybook/react": "5.1.9",
+    "@types/d3": "5.7.2",
     "@types/enzyme": "3.10.2",
     "@types/jest": "24.0.15",
     "@types/lodash": "4.14.135",
@@ -96,6 +99,7 @@
     "lint-staged": "9.0.1",
     "mini-css-extract-plugin": "0.7.0",
     "ora": "3.4.0",
+    "postcss-hexrgba": "^1.0.2",
     "postcss-loader": "3.0.0",
     "postcss-nested": "4.1.2",
     "postcss-preset-env": "6.6.0",

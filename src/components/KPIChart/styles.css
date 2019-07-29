@@ -1,0 +1,88 @@
+.kpi-chart {
+  position: relative;
+
+  &__svg {
+    display: block;
+  }
+
+  &__circle {
+    position: absolute;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 4px;
+      height: 4px;
+      z-index: 2;
+      background: #fff;
+      border-radius: 100%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &__line-background {
+    stroke: rgba(#c4c4c4, 0.2);
+    fill: none;
+    stroke-width: 1.5px;
+  }
+
+  &__line-foreground {
+    fill: none;
+    stroke-width: 1.5px;
+  }
+
+  &__area-gradient {
+    &_start_normal {
+      stop-color: rgba(#2fcc69, 0);
+    }
+
+    &_start_warning {
+      stop-color: rgba(#ffdb1f, 0);
+    }
+
+    &_start_danger {
+      stop-color: rgba(#cc1027, 0);
+    }
+
+    &_end_normal {
+      stop-color: rgba(#2fcc69, 0.4);
+    }
+
+    &_end_warning {
+      stop-color: rgba(#ffdb1f, 0.4);
+    }
+
+    &_end_danger {
+      stop-color: rgba(#cc1027, 0.4);
+    }
+  }
+
+  &__linear-gradient {
+    &_start_normal {
+      stop-color: rgba(#737a90, 0);
+    }
+
+    &_start_warning {
+      stop-color: rgba(#ffdb1f, 0);
+    }
+
+    &_start_danger {
+      stop-color: rgba(#cc1027, 0);
+    }
+
+    &_end_normal {
+      stop-color: rgba(#2fcc69, 1);
+    }
+
+    &_end_warning {
+      stop-color: rgba(#ffdb1f, 1);
+    }
+
+    &_end_danger {
+      stop-color: rgba(#cc1027, 1);
+    }
+  }
+}
