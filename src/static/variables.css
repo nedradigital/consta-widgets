@@ -1,5 +1,6 @@
 :root {
   --bg-color: #050e1c;
+  --bg-color-white-semi: rgba(255, 255, 255, 0.05);
   --text-color: #fff;
   --text-color-additional: #b1c4e3;
   --text-color-additional-semi: rgba(177, 196, 227, 0.5);
