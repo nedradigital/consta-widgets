@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const babelConfig = require('./babel');
@@ -95,6 +96,7 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.ProvidePlugin({ React: 'react' }),
     new MiniCssExtractPlugin({
       chunkFilename: 'assets/css/[id].css',
       filename: `assets/css/[name]${isProduction ? '.[contenthash]' : ''}.css`,
