@@ -35,12 +35,15 @@ function* css() {
           ident: 'postcss',
           plugins() {
             return [
-              require('postcss-hexrgba'),
               require('postcss-nested'),
               require('postcss-preset-env')({
                 stage: 2,
                 features: {
                   autoprefixer: true,
+                  'color-mod-function': {
+                    transformVars: true,
+                    importFrom: ['./src/static/variables.css'],
+                  },
                 },
               }),
               require('cssnano')(),

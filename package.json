@@ -107,7 +107,6 @@
     "lint-staged": "9.0.1",
     "mini-css-extract-plugin": "0.7.0",
     "ora": "3.4.0",
-    "postcss-hexrgba": "1.0.2",
     "postcss-loader": "3.0.0",
     "postcss-nested": "4.1.2",
     "postcss-preset-env": "6.6.0",

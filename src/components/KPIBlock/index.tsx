@@ -24,7 +24,7 @@ type Props = {
 
 const cn = classname('kpi-block');
 
-export const KPIBlock = ({
+export const KPIBlock: React.FunctionComponent<Props> = ({
   className,
   deviation,
   factData,
@@ -36,7 +36,7 @@ export const KPIBlock = ({
   unit,
   status,
   chartId,
-}: Props) => (
+}) => (
   <div className={cn(null, null, className)}>
     <div className={cn('title')}>{title || '--'}</div>
     <div className={cn('indicators')}>

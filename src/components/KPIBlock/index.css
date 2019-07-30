@@ -77,12 +77,12 @@
     bottom: 23px;
     left: 16px;
     position: absolute;
-    color: rgba(var(--text-color-additional), 0.5);
+    color: color-mod(var(--text-color-additional) alpha(50%));
   }
 
   &__legend {
     bottom: 1px;
-    color: rgba(var(--text-color-additional), 0.5);
+    color: color-mod(var(--text-color-additional) alpha(50%));
     display: flex;
     flex-direction: row;
     justify-content: space-between;
