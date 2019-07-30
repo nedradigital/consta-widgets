@@ -5,7 +5,6 @@ import { classname } from '../../utils/classname';
 import './index.css';
 
 export const statuses = ['danger', 'normal', 'warning'] as const;
-
 type Status = typeof statuses[number];
 
 type Props = {
