@@ -1,0 +1,119 @@
+.pin {
+  background: rgba(255, 255, 255, 0.05);
+  border: var(--white-border);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  color: #fff;
+  letter-spacing: 0.03em;
+  max-width: 136px;
+  min-width: 102px;
+  padding: 6px 11px;
+  position: relative;
+
+  &_position_left {
+    padding-left: 20px;
+  }
+
+  &_position_right {
+    padding-right: 20px;
+  }
+
+  &_skin_outside&_position_left {
+    padding-left: 11px;
+  }
+
+  &__edge {
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    width: 57px;
+
+    &::before {
+      background-color: #494f59;
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+      height: 5px;
+      top: -2px;
+      position: absolute;
+      width: 5px;
+    }
+
+    &::after {
+      background-image: linear-gradient(to right, #494f59 0%, #494f59 30%, rgba(#494f59, 0) 100%);
+
+      content: '';
+      display: inline-block;
+      height: 1px;
+      vertical-align: top;
+      width: 100%;
+    }
+  }
+
+  &_skin_outside &__edge {
+    top: 14px;
+    width: 27px;
+  }
+
+  &_position_right &__edge {
+    left: calc(100% - 10px);
+  }
+
+  &_position_left &__edge {
+    right: calc(100% - 10px);
+  }
+
+  &_skin_outside&_position_right &__edge {
+    left: 100%;
+  }
+
+  &_skin_outside&_position_left &__edge {
+    right: 100%;
+  }
+
+  &_position_left &__edge::before {
+    right: 0;
+  }
+
+  &_skin_outside &__edge::before {
+    background-color: #9fa3a8;
+  }
+
+  &_status_warning &__edge::before {
+    background-color: var(--color-warning);
+  }
+
+  &_status_danger &__edge::before {
+    background-color: var(--color-danger);
+  }
+
+  &_skin_outside &__edge::after {
+    background-color: #9fa3a8;
+  }
+
+  &_skin_outside&_position_left &__edge::before {
+    right: 100%;
+  }
+
+  &_skin_outside&_position_right &__edge::before {
+    left: 100%;
+  }
+
+  &__content {
+    word-wrap: break-word;
+  }
+
+  &__title {
+    font-size: var(--font-size-medium);
+    font-weight: bold;
+    margin-bottom: 1px;
+  }
+
+  &_status_warning &__title {
+    color: var(--color-warning);
+  }
+
+  &_status_danger &__title {
+    color: var(--color-danger);
+  }
+}
