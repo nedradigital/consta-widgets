@@ -17,6 +17,7 @@ type Props = {
   color?: Color;
   order?: Order;
   children: React.ReactNode;
+  className?: string;
 };
 
 export const ElementWithIcon: React.FunctionComponent<Props> = ({
@@ -24,6 +25,7 @@ export const ElementWithIcon: React.FunctionComponent<Props> = ({
   icon,
   color,
   order = 'normal',
+  className,
 }) => {
   const items = [
     <span key="icon" className={cn('icon', { color })}>
@@ -34,5 +36,7 @@ export const ElementWithIcon: React.FunctionComponent<Props> = ({
     </span>,
   ];
 
-  return <div className={cn()}>{order === 'reverse' ? items.reverse() : items}</div>;
+  return (
+    <div className={cn(null, null, className)}>{order === 'reverse' ? items.reverse() : items}</div>
+  );
 };
