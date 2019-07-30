@@ -4,11 +4,13 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import { classname } from '@/utils/classname';
 
-import { Dashboard, DashboardProps } from './components/Dashboard';
+import { Dashboard, DashboardProps, DashboardState } from './components/Dashboard';
 import { Menu, MenuProps } from './components/Menu';
 import './index.css';
 
-export { DashboardState } from './components/Dashboard';
+// с webpack сейчас нормально не работает re-export, поэтому приходится делать так
+// https://github.com/TypeStrong/ts-loader/issues/751
+export type DashboardState = DashboardState;
 
 // TODO: нужно будет расширить enum в соотвествии с типами данных для графиков
 export enum DataType {
