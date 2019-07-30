@@ -7,15 +7,19 @@
     "build": "NODE_ENV=production node scripts/run.js",
     "start": "NODE_ENV=development node scripts/run.js",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
-    "lint": "yarn run lint:ts && yarn run lint:js && yarn run lint:css",
-    "lint:ts": "tslint '{src,types}/**/*.ts{,x}' --fix",
-    "lint:js": "eslint '{src,scripts,config}/**/*.js' --fix",
+    "lint": "yarn lint:ts && yarn lint:js && yarn lint:css",
+    "lint-fix": "yarn lint:ts-fix && yarn lint:js-fix && yarn lint:css-fix",
+    "lint:ts": "tslint '{src,types}/**/*.ts{,x}'",
+    "lint:ts-fix": "tslint '{src,types}/**/*.ts{,x}' --fix",
+    "lint:js": "eslint '{src,scripts,config}/**/*.js'",
+    "lint:js-fix": "eslint '{src,scripts,config}/**/*.js' --fix",
     "lint:css": "stylelint 'src/**/*.css'",
+    "lint:css-fix": "stylelint 'src/**/*.css' --fix",
     "checktypes": "tsc --noEmit --extendedDiagnostics",
     "storybook": "NODE_ENV=development start-storybook -c config/storybook -p 6006",
     "storybook:build": "NODE_ENV=production build-storybook -c config/storybook -o build/storybook",
     "unit": "TZ=Europe/Moscow jest",
-    "test": "yarn run lint && yarn run checktypes && yarn run unit"
+    "test": "yarn lint && yarn checktypes && yarn unit"
   },
   "browserslist": [
     "Chrome >= 75"
@@ -23,7 +27,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run checktypes"
+      "pre-push": "yarn checktypes"
     }
   },
   "lint-staged": {
