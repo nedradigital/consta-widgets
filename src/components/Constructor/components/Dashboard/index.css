@@ -1,0 +1,62 @@
+.dashboard {
+  width: 100%;
+
+  border: 1px solid gray;
+
+  background-color: var(--bg-dashboard);
+
+  &__widget-wrapper {
+    background-color: var(--bg-widget);
+
+    border: 1px solid var(--color-dashboard);
+    border-radius: 5px;
+  }
+
+  /* эти стили нужны для корректной работы react-grid-layout */
+  & .react-grid-layout {
+    position: relative;
+    transition: height 200ms ease;
+  }
+
+  & .react-grid-item {
+    transition: all 200ms ease;
+    transition-property: left, top;
+  }
+  & .react-grid-item.cssTransforms {
+    transition-property: transform;
+  }
+
+  & .react-grid-item.resizing {
+    z-index: 1;
+    will-change: width, height;
+  }
+
+  & .react-grid-item.react-draggable-dragging {
+    transition: none;
+    z-index: 3;
+    will-change: transform;
+  }
+
+  & .react-grid-item.react-grid-placeholder {
+    background: red;
+    opacity: 0.2;
+    transition-duration: 100ms;
+    z-index: 2;
+    user-select: none;
+  }
+
+  & .react-grid-item > .react-resizable-handle {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: 0;
+    right: 0;
+    background: url('data:image/svg+xml;base64, PHN2ZyBzdHlsZT0iZmlsbDojNTA2NTczIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTEwIDEwSDBWNi4yaDYuMlYwSDEwdjZ6Ij48L3BhdGg+PC9zdmc+');
+    background-position: bottom right;
+    padding: 0 3px 3px 0;
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    box-sizing: border-box;
+    cursor: se-resize;
+  }
+}

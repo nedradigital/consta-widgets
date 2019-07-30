@@ -1,6 +1,6 @@
 .App {
-  background: var(--bg-color);
-  color: var(--text-color);
+  height: 100vh;
+
   font-family: var(--main-font-family);
   font-size: var(--main-font-size);
 }

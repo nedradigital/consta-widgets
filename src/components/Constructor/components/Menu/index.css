@@ -1,0 +1,26 @@
+.menu {
+  width: 160px;
+
+  background-color: var(--bg-menu);
+
+  border: 1px solid var(--color-dashboard);
+
+  &__widget-wrapper {
+    height: 80px;
+    width: 110px;
+
+    margin: 10px;
+
+    background-color: var(--bg-widget);
+
+    border: 1px solid var(--color-dashboard);
+    border-radius: 5px;
+  }
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+
+    margin: 10px;
+  }
+}
