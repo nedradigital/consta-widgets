@@ -6,7 +6,7 @@ import { classname } from '../../utils/classname';
 import { Badge } from '../Badge';
 import { KPIChart, Status } from '../KPIChart';
 
-import './styles.css';
+import './index.css';
 
 type Props = {
   className?: string;

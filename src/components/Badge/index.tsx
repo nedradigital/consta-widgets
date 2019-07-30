@@ -2,7 +2,7 @@ import React from 'react';
 
 import { classname } from '../../utils/classname';
 
-import './styles.css';
+import './index.css';
 
 export const statuses = ['danger', 'normal', 'warning'] as const;
 
