@@ -1,5 +1,5 @@
 .pin {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--bg-color-white-semi);
   border: var(--white-border);
   box-sizing: border-box;
   border-radius: var(--border-radius);
@@ -29,7 +29,7 @@
     width: 57px;
 
     &::before {
-      background-color: #494f59;
+      background-color: var(--pin-color);
       border-radius: 50%;
       content: '';
       display: inline-block;
@@ -40,7 +40,12 @@
     }
 
     &::after {
-      background-image: linear-gradient(to right, #494f59 0%, #494f59 30%, rgba(#494f59, 0) 100%);
+      background-image: linear-gradient(
+        to right,
+        var(--pin-color) 0%,
+        var(--pin-color) 30%,
+        color-moe(var(--pin-color) alpha(0)) 100%
+      );
 
       content: '';
       display: inline-block;

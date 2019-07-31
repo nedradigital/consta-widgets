@@ -1,5 +1,5 @@
 .background-status-indicator {
-  border-top: 4px solid rgba(var(--text-color-additional), 0.63);
+  border-top: 4px solid color-mod(var(--text-color-additional) alpha(63%));
   bottom: 0;
   box-sizing: border-box;
   left: 0;
@@ -13,7 +13,7 @@
       rgba(201, 29, 50, 0.52) 5.81%,
       rgba(201, 29, 50, 0) 62.66%
     );
-    border-top-color: rgba(#ca1d32, 0.7);
+    border-top-color: color-mod(var(--color-danger) alpha(70%));
   }
 
   &_status_important {
@@ -22,7 +22,7 @@
       rgba(33, 92, 196, 0.44) 4.16%,
       rgba(33, 92, 196, 0) 61.42%
     );
-    border-top-color: rgba(#5592ff, 0.7);
+    border-top-color: color-mod(var(--color-important) alpha(70%));
   }
 
   &_status_warning {
@@ -31,6 +31,6 @@
       rgba(231, 177, 38, 0.36) 5.81%,
       rgba(232, 202, 47, 0) 62.66%
     );
-    border-top-color: rgba(#ffdb1f, 0.7);
+    border-top-color: color-mod(var(--color-warning) alpha(70%));
   }
 }

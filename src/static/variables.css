@@ -6,7 +6,7 @@
   --text-color-additional: #b1c4e3;
   --text-color-additional-semi: rgba(177, 196, 227, 0.5);
   --bg-element: #121a28;
-  --pin-border-color: #494f59;
+  --pin-color: #494f59;
   --white-border: 1px solid rgba(255, 255, 255, 0.1);
   --bg-block: #0f1827;
   --bg-well-pasport: #161f2c;
@@ -21,8 +21,8 @@
   --main-font-size: 14px;
   --font-size-medium: 16px;
   --progress-gradient: linear-gradient(
-    rgba(var(--color-important), 0) 10%,
-    rgba(var(--color-important), 0.1) 70%
+    color-mod(var(--color-important) alpha(0)) 10%,
+    color-mod(var(--color-important) alpha(10%)) 70%
   );
   --progress-transition: left 0.5s ease;
 

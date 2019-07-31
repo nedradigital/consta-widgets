@@ -84,13 +84,13 @@ export const castCircleData = ({ safeFactData, maxDuration, minValue, maxValue }
   return { circleLeft, circleBottom };
 };
 
-const Circle = ({
+const Circle: React.FunctionComponent<CircleProps> = ({
   height = MIN_HEIGHT,
   safeFactData,
   maxDuration,
   minValue,
   maxValue,
-}: CircleProps) => {
+}) => {
   const { circleLeft, circleBottom } = castCircleData({
     safeFactData,
     maxDuration,
@@ -116,7 +116,7 @@ const Circle = ({
   return null;
 };
 
-const LinearGradient = ({ type, status, id }: LinearGradientProps) => {
+const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, status, id }) => {
   if (!status) {
     return null;
   }
@@ -129,7 +129,13 @@ const LinearGradient = ({ type, status, id }: LinearGradientProps) => {
   );
 };
 
-export const KPIChart = ({ id, planData, factData, className, status = 'normal' }: Props) => {
+export const KPIChart: React.FunctionComponent<Props> = ({
+  id,
+  planData,
+  factData,
+  className,
+  status = 'normal',
+}) => {
   const areaGradientId = cn(`area-gradient-${id}`);
   const linearGradientId = cn(`linear-gradient-${id}`);
   const scaleHeightBackground = d3.scaleLinear();
