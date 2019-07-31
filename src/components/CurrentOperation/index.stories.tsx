@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { subtractTime } from '@/utils/time';
-import { blockCenteringDecorator } from '@/utils/Storybook';
 import { action } from '@storybook/addon-actions';
 import { boolean, date, text, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+
+import { subtractTime } from '@/utils/time';
+import { blockCenteringDecorator } from '@/utils/Storybook';
 
 import { CurrentOperation } from '.';
 

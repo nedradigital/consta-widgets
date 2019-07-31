@@ -1,7 +1,8 @@
-import { subtractTime } from '@/utils/time';
-import { blockCenteringDecorator } from '@/utils/Storybook';
 import { date, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+
+import { subtractTime } from '@/utils/time';
+import { blockCenteringDecorator } from '@/utils/Storybook';
 
 import { Timer } from '.';
 
