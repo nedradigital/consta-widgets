@@ -15,8 +15,6 @@ type Props = {
   styles?: React.CSSProperties;
 };
 
-export const BackgroundStatusIndicator: React.FunctionComponent<Props> = ({
-  className,
-  status,
-  styles = {},
-}) => <div className={cn(null, { status }, className)} style={styles} />;
+export const BackgroundStatusIndicator: React.FC<Props> = ({ className, status, styles = {} }) => (
+  <div className={cn(null, { status }, className)} style={styles} />
+);

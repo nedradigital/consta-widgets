@@ -15,7 +15,7 @@ type Props = {
   children?: never;
 };
 
-export const OpenableLabel: React.FunctionComponent<Props> = ({
+export const OpenableLabel: React.FC<Props> = ({
   isInitiallyOpened,
   title,
   shortTitle,

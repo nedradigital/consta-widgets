@@ -24,7 +24,7 @@ type Props = {
 
 const normalizedProgress = (progress: Progress): Progress => Math.min(Math.max(progress, 0), 100);
 
-export const ProgressLine: React.FunctionComponent<Props> = ({
+export const ProgressLine: React.FC<Props> = ({
   children,
   className,
   progress,

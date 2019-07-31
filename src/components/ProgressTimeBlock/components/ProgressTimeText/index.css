@@ -1,0 +1,61 @@
+.progress-time-block-text {
+  &_name_deviation {
+    grid-area: deviation;
+  }
+
+  &_name_hse {
+    grid-area: hse;
+  }
+
+  &_name_recommendations {
+    grid-area: recom;
+    position: relative;
+
+    &::after {
+      background: rgba(#fff, 0.2);
+      content: '';
+      height: 20px;
+      position: absolute;
+      top: 26px;
+      right: 10px;
+      width: 1px;
+    }
+  }
+
+  &_name_recommendations-refused {
+    grid-area: recom-ref;
+  }
+
+  &__title {
+    color: #878ca8;
+    margin-bottom: 4px;
+
+    &_status_normal {
+      color: #2fcc69;
+    }
+
+    &_status_warning {
+      color: var(--color-warning);
+    }
+
+    &_status_danger {
+      color: #f00;
+    }
+  }
+
+  &__value-item {
+    font-weight: bold;
+    line-height: 32px;
+  }
+
+  &__value {
+    font-size: 28px;
+    letter-spacing: 0.0121em;
+  }
+
+  &__units {
+    font-weight: bold;
+    font-size: 16px;
+    letter-spacing: 0.0121em;
+  }
+}

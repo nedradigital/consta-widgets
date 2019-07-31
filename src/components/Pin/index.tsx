@@ -24,7 +24,7 @@ type Props = {
   title?: string;
 };
 
-export const Pin: React.FunctionComponent<Props> = ({
+export const Pin: React.FC<Props> = ({
   className,
   children,
   position = 'left',

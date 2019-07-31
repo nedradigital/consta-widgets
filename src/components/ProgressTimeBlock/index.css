@@ -1,0 +1,20 @@
+.progress-time-block {
+  background-color: var(--bg-color);
+  border-radius: var(--border-radius);
+  border: var(--white-border);
+  box-sizing: border-box;
+  color: var(--text-color);
+  display: grid;
+  height: 100%;
+  font-size: var(--main-font-size);
+  grid-template-columns: 136px 50px 114px 5px auto;
+  grid-template-rows: 26px 24px 51px 21px 21px 43px;
+  grid-template-areas:
+    'current-day . date      date date'
+    '.           . .         .    .'
+    'chart       . deviation .    hse'
+    'chart       . .         .    .'
+    'chart       . recom     .    .'
+    'chart       . recom     .    recom-ref';
+  padding: 18px 27px;
+}
