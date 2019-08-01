@@ -6,7 +6,7 @@ type Props = {
 
 const formatTime = (n: number): string => String(n).padStart(2, '0');
 
-export const Timer: React.FunctionComponent<Props> = ({ startTime }) => {
+export const Timer: React.FC<Props> = ({ startTime }) => {
   const getDuration = () => new Date().getTime() - startTime;
   const [duration, setDuration] = useState(getDuration());
   const timeoutRef = useRef<number>();

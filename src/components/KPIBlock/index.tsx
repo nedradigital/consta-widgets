@@ -24,7 +24,7 @@ type Props = {
 
 const cn = classname('kpi-block');
 
-export const KPIBlock: React.FunctionComponent<Props> = ({
+export const KPIBlock: React.FC<Props> = ({
   className,
   deviation,
   factData,

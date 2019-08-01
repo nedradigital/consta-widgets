@@ -17,7 +17,7 @@ type Props = {
   styles?: React.CSSProperties;
 };
 
-export const Timeline: React.FunctionComponent<Props> = ({ className, data = [], styles = {} }) => (
+export const Timeline: React.FC<Props> = ({ className, data = [], styles = {} }) => (
   <div className={cn(null, null, className)} style={styles}>
     {data.map((item, index) => {
       const [time, depth] = item;

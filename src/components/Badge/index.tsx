@@ -15,6 +15,6 @@ type Props = {
 
 const cn = classname('badge');
 
-export const Badge: React.FunctionComponent<Props> = ({ className, status, children }) => (
+export const Badge: React.FC<Props> = ({ className, status, children }) => (
   <span className={cn(null, { status }, className)}>{children}</span>
 );

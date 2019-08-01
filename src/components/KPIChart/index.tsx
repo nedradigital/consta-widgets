@@ -129,7 +129,7 @@ const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, st
   );
 };
 
-export const KPIChart: React.FunctionComponent<Props> = ({
+export const KPIChart: React.FC<Props> = ({
   id,
   planData,
   factData,
