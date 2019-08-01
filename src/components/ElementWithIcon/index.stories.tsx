@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { select, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { select, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { ReactComponent as Icon } from '../CurrentOperation/images/i-fb.svg';
+import { ReactComponent as Icon } from '../CurrentOperation/images/i-fb.svg'
 
-import { colors, ElementWithIcon, orders } from '.';
+import { colors, ElementWithIcon, orders } from '.'
 
 storiesOf('components/ElementWithIcon', module)
   .addDecorator(withKnobs)
@@ -20,4 +20,4 @@ storiesOf('components/ElementWithIcon', module)
     >
       {text('children', 'title')}
     </ElementWithIcon>
-  ));
+  ))

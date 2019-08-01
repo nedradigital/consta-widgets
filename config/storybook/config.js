@@ -1,16 +1,16 @@
-import { addDecorator, configure } from '@storybook/react';
+import { addDecorator, configure } from '@storybook/react'
 
-import { appDecorator } from '@/utils/Storybook';
+import { appDecorator } from '@/utils/Storybook'
 
-import '@/index.css';
+import '@/index.css'
 
 // automatically import all files ending in *.stories.tsx
-const req = require.context('../../src', true, /.stories\.tsx$/);
+const req = require.context('../../src', true, /.stories\.tsx$/)
 
 function loadStories() {
-  req.keys().forEach(req);
+  req.keys().forEach(req)
 }
 
-addDecorator(appDecorator);
+addDecorator(appDecorator)
 
-configure(loadStories, module);
+configure(loadStories, module)

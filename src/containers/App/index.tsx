@@ -1,32 +1,32 @@
-import * as React from 'react';
-import { hot } from 'react-hot-loader/root';
+import * as React from 'react'
+import { hot } from 'react-hot-loader/root'
 
-import { Constructor, DashboardState, DataType } from '@/components/Constructor';
-import { classname } from '@/utils/classname';
+import { Constructor, DashboardState, DataType } from '@/components/Constructor'
+import { classname } from '@/utils/classname'
 
-import './styles.css';
+import './styles.css'
 
-const cn = classname('App');
+const cn = classname('App')
 
-let loaded = false;
+let loaded = false
 
 export function App() {
-  const [dashboard, setDashboard] = React.useState<DashboardState>({ widgets: [], layouts: {} });
-  const [viewMode, setViewMode] = React.useState(false);
+  const [dashboard, setDashboard] = React.useState<DashboardState>({ widgets: [], layouts: {} })
+  const [viewMode, setViewMode] = React.useState(false)
 
   React.useEffect(() => {
-    const data = localStorage.getItem('data');
-    const savedData = data && JSON.parse(data);
+    const data = localStorage.getItem('data')
+    const savedData = data && JSON.parse(data)
 
     if (savedData && !loaded) {
-      setDashboard(savedData);
+      setDashboard(savedData)
     }
 
-    loaded = true;
-  });
+    loaded = true
+  })
 
   if (loaded) {
-    localStorage.setItem('data', JSON.stringify(dashboard));
+    localStorage.setItem('data', JSON.stringify(dashboard))
   }
 
   return (
@@ -53,16 +53,16 @@ export function App() {
         cols={{ lg: 6, md: 5, sm: 4, xs: 4, xxs: 2 }}
         onChange={setDashboard}
         onClear={() => {
-          localStorage.removeItem('data');
-          location.reload();
+          localStorage.removeItem('data')
+          location.reload()
         }}
         onToggleMode={() => setViewMode(!viewMode)}
         viewMode={viewMode}
         dashboard={dashboard}
       />
     </div>
-  );
+  )
 }
 
 // tslint:disable-next-line:no-default-export
-export default hot(App);
+export default hot(App)

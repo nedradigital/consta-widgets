@@ -1,25 +1,25 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react'
 
 type Props = {
-  startTime: number;
-};
+  startTime: number
+}
 
-const formatTime = (n: number): string => String(n).padStart(2, '0');
+const formatTime = (n: number): string => String(n).padStart(2, '0')
 
 export const Timer: React.FC<Props> = ({ startTime }) => {
-  const getDuration = () => new Date().getTime() - startTime;
-  const [duration, setDuration] = useState(getDuration());
-  const timeoutRef = useRef<number>();
-  const updateTime = () => setDuration(getDuration());
+  const getDuration = () => new Date().getTime() - startTime
+  const [duration, setDuration] = useState(getDuration())
+  const timeoutRef = useRef<number>()
+  const updateTime = () => setDuration(getDuration())
 
-  useEffect(updateTime, [startTime]);
+  useEffect(updateTime, [startTime])
 
   useEffect(() => {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = window.setTimeout(updateTime, 1000);
+    clearTimeout(timeoutRef.current)
+    timeoutRef.current = window.setTimeout(updateTime, 1000)
 
-    return () => clearTimeout(timeoutRef.current);
-  });
+    return () => clearTimeout(timeoutRef.current)
+  })
 
   return (
     <>
@@ -32,5 +32,5 @@ export const Timer: React.FC<Props> = ({ startTime }) => {
         .map(formatTime)
         .join(':')}
     </>
-  );
-};
+  )
+}

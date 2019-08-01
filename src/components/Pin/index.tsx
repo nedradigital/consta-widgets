@@ -1,28 +1,28 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('pin');
+const cn = classname('pin')
 
-export const positions = ['left', 'right'] as const;
-type Position = typeof positions[number];
+export const positions = ['left', 'right'] as const
+type Position = typeof positions[number]
 
-export const statuses = ['danger', 'warning'] as const;
-type Status = typeof statuses[number];
+export const statuses = ['danger', 'warning'] as const
+type Status = typeof statuses[number]
 
-export const skins = ['inside', 'outside'] as const;
-type Skin = typeof skins[number];
+export const skins = ['inside', 'outside'] as const
+type Skin = typeof skins[number]
 
 type Props = {
-  className?: string;
-  children: React.ReactNode;
-  position?: Position;
-  status?: Status;
-  skin?: Skin;
-  title?: string;
-};
+  className?: string
+  children: React.ReactNode
+  position?: Position
+  status?: Status
+  skin?: Skin
+  title?: string
+}
 
 export const Pin: React.FC<Props> = ({
   className,
@@ -39,4 +39,4 @@ export const Pin: React.FC<Props> = ({
       <div className={cn('text')}>{children}</div>
     </div>
   </div>
-);
+)

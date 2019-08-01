@@ -1,35 +1,35 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import { ProgressTimeChart, ProgressTimeChartProps } from './components/ProgressTimeChart';
-import { ProgressTimeDate, ProgressTimeDateProps } from './components/ProgressTimeDate';
-import { ProgressTimeText } from './components/ProgressTimeText';
-import './index.css';
+import { ProgressTimeChart, ProgressTimeChartProps } from './components/ProgressTimeChart'
+import { ProgressTimeDate, ProgressTimeDateProps } from './components/ProgressTimeDate'
+import { ProgressTimeText } from './components/ProgressTimeText'
+import './index.css'
 
-export const statuses = ['danger', 'normal', 'warning'] as const;
+export const statuses = ['danger', 'normal', 'warning'] as const
 
 type Props = {
-  className?: string;
+  className?: string
 
   /** HSE по скважине [сутки] */
-  hse?: number;
+  hse?: number
 
   /** Кол-во принятых рекомендаций */
-  recAccepted?: number;
+  recAccepted?: number
 
   /** Кол-во отклоненных рекомендаций */
-  recRejected?: number;
+  recRejected?: number
 
   /** Отклонение сроков строительства [сутки] */
-  timeGap?: number;
+  timeGap?: number
 
-  statusTitle?: string;
-  status?: typeof statuses[number];
+  statusTitle?: string
+  status?: typeof statuses[number]
 } & ProgressTimeChartProps &
-  ProgressTimeDateProps;
+  ProgressTimeDateProps
 
-const cn = classname('progress-time-block');
+const cn = classname('progress-time-block')
 
 export const ProgressTimeBlock: React.FC<Props> = ({
   className,
@@ -65,4 +65,4 @@ export const ProgressTimeBlock: React.FC<Props> = ({
     />
     <ProgressTimeText name="recommendations-refused" value={recRejected} unit="отклонено" />
   </div>
-);
+)

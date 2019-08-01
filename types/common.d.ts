@@ -1,12 +1,12 @@
 declare module '*.svg' {
   export const ReactComponent: React.ComponentType<
     React.SVGProps<SVGSVGElement> & {
-      children?: never;
+      children?: never
     }
-  >;
+  >
 }
 
 declare module '*.gif' {
-  const content: string;
-  export default content;
+  const content: string
+  export default content
 }

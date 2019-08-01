@@ -1,24 +1,24 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('text-with-icon');
+const cn = classname('text-with-icon')
 
-export const colors = ['normal', 'danger', 'warning'] as const;
-type Color = typeof colors[number];
+export const colors = ['normal', 'danger', 'warning'] as const
+type Color = typeof colors[number]
 
-export const orders = ['normal', 'reverse'] as const;
-type Order = typeof orders[number];
+export const orders = ['normal', 'reverse'] as const
+type Order = typeof orders[number]
 
 type Props = {
-  icon: React.ReactNode;
-  color?: Color;
-  order?: Order;
-  children: React.ReactNode;
-  className?: string;
-};
+  icon: React.ReactNode
+  color?: Color
+  order?: Order
+  children: React.ReactNode
+  className?: string
+}
 
 export const ElementWithIcon: React.FC<Props> = ({
   children,
@@ -34,9 +34,9 @@ export const ElementWithIcon: React.FC<Props> = ({
     <span key="element" className={cn('element')}>
       {children}
     </span>,
-  ];
+  ]
 
   return (
     <div className={cn(null, null, className)}>{order === 'reverse' ? items.reverse() : items}</div>
-  );
-};
+  )
+}

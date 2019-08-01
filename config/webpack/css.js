@@ -1,17 +1,17 @@
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const cssRules = [
   {
     ext: 'css',
     use: [],
   },
-];
+]
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === 'production'
 
 // Use generator function for spread in arrays
 function* css() {
-  const sourceMap = !isProduction;
+  const sourceMap = !isProduction
 
   for (const rule of cssRules) {
     const use = [
@@ -47,22 +47,22 @@ function* css() {
                 },
               }),
               require('cssnano')(),
-            ];
+            ]
           },
           sourceMap,
         },
       },
       ...rule.use,
-    ];
+    ]
 
     yield {
       test: new RegExp(`\\.${rule.ext}$`),
       use: use.filter(Boolean),
-    };
+    }
   }
 }
 
 module.exports = {
   css,
   cssRules,
-};
+}

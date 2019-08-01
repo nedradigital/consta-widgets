@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { select, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { select, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Pin, positions, skins, statuses } from '.';
+import { Pin, positions, skins, statuses } from '.'
 
 storiesOf('components/Pin', module)
   .addDecorator(withKnobs)
@@ -22,4 +22,4 @@ storiesOf('components/Pin', module)
     >
       {text('Text', 'Высокий риск обвала породы')}
     </Pin>
-  ));
+  ))

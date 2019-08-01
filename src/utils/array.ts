@@ -5,5 +5,5 @@ export function stringArrayToObjectMap<T extends string>(arr: ReadonlyArray<T>) 
       [item]: item,
     }),
     {}
-  );
+  )
 }

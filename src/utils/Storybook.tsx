@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'
 
-import { StoryDecorator } from '@storybook/react';
+import { StoryDecorator } from '@storybook/react'
 
 export const blockCenteringDecorator = (
   styles: React.CSSProperties = {}
@@ -18,10 +18,10 @@ export const blockCenteringDecorator = (
   >
     <div style={styles}>{storyFn()}</div>
   </div>
-);
+)
 
 export const appDecorator: StoryDecorator = storyFn => (
   <div className="App" style={{ minHeight: '100vh' }}>
     {storyFn()}
   </div>
-);
+)

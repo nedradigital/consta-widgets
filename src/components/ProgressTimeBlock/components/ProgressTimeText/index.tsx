@@ -1,20 +1,20 @@
-import { isNil } from 'lodash';
+import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('progress-time-block-text');
+const cn = classname('progress-time-block-text')
 
-export const statuses = ['danger', 'normal', 'warning'] as const;
+export const statuses = ['danger', 'normal', 'warning'] as const
 
 type ProgressTimeTextProps = {
-  name: 'hse' | 'recommendations' | 'recommendations-refused' | 'deviation';
-  value?: number;
-  unit: 'дн' | 'принято' | 'отклонено';
-  title?: string;
-  status?: typeof statuses[number];
-};
+  name: 'hse' | 'recommendations' | 'recommendations-refused' | 'deviation'
+  value?: number
+  unit: 'дн' | 'принято' | 'отклонено'
+  title?: string
+  status?: typeof statuses[number]
+}
 
 export const ProgressTimeText: React.FC<ProgressTimeTextProps> = ({
   name,
@@ -30,4 +30,4 @@ export const ProgressTimeText: React.FC<ProgressTimeTextProps> = ({
       <span className={cn('units')}>{unit}</span>
     </div>
   </div>
-);
+)

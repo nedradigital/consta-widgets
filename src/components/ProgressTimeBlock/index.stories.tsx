@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { number, select, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { number, select, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { ProgressTimeBlock, statuses } from '.';
+import { ProgressTimeBlock, statuses } from '.'
 
 storiesOf('components/ProgressTimeBlock', module)
   .addDecorator(withKnobs)
@@ -27,4 +27,4 @@ storiesOf('components/ProgressTimeBlock', module)
       statusTitle={text('statusTitle', 'Опережение')}
       status={select('status', statuses, statuses[0])}
     />
-  ));
+  ))

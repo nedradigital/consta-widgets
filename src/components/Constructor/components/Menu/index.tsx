@@ -1,21 +1,21 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import { DataType } from '../../';
-import { Widget } from '../Widget';
+import { DataType } from '../../'
+import { Widget } from '../Widget'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('menu');
+const cn = classname('menu')
 
 export type MenuProps = {
-  onToggleMode?: () => void;
-  onClear?: () => void;
-};
+  onToggleMode?: () => void
+  onClear?: () => void
+}
 
 export const Menu: React.FunctionComponent<MenuProps> = props => {
-  const { onToggleMode, onClear } = props;
+  const { onToggleMode, onClear } = props
 
   return (
     <div className={cn()}>
@@ -32,5 +32,5 @@ export const Menu: React.FunctionComponent<MenuProps> = props => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}

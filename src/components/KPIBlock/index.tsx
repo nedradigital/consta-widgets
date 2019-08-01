@@ -1,28 +1,28 @@
-import React from 'react';
+import React from 'react'
 
-import { isNil } from 'lodash';
+import { isNil } from 'lodash'
 
-import { classname } from '../../utils/classname';
-import { Badge } from '../Badge';
-import { KPIChart, Status } from '../KPIChart';
+import { classname } from '../../utils/classname'
+import { Badge } from '../Badge'
+import { KPIChart, Status } from '../KPIChart'
 
-import './index.css';
+import './index.css'
 
 type Props = {
-  className?: string;
-  deviation?: number;
-  factData?: number[] | number;
-  factValue?: number;
-  legend?: number[];
-  planData?: number[] | number;
-  planValue?: number;
-  status?: Status;
-  title?: string;
-  unit?: string;
-  chartId: string;
-};
+  className?: string
+  deviation?: number
+  factData?: number[] | number
+  factValue?: number
+  legend?: number[]
+  planData?: number[] | number
+  planValue?: number
+  status?: Status
+  title?: string
+  unit?: string
+  chartId: string
+}
 
-const cn = classname('kpi-block');
+const cn = classname('kpi-block')
 
 export const KPIBlock: React.FC<Props> = ({
   className,
@@ -72,4 +72,4 @@ export const KPIBlock: React.FC<Props> = ({
       </div>
     )}
   </div>
-);
+)

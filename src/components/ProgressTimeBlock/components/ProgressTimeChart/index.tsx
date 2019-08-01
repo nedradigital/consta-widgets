@@ -1,14 +1,14 @@
-import { isNil } from 'lodash';
+import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('progress-time-block-chart');
+const cn = classname('progress-time-block-chart')
 
 export type ProgressTimeChartProps = {
-  progress?: number;
-};
+  progress?: number
+}
 
 export const ProgressTimeChart: React.FC<ProgressTimeChartProps> = ({ progress }) => (
   <div className={cn()}>
@@ -30,4 +30,4 @@ export const ProgressTimeChart: React.FC<ProgressTimeChartProps> = ({ progress }
     </svg>
     <span className={cn('value')}>{isNil(progress) ? '--' : progress}%</span>
   </div>
-);
+)

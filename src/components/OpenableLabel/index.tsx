@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('openable-label');
+const cn = classname('openable-label')
 
 type Props = {
-  className?: string;
-  title: React.ReactNode;
-  shortTitle: string;
-  isInitiallyOpened?: boolean;
-  items: React.ReactNode[];
-  children?: never;
-};
+  className?: string
+  title: React.ReactNode
+  shortTitle: string
+  isInitiallyOpened?: boolean
+  items: React.ReactNode[]
+  children?: never
+}
 
 export const OpenableLabel: React.FC<Props> = ({
   isInitiallyOpened,
@@ -22,11 +22,11 @@ export const OpenableLabel: React.FC<Props> = ({
   items,
   className,
 }) => {
-  const [isOpened, setOpened] = useState(isInitiallyOpened);
+  const [isOpened, setOpened] = useState(isInitiallyOpened)
 
   useEffect(() => {
-    setOpened(isInitiallyOpened);
-  }, [isInitiallyOpened]);
+    setOpened(isInitiallyOpened)
+  }, [isInitiallyOpened])
 
   return (
     <div className={cn(null, null, className)}>
@@ -49,5 +49,5 @@ export const OpenableLabel: React.FC<Props> = ({
         </div>
       )}
     </div>
-  );
-};
+  )
+}

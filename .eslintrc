@@ -2,7 +2,7 @@
   "extends": "eslint:recommended",
   "rules": {
     "indent": ["error", 2],
-    "semi": "error",
+    "semi": ["error", "never"],
     "comma-dangle": [ "error", "always-multiline" ],
     "no-console": "error",
     "prefer-const": "error",

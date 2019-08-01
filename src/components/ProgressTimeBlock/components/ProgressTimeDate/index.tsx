@@ -1,19 +1,19 @@
-import { isNil } from 'lodash';
+import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import { ReactComponent as IconFlag } from './images/flag.svg';
-import './index.css';
+import { ReactComponent as IconFlag } from './images/flag.svg'
+import './index.css'
 
-const cn = classname('progress-time-block-date');
+const cn = classname('progress-time-block-date')
 
 export type ProgressTimeDateProps = {
   /** Текущий день строительства скважины */
-  currentDay?: number;
-  endDate?: string;
+  currentDay?: number
+  endDate?: string
   /** Плановое время строительства (сутки) */
-  planDaysCount?: number;
-};
+  planDaysCount?: number
+}
 
 export const ProgressTimeDate: React.FC<ProgressTimeDateProps> = ({
   currentDay,
@@ -29,4 +29,4 @@ export const ProgressTimeDate: React.FC<ProgressTimeDateProps> = ({
       <span className={cn('value')}>{endDate}</span>
     </div>
   </>
-);
+)
