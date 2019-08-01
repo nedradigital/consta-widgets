@@ -1,0 +1,14 @@
+.direction-indicator {
+  display: block;
+  width: 32px;
+  height: 33px;
+
+  justify-content: center;
+  line-height: 0;
+  background: var(--color-important);
+  border-radius: var(--border-radius);
+
+  &_direction_up {
+    transform: rotate(180deg);
+  }
+}

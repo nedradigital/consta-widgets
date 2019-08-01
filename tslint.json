@@ -24,7 +24,7 @@
           },
           {
             "name": "Root",
-            "match": "^@",
+            "match": "^@\/",
             "order": 99
           },
           {

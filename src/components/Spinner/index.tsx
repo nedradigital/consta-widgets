@@ -6,7 +6,7 @@ import './index.css';
 
 const cn = classname('spinner');
 
-enum Size {
+export enum SpinnerSize {
   s = 16,
   m = 32,
   l = 64,
@@ -14,10 +14,10 @@ enum Size {
 
 type Props = {
   className?: string;
-  size?: Size;
+  size?: SpinnerSize;
 };
 
-export const Spinner = ({ className, size = Size.m }: Props) => (
+export const Spinner: React.FC<Props> = ({ className, size = SpinnerSize.m }) => (
   <svg
     className={cn(null, null, className)}
     viewBox="25 25 50 50"
@@ -37,5 +37,3 @@ export const Spinner = ({ className, size = Size.m }: Props) => (
     />
   </svg>
 );
-
-Spinner.Size = Size;

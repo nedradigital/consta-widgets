@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
 import { withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+
+import { blockCenteringDecorator } from '@/utils/Storybook';
 
 import { Timeline } from '.';
 

@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Spinner } from '@/components/Spinner';
-import { blockCenteringDecorator } from '@/utils/Storybook';
 import { boolean, text, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+
+import { Spinner, SpinnerSize } from '@/components/Spinner';
+import { blockCenteringDecorator } from '@/utils/Storybook';
 
 import { OpenableLabel } from '.';
 
@@ -22,7 +23,7 @@ storiesOf('components/OpenableLabel', module)
           <div key={2} style={{ color: 'tomato' }}>
             item2
           </div>,
-          <Spinner key={3} size={Spinner.Size.s} />,
+          <Spinner key={3} size={SpinnerSize.s} />,
         ]}
       />
     );

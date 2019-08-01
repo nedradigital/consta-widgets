@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
 import { select, text, withKnobs } from '@storybook/addon-knobs';
 import { storiesOf } from '@storybook/react';
+
+import { blockCenteringDecorator } from '@/utils/Storybook';
 
 import { Badge, statuses } from '.';
 
