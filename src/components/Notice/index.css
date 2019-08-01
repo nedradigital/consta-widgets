@@ -1,0 +1,33 @@
+.notice {
+  background: url('./images/bg-lines.svg') right top repeat-y var(--bg-color-white-semi);
+  background-color: var(--bg-color-white-semi);
+  border: var(--white-border);
+  box-sizing: border-box;
+  border-radius: var(--border-radius);
+  color: var(--text-color);
+  letter-spacing: 0.03em;
+  display: block;
+  padding: 14px 30px 14px 24px;
+  position: relative;
+  word-wrap: break-word;
+  width: 100%;
+
+  &__timer {
+    margin-bottom: 7px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__title {
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+    margin-bottom: 5px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
