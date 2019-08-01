@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { array, number, select, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { array, number, select, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { statuses } from '../KPIChart';
+import { statuses } from '../KPIChart'
 
-import { KPIBlock } from '.';
+import { KPIBlock } from '.'
 
 storiesOf('components/KPI/KPIBlock', module)
   .addDecorator(withKnobs)
@@ -24,4 +24,4 @@ storiesOf('components/KPI/KPIBlock', module)
       factData={array('factData', [52, 552, 552, 667, 1370, 1557], ',')}
       status={select('Status', statuses, 'normal')}
     />
-  ));
+  ))

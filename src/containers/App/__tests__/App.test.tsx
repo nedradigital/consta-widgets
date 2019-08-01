@@ -1,10 +1,10 @@
-import * as React from 'react';
+import * as React from 'react'
 
-import { shallow } from 'enzyme';
+import { shallow } from 'enzyme'
 
 type TestComponentProps = {
-  onButtonClick: () => void;
-};
+  onButtonClick: () => void
+}
 
 function TestComponent(props: TestComponentProps) {
   return (
@@ -13,17 +13,17 @@ function TestComponent(props: TestComponentProps) {
         Click me
       </button>
     </div>
-  );
+  )
 }
 
 describe('TestComponent', () => {
   it('handles button click', () => {
-    const handleButtonClick = jest.fn();
-    const wrapper = shallow(<TestComponent onButtonClick={handleButtonClick} />);
-    const button = wrapper.find('.TestComponent__button');
+    const handleButtonClick = jest.fn()
+    const wrapper = shallow(<TestComponent onButtonClick={handleButtonClick} />)
+    const button = wrapper.find('.TestComponent__button')
 
-    expect(handleButtonClick).toHaveBeenCalledTimes(0);
-    button.simulate('click');
-    expect(handleButtonClick).toHaveBeenCalledTimes(1);
-  });
-});
+    expect(handleButtonClick).toHaveBeenCalledTimes(0)
+    button.simulate('click')
+    expect(handleButtonClick).toHaveBeenCalledTimes(1)
+  })
+})

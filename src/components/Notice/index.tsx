@@ -1,21 +1,21 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import { ElementWithIcon } from '../ElementWithIcon';
-import { Timer } from '../Timer';
+import { ElementWithIcon } from '../ElementWithIcon'
+import { Timer } from '../Timer'
 
-import { ReactComponent as IconTime } from './images/time.svg';
-import './index.css';
+import { ReactComponent as IconTime } from './images/time.svg'
+import './index.css'
 
-const cn = classname('notice');
+const cn = classname('notice')
 
 export type Props = {
-  className?: string;
-  description?: string;
-  startTime?: number;
-  title?: string;
-};
+  className?: string
+  description?: string
+  startTime?: number
+  title?: string
+}
 
 export const Notice: React.FunctionComponent<Props> = ({
   className,
@@ -32,4 +32,4 @@ export const Notice: React.FunctionComponent<Props> = ({
     {title && <div className={cn('title')}>{title}</div>}
     {description && <div className={cn('description')}>{description}</div>}
   </div>
-);
+)

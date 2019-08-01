@@ -1,18 +1,18 @@
-const path = require('path');
-const webpack = require('webpack');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require('path')
+const webpack = require('webpack')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const babelConfig = require('./babel');
-const { css } = require('./css');
+const babelConfig = require('./babel')
+const { css } = require('./css')
 
-const isProduction = process.env.NODE_ENV === 'production';
-const root = path.resolve(__dirname, '..', '..');
+const isProduction = process.env.NODE_ENV === 'production'
+const root = path.resolve(__dirname, '..', '..')
 
 const files = {
   fonts: /\.(woff|woff2|(o|t)tf|eot)$/,
   images: /\.(jpe?g|png|gif|svg)$/,
   js: /\.(js|ts|tsx)$/,
-};
+}
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -102,4 +102,4 @@ module.exports = {
       filename: `assets/css/[name]${isProduction ? '.[contenthash]' : ''}.css`,
     }),
   ],
-};
+}

@@ -8,7 +8,7 @@
     "start": "NODE_ENV=development node scripts/run.js",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "lint": "yarn lint:ts && yarn lint:js && yarn lint:css",
-    "lint-fix": "yarn lint:ts-fix && yarn lint:js-fix && yarn lint:css-fix",
+    "lint-fix": "yarn format && yarn lint:ts-fix && yarn lint:js-fix && yarn lint:css-fix",
     "lint:ts": "tslint '{src,types}/**/*.ts{,x}'",
     "lint:ts-fix": "tslint '{src,types}/**/*.ts{,x}' --fix",
     "lint:js": "eslint '{src,scripts,config}/**/*.js'",
@@ -32,18 +32,18 @@
   },
   "lint-staged": {
     "{src,types}/**/*.{ts,tsx}": [
-      "tslint --fix",
       "prettier --write",
+      "tslint --fix",
       "git add"
     ],
     "{src}/**/*.css": [
-      "stylelint --fix",
       "prettier --write",
+      "stylelint --fix",
       "git add"
     ],
     "{src,scripts,config}/**/*.{json,js}": [
-      "eslint --fix",
       "prettier --write",
+      "eslint --fix",
       "git add"
     ]
   },

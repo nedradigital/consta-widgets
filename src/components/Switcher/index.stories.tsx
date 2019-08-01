@@ -1,12 +1,12 @@
-import React from 'react';
+import React from 'react'
 
-import { action } from '@storybook/addon-actions';
-import { boolean, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions'
+import { boolean, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Switcher } from '.';
+import { Switcher } from '.'
 
 storiesOf('components/Switcher', module)
   .addDecorator(withKnobs)
@@ -17,4 +17,4 @@ storiesOf('components/Switcher', module)
       title={text('title', 'Абсолют.')}
       onClick={action('click')}
     />
-  ));
+  ))

@@ -1,18 +1,18 @@
-const chalk = require('chalk');
-const ora = require('ora');
-const path = require('path');
-const webpackMerge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const chalk = require('chalk')
+const ora = require('ora')
+const path = require('path')
+const webpackMerge = require('webpack-merge')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const TerserPlugin = require('terser-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const commonConfig = require('./common.webpack');
-const { cssRules } = require('./css');
+const commonConfig = require('./common.webpack')
+const { cssRules } = require('./css')
 
-const isProduction = process.env.NODE_ENV === 'production';
-const spinner = ora();
+const isProduction = process.env.NODE_ENV === 'production'
+const spinner = ora()
 
 const clientConfig = {
   entry: [path.resolve(__dirname, '..', '..', 'src', 'index.tsx')],
@@ -51,7 +51,7 @@ const clientConfig = {
 
     new CopyWebpackPlugin([{ from: 'public', to: '' }]),
   ],
-};
+}
 
 const developmentConfig = {
   devtool: 'inline-source-map',
@@ -74,7 +74,7 @@ const developmentConfig = {
       },
     }),
   ],
-};
+}
 
 const productionConfig = {
   output: {
@@ -82,10 +82,10 @@ const productionConfig = {
     filename: 'assets/js/[name].[chunkhash].js',
   },
   plugins: [new CleanWebpackPlugin()],
-};
+}
 
 module.exports = webpackMerge(
   commonConfig,
   clientConfig,
   isProduction ? productionConfig : developmentConfig
-);
+)

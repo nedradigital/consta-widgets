@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Notice } from '.';
+import { Notice } from '.'
 
 storiesOf('components/Notice', module)
   .addDecorator(withKnobs)
@@ -19,4 +19,4 @@ storiesOf('components/Notice', module)
       startTime={new Date().getTime()}
       title={text('title', 'Вероятность прихвата 90%')}
     />
-  ));
+  ))

@@ -1,31 +1,31 @@
-import * as React from 'react';
-import { useDrag } from 'react-dnd';
+import * as React from 'react'
+import { useDrag } from 'react-dnd'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import { Dataset, DataType } from '../../';
-import { ItemTypes } from '../../dnd-constants';
+import { Dataset, DataType } from '../../'
+import { ItemTypes } from '../../dnd-constants'
 
-import { ReactComponent as EditIcon } from './icons/edit.svg';
-import { ReactComponent as SaveIcon } from './icons/save.svg';
-import './index.css';
+import { ReactComponent as EditIcon } from './icons/edit.svg'
+import { ReactComponent as SaveIcon } from './icons/save.svg'
+import './index.css'
 
-const cn = classname('widget');
+const cn = classname('widget')
 
 export interface IWidget {
-  name: string;
-  dataType: DataType;
-  datasets?: Dataset[];
-  currentDatasetName?: string;
+  name: string
+  dataType: DataType
+  datasets?: Dataset[]
+  currentDatasetName?: string
 }
 
 type WidgetProps = IWidget & {
-  dashboardMode?: boolean;
-  className?: string;
-  datasets?: Dataset[];
-  onDatasetChanged?: (name: string, value: string) => void;
-  viewMode?: boolean;
-};
+  dashboardMode?: boolean
+  className?: string
+  datasets?: Dataset[]
+  onDatasetChanged?: (name: string, value: string) => void
+  viewMode?: boolean
+}
 
 // TODO: сам виджет нужно будет рефакторить исходя уже из того, как он на самом деле будет выглядеть
 export const Widget: React.FunctionComponent<WidgetProps> = props => {
@@ -38,19 +38,19 @@ export const Widget: React.FunctionComponent<WidgetProps> = props => {
     onDatasetChanged,
     currentDatasetName,
     viewMode,
-  } = props;
+  } = props
 
-  const [isEdit, setEdit] = React.useState(false);
+  const [isEdit, setEdit] = React.useState(false)
 
   const [{ opacity }, dragRef] = useDrag({
     item: { type: ItemTypes.WIDGET, dataType, name },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
-  });
+  })
 
-  const resultDatasets = (datasets || []).filter(d => d.type === dataType);
-  const Icon = isEdit ? SaveIcon : EditIcon;
+  const resultDatasets = (datasets || []).filter(d => d.type === dataType)
+  const Icon = isEdit ? SaveIcon : EditIcon
 
   return (
     <div
@@ -86,5 +86,5 @@ export const Widget: React.FunctionComponent<WidgetProps> = props => {
         </span>
       )}
     </div>
-  );
-};
+  )
+}

@@ -1,4 +1,4 @@
-import { isNil } from 'lodash';
+import { isNil } from 'lodash'
 
 const concatClass = (
   name: string,
@@ -6,30 +6,30 @@ const concatClass = (
   mods?: { [key: string]: string | boolean | null | undefined } | null,
   mix?: string | null
 ) => {
-  const baseName = elem ? `${name}__${elem}` : name;
-  const buf = [baseName];
+  const baseName = elem ? `${name}__${elem}` : name
+  const buf = [baseName]
 
   if (mods) {
     Object.keys(mods).forEach(modName => {
-      const modVal = mods[modName];
+      const modVal = mods[modName]
 
       if (!isNil(modVal) && modVal !== false) {
-        buf.push(`${baseName}_${modName}${modVal === true ? '' : `_${modVal}`}`);
+        buf.push(`${baseName}_${modName}${modVal === true ? '' : `_${modVal}`}`)
       }
-    });
+    })
   }
 
   if (mix) {
-    buf.push(mix);
+    buf.push(mix)
   }
 
-  return buf.join(' ');
-};
+  return buf.join(' ')
+}
 
 export const classname = (name: string) => {
   return (
     elem?: string | null,
     mods?: { [key: string]: string | boolean | null | undefined } | null,
     mix?: string | null
-  ) => concatClass(name, elem, mods, mix);
-};
+  ) => concatClass(name, elem, mods, mix)
+}

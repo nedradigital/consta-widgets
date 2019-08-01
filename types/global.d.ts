@@ -1,5 +1,5 @@
-import R from 'react';
+import R from 'react'
 
 declare global {
-  const React: typeof R;
+  const React: typeof R
 }

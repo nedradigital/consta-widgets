@@ -1,17 +1,17 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
 type Props = {
-  className?: string;
-  company?: string;
-  name?: string;
-  phone?: string;
-};
+  className?: string
+  company?: string
+  name?: string
+  phone?: string
+}
 
-const cn = classname('contractor-info');
+const cn = classname('contractor-info')
 
 export const ContractorInfo: React.FC<Props> = ({
   company = 'Название подрядчика: --',
@@ -25,4 +25,4 @@ export const ContractorInfo: React.FC<Props> = ({
       {name}, <div className={cn('phone')}>{phone}</div>
     </div>
   </div>
-);
+)

@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Timeline } from '.';
+import { Timeline } from '.'
 
 storiesOf('components/Timeline', module)
   .addDecorator(withKnobs)
@@ -26,4 +26,4 @@ storiesOf('components/Timeline', module)
         ['22:54', 2883],
       ]}
     />
-  ));
+  ))

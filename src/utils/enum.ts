@@ -1,9 +1,9 @@
 function getEnumValues(e: any): Array<number | string> {
-  return Object.keys(e).map(k => e[k]);
+  return Object.keys(e).map(k => e[k])
 }
 
 export function enumToStringArray(e: any) {
-  return getEnumValues(e).filter(v => typeof v === 'string') as string[];
+  return getEnumValues(e).filter(v => typeof v === 'string') as string[]
 }
 
 export function enumToStringMap(e: any) {
@@ -13,5 +13,5 @@ export function enumToStringMap(e: any) {
       [v]: e[v],
     }),
     {}
-  );
+  )
 }

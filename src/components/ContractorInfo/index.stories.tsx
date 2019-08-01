@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import { text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { ContractorInfo } from '.';
+import { ContractorInfo } from '.'
 
 storiesOf('components/ContractorInfo', module)
   .addDecorator(withKnobs)
@@ -16,4 +16,4 @@ storiesOf('components/ContractorInfo', module)
       name={text('name', 'Супервайзер')}
       company={text('company', 'АО «Мессояханефтегаз»')}
     />
-  ));
+  ))

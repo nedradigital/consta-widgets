@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { action } from '@storybook/addon-actions';
-import { boolean, date, text, withKnobs } from '@storybook/addon-knobs';
-import { storiesOf } from '@storybook/react';
+import { action } from '@storybook/addon-actions'
+import { boolean, date, text, withKnobs } from '@storybook/addon-knobs'
+import { storiesOf } from '@storybook/react'
 
-import { subtractTime } from '@/utils/time';
-import { blockCenteringDecorator } from '@/utils/Storybook';
+import { subtractTime } from '@/utils/time'
+import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { CurrentOperation } from '.';
+import { CurrentOperation } from '.'
 
 storiesOf('components/CurrentOperation', module)
   .addDecorator(withKnobs)
@@ -21,4 +21,4 @@ storiesOf('components/CurrentOperation', module)
       isAdaptive={boolean('isAdaptive', false)}
       toggleAdaptive={action('toggleAdaptive')}
     />
-  ));
+  ))

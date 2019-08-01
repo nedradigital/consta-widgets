@@ -1,16 +1,16 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('switcher');
+const cn = classname('switcher')
 
 type SwitcherPropsType = {
-  title?: React.ReactNode;
-  isEnabled: boolean;
-  onClick: (value: boolean) => void;
-};
+  title?: React.ReactNode
+  isEnabled: boolean
+  onClick: (value: boolean) => void
+}
 
 export const Switcher = ({ onClick, isEnabled, title }: SwitcherPropsType) => (
   <span
@@ -22,4 +22,4 @@ export const Switcher = ({ onClick, isEnabled, title }: SwitcherPropsType) => (
       <span className={cn('icon')} />
     </span>
   </span>
-);
+)

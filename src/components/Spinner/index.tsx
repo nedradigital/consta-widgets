@@ -1,10 +1,10 @@
-import React from 'react';
+import React from 'react'
 
-import { classname } from '@/utils/classname';
+import { classname } from '@/utils/classname'
 
-import './index.css';
+import './index.css'
 
-const cn = classname('spinner');
+const cn = classname('spinner')
 
 export enum SpinnerSize {
   s = 16,
@@ -13,9 +13,9 @@ export enum SpinnerSize {
 }
 
 type Props = {
-  className?: string;
-  size?: SpinnerSize;
-};
+  className?: string
+  size?: SpinnerSize
+}
 
 export const Spinner: React.FC<Props> = ({ className, size = SpinnerSize.m }) => (
   <svg
@@ -36,4 +36,4 @@ export const Spinner: React.FC<Props> = ({ className, size = SpinnerSize.m }) =>
       strokeMiterlimit="10"
     />
   </svg>
-);
+)
