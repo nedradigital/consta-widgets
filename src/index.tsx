@@ -1,8 +1,5 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-
-import App from './containers/App'
 import './index.css'
 
-const rootElement = document.getElementById('root')
-ReactDOM.render(<App />, rootElement)
+const req = require.context('./components', true, /index.tsx$/)
+
+req.keys().forEach(req)
