@@ -1,0 +1,111 @@
+.chart-with-subinfo {
+  align-items: stretch;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &__chart-wrapper {
+    background-color: var(--bg-block);
+    border-radius: 4px;
+    border: 1px solid color-mod(var(--text-color) alpha(10%));
+    box-sizing: border-box;
+    color: var(--text-color);
+    padding-left: 45px;
+    position: relative;
+    width: 80%;
+  }
+
+  &__chart-info-line {
+    align-items: center;
+    bottom: -4px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    left: 14px;
+    position: absolute;
+    transform-origin: left top;
+    transform: rotate(-90deg);
+  }
+
+  &__chart-title {
+    font-size: 20px;
+    font-style: normal;
+    font-weight: bold;
+    margin-right: 14px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__chart-units {
+    color: #8bb1ff;
+    font-size: 16px;
+  }
+
+  &__chart-popup-wrapper {
+    position: absolute;
+    left: 95px;
+    right: 20px;
+    top: 10px;
+  }
+
+  &__chart-popup {
+    border-radius: 4px;
+    box-sizing: border-box;
+    background: #262737;
+    border: 1px solid #343b51;
+    position: absolute;
+    top: -20px;
+    width: 200px;
+    z-index: 10;
+    box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.7);
+    transition: left 1s ease, right 1s ease;
+  }
+
+  &__close-button {
+    align-items: center;
+    background: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: inline-flex;
+    height: 22px;
+    justify-content: center;
+    outline: none;
+    padding: 0;
+    position: absolute;
+    right: -11px;
+    top: -11px;
+    width: 22px;
+    z-index: 1;
+    visibility: hidden;
+
+    &::before {
+      background: #000;
+      content: '';
+      display: inline-block;
+      height: 2px;
+      width: 12px;
+    }
+  }
+
+  &__chart-popup-title {
+    background-color: #343b51;
+    border-radius: 4px 4px 0 0;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    line-height: 16px;
+    padding: 12px 16px;
+    text-transform: uppercase;
+  }
+
+  &__subinfo-wrapper {
+    width: 18.5%;
+  }
+}
+
+.depth-per-day-block .chart-with-subinfo__close-button {
+  visibility: visible;
+}

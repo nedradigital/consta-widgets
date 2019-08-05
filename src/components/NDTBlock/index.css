@@ -1,0 +1,9 @@
+.ndt-block {
+  &__chart {
+    height: 328px;
+  }
+
+  &__popup-body {
+    padding: 10px 0;
+  }
+}

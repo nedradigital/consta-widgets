@@ -51,6 +51,7 @@
     "classnames": "2.2.6",
     "d3": "5.9.7",
     "lodash": "4.17.11",
+    "pluralize-ru": "1.0.1",
     "react": "16.8.6",
     "react-dnd": "9.3.2",
     "react-dnd-html5-backend": "9.3.2",
