@@ -19,9 +19,3 @@ export const blockCenteringDecorator = (
     <div style={styles}>{storyFn()}</div>
   </div>
 )
-
-export const appDecorator: StoryDecorator = storyFn => (
-  <div className="App" style={{ minHeight: '100vh' }}>
-    {storyFn()}
-  </div>
-)

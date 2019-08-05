@@ -1,6 +1,4 @@
-import { addDecorator, configure } from '@storybook/react'
-
-import { appDecorator } from '@/utils/Storybook'
+import { configure } from '@storybook/react'
 
 import '@/index.css'
 
@@ -10,7 +8,5 @@ const req = require.context('../../src', true, /.stories\.tsx$/)
 function loadStories() {
   req.keys().forEach(req)
 }
-
-addDecorator(appDecorator)
 
 configure(loadStories, module)

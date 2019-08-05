@@ -2,8 +2,6 @@ const chalk = require('chalk')
 const ora = require('ora')
 const path = require('path')
 const webpackMerge = require('webpack-merge')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
@@ -42,15 +40,6 @@ const clientConfig = {
       }),
     ],
   },
-
-  plugins: [
-    new HtmlWebpackPlugin({
-      inject: false,
-      template: 'src/index.html',
-    }),
-
-    new CopyWebpackPlugin([{ from: 'public', to: '' }]),
-  ],
 }
 
 const developmentConfig = {

@@ -13,7 +13,6 @@
     "noUnusedParameters": true,
     "outDir": "dist/ts",
     "paths": {
-      "lodash/*": ["node_modules/@types/lodash-es/*"],
       "*": ["types/modules/*"],
       "@/*": ["src/*"]
     },
