@@ -1,0 +1,259 @@
+/* TODO: убрать в задаче https://jira.csssr.io/browse/TSUB-59 */
+/* stylelint-disable-next-line */
+:root {
+  --cost-chart-marker-normal: #32d8ff;
+  --cost-chart-marker-warning: #fffa88;
+  --cost-chart-marker-danger: #ff6262;
+}
+
+.costChart {
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-bottom: 40px;
+  margin-right: 20px;
+  position: relative;
+}
+
+.highlightBox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mod(var(--color-danger) alpha(20%));
+}
+
+.day {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    border-left: 1px solid color-mod(var(--text-color) alpha(4%));
+  }
+}
+
+.section {
+  position: absolute;
+  top: -10px;
+  bottom: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    border-left: 1px solid color-mod(var(--text-color) alpha(20%));
+  }
+}
+
+.sectionName {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  transform-origin: 100% 100%;
+  transform: translate(-100%, -100%) rotate(-90deg);
+}
+
+.durations {
+  margin-left: 15px;
+  margin-right: 15px;
+  position: relative;
+  height: 27px;
+}
+
+.durationsWrapper {
+  position: absolute;
+  left: -15px;
+  right: -15px;
+  bottom: -3px;
+  transform: translate(0, 100%);
+  z-index: 10;
+}
+
+.durationsItem {
+  position: absolute;
+  top: 50%;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-color-additional);
+  cursor: default;
+  margin-top: -1px;
+}
+
+.durationsLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.costs {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  left: -10px;
+  top: 0;
+  bottom: 0;
+  transform: translate(-100%, 0);
+}
+
+.costsItem {
+  position: relative;
+}
+
+.costsLabel {
+  position: absolute;
+  top: 50%;
+  right: 50%;
+  transform: translate(0, -50%);
+  white-space: nowrap;
+}
+
+.current {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -10px;
+    bottom: -40px;
+    border-left: 1px dashed #fff;
+  }
+}
+
+.currentMarker {
+  position: absolute;
+
+  &::before {
+    content: '';
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle closest-side at center,
+      color-mod(var(--cost-chart-marker-normal) alpha(0.3)) 0%,
+      color-mod(var(--cost-chart-marker-normal) alpha(0.2)) 30%,
+      color-mod(var(--cost-chart-marker-normal) alpha(7.5%)) 45%,
+      color-mod(var(--cost-chart-marker-normal) alpha(0)) 100%
+    );
+  }
+
+  &.red::before {
+    background: radial-gradient(
+      circle closest-side at center,
+      color-mod(var(--cost-chart-marker-danger) alpha(0.3)) 0%,
+      color-mod(var(--cost-chart-marker-danger) alpha(0.2)) 30%,
+      color-mod(var(--cost-chart-marker-danger) alpha(7.5%)) 45%,
+      color-mod(var(--cost-chart-marker-danger) alpha(0)) 100%
+    );
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    background: var(--cost-chart-marker-normal);
+  }
+
+  &.red::after {
+    background: var(--cost-chart-marker-danger);
+  }
+}
+
+.selected {
+  position: absolute;
+  top: 50%;
+  transition: var(--progress-transition);
+}
+
+.selectedLabel {
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 100%;
+  width: 25px;
+  height: 25px;
+  font-size: 12px;
+  border: 1px solid #fff;
+  text-align: center;
+  line-height: 25px;
+  transform: translate(-50%, -50%);
+  background-color: var(--bg-block);
+  user-select: none;
+}
+
+.selectedBox {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-image: var(--progress-gradient);
+}
+
+.selectedLine {
+  position: absolute;
+  left: 0;
+  bottom: -20px;
+  border-left: 1px solid #fff;
+}
+
+.svg {
+  display: block;
+  width: 100%;
+}
+
+.svgWrapper {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid color-mod(var(--text-color) alpha(4%));
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-bottom: 1px solid color-mod(var(--text-color) alpha(4%));
+  }
+}
+
+.lineBackground {
+  stroke: color-mod(var(--text-color) alpha(20%));
+  stroke-dasharray: 5;
+  fill: none;
+}
+
+.lineForeground {
+  stroke: var(--color-important);
+  stroke-width: 1.5px;
+  fill: none;
+}
+
+.lineForegroundDanger {
+  stop-color: var(--color-danger);
+}
+
+.lineForegroundNormal {
+  stop-color: var(--color-important);
+}

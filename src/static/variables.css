@@ -1,3 +1,5 @@
+/* Сделан запрет на root, что бы нельзя было его использовать, кроме текущего файла */
+/* stylelint-disable-next-line */
 :root {
   --bg-color: #050e1c;
   --bg-color-white: rgba(255, 255, 255, 0.1);
