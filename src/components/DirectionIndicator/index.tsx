@@ -1,11 +1,9 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
 import directionImage from './images/i-direction.gif'
-import './index.css'
-
-const cn = classname('direction-indicator')
+import css from './index.css'
 
 export const directions = ['down', 'up'] as const
 
@@ -15,5 +13,16 @@ type DirectionIndicatorPropsType = {
 }
 
 export const DirectionIndicator = ({ className, direction }: DirectionIndicatorPropsType) => (
-  <img className={cn(null, { direction }, className)} src={directionImage} alt={direction} />
+  <img
+    className={classnames(
+      css.directionIndicator,
+      {
+        up: css.up,
+        down: null,
+      }[direction],
+      className
+    )}
+    src={directionImage}
+    alt={direction}
+  />
 )

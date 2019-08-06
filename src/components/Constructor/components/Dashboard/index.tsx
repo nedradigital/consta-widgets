@@ -2,15 +2,12 @@ import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { Layouts, Responsive, WidthProvider } from 'react-grid-layout'
 
-import { classname } from '@/utils/classname'
-
 import { Dataset } from '../../'
 import { ItemTypes } from '../../dnd-constants'
 import { IWidget, Widget } from '../Widget'
 
-import './index.css'
+import css from './index.css'
 
-const cn = classname('dashboard')
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
 const uniqCounter: { [key: string]: number } = {}
@@ -45,7 +42,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
 
   const { widgets, layouts } = dashboard
 
-  const [{ isOver }, drop] = useDrop({
+  const [, drop] = useDrop({
     accept: ItemTypes.WIDGET,
     drop: (item: any) => {
       const newWidgets = [...widgets, { ...item, name: getUniqName(item.name) } as IWidget]
@@ -75,7 +72,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
   }
 
   return (
-    <div ref={drop} className={cn(null, { dropping: isOver })}>
+    <div ref={drop} className={css.dashboard}>
       <ResponsiveReactGridLayout
         margin={margin}
         cols={cols}
@@ -83,7 +80,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         className="layout"
         layouts={layouts}
         measureBeforeMount
-        verticalCompact={false}
+        compactType={null}
         onLayoutChange={(_, newLayoutsState) => {
           if (onChange) {
             onChange({ widgets, layouts: newLayoutsState })
@@ -91,7 +88,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         }}
       >
         {widgets.map(widget => (
-          <div key={widget.name} className={cn('widget-wrapper')}>
+          <div key={widget.name} className={css.widgetWrapper}>
             <Widget
               dashboardMode
               datasets={datasets}

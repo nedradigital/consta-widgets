@@ -16,39 +16,39 @@
 
   align-items: center;
   justify-content: center;
+}
 
-  &__edit-button {
-    height: 24px;
-    width: 24px;
+.editButton {
+  height: 24px;
+  width: 24px;
 
-    background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
 
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 
-    position: absolute;
-    right: 30px;
-    top: 10px;
+  position: absolute;
+  right: 30px;
+  top: 10px;
 
-    border: none;
+  border: none;
+}
+
+.editIcon {
+  width: 24px;
+  height: 24px;
+
+  fill: none;
+
+  & path {
+    stroke: var(--color-dashboard);
   }
+}
 
-  &__edit-icon {
-    width: 24px;
-    height: 24px;
+.select {
+  background: none;
 
-    fill: none;
+  border: none;
 
-    & path {
-      stroke: var(--color-dashboard);
-    }
-  }
-
-  &__select {
-    background: none;
-
-    border: none;
-
-    color: #ccc;
-  }
+  color: #ccc;
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 
+import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { classname } from '../../utils/classname'
 import { Badge } from '../Badge'
 import { KPIChart, Status } from '../KPIChart'
 
-import './index.css'
+import css from './index.css'
 
 type Props = {
   className?: string
@@ -22,8 +22,6 @@ type Props = {
   chartId: string
 }
 
-const cn = classname('kpi-block')
-
 export const KPIBlock: React.FC<Props> = ({
   className,
   deviation,
@@ -37,35 +35,35 @@ export const KPIBlock: React.FC<Props> = ({
   status,
   chartId,
 }) => (
-  <div className={cn(null, null, className)}>
-    <div className={cn('title')}>{title || '--'}</div>
-    <div className={cn('indicators')}>
-      <div className={cn('indicator', { fact: true })}>
-        <div className={cn('value-line')}>
-          <span className={cn('value')}>{isNil(factValue) ? '--' : factValue.toFixed(1)}</span>
+  <div className={classnames(css.kpiBlock, className)}>
+    <div className={css.title}>{title || '--'}</div>
+    <div className={css.indicators}>
+      <div className={classnames(css.indicator, css.isFact)}>
+        <div className={css.valueLine}>
+          <span className={css.value}>{isNil(factValue) ? '--' : factValue.toFixed(1)}</span>
           {!isNil(deviation) && (
-            <Badge className={cn('deviation')} status={status}>
+            <Badge className={css.deviation} status={status}>
               {deviation}%
             </Badge>
           )}
         </div>
-        <div className={cn('value-name')}>Факт</div>
+        <div className={css.valueName}>Факт</div>
       </div>
-      <div className={cn('indicator', { plan: true })}>
-        <div className={cn('value-line')}>
-          <span className={cn('value')}>{isNil(planValue) ? '--' : planValue.toFixed(1)}</span>
+      <div className={classnames(css.indicator, css.isPlan)}>
+        <div className={css.valueLine}>
+          <span className={css.value}>{isNil(planValue) ? '--' : planValue.toFixed(1)}</span>
         </div>
-        <div className={cn('value-name')}>План</div>
+        <div className={css.valueName}>План</div>
       </div>
     </div>
-    <div className={cn('chart')}>
+    <div className={css.chart}>
       <KPIChart id={chartId} factData={factData} planData={planData} status={status} />
     </div>
-    {!isNil(unit) && <div className={cn('unit')}>{unit}</div>}
+    {!isNil(unit) && <div className={css.unit}>{unit}</div>}
     {!isNil(legend) && Boolean(legend.length) && (
-      <div className={cn('legend')}>
+      <div className={css.legend}>
         {legend.map(value => (
-          <span key={value} className={cn('legend-item')}>
+          <span key={value} className={css.legendItem}>
             {value}
           </span>
         ))}

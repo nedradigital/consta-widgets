@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('pin')
+import css from './index.css'
 
 export const positions = ['left', 'right'] as const
 type Position = typeof positions[number]
@@ -32,11 +30,29 @@ export const Pin: React.FC<Props> = ({
   skin = 'inside',
   title,
 }) => (
-  <div className={cn(null, { position, skin, status }, className)}>
-    <span className={cn('edge')} />
-    <div className={cn('content')}>
-      {title && <div className={cn('title')}>{title}</div>}
-      <div className={cn('text')}>{children}</div>
+  <div
+    className={classnames([
+      css.pin,
+      status &&
+        {
+          danger: css.statusDanger,
+          warning: css.statusWarning,
+        }[status],
+      {
+        left: css.positionLeft,
+        right: css.positionRight,
+      }[position],
+      {
+        outside: css.skinOutside,
+        inside: null,
+      }[skin],
+      className,
+    ])}
+  >
+    <span className={css.edge} />
+    <div className={css.content}>
+      {title && <div className={css.title}>{title}</div>}
+      <div>{children}</div>
     </div>
   </div>
 )

@@ -1,23 +1,21 @@
-.progress-time-block-date {
-  &__current-day {
-    font-weight: bold;
-    font-size: 24px;
-    grid-area: current-day;
-  }
+.currentDay {
+  font-weight: bold;
+  font-size: 24px;
+  grid-area: current-day;
+}
 
-  &__content {
-    grid-area: date;
-    align-items: flex-end;
-    display: flex;
-    padding-bottom: 3px;
-  }
+.content {
+  grid-area: date;
+  align-items: flex-end;
+  display: flex;
+  padding-bottom: 3px;
+}
 
-  &__icon {
-    margin-right: 10px;
-  }
+.icon {
+  margin-right: 10px;
+}
 
-  &__value {
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
+.value {
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }

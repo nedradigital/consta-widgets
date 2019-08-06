@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('progress-line')
+import css from './index.css'
 
 export const statuses = ['danger', 'normal', 'warning'] as const
 type Status = typeof statuses[number]
@@ -31,8 +29,22 @@ export const ProgressLine: React.FC<Props> = ({
   status = 'normal',
   type = 'line',
 }) => (
-  <div className={cn(null, { status, type }, className)}>
-    <div className={cn('progress')} style={{ left: `${normalizedProgress(progress)}%` }} />
-    {children && type === 'hollow' && <div className={cn('content')}>{children}</div>}
+  <div
+    className={classnames([
+      css.progressLine,
+      {
+        normal: css.statusNormal,
+        danger: css.statusDanger,
+        warning: css.statusWarning,
+      }[status],
+      {
+        hollow: css.typeHollow,
+        line: css.typeLine,
+      }[type],
+      className,
+    ])}
+  >
+    <div className={css.progress} style={{ left: `${normalizedProgress(progress)}%` }} />
+    {children && type === 'hollow' && <div className={css.content}>{children}</div>}
   </div>
 )

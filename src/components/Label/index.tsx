@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('label')
+import css from './index.css'
 
 type Props = {
   className?: string
@@ -12,5 +10,5 @@ type Props = {
 }
 
 export const Label = ({ className, children }: Props) => (
-  <div className={cn(null, null, className)}>{children}</div>
+  <div className={classnames(css.label, className)}>{children}</div>
 )

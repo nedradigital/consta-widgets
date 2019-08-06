@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('background-status-indicator')
+import css from './index.css'
 
 export const statuses = ['danger', 'important', 'warning'] as const
 type Status = typeof statuses[number]
@@ -16,5 +14,5 @@ type Props = {
 }
 
 export const BackgroundStatusIndicator: React.FC<Props> = ({ className, status, styles = {} }) => (
-  <div className={cn(null, { status }, className)} style={styles} />
+  <div className={classnames(css.main, css[status], className)} style={styles} />
 )

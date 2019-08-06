@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('openable-label')
+import css from './index.css'
 
 type Props = {
   className?: string
@@ -29,23 +27,23 @@ export const OpenableLabel: React.FC<Props> = ({
   }, [isInitiallyOpened])
 
   return (
-    <div className={cn(null, null, className)}>
+    <div className={classnames(css.openableLabel, className)}>
       {isOpened ? (
         <>
-          <div className={cn('content')}>
-            <div className={cn('title')}>{title}</div>
+          <div className={css.content}>
+            <div className={css.title}>{title}</div>
             {items.map((item, idx) => (
-              <div key={idx} className={cn('item')}>
+              <div key={idx} className={css.item}>
                 {item}
               </div>
             ))}
           </div>
-          <span className={cn('close')} onClick={() => setOpened(false)} />
+          <span className={css.close} onClick={() => setOpened(false)} />
         </>
       ) : (
-        <div className={cn('short-title-block')} onClick={() => setOpened(true)}>
-          <span className={cn('short-title')}>{shortTitle}</span>
-          <span className={cn('short-title-icon')}>+</span>
+        <div className={css.shortTitleBlock} onClick={() => setOpened(true)}>
+          <span className={css.shortTitle}>{shortTitle}</span>
+          <span className={css.shortTitleIcon}>+</span>
         </div>
       )}
     </div>

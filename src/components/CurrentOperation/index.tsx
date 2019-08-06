@@ -1,14 +1,12 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
-
 import { ElementWithIcon } from '../ElementWithIcon'
 import { Switcher } from '../Switcher'
 import { Timer } from '../Timer'
 
 import { ReactComponent as IconFb } from './images/i-fb.svg'
 import { ReactComponent as IconTime } from './images/i-time.svg'
-import './index.css'
+import css from './index.css'
 
 type Props = {
   title: React.ReactNode
@@ -19,14 +17,12 @@ type Props = {
   toggleAdaptive?: () => void
 }
 
-const cn = classname('current-operation')
-
 export const CurrentOperation = React.memo<Props>(
   ({ actualTime, duration, fb, title, isAdaptive, toggleAdaptive }) => (
-    <div className={cn()}>
-      <div className={cn('info-line')}>
+    <div className={css.currentOoperation}>
+      <div className={css.infoLine}>
         {actualTime && (
-          <div className={cn('element')}>
+          <div className={css.element}>
             <ElementWithIcon icon={<IconTime />}>
               <Timer startTime={actualTime} />
             </ElementWithIcon>
@@ -34,25 +30,25 @@ export const CurrentOperation = React.memo<Props>(
         )}
 
         {duration && (
-          <div className={cn('element')}>
+          <div className={css.element}>
             <ElementWithIcon icon={<IconTime />}>{duration}</ElementWithIcon>
           </div>
         )}
 
         {fb && (
-          <div className={cn('element')}>
+          <div className={css.element}>
             <ElementWithIcon icon={<IconFb />}>{fb}</ElementWithIcon>
           </div>
         )}
 
         {toggleAdaptive && (
-          <div className={cn('switcher')}>
+          <div className={css.switcher}>
             <Switcher isEnabled={Boolean(isAdaptive)} onClick={toggleAdaptive} />
           </div>
         )}
       </div>
 
-      <div className={cn('title')}>{title}</div>
+      <div className={css.title}>{title}</div>
     </div>
   )
 )

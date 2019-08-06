@@ -1,16 +1,14 @@
 import * as React from 'react'
 import { useDrag } from 'react-dnd'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
 import { Dataset, DataType } from '../../'
 import { ItemTypes } from '../../dnd-constants'
 
 import { ReactComponent as EditIcon } from './icons/edit.svg'
 import { ReactComponent as SaveIcon } from './icons/save.svg'
-import './index.css'
-
-const cn = classname('widget')
+import css from './index.css'
 
 export interface IWidget {
   name: string
@@ -54,13 +52,13 @@ export const Widget: React.FunctionComponent<WidgetProps> = props => {
 
   return (
     <div
-      className={cn(null, null, className)}
+      className={classnames(css.widget, className)}
       ref={dashboardMode ? null : dragRef}
       style={{ opacity }}
     >
       {!viewMode && dashboardMode && (
-        <button className={cn('edit-button')} onClick={() => setEdit(!isEdit)}>
-          <Icon className={cn('edit-icon')} />
+        <button className={css.editButton} onClick={() => setEdit(!isEdit)}>
+          <Icon className={css.editIcon} />
         </button>
       )}
       {viewMode && <span>Данные из: {currentDatasetName || 'нет источника данных'}</span>}
@@ -72,7 +70,7 @@ export const Widget: React.FunctionComponent<WidgetProps> = props => {
         <span>
           <label>Тип данных:</label>
           <select
-            className={cn('select')}
+            className={css.select}
             onChange={e => onDatasetChanged && onDatasetChanged(name, e.currentTarget.value)}
             value={currentDatasetName}
           >

@@ -1,11 +1,10 @@
 import React, { createRef, useEffect, useState } from 'react'
 
+import classnames from 'classnames'
 import * as d3 from 'd3'
 import { isNil } from 'lodash'
 
-import { classname } from '../../utils/classname'
-
-import './index.css'
+import css from './index.css'
 
 export const statuses = ['danger', 'normal', 'warning'] as const
 export type Data = number[] | number
@@ -41,14 +40,12 @@ type LinearGradientProps = {
 
 type CastSafeData = SummaryData
 
-const cn = classname('kpi-chart')
-
 const MIN_WIDTH = 234
 const MIN_HEIGHT = 95
 
-const CLASS_LINE_BACKGROUND = cn('line-background')
-const CLASS_LINE_FOREGROUND = cn('line-foreground')
-const CLASS_AREA_FOREGROUND = cn('area-foreground')
+const CLASS_LINE_BACKGROUND = css.lineBackground
+const CLASS_LINE_FOREGROUND = css.lineForeground
+const CLASS_AREA_FOREGROUND = css.areaForeground
 
 export const castData = (data?: Data, length = 2) => {
   return (Array.isArray(data)
@@ -104,7 +101,7 @@ const Circle: React.FunctionComponent<CircleProps> = ({
   if (isVisible) {
     return (
       <div
-        className={cn('circle')}
+        className={css.circle}
         style={{
           left: circleLeft * 100 + '%',
           bottom: circleBottom * height + 'px',
@@ -121,10 +118,12 @@ const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, st
     return null
   }
 
+  const gradientClass = type === 'linear' ? css.linearGradient : css.areaGradient
+
   return (
     <linearGradient id={id} x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" className={cn(`${type}-gradient`, { start: status })} />
-      <stop offset="100%" className={cn(`${type}-gradient`, { end: status })} />
+      <stop offset="0%" className={classnames(gradientClass, css.isStart, css[status])} />
+      <stop offset="100%" className={classnames(gradientClass, css.isEnd, css[status])} />
     </linearGradient>
   )
 }
@@ -136,8 +135,8 @@ export const KPIChart: React.FC<Props> = ({
   className,
   status = 'normal',
 }) => {
-  const areaGradientId = cn(`area-gradient-${id}`)
-  const linearGradientId = cn(`linear-gradient-${id}`)
+  const areaGradientId = `area-gradient-${id}`
+  const linearGradientId = `linear-gradient-${id}`
   const scaleHeightBackground = d3.scaleLinear()
   const scaleHeightForeground = d3.scaleLinear()
   const scaleWidthBackground = d3.scaleLinear()
@@ -200,8 +199,8 @@ export const KPIChart: React.FC<Props> = ({
   })
 
   return (
-    <div className={cn(null, null, className)}>
-      <svg className={cn('svg')} ref={ref} width={width} height={height}>
+    <div className={classnames(css.kpiChart, className)}>
+      <svg className={css.svg} ref={ref} width={width} height={height}>
         <defs>
           <LinearGradient type="linear" status={status} id={linearGradientId} />
           <LinearGradient type="area" status={status} id={areaGradientId} />

@@ -1,8 +1,14 @@
 module.exports = {
   moduleNameMapper: {
-    '\\.(css|jpg|jpeg|png|gif|webp|svg|ttf|woff|woff2|)$': '<rootDir>/config/jest/mock-files.js'
+    '\\.(jpg|jpeg|png|gif|webp|svg|ttf|woff|woff2|)$': '<rootDir>/config/jest/mock-files.js',
+    "\\.css$": "identity-obj-proxy"
   },
   modulePathIgnorePatterns: [ '.npm' ],
+  globals: {
+    'ts-jest': {
+      diagnostics: false
+    }
+  },
   transform: {
     "^.+\\.(ts|tsx)$": "ts-jest",
   },

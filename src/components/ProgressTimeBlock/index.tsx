@@ -1,11 +1,11 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
 import { ProgressTimeChart, ProgressTimeChartProps } from './components/ProgressTimeChart'
 import { ProgressTimeDate, ProgressTimeDateProps } from './components/ProgressTimeDate'
 import { ProgressTimeText } from './components/ProgressTimeText'
-import './index.css'
+import css from './index.css'
 
 export const statuses = ['danger', 'normal', 'warning'] as const
 
@@ -29,8 +29,6 @@ type Props = {
 } & ProgressTimeChartProps &
   ProgressTimeDateProps
 
-const cn = classname('progress-time-block')
-
 export const ProgressTimeBlock: React.FC<Props> = ({
   className,
   currentDay,
@@ -44,7 +42,7 @@ export const ProgressTimeBlock: React.FC<Props> = ({
   statusTitle,
   status,
 }) => (
-  <div className={cn(null, null, className)}>
+  <div className={classnames(css.progressTimeBlock, className)}>
     <ProgressTimeDate currentDay={currentDay} endDate={endDate} planDaysCount={planDaysCount} />
 
     <ProgressTimeChart progress={progress} />
@@ -63,6 +61,6 @@ export const ProgressTimeBlock: React.FC<Props> = ({
       value={recAccepted}
       unit="принято"
     />
-    <ProgressTimeText name="recommendations-refused" value={recRejected} unit="отклонено" />
+    <ProgressTimeText name="recommendationsRefused" value={recRejected} unit="отклонено" />
   </div>
 )

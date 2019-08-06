@@ -1,9 +1,11 @@
-.progress-line {
+@custom-selector :--main .progressLine;
+
+:--main {
   box-sizing: border-box;
   overflow: hidden;
   position: relative;
 
-  &_type_line {
+  &.typeLine {
     background-color: color-mod(var(--text-color-additional) alpha(30%));
     border-radius: 3px;
     display: inline-block;
@@ -11,7 +13,7 @@
     width: 80px;
   }
 
-  &_type_hollow {
+  &.typeHollow {
     align-items: center;
     border-radius: var(--border-radius);
     border: 1px solid transparent;
@@ -19,46 +21,46 @@
     height: 22px;
     justify-content: center;
     width: 90px;
-  }
 
-  &_type_hollow&_status_danger {
-    border-color: var(--color-danger);
-  }
+    &.statusDanger {
+      border-color: var(--color-danger);
+    }
 
-  &_type_hollow&_status_normal {
-    border-color: var(--color-important);
-  }
+    &.statusNormal {
+      border-color: var(--color-important);
+    }
 
-  &_type_hollow&_status_warning {
-    border-color: var(--color-warning);
+    &.statusWarning {
+      border-color: var(--color-warning);
+    }
   }
+}
 
-  &__progress {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    transform: translateX(-100%);
-    transition: left 0.3s ease-out;
-    width: 100%;
-    z-index: 0;
-  }
+.progress {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  transform: translateX(-100%);
+  transition: left 0.3s ease-out;
+  width: 100%;
+  z-index: 0;
 
-  &_status_danger &__progress {
+  @nest :--main.statusDanger & {
     background-color: var(--color-danger);
   }
 
-  &_status_normal &__progress {
+  @nest :--main.statusNormal & {
     background-color: var(--color-important);
   }
 
-  &_status_warning &__progress {
+  @nest :--main.statusWarning & {
     background-color: var(--color-warning);
   }
+}
 
-  &__content {
-    max-width: 100%;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-  }
+.content {
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
 }

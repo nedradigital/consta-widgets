@@ -9,6 +9,9 @@
   "jsRules": {
     "object-literal-sort-keys": [false]
   },
+  "linterOptions": {
+    "exclude": [ "**/*.css.d.ts" ]
+  },
   "rules": {
     "prettier": true,
     "ordered-imports": [

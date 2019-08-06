@@ -1,47 +1,49 @@
-.switcher {
+@custom-selector :--main .switcher;
+
+:--main {
   font-size: var(--main-font-size);
   align-items: center;
   display: inline-flex;
   cursor: pointer;
   justify-content: center;
   user-select: none;
+}
 
-  &__title {
-    padding-right: 12px;
+.title {
+  padding-right: 12px;
 
-    &:last-child {
-      padding-right: 0;
-    }
+  &:last-child {
+    padding-right: 0;
   }
+}
 
-  &__switcher {
-    background: rgba(#323f52, 0.5);
-    border-radius: 20px;
-    display: inline-block;
-    height: 13px;
-    position: relative;
-    transition: background-color 0.3s ease-out;
-    width: 24px;
-  }
+.wrapper {
+  background: rgba(#323f52, 0.5);
+  border-radius: 20px;
+  display: inline-block;
+  height: 13px;
+  position: relative;
+  transition: background-color 0.3s ease-out;
+  width: 24px;
 
-  &_is-enabled &__switcher {
+  @nest :--main.isEnabled & {
     background-color: #5e6f8a;
   }
+}
 
-  &__icon {
-    background: #cfdef6;
-    box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.41);
-    border-radius: 50%;
-    height: 17px;
-    position: absolute;
-    left: -4px;
-    top: -2px;
-    transform: translateX(0);
-    transition: transform 0.3s ease-out;
-    width: 17px;
-  }
+.icon {
+  background: #cfdef6;
+  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.41);
+  border-radius: 50%;
+  height: 17px;
+  position: absolute;
+  left: -4px;
+  top: -2px;
+  transform: translateX(0);
+  transition: transform 0.3s ease-out;
+  width: 17px;
 
-  &_is-enabled &__icon {
+  @nest :--main.isEnabled & {
     transform: translateX(15px);
   }
 }

@@ -1,4 +1,4 @@
-.text-with-icon {
+.main {
   align-items: center;
   display: inline-flex;
   flex-direction: row;
@@ -6,22 +6,22 @@
   & > * + * {
     margin-left: 5px;
   }
+}
 
-  &__icon {
-    color: inherit;
-    display: inline-flex;
-    flex-shrink: 0;
+.icon {
+  color: inherit;
+  display: inline-flex;
+  flex-shrink: 0;
 
-    &_color_normal {
-      color: var(--color-important);
-    }
+  &.normal {
+    color: var(--color-important);
+  }
 
-    &_color_danger {
-      color: var(--color-danger);
-    }
+  &.danger {
+    color: var(--color-danger);
+  }
 
-    &_color_warning {
-      color: var(--color-warning);
-    }
+  &.warning {
+    color: var(--color-warning);
   }
 }

@@ -2,11 +2,9 @@ import * as React from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { classname } from '@/utils/classname'
-
 import { Dashboard, DashboardProps, DashboardState } from './components/Dashboard'
 import { Menu, MenuProps } from './components/Menu'
-import './index.css'
+import css from './index.css'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -26,8 +24,6 @@ export type Dataset = {
 
 type ConstructorProps = DashboardProps & MenuProps
 
-const cn = classname('Constructor')
-
 export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
   const {
     margin,
@@ -43,7 +39,7 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className={cn()}>
+      <div className={css.constructor}>
         <Menu onClear={onClear} onToggleMode={onToggleMode} />
         <Dashboard
           margin={margin}

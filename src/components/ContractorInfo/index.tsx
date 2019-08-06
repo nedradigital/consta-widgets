@@ -1,8 +1,6 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
-
-import './index.css'
+import css from './index.css'
 
 type Props = {
   className?: string
@@ -11,18 +9,16 @@ type Props = {
   phone?: string
 }
 
-const cn = classname('contractor-info')
-
 export const ContractorInfo: React.FC<Props> = ({
   company = 'Название подрядчика: --',
   name = 'Супервайзер',
   phone = '--',
   className,
 }) => (
-  <div className={cn(null, null, className)}>
-    <div className={cn('company')}>{company}</div>
-    <div className={cn('info')}>
-      {name}, <div className={cn('phone')}>{phone}</div>
+  <div className={className}>
+    <div className={css.company}>{company}</div>
+    <div className={css.info}>
+      {name}, <div>{phone}</div>
     </div>
   </div>
 )

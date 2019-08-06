@@ -23,8 +23,7 @@
   },
   "include": [
     "src/**/*",
-    "types/**/*",
-    "node_modules/jest-enzyme"
+    "types/**/*"
   ],
   "exclude": ["build", "__tests__"]
 }
