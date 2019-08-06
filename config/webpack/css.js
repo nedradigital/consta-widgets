@@ -10,22 +10,28 @@ const cssRules = [
 const isProduction = process.env.NODE_ENV === 'production'
 
 // Use generator function for spread in arrays
-function* css() {
+function* css({ onlyGenerateTypes } = {}) {
   const sourceMap = !isProduction
 
   for (const rule of cssRules) {
     const use = [
-      {
-        loader: MiniCssExtractPlugin.loader,
-        options: {
-          hmr: !isProduction,
+      onlyGenerateTypes
+        ? null
+        : {
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            hmr: !isProduction,
+          },
         },
-      },
+      !isProduction || onlyGenerateTypes ? 'css-modules-typescript-loader' : null,
       {
         loader: 'css-loader',
 
         options: {
           importLoaders: rule.use.length + 1,
+          modules: {
+            localIdentName: isProduction ? '[hash:base64:5]' : '[folder]__[local]--[hash:base64:5]',
+          },
           sourceMap,
         },
       },
@@ -44,6 +50,8 @@ function* css() {
                     transformVars: true,
                     importFrom: ['./src/static/variables.css'],
                   },
+                  'custom-selectors': true,
+                  'nesting-rules': true,
                 },
               }),
               require('cssnano')(),

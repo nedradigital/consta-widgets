@@ -1,4 +1,4 @@
-.background-status-indicator {
+.main {
   border-top: 4px solid color-mod(var(--text-color-additional) alpha(63%));
   bottom: 0;
   box-sizing: border-box;
@@ -7,7 +7,7 @@
   right: 0;
   top: 0;
 
-  &_status_danger {
+  &.danger {
     background-image: linear-gradient(
       165.63deg,
       rgba(201, 29, 50, 0.52) 5.81%,
@@ -16,7 +16,7 @@
     border-top-color: color-mod(var(--color-danger) alpha(70%));
   }
 
-  &_status_important {
+  &.important {
     background-image: linear-gradient(
       167.07deg,
       rgba(33, 92, 196, 0.44) 4.16%,
@@ -25,7 +25,7 @@
     border-top-color: color-mod(var(--color-important) alpha(70%));
   }
 
-  &_status_warning {
+  &.warning {
     background-image: linear-gradient(
       165.63deg,
       rgba(231, 177, 38, 0.36) 5.81%,

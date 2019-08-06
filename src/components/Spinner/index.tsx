@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('spinner')
+import css from './index.css'
 
 export enum SpinnerSize {
   s = 16,
@@ -19,7 +17,7 @@ type Props = {
 
 export const Spinner: React.FC<Props> = ({ className, size = SpinnerSize.m }) => (
   <svg
-    className={cn(null, null, className)}
+    className={classnames(css.spinner, className)}
     viewBox="25 25 50 50"
     style={{
       width: size,
@@ -27,7 +25,7 @@ export const Spinner: React.FC<Props> = ({ className, size = SpinnerSize.m }) =>
     }}
   >
     <circle
-      className={cn('path')}
+      className={css.path}
       cx="50"
       cy="50"
       r="20"

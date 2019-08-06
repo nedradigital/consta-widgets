@@ -9,16 +9,16 @@
   padding: 2px 4px 0;
   position: relative;
 
-  &_status_normal {
+  &.normal {
     background-color: var(--color-normal);
   }
 
-  &_status_warning {
+  &.warning {
     background-color: var(--color-warning);
     color: #000;
   }
 
-  &_status_danger {
+  &.danger {
     background-color: var(--color-danger);
   }
 }

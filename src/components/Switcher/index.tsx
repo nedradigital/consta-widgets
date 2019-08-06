@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('switcher')
+import css from './index.css'
 
 type SwitcherPropsType = {
   title?: React.ReactNode
@@ -13,13 +11,14 @@ type SwitcherPropsType = {
 }
 
 export const Switcher = ({ onClick, isEnabled, title }: SwitcherPropsType) => (
-  <span
-    className={cn(null, { 'is-enabled': isEnabled })}
+  <button
+    type="button"
+    className={classnames(css.switcher, { [css.isEnabled]: isEnabled })}
     onClick={() => onClick && onClick(!isEnabled)}
   >
-    {title && <span className={cn('title')}>{title}</span>}
-    <span className={cn('switcher')}>
-      <span className={cn('icon')} />
+    {title && <span className={css.title}>{title}</span>}
+    <span className={css.wrapper}>
+      <span className={css.icon} />
     </span>
-  </span>
+  </button>
 )

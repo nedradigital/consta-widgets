@@ -1,29 +1,29 @@
-.progress-time-block-chart {
+.main {
   grid-area: chart;
   position: relative;
+}
 
-  &__svg {
-    left: 0;
-    top: 0;
-    position: absolute;
-    height: 100%;
-    width: 100%;
-  }
+.svg {
+  left: 0;
+  top: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
 
-  &__svg-bg {
-    stroke: rgba(#565863, 0.4);
-  }
+.svgBg {
+  stroke: rgba(#565863, 0.4);
+}
 
-  &__svg-line {
-    stroke: #4a85ff;
-  }
+.svgLine {
+  stroke: #4a85ff;
+}
 
-  &__value {
-    font-size: 32px;
-    font-weight: bold;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
+.value {
+  font-size: 32px;
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

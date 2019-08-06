@@ -1,13 +1,13 @@
-.progress-time-block-text {
-  &_name_deviation {
+.main {
+  &.deviation {
     grid-area: deviation;
   }
 
-  &_name_hse {
+  &.hse {
     grid-area: hse;
   }
 
-  &_name_recommendations {
+  &.recommendations {
     grid-area: recom;
     position: relative;
 
@@ -22,40 +22,40 @@
     }
   }
 
-  &_name_recommendations-refused {
+  &.recommendationsRefused {
     grid-area: recom-ref;
   }
+}
 
-  &__title {
-    color: #878ca8;
-    margin-bottom: 4px;
+.title {
+  color: #878ca8;
+  margin-bottom: 4px;
 
-    &_status_normal {
-      color: #2fcc69;
-    }
-
-    &_status_warning {
-      color: var(--color-warning);
-    }
-
-    &_status_danger {
-      color: #f00;
-    }
+  &.normal {
+    color: #2fcc69;
   }
 
-  &__value-item {
-    font-weight: bold;
-    line-height: 32px;
+  &.warning {
+    color: var(--color-warning);
   }
 
-  &__value {
-    font-size: 28px;
-    letter-spacing: 0.0121em;
+  &.danger {
+    color: #f00;
   }
+}
 
-  &__units {
-    font-weight: bold;
-    font-size: 16px;
-    letter-spacing: 0.0121em;
-  }
+.valueItem {
+  font-weight: bold;
+  line-height: 32px;
+}
+
+.value {
+  font-size: 28px;
+  letter-spacing: 0.0121em;
+}
+
+.units {
+  font-weight: bold;
+  font-size: 16px;
+  letter-spacing: 0.0121em;
 }

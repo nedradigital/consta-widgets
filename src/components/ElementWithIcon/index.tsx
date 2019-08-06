@@ -1,10 +1,8 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
-
-const cn = classname('text-with-icon')
+import css from './index.css'
 
 export const colors = ['normal', 'danger', 'warning'] as const
 type Color = typeof colors[number]
@@ -28,15 +26,15 @@ export const ElementWithIcon: React.FC<Props> = ({
   className,
 }) => {
   const items = [
-    <span key="icon" className={cn('icon', { color })}>
+    <span key="icon" className={classnames(css.icon, color && css[color])}>
       {icon}
     </span>,
-    <span key="element" className={cn('element')}>
-      {children}
-    </span>,
+    <span key="element">{children}</span>,
   ]
 
   return (
-    <div className={cn(null, null, className)}>{order === 'reverse' ? items.reverse() : items}</div>
+    <div className={classnames(css.main, className)}>
+      {order === 'reverse' ? items.reverse() : items}
+    </div>
   )
 }

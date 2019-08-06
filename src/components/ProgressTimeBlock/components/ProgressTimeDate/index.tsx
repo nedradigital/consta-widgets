@@ -1,11 +1,7 @@
 import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname'
-
 import { ReactComponent as IconFlag } from './images/flag.svg'
-import './index.css'
-
-const cn = classname('progress-time-block-date')
+import css from './index.css'
 
 export type ProgressTimeDateProps = {
   /** Текущий день строительства скважины */
@@ -21,12 +17,12 @@ export const ProgressTimeDate: React.FC<ProgressTimeDateProps> = ({
   planDaysCount,
 }) => (
   <>
-    <div className={cn('current-day')}>
+    <div className={css.currentDay}>
       День {isNil(currentDay) ? '--' : currentDay} / {isNil(planDaysCount) ? '--' : planDaysCount}
     </div>
-    <div className={cn('content')}>
-      <IconFlag className={cn('icon')} />
-      <span className={cn('value')}>{endDate}</span>
+    <div className={css.content}>
+      <IconFlag className={css.icon} />
+      <span className={css.value}>{endDate}</span>
     </div>
   </>
 )

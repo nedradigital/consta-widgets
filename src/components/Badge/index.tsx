@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { classname } from '../../utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
+import css from './index.css'
 
 export const statuses = ['danger', 'normal', 'warning'] as const
 type Status = typeof statuses[number]
@@ -13,8 +13,6 @@ type Props = {
   children?: React.ReactNode
 }
 
-const cn = classname('badge')
-
 export const Badge: React.FC<Props> = ({ className, status, children }) => (
-  <span className={cn(null, { status }, className)}>{children}</span>
+  <span className={classnames(css.badge, status && css[status], className)}>{children}</span>
 )

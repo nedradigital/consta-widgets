@@ -1,14 +1,12 @@
 import React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
 import { ElementWithIcon } from '../ElementWithIcon'
 import { Timer } from '../Timer'
 
 import { ReactComponent as IconTime } from './images/time.svg'
-import './index.css'
-
-const cn = classname('notice')
+import css from './index.css'
 
 export type Props = {
   className?: string
@@ -23,13 +21,13 @@ export const Notice: React.FunctionComponent<Props> = ({
   startTime,
   title,
 }) => (
-  <div className={cn(null, null, className)}>
+  <div className={classnames(css.notice, className)}>
     {startTime && (
-      <div className={cn('timer')}>
+      <div className={css.timer}>
         <ElementWithIcon icon={<IconTime />} children={<Timer startTime={startTime} />} />
       </div>
     )}
-    {title && <div className={cn('title')}>{title}</div>}
-    {description && <div className={cn('description')}>{description}</div>}
+    {title && <div className={css.title}>{title}</div>}
+    {description && <div>{description}</div>}
   </div>
 )
