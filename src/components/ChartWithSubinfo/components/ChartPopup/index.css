@@ -1,4 +1,4 @@
-.chart-popup {
+.chartPopup {
   border-radius: 4px;
   box-sizing: border-box;
   background: #262737;
@@ -10,7 +10,7 @@
   box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.7);
   transition: left 1s ease, right 1s ease;
 
-  &__title {
+  &.title {
     background-color: #343b51;
     border-radius: 4px 4px 0 0;
     font-size: 14px;
@@ -21,7 +21,7 @@
     text-transform: uppercase;
   }
 
-  &__close-button {
+  &.closeButton {
     align-items: center;
     background: #fff;
     border: none;

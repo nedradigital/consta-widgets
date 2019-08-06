@@ -1,6 +1,6 @@
 import pluralize from 'pluralize-ru'
 
-const plural = (...args: any) => (count: any) => pluralize(count, ...args)
+const plural = (...args: any) => (count: number | string) => pluralize(count, ...args)
 
 export const getDayPlural = plural('%d дней', '%d день', '%d дня', '%d дней')
 

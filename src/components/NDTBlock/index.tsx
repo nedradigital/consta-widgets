@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname'
 import { getDayPlural } from '@/utils/pluralization'
 
 import { ChartPopup, ChartWithSubinfo } from '../ChartWithSubinfo'
@@ -10,7 +9,7 @@ import { NDTChart } from '../NDTChart'
 import { NDTInfo } from '../NDTInfo'
 import { NDTTable } from '../NDTTable'
 
-import './index.css'
+import css from './index.css'
 
 export type npvDayType = {
   /** Аварии [час] */
@@ -47,8 +46,6 @@ type NDTBlockPropsType = {
   clearDay?: () => void
 }
 
-const cn = classname('ndt-block')
-
 export const NDTBlock: React.FC<NDTBlockPropsType> = ({
   className,
   currentDay,
@@ -58,19 +55,17 @@ export const NDTBlock: React.FC<NDTBlockPropsType> = ({
   clearDay,
 }) => (
   <ChartWithSubinfo
-    className={cn(null, null, className)}
+    className={className}
     chartComponent={
       <NDTChart
-        className={cn('chart')}
+        className={css.chart}
         currentDay={currentDay}
         npvList={npvList}
         onDayHover={setDay}
         selectedDay={selectedDay}
       />
     }
-    subinfoComponent={
-      <NDTInfo className={cn('subinfo')} currentDay={currentDay} npvList={npvList} />
-    }
+    subinfoComponent={<NDTInfo currentDay={currentDay} npvList={npvList} />}
     chartPopupComponent={
       !isNil(selectedDay) &&
       selectedDay > 0 && (
@@ -80,7 +75,7 @@ export const NDTBlock: React.FC<NDTBlockPropsType> = ({
           selectedDay={selectedDay}
           daysCount={Math.max(0, currentDay || 0, (npvList || []).length)}
         >
-          <NDTTable className={cn('popup-body')} currentDay={selectedDay} npvList={npvList} />
+          <NDTTable className={css.popupBody} currentDay={selectedDay} npvList={npvList} />
         </ChartPopup>
       )
     }

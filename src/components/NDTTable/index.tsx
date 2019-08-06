@@ -1,20 +1,17 @@
 import * as React from 'react'
 
+import classnames from 'classnames'
 import { isNil, round } from 'lodash'
-
-import { classname } from '@/utils/classname'
 
 import { npvDayType } from '../NDTBlock'
 
-import './index.css'
+import css from './index.css'
 
 type NDTTablePropsType = {
   className?: string
   npvList?: npvDayType[]
   currentDay?: number
 }
-
-const cn = classname('ndt-table')
 
 const typesList = [
   {
@@ -52,7 +49,7 @@ const getTotalHoursByType = (days?: npvDayType[], type?: string) => {
     return null
   }
 
-  return days.reduce((acc: number, day: npvDayType) => acc + (day[type] || 0), 0)
+  return days.reduce((acc, day) => acc + (day[type] || 0), 0)
 }
 
 const getTotalInPercents = (totalHours?: number | null, currentDay?: number) => {
@@ -64,10 +61,10 @@ const getTotalInPercents = (totalHours?: number | null, currentDay?: number) => 
 }
 
 export const NDTTable: React.FC<NDTTablePropsType> = ({ className, currentDay, npvList }) => (
-  <div className={cn(null, null, className)}>
-    <div className={cn('title-row')}>
-      <div className={cn('title-cell')}>НПВ</div>
-      <div className={cn('title-cell')}>Часы</div>
+  <div className={classnames(css.main, className)}>
+    <div className={css.rowTitle}>
+      <div>НПВ</div>
+      <div>Часы</div>
     </div>
     {typesList.map(({ type, name }, index) => {
       const totalHours =
@@ -77,18 +74,16 @@ export const NDTTable: React.FC<NDTTablePropsType> = ({ className, currentDay, n
       const totalInPercents = getTotalInPercents(totalHours, currentDay)
 
       return (
-        <div className={cn('row')} key={index}>
+        <div className={css.row} key={index}>
           <span
-            className={cn('progress')}
+            className={css.progress}
             style={{ width: `${isNil(totalInPercents) ? 0 : totalInPercents}%` }}
           />
-          <div className={cn('cell', { name: true })}>{name}</div>
-          <div className={cn('cell', { percent: true })}>
+          <div className={css.cellName}>{name}</div>
+          <div className={css.cellPercent}>
             {isNil(totalInPercents) ? '--' : totalInPercents.toFixed(1)}%
           </div>
-          <div className={cn('cell', { hours: true })}>
-            {isNil(totalHours) ? '--' : totalHours.toFixed(1)}
-          </div>
+          <div className={css.cellHours}>{isNil(totalHours) ? '--' : totalHours.toFixed(1)}</div>
         </div>
       )
     })}

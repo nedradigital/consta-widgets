@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { classname } from '@/utils/classname'
+import classnames from 'classnames'
 
-import './index.css'
+import css from './index.css'
 
 export { ChartPopup } from './components/ChartPopup'
 
@@ -16,8 +16,6 @@ type ChartWithSubinfoPropsType = {
   chartPopupComponent: React.ReactNode
 }
 
-const cn = classname('chart-with-subinfo')
-
 export const ChartWithSubinfo: React.FC<ChartWithSubinfoPropsType> = ({
   chartComponent,
   chartName,
@@ -26,18 +24,16 @@ export const ChartWithSubinfo: React.FC<ChartWithSubinfoPropsType> = ({
   className,
   subinfoComponent,
 }) => (
-  <div className={cn(null, null, className)}>
-    <div className={cn('chart-wrapper')}>
-      <div className={cn('chart-info-line')}>
-        <div className={cn('chart-title')}>{chartName}</div>
-        <div className={cn('chart-units')}>{chartUnits}</div>
+  <div className={classnames(css.main, className)}>
+    <div className={css.wrapper}>
+      <div className={css.infoLine}>
+        <div className={css.title}>{chartName}</div>
+        <div className={css.units}>{chartUnits}</div>
       </div>
-      <div className={cn('chart')}>{chartComponent}</div>
-      {chartPopupComponent && (
-        <div className={cn('chart-popup-wrapper')}>{chartPopupComponent}</div>
-      )}
+      <div>{chartComponent}</div>
+      {chartPopupComponent && <div className={css.popupWrapper}>{chartPopupComponent}</div>}
     </div>
 
-    <div className={cn('subinfo-wrapper')}>{subinfoComponent}</div>
+    <div className={css.subinfoWrapper}>{subinfoComponent}</div>
   </div>
 )

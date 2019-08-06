@@ -1,65 +1,62 @@
-.ndt-table {
+.main {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-color);
   font-size: var(--main-font-size);
+}
 
-  &__title-row {
-    align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #878ca8;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 0 10px 8px 8px;
+.rowTitle {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: #878ca8;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 0 10px 8px 8px;
+}
+
+.row {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1px;
+  min-height: 35px;
+  position: relative;
+
+  &:last-child {
+    margin-bottom: 0;
   }
+}
 
-  &__row {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1px;
-    min-height: 35px;
-    position: relative;
+.progress {
+  background-color: rgba(81, 161, 255, 0.28);
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  z-index: 0;
+  transition: width 0.5s ease;
+}
 
-    &:last-child {
-      margin-bottom: 0;
-    }
+.cell {
+  box-sizing: border-box;
+  min-width: 0;
+  word-wrap: break-word;
+  z-index: 10;
+  white-space: nowrap;
+}
 
-    &_empty {
-      color: #878ca8;
-    }
-  }
+.cellName {
+  padding-left: 9px;
+  width: 53%;
+}
 
-  &__progress {
-    background-color: rgba(81, 161, 255, 0.28);
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    z-index: 0;
-    transition: width 0.5s ease;
-  }
+.cellPercent {
+  text-align: right;
+  width: 18%;
+}
 
-  &__cell {
-    box-sizing: border-box;
-    min-width: 0;
-    word-wrap: break-word;
-    z-index: 10;
-    white-space: nowrap;
-    &_name {
-      padding-left: 9px;
-      width: 53%;
-    }
-
-    &_percent {
-      text-align: right;
-      width: 18%;
-    }
-
-    &_hours {
-      padding-right: 10px;
-      text-align: right;
-      width: 29%;
-    }
-  }
+.cellHours {
+  padding-right: 10px;
+  text-align: right;
+  width: 29%;
 }

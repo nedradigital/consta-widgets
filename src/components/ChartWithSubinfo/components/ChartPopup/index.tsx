@@ -2,9 +2,7 @@ import * as React from 'react'
 
 import { isNil } from 'lodash'
 
-import { classname } from '@/utils/classname'
-
-import './index.css'
+import css from './index.css'
 
 type ChartPopupPropsType = {
   children: React.ReactNode
@@ -13,8 +11,6 @@ type ChartPopupPropsType = {
   selectedDay?: number
   daysCount?: number
 }
-
-const cn = classname('chart-popup')
 
 const getOffset = (selectedDay?: number, daysCount?: number) => {
   if (isNil(selectedDay) || isNil(daysCount) || daysCount === 0) {
@@ -38,7 +34,7 @@ export const ChartPopup: React.FC<ChartPopupPropsType> = ({
   const offset = getOffset(selectedDay, daysCount)
   return (
     <div
-      className={cn()}
+      className={css.chartPopup}
       style={
         offset <= 50
           ? { left: `calc(${offset}% + 10px)` }
@@ -46,9 +42,9 @@ export const ChartPopup: React.FC<ChartPopupPropsType> = ({
       }
     >
       {!isNil(onCloseButtonClick) && (
-        <button className={cn('close-button')} onClick={onCloseButtonClick} />
+        <button className={css.closeButton} onClick={onCloseButtonClick} />
       )}
-      {!isNil(title) && <div className={cn('title')}>{title}</div>}
+      {!isNil(title) && <div className={css.title}>{title}</div>}
       <div>{children}</div>
     </div>
   )

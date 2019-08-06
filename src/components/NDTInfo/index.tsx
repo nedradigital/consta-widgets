@@ -1,13 +1,13 @@
 import * as React from 'react'
 
+import classnames from 'classnames'
 import { isNil, round, sum } from 'lodash'
 
-import { classname } from '@/utils/classname'
 import { getHourPlural } from '@/utils/pluralization'
 
 import { NDTTable } from '../NDTTable'
 
-import './index.css'
+import css from './index.css'
 
 type npvItemType = {
   /** Аварии [час] */
@@ -38,8 +38,6 @@ type NDTInfoPropsType = {
   npvList?: npvItemType[]
 }
 
-const cn = classname('ndt-info')
-
 const getTotalHours = (days?: npvItemType[]): number | null => {
   if (isNil(days) || !days.length) {
     return null
@@ -61,12 +59,12 @@ export const NDTInfo: React.FC<NDTInfoPropsType> = ({ className, currentDay, npv
   const totalInPercent = getTotalInPercents(totalHours, currentDay)
 
   return (
-    <div className={cn(null, null, className)}>
-      <NDTTable className={cn('table')} currentDay={currentDay} npvList={npvList} />
-      <div className={cn('hours')}>
+    <div className={classnames(css.main, className)}>
+      <NDTTable className={css.table} currentDay={currentDay} npvList={npvList} />
+      <div className={css.hours}>
         {getHourPlural(isNil(totalHours) ? '--' : totalHours.toFixed(1))}
       </div>
-      <div className={cn('percents')}>
+      <div className={css.percents}>
         {isNil(totalInPercent) ? '--' : totalInPercent.toFixed(1)}% от общего времени
       </div>
     </div>
