@@ -1,0 +1,83 @@
+.fluidContacts {
+  background-color: #030912;
+  border-radius: 4px;
+  border: var(--white-border);
+  box-sizing: border-box;
+  color: var(--text-color);
+}
+
+.item {
+  border-bottom: var(--white-border);
+  padding: 14px 19px;
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.title {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+}
+
+.value {
+  padding: 8px 0 8px 32px;
+  position: relative;
+}
+
+.gnk {
+  border-radius: 2px;
+  height: 16px;
+  left: 0;
+  position: absolute;
+  top: 8px;
+  width: 16px;
+
+  &.typeGas {
+    background-color: #598fe9;
+  }
+
+  &.typeOil {
+    background-color: #8d0c75;
+  }
+
+  &.typeWater {
+    background-color: #1849a4;
+  }
+}
+
+.name {
+  color: var(--text-color-additional);
+  margin-bottom: 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.targetInterval {
+  font-weight: bold;
+}
+
+.tiValue {
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.tiUnits {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.depth {
+  background-color: #11161f;
+  border: var(--white-color);
+  border-radius: 4px;
+  color: var(--text-color-additional);
+  padding: 2px 6px;
+  position: absolute;
+  right: 9px;
+  top: 100%;
+  transform: translateY(-50%);
+}
