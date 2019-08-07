@@ -11,8 +11,6 @@ const isProduction = process.env.NODE_ENV === 'production'
 
 // Use generator function for spread in arrays
 function* css({ onlyGenerateTypes } = {}) {
-  const sourceMap = !isProduction
-
   for (const rule of cssRules) {
     const use = [
       onlyGenerateTypes
@@ -32,13 +30,11 @@ function* css({ onlyGenerateTypes } = {}) {
           modules: {
             localIdentName: isProduction ? '[hash:base64:5]' : '[folder]__[local]--[hash:base64:5]',
           },
-          sourceMap,
         },
       },
       {
         loader: 'postcss-loader',
         options: {
-          ident: 'postcss',
           plugins() {
             return [
               require('postcss-nested'),
@@ -54,10 +50,9 @@ function* css({ onlyGenerateTypes } = {}) {
                   'nesting-rules': true,
                 },
               }),
-              require('cssnano')(),
-            ]
+              isProduction && require('cssnano')(),
+            ].filter(Boolean)
           },
-          sourceMap,
         },
       },
       ...rule.use,
