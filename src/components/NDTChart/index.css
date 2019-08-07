@@ -1,0 +1,96 @@
+.main {
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-bottom: 40px;
+  margin-right: 20px;
+  position: relative;
+}
+
+.day {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 1px;
+    top: 1px;
+    border-left: 1px solid color-mod(var(--text-color) alpha(4%));
+  }
+}
+
+.section {
+  position: absolute;
+  top: -10px;
+  bottom: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    top: 0;
+    border-left: 1px solid color-mod(var(--text-color) alpha(20%));
+  }
+
+  &.sectionName {
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform-origin: 100% 100%;
+    transform: translate(-100%, -100%) rotate(-90deg);
+  }
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-bottom: 1px solid color-mod(var(--text-color) alpha(4%));
+}
+
+.types {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+  min-height: 100%;
+  transform: translate(-100%, 0);
+
+  &.type {
+    position: relative;
+    flex: 1;
+
+    &.typeLabel {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translate(0, -50%);
+      white-space: nowrap;
+    }
+  }
+}
+
+.current {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -10px;
+    bottom: -40px;
+    border-left: 1px dashed var(--text-color);
+  }
+}
+
+.selectedBox {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background-image: var(--progress-gradient);
+}
