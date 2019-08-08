@@ -1,0 +1,191 @@
+.trajectoryBlock {
+  --trajectory-border-color: #29313d;
+
+  align-items: stretch;
+  background: linear-gradient(#172949, #17202c);
+  border-radius: 4px;
+  border: 1px solid var(--trajectory-border-color);
+  box-sizing: border-box;
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+  justify-content: center;
+  letter-spacing: 0.03em;
+  width: 100%;
+
+  &.success {
+    border-color: color-mod(var(--color-success) alpha(70%));
+  }
+
+  &.danger {
+    border-color: color-mod(var(--color-danger) alpha(70%));
+  }
+
+  &.warning {
+    border-color: color-mod(var(--color-warning) alpha(70%));
+  }
+}
+
+.header {
+  border-bottom: 1px solid var(--trajectory-border-color);
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.cell {
+  align-items: center;
+  border-right: 1px solid var(--trajectory-border-color);
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+  min-height: 34px;
+  overflow: hidden;
+  width: calc(100% / 3);
+  word-wrap: break-word;
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.cellContent {
+  min-width: 0;
+  word-wrap: break-word;
+  white-space: nowrap;
+}
+
+.chartWrapper {
+  position: relative;
+  padding-top: 4px;
+  padding-bottom: 30px;
+}
+
+.chart {
+  width: 118px;
+  height: 118px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.chartTriangle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 10;
+  opacity: 0.75;
+
+  &::after {
+    border-bottom: 7px var(--text-color) solid;
+    border-left: transparent 4px solid;
+    border-right: transparent 4px solid;
+    content: '';
+    position: absolute;
+    bottom: calc(50% + 59px);
+    transform: translate(-50%, 3px);
+  }
+}
+
+.chartIndicatorRight {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(69px, -50%);
+  z-index: 1;
+}
+
+.chartIndicatorBottom {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 69px);
+  z-index: 1;
+}
+
+.depth {
+  position: absolute;
+  left: -25px;
+  top: 6px;
+  bottom: 6px;
+  width: 15px;
+}
+
+.depthPlan {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    transform: translate(-50%, -50%);
+    border-bottom: 1px solid var(--text-color);
+  }
+}
+
+.depthValue {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 32px);
+}
+
+.depthTriangle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-10px, -50%);
+    border-top: 4px transparent solid;
+    border-left: 6px var(--text-color) solid;
+    border-bottom: 4px transparent solid;
+  }
+}
+
+.depthLine {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  bottom: 0;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-right: 1px solid color-mod(var(--text-color) alpha(29%));
+    transform: translate(-50%, 0);
+  }
+}
+
+.footer {
+  align-items: center;
+  display: flex;
+  flex-grow: 1;
+  justify-content: center;
+  min-height: 34px;
+  overflow: hidden;
+  text-align: center;
+  word-wrap: break-word;
+  border-top: 1px solid var(--trajectory-border-color);
+}
+
+.footerContent {
+  min-width: 0;
+  word-wrap: break-word;
+}

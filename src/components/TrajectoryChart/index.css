@@ -1,0 +1,83 @@
+@custom-selector :--main .trajectoryСhart;
+
+:--main {
+  --trajectory-chart-opacity: 0.116;
+
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.line {
+  stroke: var(--text-color);
+  opacity: var(--trajectory-chart-opacity);
+  stroke-width: 1;
+}
+
+.circle {
+  fill: none;
+  stroke: var(--text-color);
+  opacity: var(--trajectory-chart-opacity);
+  stroke-width: 1;
+
+  &.isFill.success {
+    fill: var(--color-success);
+    opacity: var(--trajectory-chart-opacity);
+    stroke-width: 0;
+  }
+
+  &.isFill.warning {
+    fill: var(--color-warning);
+    opacity: var(--trajectory-chart-opacity);
+    stroke-width: 0;
+  }
+
+  &.isFill.danger {
+    fill: var(--color-danger);
+    opacity: var(--trajectory-chart-opacity);
+    stroke-width: 0;
+  }
+
+  &.isStroke.success {
+    fill: none;
+    stroke: var(--color-success);
+    opacity: 1;
+    stroke-width: 1;
+  }
+
+  &.isStroke.warning {
+    fill: none;
+    stroke: var(--color-warning);
+    opacity: 1;
+    stroke-width: 1;
+  }
+
+  &.isStroke.danger {
+    fill: none;
+    stroke: var(--color-danger);
+    opacity: 1;
+    stroke-width: 1;
+  }
+}
+
+.circleCurrent {
+  fill: var(--text-color);
+  stroke-width: 0;
+
+  @nest :--main.success & {
+    fill: var(--color-success);
+  }
+
+  @nest :--main.warning & {
+    fill: var(--color-warning);
+  }
+
+  @nest :--main.danger & {
+    fill: var(--color-danger);
+  }
+}
+
+.center {
+  fill: var(--text-color);
+  stroke-width: 0;
+}
