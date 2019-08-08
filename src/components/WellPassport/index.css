@@ -1,0 +1,125 @@
+.main {
+  background-color: var(--bg-well-passport);
+  color: var(--text-color-additional);
+  font-family: var(--main-font-family);
+  font-size: 16px;
+  line-height: 18px;
+  position: relative;
+
+  &.isHoverable {
+    cursor: pointer;
+  }
+}
+
+.cells {
+  display: flex;
+  flex-direction: row;
+}
+
+.cell {
+  box-sizing: border-box;
+  border-right: 1px solid rgba(235, 64, 64, 0.05);
+  min-width: 0;
+  padding: 18px 20px 15px;
+  word-wrap: break-word;
+  white-space: nowrap;
+
+  &:first-child {
+    padding-left: 34px;
+  }
+
+  &:last-child {
+    border-right: none;
+    flex-grow: 1;
+    padding-right: 74px;
+  }
+}
+
+.title {
+  &:empty::before {
+    content: ' ';
+    display: inline-block;
+  }
+}
+
+.content {
+  color: #fff;
+  margin-top: 12px;
+
+  &:empty::before {
+    content: ' ';
+    display: inline-block;
+  }
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &.colorDark {
+    color: var(--text-color-additional);
+  }
+}
+
+.contentStrong {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  line-height: 28px;
+  margin-top: 6px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 310px;
+  overflow: hidden;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+.textItem {
+  margin-right: 14px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.responsiblePersons {
+  display: flex;
+  flex-direction: row;
+
+  &.hasPhones {
+    margin-top: -7px;
+    margin-bottom: -6px;
+  }
+}
+
+.responsiblePerson {
+  letter-spacing: 0.03em;
+  margin-right: 14px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.responsiblePersonName {
+  margin-bottom: 2px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.responsiblePersonPhone {
+  color: rgba(#fff, 0.5);
+  font-size: 14px;
+}
+
+.wellsNavigation {
+  position: absolute;
+  right: 35px;
+  top: 50%;
+  transform: translate(50%, -50%);
+  z-index: 100;
+}
