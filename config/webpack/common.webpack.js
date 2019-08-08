@@ -42,7 +42,6 @@ module.exports = ({ withDocgen }) => ({
           withDocgen && {
             loader: '@nekitk/react-docgen-typescript-loader',
             options: {
-              setDisplayName: false,
               compilerOptions: {
                 ...tsConfig.compilerOptions,
                 strict: false, // чтобы не добавлялось "| undefined" у опциональных пропсов
