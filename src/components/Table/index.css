@@ -1,0 +1,34 @@
+.table {
+  font-size: var(--main-font-size);
+  font-family: var(--main-font-family);
+}
+
+.row {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.cell {
+  padding-right: 5px;
+
+  &:first-child {
+    color: rgba($APP_TEXT_COLOR, 0.5);
+    flex-grow: 1;
+  }
+
+  &:last-child {
+    padding-right: 0;
+  }
+
+  &.oneLine {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
