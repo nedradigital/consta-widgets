@@ -1,13 +1,12 @@
 import * as React from 'react'
 
 import { action } from '@storybook/addon-actions'
-import { array, object, withKnobs } from '@storybook/addon-knobs'
+import { array, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { Constructor, DashboardState, DataType } from './'
 
 storiesOf('components/Constructor', module)
-  .addDecorator(withKnobs)
   .add('default constructor', () => {
     const margin = array('margin', [15, 15]) as [number, number]
     const datasets = [

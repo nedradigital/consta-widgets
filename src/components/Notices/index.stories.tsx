@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, withKnobs } from '@storybook/addon-knobs'
+import { boolean } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { subtractTime } from '@/utils/time'
@@ -9,7 +9,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Notices } from '.'
 
 storiesOf('components/Notices', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => {
     const isMultiple = boolean('isMultiple', true)

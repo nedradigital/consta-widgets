@@ -6,7 +6,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const commonConfig = require('./common.webpack')
+const getCommonConfig = require('./common.webpack')
 const { cssRules } = require('./css')
 
 const isProduction = process.env.NODE_ENV === 'production'
@@ -22,6 +22,11 @@ const clientConfig = {
   optimization: {
     splitChunks: {
       cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
         styles: {
           chunks: 'all',
           enforce: true,
@@ -74,7 +79,7 @@ const productionConfig = {
 }
 
 module.exports = webpackMerge(
-  commonConfig,
+  getCommonConfig(),
   clientConfig,
   isProduction ? productionConfig : developmentConfig
 )

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, number, select, withKnobs } from '@storybook/addon-knobs'
+import { boolean, number, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -10,7 +10,6 @@ import { statuses } from '../TrajectoryChart'
 import { TrajectoryBlock } from '.'
 
 storiesOf('components/TrajectoryBlock', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator({ width: 250 }))
   .add('interactive', () => (
     <TrajectoryBlock
