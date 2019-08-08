@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
+const tsConfig = require('../../tsconfig.json')
 const files = require('./files')
 const babelConfig = require('./babel')
 const { css } = require('./css')
@@ -9,7 +10,7 @@ const { css } = require('./css')
 const isProduction = process.env.NODE_ENV === 'production'
 const root = path.resolve(__dirname, '..', '..')
 
-module.exports = {
+module.exports = ({ withDocgen }) => ({
   mode: isProduction ? 'production' : 'development',
 
   output: {
@@ -38,6 +39,16 @@ module.exports = {
               compact: isProduction,
             },
           },
+          withDocgen && {
+            loader: '@nekitk/react-docgen-typescript-loader',
+            options: {
+              setDisplayName: false,
+              compilerOptions: {
+                ...tsConfig.compilerOptions,
+                strict: false, // чтобы не добавлялось "| undefined" у опциональных пропсов
+              },
+            },
+          },
           {
             loader: 'ts-loader',
             options: {
@@ -48,7 +59,7 @@ module.exports = {
               transpileOnly: true,
             },
           },
-        ],
+        ].filter(Boolean),
       },
       {
         test: files.fonts,
@@ -97,4 +108,4 @@ module.exports = {
       filename: `assets/css/[name]${isProduction ? '.[contenthash]' : ''}.css`,
     }),
   ],
-}
+})

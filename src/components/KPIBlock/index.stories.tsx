@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { array, number, select, text, withKnobs } from '@storybook/addon-knobs'
+import { array, number, select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -10,7 +10,6 @@ import { statuses } from '../KPIChart'
 import { KPIBlock } from '.'
 
 storiesOf('components/KPI/KPIBlock', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator({ width: '236px' }))
   .add('interactive', () => (
     <KPIBlock

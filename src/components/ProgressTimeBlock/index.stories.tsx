@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { number, select, text, withKnobs } from '@storybook/addon-knobs'
+import { number, select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,7 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ProgressTimeBlock, statuses } from '.'
 
 storiesOf('components/ProgressTimeBlock', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator({ width: '496px' }))
   .add('without props', () => <ProgressTimeBlock />)
   .add('statusTitle without status', () => (

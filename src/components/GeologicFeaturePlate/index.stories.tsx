@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { select, text, withKnobs } from '@storybook/addon-knobs'
+import { select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,7 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { GeologicFeaturePlate, icons } from '.'
 
 storiesOf('components/GeologicFeaturePlate', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <GeologicFeaturePlate

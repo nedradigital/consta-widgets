@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, text, withKnobs } from '@storybook/addon-knobs'
+import { boolean, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { Spinner, SpinnerSize } from '@/components/Spinner'
@@ -9,7 +9,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { OpenableLabel } from '.'
 
 storiesOf('components/OpenableLabel', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => {
     return (

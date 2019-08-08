@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { select, text, withKnobs } from '@storybook/addon-knobs'
+import { select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,7 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Pin, positions, skins, statuses } from '.'
 
 storiesOf('components/Pin', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('default props', () => (
     <Pin title={text('Title text', '1540 м')}>{text('Text', 'Высокий риск обвала породы')}</Pin>

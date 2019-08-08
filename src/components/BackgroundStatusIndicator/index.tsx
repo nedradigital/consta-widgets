@@ -13,6 +13,7 @@ type Props = {
   styles?: React.CSSProperties
 }
 
+/** Фон под цвет статуса */
 export const BackgroundStatusIndicator: React.FC<Props> = ({ className, status, styles = {} }) => (
   <div className={classnames(css.main, css[status], className)} style={styles} />
 )

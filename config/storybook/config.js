@@ -1,6 +1,11 @@
-import { configure } from '@storybook/react'
+import { addDecorator, configure } from '@storybook/react'
+import { withKnobs } from '@storybook/addon-knobs'
+const { withPropsTable } = require('storybook-addon-react-docgen')
 
 import '@/index.css'
+
+addDecorator(withPropsTable)
+addDecorator(withKnobs)
 
 // automatically import all files ending in *.stories.tsx
 const req = require.context('../../src', true, /.stories\.tsx$/)

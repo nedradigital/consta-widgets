@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { action } from '@storybook/addon-actions'
-import { boolean, text, withKnobs } from '@storybook/addon-knobs'
+import { boolean, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -9,7 +9,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Switcher } from '.'
 
 storiesOf('components/Switcher', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <Switcher

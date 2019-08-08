@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { action } from '@storybook/addon-actions'
-import { boolean, date, text, withKnobs } from '@storybook/addon-knobs'
+import { boolean, date, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { subtractTime } from '@/utils/time'
@@ -10,7 +10,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { CurrentOperation } from '.'
 
 storiesOf('components/CurrentOperation', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator({ border: '1px solid rgba(255, 255, 255, 0.5)' }))
   .add('interactive', () => (
     <CurrentOperation

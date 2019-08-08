@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, number, text, withKnobs } from '@storybook/addon-knobs'
+import { boolean, number, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,7 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { FluidContacts } from '.'
 
 storiesOf('components/FluidContacts', module)
-  .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator({ width: 226 }))
   .add('interactive', () => (
     <FluidContacts
