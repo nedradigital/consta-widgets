@@ -17,7 +17,7 @@ type Props = {
   toggleAdaptive?: () => void
 }
 
-export const CurrentOperation = React.memo<Props>(
+export const CurrentOperation: React.FC<Props> = React.memo(
   ({ actualTime, duration, fb, title, isAdaptive, toggleAdaptive }) => (
     <div className={css.currentOoperation}>
       <div className={css.infoLine}>
