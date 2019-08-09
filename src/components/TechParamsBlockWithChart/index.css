@@ -1,0 +1,37 @@
+.techParamsBlockWithChart {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.chart {
+  background: var(--bg-color-white-semi);
+  border-left: var(--white-border);
+  border-right: var(--white-border);
+  box-sizing: border-box;
+  flex-grow: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+
+  &::after {
+    background: linear-gradient(
+      180deg,
+      var(--bg-color) 0%,
+      color-mod(var(--bg-color) alpha(0)) 100%
+    );
+    content: '';
+    display: inline-block;
+    height: 150px;
+    left: -1px;
+    position: absolute;
+    right: -1px;
+    top: 0;
+  }
+}
+
+.params {
+  flex-shrink: 0;
+}

@@ -1,0 +1,57 @@
+.techParamsChart {
+  display: flex;
+  height: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+  width: calc(100% - 2px);
+  margin-left: auto;
+  margin-right: auto;
+
+  &.statusDanger {
+    background-image: linear-gradient(
+      to top,
+      rgb(164, 12, 31, 0.21) 0%,
+      rgb(114, 7, 20, 0.01) 100%
+    );
+  }
+
+  &.statusWarningPossibleDanger,
+  &.statusWarning {
+    background-image: linear-gradient(
+      to top,
+      rgb(255, 219, 31, 0.21) 0%,
+      rgb(114, 7, 20, 0.01) 100%
+    );
+  }
+}
+
+.svg {
+  display: block;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+}
+
+.lineBackground {
+  fill: none;
+  stroke: var(--text-color-additional);
+  stroke-width: 1.1;
+  stroke-align: inner;
+}
+
+.lineForeground {
+  fill: none;
+  stroke: var(--color-important);
+  stroke-width: 1.1;
+  stroke-align: inner;
+}
+
+.lineForegroundDanger {
+  stop-color: var(--color-danger);
+}
+.lineForegroundWarning {
+  stop-color: var(--color-warning);
+}
+.lineForegroundNormal {
+  stop-color: var(--color-important);
+}
