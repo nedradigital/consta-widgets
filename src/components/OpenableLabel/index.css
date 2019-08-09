@@ -33,7 +33,7 @@
   align-items: center;
   background: rgba(18, 26, 40, 1);
 
-  border: var(--white-border);
+  border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
   box-sizing: border-box;
   cursor: pointer;
@@ -67,7 +67,7 @@
 .content {
   background: rgba(18, 26, 40, 1);
 
-  border: var(--white-border);
+  border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
   display: block;
 }

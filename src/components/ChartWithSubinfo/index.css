@@ -8,7 +8,7 @@
 .wrapper {
   background-color: var(--bg-block);
   border-radius: 4px;
-  border: 1px solid color-mod(var(--text-color) alpha(10%));
+  border: 1px solid var(--white-border-color-opacity-10);
   box-sizing: border-box;
   color: var(--text-color);
   padding-left: 45px;

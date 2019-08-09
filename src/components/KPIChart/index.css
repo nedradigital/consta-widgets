@@ -41,7 +41,7 @@
   }
 
   &.isStart.warning {
-    stop-color: color-mod(var(--color-warning) alpha(0%));
+    stop-color: var(--opaque-color);
   }
 
   &.isStart.danger {
@@ -53,7 +53,7 @@
   }
 
   &.isEnd.warning {
-    stop-color: color-mod(var(--color-warning) alpha(40%));
+    stop-color: var(--warning-border-color-opacity-40);
   }
 
   &.isEnd.danger {
@@ -67,7 +67,7 @@
   }
 
   &.isStart.warning {
-    stop-color: color-mod(var(--color-warning) alpha(0%));
+    stop-color: var(--opaque-color);
   }
 
   &.isStart.danger {
@@ -79,7 +79,7 @@
   }
 
   &.isEnd.warning {
-    stop-color: color-mod(var(--color-warning) alpha(100%));
+    stop-color: var(--color-warning);
   }
 
   &.isEnd.danger {

@@ -42,10 +42,6 @@ function* css({ onlyGenerateTypes } = {}) {
                 stage: 2,
                 features: {
                   autoprefixer: true,
-                  'color-mod-function': {
-                    transformVars: true,
-                    importFrom: ['./src/static/variables.css'],
-                  },
                   'custom-selectors': true,
                   'nesting-rules': true,
                 },
