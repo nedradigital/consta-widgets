@@ -1,0 +1,7 @@
+.main {
+  align-items: center;
+  display: flex;
+  font-size: var(--main-font-size);
+  justify-content: space-between;
+  width: 100%;
+}
