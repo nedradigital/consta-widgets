@@ -1,0 +1,81 @@
+.costInfo {
+  color: var(--text-color);
+  font-size: var(--font-size-main);
+}
+
+.statusLine {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-bottom: 23px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.badge {
+  margin-right: 7px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.statusNormal {
+  color: #77eca2;
+}
+
+.statusDanger {
+  color: #ff3d54;
+}
+
+.infoItem {
+  margin-bottom: 13px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.infoTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 3px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.lineDescription {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.lineName {
+  color: #878ca8;
+  margin-right: 7px;
+  padding-bottom: 2px;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.line {
+  flex-grow: 1;
+}
+
+.lineFact {
+  background-color: #4198ff;
+  border-radius: 2px;
+  height: 2px;
+}
+
+.linePlan {
+  height: 0;
+  border-top: 1px dashed #b2b2b2;
+}

@@ -35,6 +35,8 @@
           "global"
         ]
       }
-    ]
+    ],
+    "selector-nested-pattern": "^&(:(?:hover|focus|after|before))|(.(.*))$",
+    "selector-pseudo-class-blacklist": ["root"]
   }
 }
