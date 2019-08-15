@@ -10,6 +10,7 @@
     /* stylelint-disable selector-class-pattern */
 
     & .react-grid-layout {
+      min-height: 100%;
       position: relative;
       transition: height 200ms ease;
     }
@@ -54,6 +55,10 @@
       background-origin: content-box;
       box-sizing: border-box;
       cursor: se-resize;
+    }
+
+    & .react-grid-item.dropping > .react-resizable-handle {
+      background: none;
     }
 
     /* stylelint-enable */

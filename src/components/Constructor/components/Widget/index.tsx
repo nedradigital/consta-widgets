@@ -15,6 +15,8 @@ export interface IWidget {
   dataType: DataType
   datasets?: Dataset[]
   currentDatasetName?: string
+  x?: number
+  y?: number
 }
 
 type WidgetProps = IWidget & {
