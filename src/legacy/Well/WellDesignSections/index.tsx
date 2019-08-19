@@ -14,21 +14,16 @@ export const voidTypes = [
   'FRACTURED_POROUS',
   'FRACTURED_POROUS_VUGGY',
 ] as const
-type VoidType = typeof voidTypes[number]
-
 export const objectives = ['EXPLORATION', 'ZBS'] as const
-type Objective = typeof objectives[number]
-
 export const stageKinds = ['SH', 'SK', 'SP', 'SE', 'SN'] as const
-type StageKind = typeof stageKinds[number]
 
 type WellDesignSectionsProps = {
   className?: string
   geology?: {
     gnk?: boolean
     vnk?: boolean
-    voidType?: VoidType
-    objective?: Objective
+    voidType?: typeof voidTypes[number]
+    objective?: typeof objectives[number]
     collectorType?: any
   }
   technology?: {
@@ -36,7 +31,7 @@ type WellDesignSectionsProps = {
     mgrpCount?: number
   }
   sections: Array<{
-    stageKind: StageKind
+    stageKind: typeof stageKinds[number]
     stageNum: number
     hasTool?: boolean
     drillingEnd?: boolean

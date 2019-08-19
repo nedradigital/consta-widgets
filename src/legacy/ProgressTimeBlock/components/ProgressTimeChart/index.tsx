@@ -2,11 +2,11 @@ import { isNil } from 'lodash'
 
 import css from './index.css'
 
-export type ProgressTimeChartProps = {
+export type Props = {
   progress?: number
 }
 
-export const ProgressTimeChart: React.FC<ProgressTimeChartProps> = ({ progress }) => (
+export const ProgressTimeChart: React.FC<Props> = ({ progress }) => (
   <div className={css.main}>
     <svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 136 136" className={css.svg}>
       <circle className={css.svgBg} strokeWidth="11" fill="none" r="57" cy="68" cx="68" />

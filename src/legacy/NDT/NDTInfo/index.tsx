@@ -32,7 +32,7 @@ type npvItemType = {
   trouble?: number
 }
 
-type NDTInfoPropsType = {
+type Props = {
   className?: string
   currentDay?: number
   npvList?: npvItemType[]
@@ -54,7 +54,7 @@ const getTotalInPercents = (totalHours: number | null, currentDay?: number) => {
   return Math.max(0, Math.min(100, round((totalHours / (currentDay * 24)) * 100, 1)))
 }
 
-export const NDTInfo: React.FC<NDTInfoPropsType> = ({ className, currentDay, npvList }) => {
+export const NDTInfo: React.FC<Props> = ({ className, currentDay, npvList }) => {
   const totalHours = getTotalHours(npvList)
   const totalInPercent = getTotalInPercents(totalHours, currentDay)
 

@@ -46,7 +46,7 @@ export const types = [
   },
 ]
 
-type NDTChartPropsType = {
+type Props = {
   className?: string
 
   status?: 'normal' | 'warning' | 'danger'
@@ -60,7 +60,7 @@ type NDTChartPropsType = {
   onDayHover?: (day: number) => void
 }
 
-export const NDTChart: React.FC<NDTChartPropsType> = ({
+export const NDTChart: React.FC<Props> = ({
   className,
   currentDay,
   npvList,

@@ -10,7 +10,7 @@ type responsiblePersonType = {
   phone?: string
 }
 
-type WellPassportProps = {
+type Props = {
   /** Буровой подрядчик */
   drillCompany: string
   /** Название месторождения */
@@ -39,7 +39,7 @@ const professionMap: { [index: string]: string } = {
 
 const professionTypes = ['technologist', 'geologist', 'geonavigator']
 
-export const WellPassport: React.FC<WellPassportProps> = ({
+export const WellPassport: React.FC<Props> = ({
   className,
   drillCompany,
   oilFieldName,

@@ -4,11 +4,9 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-const statuses = ['success', 'warning', 'danger'] as const
-
 export type Props = {
   className?: string
-  status?: typeof statuses[number]
+  status?: 'success' | 'warning' | 'danger'
 }
 
 const visualWarningZone = 0.375

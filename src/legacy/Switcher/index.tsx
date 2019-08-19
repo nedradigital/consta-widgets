@@ -4,13 +4,13 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-type SwitcherPropsType = {
+type Props = {
   title?: React.ReactNode
   isEnabled: boolean
   onClick: (value: boolean) => void
 }
 
-export const Switcher = ({ onClick, isEnabled, title }: SwitcherPropsType) => (
+export const Switcher = ({ onClick, isEnabled, title }: Props) => (
   <button
     type="button"
     className={classnames(css.switcher, { [css.isEnabled]: isEnabled })}
