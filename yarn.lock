@@ -10765,10 +10765,10 @@ react-focus-lock@^1.18.3:
     prop-types "^15.6.2"
     react-clientside-effect "^1.2.0"
 
-react-grid-layout-tmp-fork@0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/react-grid-layout-tmp-fork/-/react-grid-layout-tmp-fork-0.17.0.tgz#42da3624c18e9dc817b73ae17986bcc6de1d5557"
-  integrity sha512-0p5eBV5cRMY7rINQ48BwHc8mciYgmGH2h2ZmDhbaDpYLcXfjiS790rKRRn4LKf/PM1+mTs3g+swM8Ue7O5+1vQ==
+react-grid-layout-tmp-fork@0.18.0:
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/react-grid-layout-tmp-fork/-/react-grid-layout-tmp-fork-0.18.0.tgz#bdd5c02452db6f237ab62fc5e44d3ce082e99000"
+  integrity sha512-DdIHl3rfoTTm8za71rRNlntKK13kIPxH4IebDYhrF0rdAVtDxCeaXmNP9s9a661u79ydEebZ+SH71PAgnjTbyg==
   dependencies:
     classnames "2.x"
     lodash.isequal "^4.0.0"

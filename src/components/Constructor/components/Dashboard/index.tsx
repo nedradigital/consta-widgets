@@ -90,6 +90,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         compactType={null}
         isDroppable={true}
         onDrop={onDrop}
+        droppingPositionShift={{ x: -110, y: -80 }}
         onLayoutChange={(_, newLayoutsState) => {
           if (onChange) {
             onChange({ widgets, layouts: newLayoutsState })
