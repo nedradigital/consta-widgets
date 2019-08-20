@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
-import { Layouts, Responsive, WidthProvider } from 'react-grid-layout'
+import { Layouts, Responsive, WidthProvider } from 'react-grid-layout-tmp-fork'
 
 import { Dataset } from '../../'
 import { ItemTypes } from '../../dnd-constants'
@@ -39,17 +39,20 @@ export type DashboardProps = {
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
   const { margin, cols, breakpoints, datasets, viewMode, onChange, dashboard } = props
-
   const { widgets, layouts } = dashboard
+
+  const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
 
   const [, drop] = useDrop({
     accept: ItemTypes.WIDGET,
     drop: (item: any) => {
-      const newWidgets = [...widgets, { ...item, name: getUniqName(item.name) } as IWidget]
+      dropPromise.then(({ x, y }: { x: number; y: number }) => {
+        const newWidgets = [...widgets, { ...item, name: getUniqName(item.name), x, y } as IWidget]
 
-      if (onChange) {
-        onChange({ widgets: newWidgets, layouts })
-      }
+        if (onChange) {
+          onChange({ widgets: newWidgets, layouts })
+        }
+      })
     },
     collect: monitor => ({
       isOver: monitor.isOver(),
@@ -71,6 +74,10 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     }
   }
 
+  const onDrop = (params: { x: number; y: number }) => {
+    setDropPromise(new Promise(res => res(params)))
+  }
+
   return (
     <div ref={drop} className={css.dashboard}>
       <ResponsiveReactGridLayout
@@ -81,6 +88,8 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         layouts={layouts}
         measureBeforeMount
         compactType={null}
+        isDroppable={true}
+        onDrop={onDrop}
         onLayoutChange={(_, newLayoutsState) => {
           if (onChange) {
             onChange({ widgets, layouts: newLayoutsState })
@@ -88,7 +97,11 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         }}
       >
         {widgets.map(widget => (
-          <div key={widget.name} className={css.widgetWrapper}>
+          <div
+            key={widget.name}
+            data-grid={{ x: widget.x, y: widget.y, w: 1, h: 1 }}
+            className={css.widgetWrapper}
+          >
             <Widget
               dashboardMode
               datasets={datasets}
