@@ -25,6 +25,10 @@ declare module 'react-grid-layout-tmp-fork' {
       WidthProviderProps & {
         isDroppable: boolean
         onDrop: (params: { x: number; y: number }) => void
+        droppingPositionShift?: {
+          x: number
+          y: number
+        }
       }
   >
 
