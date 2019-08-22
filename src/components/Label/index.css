@@ -1,7 +1,7 @@
 .label {
   background: var(--bg-color-white-semi);
   border-radius: 6px;
-  border: var(--white-border);
+  border: 1px solid var(--white-border-color-opacity-10);
   box-sizing: border-box;
   font-size: var(--main-font-size);
   max-width: 150px;

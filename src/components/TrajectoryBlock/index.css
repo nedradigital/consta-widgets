@@ -16,15 +16,15 @@
   width: 100%;
 
   &.success {
-    border-color: color-mod(var(--color-success) alpha(70%));
+    border-color: var(--success-border-color-opacity-70);
   }
 
   &.danger {
-    border-color: color-mod(var(--color-danger) alpha(70%));
+    border-color: var(--danger-border-color-opacity-70);
   }
 
   &.warning {
-    border-color: color-mod(var(--color-warning) alpha(70%));
+    border-color: var(--warning-border-color-opacity-70);
   }
 }
 
@@ -168,7 +168,7 @@
     top: 0;
     bottom: 0;
     left: 50%;
-    border-right: 1px solid color-mod(var(--text-color) alpha(29%));
+    border-right: 1px solid var(--white-border-color-opacity-29);
     transform: translate(-50%, 0);
   }
 }

@@ -78,12 +78,12 @@
   bottom: 23px;
   left: 16px;
   position: absolute;
-  color: color-mod(var(--text-color-additional) alpha(50%));
+  color: var(--text-color-additional-semi);
 }
 
 .legend {
   bottom: 1px;
-  color: color-mod(var(--text-color-additional) alpha(50%));
+  color: var(--text-color-additional-semi);
   display: flex;
   flex-direction: row;
   justify-content: space-between;

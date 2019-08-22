@@ -1,9 +1,12 @@
 /* Сделан запрет на root, что бы нельзя было его использовать, кроме текущего файла */
 /* stylelint-disable-next-line */
 :root {
-  --bg-color: #050e1c;
+  --opaque-color: rgba(0, 0, 0, 0);
+  --bg-color: rgb(5, 14, 28);
   --bg-color-white: rgba(255, 255, 255, 0.1);
   --bg-color-white-semi: rgba(255, 255, 255, 0.05);
+  --bg-color-additional: #b1c4e3;
+  --bg-color-additional-opacity-30: rgba(177, 196, 227, 0.3);
   --text-color: #fff;
   --text-color-semi: rgba(255, 255, 255, 0.5);
   --text-color-black: #000;
@@ -11,22 +14,38 @@
   --text-color-additional: #b1c4e3;
   --text-color-additional-semi: rgba(177, 196, 227, 0.5);
   --bg-element: #121a28;
-  --white-border: 1px solid rgba(255, 255, 255, 0.1);
+  --additional-border-color-opacity-67: rgba(177, 196, 227, 0.67);
+  --white-border-color-opacity-04: rgba(255, 255, 255, 0.04);
+  --white-border-color-opacity-10: rgba(255, 255, 255, 0.1);
+  --white-border-color-opacity-20: rgba(255, 255, 255, 0.2);
+  --white-border-color-opacity-29: rgba(255, 255, 255, 0.29);
+  --white-border-color: #fff;
+  --important-border-color: rgb(85, 146, 255);
+  --important-border-color-opacity-70: rgba(85, 146, 255, 0.7);
+  --normal-border-color: rgb(29, 128, 66);
+  --warning-border-color: rgb(255, 219, 31);
+  --warning-border-color-opacity-40: rgba(255, 219, 31, 0.4);
+  --warning-border-color-opacity-70: rgba(255, 219, 31, 0.7);
+  --danger-border-color: rgb(202, 29, 50);
+  --danger-border-color-opacity-70: rgba(202, 29, 50, 0.7);
+  --success-border-color: rgb(134, 255, 160);
+  --success-border-color-opacity-70: rgba(134, 255, 160, 0.7);
   --bg-block: #0f1827;
   --bg-well-passport: #161f2c;
   --white-color-semi: rgba(255, 255, 255, 0.05);
   --border-radius: 4px;
-  --color-important: #5592ff;
-  --color-normal: #1d8042;
-  --color-warning: #ffdb1f;
-  --color-danger: #ca1d32;
-  --color-success: #86ffa0;
+  --color-important: rgb(85, 146, 255);
+  --color-important-opacity-10: rgba(85, 146, 255, 0.1);
+  --color-normal: rgb(29, 128, 66);
+  --color-warning: rgb(255, 219, 31);
+  --color-danger: rgb(202, 29, 50);
+  --color-success: rgb(134, 255, 160);
   --main-font-family: 'Roboto Condensed', sans-serif;
   --main-font-size: 14px;
   --font-size-medium: 16px;
   --progress-gradient: linear-gradient(
-    color-mod(var(--color-important) alpha(0)) 10%,
-    color-mod(var(--color-important) alpha(10%)) 70%
+    var(--opaque-color) 10%,
+    var(--color-important-opacity-10) 70%
   );
   --progress-transition: left 0.5s ease;
 

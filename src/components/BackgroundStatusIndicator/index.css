@@ -1,5 +1,5 @@
 .main {
-  border-top: 4px solid color-mod(var(--text-color-additional) alpha(63%));
+  border-top: 4px solid var(--additional-border-color-opacity-67);
   bottom: 0;
   box-sizing: border-box;
   left: 0;
@@ -13,7 +13,7 @@
       rgba(201, 29, 50, 0.52) 5.81%,
       rgba(201, 29, 50, 0) 62.66%
     );
-    border-top-color: color-mod(var(--color-danger) alpha(70%));
+    border-top-color: var(--warning-border-color-opacity-70);
   }
 
   &.important {
@@ -22,7 +22,7 @@
       rgba(33, 92, 196, 0.44) 4.16%,
       rgba(33, 92, 196, 0) 61.42%
     );
-    border-top-color: color-mod(var(--color-important) alpha(70%));
+    border-top-color: var(--important-border-color-opacity-70);
   }
 
   &.warning {
@@ -31,6 +31,6 @@
       rgba(231, 177, 38, 0.36) 5.81%,
       rgba(232, 202, 47, 0) 62.66%
     );
-    border-top-color: color-mod(var(--color-warning) alpha(70%));
+    border-top-color: var(--danger-border-color-opacity-70);
   }
 }
