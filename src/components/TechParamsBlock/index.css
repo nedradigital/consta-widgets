@@ -1,0 +1,216 @@
+@custom-selector :--main .techParamsBlock;
+@custom-selector :--cell .cellAdditional;
+
+:--main {
+  background: #111a28;
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #29313d;
+  box-sizing: border-box;
+  padding: 5px 0 10px 6px;
+  position: relative;
+  width: 100%;
+
+  &.statusWarning {
+    background-color: var(--color-warning);
+  }
+
+  &.statusPossibleWarning {
+    border-color: var(--color-warning);
+    border-top-color: inherit;
+  }
+
+  &.statusWarningPossibleDanger {
+    background-color: var(--color-warning);
+    border-color: var(--color-danger);
+    border-top-color: inherit;
+  }
+
+  &.statusPossibleDanger {
+    border-color: var(--color-danger);
+    border-top-color: inherit;
+  }
+
+  &.statusDanger {
+    background-color: var(--color-danger);
+  }
+}
+
+.rangeChart {
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: -1px;
+}
+
+.rangeChartPadded {
+  left: 1px;
+  position: absolute;
+  right: 1px;
+}
+
+.cells {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: row;
+}
+
+.cell {
+  box-sizing: border-box;
+  min-width: 0;
+  word-wrap: break-word;
+  width: 50%;
+
+  &:only-child {
+    width: 100%;
+  }
+}
+
+.state {
+  color: var(--text-color-semi);
+  font-size: 14px;
+  line-height: 16px;
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:empty::before {
+    content: ' ';
+    display: inline-block;
+  }
+
+  @nest :--main.statusWarning & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusWarningPossibleDanger & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusDanger & {
+    color: var(--text-color);
+  }
+
+  @nest :--main.statusWarning .cell:only-child & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusWarningPossibleDanger .cell:only-child & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusDanger .cell:only-child & {
+    color: var(--text-color-semi);
+  }
+
+  @nest :--cell & {
+    color: var(--text-color-additional-semi);
+  }
+
+  @nest :--main.statusWarning :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusWarningPossibleDanger :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusDanger :--cell & {
+    color: var(--text-color-semi);
+  }
+}
+
+.valueLine {
+  color: var(--text-color);
+  line-height: 24px;
+  margin-bottom: 1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @nest :--cell & {
+    color: var(--text-color-additional-semi);
+  }
+
+  @nest :--main.statusWarning & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusWarningPossibleDanger & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusWarning :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusWarningPossibleDanger :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusDanger :--cell & {
+    color: var(--text-color-semi);
+  }
+}
+
+.value {
+  font-size: 22px;
+  letter-spacing: -0.03em;
+}
+
+.dimension {
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+}
+
+.name {
+  color: var(--text-color-additional);
+  font-size: 14px;
+  line-height: 16px;
+
+  &.minTwoLines {
+    min-height: 32px;
+  }
+
+  @nest :--main.statusWarning & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusWarningPossibleDanger & {
+    color: var(--text-color-black);
+  }
+
+  @nest :--main.statusDanger & {
+    color: var(--text-color);
+  }
+
+  @nest :--main.statusWarning .cell:only-child & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusWarningPossibleDanger .cell:only-child & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusDanger .cell:only-child & {
+    color: var(--text-color-semi);
+  }
+
+  @nest :--cell & {
+    color: var(--text-color-additional-semi);
+  }
+
+  @nest :--main.statusWarning :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusWarningPossibleDanger :--cell & {
+    color: var(--text-color-black-semi);
+  }
+
+  @nest :--main.statusDanger :--cell & {
+    color: var(--text-color-semi);
+  }
+}
