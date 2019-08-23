@@ -25,7 +25,7 @@
 }
 
 .lineBackground {
-  stroke: rgba(#c4c4c4, 0.2);
+  stroke: rgba(196, 196, 196, 0.2);
   fill: none;
   stroke-width: 1.5px;
 }
@@ -37,7 +37,7 @@
 
 .areaGradient {
   &.isStart.normal {
-    stop-color: rgba(#2fcc69, 0);
+    stop-color: var(--opaque-color);
   }
 
   &.isStart.warning {
@@ -45,11 +45,11 @@
   }
 
   &.isStart.danger {
-    stop-color: rgba(#cc1027, 0);
+    stop-color: var(--opaque-color);
   }
 
   &.isEnd.normal {
-    stop-color: rgba(#2fcc69, 0.4);
+    stop-color: rgba(47, 204, 105, 0.4);
   }
 
   &.isEnd.warning {
@@ -57,13 +57,13 @@
   }
 
   &.isEnd.danger {
-    stop-color: rgba(#cc1027, 0.4);
+    stop-color: rgba(204, 16, 39, 0.4);
   }
 }
 
 .linearGradient {
   &.isStart.normal {
-    stop-color: rgba(#737a90, 0);
+    stop-color: var(--opaque-color);
   }
 
   &.isStart.warning {
@@ -71,11 +71,11 @@
   }
 
   &.isStart.danger {
-    stop-color: rgba(#cc1027, 0);
+    stop-color: var(--opaque-color);
   }
 
   &.isEnd.normal {
-    stop-color: rgba(#2fcc69, 1);
+    stop-color: rgba(47, 204, 105, 1);
   }
 
   &.isEnd.warning {
@@ -83,7 +83,7 @@
   }
 
   &.isEnd.danger {
-    stop-color: rgba(#cc1027, 1);
+    stop-color: rgba(204, 16, 39, 1);
   }
 }
 

@@ -1,7 +1,8 @@
 module.exports = {
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|webp|svg|ttf|woff|woff2|)$': '<rootDir>/config/jest/mock-files.js',
-    "\\.css$": "identity-obj-proxy"
+    "\\.css$": "identity-obj-proxy",
+    "@/(.*)": "<rootDir>/src/$1"
   },
   modulePathIgnorePatterns: [ '.npm' ],
   globals: {

@@ -3,14 +3,14 @@ import { DraggableCore, DraggableData, DraggableEvent } from 'react-draggable'
 
 import classnames from 'classnames'
 
+import { createArrayOfIndexes } from '@/utils/array'
+import { getDurations, getDurationsGrid } from '@/utils/duration'
+
 import { npvDayType } from '../NDTBlock'
 
 import { NDTChartBar } from './components/NDTChartBar'
 import { NDTChartDurations } from './components/NDTChartDurations'
 import css from './index.css'
-
-const createArrayOfIndexes = (length: number): number[] =>
-  new Array(length).fill(0).map((_, index) => index)
 
 const defaultWidth = 790
 const defaultHeight = 323
@@ -104,22 +104,8 @@ export const NDTChart: React.FC<NDTChartPropsType> = ({
   const selectedDuration =
     selectedDay !== null ? Math.max(0, Math.min(maxDuration, selectedDay || 0)) : currentDuration
 
-  const maxDurationSteps = Math.max(
-    8,
-    maxDuration < 32
-      ? maxDuration
-      : maxDuration > 96
-      ? 32 - (maxDuration % 32)
-      : 16 - (maxDuration % 16)
-  )
-
-  const durations = createArrayOfIndexes(maxDuration + 1).filter(duration => {
-    const step = Math.round(maxDuration / maxDurationSteps) || 1
-    return duration === 0 || duration === maxDuration || duration % step === 0
-  })
-  const durationsGrid = hasValidData
-    ? durations.map(duration => duration / maxDuration)
-    : [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
+  const durations = getDurations(maxDuration)
+  const durationsGrid = getDurationsGrid(npvList, maxDuration)
 
   return (
     <div className={classnames(css.main, className)} ref={viz}>

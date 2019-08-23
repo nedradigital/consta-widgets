@@ -27,7 +27,7 @@ storiesOf('components/TechParamsChart', module)
         minimum: -7.9,
         upperDanger: 159,
         upperWarning: 159,
-        originalLowerDanger: 0,
+        originalLowerDanger: 200,
         originalLowerWarning: 0,
         originalUpperWarning: 0,
         originalUpperDanger: 0,

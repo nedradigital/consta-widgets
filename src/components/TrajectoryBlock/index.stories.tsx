@@ -9,7 +9,7 @@ import { statuses } from '../TrajectoryChart'
 
 import { TrajectoryBlock } from '.'
 
-storiesOf('components/TrajectoryBlock', module)
+storiesOf('components/Trajectory/TrajectoryBlock', module)
   .addDecorator(blockCenteringDecorator({ width: 250 }))
   .add('interactive', () => (
     <TrajectoryBlock

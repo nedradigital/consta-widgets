@@ -1,8 +1,9 @@
 import React, { createRef, useLayoutEffect, useState } from 'react'
 
 import classnames from 'classnames'
-import * as d3 from 'd3'
 import { isNil } from 'lodash'
+
+import { ChartContent } from '@/components/ChartContent'
 
 import css from './index.css'
 
@@ -41,85 +42,29 @@ type Props = {
 export const TechParamsChart: React.FC<Props> = ({
   id,
   mainChartData,
-  additionalChartData,
+  additionalChartData = [],
   dataRange,
   additionalDataDefaultLoBound,
   additionalDataDefaultHiBound,
   status,
 }) => {
-  const scaleHeightBackground = d3.scaleLinear()
-  const scaleHeightForeground = d3.scaleLinear()
-  const scaleWidthBackground = d3.scaleLinear()
-  const scaleWidthForeground = d3.scaleLinear()
   const [width, changeWidth] = useState(0)
   const [height, changeHeight] = useState(0)
   const ref = createRef<SVGSVGElement>()
+
+  const additionalDataMinimum = !isNil(additionalDataDefaultLoBound)
+    ? Math.min(additionalDataDefaultLoBound, ...additionalChartData)
+    : Math.min(...additionalChartData)
+
+  const additionalDataMaximum = !isNil(additionalDataDefaultHiBound)
+    ? Math.max(additionalDataDefaultHiBound, ...additionalChartData)
+    : Math.max(...additionalChartData)
 
   useLayoutEffect(() => {
     if (ref.current) {
       changeHeight(ref.current.getBoundingClientRect().height)
       changeWidth(ref.current.getBoundingClientRect().width)
     }
-
-    if (additionalChartData) {
-      const additionalDataMinimum = !isNil(additionalDataDefaultLoBound)
-        ? Math.min(additionalDataDefaultLoBound, ...additionalChartData)
-        : Math.min(...additionalChartData)
-
-      const additionalDataMaximum = !isNil(additionalDataDefaultHiBound)
-        ? Math.max(additionalDataDefaultHiBound, ...additionalChartData)
-        : Math.max(...additionalChartData)
-
-      scaleWidthBackground.domain([additionalDataMinimum, additionalDataMaximum]).range([0, width])
-
-      scaleHeightBackground.domain([0, additionalChartData.length - 1]).range([0, height])
-    }
-
-    scaleWidthForeground.domain([dataRange.minimum, dataRange.maximum]).range([0, width])
-
-    scaleHeightForeground.domain([0, mainChartData.length - 1]).range([0, height])
-
-    const lineBackground = d3
-      .line<number>()
-      .x(value => {
-        return scaleWidthBackground(value) // set the x values for the line generator
-      })
-      .y((_, index) => {
-        return scaleHeightBackground(index) // set the y values for the line generator
-      })
-      .curve(d3.curveMonotoneY) // apply smoothing to the line
-
-    const lineForeground = d3
-      .line<number>()
-      .x(value => {
-        return scaleWidthForeground(value) // set the x values for the line generator
-      })
-      .y((_, index) => {
-        return scaleHeightForeground(index) // set the y values for the line generator
-      })
-
-    d3.select(ref.current)
-      .select(`.${css.lineBackground}`)
-      .remove()
-
-    if (additionalChartData) {
-      d3.select(ref.current)
-        .datum(additionalChartData)
-        .append('path')
-        .attr('class', css.lineBackground)
-        .attr('d', lineBackground)
-    }
-
-    d3.select(ref.current)
-      .select(`.${css.lineForeground}`)
-      .remove()
-
-    d3.select(ref.current)
-      .datum(mainChartData)
-      .append('path')
-      .attr('class', css.lineForeground)
-      .attr('style', 'stroke: url(#foreground-gradient-' + id + ');')
-      .attr('d', lineForeground)
   })
 
   const fullRange = Math.abs(dataRange.maximum - dataRange.minimum)
@@ -192,6 +137,26 @@ export const TechParamsChart: React.FC<Props> = ({
             {upperDangerRatio < 1 && <stop offset="100%" className={css.lineForegroundDanger} />}
           </linearGradient>
         </defs>
+        <ChartContent
+          orientation="vertical"
+          lineForeground={{
+            data: mainChartData,
+            widthDomain: [dataRange.minimum, dataRange.maximum],
+            widthRange: [0, width],
+            heightDomain: [0, mainChartData.length - 1],
+            heightRange: [0, height],
+            styles: `stroke: url(#foreground-gradient-${id});`,
+            className: css.lineForeground,
+          }}
+          lineBackground={{
+            data: additionalChartData,
+            widthDomain: [additionalDataMinimum, additionalDataMaximum],
+            widthRange: [0, width],
+            heightDomain: [0, additionalChartData.length - 1],
+            heightRange: [0, height],
+            className: css.lineBackground,
+          }}
+        />
       </svg>
     </div>
   )
