@@ -277,7 +277,6 @@ export class WellDesign extends React.Component<any> {
         segment.position >= position && (!occupy || segment.occupied === false)
     )
     if (segmentIndex === -1) {
-      // console.log('Nothing found', position);
       return position
     }
     if (occupy) {
@@ -366,8 +365,6 @@ export class WellDesign extends React.Component<any> {
         )
         return newSection
       })
-
-    // console.log(motherboreSections);
 
     const stickColumnToLeft = leftInsetSections.length === 0
 
