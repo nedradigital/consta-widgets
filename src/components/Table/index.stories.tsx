@@ -7,7 +7,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Cell, Row, Table } from '.'
 
-storiesOf('coreComponents/Table', module)
+storiesOf('components/Table', module)
   .addDecorator(withKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
