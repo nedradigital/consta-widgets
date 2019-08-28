@@ -1,8 +1,10 @@
 import React, { createRef, useEffect, useState } from 'react'
 
 import classnames from 'classnames'
-import * as d3 from 'd3'
 import { isNil } from 'lodash'
+
+import { ChartContent } from '@/components/ChartContent'
+import { getDurations, getDurationsGrid } from '@/utils/duration'
 
 import css from './index.css'
 
@@ -20,6 +22,7 @@ type Props = {
   currentDay?: number
   daysSummary?: Day[]
   selectedDay?: number
+  maxCostSteps?: number
 }
 
 const foregroundGradientId = 'foreground-gradient-cost-chart'
@@ -27,6 +30,7 @@ const foregroundGradientId = 'foreground-gradient-cost-chart'
 export const CostChart: React.FC<Props> = ({
   className,
   currentDay = 0,
+  maxCostSteps = 3,
   daysSummary = [],
   selectedDay,
 }) => {
@@ -47,33 +51,9 @@ export const CostChart: React.FC<Props> = ({
   const lastDuration = filteredFactList.length
   const currentCost = filteredFactList[filteredFactList.length - 1]
 
-  const maxDurationSteps = Math.max(
-    8,
-    maxDuration < 32
-      ? maxDuration
-      : maxDuration > 96
-      ? 32 - (maxDuration % 32)
-      : 16 - (maxDuration % 16)
-  )
-  const maxCostSteps = 3
+  const durationsGrid = getDurationsGrid(daysSummary, maxDuration)
+  const durations = getDurations(maxDuration)
 
-  const durationsGrid = daysSummary.length
-    ? new Array(maxDuration + 1)
-        .fill(0)
-        .map((_, index) => index)
-        .filter(duration => {
-          const step = Math.round(maxDuration / maxDurationSteps) || 1
-          return duration === 0 || duration === maxDuration || duration % step === 0
-        })
-        .map(duration => duration / maxDuration)
-    : [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]
-  const durations = new Array(maxDuration + 1)
-    .fill(0)
-    .map((_, index) => index)
-    .filter(duration => {
-      const step = Math.round(maxDuration / maxDurationSteps)
-      return duration === 0 || duration === maxDuration || duration % step === 0
-    })
   const costs = new Array(maxCostSteps)
     .fill(null)
     .map((_, index) =>
@@ -143,66 +123,24 @@ export const CostChart: React.FC<Props> = ({
 
   const isCurrentMarketRed = mostRecentHighlight && mostRecentHighlight.value === false
 
+  const backgroundLineData = [0].concat(
+    daysSummary.map(day => day.planCost).filter(value => value !== null)
+  )
+  const foregroundLineData = [0].concat(
+    daysSummary.map(day => day.factCost).filter(value => value !== null)
+  )
+
+  const lineMinValue = Math.min(...backgroundLineData, ...foregroundLineData)
+  const lineMaxValue = Math.max(...backgroundLineData, ...foregroundLineData)
+
+  const backgroundLineWidth = width * Math.min(1, (backgroundLineData.length - 1) / maxDuration)
+  const foregroundLineWidth = width * Math.min(1, (foregroundLineData.length - 1) / maxDuration)
+
   useEffect(() => {
     if (ref.current) {
       changeHeight(ref.current.getBoundingClientRect().height)
       changeWidth(ref.current.getBoundingClientRect().width)
     }
-
-    const backgroundLineData = new Array().concat(
-      [0],
-      daysSummary.map(day => day.planCost).filter(value => value !== null)
-    )
-    const foregroundLineData = new Array().concat(
-      [0],
-      daysSummary.map(day => day.factCost).filter(value => value !== null)
-    )
-
-    const backgroundLineMin = Math.min(...backgroundLineData, ...foregroundLineData)
-    const backgroundLineMax = Math.max(...backgroundLineData, ...foregroundLineData)
-    const foregroundLineMin = Math.min(...backgroundLineData, ...foregroundLineData)
-    const foregroundLineMax = Math.max(...backgroundLineData, ...foregroundLineData)
-
-    const backgroundLineWidth = width * Math.min(1, (backgroundLineData.length - 1) / maxDuration)
-    const foregroundLineWidth = width * Math.min(1, (foregroundLineData.length - 1) / maxDuration)
-
-    const backgroundLineWidthScale = d3.scaleLinear()
-    const backgroundLineHeightScale = d3.scaleLinear()
-    const foregroundLineWidthScale = d3.scaleLinear()
-    const foregroundLineHeightScale = d3.scaleLinear()
-
-    backgroundLineWidthScale
-      .domain([0, backgroundLineData.length - 1])
-      .range([0, backgroundLineWidth])
-
-    backgroundLineHeightScale.domain([backgroundLineMin, backgroundLineMax]).range([height - 1, 1])
-
-    foregroundLineWidthScale
-      .domain([0, foregroundLineData.length - 1])
-      .range([0, foregroundLineWidth])
-
-    foregroundLineHeightScale.domain([foregroundLineMin, foregroundLineMax]).range([height - 1, 1])
-
-    const backgroundLine = d3
-      .line<number>()
-      .x((_, index) => backgroundLineWidthScale(index))
-      .y(value => backgroundLineHeightScale(value))
-
-    const foregroundLine = d3
-      .line<number>()
-      .x((_, index) => foregroundLineWidthScale(index))
-      .y(value => foregroundLineHeightScale(value))
-
-    d3.select(ref.current)
-      .select(`.${css.lineBackground}`)
-      .datum(backgroundLineData)
-      .attr('d', backgroundLine)
-
-    d3.select(ref.current)
-      .select(`.${css.lineForeground}`)
-      .datum(foregroundLineData)
-      .attr('d', foregroundLine)
-      .attr('style', `stroke: url(#${foregroundGradientId});`)
   })
 
   return (
@@ -321,8 +259,26 @@ export const CostChart: React.FC<Props> = ({
               })}
             </linearGradient>
           </defs>
-          {filteredPlanList.length > 0 && <path className={css.lineBackground} />}
-          {filteredFactList.length > 0 && <path className={css.lineForeground} />}
+          <ChartContent
+            orientation="horizontal"
+            lineForeground={{
+              data: foregroundLineData,
+              widthDomain: [0, foregroundLineData.length - 1],
+              widthRange: [0, foregroundLineWidth],
+              heightDomain: [lineMinValue, lineMaxValue],
+              heightRange: [height - 1, 1],
+              styles: `stroke: url(#${foregroundGradientId});`,
+              className: css.lineForeground,
+            }}
+            lineBackground={{
+              data: backgroundLineData,
+              widthDomain: [0, backgroundLineData.length - 1],
+              widthRange: [0, backgroundLineWidth],
+              heightDomain: [lineMinValue, lineMaxValue],
+              heightRange: [height - 1, 1],
+              className: css.lineBackground,
+            }}
+          />
         </svg>
       </div>
     </div>

@@ -1,8 +1,9 @@
 import React, { createRef, useEffect, useState } from 'react'
 
 import classnames from 'classnames'
-import * as d3 from 'd3'
 import { isNil } from 'lodash'
+
+import { ChartContent } from '@/components/ChartContent'
 
 import css from './index.css'
 
@@ -137,10 +138,6 @@ export const KPIChart: React.FC<Props> = ({
 }) => {
   const areaGradientId = `area-gradient-${id}`
   const linearGradientId = `linear-gradient-${id}`
-  const scaleHeightBackground = d3.scaleLinear()
-  const scaleHeightForeground = d3.scaleLinear()
-  const scaleWidthBackground = d3.scaleLinear()
-  const scaleWidthForeground = d3.scaleLinear()
   const [width, changeWidth] = useState(MIN_WIDTH)
   const [height, changeHeight] = useState(MIN_HEIGHT)
   const ref = createRef<SVGSVGElement>()
@@ -155,47 +152,6 @@ export const KPIChart: React.FC<Props> = ({
       changeWidth(ref.current.getBoundingClientRect().width)
       changeHeight(ref.current.getBoundingClientRect().height)
     }
-
-    scaleHeightBackground.domain([minValue, maxValue]).range([height - 1, 1])
-
-    scaleWidthBackground.domain([0, maxDuration]).range([0, width])
-
-    scaleHeightForeground.domain([minValue, maxValue]).range([height - 1, 1])
-
-    scaleWidthForeground.domain([0, maxDuration]).range([0, width])
-
-    const lineBackground = d3
-      .line<number>()
-      .x((_, index) => scaleWidthBackground(index))
-      .y(value => scaleHeightBackground(value))
-
-    const areaForeground = d3
-      .area<number>()
-      .x((_, index) => scaleWidthForeground(index))
-      .y0(_ => scaleHeightForeground(0))
-      .y1(value => scaleHeightForeground(value))
-
-    const lineForeground = d3
-      .line<number>()
-      .x((_, index) => scaleWidthForeground(index))
-      .y(value => scaleHeightForeground(value))
-
-    d3.select(ref.current)
-      .select(`.${CLASS_LINE_BACKGROUND}`)
-      .datum(safePlanData)
-      .attr('d', lineBackground)
-
-    d3.select(ref.current)
-      .datum(safeFactData)
-      .select(`.${CLASS_AREA_FOREGROUND}`)
-      .attr('style', `fill: url(#${areaGradientId});`)
-      .attr('d', areaForeground)
-
-    d3.select(ref.current)
-      .datum(safeFactData)
-      .select(`.${CLASS_LINE_FOREGROUND}`)
-      .attr('style', `stroke: url(#${linearGradientId});`)
-      .attr('d', lineForeground)
   })
 
   return (
@@ -205,9 +161,31 @@ export const KPIChart: React.FC<Props> = ({
           <LinearGradient type="linear" status={status} id={linearGradientId} />
           <LinearGradient type="area" status={status} id={areaGradientId} />
         </defs>
-        {safePlanData.length > 0 && <path className={CLASS_LINE_BACKGROUND} />}
-        {safeFactData.length > 0 && <path className={CLASS_LINE_FOREGROUND} />}
-        {safeFactData.length > 0 && <path className={CLASS_AREA_FOREGROUND} />}
+        <ChartContent
+          orientation="horizontal"
+          lineForeground={{
+            data: safeFactData,
+            widthDomain: [0, maxDuration],
+            widthRange: [0, width],
+            heightDomain: [minValue, maxValue],
+            heightRange: [height - 1, 1],
+            styles: `stroke: url(#${linearGradientId});`,
+            className: CLASS_LINE_FOREGROUND,
+          }}
+          lineBackground={{
+            data: safePlanData,
+            widthDomain: [0, maxDuration],
+            widthRange: [0, width],
+            heightDomain: [minValue, maxValue],
+            heightRange: [height - 1, 1],
+            className: CLASS_LINE_BACKGROUND,
+          }}
+          areaForeground={{
+            data: safeFactData,
+            styles: `fill: url(#${areaGradientId});`,
+            className: CLASS_AREA_FOREGROUND,
+          }}
+        />
       </svg>
       <Circle
         safeFactData={safeFactData}
