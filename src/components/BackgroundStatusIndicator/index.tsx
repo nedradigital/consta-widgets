@@ -4,12 +4,9 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const statuses = ['danger', 'important', 'warning'] as const
-type Status = typeof statuses[number]
-
 type Props = {
   className?: string
-  status: Status
+  status: 'danger' | 'important' | 'warning'
   styles?: React.CSSProperties
 }
 

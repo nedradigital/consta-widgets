@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, number, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,15 +8,16 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { FluidContacts } from '.'
 
 storiesOf('components/FluidContacts', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ width: 226 }))
   .add('interactive', () => (
     <FluidContacts
-      collectorTypeName={text('collectorTypeName', 'Имя раз')}
-      voidTypeName={text('voidTypeName', 'Имя двас')}
-      htr={boolean('htr', true)}
-      gnk={number('gnk', 100)}
-      vnk={number('vnk', 100)}
-      targetIntervalPower={number('targetIntervalPower', 100)}
-      vdTop={number('vdTop', 100)}
+      collectorTypeName="Имя раз"
+      voidTypeName="Имя двас"
+      htr={true}
+      gnk={100}
+      vnk={100}
+      targetIntervalPower={100}
+      vdTop={100}
     />
   ))

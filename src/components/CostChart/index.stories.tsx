@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withKnobs } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -47,6 +47,6 @@ const summary = [
 ]
 
 storiesOf('components/Cost/CostChart', module)
-  .addDecorator(withKnobs)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <CostChart currentDay={0} daysSummary={summary} />)

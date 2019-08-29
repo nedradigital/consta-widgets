@@ -1,32 +1,33 @@
 import React from 'react'
 
-import { array, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { WellPassport } from '.'
 
-storiesOf('components/WellPassport', module)
+storiesOf('components/Well/Passport', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ width: 1080 }))
   .add('interactive', () => (
     <WellPassport
-      drillCompany={text('drillCompany', '{dC}')}
-      geoParams={array('geoParams', ['МЗС 5ст', 'TAML-2', 'ВЗД', ' ERD 1.1', 'РУО'])}
-      oilFieldName={text('oilFieldName', '{oFN}')}
-      planDepth={text('planDepth', '{pD}')}
+      drillCompany={'{dC}'}
+      geoParams={['МЗС 5ст', 'TAML-2', 'ВЗД', ' ERD 1.1', 'РУО']}
+      oilFieldName={'{oFN}'}
+      planDepth={'{pD}'}
       techParams={['Пласт', 'ЦИ 24.6']}
-      wellId={text('wellId', '{wI}')}
-      wellPad={text('wellPad', '{wP}')}
+      wellId={'{wI}'}
+      wellPad={'{wP}'}
     />
   ))
   .add('responsible persons', () => (
     <WellPassport
-      drillCompany={text('drillCompany', '{dC}')}
-      oilFieldName={text('oilFieldName', '{oFN}')}
-      planDepth={text('planDepth', '{pD}')}
-      wellId={text('wellId', '{wI}')}
-      wellPad={text('wellPad', '{wP}')}
+      drillCompany={'{dC}'}
+      oilFieldName={'{oFN}'}
+      planDepth={'{pD}'}
+      wellId={'{wI}'}
+      wellPad={'{wP}'}
       responsiblePersons={{
         technologist: { name: 'Петров П.П.', phone: '8(931)654-66-13' },
         geologist: { name: 'Иванов И.И.', phone: '8(931)654-67-09' },
@@ -36,11 +37,11 @@ storiesOf('components/WellPassport', module)
   ))
   .add('responsible persons some data', () => (
     <WellPassport
-      drillCompany={text('drillCompany', '{dC}')}
-      oilFieldName={text('oilFieldName', '{oFN}')}
-      planDepth={text('planDepth', '{pD}')}
-      wellId={text('wellId', '{wI}')}
-      wellPad={text('wellPad', '{wP}')}
+      drillCompany={'{dC}'}
+      oilFieldName={'{oFN}'}
+      planDepth={'{pD}'}
+      wellId={'{wI}'}
+      wellPad={'{wP}'}
       responsiblePersons={{
         technologist: { phone: '8(931)654-66-13' },
         geologist: { name: 'Иванов И.И.' },

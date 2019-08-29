@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withKnobs } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -10,8 +10,13 @@ import { TechnologyInfo } from '../TechnologyInfo'
 import { Separator, TechnologiesBlock } from '.'
 
 storiesOf('components/TechnologiesBlock', module)
-  .addDecorator(withKnobs)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ width: 600 }))
+  .addParameters({
+    props: {
+      propTablesExclude: [TechnologyInfo],
+    },
+  })
   .add('interactive', () => (
     <TechnologiesBlock>
       <TechnologyInfo

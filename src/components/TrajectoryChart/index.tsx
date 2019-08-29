@@ -4,7 +4,7 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const statuses = ['success', 'warning', 'danger'] as const
+const statuses = ['success', 'warning', 'danger'] as const
 
 export type Props = {
   className?: string

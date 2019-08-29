@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withKnobs } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -31,8 +31,8 @@ const data = {
   ],
 }
 
-storiesOf('components/KNBKOpenableLabel', module)
-  .addDecorator(withKnobs)
+storiesOf('components/KNBK/OpenableLabel', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('has data', () => <KNBKOpenableLabel {...data} />)
   .add('empty data', () => <KNBKOpenableLabel absoluteValues={[]} relativeValues={[]} />)

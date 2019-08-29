@@ -8,11 +8,9 @@ import { ReactComponent as IconMGRP } from './images/i-mgrp.svg'
 import { ReactComponent as IconTechnology } from './images/i-technology.svg'
 import css from './index.css'
 
-export const icons = ['technology', 'fb', 'length', 'mgrp'] as const
-
 type Props = {
   className?: string
-  icon?: typeof icons[number]
+  icon?: 'technology' | 'fb' | 'length' | 'mgrp'
   isNew?: boolean
   title?: string
   description?: string

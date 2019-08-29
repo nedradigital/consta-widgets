@@ -34,3 +34,9 @@ declare module 'react-grid-layout-tmp-fork' {
 
   export { Layouts, Responsive, WidthProvider }
 }
+
+declare module '@nekitk/storybook-addon-smart-knobs' {
+  import { StoryDecorator } from '@storybook/react'
+
+  export const withSmartKnobs: StoryDecorator
+}

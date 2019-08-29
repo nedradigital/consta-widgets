@@ -1,18 +1,13 @@
 import React from 'react'
 
-import { radios, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { stringArrayToObjectMap } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { DirectionIndicator, directions } from '.'
+import { DirectionIndicator } from '.'
 
 storiesOf('components/DirectionIndicator', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => (
-    <DirectionIndicator
-      className={text('className', '')}
-      direction={radios('direction', stringArrayToObjectMap(directions), directions[0])}
-    />
-  ))
+  .add('interactive', () => <DirectionIndicator direction={'up'} />)

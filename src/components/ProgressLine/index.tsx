@@ -4,20 +4,14 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const statuses = ['danger', 'normal', 'warning'] as const
-type Status = typeof statuses[number]
-
-export const types = ['hollow', 'line'] as const
-type Type = typeof types[number]
-
 type Progress = number
 
 type Props = {
   className?: string
   children?: React.ReactNode
   progress: Progress
-  status: Status
-  type: Type
+  status: 'danger' | 'normal' | 'warning'
+  type: 'hollow' | 'line'
 }
 
 const normalizedProgress = (progress: Progress): Progress => Math.min(Math.max(progress, 0), 100)

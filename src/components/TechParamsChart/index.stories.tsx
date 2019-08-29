@@ -1,26 +1,28 @@
 import React from 'react'
 
-import { select } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { statuses, TechParamsChart } from '.'
+import { TechParamsChart } from '.'
 
 const getRandomArray = () =>
   [...new Array(100)].map(() => {
     return Math.random()
   })
 
-storiesOf('components/TechParamsChart', module)
+storiesOf('components/TechParams/Chart', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ display: 'flex', height: 620, width: 161 }))
   .add('interactive', () => (
     <TechParamsChart
-      status={select('Status', statuses, statuses[0])}
       id="test-chart"
+      status={'normal'}
       mainChartData={getRandomArray()}
       additionalChartData={getRandomArray()}
-      dataRange={{
+      dataRange={object('dataRange', {
         lowerDanger: -7.9,
         lowerWarning: -7.9,
         maximum: 159,
@@ -31,6 +33,6 @@ storiesOf('components/TechParamsChart', module)
         originalLowerWarning: 0,
         originalUpperWarning: 0,
         originalUpperDanger: 0,
-      }}
+      })}
     />
   ))

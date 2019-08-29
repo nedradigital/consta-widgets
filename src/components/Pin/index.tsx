@@ -4,21 +4,12 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const positions = ['left', 'right'] as const
-type Position = typeof positions[number]
-
-export const statuses = ['danger', 'warning'] as const
-type Status = typeof statuses[number]
-
-export const skins = ['inside', 'outside'] as const
-type Skin = typeof skins[number]
-
 type Props = {
   className?: string
   children: React.ReactNode
-  position?: Position
-  status?: Status
-  skin?: Skin
+  position?: 'left' | 'right'
+  status?: 'danger' | 'warning'
+  skin?: 'inside' | 'outside'
   title?: string
 }
 

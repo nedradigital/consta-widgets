@@ -1,20 +1,18 @@
 import React from 'react'
 
-import { number, select, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
+import { text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { ProgressLine, statuses, types } from '.'
+import { ProgressLine } from '.'
 
 storiesOf('components/ProgressLine', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <ProgressLine
-      progress={number('Progress', 50)}
-      status={select('Status', statuses, statuses[0])}
-      type={select('Type', types, types[0])}
-    >
-      {text('Content', '03:12:11')}
+    <ProgressLine progress={50} status={'normal'} type={'hollow'}>
+      {text('children', '03:12:11')}
     </ProgressLine>
   ))

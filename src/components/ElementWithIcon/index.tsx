@@ -4,16 +4,10 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const colors = ['normal', 'danger', 'warning'] as const
-type Color = typeof colors[number]
-
-export const orders = ['normal', 'reverse'] as const
-type Order = typeof orders[number]
-
 type Props = {
   icon: React.ReactNode
-  color?: Color
-  order?: Order
+  color?: 'normal' | 'danger' | 'warning'
+  order?: 'normal' | 'reverse'
   children: React.ReactNode
   className?: string
 }

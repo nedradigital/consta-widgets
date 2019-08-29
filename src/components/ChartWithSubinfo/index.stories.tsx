@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -8,11 +8,12 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ChartWithSubinfo } from '.'
 
 storiesOf('components/ChartWithSubinfo', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ width: '1034px' }))
   .add('interactive', () => (
     <ChartWithSubinfo
-      chartName={text('chartName', 'Глубина по суткам')}
-      chartUnits={text('chartUnits', 'Метры')}
+      chartName="Глубина по суткам"
+      chartUnits="Метры"
       chartComponent={
         <div style={{ height: '410px', background: 'white', color: 'red' }}>chart</div>
       }

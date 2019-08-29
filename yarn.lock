@@ -1341,14 +1341,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nekitk/react-docgen-typescript-loader@3.1.1":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@nekitk/react-docgen-typescript-loader/-/react-docgen-typescript-loader-3.1.1.tgz#fb4e1cd34690b5501b2c531d477992a9f0ed383d"
-  integrity sha512-z+LX75evBZSKXHQJw5dmVZgOzw8OqnOj5zldgEiLt38zLJGwjcxNbaFQkfWK9Tsrd4qeBW2odekPkx5jYOpYQw==
-  dependencies:
-    "@webpack-contrib/schema-utils" "^1.0.0-beta.0"
-    loader-utils "^1.2.3"
-    react-docgen-typescript "^1.12.3"
+"@nekitk/storybook-addon-smart-knobs@5.0.0-nekitk.3":
+  version "5.0.0-nekitk.3"
+  resolved "https://registry.yarnpkg.com/@nekitk/storybook-addon-smart-knobs/-/storybook-addon-smart-knobs-5.0.0-nekitk.3.tgz#48b04c03dd8a04b4abf08ba9812c733d25880c44"
+  integrity sha512-oJS0c/pt1zPb9kEnQVXCtmg9V8kPZnrQJNlvTKPS+c3RvWb6GNXDNeWmDpJ46MrbGEf92Ojoe0mhtm+E3EiPRA==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"
@@ -10709,6 +10705,15 @@ react-dnd@9.3.2:
     hoist-non-react-statics "^3.3.0"
     shallowequal "^1.1.0"
 
+react-docgen-typescript-loader@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/react-docgen-typescript-loader/-/react-docgen-typescript-loader-3.1.1.tgz#c1992538524fb9e45246d6c1314ddcfbf26e9d08"
+  integrity sha512-h8xfQIiEI4Z1oZewZhi9oohiWMS5Ek19LmgrvoL77Y/5d3tzu6fE3QHqhzYzdPnTaCfMzF7JMDUaydJiLbsDKg==
+  dependencies:
+    "@webpack-contrib/schema-utils" "^1.0.0-beta.0"
+    loader-utils "^1.2.3"
+    react-docgen-typescript "^1.12.3"
+
 react-docgen-typescript@^1.12.3:
   version "1.12.5"
   resolved "https://registry.yarnpkg.com/react-docgen-typescript/-/react-docgen-typescript-1.12.5.tgz#922cdbd9b6f3804695c94bff377c1b40a2e04f0c"
@@ -11944,10 +11949,10 @@ store2@^2.7.1:
   resolved "https://registry.yarnpkg.com/store2/-/store2-2.7.1.tgz#22070b7dc04748a792fc6912a58ab99d3a21d788"
   integrity sha512-zzzP5ZY6QWumnAFV6kBRbS44pUMcpZBNER5DWUe1HETlaKXqLcCQxbNu6IHaKr1pUsjuhUGBdOy8sWKmMkL6pQ==
 
-storybook-addon-react-docgen@1.2.2:
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/storybook-addon-react-docgen/-/storybook-addon-react-docgen-1.2.2.tgz#eefca64b0d582fd35898801eea791a0294bbfc9b"
-  integrity sha512-vRJUQvrmX4sutQjEmvlQjcTWDtf6Jw1qQMoyK/UNJEo9oTR5RYoT12ozYe7Pjz4bcEdU03j9xXnZ0AIX90qbjg==
+storybook-addon-react-docgen@1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/storybook-addon-react-docgen/-/storybook-addon-react-docgen-1.2.6.tgz#48308879ca2837b70d28edf92069d76bafa718f4"
+  integrity sha512-F1MzrgXQ0RjsxdfEvjlnKgGObM5ZY8vDWMqiFCHxcT48U79INBXgRtvoZ1SPjmcH/lNTQKKBFEY835J3R4KHAA==
   dependencies:
     nested-object-assign "^1.0.3"
     prop-types "^15.6.2"

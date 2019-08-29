@@ -5,11 +5,9 @@ import classnames from 'classnames'
 import directionImage from './images/i-direction.gif'
 import css from './index.css'
 
-export const directions = ['down', 'up'] as const
-
 type DirectionIndicatorPropsType = {
   className?: string
-  direction: typeof directions[number]
+  direction: 'down' | 'up'
 }
 
 export const DirectionIndicator = ({ className, direction }: DirectionIndicatorPropsType) => (

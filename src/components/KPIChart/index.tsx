@@ -7,9 +7,9 @@ import { ChartContent } from '@/components/ChartContent'
 
 import css from './index.css'
 
-export const statuses = ['danger', 'normal', 'warning'] as const
-export type Data = number[] | number
+const statuses = ['danger', 'normal', 'warning'] as const
 export type Status = typeof statuses[number]
+export type Data = number[] | number
 
 type SummaryData = {
   factData?: Data
