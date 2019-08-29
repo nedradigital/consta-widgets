@@ -1146,7 +1146,6 @@ export const WellDesignSections: React.FC<WellDesignSectionsProps> = ({
           {!fbCount &&
             additionalSections.length &&
             additionalSections.map((item, index) => {
-              //console.log(item);
               return (
                 !isNil(additionalSectionsArray[index]) && (
                   <g

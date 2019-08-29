@@ -18,7 +18,7 @@
   padding-right: 5px;
 
   &:first-child {
-    color: rgba($APP_TEXT_COLOR, 0.5);
+    color: rgba(var(--text-color), 0.5);
     flex-grow: 1;
   }
 
