@@ -1,22 +1,18 @@
 import React from 'react'
 
-import { select, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
+import { text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { ReactComponent as Icon } from '../CurrentOperation/images/i-fb.svg'
 
-import { colors, ElementWithIcon, orders } from '.'
+import { ElementWithIcon } from '.'
 
 storiesOf('components/ElementWithIcon', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <ElementWithIcon
-      icon={<Icon />}
-      color={select('color', colors, colors[0])}
-      order={select('order', orders, orders[0])}
-    >
-      {text('children', 'title')}
-    </ElementWithIcon>
+    <ElementWithIcon icon={<Icon />}>{text('children', 'title')}</ElementWithIcon>
   ))

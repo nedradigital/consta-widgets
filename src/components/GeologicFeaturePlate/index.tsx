@@ -8,11 +8,11 @@ import { ReactComponent as IconH2S } from './images/h2s.svg'
 import { ReactComponent as IconPermafrost } from './images/permafrost.svg'
 import css from './index.css'
 
-export const icons = ['abnormalPressure', 'cg', 'h2s', 'permafrost'] as const
+export const icons = [] as const
 
 type Props = {
   className?: string
-  icon: typeof icons[number]
+  icon: 'abnormalPressure' | 'cg' | 'h2s' | 'permafrost'
   text?: string
   title?: string
 }

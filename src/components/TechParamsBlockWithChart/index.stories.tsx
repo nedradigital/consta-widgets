@@ -1,11 +1,9 @@
 import React from 'react'
 
-import { select } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
-
-import { statuses } from '../TechParamsChart'
 
 import { TechParamsBlockWithChart } from '.'
 
@@ -63,11 +61,11 @@ const dataRange = {
   originalUpperDanger: 0,
 }
 
-storiesOf('components/TechParamsBlockWithChart', module)
+storiesOf('components/TechParams/BlockWithChart', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ display: 'flex', height: 620, width: 161 }))
   .add('interactive', () => (
     <TechParamsBlockWithChart
-      status={select('Status', statuses, statuses[0])}
       mainData={mainData}
       additionalData={additionalData}
       dataRange={dataRange}

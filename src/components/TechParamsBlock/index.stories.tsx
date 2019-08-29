@@ -1,15 +1,15 @@
 import React from 'react'
 
-import { number, select, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
+import { text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { statuses } from '../TechParamsChart'
-
 import { TechParamsBlock } from '.'
 
-storiesOf('components/TechParamsBlock', module)
+storiesOf('components/TechParams/Block', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('colors with states', () => (
     <>
@@ -87,14 +87,13 @@ storiesOf('components/TechParamsBlock', module)
   ))
   .add('interactive', () => (
     <TechParamsBlock
-      status={select('Status', statuses, statuses[0])}
-      state={text('State', 'Обсажен')}
-      value={text('Value', '150')}
-      dimension={text('Dimension', 'атм')}
-      name={text('Name', 'Давл. на стояке')}
-      addState={text('Additional state', 'Открыт')}
-      addValue={number('Additional value', 18)}
-      addDimension={text('Additional dimension', 'л/с')}
-      addName={text('Additional name', 'Расход б/р на входе')}
+      state={'Обсажен'}
+      value={text('value', '150')}
+      dimension={'атм'}
+      name={'Давл. на стояке'}
+      addState={'Открыт'}
+      addValue={18}
+      addDimension={'л/с'}
+      addName={'Расход б/р на входе'}
     />
   ))

@@ -9,12 +9,6 @@ import { ReactComponent as IconRVO } from './images/rvo.svg'
 import { ReactComponent as IconVZD } from './images/vzd.svg'
 import css from './index.css'
 
-export const drillingIcons = ['VZD', 'RUS'] as const
-type DrillingIcon = typeof drillingIcons[number]
-
-export const mudIcons = ['RUO', 'RVO'] as const
-type MudIcon = typeof mudIcons[number]
-
 type Props = {
   className?: string
 
@@ -22,13 +16,13 @@ type Props = {
   drillRig?: string
 
   /** Иконка типа воздействия на забой */
-  drillingIcon?: DrillingIcon
+  drillingIcon?: 'VZD' | 'RUS'
 
   /** Тип воздействия на забой */
   drillingShortName?: string
 
   /** Иконка типа раствора */
-  mudIcon?: MudIcon
+  mudIcon?: 'RUO' | 'RVO'
 
   /** Тип раствора */
   mudShortName?: string

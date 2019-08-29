@@ -1,6 +1,6 @@
 import { addDecorator, configure } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
-const { withPropsTable } = require('storybook-addon-react-docgen')
+import { withPropsTable } from 'storybook-addon-react-docgen'
 
 import '@/index.css'
 

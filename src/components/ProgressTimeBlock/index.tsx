@@ -7,8 +7,6 @@ import { ProgressTimeDate, ProgressTimeDateProps } from './components/ProgressTi
 import { ProgressTimeText } from './components/ProgressTimeText'
 import css from './index.css'
 
-export const statuses = ['danger', 'normal', 'warning'] as const
-
 type Props = {
   className?: string
 
@@ -25,7 +23,7 @@ type Props = {
   timeGap?: number
 
   statusTitle?: string
-  status?: typeof statuses[number]
+  status?: 'danger' | 'normal' | 'warning'
 } & ProgressTimeChartProps &
   ProgressTimeDateProps
 

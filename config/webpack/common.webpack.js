@@ -40,7 +40,7 @@ module.exports = ({ withDocgen }) => ({
             },
           },
           withDocgen && {
-            loader: '@nekitk/react-docgen-typescript-loader',
+            loader: 'react-docgen-typescript-loader',
             options: {
               compilerOptions: {
                 ...tsConfig.compilerOptions,

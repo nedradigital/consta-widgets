@@ -7,7 +7,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { objectives, voidTypes, WellDesignSections } from '.'
 
-storiesOf('components/WellDesignSections', module)
+storiesOf('components/Well/DesignSections', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <WellDesignSections

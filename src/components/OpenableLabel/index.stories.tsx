@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, text } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { Spinner, SpinnerSize } from '@/components/Spinner'
@@ -9,14 +9,15 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { OpenableLabel } from '.'
 
 storiesOf('components/OpenableLabel', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => {
     return (
       <OpenableLabel
-        className={text('Class name', 'external-classname')}
-        title={text('Title', 'Конструкция хвостовика')}
-        shortTitle={text('Short title', 'Хвостовик')}
-        isInitiallyOpened={boolean('Is opened', false)}
+        className="external-classname"
+        title="Конструкция хвостовика"
+        shortTitle="Хвостовик"
+        isInitiallyOpened={false}
         items={[
           'item 1',
           <div key={2} style={{ color: 'tomato' }}>

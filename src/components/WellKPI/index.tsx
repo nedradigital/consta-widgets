@@ -13,7 +13,7 @@ import { ReactComponent as IconMoneySign } from './icons/money-sign.svg'
 import { ReactComponent as IconSpeedometer } from './icons/speedometer.svg'
 import css from './index.css'
 
-export const statuses = ['normal', 'danger', 'warning'] as const
+const statuses = ['normal', 'danger', 'warning'] as const
 type Status = typeof statuses[number]
 
 type WellKPIPropsType = {

@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -7,6 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Timeline } from '.'
 
 storiesOf('components/Timeline', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator({ height: '600px' }))
   .add('No data', () => <Timeline />)
   .add('Half empty data', () => (

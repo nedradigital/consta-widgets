@@ -7,7 +7,7 @@ import { ChartContent } from '@/components/ChartContent'
 
 import css from './index.css'
 
-export const statuses = [
+const statuses = [
   'warning',
   'danger',
   'warning-possible-danger',

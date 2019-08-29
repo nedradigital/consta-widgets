@@ -25,5 +25,8 @@
     "src/**/*",
     "types/**/*"
   ],
-  "exclude": ["build", "__tests__"]
+  "exclude": [
+    "build",
+    "__tests__"
+  ]
 }

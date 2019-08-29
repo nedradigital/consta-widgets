@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -74,6 +75,7 @@ const wellDesignData = {
   bitDepth: 1809,
 }
 
-storiesOf('components/WellDesign', module)
+storiesOf('components/Well/Design', module)
+  .addDecorator(withSmartKnobs)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <WellDesign {...wellDesignData} />)
