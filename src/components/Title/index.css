@@ -1,0 +1,16 @@
+.title {
+  color: var(--text-color);
+  margin-bottom: 12px;
+}
+
+.small {
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.big {
+  font-size: 32px;
+  line-height: 42px;
+}
