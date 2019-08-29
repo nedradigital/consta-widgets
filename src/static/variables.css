@@ -2,13 +2,14 @@
 /* stylelint-disable-next-line */
 :root {
   --opaque-color: rgba(0, 0, 0, 0);
-  --bg-color: rgb(5, 14, 28);
+  --bg-color: rgb(0, 32, 51);
   --bg-color-white: rgba(255, 255, 255, 0.1);
   --bg-color-white-semi: rgba(255, 255, 255, 0.05);
   --bg-color-additional: #b1c4e3;
   --bg-color-additional-opacity-30: rgba(177, 196, 227, 0.3);
-  --text-color: #fff;
+  --text-color: rgba(246, 251, 253);
   --text-color-semi: rgba(255, 255, 255, 0.5);
+  --text-color-70: rgba(246, 251, 253, 0.7);
   --text-color-black: #000;
   --text-color-black-semi: rgba(0, 0, 0, 0.5);
   --text-color-additional: #b1c4e3;
@@ -36,7 +37,7 @@
   --border-radius: 4px;
   --color-important: rgb(85, 146, 255);
   --color-important-opacity-10: rgba(85, 146, 255, 0.1);
-  --color-normal: rgb(29, 128, 66);
+  --color-normal: rgb(28, 156, 82);
   --color-warning: rgb(255, 219, 31);
   --color-danger: rgb(202, 29, 50);
   --color-success: rgb(134, 255, 160);

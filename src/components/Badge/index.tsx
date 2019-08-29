@@ -5,10 +5,11 @@ import classnames from 'classnames'
 import css from './index.css'
 
 export const statuses = ['danger', 'normal', 'warning'] as const
+export type Status = typeof statuses[number]
 
 type Props = {
   className?: string
-  status?: typeof statuses[number]
+  status?: Status
   children?: React.ReactNode
 }
 
