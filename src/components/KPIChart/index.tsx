@@ -39,6 +39,13 @@ type LinearGradientProps = {
   id: string
 }
 
+type Params = {
+  widthDomain: [number, number]
+  widthRange: [number, number]
+  heightDomain: [number, number]
+  heightRange: [number, number]
+}
+
 type CastSafeData = SummaryData
 
 const MIN_WIDTH = 234
@@ -163,28 +170,32 @@ export const KPIChart: React.FC<Props> = ({
         </defs>
         <ChartContent
           orientation="horizontal"
-          lineForeground={{
-            data: safeFactData,
-            widthDomain: [0, maxDuration],
-            widthRange: [0, width],
-            heightDomain: [minValue, maxValue],
-            heightRange: [height - 1, 1],
-            styles: `stroke: url(#${linearGradientId});`,
-            className: CLASS_LINE_FOREGROUND,
-          }}
-          lineBackground={{
-            data: safePlanData,
-            widthDomain: [0, maxDuration],
-            widthRange: [0, width],
-            heightDomain: [minValue, maxValue],
-            heightRange: [height - 1, 1],
-            className: CLASS_LINE_BACKGROUND,
-          }}
-          areaForeground={{
-            data: safeFactData,
-            styles: `fill: url(#${areaGradientId});`,
-            className: CLASS_AREA_FOREGROUND,
-          }}
+          lines={[
+            {
+              value: safeFactData,
+              lineStyles: `stroke: url(#${linearGradientId});`,
+              classNameLine: CLASS_LINE_FOREGROUND,
+              background: true,
+              areaStyles: `fill: url(#${areaGradientId});`,
+              classNameBackground: CLASS_AREA_FOREGROUND,
+              ...({
+                widthDomain: [0, maxDuration],
+                widthRange: [0, width],
+                heightDomain: [minValue, maxValue],
+                heightRange: [height - 1, 1],
+              } as Params),
+            },
+            {
+              value: safePlanData,
+              classNameLine: CLASS_LINE_BACKGROUND,
+              ...({
+                widthDomain: [0, maxDuration],
+                widthRange: [0, width],
+                heightDomain: [minValue, maxValue],
+                heightRange: [height - 1, 1],
+              } as Params),
+            },
+          ]}
         />
       </svg>
       <Circle

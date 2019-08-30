@@ -1,0 +1,181 @@
+.main {
+  color: var(--text-color-70);
+  font-size: 11px;
+}
+
+.chart {
+  position: relative;
+  padding: 0 30px 27px 0;
+  box-sizing: border-box;
+}
+
+.unitName {
+  position: absolute;
+  right: 0;
+  top: -13px;
+  transform: translateY(-100%);
+}
+
+.columnsGroup {
+  display: flex;
+  width: calc(100% - 30px);
+  top: 5px;
+  bottom: 0;
+  justify-content: space-between;
+  position: absolute;
+}
+
+.columnName {
+  position: absolute;
+  bottom: -27px;
+  right: 100%;
+  transform: translateX(50%);
+}
+
+.column {
+  border-right: 1px dashed rgba(246, 251, 253, 0.28);
+  height: calc(100% - 27px);
+  width: 100%;
+  position: relative;
+
+  &::after {
+    content: '';
+    height: 4px;
+    width: 1px;
+    background: var(--text-color-70);
+    position: absolute;
+    right: -1px;
+    bottom: -12px;
+  }
+
+  &:first-child {
+    border-left: 1px dashed rgba(246, 251, 253, 0.28);
+  }
+
+  &:first-child .columnName {
+    left: 0;
+    transform: none;
+  }
+
+  &:first-child::before {
+    content: '';
+    height: 4px;
+    width: 1px;
+    background: var(--text-color-70);
+    position: absolute;
+    left: -1px;
+    bottom: -12px;
+  }
+
+  &:last-child {
+    & .columnName {
+      right: 0;
+      transform: none;
+    }
+  }
+}
+
+.rowsGroup {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  bottom: 22px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  justify-content: space-between;
+}
+
+.row {
+  &::before {
+    content: '';
+    width: 4px;
+    height: 1px;
+    background: var(--text-color-70);
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
+
+.svg {
+  position: relative;
+  z-index: 1;
+}
+
+.line {
+  stroke-width: 2px;
+  fill: none;
+
+  &.blue {
+    stroke: #29b0ff;
+  }
+
+  &.green {
+    stroke: #1c9c52;
+  }
+}
+
+.area {
+  &.isStart.blue {
+    stop-color: rgba(41, 176, 255, 0.4);
+  }
+
+  &.isStart.green {
+    stop-color: rgba(28, 156, 82, 0.4);
+  }
+
+  &.isEnd {
+    stop-color: var(--opaque-color);
+  }
+}
+
+.circle {
+  &.blue {
+    fill: #29b0ff;
+  }
+
+  &.green {
+    fill: #1c9c52;
+  }
+}
+
+.legend {
+  margin-bottom: 12px;
+  padding-right: 30px;
+}
+
+.legendItem {
+  display: inline-flex;
+  font-size: 13px;
+  line-height: 18px;
+  margin-right: 15px;
+  align-items: center;
+
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    vertical-align: middle;
+    margin-right: 4px;
+    border-radius: 10px;
+  }
+
+  &.blue::before {
+    background: #29b0ff;
+  }
+
+  &.green::before {
+    background: #1c9c52;
+  }
+}
+
+.legendValue {
+  font-weight: bold;
+
+  &::before {
+    content: ':\00a0';
+    font-weight: normal;
+  }
+}
