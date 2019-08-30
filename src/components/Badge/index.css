@@ -2,11 +2,9 @@
   background-color: var(--text-color-additional-semi);
   border-radius: 2px;
   display: inline-block;
-  font-size: 16px;
-  font-weight: bold;
   letter-spacing: -0.02em;
   line-height: 1;
-  padding: 2px 4px 0;
+  padding: 2px 4px;
   position: relative;
 
   &.normal {
