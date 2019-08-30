@@ -1,0 +1,65 @@
+.pieChart {
+  position: relative;
+}
+
+.chart {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.border {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.inner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  margin: auto;
+  width: 220px;
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+
+  font-size: 15px;
+  line-height: 21px;
+
+  background: url('./images/inner-background.svg');
+  background-color: #002033;
+  background-size: cover;
+  border: 1px solid rgba(246, 251, 253, 0.28);
+  border-radius: 100%;
+  box-shadow: 0 0 30px rgba(0, 32, 51, 0.5);
+}
+
+.totalTitle {
+  margin-top: 28px;
+
+  color: var(--text-color-70);
+}
+
+.total {
+  font-size: 96px;
+  line-height: 100px;
+}
+
+.subTotal {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+}
+
+.subTotalValue {
+  font-weight: bold;
+}
