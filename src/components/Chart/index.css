@@ -3,41 +3,92 @@
   font-size: 11px;
 }
 
-.chart {
+.svg {
   position: relative;
-  padding: 0 30px 27px 0;
-  box-sizing: border-box;
+  z-index: 1;
+  width: 100%;
+  overflow: visible;
 }
 
-.unitName {
-  position: absolute;
-  right: 0;
-  top: -13px;
-  transform: translateY(-100%);
+.line {
+  stroke-width: 2px;
+  fill: none;
+}
+
+.area {
+  &.isEnd {
+    stop-color: var(--opaque-color);
+  }
 }
 
 .columnsGroup {
+  width: 100%;
   display: flex;
-  width: calc(100% - 30px);
-  top: 5px;
-  bottom: 0;
   justify-content: space-between;
   position: absolute;
+
+  &.grid {
+    top: 0;
+    bottom: 0;
+  }
 }
 
-.columnName {
-  position: absolute;
-  bottom: -27px;
-  right: 100%;
-  transform: translateX(50%);
+.hint {
+  right: 0;
+  z-index: 2;
+
+  &.top {
+    bottom: auto !important;
+    transform: translate(50%, 14px);
+  }
+
+  &.bottom {
+    top: auto !important;
+    transform: translate(50%, -9px);
+  }
+}
+
+.topBlock {
+  margin-bottom: 12px;
+  align-items: flex-end;
+}
+
+.row {
+  display: flex;
+}
+
+.left {
+  width: 100%;
+  position: relative;
+}
+
+.right {
+  white-space: nowrap;
+  padding-left: 8px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.footer {
+  margin-top: 8px;
 }
 
 .column {
-  border-right: 1px dashed rgba(246, 251, 253, 0.28);
-  height: calc(100% - 27px);
+  height: 100%;
   width: 100%;
   position: relative;
+}
 
+.horizontalName {
+  margin-top: 5px;
+  line-height: 15px;
+  transform: translateX(-50%);
+  display: inline-block;
+}
+
+.descriptionColumn {
   &::after {
     content: '';
     height: 4px;
@@ -45,14 +96,10 @@
     background: var(--text-color-70);
     position: absolute;
     right: -1px;
-    bottom: -12px;
+    top: 0;
   }
 
-  &:first-child {
-    border-left: 1px dashed rgba(246, 251, 253, 0.28);
-  }
-
-  &:first-child .columnName {
+  &:first-child .horizontalName {
     left: 0;
     transform: none;
   }
@@ -64,30 +111,28 @@
     background: var(--text-color-70);
     position: absolute;
     left: -1px;
-    bottom: -12px;
+    top: 0;
   }
+}
 
-  &:last-child {
-    & .columnName {
-      right: 0;
-      transform: none;
-    }
+.lineColumn {
+  border-right: 1px dashed rgba(246, 251, 253, 0.28);
+
+  &:first-child {
+    border-left: 1px dashed rgba(246, 251, 253, 0.28);
   }
 }
 
 .rowsGroup {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 30px;
-  bottom: 22px;
   display: flex;
   flex-direction: column;
   text-align: right;
   justify-content: space-between;
+  height: calc(100% + 10px);
+  margin-top: -5px;
 }
 
-.row {
+.verticalName {
   &::before {
     content: '';
     width: 4px;
@@ -99,76 +144,20 @@
   }
 }
 
-.svg {
-  position: relative;
-  z-index: 1;
-}
-
-.line {
-  stroke-width: 2px;
-  fill: none;
-
-  &.blue {
-    stroke: #29b0ff;
-  }
-
-  &.green {
-    stroke: #1c9c52;
-  }
-}
-
-.area {
-  &.isStart.blue {
-    stop-color: rgba(41, 176, 255, 0.4);
-  }
-
-  &.isStart.green {
-    stop-color: rgba(28, 156, 82, 0.4);
-  }
-
-  &.isEnd {
-    stop-color: var(--opaque-color);
-  }
-}
-
-.circle {
-  &.blue {
-    fill: #29b0ff;
-  }
-
-  &.green {
-    fill: #1c9c52;
-  }
-}
-
-.legend {
-  margin-bottom: 12px;
-  padding-right: 30px;
-}
-
 .legendItem {
   display: inline-flex;
   font-size: 13px;
   line-height: 18px;
   margin-right: 15px;
   align-items: center;
+}
 
-  &::before {
-    content: '';
-    width: 8px;
-    height: 8px;
-    vertical-align: middle;
-    margin-right: 4px;
-    border-radius: 10px;
-  }
-
-  &.blue::before {
-    background: #29b0ff;
-  }
-
-  &.green::before {
-    background: #1c9c52;
-  }
+.legendMarker {
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  margin-right: 4px;
+  border-radius: 10px;
 }
 
 .legendValue {

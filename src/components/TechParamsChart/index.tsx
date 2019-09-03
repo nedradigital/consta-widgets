@@ -149,7 +149,9 @@ export const TechParamsChart: React.FC<Props> = ({
           lines={[
             {
               value: mainChartData,
-              lineStyles: `stroke: url(#foreground-gradient-${id});`,
+              colors: {
+                line: `url(#foreground-gradient-${id})`,
+              },
               classNameLine: css.lineForeground,
               ...({
                 widthDomain: [dataRange.minimum, dataRange.maximum],
@@ -161,6 +163,9 @@ export const TechParamsChart: React.FC<Props> = ({
             {
               value: additionalChartData,
               classNameLine: css.lineBackground,
+              colors: {
+                line: '#b1c4e3',
+              },
               ...({
                 widthDomain: [additionalDataMinimum, additionalDataMaximum],
                 widthRange: [0, width],

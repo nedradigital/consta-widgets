@@ -34,7 +34,6 @@
 
 .lineBackground {
   fill: none;
-  stroke: var(--text-color-additional);
   stroke-width: 1.1;
   stroke-align: inner;
 }

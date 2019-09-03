@@ -231,7 +231,6 @@
 }
 
 .lineBackground {
-  stroke: rgba(246, 251, 253, 0.2);
   stroke-dasharray: 5;
   fill: none;
 }

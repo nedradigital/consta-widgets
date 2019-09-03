@@ -25,7 +25,6 @@
 }
 
 .lineBackground {
-  stroke: rgba(196, 196, 196, 0.2);
   fill: none;
   stroke-width: 1.5px;
 }

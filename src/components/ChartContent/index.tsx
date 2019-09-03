@@ -1,4 +1,4 @@
-import React, { createRef, useLayoutEffect } from 'react'
+import React, { createRef, Fragment, useLayoutEffect } from 'react'
 
 import classnames from 'classnames'
 import * as d3 from 'd3'
@@ -13,14 +13,17 @@ type Lines = {
   widthRange: [number, number]
   heightDomain: [number, number]
   heightRange: [number, number]
-  lineStyles?: string
-  areaStyles?: string
-  circleStyles?: string
+  lineStyles?: React.CSSProperties
+  areaStyles?: React.CSSProperties
+  circleStyles?: React.CSSProperties
   background?: boolean
   circle?: boolean
   classNameLine?: string
   classNameBackground?: string
   classNameCircle?: string
+  colors: {
+    line: string
+  }
 }
 
 type Props = {
@@ -47,17 +50,15 @@ export const ChartContent: React.FC<Props> = ({ orientation, lines }) => {
       d3.select(ref.current)
         .datum(line.value)
         .select(`.${CLASS_LINE}_${lineNumber}`)
-        .attr('style', line.lineStyles || '')
         .attr('d', LineBackground)
 
       if (line.circle) {
         d3.select(ref.current)
           .datum(line.value[line.value.length - 1])
           .select(`.${CLASS_CIRCLE}_${lineNumber}`)
-          .attr('r', 4)
+          .attr('r', 2)
           .attr('cx', line.widthRange[1])
           .attr('cy', value => scaleHeight(value))
-          .attr('style', line.circleStyles || '')
       }
 
       if (line.background) {
@@ -70,7 +71,6 @@ export const ChartContent: React.FC<Props> = ({ orientation, lines }) => {
         d3.select(ref.current)
           .datum(line.value)
           .select(`.${CLASS_AREA}_${lineNumber}`)
-          .attr('style', line.areaStyles || '')
           .attr('d', AreaForeground)
       }
     })
@@ -80,15 +80,30 @@ export const ChartContent: React.FC<Props> = ({ orientation, lines }) => {
     <g ref={ref}>
       {lines.map((item, index) => {
         return (
-          <>
-            <path className={classnames(item.classNameLine, `${CLASS_LINE}_${index}`)} />
+          <Fragment key={index}>
+            <path
+              className={classnames(item.classNameLine, `${CLASS_LINE}_${index}`)}
+              style={{
+                ...item.lineStyles,
+                stroke: item.colors.line,
+              }}
+            />
             {item.background && (
-              <path className={classnames(item.classNameBackground, `${CLASS_AREA}_${index}`)} />
+              <path
+                className={classnames(item.classNameBackground, `${CLASS_AREA}_${index}`)}
+                style={item.areaStyles}
+              />
             )}
             {item.circle && (
-              <circle className={classnames(item.classNameCircle, `${CLASS_CIRCLE}_${index}`)} />
+              <circle
+                className={classnames(item.classNameCircle, `${CLASS_CIRCLE}_${index}`)}
+                style={{
+                  ...item.circleStyles,
+                  fill: item.colors.line,
+                }}
+              />
             )}
-          </>
+          </Fragment>
         )
       })}
     </g>

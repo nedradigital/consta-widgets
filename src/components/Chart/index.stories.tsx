@@ -3,23 +3,12 @@ import React from 'react'
 import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
+import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Chart } from '.'
 
 const size = 12 * 4
-
-function getRandomInt(min: number, max: number) {
-  return Math.floor(Math.random() * (max - min)) + min
-}
-
-const dataBackground = [...new Array(size)].map(() => {
-  return getRandomInt(85, 90)
-})
-
-const dataForeground = [...new Array(size)].map(() => {
-  return getRandomInt(60, 80)
-})
 
 const legend = [
   {
@@ -41,13 +30,26 @@ const props = {
   maxValue: 90,
   lines: [
     {
-      value: dataBackground,
+      value: getArrayWithRandomInt(85, 90, size),
       background: true,
       circle: true,
+      hint: true,
+      colors: {
+        line: '#29b0ff',
+        background: {
+          start: 'rgba(41, 176, 255, 0.4)',
+        },
+      },
     },
     {
-      value: dataForeground,
+      value: getArrayWithRandomInt(60, 80, size),
       circle: true,
+      colors: {
+        line: '#1c9c52',
+        background: {
+          start: 'rgba(28, 156, 82, 0.4)',
+        },
+      },
     },
   ],
   unitName: 'шт',

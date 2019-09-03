@@ -51,10 +51,6 @@ type CastSafeData = SummaryData
 const MIN_WIDTH = 234
 const MIN_HEIGHT = 95
 
-const CLASS_LINE_BACKGROUND = css.lineBackground
-const CLASS_LINE_FOREGROUND = css.lineForeground
-const CLASS_AREA_FOREGROUND = css.areaForeground
-
 export const castData = (data?: Data, length = 2) => {
   return (Array.isArray(data)
     ? data.length > 1
@@ -173,11 +169,15 @@ export const KPIChart: React.FC<Props> = ({
           lines={[
             {
               value: safeFactData,
-              lineStyles: `stroke: url(#${linearGradientId});`,
-              classNameLine: CLASS_LINE_FOREGROUND,
+              classNameLine: css.lineForeground,
               background: true,
-              areaStyles: `fill: url(#${areaGradientId});`,
-              classNameBackground: CLASS_AREA_FOREGROUND,
+              areaStyles: {
+                fill: `url(#${areaGradientId})`,
+              },
+              colors: {
+                line: `url(#${linearGradientId})`,
+              },
+              classNameBackground: css.areaForeground,
               ...({
                 widthDomain: [0, maxDuration],
                 widthRange: [0, width],
@@ -187,7 +187,10 @@ export const KPIChart: React.FC<Props> = ({
             },
             {
               value: safePlanData,
-              classNameLine: CLASS_LINE_BACKGROUND,
+              classNameLine: css.lineBackground,
+              colors: {
+                line: 'rgba(196, 196, 196, 0.2)',
+              },
               ...({
                 widthDomain: [0, maxDuration],
                 widthRange: [0, width],

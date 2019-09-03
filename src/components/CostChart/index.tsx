@@ -271,7 +271,9 @@ export const CostChart: React.FC<Props> = ({
             lines={[
               {
                 value: foregroundLineData,
-                lineStyles: `stroke: url(#${foregroundGradientId});`,
+                colors: {
+                  line: `url(#${foregroundGradientId})`,
+                },
                 classNameLine: css.lineForeground,
                 ...({
                   widthDomain: [0, foregroundLineData.length - 1],
@@ -283,6 +285,9 @@ export const CostChart: React.FC<Props> = ({
               {
                 value: backgroundLineData,
                 classNameLine: css.lineBackground,
+                colors: {
+                  line: 'rgba(246, 251, 253, 0.2)',
+                },
                 ...({
                   widthDomain: [0, backgroundLineData.length - 1],
                   widthRange: [0, backgroundLineWidth],
