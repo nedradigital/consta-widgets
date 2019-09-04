@@ -1,0 +1,30 @@
+.group {
+  display: flex;
+}
+
+.item {
+  background: rgba(246, 251, 253, 0.08);
+  padding: 8px 12px;
+  margin-right: 4px;
+  height: 86px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-basis: 33%;
+
+  & + & {
+    margin-left: 4px;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.text {
+  flex: 1;
+}
+
+.label {
+  background: rgb(10, 165, 255, 0.3);
+}
