@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const mixins = require('../../utils/postcss-utils')
 
 const cssRules = [
   {
@@ -37,6 +38,13 @@ function* css({ onlyGenerateTypes } = {}) {
         options: {
           plugins() {
             return [
+              require('postcss-functions')({
+                functions: {
+                  'calc-size': function(size) {
+                    return mixins.calcSize(size)
+                  },
+                },
+              }),
               require('postcss-nested'),
               require('postcss-preset-env')({
                 stage: 2,

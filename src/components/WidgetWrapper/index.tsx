@@ -3,6 +3,8 @@ import * as React from 'react'
 import ReactDOM from 'react-dom'
 import ClickOutHandler from 'react-onclickout'
 
+import { calcSize } from 'utils/postcss-utils'
+
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { Dataset } from '@/dashboard/types'
 import { OnChangeParam, WithDataset } from '@/utils/WidgetFactory'
@@ -55,8 +57,8 @@ export const WidgetWrapper: React.FC<Props> = ({
   return (
     <div
       style={{
-        marginTop: params.marginTop && sizeValues[params.marginTop],
-        marginRight: params.marginRight && sizeValues[params.marginRight],
+        marginTop: params.marginTop && calcSize(sizeValues[params.marginTop]),
+        marginRight: params.marginRight && calcSize(sizeValues[params.marginRight]),
       }}
       ref={ref}
     >

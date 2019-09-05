@@ -101,6 +101,7 @@ module.exports = ({ withDocgen, isLibBuilding } = {}) => ({
     modules: [path.resolve(root, 'node_modules')],
     alias: {
       '@': path.resolve(root, 'src'),
+      utils: path.resolve(root, 'utils'),
     },
   },
 

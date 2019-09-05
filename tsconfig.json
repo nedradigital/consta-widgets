@@ -14,7 +14,8 @@
     "outDir": "dist/ts",
     "paths": {
       "*": ["types/modules/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "utils/*": ["utils/*"]
     },
     "removeComments": true,
     "sourceMap": true,
@@ -23,7 +24,8 @@
   },
   "include": [
     "src/**/*",
-    "types/**/*"
+    "types/**/*",
+    "utils/**/*"
   ],
   "exclude": [
     "build",
