@@ -18,7 +18,7 @@
   padding-right: 5px;
 
   &:first-child {
-    color: rgba(var(--text-color), 0.5);
+    color: var(--text-color-semi);
     flex-grow: 1;
   }
 

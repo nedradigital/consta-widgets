@@ -1,0 +1,60 @@
+.table {
+  width: 100%;
+
+  & tbody {
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  & th {
+    font-size: 11px;
+    line-height: 15px;
+    color: var(--text-color-70);
+  }
+
+  & th,
+  & td {
+    padding: 0;
+
+    &.value {
+      text-align: right;
+      padding-left: 8px;
+    }
+
+    &.isPadded {
+      padding-left: 40px;
+    }
+  }
+}
+
+.title {
+  margin-bottom: 0;
+  text-align: left;
+}
+
+.circle {
+  display: inline-block;
+  margin-right: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.values {
+  margin-top: 16px;
+  padding-top: 8px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  border-top: 1px solid rgba(246, 251, 253, 0.28);
+}
+
+.valueName {
+  display: inline-block;
+
+  & + & {
+    margin-left: 20px;
+  }
+}

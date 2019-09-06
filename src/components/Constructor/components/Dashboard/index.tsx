@@ -88,6 +88,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         layouts={layouts}
         measureBeforeMount
         compactType={null}
+        preventCollision
         isDroppable={true}
         onDrop={onDrop}
         droppingPositionShift={{ x: -110, y: -80 }}

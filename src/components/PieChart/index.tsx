@@ -6,7 +6,7 @@ import * as d3 from 'd3'
 import { ReactComponent as ChartBorder } from './images/chart-border.svg'
 import css from './index.css'
 
-const CHART_COLORS = {
+export const CHART_COLORS = {
   red: {
     legend: '#EB5757',
     chart: '#D43535',
