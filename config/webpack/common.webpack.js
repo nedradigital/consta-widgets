@@ -46,6 +46,7 @@ module.exports = ({ withDocgen }) => ({
                 ...tsConfig.compilerOptions,
                 strict: false, // чтобы не добавлялось "| undefined" у опциональных пропсов
               },
+              shouldExtractLiteralValuesFromEnum: true,
             },
           },
           {
