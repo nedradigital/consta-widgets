@@ -1,0 +1,170 @@
+.main {
+  color: var(--text-color-70);
+  font-size: 11px;
+}
+
+.svg {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: visible;
+}
+
+.line {
+  stroke-width: 2px;
+  fill: none;
+}
+
+.area {
+  &.isEnd {
+    stop-color: var(--opaque-color);
+  }
+}
+
+.columnsGroup {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+
+  &.grid {
+    top: 0;
+    bottom: 0;
+  }
+}
+
+.hint {
+  right: 0;
+  z-index: 2;
+
+  &.top {
+    bottom: auto !important;
+    transform: translate(50%, 14px);
+  }
+
+  &.bottom {
+    top: auto !important;
+    transform: translate(50%, -9px);
+  }
+}
+
+.topBlock {
+  margin-bottom: 12px;
+  align-items: flex-end;
+}
+
+.row {
+  display: flex;
+}
+
+.left {
+  width: 100%;
+  position: relative;
+}
+
+.right {
+  white-space: nowrap;
+  padding-left: 8px;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.footer {
+  margin-top: 8px;
+}
+
+.column {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.horizontalName {
+  margin-top: 5px;
+  line-height: 15px;
+  transform: translateX(-50%);
+  display: inline-block;
+}
+
+.descriptionColumn {
+  &::after {
+    content: '';
+    height: 4px;
+    width: 1px;
+    background: var(--text-color-70);
+    position: absolute;
+    right: -1px;
+    top: 0;
+  }
+
+  &:first-child .horizontalName {
+    left: 0;
+    transform: none;
+  }
+
+  &:first-child::before {
+    content: '';
+    height: 4px;
+    width: 1px;
+    background: var(--text-color-70);
+    position: absolute;
+    left: -1px;
+    top: 0;
+  }
+}
+
+.lineColumn {
+  border-right: 1px dashed rgba(246, 251, 253, 0.28);
+
+  &:first-child {
+    border-left: 1px dashed rgba(246, 251, 253, 0.28);
+  }
+}
+
+.rowsGroup {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  justify-content: space-between;
+  height: calc(100% + 10px);
+  margin-top: -5px;
+}
+
+.verticalName {
+  &::before {
+    content: '';
+    width: 4px;
+    height: 1px;
+    background: var(--text-color-70);
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
+
+.legendItem {
+  display: inline-flex;
+  font-size: 13px;
+  line-height: 18px;
+  margin-right: 15px;
+  align-items: center;
+}
+
+.legendMarker {
+  width: 8px;
+  height: 8px;
+  vertical-align: middle;
+  margin-right: 4px;
+  border-radius: 10px;
+}
+
+.legendValue {
+  font-weight: bold;
+
+  &::before {
+    content: ':\00a0';
+    font-weight: normal;
+  }
+}

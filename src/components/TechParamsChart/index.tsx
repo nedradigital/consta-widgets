@@ -39,6 +39,13 @@ type Props = {
   additionalDataDefaultHiBound?: number
 }
 
+type Params = {
+  widthDomain: [number, number]
+  widthRange: [number, number]
+  heightDomain: [number, number]
+  heightRange: [number, number]
+}
+
 export const TechParamsChart: React.FC<Props> = ({
   id,
   mainChartData,
@@ -139,23 +146,34 @@ export const TechParamsChart: React.FC<Props> = ({
         </defs>
         <ChartContent
           orientation="vertical"
-          lineForeground={{
-            data: mainChartData,
-            widthDomain: [dataRange.minimum, dataRange.maximum],
-            widthRange: [0, width],
-            heightDomain: [0, mainChartData.length - 1],
-            heightRange: [0, height],
-            styles: `stroke: url(#foreground-gradient-${id});`,
-            className: css.lineForeground,
-          }}
-          lineBackground={{
-            data: additionalChartData,
-            widthDomain: [additionalDataMinimum, additionalDataMaximum],
-            widthRange: [0, width],
-            heightDomain: [0, additionalChartData.length - 1],
-            heightRange: [0, height],
-            className: css.lineBackground,
-          }}
+          lines={[
+            {
+              value: mainChartData,
+              colors: {
+                line: `url(#foreground-gradient-${id})`,
+              },
+              classNameLine: css.lineForeground,
+              ...({
+                widthDomain: [dataRange.minimum, dataRange.maximum],
+                widthRange: [0, width],
+                heightDomain: [0, mainChartData.length - 1],
+                heightRange: [0, height],
+              } as Params),
+            },
+            {
+              value: additionalChartData,
+              classNameLine: css.lineBackground,
+              colors: {
+                line: '#b1c4e3',
+              },
+              ...({
+                widthDomain: [additionalDataMinimum, additionalDataMaximum],
+                widthRange: [0, width],
+                heightDomain: [0, additionalChartData.length - 1],
+                heightRange: [0, height],
+              } as Params),
+            },
+          ]}
         />
       </svg>
     </div>

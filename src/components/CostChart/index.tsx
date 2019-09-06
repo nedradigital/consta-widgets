@@ -25,6 +25,13 @@ type Props = {
   maxCostSteps?: number
 }
 
+type Params = {
+  widthDomain: [number, number]
+  widthRange: [number, number]
+  heightDomain: [number, number]
+  heightRange: [number, number]
+}
+
 const foregroundGradientId = 'foreground-gradient-cost-chart'
 
 export const CostChart: React.FC<Props> = ({
@@ -261,23 +268,34 @@ export const CostChart: React.FC<Props> = ({
           </defs>
           <ChartContent
             orientation="horizontal"
-            lineForeground={{
-              data: foregroundLineData,
-              widthDomain: [0, foregroundLineData.length - 1],
-              widthRange: [0, foregroundLineWidth],
-              heightDomain: [lineMinValue, lineMaxValue],
-              heightRange: [height - 1, 1],
-              styles: `stroke: url(#${foregroundGradientId});`,
-              className: css.lineForeground,
-            }}
-            lineBackground={{
-              data: backgroundLineData,
-              widthDomain: [0, backgroundLineData.length - 1],
-              widthRange: [0, backgroundLineWidth],
-              heightDomain: [lineMinValue, lineMaxValue],
-              heightRange: [height - 1, 1],
-              className: css.lineBackground,
-            }}
+            lines={[
+              {
+                value: foregroundLineData,
+                colors: {
+                  line: `url(#${foregroundGradientId})`,
+                },
+                classNameLine: css.lineForeground,
+                ...({
+                  widthDomain: [0, foregroundLineData.length - 1],
+                  widthRange: [0, foregroundLineWidth],
+                  heightDomain: [lineMinValue, lineMaxValue],
+                  heightRange: [height - 1, 1],
+                } as Params),
+              },
+              {
+                value: backgroundLineData,
+                classNameLine: css.lineBackground,
+                colors: {
+                  line: 'rgba(246, 251, 253, 0.2)',
+                },
+                ...({
+                  widthDomain: [0, backgroundLineData.length - 1],
+                  widthRange: [0, backgroundLineWidth],
+                  heightDomain: [lineMinValue, lineMaxValue],
+                  heightRange: [height - 1, 1],
+                } as Params),
+              },
+            ]}
           />
         </svg>
       </div>

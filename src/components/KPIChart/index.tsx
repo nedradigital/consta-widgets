@@ -39,14 +39,17 @@ type LinearGradientProps = {
   id: string
 }
 
+type Params = {
+  widthDomain: [number, number]
+  widthRange: [number, number]
+  heightDomain: [number, number]
+  heightRange: [number, number]
+}
+
 type CastSafeData = SummaryData
 
 const MIN_WIDTH = 234
 const MIN_HEIGHT = 95
-
-const CLASS_LINE_BACKGROUND = css.lineBackground
-const CLASS_LINE_FOREGROUND = css.lineForeground
-const CLASS_AREA_FOREGROUND = css.areaForeground
 
 export const castData = (data?: Data, length = 2) => {
   return (Array.isArray(data)
@@ -163,28 +166,39 @@ export const KPIChart: React.FC<Props> = ({
         </defs>
         <ChartContent
           orientation="horizontal"
-          lineForeground={{
-            data: safeFactData,
-            widthDomain: [0, maxDuration],
-            widthRange: [0, width],
-            heightDomain: [minValue, maxValue],
-            heightRange: [height - 1, 1],
-            styles: `stroke: url(#${linearGradientId});`,
-            className: CLASS_LINE_FOREGROUND,
-          }}
-          lineBackground={{
-            data: safePlanData,
-            widthDomain: [0, maxDuration],
-            widthRange: [0, width],
-            heightDomain: [minValue, maxValue],
-            heightRange: [height - 1, 1],
-            className: CLASS_LINE_BACKGROUND,
-          }}
-          areaForeground={{
-            data: safeFactData,
-            styles: `fill: url(#${areaGradientId});`,
-            className: CLASS_AREA_FOREGROUND,
-          }}
+          lines={[
+            {
+              value: safeFactData,
+              classNameLine: css.lineForeground,
+              background: true,
+              areaStyles: {
+                fill: `url(#${areaGradientId})`,
+              },
+              colors: {
+                line: `url(#${linearGradientId})`,
+              },
+              classNameBackground: css.areaForeground,
+              ...({
+                widthDomain: [0, maxDuration],
+                widthRange: [0, width],
+                heightDomain: [minValue, maxValue],
+                heightRange: [height - 1, 1],
+              } as Params),
+            },
+            {
+              value: safePlanData,
+              classNameLine: css.lineBackground,
+              colors: {
+                line: 'rgba(196, 196, 196, 0.2)',
+              },
+              ...({
+                widthDomain: [0, maxDuration],
+                widthRange: [0, width],
+                heightDomain: [minValue, maxValue],
+                heightRange: [height - 1, 1],
+              } as Params),
+            },
+          ]}
         />
       </svg>
       <Circle
