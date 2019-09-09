@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Badge } from '@/components/Badge'
-import { Title } from '@/components/Title'
+import { Badge } from '@/ui/Badge'
+import { Title } from '@/ui/Title'
 
 import css from './index.css'
 

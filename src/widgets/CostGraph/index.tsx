@@ -3,7 +3,7 @@ import React from 'react'
 import { range } from 'lodash'
 
 import { Chart } from '@/components/Chart'
-import { Title } from '@/components/Title'
+import { Title } from '@/ui/Title'
 
 type Props = {
   data: number[]

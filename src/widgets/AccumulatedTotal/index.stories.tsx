@@ -2,7 +2,7 @@ import React from 'react'
 
 import { storiesOf } from '@storybook/react'
 
-import { statuses } from '@/components/Badge'
+import { statuses } from '@/ui/Badge'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { AccumulatedTotal } from '.'

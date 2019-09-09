@@ -3,7 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { Title } from '@/components/Title'
+import { Title } from '@/ui/Title'
 
 import css from './index.css'
 
