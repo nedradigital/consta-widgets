@@ -48,7 +48,7 @@
     &-line {
       display: block;
       position: relative;
-      box-sizing: border-box;
+
       .default-well-line {
         stroke: #24354f;
         stroke-width: 4px;
@@ -60,6 +60,7 @@
           stroke: lighten(var(--color-important), 25%);
         }
       }
+
       .default-well-line-terminator {
         fill: var(--color-important);
       }

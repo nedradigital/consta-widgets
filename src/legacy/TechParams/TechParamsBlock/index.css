@@ -5,7 +5,6 @@
   background: #111a28;
   border-radius: 0 0 4px 4px;
   border: 1px solid #29313d;
-  box-sizing: border-box;
   padding: 5px 0 10px 6px;
   position: relative;
   width: 100%;
@@ -55,7 +54,6 @@
 }
 
 .cell {
-  box-sizing: border-box;
   min-width: 0;
   word-wrap: break-word;
   width: 50%;

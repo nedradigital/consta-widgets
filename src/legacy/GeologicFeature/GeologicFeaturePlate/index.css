@@ -2,7 +2,6 @@
   background: #111116;
   border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
-  box-sizing: border-box;
   color: var(--text-color);
   position: relative;
 

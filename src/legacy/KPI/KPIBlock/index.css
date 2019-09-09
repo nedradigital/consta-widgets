@@ -32,7 +32,6 @@
 }
 
 .indicator {
-  box-sizing: border-box;
   min-width: 0;
   word-wrap: break-word;
 

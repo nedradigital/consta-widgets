@@ -1,7 +1,6 @@
 @custom-selector :--main .progressLine;
 
 :--main {
-  box-sizing: border-box;
   overflow: hidden;
   position: relative;
 

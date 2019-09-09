@@ -1,5 +1,4 @@
 .openableLabel {
-  box-sizing: border-box;
   color: #fff;
   font-size: var(--main-font-size);
   position: relative;
@@ -35,7 +34,6 @@
 
   border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
-  box-sizing: border-box;
   cursor: pointer;
   display: flex;
   flex-direction: row;

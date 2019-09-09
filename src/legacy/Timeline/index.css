@@ -8,7 +8,6 @@
 
 .item {
   border: 1px solid transparent;
-  box-sizing: border-box;
   padding: 6px;
   opacity: 0.5;
   width: 43px;
