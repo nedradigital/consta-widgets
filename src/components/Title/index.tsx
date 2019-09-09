@@ -9,9 +9,10 @@ export type Size = typeof sizes[number]
 
 type Props = {
   size?: Size
+  className?: string
   children: React.ReactNode
 }
 
-export const Title: React.FC<Props> = ({ children, size = 'small' }) => (
-  <div className={classnames(css.title, css[size])}>{children}</div>
+export const Title: React.FC<Props> = ({ children, size = 'small', className }) => (
+  <div className={classnames(css.title, css[size], className)}>{children}</div>
 )

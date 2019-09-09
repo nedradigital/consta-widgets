@@ -71,6 +71,7 @@
     "@hot-loader/react-dom": "16.8.6",
     "@nekitk/storybook-addon-smart-knobs": "5.0.0-nekitk.3",
     "@storybook/addon-actions": "5.1.9",
+    "@storybook/addon-info": "5.1.11",
     "@storybook/addon-knobs": "5.1.9",
     "@storybook/react": "5.1.9",
     "@types/classnames": "2.2.9",
