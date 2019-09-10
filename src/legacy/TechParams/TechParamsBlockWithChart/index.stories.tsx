@@ -63,7 +63,7 @@ const dataRange = {
 
 storiesOf('legacy/TechParams/BlockWithChart', module)
   .addDecorator(withSmartKnobs)
-  .addDecorator(blockCenteringDecorator({ display: 'flex', height: 620, width: 161 }))
+  .addDecorator(blockCenteringDecorator({ display: 'flex', height: '90vh', width: 161 }))
   .add('interactive', () => (
     <TechParamsBlockWithChart
       mainData={mainData}

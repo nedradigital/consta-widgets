@@ -15,10 +15,9 @@ const getRandomArray = () =>
 
 storiesOf('legacy/TechParams/Chart', module)
   .addDecorator(withSmartKnobs)
-  .addDecorator(blockCenteringDecorator({ display: 'flex', height: 620, width: 161 }))
+  .addDecorator(blockCenteringDecorator({ display: 'flex', height: '90vh', width: 161 }))
   .add('interactive', () => (
     <TechParamsChart
-      id="test-chart"
       status={'normal'}
       mainChartData={getRandomArray()}
       additionalChartData={getRandomArray()}

@@ -10,10 +10,9 @@ import { KPIChart } from '.'
 
 storiesOf('legacy/KPI/KPIChart', module)
   .addDecorator(withSmartKnobs)
-  .addDecorator(blockCenteringDecorator())
+  .addDecorator(blockCenteringDecorator({ width: '60vw', height: '60vh' }))
   .add('interactive', () => (
     <KPIChart
-      id="test-chart"
       planData={array('planData', [50, 552, 552, 1779, 1779, 1779])}
       factData={array('factData', [52, 552, 552, 667, 1370, 1557])}
     />

@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { range } from 'lodash'
-
-import { Chart } from '@/components/Chart'
+import { GridLines } from '@/components/GridLines'
+import { HorizontalTicks } from '@/components/HorizontalTicks'
+import { LinearChart } from '@/components/LinearChart'
+import { VerticalTicks } from '@/components/VerticalTicks'
 import { Title } from '@/ui/Title'
 
 type Props = {
@@ -12,25 +13,16 @@ type Props = {
   legendName: string
 }
 
-const x = ['янв', '', '', 'апр', '', '', 'июл', '', '', 'окт', '', '']
+const xLabels = ['янв', '', '', 'апр', '', '', 'июл', '', '', 'окт', '', '', '']
 
 export const CostGraph: React.FC<Props> = ({ data, title, unitName, legendName }) => {
-  const max = Math.max(...data)
-  const min = Math.min(...data)
-  const maxValue = max + Math.ceil(max * 0.1)
-  const minValue = min - Math.ceil(min * 0.1)
-  const y = range(minValue, maxValue, (maxValue - minValue) / 4).reverse()
-
   return (
     <div>
       <Title>{title}</Title>
-      <Chart
-        labels={{ x, y }}
-        minValue={minValue}
-        maxValue={maxValue}
+      <LinearChart
         lines={[
           {
-            value: data,
+            values: data,
             circle: true,
             hint: true,
             colors: {
@@ -38,12 +30,18 @@ export const CostGraph: React.FC<Props> = ({ data, title, unitName, legendName }
             },
           },
         ]}
+        valuePadding={[0.1, 0.1]}
         unitName={unitName}
         legend={[
           {
             name: legendName,
           },
         ]}
+        renderHorizontalScale={() => <HorizontalTicks labels={xLabels} />}
+        renderVerticalScale={({ minValue, maxValue }) => (
+          <VerticalTicks minValue={minValue} maxValue={maxValue} ticks={4} />
+        )}
+        renderGridLines={() => <GridLines columns={12} />}
       />
     </div>
   )

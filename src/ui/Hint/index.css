@@ -1,12 +1,14 @@
 .hint {
+  --arrow-size: 6px;
+
   padding: 2px 8px;
   background: #fff;
   border-radius: 4px;
   color: #002033;
   font-size: 13px;
+  line-height: 18px;
   position: absolute;
   font-weight: bold;
-  line-height: 18px;
 
   &::after {
     content: '';
@@ -14,39 +16,55 @@
     display: inline-block;
   }
 
-  &.bottom::after {
-    top: 100%;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-top: 6px solid #fff;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+  &.top {
+    transform: translate(50%, -50%);
+
+    &::after {
+      top: 100%;
+      left: 50%;
+      transform: translate(-50%, 0);
+      border-top: var(--arrow-size) solid #fff;
+      border-left: var(--arrow-size) solid transparent;
+      border-right: var(--arrow-size) solid transparent;
+    }
   }
 
-  &.top::after {
-    bottom: 100%;
-    left: 50%;
-    transform: translate(-50%, 0);
-    border-bottom: 6px solid #fff;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
+  &.bottom {
+    transform: translate(50%, 50%);
+
+    &::after {
+      bottom: 100%;
+      left: 50%;
+      transform: translate(-50%, 0);
+      border-bottom: var(--arrow-size) solid #fff;
+      border-left: var(--arrow-size) solid transparent;
+      border-right: var(--arrow-size) solid transparent;
+    }
   }
 
-  &.left::after {
-    top: 50%;
-    right: 100%;
-    transform: translate(0, -50%);
-    border-right: 6px solid #fff;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
+  &.right {
+    transform: translateX(calc(100% + 1.5 * var(--arrow-size))) translateY(-50%);
+
+    &::after {
+      top: 50%;
+      right: 100%;
+      transform: translate(0, -50%);
+      border-right: var(--arrow-size) solid #fff;
+      border-top: var(--arrow-size) solid transparent;
+      border-bottom: var(--arrow-size) solid transparent;
+    }
   }
 
-  &.right::after {
-    top: 50%;
-    left: 100%;
-    transform: translate(0, -50%);
-    border-left: 6px solid #fff;
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
+  &.left {
+    transform: translateX(calc(-1.5 * var(--arrow-size))) translateY(-50%);
+
+    &::after {
+      top: 50%;
+      left: 100%;
+      transform: translate(0, -50%);
+      border-left: var(--arrow-size) solid #fff;
+      border-top: var(--arrow-size) solid transparent;
+      border-bottom: var(--arrow-size) solid transparent;
+    }
   }
 }

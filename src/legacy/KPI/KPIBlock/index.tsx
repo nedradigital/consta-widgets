@@ -20,7 +20,6 @@ type Props = {
   status?: Status
   title?: string
   unit?: string
-  chartId: string
 }
 
 export const KPIBlock: React.FC<Props> = ({
@@ -34,7 +33,6 @@ export const KPIBlock: React.FC<Props> = ({
   title,
   unit,
   status,
-  chartId,
 }) => (
   <div className={classnames(css.kpiBlock, className)}>
     <div className={css.title}>{title || '--'}</div>
@@ -58,9 +56,9 @@ export const KPIBlock: React.FC<Props> = ({
       </div>
     </div>
     <div className={css.chart}>
-      <KPIChart id={chartId} factData={factData} planData={planData} status={status} />
+      <KPIChart factData={factData} planData={planData} status={status} />
+      {!isNil(unit) && <div className={css.unit}>{unit}</div>}
     </div>
-    {!isNil(unit) && <div className={css.unit}>{unit}</div>}
     {!isNil(legend) && Boolean(legend.length) && (
       <div className={css.legend}>
         {legend.map(value => (
