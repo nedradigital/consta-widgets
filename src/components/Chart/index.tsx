@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import { isNumber, uniq } from 'lodash'
 
 import { ChartContent } from '@/components/ChartContent'
-import { Hint } from '@/components/Hint'
+import { Hint } from '@/ui/Hint'
 
 import css from './index.css'
 
