@@ -16,7 +16,7 @@ import css from './index.css'
 const statuses = ['normal', 'danger', 'warning'] as const
 type Status = typeof statuses[number]
 
-type WellKPIPropsType = {
+type Props = {
   className?: string
   /** Фактическая стоимость строительства */
   factCost: number
@@ -35,7 +35,7 @@ type WellKPIPropsType = {
   debit?: number
 }
 
-export const WellKPI: React.FC<WellKPIPropsType> = React.memo(
+export const WellKPI: React.FC<Props> = React.memo(
   ({
     className,
     costStatus,

@@ -6,7 +6,7 @@ import css from './index.css'
 
 export { ChartPopup } from './components/ChartPopup'
 
-type ChartWithSubinfoPropsType = {
+type Props = {
   chartComponent: React.ReactNode
   chartName: string
   chartPopup?: React.ReactNode
@@ -16,7 +16,7 @@ type ChartWithSubinfoPropsType = {
   chartPopupComponent: React.ReactNode
 }
 
-export const ChartWithSubinfo: React.FC<ChartWithSubinfoPropsType> = ({
+export const ChartWithSubinfo: React.FC<Props> = ({
   chartComponent,
   chartName,
   chartPopupComponent,

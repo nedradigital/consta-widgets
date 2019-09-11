@@ -21,7 +21,7 @@
   stroke-width: 1;
 
   &.isFill.success {
-    fill: var(--color-success);
+    fill: #86ffa0;
     opacity: var(--trajectory-chart-opacity);
     stroke-width: 0;
   }
@@ -40,7 +40,7 @@
 
   &.isStroke.success {
     fill: none;
-    stroke: var(--color-success);
+    stroke: #86ffa0;
     opacity: 1;
     stroke-width: 1;
   }
@@ -65,7 +65,7 @@
   stroke-width: 0;
 
   @nest :--main.success & {
-    fill: var(--color-success);
+    fill: #86ffa0;
   }
 
   @nest :--main.warning & {

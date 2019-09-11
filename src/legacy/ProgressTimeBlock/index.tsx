@@ -2,8 +2,8 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { ProgressTimeChart, ProgressTimeChartProps } from './components/ProgressTimeChart'
-import { ProgressTimeDate, ProgressTimeDateProps } from './components/ProgressTimeDate'
+import { ProgressTimeChart, Props as ProgressTimeChartProps } from './components/ProgressTimeChart'
+import { ProgressTimeDate, Props as ProgressTimeDateProps } from './components/ProgressTimeDate'
 import { ProgressTimeText } from './components/ProgressTimeText'
 import css from './index.css'
 

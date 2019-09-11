@@ -7,7 +7,7 @@ import { npvDayType } from '../NDTBlock'
 
 import css from './index.css'
 
-type NDTTablePropsType = {
+type Props = {
   className?: string
   npvList?: npvDayType[]
   currentDay?: number
@@ -60,7 +60,7 @@ const getTotalInPercents = (totalHours?: number | null, currentDay?: number) => 
   return Math.max(0, Math.min(100, round((totalHours / (currentDay * 24)) * 100, 1)))
 }
 
-export const NDTTable: React.FC<NDTTablePropsType> = ({ className, currentDay, npvList }) => (
+export const NDTTable: React.FC<Props> = ({ className, currentDay, npvList }) => (
   <div className={classnames(css.main, className)}>
     <div className={css.rowTitle}>
       <div>НПВ</div>
