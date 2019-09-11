@@ -46,12 +46,7 @@ export const CostBlock: React.FC<Props> = ({
     <ChartWithSubinfo
       className={classnames(className)}
       chartComponent={
-        <CostChart
-          className={css.chart}
-          currentDay={currentDay}
-          daysSummary={daysSummary}
-          selectedDay={selectedDay}
-        />
+        <CostChart currentDay={currentDay} daysSummary={daysSummary} selectedDay={selectedDay} />
       }
       subinfoComponent={
         <CostInfo

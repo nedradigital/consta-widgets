@@ -48,5 +48,5 @@ const summary = [
 
 storiesOf('legacy/Cost/CostBlock', module)
   .addDecorator(withSmartKnobs)
-  .addDecorator(blockCenteringDecorator({ width: 1034 }))
+  .addDecorator(blockCenteringDecorator({ width: '90%', height: '60vh' }))
   .add('interactive', () => <CostBlock currentDay={1} daysSummary={summary} />)

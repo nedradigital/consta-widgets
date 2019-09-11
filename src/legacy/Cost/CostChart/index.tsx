@@ -1,9 +1,11 @@
-import React, { createRef, useEffect, useState } from 'react'
+import React from 'react'
+import { useUID } from 'react-uid'
+import useDimensions from 'react-use-dimensions'
 
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { ChartContent } from '@/components/ChartContent'
+import { LinearChart } from '@/components/LinearChart'
 import { getDurations, getDurationsGrid } from '@/utils/duration'
 
 import css from './index.css'
@@ -18,32 +20,20 @@ export type Day = {
 }
 
 type Props = {
-  className?: string
   currentDay?: number
   daysSummary?: Day[]
   selectedDay?: number
   maxCostSteps?: number
 }
 
-type Params = {
-  widthDomain: [number, number]
-  widthRange: [number, number]
-  heightDomain: [number, number]
-  heightRange: [number, number]
-}
-
-const foregroundGradientId = 'foreground-gradient-cost-chart'
-
 export const CostChart: React.FC<Props> = ({
-  className,
   currentDay = 0,
   maxCostSteps = 3,
   daysSummary = [],
   selectedDay,
 }) => {
-  const [width, changeWidth] = useState(704.594)
-  const [height, changeHeight] = useState(196)
-  const ref = createRef<SVGSVGElement>()
+  const [ref, { height }] = useDimensions()
+  const foregroundGradientId = `foreground-gradient-cost-chart-${useUID()}`
 
   const filteredPlanList = daysSummary.map(day => day.planCost).filter(value => !isNil(value))
   const filteredFactList = daysSummary.map(day => day.factCost).filter(value => !isNil(value))
@@ -82,7 +72,7 @@ export const CostChart: React.FC<Props> = ({
       },
       [1]
     )
-    .map(value => (isNil(value) ? null : value > 1.05 ? false : true))
+    .map(value => (isNil(value) ? null : value <= 1.05))
 
   const highlights = valueWithinSafeArea
     .reduce<Array<{ from: number; value: boolean | null }>>((ranges, value, day) => {
@@ -137,167 +127,137 @@ export const CostChart: React.FC<Props> = ({
     daysSummary.map(day => day.factCost).filter(value => value !== null)
   )
 
-  const lineMinValue = Math.min(...backgroundLineData, ...foregroundLineData)
-  const lineMaxValue = Math.max(...backgroundLineData, ...foregroundLineData)
-
-  const backgroundLineWidth = width * Math.min(1, (backgroundLineData.length - 1) / maxDuration)
-  const foregroundLineWidth = width * Math.min(1, (foregroundLineData.length - 1) / maxDuration)
-
-  useEffect(() => {
-    if (ref.current) {
-      changeHeight(ref.current.getBoundingClientRect().height)
-      changeWidth(ref.current.getBoundingClientRect().width)
-    }
-  })
-
   return (
-    <div className={classnames(css.costChart, className)}>
-      {selectedDay !== null && (
-        <div
-          className={css.selectedBox}
-          style={{ width: (selectedDuration / maxDuration) * 100 + '%' }}
-        />
-      )}
-      <div>
-        {durationsGrid.map((duration, index) => {
-          return <div className={css.day} key={index} style={{ left: duration * 100 + '%' }} />
-        })}
-      </div>
-      <div>
-        {highlights
-          .concat()
-          .reverse()
-          .filter(highlight => highlight.value === false)
-          .map((highlight, index) => {
-            return (
-              <div
-                className={css.highlightBox}
-                key={index}
-                style={{
-                  left: highlight.from * 100 + '%',
-                  width: (highlight.to - highlight.from) * 100 + '%',
-                }}
-              />
-            )
+    <div className={css.main} ref={ref}>
+      <div className={css.wrapper}>
+        {selectedDay !== null && (
+          <div
+            className={css.selectedBox}
+            style={{ width: (selectedDuration / maxDuration) * 100 + '%' }}
+          />
+        )}
+        <div>
+          {durationsGrid.map((duration, index) => {
+            return <div className={css.day} key={index} style={{ left: duration * 100 + '%' }} />
           })}
-      </div>
-      <div className={css.costs}>
-        {costs
-          .concat()
-          .reverse()
-          .map((cost, index) => {
-            return (
-              <div className={css.costsItem} key={index}>
-                <span className={css.costsLabel}>
-                  {isNil(cost) ? '' : Math.round(cost / 1000000)}
-                </span>
-              </div>
-            )
-          })}
-      </div>
-      <div className={css.durationsWrapper}>
-        <div className={css.durations}>
-          {daysSummary.length &&
-            durations.map((duration, index) => {
+        </div>
+        <div>
+          {highlights
+            .concat()
+            .reverse()
+            .filter(highlight => highlight.value === false)
+            .map((highlight, index) => {
               return (
                 <div
-                  className={css.durationsItem}
+                  className={css.highlightBox}
                   key={index}
-                  style={{ left: (duration / maxDuration) * 100 + '%' }}
-                >
-                  <span className={css.durationsLabel}>{Math.round(duration)}</span>
+                  style={{
+                    left: highlight.from * 100 + '%',
+                    width: (highlight.to - highlight.from) * 100 + '%',
+                  }}
+                />
+              )
+            })}
+        </div>
+        <div className={css.costs}>
+          {costs
+            .concat()
+            .reverse()
+            .map((cost, index) => {
+              return (
+                <div className={css.costsItem} key={index}>
+                  <span className={css.costsLabel}>
+                    {isNil(cost) ? '' : Math.round(cost / 1000000)}
+                  </span>
                 </div>
               )
             })}
-          {daysSummary.length && (
-            <div
-              className={css.selected}
-              style={{ left: (selectedDuration / maxDuration) * 100 + '%' }}
-            >
-              <div className={css.selectedLine} style={{ height: height + 37 + 'px' }} />
-              <div className={css.selectedLabel}>{Math.floor(selectedDuration)}</div>
-            </div>
-          )}
         </div>
-      </div>
-      {filteredFactList.length > 0 && (
-        <div
-          className={classnames(css.currentMarker, isCurrentMarketRed && css.red)}
-          style={{
-            left: (lastDuration / maxDuration) * 100 + '%',
-            bottom: (currentCost / maxCost) * 100 + '%',
-          }}
-        />
-      )}
-      {daysSummary.length && (
-        <div
-          className={css.current}
-          style={{ left: (currentDuration / maxDuration) * 100 + '%' }}
-        />
-      )}
-      <div className={css.svgWrapper}>
-        <svg
-          className={css.svg}
-          width={width}
-          height={height}
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          ref={ref}
-        >
-          <defs>
-            <linearGradient id={foregroundGradientId} x1="0%" y1="0%" x2="100%" y2="0%">
-              {highlights.map((highlight, index) => {
+        <div className={css.durationsWrapper}>
+          <div className={css.durations}>
+            {daysSummary.length &&
+              durations.map((duration, index) => {
                 return (
-                  <React.Fragment key={index}>
-                    <stop
-                      offset={highlight.from * highlightCorrection * 100 + '%'}
-                      className={
-                        highlight.value ? css.lineForegroundNormal : css.lineForegroundDanger
-                      }
-                    />
-                    <stop
-                      offset={highlight.to * highlightCorrection * 100 + '%'}
-                      className={
-                        highlight.value ? css.lineForegroundNormal : css.lineForegroundDanger
-                      }
-                    />
-                  </React.Fragment>
+                  <div
+                    className={css.durationsItem}
+                    key={index}
+                    style={{ left: (duration / maxDuration) * 100 + '%' }}
+                  >
+                    <span className={css.durationsLabel}>{Math.round(duration)}</span>
+                  </div>
                 )
               })}
-            </linearGradient>
-          </defs>
-          <ChartContent
-            orientation="horizontal"
+          </div>
+        </div>
+        {daysSummary.length && (
+          <div
+            className={css.selected}
+            style={{ left: (selectedDuration / maxDuration) * 100 + '%', height }}
+          >
+            <div className={css.selectedLine} />
+            <div className={css.selectedLabel} />
+          </div>
+        )}
+        {filteredFactList.length > 0 && (
+          <div
+            className={classnames(css.currentMarker, isCurrentMarketRed && css.red)}
+            style={{
+              left: (lastDuration / maxDuration) * 100 + '%',
+              bottom: (currentCost / maxCost) * 100 + '%',
+            }}
+          />
+        )}
+        {daysSummary.length && (
+          <div
+            className={css.current}
+            style={{ left: (currentDuration / maxDuration) * 100 + '%' }}
+          />
+        )}
+        <div className={css.svgWrapper}>
+          <svg className={css.svgDefs} fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id={foregroundGradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+                {highlights.map((highlight, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <stop
+                        offset={highlight.from * highlightCorrection * 100 + '%'}
+                        className={
+                          highlight.value ? css.lineForegroundNormal : css.lineForegroundDanger
+                        }
+                      />
+                      <stop
+                        offset={highlight.to * highlightCorrection * 100 + '%'}
+                        className={
+                          highlight.value ? css.lineForegroundNormal : css.lineForegroundDanger
+                        }
+                      />
+                    </React.Fragment>
+                  )
+                })}
+              </linearGradient>
+            </defs>
+          </svg>
+
+          <LinearChart
             lines={[
               {
-                value: foregroundLineData,
+                values: foregroundLineData,
                 colors: {
                   line: `url(#${foregroundGradientId})`,
                 },
                 classNameLine: css.lineForeground,
-                ...({
-                  widthDomain: [0, foregroundLineData.length - 1],
-                  widthRange: [0, foregroundLineWidth],
-                  heightDomain: [lineMinValue, lineMaxValue],
-                  heightRange: [height - 1, 1],
-                } as Params),
               },
               {
-                value: backgroundLineData,
+                values: backgroundLineData,
                 classNameLine: css.lineBackground,
                 colors: {
                   line: 'rgba(246, 251, 253, 0.2)',
                 },
-                ...({
-                  widthDomain: [0, backgroundLineData.length - 1],
-                  widthRange: [0, backgroundLineWidth],
-                  heightDomain: [lineMinValue, lineMaxValue],
-                  heightRange: [height - 1, 1],
-                } as Params),
               },
             ]}
           />
-        </svg>
+        </div>
       </div>
     </div>
   )

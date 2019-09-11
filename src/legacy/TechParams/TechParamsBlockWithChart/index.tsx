@@ -142,7 +142,6 @@ export const TechParamsBlockWithChart: React.FC<Props> = ({
     <div className={classnames(css.techParamsBlockWithChart, className)}>
       <div className={css.chart}>
         <TechParamsChart
-          id="chart"
           mainChartData={mainData.data}
           additionalChartData={additionalData && additionalData.data}
           additionalDataDefaultLoBound={additionalData && additionalData.defaultLoBound}

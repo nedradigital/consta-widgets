@@ -30,7 +30,7 @@ export const ChartWithSubinfo: React.FC<ChartWithSubinfoPropsType> = ({
         <div className={css.title}>{chartName}</div>
         <div className={css.units}>{chartUnits}</div>
       </div>
-      <div>{chartComponent}</div>
+      {chartComponent}
       {chartPopupComponent && <div className={css.popupWrapper}>{chartPopupComponent}</div>}
     </div>
 

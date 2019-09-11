@@ -1,9 +1,10 @@
-import React, { createRef, useEffect, useState } from 'react'
+import React from 'react'
+import { useUID } from 'react-uid'
 
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { ChartContent } from '@/components/ChartContent'
+import { LinearChart } from '@/components/LinearChart'
 
 import css from './index.css'
 
@@ -19,19 +20,7 @@ type SummaryData = {
 type Props = {
   className?: string
   status?: Status
-  id: string
 } & SummaryData
-
-type CircleData = {
-  safeFactData: number[]
-  maxDuration: number
-  minValue: number
-  maxValue: number
-}
-
-type CircleProps = {
-  height?: number
-} & CircleData
 
 type LinearGradientProps = {
   type: 'linear' | 'area'
@@ -39,17 +28,7 @@ type LinearGradientProps = {
   id: string
 }
 
-type Params = {
-  widthDomain: [number, number]
-  widthRange: [number, number]
-  heightDomain: [number, number]
-  heightRange: [number, number]
-}
-
 type CastSafeData = SummaryData
-
-const MIN_WIDTH = 234
-const MIN_HEIGHT = 95
 
 export const castData = (data?: Data, length = 2) => {
   return (Array.isArray(data)
@@ -69,52 +48,7 @@ export const castSafeData = ({ planData, factData }: CastSafeData) => {
   const safePlanData = castData(planData, maxDuration)
   const safeFactData = castData(factData, maxDuration)
 
-  const minValue = Math.min(...safePlanData, ...safeFactData)
-  const maxValue = Math.max(...safePlanData, ...safeFactData)
-
-  return { safePlanData, safeFactData, maxDuration, minValue, maxValue }
-}
-
-export const castCircleData = ({ safeFactData, maxDuration, minValue, maxValue }: CircleData) => {
-  const circleLeft = Math.min(1, Math.max(0, (safeFactData.length - 1) / maxDuration))
-  const circleBottom = Math.min(
-    1,
-    Math.max(0, (safeFactData[safeFactData.length - 1] - minValue) / (maxValue - minValue))
-  )
-
-  return { circleLeft, circleBottom }
-}
-
-const Circle: React.FunctionComponent<CircleProps> = ({
-  height = MIN_HEIGHT,
-  safeFactData,
-  maxDuration,
-  minValue,
-  maxValue,
-}) => {
-  const { circleLeft, circleBottom } = castCircleData({
-    safeFactData,
-    maxDuration,
-    minValue,
-    maxValue,
-  })
-
-  const isVisible =
-    !isNil(circleLeft) && !isNil(circleBottom) && !isNaN(circleLeft) && !isNaN(circleBottom)
-
-  if (isVisible) {
-    return (
-      <div
-        className={css.circle}
-        style={{
-          left: circleLeft * 100 + '%',
-          bottom: circleBottom * height + 'px',
-        }}
-      />
-    )
-  }
-
-  return null
+  return { safePlanData, safeFactData }
 }
 
 const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, status, id }) => {
@@ -132,81 +66,50 @@ const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, st
   )
 }
 
-export const KPIChart: React.FC<Props> = ({
-  id,
-  planData,
-  factData,
-  className,
-  status = 'normal',
-}) => {
-  const areaGradientId = `area-gradient-${id}`
-  const linearGradientId = `linear-gradient-${id}`
-  const [width, changeWidth] = useState(MIN_WIDTH)
-  const [height, changeHeight] = useState(MIN_HEIGHT)
-  const ref = createRef<SVGSVGElement>()
+export const KPIChart: React.FC<Props> = ({ planData, factData, className, status = 'normal' }) => {
+  const uid = useUID()
+  const areaGradientId = `area-gradient-${uid}`
+  const linearGradientId = `linear-gradient-${uid}`
 
-  const { safePlanData, safeFactData, maxDuration, minValue, maxValue } = castSafeData({
+  const { safePlanData, safeFactData } = castSafeData({
     planData,
     factData,
   })
 
-  useEffect(() => {
-    if (ref.current) {
-      changeWidth(ref.current.getBoundingClientRect().width)
-      changeHeight(ref.current.getBoundingClientRect().height)
-    }
-  })
-
   return (
     <div className={classnames(css.kpiChart, className)}>
-      <svg className={css.svg} ref={ref} width={width} height={height}>
+      <svg className={css.svgDefs}>
         <defs>
           <LinearGradient type="linear" status={status} id={linearGradientId} />
           <LinearGradient type="area" status={status} id={areaGradientId} />
         </defs>
-        <ChartContent
-          orientation="horizontal"
-          lines={[
-            {
-              value: safeFactData,
-              classNameLine: css.lineForeground,
-              background: true,
-              areaStyles: {
-                fill: `url(#${areaGradientId})`,
-              },
-              colors: {
-                line: `url(#${linearGradientId})`,
-              },
-              classNameBackground: css.areaForeground,
-              ...({
-                widthDomain: [0, maxDuration],
-                widthRange: [0, width],
-                heightDomain: [minValue, maxValue],
-                heightRange: [height - 1, 1],
-              } as Params),
-            },
-            {
-              value: safePlanData,
-              classNameLine: css.lineBackground,
-              colors: {
-                line: 'rgba(196, 196, 196, 0.2)',
-              },
-              ...({
-                widthDomain: [0, maxDuration],
-                widthRange: [0, width],
-                heightDomain: [minValue, maxValue],
-                heightRange: [height - 1, 1],
-              } as Params),
-            },
-          ]}
-        />
       </svg>
-      <Circle
-        safeFactData={safeFactData}
-        maxDuration={maxDuration}
-        minValue={minValue}
-        maxValue={maxValue}
-        height={height}
+
+      <LinearChart
+        lines={[
+          {
+            values: safeFactData,
+            classNameLine: css.lineForeground,
+            background: true,
+            areaStyles: {
+              fill: `url(#${areaGradientId})`,
+            },
+            colors: {
+              line: `url(#${linearGradientId})`,
+            },
+            circle: true,
+            circleStyles: {
+              fill: '#fff',
+            },
+          },
+          {
+            values: safePlanData,
+            classNameLine: css.lineBackground,
+            colors: {
+              line: 'rgba(196, 196, 196, 0.2)',
+            },
+          },
+        ]}
       />
     </div>
   )

@@ -1,9 +1,10 @@
-import React, { createRef, useLayoutEffect, useState } from 'react'
+import React from 'react'
+import { useUID } from 'react-uid'
 
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { ChartContent } from '@/components/ChartContent'
+import { LinearChart } from '@/components/LinearChart'
 
 import css from './index.css'
 
@@ -31,7 +32,6 @@ export type DataRange = {
 
 type Props = {
   status: Status
-  id: string
   dataRange: DataRange
   mainChartData: number[]
   additionalChartData?: number[]
@@ -39,15 +39,7 @@ type Props = {
   additionalDataDefaultHiBound?: number
 }
 
-type Params = {
-  widthDomain: [number, number]
-  widthRange: [number, number]
-  heightDomain: [number, number]
-  heightRange: [number, number]
-}
-
 export const TechParamsChart: React.FC<Props> = ({
-  id,
   mainChartData,
   additionalChartData = [],
   dataRange,
@@ -55,9 +47,7 @@ export const TechParamsChart: React.FC<Props> = ({
   additionalDataDefaultHiBound,
   status,
 }) => {
-  const [width, changeWidth] = useState(0)
-  const [height, changeHeight] = useState(0)
-  const ref = createRef<SVGSVGElement>()
+  const foregroundGradientId = `foreground-gradient-${useUID()}`
 
   const additionalDataMinimum = !isNil(additionalDataDefaultLoBound)
     ? Math.min(additionalDataDefaultLoBound, ...additionalChartData)
@@ -66,13 +56,6 @@ export const TechParamsChart: React.FC<Props> = ({
   const additionalDataMaximum = !isNil(additionalDataDefaultHiBound)
     ? Math.max(additionalDataDefaultHiBound, ...additionalChartData)
     : Math.max(...additionalChartData)
-
-  useLayoutEffect(() => {
-    if (ref.current) {
-      changeHeight(ref.current.getBoundingClientRect().height)
-      changeWidth(ref.current.getBoundingClientRect().width)
-    }
-  })
 
   const fullRange = Math.abs(dataRange.maximum - dataRange.minimum)
   const dataMinimum = Math.min(...mainChartData)
@@ -111,10 +94,10 @@ export const TechParamsChart: React.FC<Props> = ({
         }[status]
       )}
     >
-      <svg className={css.svg} ref={ref}>
+      <svg className={css.svgDefs}>
         <defs>
           <linearGradient
-            id={`foreground-gradient-${id}`}
+            id={foregroundGradientId}
             x1={`${-1 * chartOverhangLeft * 100}%`}
             y1="0%"
             x2={`${(1 + chartOverhangRight) * 100}%`}
@@ -144,38 +127,28 @@ export const TechParamsChart: React.FC<Props> = ({
             {upperDangerRatio < 1 && <stop offset="100%" className={css.lineForegroundDanger} />}
           </linearGradient>
         </defs>
-        <ChartContent
-          orientation="vertical"
-          lines={[
-            {
-              value: mainChartData,
-              colors: {
-                line: `url(#foreground-gradient-${id})`,
-              },
-              classNameLine: css.lineForeground,
-              ...({
-                widthDomain: [dataRange.minimum, dataRange.maximum],
-                widthRange: [0, width],
-                heightDomain: [0, mainChartData.length - 1],
-                heightRange: [0, height],
-              } as Params),
-            },
-            {
-              value: additionalChartData,
-              classNameLine: css.lineBackground,
-              colors: {
-                line: '#b1c4e3',
-              },
-              ...({
-                widthDomain: [additionalDataMinimum, additionalDataMaximum],
-                widthRange: [0, width],
-                heightDomain: [0, additionalChartData.length - 1],
-                heightRange: [0, height],
-              } as Params),
-            },
-          ]}
-        />
       </svg>
+      <LinearChart
+        orientation="vertical"
+        lines={[
+          {
+            values: mainChartData,
+            colors: {
+              line: `url(#${foregroundGradientId})`,
+            },
+            classNameLine: css.lineForeground,
+            valueRange: [dataRange.minimum, dataRange.maximum],
+          },
+          {
+            values: additionalChartData,
+            classNameLine: css.lineBackground,
+            colors: {
+              line: '#b1c4e3',
+            },
+            valueRange: [additionalDataMinimum, additionalDataMaximum],
+          },
+        ]}
+      />
     </div>
   )
 }

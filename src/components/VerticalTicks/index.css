@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 1px;
+
+  &::before {
+    content: '';
+    width: 4px;
+    height: 100%;
+    background: var(--text-color-70);
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 4px;
+  }
+}
