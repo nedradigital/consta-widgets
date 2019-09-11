@@ -5,7 +5,6 @@
   background: linear-gradient(#172949, #17202c);
   border-radius: 4px;
   border: 1px solid var(--trajectory-border-color);
-  box-sizing: border-box;
   color: var(--text-color);
   display: flex;
   flex-direction: column;

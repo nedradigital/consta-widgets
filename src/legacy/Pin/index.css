@@ -5,7 +5,6 @@
 
   background: var(--bg-color-white-semi);
   border: 1px solid var(--white-border-color-opacity-10);
-  box-sizing: border-box;
   border-radius: var(--border-radius);
   color: #fff;
   letter-spacing: 0.03em;

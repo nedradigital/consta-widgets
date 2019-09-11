@@ -1,23 +1,21 @@
 .diagram {
-  display: flex;
-  flex-direction: column;
   color: var(--text-color-70);
   font-size: 11px;
 }
 
 .line {
   line-height: 15px;
-  display: flex;
-  align-items: center;
   width: 100%;
 }
 
-.line + .line {
-  margin-top: 8px;
+.line + .line > td {
+  padding-top: 8px;
 }
 
 .title {
   min-width: 80px;
+  max-width: 25%;
+  padding-right: 10px;
 }
 
 .progressWrapper {
@@ -26,6 +24,7 @@
 
 .value {
   text-align: right;
+  padding-left: 10px;
   min-width: 25px;
 }
 
@@ -33,6 +32,5 @@
   height: 2px;
   background: #29b0ff;
 
-  margin: 0 4px;
   flex-basis: auto;
 }

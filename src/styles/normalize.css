@@ -123,7 +123,6 @@ fieldset {
 }
 
 legend {
-  box-sizing: border-box;
   color: inherit;
   display: table;
   max-width: 100%;
@@ -141,7 +140,6 @@ textarea {
 
 [type='checkbox'],
 [type='radio'] {
-  box-sizing: border-box;
   padding: 0;
 }
 

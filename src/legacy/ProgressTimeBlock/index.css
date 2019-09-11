@@ -2,7 +2,6 @@
   background-color: var(--bg-color);
   border-radius: var(--border-radius);
   border: 1px solid var(--white-border-color-opacity-10);
-  box-sizing: border-box;
   color: var(--text-color);
   display: grid;
   height: 100%;

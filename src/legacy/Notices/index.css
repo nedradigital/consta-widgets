@@ -27,7 +27,6 @@
       background: rgba(255, 255, 255, 0.03);
       border: var(--border-radius);
       border-top: none;
-      box-sizing: border-box;
       border-radius: 0 0 4px 4px;
       content: '';
       position: absolute;
