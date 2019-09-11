@@ -52,8 +52,7 @@ type Props = {
   renderGridLines?: () => React.ReactNode
 }
 
-// TODO unit test
-const getValueRange = (
+export const getValueRange = (
   lines: Line[],
   valuePadding: [number, number],
   paddingPrecision: number
