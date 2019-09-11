@@ -1,0 +1,54 @@
+.box {
+  background: #2a2f3f;
+  padding: 10px;
+  border-radius: 10px 0;
+  height: 100%;
+  overflow: auto;
+
+  & button {
+    font-size: 20px;
+  }
+}
+
+.panel {
+  position: absolute;
+  right: 0;
+  top: 100%;
+}
+
+.arrow {
+  position: absolute;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 2;
+
+  &.down {
+    top: 100%;
+  }
+}
+
+.item {
+  min-height: 50px;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 0 5px aquamarine inset;
+
+    & .arrow {
+      display: block;
+    }
+  }
+}
+
+.add {
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+.remove {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}

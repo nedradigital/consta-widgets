@@ -29,12 +29,14 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
     margin,
     cols,
     breakpoints,
-    datasets,
     onChange,
     dashboard,
     onClear,
     onToggleMode,
     viewMode,
+    onChangeWidgets,
+    config,
+    datasets,
   } = props
 
   return (
@@ -44,11 +46,13 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
         <Dashboard
           margin={margin}
           cols={cols}
-          breakpoints={breakpoints}
           datasets={datasets}
+          breakpoints={breakpoints}
           viewMode={viewMode}
           onChange={onChange}
           dashboard={dashboard}
+          onChangeWidgets={onChangeWidgets}
+          config={config}
         />
       </div>
     </DndProvider>

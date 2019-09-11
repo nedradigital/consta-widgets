@@ -4,7 +4,7 @@ import { Layouts, Responsive, WidthProvider } from 'react-grid-layout-tmp-fork'
 
 import { Dataset } from '../../'
 import { ItemTypes } from '../../dnd-constants'
-import { IWidget, Widget } from '../Widget'
+import { Box, IWidget } from '../Box'
 
 import css from './index.css'
 
@@ -23,7 +23,11 @@ const getUniqName = (name: string): string => {
 }
 
 export type DashboardState = {
-  widgets: IWidget[]
+  boxes: Array<{
+    name: string
+    x?: number
+    y?: number
+  }>
   layouts: Layouts
 }
 
@@ -35,22 +39,34 @@ export type DashboardProps = {
   viewMode?: boolean
   onChange?: (dashboard: DashboardState) => void
   dashboard: DashboardState
+  onChangeWidgets?: (item: string, items: IWidget[]) => void
+  config: { [key: string]: IWidget[] }
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
-  const { margin, cols, breakpoints, datasets, viewMode, onChange, dashboard } = props
-  const { widgets, layouts } = dashboard
+  const {
+    margin,
+    cols,
+    breakpoints,
+    viewMode,
+    onChange,
+    dashboard,
+    onChangeWidgets,
+    config,
+    datasets,
+  } = props
+  const { boxes, layouts } = dashboard
 
   const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
 
   const [, drop] = useDrop({
-    accept: ItemTypes.WIDGET,
+    accept: ItemTypes.BOX,
     drop: (item: any) => {
       dropPromise.then(({ x, y }: { x: number; y: number }) => {
-        const newWidgets = [...widgets, { ...item, name: getUniqName(item.name), x, y } as IWidget]
+        const newBoxes = [...boxes, { ...item, name: getUniqName(item.name), x, y }]
 
         if (onChange) {
-          onChange({ widgets: newWidgets, layouts })
+          onChange({ boxes: newBoxes, layouts })
         }
       })
     },
@@ -59,20 +75,6 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
       current: null,
     }),
   })
-
-  const onDatasetChanged = (widgetName: string, value: string) => {
-    const newWidgets = widgets.map(widget => {
-      if (widget.name === widgetName) {
-        widget.currentDatasetName = value
-      }
-
-      return widget
-    })
-
-    if (onChange) {
-      onChange({ widgets: newWidgets, layouts })
-    }
-  }
 
   const onDrop = (params: { x: number; y: number }) => {
     setDropPromise(new Promise(res => res(params)))
@@ -94,24 +96,24 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         droppingPositionShift={{ x: -110, y: -80 }}
         onLayoutChange={(_, newLayoutsState) => {
           if (onChange) {
-            onChange({ widgets, layouts: newLayoutsState })
+            onChange({ boxes, layouts: newLayoutsState })
           }
         }}
       >
-        {widgets.map(widget => (
+        {boxes.map(box => (
           <div
-            key={widget.name}
-            data-grid={{ x: widget.x, y: widget.y, w: 1, h: 1 }}
+            key={box.name}
+            data-grid={{ x: box.x, y: box.y, w: 1, h: 1 }}
             className={css.widgetWrapper}
           >
-            <Widget
-              dashboardMode
-              datasets={datasets}
-              name={widget.name}
-              dataType={widget.dataType}
-              currentDatasetName={widget.currentDatasetName}
-              onDatasetChanged={onDatasetChanged}
+            <Box
+              isPreview
+              name={box.name}
+              data={{}}
               viewMode={viewMode}
+              onChangeWidgets={onChangeWidgets}
+              widgets={config[box.name]}
+              datasets={datasets}
             />
           </div>
         ))}
