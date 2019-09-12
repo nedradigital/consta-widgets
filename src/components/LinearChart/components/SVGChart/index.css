@@ -3,6 +3,18 @@
   width: 100%;
   height: 100%;
   overflow: visible;
+
+  &.downRight {
+    transform: scaleY(-1);
+  }
+
+  &.upLeft {
+    transform: scaleX(-1);
+  }
+
+  &.downLeft {
+    transform: scale(-1);
+  }
 }
 
 .area {

@@ -14,19 +14,16 @@ export type Line = {
   /** Мин/макс значение для конкретной линии (если не указать, вычисляется автоматически) */
   valueRange?: [number, number]
   classNameLine?: string
-  background?: boolean
+  color?: string
+  background?: {
+    start: string
+    end?: string
+  }
   circle?: boolean
   hint?: boolean
   lineStyles?: React.CSSProperties
   areaStyles?: React.CSSProperties
   circleStyles?: React.CSSProperties
-  colors: {
-    line: string
-    background?: {
-      start: string
-      end?: string
-    }
-  }
 }
 
 export type Legend = {
@@ -35,11 +32,13 @@ export type Legend = {
 }
 
 export type Orientation = 'horizontal' | 'vertical'
+export type ChartDirection = 'up-right' | 'up-left' | 'down-right' | 'down-left'
 
 type RenderScaleFunc = (props: { minValue: number; maxValue: number }) => React.ReactNode
 
 type Props = {
   orientation?: Orientation
+  chartDirection?: ChartDirection
   lines: Line[]
   legend?: Legend[]
   /** Свободное место под/над графиком, от 0 до 1 */
@@ -82,6 +81,7 @@ export const LinearChart: React.FC<Props> = ({
   valuePadding = [0, 0],
   paddingPrecision = 0,
   orientation = 'horizontal',
+  chartDirection = 'up-right',
 }) => {
   const hints = uniq(
     lines
@@ -107,6 +107,7 @@ export const LinearChart: React.FC<Props> = ({
 
           <SVGChart
             orientation={orientation}
+            chartDirection={chartDirection}
             lines={lines}
             minValue={minValue}
             maxValue={maxValue}

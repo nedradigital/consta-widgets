@@ -243,17 +243,13 @@ export const CostChart: React.FC<Props> = ({
             lines={[
               {
                 values: foregroundLineData,
-                colors: {
-                  line: `url(#${foregroundGradientId})`,
-                },
+                color: `url(#${foregroundGradientId})`,
                 classNameLine: css.lineForeground,
               },
               {
                 values: backgroundLineData,
                 classNameLine: css.lineBackground,
-                colors: {
-                  line: 'rgba(246, 251, 253, 0.2)',
-                },
+                color: 'rgba(246, 251, 253, 0.2)',
               },
             ]}
           />

@@ -31,24 +31,19 @@ const props = {
   lines: [
     {
       values: getArrayWithRandomInt(85, 90, size),
-      background: true,
       circle: true,
       hint: true,
-      colors: {
-        line: '#29b0ff',
-        background: {
-          start: 'rgba(41, 176, 255, 0.4)',
-        },
+      color: '#29b0ff',
+      background: {
+        start: 'rgba(41, 176, 255, 0.4)',
       },
     },
     {
       values: getArrayWithRandomInt(60, 80, size),
       circle: true,
-      colors: {
-        line: '#1c9c52',
-        background: {
-          start: 'rgba(28, 156, 82, 0.4)',
-        },
+      color: '#1c9c52',
+      background: {
+        start: 'rgba(28, 156, 82, 0.4)',
       },
     },
   ],

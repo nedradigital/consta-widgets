@@ -90,13 +90,10 @@ export const KPIChart: React.FC<Props> = ({ planData, factData, className, statu
           {
             values: safeFactData,
             classNameLine: css.lineForeground,
-            background: true,
             areaStyles: {
               fill: `url(#${areaGradientId})`,
             },
-            colors: {
-              line: `url(#${linearGradientId})`,
-            },
+            color: `url(#${linearGradientId})`,
             circle: true,
             circleStyles: {
               fill: '#fff',
@@ -105,9 +102,7 @@ export const KPIChart: React.FC<Props> = ({ planData, factData, className, statu
           {
             values: safePlanData,
             classNameLine: css.lineBackground,
-            colors: {
-              line: 'rgba(196, 196, 196, 0.2)',
-            },
+            color: 'rgba(196, 196, 196, 0.2)',
           },
         ]}
       />

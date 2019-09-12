@@ -14,7 +14,7 @@ export const LinearChartLegend: React.FC<{ items: Legend[]; lines: Line[] }> = (
         <span
           className={css.marker}
           style={{
-            background: lines[index] && lines[index].colors.line,
+            background: lines[index] && lines[index].color,
           }}
         />
         {item.name}
