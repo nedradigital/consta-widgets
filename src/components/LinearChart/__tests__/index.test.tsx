@@ -5,7 +5,6 @@ describe('getValueRange', () => {
     const lines = [
       {
         values: [0, 1, 2, 3, 4, 5],
-        colors: { line: '' },
       },
     ]
 
@@ -26,11 +25,9 @@ describe('getValueRange', () => {
     const lines = [
       {
         values: [-1, 0, 1, 2, 3, 4, 5],
-        colors: { line: '' },
       },
       {
         values: [-5, -4, -3, -2, -1, 0, 1],
-        colors: { line: '' },
       },
     ]
 

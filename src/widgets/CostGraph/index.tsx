@@ -25,9 +25,7 @@ export const CostGraph: React.FC<Props> = ({ data, title, unitName, legendName }
             values: data,
             circle: true,
             hint: true,
-            colors: {
-              line: '#29b0ff',
-            },
+            color: '#29b0ff',
           },
         ]}
         valuePadding={[0.1, 0.1]}

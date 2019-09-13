@@ -41,20 +41,26 @@ export const LineGroup: React.FC<{
       .datum(item.values)
       .attr('d', LineBackground)
 
-    if (item.circle) {
+    if (circleRef.current) {
       d3.select(circleRef.current)
         .datum(item.values[item.values.length - 1])
         .attr('r', 2)
-        .attr('cx', widthRange[1])
-        .attr('cy', value => scaleHeight(value))
+        .attr('cx', value => (isHorizontal ? widthRange[1] : scaleWidth(value)))
+        .attr('cy', value => (isHorizontal ? scaleHeight(value) : heightRange[1]))
     }
 
-    if (item.background) {
-      const AreaForeground = d3
-        .area<number>()
-        .x((_, index) => scaleWidth(index))
-        .y0(heightRange[0])
-        .y1(value => scaleHeight(value))
+    if (backgroundRef.current) {
+      const AreaForeground = isHorizontal
+        ? d3
+            .area<number>()
+            .x((_, index) => scaleWidth(index))
+            .y0(heightRange[0])
+            .y1(value => scaleHeight(value))
+        : d3
+            .area<number>()
+            .x0(widthRange[0])
+            .x1(value => scaleWidth(value))
+            .y((_, index) => scaleHeight(index))
 
       d3.select(backgroundRef.current)
         .datum(item.values)
@@ -69,17 +75,17 @@ export const LineGroup: React.FC<{
         className={classnames(css.line, item.classNameLine)}
         style={{
           ...item.lineStyles,
-          stroke: item.colors.line,
+          stroke: item.color,
         }}
       />
 
-      {item.background && <path ref={backgroundRef} style={item.areaStyles} />}
+      {item.areaStyles && <path ref={backgroundRef} style={item.areaStyles} />}
 
       {item.circle && (
         <circle
           ref={circleRef}
           style={{
-            fill: item.colors.line,
+            fill: item.color,
             ...item.circleStyles,
           }}
         />
