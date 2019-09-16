@@ -8,7 +8,7 @@ import css from './index.css'
 
 type Props = {
   className?: string
-  notices: NoticeProps[]
+  notices: readonly NoticeProps[]
 }
 
 export const Notices: React.FunctionComponent<Props> = ({ notices, className }) => {

@@ -18,6 +18,10 @@
   position: relative;
   flex: 1;
   min-width: 0;
+
+  & + & {
+    margin-left: 8px;
+  }
 }
 
 .main {
@@ -30,9 +34,20 @@
     display: block;
   }
 
-  &:not(.viewMode) .column {
+  &:not(.viewMode) .column::before {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    content: '';
     border: 1px dashed gray;
+    pointer-events: none;
   }
+}
+
+.main:not(.viewMode) .column {
+  min-height: 30px;
 }
 
 .remove {
@@ -40,4 +55,5 @@
   position: absolute;
   top: 0;
   right: 0;
+  transform: translateY(-50%) translateX(-100%);
 }

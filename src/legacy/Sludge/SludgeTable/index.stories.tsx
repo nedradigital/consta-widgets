@@ -6,9 +6,11 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
+import { ElementType } from '../SludgeBlock'
+
 import { SludgeTable } from '.'
 
-const elements = [
+const elements: readonly ElementType[] = [
   {
     name: 'Песчаник',
     value: 35,

@@ -1,0 +1,7 @@
+.name {
+  grid-column: 1;
+}
+
+.value {
+  grid-column: 2;
+}

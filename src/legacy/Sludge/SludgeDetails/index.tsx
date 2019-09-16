@@ -10,8 +10,8 @@ import css from './index.css'
 
 type CommonProps = {
   onElementCompositionClick: (name: string) => void
-  selectedElements: string[]
-  elements?: ElementType[]
+  selectedElements: readonly string[]
+  elements?: readonly ElementType[]
 }
 
 type Props = {

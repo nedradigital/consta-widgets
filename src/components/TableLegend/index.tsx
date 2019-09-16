@@ -7,19 +7,19 @@ import { Title } from '@/ui/Title'
 
 import css from './index.css'
 
-type Values = Array<string | number | null>
+type Values = ReadonlyArray<string | number | null>
 
 type Props = {
-  columnNames: string[]
-  valueNames: string[]
-  data: Array<{
+  columnNames: readonly string[]
+  valueNames: readonly string[]
+  data: ReadonlyArray<{
     color: string
     name: string
-    columns: Values[]
+    columns: readonly Values[]
   }>
 }
 
-const valueColors = [undefined, '#0FC75D']
+const valueColors = [undefined, '#0FC75D'] as const
 
 export const TableLegend: React.FC<Props> = ({ data, columnNames, valueNames }) => {
   return (

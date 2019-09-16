@@ -19,13 +19,13 @@ type SensorType = {
 
 type Props = {
   /* Массив значений датчиков по глубине */
-  absoluteValues?: SensorType[]
+  absoluteValues?: readonly SensorType[]
 
   /* Диаметр долота */
   bitDiameter?: number
 
   /* Массив значений относительно долота */
-  relativeValues?: SensorType[]
+  relativeValues?: readonly SensorType[]
 }
 
 export const KNBKOpenableLabel: React.FC<Props> = ({

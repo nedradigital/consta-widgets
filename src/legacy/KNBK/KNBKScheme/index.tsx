@@ -7,7 +7,7 @@ import css from './index.css'
 
 type Props = {
   className?: string
-  values?: number[]
+  values?: readonly number[]
 }
 
 const Disk = () => (

@@ -23,8 +23,8 @@ type Props = {
   wellPad: string
   className?: string
   onClick?: () => void
-  geoParams?: string[]
-  techParams?: string[]
+  geoParams?: readonly string[]
+  techParams?: readonly string[]
   responsiblePersons?: {
     [key: string]: responsiblePersonType
   }
@@ -37,7 +37,7 @@ const professionMap: { [index: string]: string } = {
   geonavigator: 'Геонавигатор',
 }
 
-const professionTypes = ['technologist', 'geologist', 'geonavigator']
+const professionTypes = ['technologist', 'geologist', 'geonavigator'] as const
 
 export const WellPassport: React.FC<Props> = ({
   className,

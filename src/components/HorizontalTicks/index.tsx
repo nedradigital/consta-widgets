@@ -6,7 +6,7 @@ import css from './index.css'
 
 type Props = { marginTop?: number } & (
   | {
-      labels: string[]
+      labels: readonly string[]
     }
   | {
       columns: number
@@ -14,7 +14,10 @@ type Props = { marginTop?: number } & (
     })
 
 export const HorizontalTicks: React.FC<Props> = (props: Props) => {
-  const labels = 'labels' in props ? props.labels : _.times(props.columns, props.renderLabel)
+  const labels =
+    'labels' in props
+      ? props.labels
+      : (_.times(props.columns, props.renderLabel) as readonly React.ReactNode[])
 
   return (
     <div className={css.main} style={{ marginTop: props.marginTop }}>

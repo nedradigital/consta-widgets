@@ -7,7 +7,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { KNBKScheme } from '.'
 
-const data = [100, 98, 59, 42, 21, 2]
+const data = [100, 98, 59, 42, 21, 2] as const
 
 storiesOf('legacy/KNBK/Scheme', module)
   .addDecorator(withSmartKnobs)

@@ -9,7 +9,7 @@ import css from './index.css'
 
 type Props = {
   className?: string
-  npvList?: npvDayType[]
+  npvList?: readonly npvDayType[]
   currentDay?: number
 }
 
@@ -42,9 +42,9 @@ const typesList = [
     type: 'repair',
     name: 'Ремонт',
   },
-]
+] as const
 
-const getTotalHoursByType = (days?: npvDayType[], type?: string) => {
+const getTotalHoursByType = (days?: readonly npvDayType[], type?: string) => {
   if (isNil(days) || !days.length || !type) {
     return null
   }

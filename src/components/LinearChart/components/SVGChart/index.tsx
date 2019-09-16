@@ -18,7 +18,7 @@ const directionClasses = {
 }
 
 export const SVGChart: React.FC<{
-  lines: Line[]
+  lines: readonly Line[]
   minValue: number
   maxValue: number
   orientation: Orientation

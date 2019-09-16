@@ -10,7 +10,7 @@ type Depth = number
 
 type Props = {
   className?: string
-  data?: Array<[Time?, Depth?]>
+  data?: ReadonlyArray<readonly [Time?, Depth?]>
   styles?: React.CSSProperties
 }
 

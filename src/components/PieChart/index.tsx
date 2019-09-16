@@ -40,7 +40,7 @@ type Props = {
   total: number
   subTotalTitle: string
   subTotal: number
-  data: DataItem[]
+  data: readonly DataItem[]
 }
 
 export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal }) => {
@@ -50,7 +50,7 @@ export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal
     const pieData = d3
       .pie<DataItem>()
       .sort(null)
-      .value(d => d.value)(data)
+      .value(d => d.value)(data as Writeable<typeof data>)
 
     const radius = Math.min(width, height) / 2
 

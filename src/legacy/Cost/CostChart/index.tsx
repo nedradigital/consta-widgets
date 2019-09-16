@@ -21,7 +21,7 @@ export type Day = {
 
 type Props = {
   currentDay?: number
-  daysSummary?: Day[]
+  daysSummary?: readonly Day[]
   selectedDay?: number
   maxCostSteps?: number
 }
@@ -60,6 +60,7 @@ export const CostChart: React.FC<Props> = ({
     )
 
   const valueWithinSafeArea = daysSummary
+    /* tslint:disable-next-line:readonly-array */
     .reduce<Array<number | null>>(
       (result, current, index) => {
         result.push(
@@ -75,6 +76,7 @@ export const CostChart: React.FC<Props> = ({
     .map(value => (isNil(value) ? null : value <= 1.05))
 
   const highlights = valueWithinSafeArea
+    /* tslint:disable-next-line:readonly-array */
     .reduce<Array<{ from: number; value: boolean | null }>>((ranges, value, day) => {
       if (day === 0) {
         ranges.push({

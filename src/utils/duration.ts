@@ -10,7 +10,7 @@ export const getMaxDurationSteps = (maxDuration: number): number =>
       : 16 - (maxDuration % 16)
   )
 
-export const getDurationsGrid = (data: any[] | undefined, maxDuration: number) =>
+export const getDurationsGrid = (data: readonly any[] | undefined, maxDuration: number) =>
   data && data.length
     ? createArrayOfIndexes(maxDuration + 1).map(duration => duration / maxDuration)
     : [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]

@@ -10,11 +10,11 @@ import { VerticalTicks } from '@/components/VerticalTicks'
 import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { LinearChart } from '.'
+import { Legend, LinearChart } from '.'
 
 const size = 12 * 4
 
-const legend = [
+const legend: readonly Legend[] = [
   {
     name: 'Всего в разработке',
     value: 80,

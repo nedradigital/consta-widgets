@@ -44,7 +44,7 @@ export const types = [
     name: 'repair',
     label: 'Ремонт',
   },
-]
+] as const
 
 type Props = {
   className?: string
@@ -55,7 +55,7 @@ type Props = {
   currentDay?: number
 
   /** Упорядоченный массив. Первый элемент = первый день и т.д. */
-  npvList?: npvDayType[]
+  npvList?: readonly npvDayType[]
   selectedDay?: number
   onDayHover?: (day: number) => void
 }

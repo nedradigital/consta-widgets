@@ -4,7 +4,7 @@ import { Legend, Line } from '@/components/LinearChart'
 
 import css from './index.css'
 
-export const LinearChartLegend: React.FC<{ items: Legend[]; lines: Line[] }> = ({
+export const LinearChartLegend: React.FC<{ items: readonly Legend[]; lines: readonly Line[] }> = ({
   items,
   lines,
 }) => (

@@ -14,11 +14,11 @@ import css from './index.css'
 type Props = {
   className?: string
   currentDay?: number
-  daysSummary?: Day[]
+  daysSummary?: readonly Day[]
   selectedDay?: number
 }
 
-const getDaySummary = (day: number, daysSummary: Day[]) => {
+const getDaySummary = (day: number, daysSummary: readonly Day[]) => {
   if (!daysSummary.length) {
     return {
       planCost: 0,

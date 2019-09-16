@@ -22,7 +22,7 @@ const geologyIntervals = [
       { name: 'Песок', value: 5 },
     ],
   },
-]
+] as const
 
 const elementsComposition = [
   { name: 'Цемент', value: 80 },
@@ -31,7 +31,7 @@ const elementsComposition = [
   { name: 'Песчаник', value: 5 },
   { name: 'Уголь', value: 0 },
   { name: 'Сланец', value: 0 },
-]
+] as const
 
 const moreThan8GeologyIntervals = [
   {
@@ -61,7 +61,7 @@ const moreThan8GeologyIntervals = [
       { name: 'Материал 10', value: 1 },
     ],
   },
-]
+] as const
 
 const moreThan8ElementsComposition = [
   { name: 'Песок', value: 20 },
@@ -72,7 +72,7 @@ const moreThan8ElementsComposition = [
   { name: 'Материал 7', value: 7 },
   { name: 'Песчаник', value: 6 },
   { name: 'Другое', value: 25 },
-]
+] as const
 
 const moreThan8GeologyIntervals2 = [
   {
@@ -100,7 +100,7 @@ const moreThan8GeologyIntervals2 = [
       { name: 'Песок', value: 5 },
     ],
   },
-]
+] as const
 
 const moreThan8ElementsComposition2 = [
   { name: 'Цемент', value: 80 },
@@ -111,7 +111,7 @@ const moreThan8ElementsComposition2 = [
   { name: 'Сланец', value: 0 },
   { name: 'Материал 1', value: 0 },
   { name: 'Другое', value: 0 },
-]
+] as const
 
 describe('Sludge block utils', () => {
   it('getElementsComposition should work', () => {

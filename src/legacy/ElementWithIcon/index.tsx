@@ -1,6 +1,7 @@
 import React from 'react'
 
 import classnames from 'classnames'
+import { reverse } from 'lodash'
 
 import css from './index.css'
 
@@ -24,11 +25,11 @@ export const ElementWithIcon: React.FC<Props> = ({
       {icon}
     </span>,
     <span key="element">{children}</span>,
-  ]
+  ] as const
 
   return (
     <div className={classnames(css.main, className)}>
-      {order === 'reverse' ? items.reverse() : items}
+      {order === 'reverse' ? reverse(items) : items}
     </div>
   )
 }

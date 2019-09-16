@@ -1,8 +1,8 @@
-import { getValueRange } from '../'
+import { getValueRange, Line } from '../'
 
 describe('getValueRange', () => {
   describe('single line', () => {
-    const lines = [
+    const lines: readonly Line[] = [
       {
         values: [0, 1, 2, 3, 4, 5],
       },
@@ -22,7 +22,7 @@ describe('getValueRange', () => {
   })
 
   describe('multiple lines', () => {
-    const lines = [
+    const lines: readonly Line[] = [
       {
         values: [-1, 0, 1, 2, 3, 4, 5],
       },

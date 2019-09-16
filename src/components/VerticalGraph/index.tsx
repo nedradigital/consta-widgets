@@ -11,7 +11,7 @@ type Params = {
 }
 
 type Data = {
-  values: number[]
+  values: readonly number[]
   from: number
   to: number
 }

@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import css from './index.css'
 
 type Props = {
-  data: LineProps[]
+  data: readonly LineProps[]
   className?: string
 }
 

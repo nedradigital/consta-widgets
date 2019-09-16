@@ -1,0 +1,19 @@
+.portal {
+  visibility: visible;
+}
+
+.settings {
+  position: absolute;
+  padding: 10px;
+  margin-left: 10px;
+
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+  align-items: baseline;
+
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  color: black;
+}

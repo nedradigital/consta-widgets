@@ -33,8 +33,8 @@ export type DataRange = {
 type Props = {
   status: Status
   dataRange: DataRange
-  mainChartData: number[]
-  additionalChartData?: number[]
+  mainChartData: readonly number[]
+  additionalChartData?: readonly number[]
   additionalDataDefaultLoBound?: number
   additionalDataDefaultHiBound?: number
 }
