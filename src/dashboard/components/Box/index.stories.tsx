@@ -95,7 +95,6 @@ storiesOf('dashboard/Box', module)
                 status: 'warning',
               },
             }}
-            name="box"
             datasets={exampleDatasets}
             isNestedBox={boolean('isNestedBox', false)}
           />

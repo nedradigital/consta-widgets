@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react'
 import { Dataset, DataType } from '@/dashboard/types'
 
 import { Constructor, DashboardState } from './'
-import { BoxItem } from './components/Box'
+import { Config } from './components/Dashboard'
 
 const getMargin = () => [number('margin x', 15), number('margin y', 15)] as const
 
@@ -33,7 +33,26 @@ export const exampleDatasets: readonly Dataset[] = [
     id: 'wasted',
   },
 ]
-const cols = { lg: 6, md: 5, sm: 4, xs: 4, xxs: 2 }
+const cols = 4
+
+const storageName = 'story::dashboard'
+
+const getStateFromStorage = (): DashboardState => {
+  const str = localStorage.getItem(storageName)
+
+  if (str) {
+    return JSON.parse(str)
+  }
+
+  return {
+    boxes: [],
+    config: {},
+  }
+}
+
+const setStateToStorage = (value: DashboardState | Config) => {
+  localStorage.setItem(storageName, JSON.stringify(value))
+}
 
 storiesOf('dashboard/Constructor', module)
   .addDecorator(withSmartKnobs)
@@ -44,13 +63,9 @@ storiesOf('dashboard/Constructor', module)
         margin={getMargin()}
         datasets={exampleDatasets}
         cols={cols}
-        dashboard={{ boxes: [], layouts: {} }}
-        config={{}}
+        dashboard={{ boxes: [], config: {} }}
         data={{}}
         onChange={() => {
-          /**/
-        }}
-        onChangeWidgets={() => {
           /**/
         }}
       />
@@ -58,18 +73,12 @@ storiesOf('dashboard/Constructor', module)
   })
   .add('with state', () => {
     function Wrapper() {
-      const [dashboard, setDashboard] = React.useState<DashboardState>({
-        boxes: [],
-        layouts: {},
-      })
+      const [dashboard, setDashboard] = React.useState<DashboardState>(getStateFromStorage())
       const [viewMode, setViewMode] = React.useState(false)
-      const [config, changeConfig] = React.useState<{ [key: string]: readonly BoxItem[] }>({})
 
-      const handler = (name: string, items: readonly BoxItem[]) => {
-        changeConfig({
-          ...config,
-          [name]: items,
-        })
+      const handler = (data: DashboardState) => {
+        setDashboard(data)
+        setStateToStorage(data)
       }
 
       return (
@@ -78,15 +87,13 @@ storiesOf('dashboard/Constructor', module)
           datasets={object('datasets', exampleDatasets)}
           cols={object('cols', cols)}
           dashboard={dashboard}
-          onChange={setDashboard}
+          onChange={handler}
           onClear={() => {
-            localStorage.removeItem('data')
+            localStorage.removeItem(storageName)
             location.reload()
           }}
           onToggleMode={() => setViewMode(!viewMode)}
           viewMode={viewMode}
-          onChangeWidgets={handler}
-          config={config}
           data={{}}
         />
       )

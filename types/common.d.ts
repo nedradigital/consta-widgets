@@ -17,7 +17,7 @@ declare module 'pluralize-ru' {
 }
 
 declare module 'react-grid-layout-tmp-fork' {
-  import { Layouts, Responsive, WidthProviderProps } from 'react-grid-layout'
+  import ReactGridLayout, { ItemCallback, Layout, WidthProviderProps } from 'react-grid-layout'
   function WidthProvider<P>(
     component: React.ComponentClass<P>
   ): React.ComponentClass<
@@ -32,7 +32,9 @@ declare module 'react-grid-layout-tmp-fork' {
       }
   >
 
-  export { Layouts, Responsive, WidthProvider }
+  export default ReactGridLayout
+
+  export { ItemCallback, WidthProvider, Layout }
 }
 
 declare module '@nekitk/storybook-addon-smart-knobs' {
