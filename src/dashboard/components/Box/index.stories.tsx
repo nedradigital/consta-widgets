@@ -10,7 +10,7 @@ import { statuses } from '@/ui/Badge'
 import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Box, IWidget } from '.'
+import { Box, BoxItem } from '.'
 
 const dataForWidget: { [key: string]: {} } = {
   AccumulatedTotal: {
@@ -66,9 +66,10 @@ storiesOf('dashboard/Box', module)
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .add('interactive', () => {
     const Wrapper = () => {
-      const [widgets, changeWidgets] = React.useState<IWidget[]>([
+      const [items, changeItems] = React.useState<BoxItem[]>([
         {
           name: 'AccumulatedTotal',
+          type: 'widget',
           props: {
             ...propsForWidget.AccumulatedTotal,
             data: dataForWidget.AccumulatedTotal,
@@ -76,37 +77,67 @@ storiesOf('dashboard/Box', module)
         },
         {
           name: 'CostGraph',
+          type: 'widget',
           props: {
             ...propsForWidget.CostGraph,
             data: dataForWidget.CostGraph,
           },
         },
+        {
+          type: 'columns',
+          columns: [
+            [
+              {
+                name: 'AccumulatedTotal',
+                type: 'widget',
+                props: {
+                  ...propsForWidget.AccumulatedTotal,
+                  data: dataForWidget.AccumulatedTotal,
+                },
+              },
+            ],
+            [
+              {
+                name: 'AccumulatedTotal',
+                type: 'widget',
+                props: {
+                  ...propsForWidget.AccumulatedTotal,
+                  data: dataForWidget.AccumulatedTotal,
+                },
+              },
+            ],
+          ],
+        },
       ])
 
-      const handler = (_: string, items: IWidget[]) => {
-        if (items.length > 0) {
-          const lastItem = items[items.length - 1]
-          items[items.length - 1] = {
-            ...lastItem,
-            props: {
-              ...(propsForWidget[lastItem.name] || {}),
-              data: dataForWidget[lastItem.name] || {},
-            },
+      const handler = (newItems: BoxItem[]) => {
+        if (newItems.length > 0) {
+          const lastItem = newItems[newItems.length - 1]
+
+          if (lastItem.type === 'widget') {
+            newItems[newItems.length - 1] = {
+              ...lastItem,
+              props: {
+                ...(propsForWidget[lastItem.name] || {}),
+                data: dataForWidget[lastItem.name] || {},
+              },
+            }
           }
         }
 
-        changeWidgets(items)
+        changeItems(newItems)
       }
 
       return (
         <div style={{ position: 'relative' }}>
           <Box
             viewMode={boolean('viewMode', false)}
-            widgets={widgets}
-            onChangeWidgets={handler}
+            items={items}
+            onChange={handler}
             data={{}}
             name="box"
             isPreview={false}
+            customElements
           />
         </div>
       )

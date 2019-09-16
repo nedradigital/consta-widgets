@@ -8,7 +8,7 @@ import { statuses } from '@/ui/Badge'
 import { getArrayWithRandomInt } from '@/utils/array'
 
 import { Constructor, DashboardState, DataType } from './'
-import { IWidget } from './components/Box'
+import { BoxItem } from './components/Box'
 
 const margin = [15, 15] as [number, number]
 const datasets = [
@@ -99,17 +99,19 @@ storiesOf('dashboard/Constructor', module)
         layouts: {},
       })
       const [viewMode, setViewMode] = React.useState(false)
-      const [config, changeConfig] = React.useState<{ [key: string]: IWidget[] }>({})
+      const [config, changeConfig] = React.useState<{ [key: string]: BoxItem[] }>({})
 
-      const handler = (name: string, items: IWidget[]) => {
+      const handler = (name: string, items: BoxItem[]) => {
         if (items.length > 0) {
           const lastItem = items[items.length - 1]
-          items[items.length - 1] = {
-            ...lastItem,
-            props: {
-              ...(propsForWidget[lastItem.name] || {}),
-              data: dataForWidget[lastItem.name] || {},
-            },
+          if (lastItem.type === 'widget') {
+            items[items.length - 1] = {
+              ...lastItem,
+              props: {
+                ...(propsForWidget[lastItem.name] || {}),
+                data: dataForWidget[lastItem.name] || {},
+              },
+            }
           }
         }
 
