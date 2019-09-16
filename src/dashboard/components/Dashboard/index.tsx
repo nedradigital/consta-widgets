@@ -4,7 +4,7 @@ import { Layouts, Responsive, WidthProvider } from 'react-grid-layout-tmp-fork'
 
 import { Dataset } from '../../'
 import { ItemTypes } from '../../dnd-constants'
-import { Box, IWidget } from '../Box'
+import { Box, BoxItem } from '../Box'
 
 import css from './index.css'
 
@@ -39,8 +39,8 @@ export type DashboardProps = {
   viewMode?: boolean
   onChange?: (dashboard: DashboardState) => void
   dashboard: DashboardState
-  onChangeWidgets?: (item: string, items: IWidget[]) => void
-  config: { [key: string]: IWidget[] }
+  onChangeWidgets?: (name: string, items: BoxItem[]) => void
+  config: { [key: string]: BoxItem[] }
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
@@ -111,8 +111,12 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
               name={box.name}
               data={{}}
               viewMode={viewMode}
-              onChangeWidgets={onChangeWidgets}
-              widgets={config[box.name]}
+              onChange={items => {
+                if (onChangeWidgets) {
+                  onChangeWidgets(box.name, items)
+                }
+              }}
+              items={config[box.name]}
               datasets={datasets}
             />
           </div>

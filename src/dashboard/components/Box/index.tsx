@@ -7,24 +7,29 @@ import { move } from '@/utils/array'
 
 import { Dataset } from '../../'
 import { ItemTypes } from '../../dnd-constants'
+import { Columns, ColumnsItem } from '../Columns'
 
 import css from './index.css'
 
-export type IWidget = {
+type WidgetItem = {
   name: string
   props?: any
   datasets?: Dataset[]
+  type: 'widget'
 }
 
+export type BoxItem = WidgetItem | ColumnsItem
+
 export type Props = {
-  name: string
+  name?: string
   datasets?: Dataset[]
   viewMode?: boolean
-  widgets?: IWidget[]
-  onChangeWidgets?: (name: string, widgets: IWidget[]) => void
   data?: any
   className?: string
   isPreview?: boolean
+  items?: BoxItem[]
+  onChange?: (items: BoxItem[]) => void
+  customElements?: boolean
 }
 
 type WidgetEditorBoxProps = {
@@ -76,33 +81,52 @@ const WidgetEditorBox: React.FC<WidgetEditorBoxProps> = ({
 
 export const Box: React.FC<Props> = ({
   viewMode = true,
-  widgets = [],
-  onChangeWidgets,
+  items = [],
+  onChange,
   data,
   isPreview,
   className,
   name,
   datasets,
+  customElements,
 }) => {
-  const [selected, changeSelected] = useState(Object.keys(widgetsList)[0])
+  const [selectedItem, changeSelected] = useState(Object.keys(widgetsList)[0])
 
   const addWidget = () => {
-    if (onChangeWidgets) {
-      onChangeWidgets(name, [...widgets, { name: selected } as IWidget])
+    if (onChange) {
+      switch (selectedItem) {
+        case 'columns':
+          onChange([...items, { type: 'columns', columns: [[], []] }])
+          return
+        default:
+          onChange([...items, { name: selectedItem, type: 'widget' }])
+      }
     }
   }
 
   const removeWidget = (index: number) => {
-    const arr = [...widgets]
+    const arr = [...items]
+
     arr.splice(index, 1)
-    if (onChangeWidgets) {
-      onChangeWidgets(name, arr)
+
+    if (onChange) {
+      onChange(arr)
     }
   }
 
   const changePosition = (index: number, direction: -1 | 1) => {
-    if (onChangeWidgets) {
-      onChangeWidgets(name, move(widgets, index, index + direction))
+    if (onChange) {
+      onChange(move(items, index, index + direction))
+    }
+  }
+
+  const changeColumnsConfig = (index: number, columns: BoxItem[][]) => {
+    const arr = [...items] as ColumnsItem[]
+
+    arr[index].columns = columns
+
+    if (onChange) {
+      onChange(arr)
     }
   }
 
@@ -121,34 +145,65 @@ export const Box: React.FC<Props> = ({
     >
       {!viewMode && (
         <div className={css.panel}>
-          <select value={selected} onChange={e => changeSelected(e.target.value)}>
-            {Object.keys(widgetsList).map(key => (
-              <option key={key} value={key}>
-                {key}
-              </option>
-            ))}
+          <select value={selectedItem} onChange={e => changeSelected(e.target.value)}>
+            <optgroup label="Виджеты">
+              {Object.keys(widgetsList).map(key => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </optgroup>
+            {customElements ? (
+              <optgroup label="Кастомные элементы">
+                {['columns'].map(key => (
+                  <option key={key} value={key}>
+                    {key}
+                  </option>
+                ))}
+              </optgroup>
+            ) : null}
           </select>
           <button className={css.add} type="button" onClick={addWidget}>
             ➕
           </button>
         </div>
       )}
-      {widgets.map((widget, index) => {
-        const Component: React.FC<{}> = widgetsList[widget.name][widget.name]
+      {items.map((item, index) => {
+        let component
+
+        if (item.type === 'widget') {
+          const Component: React.FC<{}> = widgetsList[item.name][item.name]
+          component = <Component data={data} {...item.props} datasets={datasets} />
+        }
+
+        if (item.type === 'columns') {
+          component = (
+            <Columns
+              datasets={datasets}
+              columns={item.columns}
+              viewMode={viewMode}
+              onChange={columns => {
+                changeColumnsConfig(index, columns)
+              }}
+              data={data}
+              isPreview={isPreview}
+            />
+          )
+        }
 
         if (viewMode) {
-          return <Component data={data} {...widget.props} />
+          return component
         }
 
         return (
           <WidgetEditorBox
-            key={widget.name + index}
+            key={index}
             index={index}
             changePosition={changePosition}
-            lastElement={Boolean(index === widgets.length - 1)}
+            lastElement={Boolean(index === items.length - 1)}
             removeWidget={removeWidget}
           >
-            <Component data={data} {...widget.props} datasets={datasets} />
+            {component}
           </WidgetEditorBox>
         )
       })}
