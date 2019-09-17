@@ -2,45 +2,38 @@ import * as React from 'react'
 import { useDrop } from 'react-dnd'
 import { Layouts, Responsive, WidthProvider } from 'react-grid-layout-tmp-fork'
 
-import { Dataset } from '../../'
+import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
+
 import { ItemTypes } from '../../dnd-constants'
+import { Data, Dataset } from '../../types'
 import { Box, BoxItem } from '../Box'
 
 import css from './index.css'
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive)
 
-const uniqCounter: { [key: string]: number } = {}
-
-const getUniqName = (name: string): string => {
-  if (uniqCounter[name] != null) {
-    uniqCounter[name] += 1
-  } else {
-    uniqCounter[name] = 0
-  }
-
-  return uniqCounter[name] ? `${name}(${uniqCounter[name]})` : `${name}(0)`
+type DashboardBox = {
+  name: string
+  x?: number
+  y?: number
 }
 
 export type DashboardState = {
-  boxes: Array<{
-    name: string
-    x?: number
-    y?: number
-  }>
+  boxes: readonly DashboardBox[]
   layouts: Layouts
 }
 
 export type DashboardProps = {
-  margin?: [number, number]
+  margin?: readonly [number, number]
   cols?: { [P: string]: number }
   breakpoints?: { [P: string]: number }
-  datasets: Dataset[]
-  viewMode?: boolean
-  onChange?: (dashboard: DashboardState) => void
+  datasets: readonly Dataset[]
+  data: Data
+  viewMode: boolean
+  onChange: (dashboard: DashboardState) => void
   dashboard: DashboardState
-  onChangeWidgets?: (name: string, items: BoxItem[]) => void
-  config: { [key: string]: BoxItem[] }
+  onChangeWidgets: (name: string, items: readonly BoxItem[]) => void
+  config: { [key: string]: readonly BoxItem[] }
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
@@ -53,9 +46,12 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     dashboard,
     onChangeWidgets,
     config,
+    data,
     datasets,
   } = props
   const { boxes, layouts } = dashboard
+  // TODO дёрнуть removeName при удалении бокса
+  const { getUniqueName } = useUniqueNameGenerator(boxes.map(box => box.name))
 
   const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
 
@@ -63,11 +59,12 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     accept: ItemTypes.BOX,
     drop: (item: any) => {
       dropPromise.then(({ x, y }: { x: number; y: number }) => {
-        const newBoxes = [...boxes, { ...item, name: getUniqName(item.name), x, y }]
+        const newBoxes: readonly DashboardBox[] = [
+          ...boxes,
+          { ...item, name: getUniqueName(item.name), x, y },
+        ]
 
-        if (onChange) {
-          onChange({ boxes: newBoxes, layouts })
-        }
+        onChange({ boxes: newBoxes, layouts })
       })
     },
     collect: monitor => ({
@@ -83,7 +80,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
   return (
     <div ref={drop} className={css.dashboard}>
       <ResponsiveReactGridLayout
-        margin={margin}
+        margin={margin as /* tslint:disable-line:readonly-array */ [number, number]}
         cols={cols}
         breakpoints={breakpoints}
         className="layout"
@@ -95,9 +92,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         onDrop={onDrop}
         droppingPositionShift={{ x: -110, y: -80 }}
         onLayoutChange={(_, newLayoutsState) => {
-          if (onChange) {
-            onChange({ boxes, layouts: newLayoutsState })
-          }
+          onChange({ boxes, layouts: newLayoutsState })
         }}
       >
         {boxes.map(box => (
@@ -107,14 +102,11 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
             className={css.widgetWrapper}
           >
             <Box
-              isPreview
               name={box.name}
-              data={{}}
+              data={data}
               viewMode={viewMode}
               onChange={items => {
-                if (onChangeWidgets) {
-                  onChangeWidgets(box.name, items)
-                }
+                onChangeWidgets(box.name, items)
               }}
               items={config[box.name]}
               datasets={datasets}

@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { VerticalGraph } from '.'
 
-storiesOf('widgets/VerticalGraph', module)
+storiesOf('components/VerticalGraph', module)
   .addDecorator(blockCenteringDecorator({ width: 175, height: 240 }))
   .add('interactive', () => (
     <VerticalGraph

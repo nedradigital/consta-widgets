@@ -54,7 +54,7 @@ declare module 'react-use-dimensions' {
     bottom: number
   }
 
-  export type UseDimensionsHook = [
+  export type UseDimensionsHook = readonly [
     (node: HTMLElement | SVGSVGElement | null) => void,
     IDimensionObject,
     HTMLElement | SVGSVGElement | null
@@ -67,4 +67,15 @@ declare module 'react-use-dimensions' {
   function useDimensions({ liveMeasure }?: IUseDimensionsArgs): UseDimensionsHook
 
   export default useDimensions
+}
+
+declare module 'react-onclickout' {
+  /* tslint:disable-next-line:ordered-imports */
+  import { ComponentType } from 'react'
+
+  const ClickOutHandler: ComponentType<{
+    onClickOut: () => void
+  }>
+
+  export default ClickOutHandler
 }

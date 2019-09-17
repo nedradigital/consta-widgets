@@ -4,14 +4,16 @@ import { ElementType, GeologyIntervals } from '.'
 
 const MAX_ELEMENTS_IN_COMPOSITION = 8
 
-export const getElementsComposition = (geologyIntervals: GeologyIntervals): ElementType[] => {
+export const getElementsComposition = (
+  geologyIntervals: GeologyIntervals
+): readonly ElementType[] => {
   if (!geologyIntervals || !geologyIntervals.length) {
     return []
   }
 
   const allElements = geologyIntervals.reduce(
     (acc, { elements }) => [...acc, ...elements.map(({ name }) => name)],
-    [] as string[]
+    [] as readonly string[]
   )
   const uniqElements = uniq(allElements)
   const lastInterval = last(geologyIntervals)
@@ -28,6 +30,7 @@ export const getElementsComposition = (geologyIntervals: GeologyIntervals): Elem
           },
         ]
       },
+      /* tslint:disable-next-line:readonly-array */
       [] as ElementType[]
     )
     .sort((el1, el2) => el2.value - el1.value)
@@ -53,6 +56,6 @@ export const getElementsComposition = (geologyIntervals: GeologyIntervals): Elem
         },
       ]
     },
-    [] as ElementType[]
+    [] as readonly ElementType[]
   )
 }

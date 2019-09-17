@@ -19,7 +19,7 @@ type Props = {
     hiLimit?: number
     defaultLoBound?: number
     defaultHiBound?: number
-    data: number[]
+    data: readonly number[]
     description?: string
   }
   dataRange?: DataRange

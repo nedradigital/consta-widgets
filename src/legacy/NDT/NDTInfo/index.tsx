@@ -35,10 +35,10 @@ type npvItemType = {
 type Props = {
   className?: string
   currentDay?: number
-  npvList?: npvItemType[]
+  npvList?: readonly npvItemType[]
 }
 
-const getTotalHours = (days?: npvItemType[]): number | null => {
+const getTotalHours = (days?: readonly npvItemType[]): number | null => {
   if (isNil(days) || !days.length) {
     return null
   }

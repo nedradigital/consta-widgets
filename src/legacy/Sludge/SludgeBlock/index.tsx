@@ -18,10 +18,10 @@ type IntervalType = {
     top?: number
     bottom?: number
   }
-  elements: ElementType[]
+  elements: readonly ElementType[]
 }
 
-export type GeologyIntervals = IntervalType[]
+export type GeologyIntervals = readonly IntervalType[]
 
 type Props = {
   className?: string
@@ -30,7 +30,7 @@ type Props = {
 
 export const SludgeBlock: React.FC<Props> = ({ className, geologyIntervals = [] }) => {
   const [isOpened, changeIsOpened] = useState(false)
-  const [selectedElements, changeSelectedElements] = useState<string[]>([])
+  const [selectedElements, changeSelectedElements] = useState<readonly string[]>([])
 
   const closeBlock = () => changeIsOpened(false)
 

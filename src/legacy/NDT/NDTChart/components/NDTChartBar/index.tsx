@@ -10,7 +10,7 @@ type NDTChartBarProps = {
   maxDuration: number
   width: number
   height: number
-  npvList?: npvDayType[]
+  npvList?: readonly npvDayType[]
 }
 
 export const NDTChartBar: React.FC<NDTChartBarProps> = ({

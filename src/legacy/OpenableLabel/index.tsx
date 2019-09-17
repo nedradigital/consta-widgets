@@ -9,7 +9,7 @@ type Props = {
   title: React.ReactNode
   shortTitle: string
   isInitiallyOpened?: boolean
-  items: React.ReactNode[]
+  items: readonly React.ReactNode[]
   children?: never
 }
 

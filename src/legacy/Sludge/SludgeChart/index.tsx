@@ -11,7 +11,7 @@ import css from './index.css'
 type Props = {
   className?: string
   geologyIntervals?: GeologyIntervals
-  elements?: ElementType[]
+  elements?: readonly ElementType[]
   hoveredElement?: string
   maxDepthSteps?: number
 }
@@ -49,7 +49,7 @@ export const SludgeChart: React.FC<Props> = ({
     .reduce(
       (acc, interval) =>
         acc.concat([interval.depthInterval.top || 0, interval.depthInterval.bottom || 0]),
-      [] as number[]
+      [] as readonly number[]
     )
     .filter((depth, index, arr) => arr.indexOf(depth) === index)
     .sort()

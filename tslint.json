@@ -4,7 +4,8 @@
     "tslint-react",
     "tslint-react-hooks",
     "tslint-config-prettier",
-    "tslint-plugin-prettier"
+    "tslint-plugin-prettier",
+    "tslint-immutable"
   ],
   "jsRules": {
     "object-literal-sort-keys": [false]
@@ -68,6 +69,7 @@
     "interface-over-type-literal": [false],
     // Для .tsx двойные кавычки потому что prettier будет форсить их
     // https://github.com/prettier/prettier/pull/126
-    "quotemark": [true, "single", "jsx-double"]
+    "quotemark": [true, "single", "jsx-double"],
+    "readonly-array": true
   }
 }

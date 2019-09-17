@@ -7,27 +7,31 @@ import { Line, Orientation } from '@/components/LinearChart'
 
 import css from './index.css'
 
+/* tslint:disable-next-line:readonly-array */
+type WritableNumberTuple = [number, number] // для d3
+
 export const LineGroup: React.FC<{
   item: Line
   width: number
   height: number
-  valueRange: [number, number]
+  valueRange: readonly [number, number]
   orientation: Orientation
 }> = ({ item, width, height, valueRange, orientation }) => {
-  const lineValueRange = item.valueRange || valueRange
+  const lineValueRange = (item.valueRange || valueRange) as Writeable<typeof valueRange>
   const lineRef = createRef<SVGPathElement>()
   const backgroundRef = createRef<SVGPathElement>()
   const circleRef = createRef<SVGCircleElement>()
   const isHorizontal = orientation === 'horizontal'
 
   useLayoutEffect(() => {
-    const widthRange = [0, width]
-    const heightRange = [height, 0]
+    const widthRange: WritableNumberTuple = [0, width]
+    const heightRange: WritableNumberTuple = [height, 0]
 
     const scaleHeight = d3.scaleLinear()
     const scaleWidth = d3.scaleLinear()
 
-    const itemsRange = [0, item.values.length - 1]
+    const itemValues = item.values as Writeable<typeof item.values>
+    const itemsRange: WritableNumberTuple = [0, itemValues.length - 1]
 
     scaleWidth.domain(isHorizontal ? itemsRange : lineValueRange).range(widthRange)
     scaleHeight.domain(isHorizontal ? lineValueRange : itemsRange).range(heightRange)
@@ -38,7 +42,7 @@ export const LineGroup: React.FC<{
       .y((value, index) => scaleHeight(isHorizontal ? value : index))
 
     d3.select(lineRef.current)
-      .datum(item.values)
+      .datum(itemValues)
       .attr('d', LineBackground)
 
     if (circleRef.current) {
@@ -63,7 +67,7 @@ export const LineGroup: React.FC<{
             .y((_, index) => scaleHeight(index))
 
       d3.select(backgroundRef.current)
-        .datum(item.values)
+        .datum(itemValues)
         .attr('d', AreaForeground)
     }
   })

@@ -10,18 +10,6 @@ import css from './index.css'
 // https://github.com/TypeStrong/ts-loader/issues/751
 export type DashboardState = DashboardState
 
-// TODO: нужно будет расширить enum в соотвествии с типами данных для графиков
-export enum DataType {
-  Chart2D,
-  PieChart,
-}
-
-export type Dataset = {
-  type: DataType
-  name: string
-  data: any
-}
-
 type ConstructorProps = DashboardProps & MenuProps
 
 export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
@@ -37,12 +25,13 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
     onChangeWidgets,
     config,
     datasets,
+    data,
   } = props
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={css.constructor}>
-        <Menu onClear={onClear} onToggleMode={onToggleMode} />
+        <Menu onClear={onClear} onToggleMode={onToggleMode} viewMode={viewMode} />
         <Dashboard
           margin={margin}
           cols={cols}
@@ -53,6 +42,7 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
           dashboard={dashboard}
           onChangeWidgets={onChangeWidgets}
           config={config}
+          data={data}
         />
       </div>
     </DndProvider>

@@ -44,7 +44,7 @@ const summary = [
     factCost: 10,
     ...data,
   },
-]
+] as const
 
 storiesOf('legacy/Cost/CostBlock', module)
   .addDecorator(withSmartKnobs)

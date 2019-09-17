@@ -10,7 +10,7 @@ import css from './index.css'
 
 const statuses = ['danger', 'normal', 'warning'] as const
 export type Status = typeof statuses[number]
-export type Data = number[] | number
+export type Data = readonly number[] | number
 
 type SummaryData = {
   factData?: Data

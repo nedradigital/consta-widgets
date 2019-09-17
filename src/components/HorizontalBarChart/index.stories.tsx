@@ -5,9 +5,9 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { HorizontalBarChart } from '.'
+import { HorizontalBarChart, LineProps } from '.'
 
-const data = [
+const data: readonly LineProps[] = [
   {
     title: 'Геонавигация',
     percent: 100,

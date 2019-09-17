@@ -10,7 +10,7 @@ import css from './index.css'
 type Props = {
   className?: string
   depth?: number
-  elements?: ElementType[]
+  elements?: readonly ElementType[]
   isClickable?: boolean
   onClick?: () => void
 }

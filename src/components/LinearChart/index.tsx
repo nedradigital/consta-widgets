@@ -10,9 +10,9 @@ import { SVGChart } from './components/SVGChart'
 import css from './index.css'
 
 export type Line = {
-  values: number[]
+  values: readonly number[]
   /** Мин/макс значение для конкретной линии (если не указать, вычисляется автоматически) */
-  valueRange?: [number, number]
+  valueRange?: readonly [number, number]
   classNameLine?: string
   color?: string
   background?: {
@@ -39,10 +39,10 @@ type RenderScaleFunc = (props: { minValue: number; maxValue: number }) => React.
 type Props = {
   orientation?: Orientation
   chartDirection?: ChartDirection
-  lines: Line[]
-  legend?: Legend[]
+  lines: readonly Line[]
+  legend?: readonly Legend[]
   /** Свободное место под/над графиком, от 0 до 1 */
-  valuePadding?: [number, number]
+  valuePadding?: readonly [number, number]
   /** Точность округления нижней и верхней границ графика */
   paddingPrecision?: number
   unitName?: string
@@ -52,10 +52,10 @@ type Props = {
 }
 
 export const getValueRange = (
-  lines: Line[],
-  valuePadding: [number, number],
+  lines: readonly Line[],
+  valuePadding: readonly [number, number],
   paddingPrecision: number
-): [number, number] => {
+): readonly [number, number] => {
   const allValues = chain(lines)
     .map('values')
     .flatten()

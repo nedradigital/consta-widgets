@@ -2,12 +2,14 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Dataset } from '../../'
+import { Data, Dataset } from '@/dashboard/types'
+import { removeAt, updateAt } from '@/utils/array'
+
 import { Box, BoxItem } from '../Box'
 
 import css from './index.css'
 
-type Items = BoxItem[][]
+export type Items = ReadonlyArray<ReadonlyArray<BoxItem>>
 
 export type ColumnsItem = {
   columns: Items
@@ -16,60 +18,42 @@ export type ColumnsItem = {
 
 type Props = {
   columns?: Items
-  datasets?: Dataset[]
-  viewMode?: boolean
-  onChange?: (columns: Items) => void
-  data?: any
-  className?: string
-  isPreview?: boolean
+  data: Data
+  datasets: readonly Dataset[]
+  viewMode: boolean
+  onChange: (columns: Items) => void
 }
 
-const defaultColumns = [[], []]
+const defaultColumns: Items = [[], []]
 
 export const Columns: React.FC<Props> = ({
   datasets,
   viewMode,
   onChange,
   data,
-  className,
-  isPreview,
   columns = defaultColumns,
 }) => {
   const addColumn = (type: 'start' | 'end') => {
     switch (type) {
       case 'start':
-        columns.unshift([])
+        onChange([[], ...columns])
         break
       case 'end':
-        columns.push([])
+        onChange([...columns, []])
         break
-    }
-
-    if (onChange) {
-      onChange(columns)
     }
   }
 
-  const changeColumn = (index: number, items: BoxItem[]) => {
-    columns[index] = items
-
-    if (onChange) {
-      onChange(columns)
-    }
+  const changeColumn = (index: number, items: readonly BoxItem[]) => {
+    onChange(updateAt(columns, index, items))
   }
 
   const removeColumn = (index: number) => {
-    const arr = [...columns]
-
-    arr.splice(index, 1)
-
-    if (onChange) {
-      onChange(arr)
-    }
+    onChange(removeAt(columns, index))
   }
 
   return (
-    <div className={classnames(css.main, className, viewMode && css.viewMode)}>
+    <div className={classnames(css.main, viewMode && css.viewMode)}>
       {!viewMode ? (
         <>
           <button type="button" onClick={() => addColumn('start')} className={css.plus}>
@@ -89,12 +73,12 @@ export const Columns: React.FC<Props> = ({
           <Box
             datasets={datasets}
             viewMode={viewMode}
-            onChange={(items: BoxItem[]) => {
+            onChange={(items: readonly BoxItem[]) => {
               changeColumn(index, items)
             }}
             data={data}
-            isPreview={isPreview}
             items={column}
+            isNestedBox
           />
           {columns.length > 2 && !viewMode ? (
             <button

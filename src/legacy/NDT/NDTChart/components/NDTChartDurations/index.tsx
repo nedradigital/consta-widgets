@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 type NDTChartDurationsProps = {
-  durations: number[]
+  durations: readonly number[]
   selectedDuration: number
   maxDuration: number
   height: number

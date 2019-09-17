@@ -1,7 +1,7 @@
-import { castData, castSafeData } from '../index'
+import { castData, castSafeData } from '../'
 
-const planData = [50, 552, 552, 1779, 1779, 1779]
-const factData = [52, 552, 552, 667, 1370, 1557]
+const planData = [50, 552, 552, 1779, 1779, 1779] as const
+const factData = [52, 552, 552, 667, 1370, 1557] as const
 
 describe('castData', () => {
   it('returns clear array, if do not have arguments', () => {

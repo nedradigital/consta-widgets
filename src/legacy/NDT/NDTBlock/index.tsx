@@ -40,7 +40,7 @@ type NDTBlockPropsType = {
   className?: string
   /** Текущий день строительства скважины */
   currentDay?: number
-  npvList?: npvDayType[]
+  npvList?: readonly npvDayType[]
   selectedDay?: number
   setDay?: () => void
   clearDay?: () => void

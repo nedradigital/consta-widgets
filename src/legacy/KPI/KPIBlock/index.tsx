@@ -12,10 +12,10 @@ import css from './index.css'
 type Props = {
   className?: string
   deviation?: number
-  factData?: number[] | number
+  factData?: readonly number[] | number
   factValue?: number
-  legend?: number[]
-  planData?: number[] | number
+  legend?: readonly number[]
+  planData?: readonly number[] | number
   planValue?: number
   status?: Status
   title?: string

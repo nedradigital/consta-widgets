@@ -24,7 +24,7 @@ const geologyIntervals = [
       { name: 'Песч.', value: 85 },
     ],
   },
-]
+] as const
 
 storiesOf('legacy/Sludge/SludgeBlock', module)
   .addDecorator(withKnobs)

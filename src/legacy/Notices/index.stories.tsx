@@ -19,7 +19,7 @@ const notices = [
     startTime: subtractTime(new Date(), 0, 0, 3).getTime(),
     title: 'Вероятность прихвата 60%',
   },
-]
+] as const
 
 storiesOf('legacy/Notices', module)
   .addDecorator(withSmartKnobs)
