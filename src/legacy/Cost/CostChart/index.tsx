@@ -5,7 +5,7 @@ import useDimensions from 'react-use-dimensions'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { LinearChart } from '@/components/LinearChart'
+import { LinearChart } from '@/legacy/LinearChart'
 import { getDurations, getDurationsGrid } from '@/utils/duration'
 
 import css from './index.css'

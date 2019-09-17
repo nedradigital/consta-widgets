@@ -3,8 +3,8 @@ import useDimensions from 'react-use-dimensions'
 
 import classnames from 'classnames'
 
-import { ChartDirection, Line, Orientation } from '@/components/LinearChart'
-import { LineGroup } from '@/components/LinearChart/components/LineGroup'
+import { ChartDirection, Line, Orientation } from '@/legacy/LinearChart'
+import { LineGroup } from '@/legacy/LinearChart/components/LineGroup'
 
 import css from './index.css'
 

@@ -4,7 +4,7 @@ import { useUID } from 'react-uid'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { LinearChart } from '@/components/LinearChart'
+import { LinearChart } from '@/legacy/LinearChart'
 
 import css from './index.css'
 
