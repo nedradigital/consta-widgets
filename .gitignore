@@ -32,6 +32,7 @@ jspm_packages
 # Distribution
 build
 dist
+lib
 
 # Env
 .env

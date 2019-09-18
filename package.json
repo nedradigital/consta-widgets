@@ -1,10 +1,15 @@
 {
-  "name": "tsub_dashboard_constructor",
+  "name": "dashboard-constructor",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "lib/index.js",
   "license": "UNLICENSED",
+  "types": "lib/@types/index.d.ts",
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "build": "NODE_ENV=production node scripts/build.js",
+    "build": "yarn generate-css-types && NODE_ENV=production webpack --config config/webpack/library.webpack.js",
+    "build:watch": "yarn generate-css-types && NODE_ENV=development webpack --config config/webpack/library.webpack.js --watch",
     "storybook": "NODE_ENV=development start-storybook -c config/storybook -p 6006 --ci",
     "storybook:build": "NODE_ENV=production build-storybook -c config/storybook -o build/storybook",
     "lint": "npm-run-all --parallel lint:*",
@@ -132,6 +137,7 @@
     "tslint-react-hooks": "2.1.1",
     "typescript": "3.5.2",
     "webpack": "4.35.2",
+    "webpack-cli": "3.3.9",
     "webpack-merge": "4.2.1"
   },
   "engines": {
