@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDrop } from 'react-dnd'
-import { Layouts, Responsive, WidthProvider } from 'react-grid-layout-tmp-fork'
+import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
 
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 
@@ -10,61 +10,43 @@ import { Box, BoxItem } from '../Box'
 
 import css from './index.css'
 
-const ResponsiveReactGridLayout = WidthProvider(Responsive)
+const GridLayout = WidthProvider(ReactGridLayout)
 
-type DashboardBox = {
-  name: string
-  x?: number
-  y?: number
-}
+export type Config = { [key: string]: readonly BoxItem[] }
 
 export type DashboardState = {
-  boxes: readonly DashboardBox[]
-  layouts: Layouts
+  boxes: readonly Layout[]
+  config: Config
 }
 
 export type DashboardProps = {
   margin?: readonly [number, number]
-  cols?: { [P: string]: number }
-  breakpoints?: { [P: string]: number }
+  cols?: number
   datasets: readonly Dataset[]
-  data: Data
   viewMode: boolean
   onChange: (dashboard: DashboardState) => void
   dashboard: DashboardState
-  onChangeWidgets: (name: string, items: readonly BoxItem[]) => void
-  config: { [key: string]: readonly BoxItem[] }
+  data: Data
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
-  const {
-    margin,
-    cols,
-    breakpoints,
-    viewMode,
-    onChange,
-    dashboard,
-    onChangeWidgets,
-    config,
-    data,
-    datasets,
-  } = props
-  const { boxes, layouts } = dashboard
-  // TODO дёрнуть removeName при удалении бокса
-  const { getUniqueName } = useUniqueNameGenerator(boxes.map(box => box.name))
+  const { margin, cols, viewMode, onChange, dashboard, datasets, data } = props
+  const { boxes, config } = dashboard
+
+  const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
   const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
 
   const [, drop] = useDrop({
     accept: ItemTypes.BOX,
-    drop: (item: any) => {
+    drop: () => {
       dropPromise.then(({ x, y }: { x: number; y: number }) => {
-        const newBoxes: readonly DashboardBox[] = [
+        const newBoxes: readonly Layout[] = [
           ...boxes,
-          { ...item, name: getUniqueName(item.name), x, y },
+          { i: getUniqueName(ItemTypes.BOX), x, y, w: 1, h: 1 },
         ]
 
-        onChange({ boxes: newBoxes, layouts })
+        onChange({ boxes: newBoxes, config })
       })
     },
     collect: monitor => ({
@@ -77,43 +59,66 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     setDropPromise(new Promise(res => res(params)))
   }
 
+  const onResizeStop = (value: readonly Layout[]) => {
+    onChange({ boxes: value, config })
+  }
+
+  const removeBox = (name: string) => {
+    const { [name]: value, ...restConfig } = config
+
+    removeName(name)
+    onChange({
+      boxes: boxes.filter(item => item.i !== name),
+      config: restConfig,
+    })
+  }
+
+  const changeBox = (name: string, items: readonly BoxItem[]) => {
+    onChange({
+      boxes,
+      config: {
+        ...config,
+        [name]: items,
+      },
+    })
+  }
+
   return (
     <div ref={drop} className={css.dashboard}>
-      <ResponsiveReactGridLayout
+      <GridLayout
         margin={margin as /* tslint:disable-line:readonly-array */ [number, number]}
         cols={cols}
-        breakpoints={breakpoints}
         className="layout"
-        layouts={layouts}
         measureBeforeMount
         compactType={null}
         preventCollision
-        isDroppable={true}
+        isDroppable={!viewMode}
+        isDraggable={!viewMode}
+        isResizable={!viewMode}
         onDrop={onDrop}
         droppingPositionShift={{ x: -110, y: -80 }}
-        onLayoutChange={(_, newLayoutsState) => {
-          onChange({ boxes, layouts: newLayoutsState })
-        }}
+        onResizeStop={onResizeStop}
       >
         {boxes.map(box => (
-          <div
-            key={box.name}
-            data-grid={{ x: box.x, y: box.y, w: 1, h: 1 }}
-            className={css.widgetWrapper}
-          >
+          <div key={box.i} data-grid={{ x: box.x, y: box.y, w: box.w, h: box.h }}>
             <Box
-              name={box.name}
               data={data}
               viewMode={viewMode}
-              onChange={items => {
-                onChangeWidgets(box.name, items)
-              }}
-              items={config[box.name]}
+              onChange={items => changeBox(box.i!, items)}
+              items={config[box.i!]}
               datasets={datasets}
             />
+            {!viewMode ? (
+              <button
+                className={css.removeBox}
+                type="button"
+                onClick={() => removeBox(box.i!)}
+                children="⚔"
+              />
+            ) : null}
           </div>
         ))}
-      </ResponsiveReactGridLayout>
+      </GridLayout>
     </div>
   )
 }

@@ -16,14 +16,11 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
   const {
     margin,
     cols,
-    breakpoints,
     onChange,
     dashboard,
     onClear,
     onToggleMode,
     viewMode,
-    onChangeWidgets,
-    config,
     datasets,
     data,
   } = props
@@ -36,12 +33,9 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
           margin={margin}
           cols={cols}
           datasets={datasets}
-          breakpoints={breakpoints}
           viewMode={viewMode}
           onChange={onChange}
           dashboard={dashboard}
-          onChangeWidgets={onChangeWidgets}
-          config={config}
           data={data}
         />
       </div>

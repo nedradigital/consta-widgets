@@ -17,7 +17,6 @@ export const Menu: React.FunctionComponent<MenuProps> = ({ viewMode, onToggleMod
         isPreview
         viewMode
         className={css.widgetWrapper}
-        name="box"
         datasets={[]}
         onChange={() => {
           /**/

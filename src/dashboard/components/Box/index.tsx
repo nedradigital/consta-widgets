@@ -23,11 +23,11 @@ type WidgetItem = {
 export type BoxItem = WidgetItem | ColumnsItem
 
 type Props = {
-  name?: string
   datasets: readonly Dataset[]
   viewMode: boolean
   data: Data
   className?: string
+  /** Флаг для отображения бокса в меню */
   isPreview?: boolean
   items?: readonly BoxItem[]
   onChange: (items: readonly BoxItem[]) => void
@@ -110,7 +110,6 @@ export const Box: React.FC<Props> = ({
   data,
   isPreview,
   className,
-  name,
   datasets,
   isNestedBox,
 }) => {
@@ -173,7 +172,7 @@ export const Box: React.FC<Props> = ({
   }
 
   const [{ opacity }, dragRef] = useDrag({
-    item: { type: ItemTypes.BOX, name },
+    item: { type: ItemTypes.BOX },
     collect: monitor => ({
       opacity: monitor.isDragging() ? 0.5 : 1,
     }),
