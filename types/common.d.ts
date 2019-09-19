@@ -38,6 +38,10 @@ declare module 'react-grid-layout-tmp-fork' {
   export { Layout, Responsive, WidthProvider }
 }
 
+declare module '@gaz/utils' {
+  export const calcSize: (size: number) => string
+}
+
 declare module '@nekitk/storybook-addon-smart-knobs' {
   import { StoryDecorator } from '@storybook/react'
 
