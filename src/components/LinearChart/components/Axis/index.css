@@ -1,0 +1,50 @@
+@custom-selector :--tick-line :global(.tick) > line;
+
+.main {
+  --grid-line-color: rgba(213, 221, 226, 0.5);
+}
+
+.grid {
+  color: var(--grid-line-color);
+
+  & > :global(.domain) {
+    stroke: none;
+  }
+
+  & > :global(.tick) {
+    stroke-dasharray: 1, 3;
+  }
+}
+
+.labels {
+  color: var(--text-color-70);
+  font-size: 11px;
+
+  & > :global(.domain) {
+    stroke: none;
+  }
+
+  & > :--tick-line {
+    color: var(--grid-line-color);
+  }
+
+  &_x&_bottom > :--tick-line {
+    transform: translateY(9px);
+  }
+
+  &_x&_top > :--tick-line {
+    transform: translateY(-9px);
+  }
+
+  &_y&_left > :--tick-line {
+    transform: translateX(-10px);
+  }
+
+  &_y&_right > :--tick-line {
+    transform: translateX(10px);
+  }
+}
+
+.axisLine {
+  stroke-dasharray: none;
+}
