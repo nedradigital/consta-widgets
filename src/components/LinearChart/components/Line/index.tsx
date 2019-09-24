@@ -51,6 +51,8 @@ export const Line: React.FC<Props> = ({
         .attr('cx', d => scaleX(d.x))
         .attr('cy', d => scaleY(d.y))
         .attr('r', dotRadius)
+    } else {
+      d3.select(dotsRef.current).html('')
     }
   })
 
