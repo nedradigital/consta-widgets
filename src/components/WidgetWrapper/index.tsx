@@ -7,9 +7,13 @@ import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { Dataset } from '@/dashboard/types'
 import { OnChangeParam, WithDataset } from '@/utils/WidgetFactory'
 
+import { MarginSettings, Size, sizeValues } from './components/MarginSettings'
 import css from './index.css'
 
-type WrapperParams = WithDataset<{}>
+export type WrapperParams = WithDataset<{
+  marginTop?: Size
+  marginRight?: Size
+}>
 
 type Props = {
   children: React.ReactNode
@@ -49,7 +53,13 @@ export const WidgetWrapper: React.FC<Props> = ({
   }, [showSettings])
 
   return (
-    <div ref={ref}>
+    <div
+      style={{
+        marginTop: params.marginTop && sizeValues[params.marginTop],
+        marginRight: params.marginRight && sizeValues[params.marginRight],
+      }}
+      ref={ref}
+    >
       {children}
       {showSettings &&
         portalEl &&
@@ -71,6 +81,7 @@ export const WidgetWrapper: React.FC<Props> = ({
                   </select>
                 </WidgetSettingsItem>
               ) : null}
+              <MarginSettings params={params} onChangeParam={onChangeParam} />
               {additionalSettings}
             </div>
           </ClickOutHandler>,
