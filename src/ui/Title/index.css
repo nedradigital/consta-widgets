@@ -1,17 +1,35 @@
 .title {
   color: var(--text-color);
-  margin-bottom: 12px;
+}
+
+.size3XL {
+  font-size: 32px;
+  line-height: 42px;
+}
+
+.sizeXL {
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.sizeS {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.sizeXS {
+  font-size: 11px;
+  line-height: 15px;
+}
+
+.secondary {
+  color: rgb(246, 251, 253, 0.7);
+}
+
+.bold {
   font-weight: bold;
 }
 
-.small {
-  font-size: 13px;
-  line-height: 18px;
+.uppercase {
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.big {
-  font-size: 32px;
-  line-height: 42px;
 }

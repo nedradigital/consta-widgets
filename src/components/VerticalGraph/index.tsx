@@ -30,7 +30,7 @@ export const VerticalGraph: React.FC<Props> = ({
 
   return (
     <div className={css.main}>
-      <Title size={'small'} className={css.title}>
+      <Title size={'s'} className={css.title}>
         {title}
       </Title>
 
@@ -61,7 +61,7 @@ export const VerticalGraph: React.FC<Props> = ({
           </svg>
           <div className={css.averageText}>
             <div className={css.averageName}>медианное</div>
-            <Title size={'big'} className={css.averageValue}>
+            <Title size={'3xl'} className={css.averageValue}>
               {_.round(averageValue)} м
             </Title>
           </div>
