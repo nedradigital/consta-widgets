@@ -1,4 +1,4 @@
-import { getValueRange, Line } from '../'
+import { getValueRange, Line } from '../index'
 
 describe('getValueRange', () => {
   describe('single line', () => {

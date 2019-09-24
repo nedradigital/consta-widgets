@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Legend, Line } from '@/components/LinearChart'
+import { Legend, Line } from '@/legacy/LinearChart'
 
 import css from './index.css'
 

@@ -3,7 +3,7 @@ import React, { createRef, useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { Line, Orientation } from '@/components/LinearChart'
+import { Line, Orientation } from '@/legacy/LinearChart'
 
 import css from './index.css'
 

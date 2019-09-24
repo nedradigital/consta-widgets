@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 
-import { LinearChart } from '@/components/LinearChart'
+import { LinearChart } from '@/legacy/LinearChart'
 import { Title } from '@/ui/Title'
 import { getAverageWeightedPercent } from '@/utils/math'
 
