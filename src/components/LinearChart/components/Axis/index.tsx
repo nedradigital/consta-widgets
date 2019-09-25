@@ -21,6 +21,13 @@ export type GridConfig = {
   y: GridConfigItem<YLabelsPosition>
 }
 
+enum AxisDirections {
+  top = 'axisTop',
+  bottom = 'axisBottom',
+  left = 'axisLeft',
+  right = 'axisRight',
+}
+
 type Props = {
   width: number
   height: number
@@ -50,25 +57,81 @@ export const Axis: React.FC<Props> = ({
 
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
+  const showXGrid = xGridTicks || xGuide
+  const showYGrid = yGridTicks || yGuide
+
+  const labelsAxis = [
+    {
+      getEl: () => xLabelsRef.current,
+      visible: Boolean(xLabelsPos),
+      direction: xOnBottom ? AxisDirections.bottom : AxisDirections.top,
+      scale: scaleX,
+      ticks: xLabelTicks,
+      classes: classnames(
+        css.labels,
+        css.labels_x,
+        xLabelsPos &&
+          {
+            bottom: css.labels_bottom,
+            top: css.labels_top,
+          }[xLabelsPos]
+      ),
+      transform: xOnBottom ? `translateY(${height}px)` : '',
+    },
+    {
+      getEl: () => yLabelsRef.current,
+      visible: Boolean(yLabelsPos),
+      direction: yOnLeft ? AxisDirections.left : AxisDirections.right,
+      scale: scaleY,
+      ticks: yLabelTicks,
+      classes: classnames(
+        css.labels,
+        css.labels_y,
+        yLabelsPos &&
+          {
+            left: css.labels_left,
+            right: css.labels_right,
+          }[yLabelsPos]
+      ),
+      transform: yOnLeft ? '' : `translateX(${width}px)`,
+    },
+  ] as const
+
+  // d3 некорректно обновляет направление оси, поэтому приходится удалять ось и пересоздавать заново
+  // @see https://github.com/d3/d3-axis/issues/45
+  useLayoutEffect(() => {
+    labelsAxis.forEach(labels => {
+      const labelsSelection = d3.select(labels.getEl())
+
+      labelsSelection.select('g').remove()
+
+      if (labels.visible) {
+        labelsSelection.append('g')
+      }
+    })
+  }, [xLabelsPos, yLabelsPos])
 
   useLayoutEffect(() => {
     // Labels
-    if (xLabelsPos) {
-      d3.select(xLabelsRef.current!).call(
-        d3[xOnBottom ? 'axisBottom' : 'axisTop'](scaleX)
-          .ticks(xLabelTicks)
-          .tickSizeInner(4)
+    labelsAxis.forEach(labels => {
+      if (labels.visible) {
+        const axisSelection = d3.select(labels.getEl()).select('g') as d3.Selection<
+          SVGGElement,
+          unknown,
+          null,
+          undefined
+        >
+        const axis = d3[labels.direction](labels.scale)
+          .ticks(labels.ticks)
+          .tickSize(4)
           .tickPadding(TICK_PADDING)
-      )
-    }
-    if (yLabelsPos) {
-      d3.select(yLabelsRef.current!).call(
-        d3[yOnLeft ? 'axisLeft' : 'axisRight'](scaleY)
-          .ticks(yLabelTicks)
-          .tickSizeInner(4)
-          .tickPadding(TICK_PADDING)
-      )
-    }
+
+        axisSelection
+          .attr('class', labels.classes)
+          .style('transform', labels.transform)
+          .call(axis)
+      }
+    })
 
     // Grid lines
     const xGridBase = d3
@@ -80,27 +143,25 @@ export const Axis: React.FC<Props> = ({
       .tickSize(-width)
       .tickFormat(() => '')
     const grids = [
-      xGridTicks || xGuide
-        ? {
-            el: xGridRef.current!,
-            axis: xGridTicks ? xGridBase.ticks(xGridTicks) : xGridBase.tickValues([0]),
-          }
-        : null,
-      yGridTicks || yGuide
-        ? {
-            el: yGridRef.current!,
-            axis: yGridTicks ? yGridBase.ticks(yGridTicks) : yGridBase.tickValues([0]),
-          }
-        : null,
+      {
+        el: xGridRef.current,
+        axis: xGridTicks ? xGridBase.ticks(xGridTicks) : xGridBase.tickValues([0]),
+        withGuide: xGuide,
+      },
+      {
+        el: yGridRef.current,
+        axis: yGridTicks ? yGridBase.ticks(yGridTicks) : yGridBase.tickValues([0]),
+        withGuide: yGuide,
+      },
     ] as const
     grids.forEach(grid => {
-      if (grid) {
+      if (grid.el) {
         d3.select(grid.el)
           .call(grid.axis)
           .selectAll('.tick')
           .filter(d => d === 0)
           .select('line')
-          .attr('class', css.axisLine)
+          .attr('class', grid.withGuide ? css.axisLine : '')
       }
     })
   })
@@ -115,37 +176,12 @@ export const Axis: React.FC<Props> = ({
   return (
     <g className={css.main}>
       <g clipPath={lineClipPath}>
-        <g className={css.grid} ref={xGridRef} />
-        <g className={css.grid} ref={yGridRef} />
+        {showXGrid && <g className={css.grid} ref={xGridRef} />}
+        {showYGrid && <g className={css.grid} ref={yGridRef} />}
       </g>
 
-      <g
-        className={classnames(
-          css.labels,
-          css.labels_x,
-          xLabelsPos &&
-            {
-              bottom: css.labels_bottom,
-              top: css.labels_top,
-            }[xLabelsPos]
-        )}
-        ref={xLabelsRef}
-        style={xOnBottom ? { transform: `translateY(${height}px)` } : undefined}
-      />
-
-      <g
-        className={classnames(
-          css.labels,
-          css.labels_y,
-          yLabelsPos &&
-            {
-              left: css.labels_left,
-              right: css.labels_right,
-            }[yLabelsPos]
-        )}
-        ref={yLabelsRef}
-        style={yOnLeft ? undefined : { transform: `translateX(${width}px)` }}
-      />
+      <g ref={xLabelsRef} />
+      <g ref={yLabelsRef} />
     </g>
   )
 }
