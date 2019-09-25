@@ -1,5 +1,5 @@
 /* tslint:disable:readonly-array */
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import classnames from 'classnames'
 import * as d3 from 'd3'
@@ -22,24 +22,19 @@ const MIN_ZOOM = 1
 const MAX_ZOOM = ZOOM_STEP ** 3
 
 export const Zoom: React.FC<Props> = ({ xRange, yRange, xDomain, originalXDomain, onZoom }) => {
-  const zoomRef = React.createRef<HTMLDivElement>()
+  const zoomRef = useRef({} as Element) // Фэйковый элемент для анимации зума
   const [zoom, setZoom] = useState(1)
   const zoomBehaviorRef = React.useRef<d3.ZoomBehavior<Element, unknown>>()
+  const dragHandleRef = React.createRef<HTMLDivElement>()
+  const dragPosition = useRef(0)
 
-  const zoomHandleSize =
+  const dragHandleSize =
     ((xDomain[1] - xDomain[0]) / (originalXDomain[1] - originalXDomain[0])) * 100
-  const zoomHandlePos = (xDomain[0] / (originalXDomain[1] - originalXDomain[0])) * 100
+  const dragHandlePos = (xDomain[0] / (originalXDomain[1] - originalXDomain[0])) * 100
 
   const changeZoom = (modifier: number) => {
     setZoom(prevZoom => _.clamp(prevZoom * modifier, MIN_ZOOM, MAX_ZOOM))
   }
-
-  useEffect(() => {
-    d3.select(zoomRef.current as Element)
-      .transition()
-      .duration(TRANSITION_DURATIONS.ZOOM)
-      .call(zoomBehaviorRef.current!.scaleTo, zoom)
-  }, [zoom])
 
   useLayoutEffect(() => {
     const zoomExtent = [[xRange[0], yRange[0]], [xRange[1], yRange[1]]] as [
@@ -52,20 +47,38 @@ export const Zoom: React.FC<Props> = ({ xRange, yRange, xDomain, originalXDomain
       .extent(zoomExtent)
       .translateExtent(zoomExtent)
       .on('zoom', onZoom)
-    d3.select(zoomRef.current as Element)
-      .call(zoomBehaviorRef.current)
-      .on('wheel.zoom', null)
-      .on('dblclick.zoom', null)
   })
+
+  useLayoutEffect(() => {
+    d3.select(zoomRef.current)
+      .transition()
+      .duration(TRANSITION_DURATIONS.ZOOM)
+      .call(zoomBehaviorRef.current!.scaleTo, zoom)
+  }, [zoom])
+
+  // Drag
+  useLayoutEffect(() => {
+    const drag = d3
+      .drag()
+      .on('start', () => {
+        dragPosition.current = d3.event.x
+      })
+      .on('drag', () => {
+        const dragDelta = dragPosition.current - d3.event.x
+        dragPosition.current = d3.event.x
+        d3.select(zoomRef.current).call(zoomBehaviorRef.current!.translateBy, dragDelta, 0)
+      })
+    d3.select(dragHandleRef.current as Element).call(drag)
+  }, [])
 
   return (
     <div className={css.zoom}>
       <div
-        className={classnames(css.zoomHandle, zoomHandleSize >= 100 && css.isHidden)}
-        ref={zoomRef}
+        className={classnames(css.dragHandle, dragHandleSize >= 100 && css.isHidden)}
+        ref={dragHandleRef}
         style={{
-          right: `${zoomHandlePos}%`,
-          width: `${zoomHandleSize}%`,
+          left: `${dragHandlePos}%`,
+          width: `${dragHandleSize}%`,
         }}
       />
       <div className={css.buttons}>

@@ -30,7 +30,6 @@ type Props = {
 type State = {
   xDomain: NumberRange
   yDomain: NumberRange
-  zoom: number
   width: number
   height: number
   paddingX: number
@@ -85,7 +84,6 @@ export class LinearChart extends React.Component<Props, State> {
   state: State = {
     xDomain: [0, 0],
     yDomain: [0, 0],
-    zoom: 1,
     width: 0,
     height: 0,
     paddingX: 0,
