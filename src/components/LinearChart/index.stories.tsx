@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { LinearChart } from './index'
+import { LinearChart } from '.'
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs)
