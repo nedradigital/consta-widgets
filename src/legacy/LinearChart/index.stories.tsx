@@ -4,13 +4,13 @@ import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { boolean, number } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { GridLines } from '@/components/GridLines'
-import { HorizontalTicks } from '@/components/HorizontalTicks'
-import { VerticalTicks } from '@/components/VerticalTicks'
+import { GridLines } from '@/legacy/GridLines'
+import { HorizontalTicks } from '@/legacy/HorizontalTicks'
+import { VerticalTicks } from '@/legacy/VerticalTicks'
 import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { Legend, LinearChart } from './index'
+import { Legend, LinearChart } from '.'
 
 const size = 12 * 4
 

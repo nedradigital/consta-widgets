@@ -7,7 +7,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { HorizontalTicks } from '.'
 
-storiesOf('components/HorizontalTicks', module)
+storiesOf('legacy/HorizontalTicks', module)
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .add('array of labels', () => (
     <div>

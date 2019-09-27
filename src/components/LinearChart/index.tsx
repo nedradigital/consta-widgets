@@ -48,15 +48,34 @@ const LINE_PADDING_Y = 0.055
 const getIndexWithFallbackToDefault = (index: number, def: number): number =>
   index < 0 ? def : index
 
-const getXDomain = (items: Item[]) => d3.extent(items, v => v.x) as NumberRange
-const getYDomain = (items: Item[]) => d3.extent(items, v => v.y) as NumberRange
+const padDomain = (
+  domain: NumberRange,
+  paddingStart?: number,
+  paddingEnd?: number
+): NumberRange => {
+  const [start, end] = domain
+  const delta = domain[1] - domain[0]
 
-const getXRange = (width: number) => [0, width * (1 - LINE_PADDING_X) + 1] as NumberRange
+  return [
+    paddingStart ? start - paddingStart * delta : start,
+    paddingEnd ? end + paddingEnd * delta : end,
+  ]
+}
+const getXDomain = (items: Item[]): NumberRange => {
+  const domain = d3.extent(items, v => v.x) as NumberRange
+  return padDomain(domain, 0, LINE_PADDING_X)
+}
+const getYDomain = (items: Item[]): NumberRange => {
+  const domain = d3.extent(items, v => v.y) as NumberRange
+  return padDomain(domain, 0, LINE_PADDING_Y)
+}
+
+const getXRange = (width: number) => [0, width] as NumberRange
 const getYRange = (height: number) =>
   [
     // Чтобы нарисовался гридлайн на нижней оси
     height - 1,
-    height * LINE_PADDING_Y,
+    0,
   ] as NumberRange
 
 const getXScale = (domain: NumberRange, width: number) =>
