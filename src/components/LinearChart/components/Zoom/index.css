@@ -1,15 +1,13 @@
 @custom-selector :--main .zoom;
+@custom-selector :--horizontal :--main.isHorizontal;
+@custom-selector :--vertical :--main.isVertical;
 
 :--main {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
 }
 
 .dragHandle {
   position: absolute;
-  top: 9px;
-  height: 4px;
 
   background: #d5dde2;
   opacity: 0.2;
@@ -17,7 +15,15 @@
 
   cursor: grab;
 
-  transition: opacity 0.15s ease-out;
+  transition: opacity var(--fast-transition);
+
+  @nest :--vertical & {
+    width: 4px;
+  }
+
+  @nest :--horizontal & {
+    height: 4px;
+  }
 
   &.isHidden {
     opacity: 0;
@@ -43,31 +49,110 @@
 
 .buttons {
   position: absolute;
-  bottom: 0;
-  right: 8px;
+  display: flex;
 
-  color: var(--text-color-70);
-  border: 1px solid currentColor;
-  background: #02273b;
-  border-radius: 2px;
+  @nest :--horizontal & {
+    bottom: 0;
+    right: 8px;
+  }
+
+  @nest :--vertical & {
+    bottom: 0;
+    left: 0;
+    flex-direction: column;
+  }
 
   @nest :--main:not(:hover) & {
     display: none;
   }
 }
 
-.button {
-  cursor: pointer;
-  line-height: 14px;
-  width: 14px;
-  font-size: 13px;
+.buttonGroup {
+  display: flex;
+  background: #02273b;
 
-  &:hover {
-    color: var(--text-color);
-    background: rgba(86, 185, 242, 0.3);
+  @nest :--horizontal & {
+    bottom: 0;
+    right: 8px;
+  }
+
+  @nest :--vertical & {
+    flex-direction: column-reverse;
   }
 
   & + & {
-    border-left: inherit;
+    @nest :--horizontal & {
+      margin-left: 4px;
+    }
+
+    @nest :--vertical & {
+      margin-top: 4px;
+    }
   }
+}
+
+.button {
+  --button-size: 14px;
+  --button-radius: 2px;
+
+  font-size: 13px;
+  line-height: var(--button-size);
+  width: var(--button-size);
+  box-sizing: content-box;
+
+  color: var(--text-color-70);
+  border: 1px solid currentColor;
+
+  transition: color var(--fast-transition);
+
+  &:first-child {
+    @nest :--horizontal & {
+      border-top-left-radius: var(--button-radius);
+      border-bottom-left-radius: var(--button-radius);
+    }
+
+    @nest :--vertical & {
+      border-bottom-left-radius: var(--button-radius);
+      border-bottom-right-radius: var(--button-radius);
+    }
+  }
+
+  &:last-child {
+    @nest :--horizontal & {
+      border-top-right-radius: var(--button-radius);
+      border-bottom-right-radius: var(--button-radius);
+    }
+
+    @nest :--vertical & {
+      border-top-left-radius: var(--button-radius);
+      border-top-right-radius: var(--button-radius);
+    }
+  }
+
+  & + & {
+    @nest :--horizontal & {
+      margin-left: -1px;
+    }
+
+    @nest :--vertical & {
+      margin-bottom: -1px;
+    }
+  }
+
+  &:disabled {
+    color: var(--text-color-semi);
+  }
+
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--text-color);
+      background: rgba(86, 185, 242, 0.3);
+    }
+  }
+}
+
+.resetButton {
+  font-size: 9px;
 }

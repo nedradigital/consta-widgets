@@ -18,13 +18,12 @@ export type Line = {
 }
 export type Item = { x: number; y: number }
 export type NumberRange = [number, number]
-export type XLabelsPosition = 'top' | 'bottom'
-export type YLabelsPosition = 'left' | 'right'
 
 type Props = {
   lines: Line[]
   gridConfig: GridConfig
   withZoom?: boolean
+  isVertical?: boolean
 }
 
 type State = {
@@ -42,8 +41,21 @@ export const TRANSITION_DURATIONS = {
 }
 
 const DOT_SIZE = 5
-const LINE_PADDING_X = 0.06
-const LINE_PADDING_Y = 0.055
+
+const domainPaddings = {
+  horizontal: {
+    top: 0.055,
+    right: 0.06,
+    bottom: 0,
+    left: 0,
+  },
+  vertical: {
+    top: 0.04,
+    bottom: 0.04,
+    right: 0.06,
+    left: 0.06,
+  },
+}
 
 const getIndexWithFallbackToDefault = (index: number, def: number): number =>
   index < 0 ? def : index
@@ -60,14 +72,6 @@ const padDomain = (
     paddingStart ? start - paddingStart * delta : start,
     paddingEnd ? end + paddingEnd * delta : end,
   ]
-}
-const getXDomain = (items: Item[]): NumberRange => {
-  const domain = d3.extent(items, v => v.x) as NumberRange
-  return padDomain(domain, 0, LINE_PADDING_X)
-}
-const getYDomain = (items: Item[]): NumberRange => {
-  const domain = d3.extent(items, v => v.y) as NumberRange
-  return padDomain(domain, 0, LINE_PADDING_Y)
 }
 
 const getXRange = (width: number) => [0, width] as NumberRange
@@ -94,7 +98,7 @@ export class LinearChart extends React.Component<Props, State> {
 
   // d3 ограничивает по 1 анимации на элемент, поэтому создаём фэйковые элементы для твинов стэйта
   paddingTransitionEl = {} as Element
-  yDomainTransitionEl = {} as Element
+  secondaryDomainTransitionEl = {} as Element
 
   uid = uid(this)
   lineClipId = `line_clipPath_${this.uid}`
@@ -109,7 +113,7 @@ export class LinearChart extends React.Component<Props, State> {
     paddingY: 0,
   }
 
-  targetYDomain = this.state.yDomain
+  targetSecondaryDomain = this.state.xDomain
   targetPaddings = {
     paddingX: this.state.paddingX,
     paddingY: this.state.paddingY,
@@ -125,10 +129,10 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines },
+      props: { lines, isVertical },
     } = this
 
-    if (lines !== prevProps.lines) {
+    if (lines !== prevProps.lines || isVertical !== prevProps.isVertical) {
       this.updateDomains()
     }
   }
@@ -140,17 +144,19 @@ export class LinearChart extends React.Component<Props, State> {
   render() {
     const {
       props: {
-        lines,
         gridConfig,
         gridConfig: {
           x: { labels: xLabelsPos },
           y: { labels: yLabelsPos },
         },
         withZoom,
+        isVertical,
       },
       state: { paddingX, paddingY, xDomain, yDomain },
     } = this
     const { svgWidth, svgHeight } = this.getSvgSize()
+    const { main: mainAxis } = this.getAxis()
+
     const lineClipPath = `url(#${this.lineClipId})`
     const scaleX = getXScale(xDomain, svgWidth)
     const scaleY = getYScale(yDomain, svgHeight)
@@ -195,7 +201,7 @@ export class LinearChart extends React.Component<Props, State> {
             onAxisSizeChange={this.onAxisSizeChange}
           />
 
-          {lines.map(line => (
+          {this.getLines().map(line => (
             <LineComponent
               key={line.color}
               values={line.values}
@@ -210,28 +216,60 @@ export class LinearChart extends React.Component<Props, State> {
         </svg>
 
         {withZoom && (
-          <div
-            className={css.zoom}
-            style={{
-              ...(xOnBottom ? { bottom: 0 } : { top: 0 }),
-              ...(yOnLeft ? { left: paddingX } : { right: paddingX }),
-              height: paddingY,
-            }}
-          >
-            <Zoom
-              xRange={getXRange(svgWidth)}
-              yRange={getYRange(svgHeight)}
-              xDomain={xDomain}
-              originalXDomain={getXDomain(this.getAllValues())}
-              onZoom={this.onZoom}
-            />
-          </div>
+          <Zoom
+            isVertical={Boolean(isVertical)}
+            xRange={getXRange(svgWidth)}
+            yRange={getYRange(svgHeight)}
+            paddingX={paddingX}
+            paddingY={paddingY}
+            xLabelsPos={xLabelsPos}
+            yLabelsPos={yLabelsPos}
+            domain={mainAxis.currentDomain}
+            originalDomain={mainAxis.getDomain(this.getAllValues())}
+            onZoom={this.onZoom}
+          />
         )}
       </div>
     )
   }
 
-  getAllValues = (): Item[] => _.flatten(this.props.lines.map(l => l.values))
+  getXDomain = (items: Item[]): NumberRange => {
+    const { isVertical } = this.props
+    const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const domain = d3.extent(items, v => v.x) as NumberRange
+    return padDomain(domain, left, right)
+  }
+
+  getYDomain = (items: Item[]): NumberRange => {
+    const { isVertical } = this.props
+    const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const domain = d3.extent(items, v => v.y)
+    return padDomain(
+      (isVertical
+        ? domain.reverse() // Чтобы 0 был сверху
+        : domain) as NumberRange,
+      bottom,
+      top
+    )
+  }
+
+  getLines = (): Line[] => {
+    const { lines, isVertical } = this.props
+
+    return isVertical
+      ? lines.map(line => ({
+          ...line,
+          values: _.sortBy(
+            line.values.map(v => ({
+              x: v.y,
+              y: v.x,
+            })),
+            'y'
+          ),
+        }))
+      : lines
+  }
+  getAllValues = (): Item[] => _.flatten(this.getLines().map(l => l.values))
 
   getSvgSize = () => {
     const {
@@ -246,8 +284,8 @@ export class LinearChart extends React.Component<Props, State> {
 
   updateDomains() {
     this.setState({
-      xDomain: getXDomain(this.getAllValues()),
-      yDomain: getYDomain(this.getAllValues()),
+      xDomain: this.getXDomain(this.getAllValues()),
+      yDomain: this.getYDomain(this.getAllValues()),
     })
   }
 
@@ -288,52 +326,101 @@ export class LinearChart extends React.Component<Props, State> {
     }
   }
 
-  onZoom = () => {
+  getAxis = () => {
     const {
-      props: { lines },
+      state: { xDomain, yDomain },
+      props: { isVertical },
     } = this
-    const { svgWidth } = this.getSvgSize()
+    const { svgWidth, svgHeight } = this.getSvgSize()
+    const setXDomain = (domain: NumberRange) => this.setState({ xDomain: domain })
+    const setYDomain = (domain: NumberRange) => this.setState({ yDomain: domain })
 
-    const originalXDomain = getXDomain(this.getAllValues())
-    const originalScaleX = getXScale(originalXDomain, svgWidth)
-    const newX = d3.event.transform.rescaleX(originalScaleX)
-    const newXDomain = newX.domain()
+    return isVertical
+      ? {
+          main: {
+            currentDomain: yDomain,
+            getDomain: this.getYDomain,
+            setDomain: setYDomain,
+            getScale: getYScale,
+            rescale: 'rescaleY',
+            getValue: (v: Item) => v.y,
+            size: svgHeight,
+          },
+          secondary: {
+            currentDomain: xDomain,
+            getDomain: this.getXDomain,
+            setDomain: setXDomain,
+          },
+        }
+      : {
+          main: {
+            currentDomain: xDomain,
+            getDomain: this.getXDomain,
+            setDomain: setXDomain,
+            getScale: getXScale,
+            rescale: 'rescaleX',
+            getValue: (v: Item) => v.x,
+            size: svgWidth,
+          },
+          secondary: {
+            currentDomain: yDomain,
+            getDomain: this.getYDomain,
+            setDomain: setYDomain,
+          },
+        }
+  }
 
-    if (_.isEqual(this.state.xDomain, newXDomain)) {
+  onZoom = () => {
+    const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
+
+    const originalMainDomain = mainAxis.getDomain(this.getAllValues())
+    const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
+    const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
+    const newMainDomain = newMainScale.domain()
+
+    if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
       return
     }
 
-    this.setState({ xDomain: newXDomain })
+    mainAxis.setDomain(newMainDomain)
 
-    const lineDomains = lines.map(({ values }) => {
-      const xRangeIndexes = [
-        getIndexWithFallbackToDefault(_.findLastIndex(values, v => v.x <= newXDomain[0]), 0),
+    // Значения в домене не всегда идут от меньшего к большему: у вертикального графика домен перевёрнут, чтобы 0 был наверху графика
+    const domainMin = Math.min(...newMainDomain)
+    const domainMax = Math.max(...newMainDomain)
+
+    const lineDomains = this.getLines().map(({ values }) => {
+      const zoomRangeIndexes = [
         getIndexWithFallbackToDefault(
-          _.findIndex(values, v => v.x >= newXDomain[1]),
+          _.findLastIndex(values, v => mainAxis.getValue(v) <= domainMin),
+          0
+        ),
+        getIndexWithFallbackToDefault(
+          _.findIndex(values, v => mainAxis.getValue(v) >= domainMax),
           values.length - 1
         ),
-      ]
-      const valuesToCalculateY = values.slice(xRangeIndexes[0], xRangeIndexes[1] + 1)
-      return getYDomain(valuesToCalculateY)
+      ].sort()
+      const valuesInZoomRange = values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
+
+      return secondaryAxis.getDomain(valuesInZoomRange)
     })
 
-    const newYDomain = [
+    const newSecondaryDomain = [
       Math.min(...lineDomains.map(d => d[0])),
       Math.max(...lineDomains.map(d => d[1])),
     ] as NumberRange
 
-    if (!_.isEqual(newYDomain, this.targetYDomain)) {
-      this.targetYDomain = newYDomain
+    if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
+      this.targetSecondaryDomain = newSecondaryDomain
 
-      d3.select(this.yDomainTransitionEl)
+      d3.select(this.secondaryDomainTransitionEl)
         .transition()
         .duration(TRANSITION_DURATIONS.ZOOM)
-        .tween('yDomain', () => {
-          const i = d3.interpolateArray(this.state.yDomain, newYDomain)
+        .tween('secondaryDomainTween', () => {
+          const i = d3.interpolateArray(secondaryAxis.currentDomain, newSecondaryDomain)
 
           return (t: number) => {
             // d3 внутри мутирует массив, поэтому клонируем
-            this.setState({ yDomain: [...i(t)] as NumberRange })
+            secondaryAxis.setDomain([...i(t)] as NumberRange)
           }
         })
     }

@@ -29,19 +29,19 @@
   }
 
   &_x&_bottom > :--tick-line {
-    transform: translateY(9px);
+    transform: translateY(var(--axis-tick-offset));
   }
 
   &_x&_top > :--tick-line {
-    transform: translateY(-9px);
+    transform: translateY(calc(-1 * var(--axis-tick-offset)));
   }
 
   &_y&_left > :--tick-line {
-    transform: translateX(-10px);
+    transform: translateX(calc(-1 * var(--axis-tick-offset)));
   }
 
   &_y&_right > :--tick-line {
-    transform: translateX(10px);
+    transform: translateX(var(--axis-tick-offset));
   }
 }
 
