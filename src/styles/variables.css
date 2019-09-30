@@ -7,7 +7,7 @@
   --bg-color-white-semi: rgba(255, 255, 255, 0.05);
   --bg-color-additional: #b1c4e3;
   --bg-color-additional-opacity-30: rgba(177, 196, 227, 0.3);
-  --text-color: rgba(246, 251, 253);
+  --text-color: rgb(246, 251, 253);
   --text-color-semi: rgba(255, 255, 255, 0.5);
   --text-color-70: rgba(246, 251, 253, 0.7);
   --text-color-black: #000;
@@ -50,6 +50,7 @@
     var(--color-important-opacity-10) 70%
   );
   --progress-transition: left 0.5s ease;
+  --fast-transition: 0.15s ease-out;
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;

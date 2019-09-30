@@ -2,15 +2,12 @@
   position: relative;
   width: 100%;
   height: 100%;
+
+  /* Используется в осях и зуме */
+  --axis-tick-offset: 9px;
 }
 
 .svg {
   position: absolute;
   overflow: visible;
-}
-
-.zoom {
-  position: absolute;
-  right: 0;
-  left: 0;
 }

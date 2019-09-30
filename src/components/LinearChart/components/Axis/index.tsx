@@ -3,11 +3,12 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { XLabelsPosition, YLabelsPosition } from '../../'
-
 import css from './index.css'
 
 const TICK_PADDING = 15
+
+export type XLabelsPosition = 'top' | 'bottom'
+export type YLabelsPosition = 'left' | 'right'
 
 type GridConfigItem<Position> = {
   labels?: Position
