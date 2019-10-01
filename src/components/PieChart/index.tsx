@@ -44,7 +44,8 @@ type Props = {
 }
 
 export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal }) => {
-  const [chartRef, { width, height }, svgChartEl] = useDimensions()
+  const [ref, { width, height }, el] = useDimensions()
+  const size = Math.min(width, height) || 0
 
   useLayoutEffect(() => {
     const pieData = d3
@@ -52,14 +53,15 @@ export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal
       .sort(null)
       .value(d => d.value)(data as Writeable<typeof data>)
 
-    const radius = Math.min(width, height) / 2
+    const radius = size / 2
 
     const arc = d3
       .arc<d3.PieArcDatum<DataItem>>()
       .innerRadius(0)
       .outerRadius(radius)
 
-    d3.select(svgChartEl)
+    d3.select(el)
+      .select('svg')
       .attr('viewBox', `${-radius}, ${-radius}, ${radius * 2}, ${radius * 2}`)
       .select('g')
       .selectAll('path')
@@ -70,16 +72,24 @@ export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal
   })
 
   return (
-    <div className={css.pieChart}>
-      <svg ref={chartRef} className={css.chart}>
-        <g />
-      </svg>
-      <ChartBorder className={css.border} />
-      <div className={css.inner}>
-        <div className={css.totalTitle}>Всего</div>
-        <div className={css.total}>{total}</div>
-        <div className={css.subTotal}>
-          {subTotalTitle}: <span className={css.subTotalValue}>{subTotal}</span>
+    <div
+      ref={ref}
+      className={css.pieChart}
+      style={{
+        fontSize: (14 * size) / 300, // 300 — исходный размер из макета, используется как отправная точка
+      }}
+    >
+      <div className={css.container} style={{ width: size, height: size }}>
+        <svg className={css.chart}>
+          <g />
+        </svg>
+        <ChartBorder className={css.border} />
+        <div className={css.inner}>
+          <div className={css.totalTitle}>Всего</div>
+          <div className={css.total}>{total}</div>
+          <div className={css.subTotal}>
+            {subTotalTitle}: <span className={css.subTotalValue}>{subTotal}</span>
+          </div>
         </div>
       </div>
     </div>

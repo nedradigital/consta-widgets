@@ -17,7 +17,8 @@ declare module 'pluralize-ru' {
 }
 
 declare module 'react-grid-layout-tmp-fork' {
-  import ReactGridLayout, { ItemCallback, Layout, WidthProviderProps } from 'react-grid-layout'
+  import ReactGridLayout, { Layout, Responsive, WidthProviderProps } from 'react-grid-layout'
+
   function WidthProvider<P>(
     component: React.ComponentClass<P>
   ): React.ComponentClass<
@@ -34,7 +35,7 @@ declare module 'react-grid-layout-tmp-fork' {
 
   export default ReactGridLayout
 
-  export { ItemCallback, WidthProvider, Layout }
+  export { Layout, Responsive, WidthProvider }
 }
 
 declare module '@nekitk/storybook-addon-smart-knobs' {
@@ -80,4 +81,8 @@ declare module 'react-onclickout' {
   }>
 
   export default ClickOutHandler
+}
+
+declare module 'utils/postcss-utils' {
+  export const calcSize: (size: number) => string
 }

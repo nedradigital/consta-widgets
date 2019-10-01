@@ -3,23 +3,23 @@
 }
 
 .size3XL {
-  font-size: 32px;
-  line-height: 42px;
+  font-size: calc-size(32);
+  line-height: calc-size(42);
 }
 
 .sizeXL {
-  font-size: 20px;
-  line-height: 28px;
+  font-size: calc-size(20);
+  line-height: calc-size(28);
 }
 
 .sizeS {
-  font-size: 13px;
-  line-height: 18px;
+  font-size: calc-size(13);
+  line-height: calc-size(18);
 }
 
 .sizeXS {
-  font-size: 11px;
-  line-height: 15px;
+  font-size: calc-size(11);
+  line-height: calc-size(15);
 }
 
 .secondary {

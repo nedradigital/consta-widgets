@@ -9,7 +9,7 @@ import { PieChart } from '.'
 
 storiesOf('components/PieChart', module)
   .addDecorator(withSmartKnobs)
-  .addDecorator(blockCenteringDecorator())
+  .addDecorator(blockCenteringDecorator({ width: 300, height: 300 }))
   .add('interactive', () => {
     return (
       <PieChart

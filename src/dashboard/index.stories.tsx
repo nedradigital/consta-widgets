@@ -10,6 +10,8 @@ import { Constructor, DashboardState } from './'
 import { Config } from './components/Dashboard'
 
 const getMargin = () => [number('margin x', 15), number('margin y', 15)] as const
+const getPadding = () => [number('padding x', 15), number('padding y', 15)] as const
+const getRowsCount = () => number('rowsCount', 4)
 
 export const exampleDatasets: readonly Dataset[] = [
   {
@@ -60,7 +62,6 @@ storiesOf('dashboard/Constructor', module)
     return (
       <Constructor
         viewMode={false}
-        margin={getMargin()}
         datasets={exampleDatasets}
         cols={cols}
         dashboard={{ boxes: [], config: {} }}
@@ -68,6 +69,9 @@ storiesOf('dashboard/Constructor', module)
         onChange={() => {
           /**/
         }}
+        baseFontSize={16}
+        baseMargin={getMargin()}
+        rowsCount={getRowsCount()}
       />
     )
   })
@@ -82,20 +86,26 @@ storiesOf('dashboard/Constructor', module)
       }
 
       return (
-        <Constructor
-          margin={getMargin()}
-          datasets={object('datasets', exampleDatasets)}
-          cols={object('cols', cols)}
-          dashboard={dashboard}
-          onChange={handler}
-          onClear={() => {
-            localStorage.removeItem(storageName)
-            location.reload()
-          }}
-          onToggleMode={() => setViewMode(!viewMode)}
-          viewMode={viewMode}
-          data={{}}
-        />
+        <div style={{ height: '100vh' }}>
+          <Constructor
+            datasets={object('datasets', exampleDatasets)}
+            cols={object('cols', cols)}
+            dashboard={dashboard}
+            onChange={handler}
+            onClear={() => {
+              localStorage.removeItem(storageName)
+              location.reload()
+            }}
+            onToggleMode={() => setViewMode(!viewMode)}
+            viewMode={viewMode}
+            data={{}}
+            widthScale={1024}
+            baseFontSize={16}
+            baseMargin={getMargin()}
+            basePadding={getPadding()}
+            rowsCount={getRowsCount()}
+          />
+        </div>
       )
     }
 

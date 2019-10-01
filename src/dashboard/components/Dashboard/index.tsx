@@ -1,6 +1,7 @@
-import * as React from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
+import useDimensions from 'react-use-dimensions'
 
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 
@@ -20,24 +21,46 @@ export type DashboardState = {
 }
 
 export type DashboardProps = {
-  margin?: readonly [number, number]
+  baseMargin?: readonly [number, number]
+  basePadding?: readonly [number, number]
   cols?: number
   datasets: readonly Dataset[]
   viewMode: boolean
   onChange: (dashboard: DashboardState) => void
   dashboard: DashboardState
   data: Data
+  baseFontSize: number
+  widthScale?: number
+  rowsCount: number
 }
 
 export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
-  const { margin, cols, viewMode, onChange, dashboard, datasets, data } = props
+  const {
+    cols,
+    viewMode,
+    onChange,
+    dashboard,
+    datasets,
+    data,
+    baseFontSize,
+    baseMargin = [0, 0],
+    basePadding = [0, 0],
+    widthScale,
+    rowsCount,
+  } = props
   const { boxes, config } = dashboard
+
+  const [demensionRef, { width, height }, element] = useDimensions()
+  const [{ margin, padding }, setMarginAndPadding] = useState({
+    margin: baseMargin,
+    padding: basePadding,
+  })
 
   const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
   const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
 
-  const [, drop] = useDrop({
+  const [, dropRef] = useDrop({
     accept: ItemTypes.BOX,
     drop: () => {
       dropPromise.then(({ x, y }: { x: number; y: number }) => {
@@ -83,11 +106,37 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     })
   }
 
+  useLayoutEffect(() => {
+    const scale = widthScale ? width / widthScale : 1
+
+    if (widthScale) {
+      setMarginAndPadding({
+        margin: [scale * baseMargin[0], scale * baseMargin[1]],
+        padding: [scale * basePadding[0], scale * basePadding[1]],
+      })
+    }
+
+    if (element) {
+      element.style.setProperty('--base-size', `${baseFontSize * scale}px`)
+    }
+  }, [width])
+
+  const rowHeight = (height - 2 * padding[1] + margin[1]) / rowsCount - margin[1]
+
   return (
-    <div ref={drop} className={css.dashboard}>
+    <div
+      ref={el => {
+        demensionRef(el)
+        dropRef(el)
+      }}
+      className={css.dashboard}
+    >
       <GridLayout
+        autoSize={false}
         margin={margin as /* tslint:disable-line:readonly-array */ [number, number]}
+        containerPadding={padding as /* tslint:disable-line:readonly-array */ [number, number]}
         cols={cols}
+        rowHeight={rowHeight}
         className="layout"
         measureBeforeMount
         compactType={null}

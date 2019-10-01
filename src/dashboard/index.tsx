@@ -14,7 +14,6 @@ type ConstructorProps = DashboardProps & MenuProps
 
 export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
   const {
-    margin,
     cols,
     onChange,
     dashboard,
@@ -23,6 +22,11 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
     viewMode,
     datasets,
     data,
+    widthScale,
+    baseFontSize,
+    baseMargin,
+    basePadding,
+    rowsCount,
   } = props
 
   return (
@@ -30,13 +34,17 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
       <div className={css.constructor}>
         <Menu onClear={onClear} onToggleMode={onToggleMode} viewMode={viewMode} />
         <Dashboard
-          margin={margin}
           cols={cols}
           datasets={datasets}
           viewMode={viewMode}
           onChange={onChange}
           dashboard={dashboard}
           data={data}
+          widthScale={widthScale}
+          baseFontSize={baseFontSize}
+          baseMargin={baseMargin}
+          basePadding={basePadding}
+          rowsCount={rowsCount}
         />
       </div>
     </DndProvider>
