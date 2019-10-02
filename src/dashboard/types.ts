@@ -1,3 +1,4 @@
+import { Data as DonutChartData } from '@/components/DonutChart'
 import { Status } from '@/ui/Badge'
 
 export enum DataType {
@@ -5,6 +6,7 @@ export enum DataType {
   PieChart,
   Number,
   NumberWithPercentAndStatus,
+  Donut,
 }
 
 export type DataMap = {
@@ -21,6 +23,7 @@ export type DataMap = {
     percentage: number
     status: Status
   }
+  [DataType.Donut]: DonutChartData
 }
 
 export type Dataset = {
