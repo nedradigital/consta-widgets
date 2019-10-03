@@ -18,6 +18,7 @@
 }
 
 .area {
+
   &.isEnd {
     stop-color: var(--opaque-color);
   }

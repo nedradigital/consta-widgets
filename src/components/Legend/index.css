@@ -1,0 +1,19 @@
+.main {
+  &.column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &.row {
+    margin-bottom: -8px;
+  }
+}
+
+.row .item {
+  margin-right: 20px;
+  margin-bottom: 8px;
+}
+
+.column .item + .item {
+  margin-top: 8px;
+}

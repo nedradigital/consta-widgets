@@ -1,0 +1,40 @@
+.stats {
+  width: 100%;
+  text-align: left;
+}
+
+.row {
+  margin: 3px 0;
+}
+
+.number {
+  display: inline-block;
+  padding: 2px 4px;
+  letter-spacing: -0.02em;
+}
+
+.middle span:first-child {
+  margin-right: 5px;
+  color: #f6fbfd;
+  font-weight: bold;
+}
+
+.sizeXS {
+  font-size: calc-size(32);
+  line-height: calc-size(42);
+}
+
+.sizeS {
+  font-size: calc-size(20);
+  line-height: calc-size(28);
+}
+
+.sizeM {
+  font-size: calc-size(13);
+  line-height: calc-size(18);
+}
+
+.sizeL {
+  font-size: calc-size(11);
+  line-height: calc-size(15);
+}

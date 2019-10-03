@@ -42,9 +42,11 @@
 .lineForegroundDanger {
   stop-color: var(--color-danger);
 }
+
 .lineForegroundWarning {
   stop-color: var(--color-warning);
 }
+
 .lineForegroundNormal {
   stop-color: var(--color-important);
 }

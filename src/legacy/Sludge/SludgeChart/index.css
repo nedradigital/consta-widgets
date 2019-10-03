@@ -47,65 +47,88 @@
 }
 
 .linearGradient1 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.11);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.11);
   }
 }
+
 .linearGradient2 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.21);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.21);
   }
 }
+
 .linearGradient3 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.31);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.31);
   }
 }
+
 .linearGradient4 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.41);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.41);
   }
 }
+
 .linearGradient5 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.51);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.51);
   }
 }
+
 .linearGradient6 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.61);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.61);
   }
 }
+
 .linearGradient7 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.71);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.71);
   }
 }
+
 .linearGradient8 {
+
   &.start {
     stop-color: rgba(144, 187, 255, 0.81);
   }
+
   &.stop {
     stop-color: rgba(144, 187, 255, 0.81);
   }

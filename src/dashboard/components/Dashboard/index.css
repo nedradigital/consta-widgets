@@ -6,6 +6,7 @@
   background-color: var(--bg-dashboard);
 
   /* эти стили нужны для корректной работы react-grid-layout */
+
   :global {
     /* stylelint-disable selector-class-pattern */
 
@@ -19,6 +20,7 @@
       transition: all 200ms ease;
       transition-property: left, top;
     }
+
     & .react-grid-item.cssTransforms {
       transition-property: transform;
     }

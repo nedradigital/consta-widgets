@@ -12,12 +12,28 @@ const getCommonProps = () => ({
   lines: [
     {
       color: '#20B55F',
-      values: [{ x: 0, y: -1 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: 4 }],
+      values: [
+        { x: 0, y: -1 },
+        { x: 1, y: 3 },
+        { x: 2, y: 1 },
+        { x: 3, y: 4 },
+        { x: 4, y: 2 },
+        { x: 5, y: -4 },
+        { x: 6, y: 5 },
+      ],
       dots: true,
     },
     {
       color: '#56B9F2',
-      values: [{ x: 0, y: -2 }, { x: 1, y: 4 }, { x: 2, y: 0 }, { x: 3, y: 5 }],
+      values: [
+        { x: 0, y: -2 },
+        { x: 1, y: 4 },
+        { x: 2, y: 0 },
+        { x: 3, y: 5 },
+        { x: 4, y: 3 },
+        { x: 5, y: 4 },
+        { x: 6, y: -1 },
+      ],
     },
   ],
   gridConfig: object('gridConfig', {
