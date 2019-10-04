@@ -14,6 +14,50 @@ const mockData: DataMap = {
     percentage: 11,
     status: 'danger',
   },
+  [DataType.Donut]: [
+    [
+      {
+        color: 'red',
+        value: 20,
+      },
+      {
+        color: 'blue',
+        value: 15,
+      },
+      {
+        color: 'yellow',
+        value: 7,
+      },
+    ],
+    [
+      {
+        color: 'red',
+        value: 20,
+      },
+      {
+        color: 'blue',
+        value: 15,
+      },
+      {
+        color: 'yellow',
+        value: 7,
+      },
+    ],
+    [
+      {
+        color: 'red',
+        value: 25,
+      },
+      {
+        color: 'blue',
+        value: 1,
+      },
+      {
+        color: 'yellow',
+        value: 5,
+      },
+    ],
+  ],
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
