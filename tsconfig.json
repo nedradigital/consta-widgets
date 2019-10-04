@@ -1,31 +1,15 @@
 {
+  "extends": "@gaz/configs/tsconfig",
   "compilerOptions": {
-    "allowJs": false,
-    "esModuleInterop": true,
-    "allowUnusedLabels": true,
     "baseUrl": ".",
-    "experimentalDecorators": true,
-    "declaration": true,
-    "jsx": "react",
-    "lib": ["dom", "es2015", "esnext"],
-    "module": "commonjs",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "outDir": "dist/ts",
     "paths": {
       "*": ["types/modules/*"],
-      "@/*": ["src/*"],
-      "utils/*": ["utils/*"]
-    },
-    "removeComments": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2017"
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "src/**/*",
-    "types/**/*",
-    "utils/**/*"
+    "types/**/*"
   ],
   "exclude": [
     "build",
