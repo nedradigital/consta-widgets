@@ -34,6 +34,11 @@ export const exampleDatasets: readonly Dataset[] = [
     type: DataType.NumberWithPercentAndStatus,
     id: 'wasted',
   },
+  {
+    name: 'Месторождение',
+    type: DataType.TableLegend,
+    id: 'field',
+  },
 ]
 const cols = 12
 

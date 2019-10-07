@@ -1,80 +1,147 @@
-import React from 'react'
+import React, { useState } from 'react'
+import useDimensions from 'react-use-dimensions'
 
 import classnames from 'classnames'
-import { isNil } from 'lodash'
+import { isNil, orderBy } from 'lodash'
 
-import { Text } from '@/ui/Text'
+import { LegendItem, Type as TypeLegend, types as defaultTypeLegend } from '@/components/LegendItem'
 
+import { DivResizable } from './components/DivResizable'
+import { ReactComponent as IconSortAscSvg } from './images/sort-asc.svg'
+import { ReactComponent as IconSortDescSvg } from './images/sort-desc.svg'
+import { ReactComponent as IconSortSvg } from './images/sort-icon.svg'
 import css from './index.css'
 
-type Values = ReadonlyArray<string | number | null>
+export const sizes = ['l', 'm', 's'] as const
+export type Size = typeof sizes[number]
 
-type Props = {
-  columnNames: readonly string[]
-  valueNames: readonly string[]
-  data: ReadonlyArray<{
-    color: string
-    name: string
-    columns: readonly Values[]
-  }>
+const locationClasses = ['textRightPosition', 'textCenterPosition', 'textLeftPosition'] as const
+type LocationClasses = typeof locationClasses[number]
+
+export type StyleProps = {
+  size: Size
 }
 
-const valueColors = [undefined, '#0FC75D'] as const
+export type Data = {
+  columnNames: readonly ColumnNames[]
+  legendFields: ReadonlyArray<{ [key: string]: string }>
+  list: ReadonlyArray<{ [key: string]: string | number }>
+}
 
-export const TableLegend: React.FC<Props> = ({ data, columnNames, valueNames }) => {
-  return (
-    <div>
-      <table className={css.table}>
-        <thead>
-          {columnNames.map((name, idx) =>
-            idx === 0 ? (
-              <th key={idx}>
-                <Text className={css.title}>{name}</Text>
-              </th>
+type Row = {
+  [key: string]: string | number
+}
+
+type ColumnNames = {
+  title: string
+  accessor: string
+  className: string
+}
+
+type Props = {
+  isShowLegend?: boolean
+  data: Data
+} & StyleProps
+
+export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
+  const [refTable, { height }] = useDimensions()
+  const [accessor, setAccessor] = useState('')
+  const [isOrderByDesc, setOrderByDesc] = useState(false)
+  const { columnNames, legendFields, list } = data
+
+  const sortBy = (field: string) => {
+    setAccessor(field)
+    setOrderByDesc(accessor === field ? !isOrderByDesc : true)
+  }
+
+  const datum = accessor ? orderBy(list, accessor, isOrderByDesc ? 'desc' : 'asc') : list
+
+  const thRender = columnNames.map((obj, idx) => {
+    const sort = accessor === obj.accessor
+    return (
+      <th
+        key={idx}
+        className={classnames(
+          css[obj.className as LocationClasses],
+          sort ? (isOrderByDesc ? css.sortDesc : css.sortAsc) : ''
+        )}
+        data-accessor={obj.accessor}
+        style={{ position: 'relative' }}
+        onClick={() => sortBy(obj.accessor)}
+      >
+        <div className={css.divHelper}>
+          <span>{obj.title}</span>
+          <span>
+            <IconSortSvg
+              className={classnames(css.icon, css.iconNeutrally)}
+              viewBox="0 0 500 500"
+            />
+            <IconSortDescSvg className={classnames(css.icon, css.iconDesc)} viewBox="0 0 500 500" />
+            <IconSortAscSvg className={classnames(css.icon, css.iconAsc)} viewBox="0 0 500 500" />
+          </span>
+        </div>
+        <DivResizable height={height} />
+      </th>
+    )
+  })
+
+  const renderTableRowWithData = (row: Row) =>
+    columnNames.map((column, index) => {
+      const text = isNil(row[column.accessor]) ? '–' : row[column.accessor]
+      if (index === 0) {
+        const legend = legendFields.find(obj => obj.field === row[column.accessor])
+        return (
+          <td
+            key={column.accessor + index}
+            className={classnames(css[column.className as LocationClasses])}
+          >
+            {isShowLegend ? (
+              <LegendItem
+                text={String(text)}
+                color={(legend && legend.color) || ''}
+                fontSize="s"
+                type={(legend && (legend.typeLegend as TypeLegend)) || defaultTypeLegend[0]}
+              />
             ) : (
-              <th key={idx} colSpan={valueNames.length} className={css.isPadded}>
-                {name}
-              </th>
-            )
-          )}
+              text
+            )}
+          </td>
+        )
+      } else {
+        return (
+          <td
+            key={column.accessor + index}
+            className={classnames(css[column.className as LocationClasses])}
+          >
+            {text}
+          </td>
+        )
+      }
+    })
+
+  return (
+    <div className={css.container}>
+      <table className={classnames(css.table, css.striped)} ref={refTable}>
+        <thead>
+          <tr>{thRender}</tr>
         </thead>
         <tbody>
-          {data.map(d => (
-            <tr key={d.name}>
-              <td>
-                <span className={css.circle} style={{ backgroundColor: d.color }} />
-                {d.name}
-              </td>
-              {d.columns.map(column =>
-                column.map((value, idx) => (
-                  <td
-                    className={classnames(css.value, idx === 0 && css.isPadded)}
-                    style={{
-                      color: valueColors[idx],
-                    }}
-                    key={idx}
-                  >
-                    {isNil(value) ? '–' : value}
-                  </td>
-                ))
+          {datum.map((row, idx) => (
+            <tr
+              key={idx}
+              className={classnames(
+                {
+                  l: css.rowL,
+                  m: css.rowM,
+                  s: css.rowS,
+                }[size]
               )}
+            >
+              {renderTableRowWithData(row)}
             </tr>
           ))}
         </tbody>
       </table>
-      <div className={css.values}>
-        {valueNames.map((name, idx) => (
-          <span
-            key={name}
-            className={css.valueName}
-            style={{
-              color: valueColors[idx],
-            }}
-          >
-            {name}
-          </span>
-        ))}
-      </div>
     </div>
   )
 }

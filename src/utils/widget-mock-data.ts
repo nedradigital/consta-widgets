@@ -153,6 +153,119 @@ const mockData: DataMap = {
     },
   ],
   [DataType.Text]: 'Какой-то текст',
+  [DataType.TableLegend]: {
+    list: [
+      {
+        field: 'Приобское',
+        year: 1982,
+        type: 'Нефтяное',
+        estimated_reserves: 5000,
+        remaining_reserves: 1700,
+        production: 33,
+        total: 313,
+      },
+      {
+        field: 'Уренгойское газонефтеконденсатное',
+        year: 2001,
+        type: 'Конденсатное',
+        estimated_reserves: 7540,
+        remaining_reserves: 7540,
+        production: 363,
+        total: 88,
+      },
+      {
+        field: 'Красноленинская группа',
+        year: 1985,
+        type: 'Комбинированное',
+        estimated_reserves: 8766,
+        remaining_reserves: 3374,
+        production: 256,
+        total: 434,
+      },
+      {
+        field: 'Великое',
+        year: 1989,
+        type: 'Конденсатное',
+        estimated_reserves: 1697,
+        remaining_reserves: 4818,
+        production: 250,
+        total: 236,
+      },
+      {
+        field: 'Русское газонефтяное',
+        year: 1997,
+        type: 'Нефтяное',
+        estimated_reserves: 5169,
+        remaining_reserves: 3712,
+        production: 292,
+        total: 417,
+      },
+    ],
+    legendFields: [
+      {
+        field: 'Приобское',
+        color: 'red',
+        typeLegend: 'dot',
+      },
+      {
+        field: 'Уренгойское газонефтеконденстаное',
+        color: 'yellow',
+        typeLegend: 'dot',
+      },
+      {
+        field: 'Красноленинская группа',
+        color: 'green',
+        typeLegend: 'dot',
+      },
+      {
+        field: 'Великое',
+        color: 'yellowgreen',
+        typeLegend: 'dot',
+      },
+      {
+        field: 'Русское газонефтяное',
+        color: 'white',
+        typeLegend: 'dot',
+      },
+    ],
+    columnNames: [
+      {
+        title: 'Месторождение',
+        accessor: 'field',
+        className: 'textLeftPosition',
+      },
+      {
+        title: 'Год октрытия',
+        accessor: 'year',
+        className: 'textCenterPosition',
+      },
+      {
+        title: 'Тип',
+        accessor: 'type',
+        className: 'textCenterPosition',
+      },
+      {
+        title: 'Предполагаемые полные \nзапасы, млн.т.',
+        accessor: 'estimated_reserves',
+        className: 'textRightPosition',
+      },
+      {
+        title: 'Остаточные извлекаемые \nзапасы, млн.т.',
+        accessor: 'remaining_reserves',
+        className: 'textRightPosition',
+      },
+      {
+        title: 'Добыча тыс.т/сут.',
+        accessor: 'production',
+        className: 'textRightPosition',
+      },
+      {
+        title: 'Всего добыто, млн.т.',
+        accessor: 'total',
+        className: 'textRightPosition',
+      },
+    ],
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
