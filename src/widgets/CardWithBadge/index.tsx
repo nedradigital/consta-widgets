@@ -16,6 +16,8 @@ export const defaultParams: Params = {
   label: 'Research',
 }
 
+export const widgetId = '47286da3-876c-472e-ba7f-9afdd171ae15'
+
 export const CardWithBadgeContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params: { text, label },
 }) => (
@@ -26,6 +28,7 @@ export const CardWithBadgeContent: React.FC<WidgetContentProps<Data, Params>> = 
 )
 
 export const CardWithBadge = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Карточка с бэйджем',
   dataType: null,
   defaultParams,

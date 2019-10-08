@@ -9,6 +9,9 @@ import { storiesOf } from '@storybook/react'
 import { exampleDatasets } from '@/dashboard/index.stories'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
+import { widgetId as cardValueWidgetId } from '@/widgets/CardValueWithBadge'
+import { widgetId as cardWidgetId } from '@/widgets/CardWithBadge'
+import { widgetId as titleWidgetId } from '@/widgets/TitleWidget'
 
 import { Box, BoxItem } from '.'
 
@@ -18,6 +21,7 @@ const initialItems: readonly BoxItem[] = [
     type: 'widget',
     name: 'TitleWidget',
     key: getUniqueName('TitleWidget'),
+    id: titleWidgetId,
     params: {
       title: 'Test title widget',
     },
@@ -26,6 +30,7 @@ const initialItems: readonly BoxItem[] = [
     type: 'widget',
     name: 'CardValueWithBadge',
     key: cardValueWithBadgeKey,
+    id: cardValueWidgetId,
     params: {
       title: 'Стоимость',
       label: 'млн,₽',
@@ -39,6 +44,7 @@ const initialItems: readonly BoxItem[] = [
           type: 'widget',
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
+          id: cardWidgetId,
           params: {
             text: 'Карточка с текстом',
             label: 'и бэйджем',
@@ -50,6 +56,7 @@ const initialItems: readonly BoxItem[] = [
           type: 'widget',
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
+          id: cardWidgetId,
           params: {
             text: 'Карточка с текстом',
             label: 'и бэйджем',
@@ -61,6 +68,7 @@ const initialItems: readonly BoxItem[] = [
           type: 'widget',
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
+          id: cardWidgetId,
           params: {
             text: 'Карточка с текстом',
             label: 'и бэйджем',

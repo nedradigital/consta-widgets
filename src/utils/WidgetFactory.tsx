@@ -17,6 +17,7 @@ export type WidgetType<Data, Params> = React.FC<{
   showName: string // name у React.FC уже есть
   mockData: Data
   defaultParams: Params
+  id: string
 }
 
 export type WidgetContentProps<Data, Params> = {
@@ -36,13 +37,14 @@ export const createWidget = <
   OriginalParams extends { [key: string]: any } = {},
   Params extends WithDataset<OriginalParams> = WithDataset<OriginalParams>
 >(opts: {
+  id: string
   name: string
   dataType: DataType | null
   defaultParams: Params
   Content: React.ComponentType<WidgetContentProps<Data, OriginalParams>>
   renderSettings?: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
 }) => {
-  const { name, dataType, defaultParams, Content, renderSettings } = opts
+  const { name, dataType, defaultParams, Content, renderSettings, id } = opts
   const Widget: WidgetType<Data, Params> = ({
     data,
     datasets,
@@ -84,6 +86,7 @@ export const createWidget = <
   if (dataType) {
     Widget.mockData = getWidgetMockData(dataType) as Data
   }
+  Widget.id = id
 
   return Widget
 }

@@ -8,6 +8,8 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 type Data = typeof undefined
 
+const widgetId = '2538ed91-7c6d-403e-9c3e-d68d3ecd8d00'
+
 type Params = {
   direction: Direction
   labelType: Type
@@ -115,6 +117,7 @@ export const LegendWidgetContent: React.FC<WidgetContentProps<Data, Params>> = (
 )
 
 export const LegendWidget = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Легенда',
   defaultParams,
   dataType: null,

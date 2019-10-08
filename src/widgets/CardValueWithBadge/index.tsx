@@ -13,6 +13,8 @@ type Params = {
   label: string
 }
 
+export const widgetId = '82748f2c-bb66-414f-a498-885fe17e3ceb'
+
 export const defaultParams: Params = { title: 'Стоимость', label: 'млн,₽' }
 
 export const CardValueWithBadgeContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -32,6 +34,7 @@ export const CardValueWithBadgeContent: React.FC<WidgetContentProps<Data, Params
 )
 
 export const CardValueWithBadge = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Значение с процентом и статусом',
   dataType,
   defaultParams,
