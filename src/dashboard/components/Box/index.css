@@ -7,6 +7,10 @@
     padding: 10px;
     border-radius: 10px 0;
   }
+
+  &:not(.isViewMode) {
+    user-select: none;
+  }
 }
 
 .panel {
