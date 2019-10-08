@@ -5,9 +5,6 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Donut
 type Data = DataMap[typeof dataType]
 
-export const typeNames = ['heading1', 'heading2', 'heading3', 'text1', 'text2'] as const
-export type TypeNames = typeof typeNames[number]
-
 type Params = {
   colors: Colors
 }
