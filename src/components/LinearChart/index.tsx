@@ -398,7 +398,15 @@ export class LinearChart extends React.Component<Props, State> {
           values.length - 1
         ),
       ].sort()
-      const valuesInZoomRange = values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
+
+      const countLines = zoomRangeIndexes[1] - zoomRangeIndexes[0]
+
+      // Если количество лучшей, которое мы видим больше двух, то нам нужен домен только видимых точек
+      // Иначе мы берем домены и точек, которые за экраном
+      const valuesInZoomRange =
+        countLines > 2
+          ? values.slice(zoomRangeIndexes[0] + (domainMin <= 0 ? 0 : 1), zoomRangeIndexes[1])
+          : values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
 
       return secondaryAxis.getDomain(valuesInZoomRange)
     })
