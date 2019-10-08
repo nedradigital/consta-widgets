@@ -2,3 +2,4 @@ export { CardValueWithBadgeContent as CardValueWithBadge } from './CardValueWith
 export { CardWithBadgeContent as CardWithBadge } from './CardWithBadge'
 export { TitleWidgetContent as TitleWidget } from './TitleWidget'
 export { DonutChartWidgetContent as DonutChartWidget } from './DonutChartWidget'
+export { BarChartWidgetContent as BarChartWidget } from './BarChartWidget'

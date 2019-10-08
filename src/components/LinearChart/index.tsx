@@ -123,7 +123,6 @@ export class LinearChart extends React.Component<Props, State> {
     this.updateDomains()
     this.updateSize()
 
-    // TODO ResizeObserver, чтобы реагировать на ресайз бокса на дашборде
     window.addEventListener('resize', this.updateSize)
   }
 

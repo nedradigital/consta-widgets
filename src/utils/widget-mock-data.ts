@@ -58,6 +58,59 @@ const mockData: DataMap = {
       },
     ],
   ],
+  [DataType.BarChart]: [
+    {
+      categorie: 'март',
+      values: [
+        {
+          value: 410,
+          description: 'blue',
+        },
+        {
+          value: 600,
+          description: 'red',
+        },
+        {
+          value: 270,
+          description: 'orange',
+        },
+      ],
+    },
+    {
+      categorie: 'апрель',
+      values: [
+        {
+          value: 670,
+          description: 'blue',
+        },
+        {
+          value: 1000,
+          description: 'red',
+        },
+        {
+          value: 1100,
+          description: 'orange',
+        },
+      ],
+    },
+    {
+      categorie: 'май',
+      values: [
+        {
+          value: 1200,
+          description: 'blue',
+        },
+        {
+          value: 630,
+          description: 'red',
+        },
+        {
+          value: 100,
+          description: 'orange',
+        },
+      ],
+    },
+  ],
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
