@@ -1,5 +1,6 @@
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DonutChartData } from '@/components/DonutChart'
+import { Line } from '@/components/LinearChart'
 import { Status } from '@/ui/Badge'
 
 export enum DataType {
@@ -9,6 +10,7 @@ export enum DataType {
   NumberWithPercentAndStatus,
   Donut,
   BarChart,
+  LinearChart,
 }
 
 export type DataMap = {
@@ -28,6 +30,8 @@ export type DataMap = {
   [DataType.Donut]: DonutChartData
   // tslint:disable-next-line:readonly-array
   [DataType.BarChart]: BarChartData[]
+  // tslint:disable-next-line:readonly-array
+  [DataType.LinearChart]: Line[]
 }
 
 export type Dataset = {
