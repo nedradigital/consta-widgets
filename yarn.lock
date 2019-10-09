@@ -1184,10 +1184,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@gaz/configs@0.1.6":
-  version "0.1.6"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.6.tgz#a4d6e5b26d50ca662027d404a2a7806a3b78ba93"
-  integrity sha512-lL4YSEUgzHo1t/IUtPD1nvMnW18dAAaCySt7UPBdPCNDkIr1B+X9MeIWDwFhlzKzExohZaDwuA7Rp7ZiHK6r+g==
+"@gaz/configs@0.1.8":
+  version "0.1.8"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.8.tgz#5585a2e9290b2f3d77685883b3db79fad8c7c16f"
+  integrity sha512-PA6MgzHNtI8a8O/ZzAwrgwl+oIZGSnjCPJoosBUywGE/P55tUP48Z3QjrbSaLlPrTwqce5z0rDyuIWzDG6SSFQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1197,7 +1197,7 @@
     "@babel/plugin-transform-runtime" "7.4.4"
     "@babel/preset-env" "7.4.5"
     "@babel/preset-react" "7.0.0"
-    "@gaz/utils" "0.1.1"
+    "@gaz/utils" "0.1.2"
     "@hot-loader/react-dom" "16.8.6"
     "@types/enzyme" "3.10.2"
     "@types/jest" "24.0.15"
@@ -1226,7 +1226,7 @@
     postcss-nested "4.1.2"
     postcss-preset-env "6.6.0"
     prettier "1.18.2"
-    react-docgen-typescript-loader "3.2.0"
+    react-docgen-typescript-loader "3.3.0"
     react-hot-loader "4.12.0"
     stylelint "10.1.0"
     stylelint-config-prettier "5.2.0"
@@ -1247,10 +1247,10 @@
     webpack "4.40.2"
     webpack-merge "4.2.1"
 
-"@gaz/utils@0.1.1":
-  version "0.1.1"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.1.tgz#9d87856c82461ef877e5fb72b951c152f25e3829"
-  integrity sha512-nngE4m70FsfXSRB5Si/IOrB5Yivj5XSuwb2vROgXOgCRV+4KVEZuQFbG7NpGUvmi+r/vWA1nI0XJ/tijDnoV1Q==
+"@gaz/utils@0.1.2":
+  version "0.1.2"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.2.tgz#7d77d39e9c102cbf9ead2622866b7349da9a68d6"
+  integrity sha512-7WCs2FuP8krNRjhGqvfc0Lt04Dae3qPhFvY3gtf03GAP1AjJEjoI7V9v8P2cMb+lJVxQnRcbzJKwbpyRCxagHw==
 
 "@hot-loader/react-dom@16.8.6":
   version "16.8.6"
@@ -11123,16 +11123,16 @@ react-dnd@9.3.2:
     hoist-non-react-statics "^3.3.0"
     shallowequal "^1.1.0"
 
-react-docgen-typescript-loader@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/react-docgen-typescript-loader/-/react-docgen-typescript-loader-3.2.0.tgz#137afca0d96211b82685253eb7397dab2ee43920"
-  integrity sha512-FL7H3yXNkcsQD/OKwReJ1i8faqaarRBzpjZd/pNtpz4nH6hx1h/oWkmaIaL8I2YaY4moPaNgAoi2PAMA9o0K7A==
+react-docgen-typescript-loader@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-docgen-typescript-loader/-/react-docgen-typescript-loader-3.3.0.tgz#c1f5c1db9a2b6a6bca220bc50fee0a071bc75499"
+  integrity sha512-gC0TeWTz7s7OMyeABppQGbbrtSNi0yl/gBgZJElBtaBFNSJlHH1sfgQybHZmlZqFcn4UBa+8DOGT6wEJKWTV6g==
   dependencies:
     "@webpack-contrib/schema-utils" "^1.0.0-beta.0"
     loader-utils "^1.2.3"
-    react-docgen-typescript "^1.14.0"
+    react-docgen-typescript "^1.15.0"
 
-react-docgen-typescript@^1.14.0:
+react-docgen-typescript@^1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/react-docgen-typescript/-/react-docgen-typescript-1.15.0.tgz#963f14210841f9b51ed18c65152a6cc37f1c3184"
   integrity sha512-8xObdkRQbrc0505tEdVRO+pdId8pKFyD6jhLYM9FDdceKma+iB+a17Dk7e3lPRBRh8ArQLCedOCOfN/bO338kw==
