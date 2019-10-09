@@ -1,0 +1,80 @@
+@custom-selector :--main .main;
+@custom-selector :--left :--main.left;
+@custom-selector :--top :--main.top;
+@custom-selector :--small :--main.sizeS;
+@custom-selector :--medium :--main.sizeM;
+
+:--main {
+  --line-height-s: 18px;
+  --line-height-m: 21px;
+  --dot-size: 12px;
+
+  display: inline-flex;
+
+  &.left {
+    align-items: top;
+  }
+
+  &.top {
+    align-items: left;
+    flex-direction: column;
+  }
+}
+
+.dot {
+  min-width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 100px;
+
+  @nest :--left & {
+    margin-right: 8px;
+    margin-top: calc((var(--line-height-s) - var(--dot-size)) / 2);
+  }
+
+  @nest :--left:--medium & {
+    margin-top: calc((var(--line-height-m) - var(--dot-size)) / 2);
+  }
+}
+
+.line {
+  min-width: 20px;
+  height: 2px;
+
+  &.bold {
+    height: 4px;
+  }
+
+  @nest :--left & {
+    margin-right: 8px;
+    margin-top: calc((var(--line-height-s) - 2px) / 2);
+  }
+
+  @nest :--left:--medium & {
+    margin-top: calc((var(--line-height-m) - 2px) / 2);
+  }
+
+  @nest :--left &.bold {
+    margin-top: calc((var(--line-height-s) - 4px) / 2);
+  }
+
+  @nest :--left:--medium &.bold {
+    margin-top: calc((var(--line-height-m) - 4px) / 2);
+  }
+
+  @nest :--top & {
+    width: 30px;
+    margin-bottom: 4px;
+  }
+}
+
+.text {
+  @nest :--small & {
+    line-height: var(--line-height-s);
+    font-size: 13px;
+  }
+
+  @nest :--medium & {
+    line-height: var(--line-height-m);
+    font-size: 15px;
+  }
+}
