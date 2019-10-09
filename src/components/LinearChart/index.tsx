@@ -150,6 +150,7 @@ export class LinearChart extends React.Component<Props, State> {
         },
         withZoom,
         isVertical,
+        lines,
       },
       state: { paddingX, paddingY, xDomain, yDomain },
     } = this
@@ -226,6 +227,7 @@ export class LinearChart extends React.Component<Props, State> {
             domain={mainAxis.currentDomain}
             originalDomain={mainAxis.getDomain(this.getAllValues())}
             onZoom={this.onZoom}
+            lines={lines}
           />
         )}
       </div>
@@ -401,8 +403,8 @@ export class LinearChart extends React.Component<Props, State> {
 
       const countLines = zoomRangeIndexes[1] - zoomRangeIndexes[0]
 
-      // Если количество лучшей, которое мы видим больше двух, то нам нужен домен только видимых точек
-      // Иначе мы берем домены и точек, которые за экраном
+      // Если количество лучей, которое мы видим, больше двух, то нам нужен домен только видимых точек
+      // Иначе мы берем домены точек, которые за экраном
       const valuesInZoomRange =
         countLines > 2
           ? values.slice(zoomRangeIndexes[0] + (domainMin <= 0 ? 0 : 1), zoomRangeIndexes[1])
