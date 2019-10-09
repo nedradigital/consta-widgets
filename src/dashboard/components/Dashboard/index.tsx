@@ -117,7 +117,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     }
 
     if (element) {
-      element.style.setProperty('--base-size', `${baseFontSize * scale}px`)
+      element.style.setProperty('--base-size', `${baseFontSize * scale}`)
     }
   }, [width])
 

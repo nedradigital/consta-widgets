@@ -51,9 +51,9 @@
     ]
   },
   "dependencies": {
+    "@gaz/utils": "0.1.2",
     "classnames": "2.2.6",
     "d3": "5.12.0",
-    "@gaz/utils": "0.1.1",
     "lodash": "4.17.11",
     "pluralize-ru": "1.0.1",
     "react": "16.8.6",
@@ -69,6 +69,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
+    "@gaz/configs": "0.1.8",
     "@nekitk/storybook-addon-smart-knobs": "5.0.0-nekitk.3",
     "@storybook/addon-actions": "5.1.9",
     "@storybook/addon-info": "5.1.11",
@@ -87,12 +88,11 @@
     "css-loader": "3.0.0",
     "css-modules-typescript-loader": "2.0.4",
     "file-loader": "4.0.0",
-    "@gaz/configs": "0.1.6",
     "husky": "3.0.0",
     "mini-css-extract-plugin": "0.7.0",
     "npm-run-all": "4.1.5",
-    "storybook-addon-react-docgen": "1.2.6",
     "ora": "3.4.0",
+    "storybook-addon-react-docgen": "1.2.6",
     "webpack-cli": "3.3.9"
   },
   "engines": {
