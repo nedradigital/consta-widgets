@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import * as React from 'react'
 import { uid } from 'react-uid'
 
@@ -9,7 +8,7 @@ import { Axis } from './components/Axis'
 import { Bar } from './components/Bar'
 import css from './index.css'
 
-type NumberRange = [number, number]
+type NumberRange = readonly [number, number]
 
 export type Orientation = 'horizontal' | 'vertical'
 
@@ -20,13 +19,13 @@ type Value = {
 
 export type Data = {
   categorie: string
-  values: Value[]
+  values: readonly Value[]
 }
 
 export type Colors = { [key in string]: string }
 
 type Props = {
-  data: Data[]
+  data: readonly Data[]
   colors: Colors
   orientation: Orientation
   /** Показывать значение рядом с линиями. Работает только при orientation: horizontal */
@@ -44,22 +43,26 @@ const getYRange = (height: number) =>
     0,
   ] as NumberRange
 
-const getGroupScale = (domain: string[], size: number, orientation: Orientation) =>
+const getGroupScale = (domain: readonly string[], size: number, orientation: Orientation) =>
   d3
     .scaleBand()
-    .domain(domain)
-    .range(orientation === 'horizontal' ? getYRange(size) : getXRange(size))
+    .domain([...domain])
+    .range(
+      orientation === 'horizontal'
+        ? [getYRange(size)[0], getYRange(size)[1]]
+        : [getXRange(size)[0], getXRange(size)[1]]
+    )
 
 const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
   d3
     .scaleLinear()
-    .domain(domain)
+    .domain([...domain])
     .range(orientation === 'horizontal' ? getXRange(size) : getYRange(size))
 
-const getComain = (items: Data[]): NumberRange => {
+const getComain = (items: readonly Data[]): NumberRange => {
   const numbers = items.reduce(
     (acc, curr) => acc.concat(curr.values.map(i => i.value)),
-    [] as number[]
+    [] as readonly number[]
   )
   return [0, d3.max(numbers)] as NumberRange
 }

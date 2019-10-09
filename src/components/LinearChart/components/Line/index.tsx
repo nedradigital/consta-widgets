@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import React, { useLayoutEffect } from 'react'
 
 import * as d3 from 'd3'
@@ -8,7 +7,7 @@ import { Item } from '../../'
 import css from './index.css'
 
 type Props = {
-  values: Item[]
+  values: readonly Item[]
   color: string
   dotRadius?: number
   lineClipPath: string
@@ -32,7 +31,7 @@ export const Line: React.FC<Props> = ({
   useLayoutEffect(() => {
     // Line
     d3.select(lineRef.current)
-      .datum(values)
+      .datum([...values])
       .attr(
         'd',
         d3
@@ -45,7 +44,7 @@ export const Line: React.FC<Props> = ({
     if (dotRadius) {
       d3.select(dotsRef.current)
         .selectAll('circle')
-        .data(values)
+        .data([...values])
         .join('circle')
         .attr('class', css.circle)
         .attr('cx', d => scaleX(d.x))

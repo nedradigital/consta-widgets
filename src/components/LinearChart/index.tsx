@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import React from 'react'
 import { uid } from 'react-uid'
 
@@ -13,14 +12,14 @@ import css from './index.css'
 
 export type Line = {
   color: string
-  values: Item[]
+  values: readonly Item[]
   dots?: boolean
 }
 export type Item = { x: number; y: number }
-export type NumberRange = [number, number]
+export type NumberRange = readonly [number, number]
 
 type Props = {
-  lines: Line[]
+  lines: readonly Line[]
   gridConfig: GridConfig
   withZoom?: boolean
   isVertical?: boolean
@@ -85,12 +84,12 @@ const getYRange = (height: number) =>
 const getXScale = (domain: NumberRange, width: number) =>
   d3
     .scaleLinear()
-    .domain(domain)
+    .domain([...domain])
     .range(getXRange(width))
 const getYScale = (domain: NumberRange, height: number) =>
   d3
     .scaleLinear()
-    .domain(domain)
+    .domain([...domain])
     .range(getYRange(height))
 
 export class LinearChart extends React.Component<Props, State> {
@@ -203,7 +202,7 @@ export class LinearChart extends React.Component<Props, State> {
           {this.getLines().map(line => (
             <LineComponent
               key={line.color}
-              values={line.values}
+              values={[...line.values]}
               color={line.color}
               dotRadius={line.dots ? dotRadius : undefined}
               scaleX={scaleX}
@@ -232,27 +231,27 @@ export class LinearChart extends React.Component<Props, State> {
     )
   }
 
-  getXDomain = (items: Item[]): NumberRange => {
+  getXDomain = (items: readonly Item[]): NumberRange => {
     const { isVertical } = this.props
     const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
     const domain = d3.extent(items, v => v.x) as NumberRange
     return padDomain(domain, left, right)
   }
 
-  getYDomain = (items: Item[]): NumberRange => {
+  getYDomain = (items: readonly Item[]): NumberRange => {
     const { isVertical } = this.props
     const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
     const domain = d3.extent(items, v => v.y)
     return padDomain(
       (isVertical
-        ? domain.reverse() // Чтобы 0 был сверху
+        ? [...domain].reverse() // Чтобы 0 был сверху
         : domain) as NumberRange,
       bottom,
       top
     )
   }
 
-  getLines = (): Line[] => {
+  getLines = (): readonly Line[] => {
     const { lines, isVertical } = this.props
 
     return isVertical
@@ -268,7 +267,7 @@ export class LinearChart extends React.Component<Props, State> {
         }))
       : lines
   }
-  getAllValues = (): Item[] => _.flatten(this.getLines().map(l => l.values))
+  getAllValues = (): readonly Item[] => _.flatten(this.getLines().map(l => l.values))
 
   getSvgSize = () => {
     const {
@@ -423,11 +422,11 @@ export class LinearChart extends React.Component<Props, State> {
         .transition()
         .duration(TRANSITION_DURATIONS.ZOOM)
         .tween('secondaryDomainTween', () => {
-          const i = d3.interpolateArray(secondaryAxis.currentDomain, newSecondaryDomain)
+          const i = d3.interpolateArray([...secondaryAxis.currentDomain], [...newSecondaryDomain])
 
           return (t: number) => {
-            // d3 внутри мутирует массив, поэтому клонируем
-            secondaryAxis.setDomain([...i(t)] as NumberRange)
+            // убеждаемся, что setDomain получит на входе массив с нужной длиной
+            secondaryAxis.setDomain([i(t)[0], i(t)[1]] as NumberRange)
           }
         })
     }
