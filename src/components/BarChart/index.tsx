@@ -67,6 +67,8 @@ const getComain = (items: Data[]): NumberRange => {
 export class BarChart extends React.Component<Props> {
   ref = React.createRef<HTMLDivElement>()
 
+  resizeObserver = new ResizeObserver(() => this.updateSize())
+
   uid = uid(this)
   clipId = `barchart_clipPath_${this.uid}`
 
@@ -85,11 +87,11 @@ export class BarChart extends React.Component<Props> {
   componentDidMount() {
     this.updateSize()
 
-    window.addEventListener('resize', this.updateSize)
+    this.resizeObserver.observe(this.ref.current!)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateSize)
+    this.resizeObserver.unobserve(this.ref.current!)
   }
 
   render() {
