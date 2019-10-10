@@ -180,7 +180,12 @@ export const Box: React.FC<Props> = ({
 
   return (
     <div
-      className={classnames(className, css.box, isNestedBox && css.isNested)}
+      className={classnames(
+        className,
+        css.box,
+        isNestedBox && css.isNested,
+        viewMode && css.isViewMode
+      )}
       ref={isPreview ? dragRef : null}
       style={{ opacity }}
     >

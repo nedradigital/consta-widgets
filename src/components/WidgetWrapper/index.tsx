@@ -27,6 +27,8 @@ type Props = {
   requestCloseSettings: () => void
 }
 
+const stopDragWidget = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()
+
 export const WidgetWrapper: React.FC<Props> = ({
   children,
   datasets,
@@ -61,6 +63,9 @@ export const WidgetWrapper: React.FC<Props> = ({
         marginRight: params.marginRight && calcSize(sizeValues[params.marginRight]),
       }}
       ref={ref}
+      onMouseDown={showSettings ? stopDragWidget : undefined}
+      onMouseUp={showSettings ? stopDragWidget : undefined}
+      onMouseMove={showSettings ? stopDragWidget : undefined}
     >
       {children}
       {showSettings &&
