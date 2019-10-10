@@ -82,6 +82,7 @@
   &:nth-child(1) {
     background-color: rgba(144, 187, 255, 0.11);
   }
+
   &:nth-child(2) {
     background-color: rgba(144, 187, 255, 0.21);
   }

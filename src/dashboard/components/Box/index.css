@@ -88,12 +88,14 @@
   }
 
   &:not(:hover) {
+
     & .button:not(.add) {
       display: none;
     }
   }
 
   &:not(.isViewMode) {
+
     &:hover,
     &.isEditing {
       box-shadow: 0 0 5px aquamarine inset;

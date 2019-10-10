@@ -1,0 +1,7 @@
+.label {
+  color: #f6fbfd;
+}
+
+.sublabel {
+  color: var(--text-color-70);
+}

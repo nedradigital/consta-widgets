@@ -14,6 +14,10 @@ const mockData: DataMap = {
     percentage: 11,
     status: 'danger',
   },
+  [DataType.Stats]: {
+    number: '+217',
+    percent: '+2.3%',
+  },
   [DataType.Donut]: [
     [
       {

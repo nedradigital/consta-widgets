@@ -35,6 +35,7 @@
 }
 
 .title {
+
   &:empty::before {
     content: ' ';
     display: inline-block;
