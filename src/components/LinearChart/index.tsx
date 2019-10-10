@@ -96,6 +96,8 @@ const getYScale = (domain: NumberRange, height: number) =>
 export class LinearChart extends React.Component<Props, State> {
   ref = React.createRef<HTMLDivElement>()
 
+  resizeObserver = new ResizeObserver(() => this.updateSize())
+
   // d3 ограничивает по 1 анимации на элемент, поэтому создаём фэйковые элементы для твинов стэйта
   paddingTransitionEl = {} as Element
   secondaryDomainTransitionEl = {} as Element
@@ -123,7 +125,7 @@ export class LinearChart extends React.Component<Props, State> {
     this.updateDomains()
     this.updateSize()
 
-    window.addEventListener('resize', this.updateSize)
+    this.resizeObserver.observe(this.ref.current!)
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -137,7 +139,7 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this.updateSize)
+    this.resizeObserver.unobserve(this.ref.current!)
   }
 
   render() {
