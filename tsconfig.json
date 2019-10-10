@@ -5,7 +5,8 @@
     "paths": {
       "*": ["types/modules/*"],
       "@/*": ["src/*"]
-    }
+    },
+    "declarationDir": "lib/@types"
   },
   "include": [
     "src/**/*",
