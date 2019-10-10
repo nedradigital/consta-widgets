@@ -6,6 +6,8 @@ import css from './index.css'
 
 type Data = typeof undefined
 
+export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
+
 export const typeNames = ['heading1', 'heading2', 'heading3', 'text1', 'text2'] as const
 export type TypeNames = typeof typeNames[number]
 
@@ -70,6 +72,7 @@ export const TitleWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
 )
 
 export const TitleWidget = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Заголовок',
   defaultParams,
   dataType: null,

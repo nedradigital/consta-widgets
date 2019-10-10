@@ -7,6 +7,8 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.LinearChart
 type Data = DataMap[typeof dataType]
 
+const widgetId = 'e63c468b-75bd-4c5c-95c7-696e598db6e3'
+
 type Params = {
   withZoom?: boolean
   isVertical?: boolean
@@ -74,6 +76,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
 )
 
 export const LinearChartWidget = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Линейный график',
   defaultParams,
   dataType: DataType.LinearChart,

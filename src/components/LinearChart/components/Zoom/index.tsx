@@ -20,7 +20,7 @@ type Props = {
   domain: NumberRange
   originalDomain: NumberRange
   onZoom: () => void
-  lines: Line[]
+  lines: readonly Line[]
 }
 
 const ZOOM_STEP = 2

@@ -12,6 +12,8 @@ type Params = {
   colors: Colors
 }
 
+const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
+
 export const defaultParams: Params = {
   orientation: 'vertical',
   showValues: false,
@@ -34,6 +36,7 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
 )
 
 export const BarChartWidget = createWidget<Data, Params>({
+  id: widgetId,
   name: 'Барчарт',
   defaultParams,
   dataType: DataType.BarChart,

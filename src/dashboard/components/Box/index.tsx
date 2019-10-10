@@ -17,6 +17,7 @@ type WidgetItem = {
   type: 'widget'
   name: string
   key: string
+  id: string
   params: {}
 }
 
@@ -46,9 +47,21 @@ type WidgetEditorBoxProps = {
 
 const widgetsList: { [key: string]: any } = {}
 const req = require.context('../../../widgets', true, /index.tsx$/)
-req.keys().forEach(key => (widgetsList[key.replace(/\.\/(.*)\/.*$/, '$1')] = req(key)))
+req.keys().forEach(key => {
+  const widgetName = key.replace(/\.\/(.*)\/.*$/, '$1')
+  const widgetId = req(key)[widgetName].id
 
-const getWidget = (name: string): WidgetType<any, any> => widgetsList[name][name]
+  widgetsList[widgetId] = {
+    widgetName,
+    ...req(key),
+  }
+})
+
+const getWidget = (id: string): WidgetType<any, any> => {
+  const name = widgetsList[id].widgetName
+
+  return widgetsList[id][name]
+}
 
 const WidgetEditorBox: React.FC<WidgetEditorBoxProps> = ({
   children,
@@ -131,6 +144,7 @@ export const Box: React.FC<Props> = ({
             type: 'widget',
             name: selectedItem,
             key: getUniqueName(selectedItem),
+            id: getWidget(selectedItem).id,
             params: getWidget(selectedItem).defaultParams,
           },
         ])
@@ -195,7 +209,7 @@ export const Box: React.FC<Props> = ({
             <optgroup label="Виджеты">
               {Object.keys(widgetsList).map(key => (
                 <option key={key} value={key}>
-                  {key} ({getWidget(key).showName})
+                  {widgetsList[key].widgetName} ({getWidget(key).showName})
                 </option>
               ))}
             </optgroup>
@@ -219,7 +233,7 @@ export const Box: React.FC<Props> = ({
         let component
 
         if (item.type === 'widget') {
-          const Component = getWidget(item.name)
+          const Component = getWidget(item.id)
           component = (
             <Component
               key={item.key}
