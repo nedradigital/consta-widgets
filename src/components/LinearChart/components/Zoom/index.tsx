@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { NumberRange, TRANSITION_DURATIONS } from '../../'
+import { Line, NumberRange, TRANSITION_DURATIONS } from '../../'
 import { XLabelsPosition, YLabelsPosition } from '../Axis'
 
 import css from './index.css'
@@ -21,6 +21,7 @@ type Props = {
   domain: NumberRange
   originalDomain: NumberRange
   onZoom: () => void
+  lines: Line[]
 }
 
 const ZOOM_STEP = 2
@@ -38,6 +39,7 @@ export const Zoom: React.FC<Props> = ({
   domain,
   originalDomain,
   onZoom,
+  lines,
 }) => {
   const zoomRef = useRef({} as Element) // Фэйковый элемент для анимации зума
   const [zoom, setZoom] = useState(1)
@@ -71,6 +73,15 @@ export const Zoom: React.FC<Props> = ({
       .translateExtent(zoomExtent)
       .on('zoom', onZoom)
   })
+
+  useLayoutEffect(() => {
+    // При изменении данных в реальном времени нам нужно заново отзумить значения
+    // Поэтому мы возвращаем изум в исходные положение
+    // А потом возвращаем к предыдущему значению зума
+    Promise.resolve()
+      .then(() => setZoom(1))
+      .then(() => setZoom(zoom))
+  }, [lines])
 
   useLayoutEffect(() => {
     d3.select(zoomRef.current)
