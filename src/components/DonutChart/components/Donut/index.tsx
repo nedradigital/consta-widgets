@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import React, { createRef, useLayoutEffect } from 'react'
 
 import * as d3 from 'd3'
@@ -10,7 +9,7 @@ type DataItem = {
   value: number
 }
 
-export type Data = DataItem[]
+export type Data = readonly DataItem[]
 
 type Props = {
   data: Data
@@ -27,7 +26,7 @@ export const Donut: React.FC<Props> = ({ colors, data, innerRadius, outerRadius 
       const pieData = d3
         .pie<DataItem>()
         .sort(null)
-        .value(d => d.value)(data)
+        .value(d => d.value)([...data])
 
       const arc = d3
         .arc<d3.PieArcDatum<DataItem>>()

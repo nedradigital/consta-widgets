@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import React, { useLayoutEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
@@ -9,7 +8,7 @@ import css from './index.css'
 
 export type Colors = { [key in string]: string }
 
-export type Data = DonutData[]
+export type Data = readonly DonutData[]
 
 type Props = {
   data: Data

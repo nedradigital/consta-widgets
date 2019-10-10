@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import classnames from 'classnames'
@@ -62,15 +61,15 @@ export const Zoom: React.FC<Props> = ({
   useLayoutEffect(() => {
     const [xRangeStart, xRangeEnd] = _.sortBy(xRange)
     const [yRangeStart, yRangeEnd] = _.sortBy(yRange)
-    const zoomExtent: [NumberRange, NumberRange] = [
+    const zoomExtent: readonly [NumberRange, NumberRange] = [
       [xRangeStart, yRangeStart],
       [xRangeEnd, yRangeEnd],
     ]
     zoomBehaviorRef.current = d3
       .zoom()
       .scaleExtent([MIN_ZOOM, MAX_ZOOM])
-      .extent(zoomExtent)
-      .translateExtent(zoomExtent)
+      .extent([[zoomExtent[0][0], zoomExtent[0][1]], [zoomExtent[1][0], zoomExtent[1][1]]])
+      .translateExtent([[zoomExtent[0][0], zoomExtent[0][1]], [zoomExtent[1][0], zoomExtent[1][1]]])
       .on('zoom', onZoom)
   })
 

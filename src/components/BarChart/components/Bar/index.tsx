@@ -1,4 +1,3 @@
-/* tslint:disable:readonly-array */
 import { createRef, useLayoutEffect } from 'react'
 
 import * as d3 from 'd3'
@@ -64,7 +63,7 @@ export const Bar: React.FC<Props> = ({
       const rect = d3
         .select(ref.current)
         .selectAll('rect')
-        .data(values)
+        .data([...values])
         .join('rect')
         .attr('rx', 3)
         .style('fill', d => colors[d.description])
@@ -81,7 +80,7 @@ export const Bar: React.FC<Props> = ({
 
           d3.select(textRef.current)
             .selectAll('text')
-            .data(values)
+            .data([...values])
             .join('text')
             .attr('x', d => valuesScale(d.value) + 4)
             .attr('y', d => (barScale(d.description) || 0) + padding / 2)
