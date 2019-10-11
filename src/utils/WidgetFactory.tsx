@@ -23,6 +23,7 @@ export type WidgetType<Data, Params> = React.FC<{
 export type WidgetContentProps<Data, Params> = {
   data: Data
   params: Params
+  dataset?: Dataset
 }
 
 export type OnChangeParam<Params> = <K extends keyof Params, V extends Params[K]>(
@@ -66,6 +67,7 @@ export const createWidget = <
         ...params,
         [paramName]: newValue,
       })
+    const dataset = params.datasetId ? datasets.find(d => d.id === params.datasetId) : undefined
 
     return (
       <WidgetWrapper
@@ -76,7 +78,7 @@ export const createWidget = <
         additionalSettings={renderSettings ? renderSettings(params, onChangeParam) : undefined}
         requestCloseSettings={requestCloseSettings}
       >
-        <Content data={widgetData} params={params} />
+        <Content dataset={dataset} data={widgetData} params={params} />
       </WidgetWrapper>
     )
   }

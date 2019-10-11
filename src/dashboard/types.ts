@@ -38,9 +38,10 @@ export type DataMap = {
 }
 
 export type Dataset = {
-  type: DataType
   name: string
   id: string
+  type: DataType
+  formatLabel?: (n: number) => string
 }
 
 export type Data = { [k: string]: DataMap[DataType] }

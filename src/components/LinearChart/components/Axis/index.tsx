@@ -3,6 +3,8 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
+import { MainTickValues } from '../..'
+
 import css from './index.css'
 
 const TICK_PADDING = 15
@@ -38,6 +40,9 @@ type Props = {
   }
   gridConfig: GridConfig
   onAxisSizeChange: (sizes: { xAxisHeight: number; yAxisWidth: number }) => void
+  mainTickValues: MainTickValues
+  isVertical?: boolean
+  formatLabel: (n: number) => string
 }
 
 export const Axis: React.FC<Props> = ({
@@ -50,6 +55,9 @@ export const Axis: React.FC<Props> = ({
     y: { labels: yLabelsPos, labelTicks: yLabelTicks, gridTicks: yGridTicks, guide: yGuide },
   },
   onAxisSizeChange,
+  mainTickValues,
+  isVertical,
+  formatLabel,
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
@@ -78,6 +86,7 @@ export const Axis: React.FC<Props> = ({
           }[xLabelsPos]
       ),
       transform: xOnBottom ? `translateY(${height}px)` : '',
+      values: isVertical ? null : mainTickValues,
     },
     {
       getEl: () => yLabelsRef.current,
@@ -95,6 +104,7 @@ export const Axis: React.FC<Props> = ({
           }[yLabelsPos]
       ),
       transform: yOnLeft ? '' : `translateX(${width}px)`,
+      values: isVertical ? mainTickValues : null,
     },
   ] as const
 
@@ -122,10 +132,15 @@ export const Axis: React.FC<Props> = ({
           null,
           undefined
         >
-        const axis = d3[labels.direction](labels.scale)
-          .ticks(labels.ticks)
-          .tickSize(4)
-          .tickPadding(TICK_PADDING)
+        const axis = labels.values
+          ? d3[labels.direction](labels.scale)
+              .tickValues([...labels.values])
+              .tickPadding(TICK_PADDING)
+              .tickFormat(v => formatLabel(v as number))
+          : d3[labels.direction](labels.scale)
+              .ticks(labels.ticks)
+              .tickSize(4)
+              .tickPadding(TICK_PADDING)
 
         axisSelection
           .attr('class', labels.classes)
@@ -143,15 +158,19 @@ export const Axis: React.FC<Props> = ({
       .axisLeft(scaleY)
       .tickSize(-width)
       .tickFormat(() => '')
+
+    const xAxis = xGridTicks ? xGridBase.ticks(xGridTicks) : xGridBase.tickValues([0])
+    const yAxis = yGridTicks ? yGridBase.ticks(yGridTicks) : yGridBase.tickValues([0])
+
     const grids = [
       {
         el: xGridRef.current,
-        axis: xGridTicks ? xGridBase.ticks(xGridTicks) : xGridBase.tickValues([0]),
+        axis: isVertical ? xAxis : xGridBase.tickValues([...mainTickValues]),
         withGuide: xGuide,
       },
       {
         el: yGridRef.current,
-        axis: yGridTicks ? yGridBase.ticks(yGridTicks) : yGridBase.tickValues([0]),
+        axis: isVertical ? yGridBase.tickValues([...mainTickValues]) : yAxis,
         withGuide: yGuide,
       },
     ] as const
