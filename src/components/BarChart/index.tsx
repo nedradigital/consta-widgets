@@ -40,7 +40,7 @@ const getYRange = (height: number) =>
     0,
   ] as NumberRange
 
-const getGroupScale = (domain: readonly string[], size: number, orientation: Orientation) =>
+export const getGroupScale = (domain: readonly string[], size: number, orientation: Orientation) =>
   d3
     .scaleBand()
     .domain([...domain])
@@ -50,7 +50,7 @@ const getGroupScale = (domain: readonly string[], size: number, orientation: Ori
         : [getXRange(size)[0], getXRange(size)[1]]
     )
 
-const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
+export const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
   d3
     .scaleLinear()
     .domain([...domain])

@@ -1,0 +1,97 @@
+@custom-selector :--main .control;
+@custom-selector :--horizontal :--main.isHorizontal;
+@custom-selector :--vertical :--main.isVertical;
+
+:--main {
+  position: absolute;
+  text-align: right;
+  height: 20px;
+  color: var(--text-color-70);
+}
+
+:--vertical {
+  bottom: 0;
+  left: 0;
+}
+
+:--horizontal {
+  top: 0;
+}
+
+.controls {
+  position: absolute;
+  display: flex;
+
+  @nest :--horizontal & {
+    bottom: 0;
+    right: 8px;
+  }
+
+  @nest :--vertical & {
+    bottom: 0;
+    right: 0;
+    flex-direction: column;
+  }
+
+  @nest :--main:not(:hover) & {
+    display: none;
+  }
+}
+
+.controlGroup {
+  display: flex;
+  background-color: rgba(2, 39, 59, 0.6);
+  align-items: center;
+
+  @nest :--horizontal & {
+    bottom: 0;
+    right: 8px;
+    writing-mode: vertical-rl;
+  }
+
+  @nest :--vertical & {
+    flex-direction: row;
+  }
+
+  & + & {
+    @nest :--horizontal & {
+      margin-left: 4px;
+    }
+
+    @nest :--vertical & {
+      margin-top: 4px;
+    }
+  }
+}
+
+.labels {
+  display: inline;
+}
+
+.checkbox {
+  display: none;
+
+  & + label {
+    border: 2px solid #0082cc;
+    box-sizing: border-box;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:checked + label {
+    background-color: #00273d;
+    color: #0082cc;
+
+    &::after {
+      content: '\2714';
+      font-size: 14px;
+      position: absolute;
+      top: -2px;
+      left: 1px;
+      color: #0082cc;
+    }
+  }
+}
