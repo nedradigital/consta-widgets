@@ -5,10 +5,15 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { Dashboard, DashboardProps, DashboardState } from './components/Dashboard'
 import { Menu, MenuProps } from './components/Menu'
 import css from './index.css'
+import { Data, DataMap, Dataset } from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
+export { DataType } from './types'
 export type DashboardState = DashboardState
+export type Data = Data
+export type DataMap = DataMap
+export type Dataset = Dataset
 
 type ConstructorProps = DashboardProps & MenuProps
 
