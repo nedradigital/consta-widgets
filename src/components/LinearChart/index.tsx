@@ -391,7 +391,7 @@ export class LinearChart extends React.Component<Props, State> {
     const domainMax = Math.max(...newMainDomain)
 
     const lineDomains = this.getLines().map(({ values }) => {
-      const zoomRangeIndexes = [
+      const zoomRangeIndexes = _.sortBy([
         getIndexWithFallbackToDefault(
           _.findLastIndex(values, v => mainAxis.getValue(v) <= domainMin),
           0
@@ -400,7 +400,7 @@ export class LinearChart extends React.Component<Props, State> {
           _.findIndex(values, v => mainAxis.getValue(v) >= domainMax),
           values.length - 1
         ),
-      ].sort()
+      ])
 
       const countLines = zoomRangeIndexes[1] - zoomRangeIndexes[0]
 
