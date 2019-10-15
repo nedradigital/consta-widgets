@@ -31,7 +31,8 @@
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn checktypes"
+      "pre-push": "yarn checktypes",
+      "post-checkout": "node node_modules/@gaz/configs/scripts/checkout-clean.js"
     }
   },
   "lint-staged": {
