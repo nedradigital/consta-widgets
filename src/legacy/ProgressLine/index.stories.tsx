@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ProgressLine } from '.'
 
 storiesOf('legacy/ProgressLine', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <ProgressLine progress={50} status={'normal'} type={'hollow'}>

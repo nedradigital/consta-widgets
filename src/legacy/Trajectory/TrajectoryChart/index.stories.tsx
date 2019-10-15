@@ -8,6 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { TrajectoryChart } from '.'
 
 storiesOf('legacy/Trajectory/TrajectoryChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: 300 }))
   .add('interactive', () => <TrajectoryChart />)

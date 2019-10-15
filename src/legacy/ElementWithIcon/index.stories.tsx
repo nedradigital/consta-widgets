@@ -11,7 +11,7 @@ import { ReactComponent as Icon } from '../CurrentOperation/images/i-fb.svg'
 import { ElementWithIcon } from '.'
 
 storiesOf('legacy/ElementWithIcon', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <ElementWithIcon icon={<Icon />}>{text('children', 'title')}</ElementWithIcon>

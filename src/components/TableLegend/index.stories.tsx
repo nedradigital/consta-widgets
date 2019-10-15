@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { TableLegend } from '.'
 
 storiesOf('components/TableLegend', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 400 }))
   .add('interactive', () => {
     return (

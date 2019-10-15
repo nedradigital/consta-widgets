@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { VerticalTicks } from '.'
 
 storiesOf('legacy/VerticalTicks', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 400, height: '60vh' }))
   .add('interactive', () => (
     <div style={{ display: 'flex', width: '100%', height: '100%' }}>

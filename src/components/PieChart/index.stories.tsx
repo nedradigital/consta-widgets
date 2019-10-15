@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { PieChart } from '.'
 
 storiesOf('components/PieChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: 300 }))
   .add('interactive', () => {
     return (

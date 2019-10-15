@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ProgressTimeBlock } from '.'
 
 storiesOf('legacy/ProgressTimeBlock', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '496px' }))
   .add('without props', () => <ProgressTimeBlock />)
   .add('statusTitle without status', () => <ProgressTimeBlock statusTitle={'Опережение'} />)

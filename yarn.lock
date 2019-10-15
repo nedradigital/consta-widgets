@@ -1430,10 +1430,10 @@
     call-me-maybe "^1.0.1"
     glob-to-regexp "^0.3.0"
 
-"@nekitk/storybook-addon-smart-knobs@5.0.0-nekitk.3":
-  version "5.0.0-nekitk.3"
-  resolved "https://registry.yarnpkg.com/@nekitk/storybook-addon-smart-knobs/-/storybook-addon-smart-knobs-5.0.0-nekitk.3.tgz#48b04c03dd8a04b4abf08ba9812c733d25880c44"
-  integrity sha512-oJS0c/pt1zPb9kEnQVXCtmg9V8kPZnrQJNlvTKPS+c3RvWb6GNXDNeWmDpJ46MrbGEf92Ojoe0mhtm+E3EiPRA==
+"@nekitk/storybook-addon-smart-knobs@5.0.0-nekitk.6":
+  version "5.0.0-nekitk.6"
+  resolved "https://registry.yarnpkg.com/@nekitk/storybook-addon-smart-knobs/-/storybook-addon-smart-knobs-5.0.0-nekitk.6.tgz#4860c65e276a32df17503f33be6680800504b146"
+  integrity sha512-6UiaJuFTFdJTI1bYxF076H8bAmuS4CoyJPzlM2fuFpSubo+u4MuQXNu9v9h3pjDbvuAHZ3xCPLtKuzsW6JmWgg==
 
 "@nodelib/fs.stat@^1.1.2":
   version "1.1.3"

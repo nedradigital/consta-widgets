@@ -10,7 +10,7 @@ import { GeologicFeaturePlate } from '../GeologicFeaturePlate'
 import { GeologicFeaturePlates } from '.'
 
 storiesOf('legacy/GeologicFeature/GeologicFeaturePlates', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 500 }))
   .addParameters({
     props: {

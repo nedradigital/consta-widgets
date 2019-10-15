@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Timeline } from '.'
 
 storiesOf('legacy/Timeline', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ height: '600px' }))
   .add('No data', () => <Timeline />)
   .add('Half empty data', () => (

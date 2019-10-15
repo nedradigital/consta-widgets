@@ -54,14 +54,14 @@ const getCommonProps = () => ({
 })
 
 storiesOf('components/LinearChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '50vh' }))
   .add('horizontal', () => {
     return <LinearChart {...getCommonProps()} />
   })
 
 storiesOf('components/LinearChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: '80vh' }))
   .add('vertical', () => {
     return <LinearChart {...getCommonProps()} isVertical />

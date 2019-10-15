@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { CostInfo } from '.'
 
 storiesOf('legacy/Cost/CostInfo', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 180 }))
   .add('interactive', () => (
     <CostInfo
