@@ -9,9 +9,18 @@ import { storiesOf } from '@storybook/react'
 import { exampleDatasets } from '@/dashboard/index.stories'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import { widgetId as cardValueWidgetId } from '@/widgets/CardValueWithBadge'
-import { widgetId as cardWidgetId } from '@/widgets/CardWithBadge'
-import { widgetId as titleWidgetId } from '@/widgets/TitleWidget'
+import {
+  defaultParams as cardValueWithBadgeDefaultParams,
+  widgetId as cardValueWidgetId,
+} from '@/widgets/CardValueWithBadge'
+import {
+  defaultParams as cardWithBadgeDefaultParams,
+  widgetId as cardWidgetId,
+} from '@/widgets/CardWithBadge'
+import {
+  defaultParams as titleDefaultParams,
+  widgetId as titleWidgetId,
+} from '@/widgets/TitleWidget'
 
 import { Box, BoxItem } from '.'
 
@@ -22,19 +31,14 @@ const initialItems: readonly BoxItem[] = [
     name: 'TitleWidget',
     key: getUniqueName('TitleWidget'),
     id: titleWidgetId,
-    params: {
-      title: 'Test title widget',
-    },
+    params: titleDefaultParams,
   },
   {
     type: 'widget',
     name: 'CardValueWithBadge',
     key: cardValueWithBadgeKey,
     id: cardValueWidgetId,
-    params: {
-      title: 'Стоимость',
-      label: 'млн,₽',
-    },
+    params: cardValueWithBadgeDefaultParams,
   },
   {
     type: 'columns',
@@ -45,10 +49,7 @@ const initialItems: readonly BoxItem[] = [
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
           id: cardWidgetId,
-          params: {
-            text: 'Карточка с текстом',
-            label: 'и бэйджем',
-          },
+          params: cardWithBadgeDefaultParams,
         },
       ],
       [
@@ -57,10 +58,7 @@ const initialItems: readonly BoxItem[] = [
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
           id: cardWidgetId,
-          params: {
-            text: 'Карточка с текстом',
-            label: 'и бэйджем',
-          },
+          params: cardWithBadgeDefaultParams,
         },
       ],
       [
@@ -69,10 +67,7 @@ const initialItems: readonly BoxItem[] = [
           name: 'CardWithBadge',
           key: getUniqueName('CardWithBadge'),
           id: cardWidgetId,
-          params: {
-            text: 'Карточка с текстом',
-            label: 'и бэйджем',
-          },
+          params: cardWithBadgeDefaultParams,
         },
       ],
     ],

@@ -7,8 +7,14 @@ import { storiesOf } from '@storybook/react'
 
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import { widgetId as cardWidgetId } from '@/widgets/CardWithBadge'
-import { widgetId as titleWidgetId } from '@/widgets/TitleWidget'
+import {
+  defaultParams as cardWithBadgeDefaultParams,
+  widgetId as cardWidgetId,
+} from '@/widgets/CardWithBadge'
+import {
+  defaultParams as titleDefaultParams,
+  widgetId as titleWidgetId,
+} from '@/widgets/TitleWidget'
 
 import { Columns, ColumnsItem } from '.'
 
@@ -21,19 +27,14 @@ const columnsItem: ColumnsItem = {
         name: 'CardWithBadge',
         key: getUniqueName('CardWithBadge'),
         id: cardWidgetId,
-        params: {
-          text: 'Карточка с текстом 1',
-          label: 'и бэйджем',
-        },
+        params: cardWithBadgeDefaultParams,
       },
       {
         type: 'widget',
         name: 'TitleWidget',
         key: getUniqueName('TitleWidget'),
         id: titleWidgetId,
-        params: {
-          title: 'Test title widget',
-        },
+        params: titleDefaultParams,
       },
     ],
     [
@@ -42,10 +43,7 @@ const columnsItem: ColumnsItem = {
         name: 'CardWithBadge',
         key: getUniqueName('CardWithBadge'),
         id: cardWidgetId,
-        params: {
-          text: 'Карточка с текстом 2',
-          label: 'и бэйджем',
-        },
+        params: cardWithBadgeDefaultParams,
       },
     ],
   ],
