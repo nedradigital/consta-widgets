@@ -4,6 +4,6 @@ node_js: '10'
 cache: yarn
 
 before_install:
-  - npm config set //nexus.csssr.space/repository/csssr/:_authToken=NpmToken.8c83f400-43b3-3e91-b0dd-9a9f5a9df861
-  - npm install -g yarn
+  - npm install -g yarn npm-cli-login
+  - npm-cli-login -u ${LOGIN} -p ${PASSWORD} -e evgeniy.grachev@csssr.com -r https://nexus.csssr.space/repository/csssr -s @gaz
   - yarn --frozen-lockfile
