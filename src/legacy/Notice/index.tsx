@@ -15,12 +15,7 @@ export type Props = {
   title?: string
 }
 
-export const Notice: React.FunctionComponent<Props> = ({
-  className,
-  description,
-  startTime,
-  title,
-}) => (
+export const Notice: React.FC<Props> = ({ className, description, startTime, title }) => (
   <div className={classnames(css.notice, className)}>
     {startTime && (
       <div className={css.timer}>

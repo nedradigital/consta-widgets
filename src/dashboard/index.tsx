@@ -3,9 +3,9 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { Dashboard, DashboardProps, DashboardState } from './components/Dashboard'
-import { Menu, MenuProps } from './components/Menu'
+import { marginSizes, Menu, MenuProps } from './components/Menu'
 import css from './index.css'
-import { Data, DataMap, Dataset } from './types'
+import { Data, DataMap, Dataset, Settings } from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -17,9 +17,9 @@ export type Dataset = Dataset
 
 type ConstructorProps = DashboardProps & MenuProps
 
-export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
+export const Constructor: React.FC<ConstructorProps> = props => {
   const {
-    cols,
+    cols = 12,
     onChange,
     dashboard,
     onClear,
@@ -34,10 +34,26 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
     rowsCount,
   } = props
 
+  const { margin = 'l' } = dashboard.settings
+  const margins = baseMargin || [marginSizes[margin], marginSizes[margin]]
+
+  const handleChangeSettings = React.useCallback(
+    (settings: Settings) => {
+      onChange({ ...dashboard, settings })
+    },
+    [dashboard, onChange]
+  )
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={css.constructor}>
-        <Menu onClear={onClear} onToggleMode={onToggleMode} viewMode={viewMode} />
+        <Menu
+          onClear={onClear}
+          onToggleMode={onToggleMode}
+          onChange={handleChangeSettings}
+          viewMode={viewMode}
+          settings={dashboard.settings}
+        />
         <Dashboard
           cols={cols}
           datasets={datasets}
@@ -47,7 +63,7 @@ export const Constructor: React.FunctionComponent<ConstructorProps> = props => {
           data={data}
           widthScale={widthScale}
           baseFontSize={baseFontSize}
-          baseMargin={baseMargin}
+          baseMargin={margins}
           basePadding={basePadding}
           rowsCount={rowsCount}
         />

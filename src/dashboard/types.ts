@@ -44,3 +44,10 @@ export type Dataset = {
 }
 
 export type Data = { [k: string]: DataMap[DataType] }
+
+export type MarginSize = 's' | 'm' | 'l' | 'xl'
+
+export type Settings = {
+  cols?: number
+  margin?: MarginSize
+}

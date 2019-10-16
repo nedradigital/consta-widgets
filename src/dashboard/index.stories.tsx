@@ -9,7 +9,6 @@ import { Dataset, DataType } from '@/dashboard/types'
 import { Constructor, DashboardState } from './'
 import { Config } from './components/Dashboard'
 
-const getMargin = () => [number('margin x', 15), number('margin y', 15)] as const
 const getPadding = () => [number('padding x', 15), number('padding y', 15)] as const
 const getRowsCount = () => number('rowsCount', 4)
 
@@ -35,7 +34,7 @@ export const exampleDatasets: readonly Dataset[] = [
     id: 'wasted',
   },
 ]
-const cols = 4
+const cols = 12
 
 const storageName = 'story::dashboard'
 
@@ -49,6 +48,7 @@ const getStateFromStorage = (): DashboardState => {
   return {
     boxes: [],
     config: {},
+    settings: {},
   }
 }
 
@@ -64,13 +64,12 @@ storiesOf('dashboard/Constructor', module)
         viewMode={false}
         datasets={exampleDatasets}
         cols={cols}
-        dashboard={{ boxes: [], config: {} }}
+        dashboard={{ boxes: [], config: {}, settings: {} }}
         data={{}}
         onChange={() => {
           /**/
         }}
         baseFontSize={16}
-        baseMargin={getMargin()}
         rowsCount={getRowsCount()}
       />
     )
@@ -101,7 +100,6 @@ storiesOf('dashboard/Constructor', module)
             data={{}}
             widthScale={1024}
             baseFontSize={16}
-            baseMargin={getMargin()}
             basePadding={getPadding()}
             rowsCount={getRowsCount()}
           />

@@ -11,7 +11,7 @@ type Props = {
   notices: readonly NoticeProps[]
 }
 
-export const Notices: React.FunctionComponent<Props> = ({ notices, className }) => {
+export const Notices: React.FC<Props> = ({ notices, className }) => {
   const noticesCount = notices.length
   const { description, startTime, title } = notices[0]
   const isMultiple = noticesCount > 1
