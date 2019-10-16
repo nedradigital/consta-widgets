@@ -27,18 +27,13 @@ export const defaultParams: Params = {
 export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params: { orientation, colors, showValues },
   data,
-}) => (
-  // TODO Нужно сделать растягивание виджетов с графиками по высоте внутри боксов
-  // @see https://jira.csssr.io/browse/GINF-50
-  <div style={{ height: 300 }}>
-    <BarChart data={data} showValues={showValues} colors={colors} orientation={orientation} />
-  </div>
-)
+}) => <BarChart data={data} showValues={showValues} colors={colors} orientation={orientation} />
 
 export const BarChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Барчарт',
   defaultParams,
+  defaultHeight: 300,
   dataType: DataType.BarChart,
   Content: BarChartWidgetContent,
   renderSettings(params, onChangeParam) {

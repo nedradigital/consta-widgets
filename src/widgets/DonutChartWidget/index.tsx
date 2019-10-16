@@ -22,18 +22,13 @@ export const defaultParams: Params = {
 export const DonutChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
   params: { colors },
-}) => (
-  // TODO Нужно сделать растягивание виджетов с графиками по высоте внутри боксов
-  // @see https://jira.csssr.io/browse/GINF-50
-  <div style={{ minHeight: 200 }}>
-    <DonutChart colors={colors} data={data} />
-  </div>
-)
+}) => <DonutChart colors={colors} data={data} />
 
 export const DonutChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Пончик',
   defaultParams,
+  defaultHeight: 200,
   dataType: DataType.Donut,
   Content: DonutChartWidgetContent,
 })
