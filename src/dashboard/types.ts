@@ -1,6 +1,7 @@
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DonutChartData } from '@/components/DonutChart'
 import { Line } from '@/components/LinearChart'
+import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
 import { Status } from '@/ui/Badge'
 
@@ -13,6 +14,7 @@ export enum DataType {
   Donut,
   BarChart,
   LinearChart,
+  Pyramid,
 }
 
 export type DataMap = {
@@ -35,6 +37,7 @@ export type DataMap = {
   [DataType.BarChart]: BarChartData[]
   // tslint:disable-next-line:readonly-array
   [DataType.LinearChart]: Line[]
+  [DataType.Pyramid]: readonly PyramidData[]
 }
 
 export type Dataset = {

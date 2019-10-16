@@ -39,7 +39,6 @@
 }
 
 .areaGradient {
-
   &.isStart.normal {
     stop-color: var(--opaque-color);
   }
@@ -66,7 +65,6 @@
 }
 
 .linearGradient {
-
   &.isStart.normal {
     stop-color: var(--opaque-color);
   }

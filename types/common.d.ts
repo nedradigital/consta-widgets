@@ -87,10 +87,6 @@ declare module 'react-onclickout' {
   export default ClickOutHandler
 }
 
-declare module 'utils/postcss-utils' {
-  export const calcSize: (size: number) => string
-}
-
 // полностью используем декларации d3 для перезаписи существующих
 declare module 'd3' {
   export * from 'd3-array'
