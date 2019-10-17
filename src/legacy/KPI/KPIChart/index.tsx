@@ -51,7 +51,7 @@ export const castSafeData = ({ planData, factData }: CastSafeData) => {
   return { safePlanData, safeFactData }
 }
 
-const LinearGradient: React.FunctionComponent<LinearGradientProps> = ({ type, status, id }) => {
+const LinearGradient: React.FC<LinearGradientProps> = ({ type, status, id }) => {
   if (!status) {
     return null
   }

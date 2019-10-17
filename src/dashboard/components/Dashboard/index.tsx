@@ -1,13 +1,12 @@
-import { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useMemo } from 'react'
 import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
 import useDimensions from 'react-use-dimensions'
 
+import { Box, BoxItem } from '@/dashboard/components/Box'
+import { ItemTypes } from '@/dashboard/dnd-constants'
+import { Data, Dataset, Settings } from '@/dashboard/types'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
-
-import { ItemTypes } from '../../dnd-constants'
-import { Data, Dataset } from '../../types'
-import { Box, BoxItem } from '../Box'
 
 import css from './index.css'
 
@@ -18,6 +17,7 @@ export type Config = { [key: string]: readonly BoxItem[] }
 export type DashboardState = {
   boxes: readonly Layout[]
   config: Config
+  settings: Settings
 }
 
 export type DashboardProps = {
@@ -34,7 +34,7 @@ export type DashboardProps = {
   rowsCount: number
 }
 
-export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
+export const Dashboard: React.FC<DashboardProps> = props => {
   const {
     cols,
     viewMode,
@@ -48,13 +48,9 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     widthScale,
     rowsCount,
   } = props
-  const { boxes, config } = dashboard
+  const { boxes, config, settings } = dashboard
 
   const [demensionRef, { width, height }, element] = useDimensions()
-  const [{ margin, padding }, setMarginAndPadding] = useState({
-    margin: baseMargin,
-    padding: basePadding,
-  })
 
   const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
@@ -69,7 +65,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
           { i: getUniqueName(ItemTypes.BOX), x, y, w: 1, h: 1 },
         ]
 
-        onChange({ boxes: newBoxes, config })
+        onChange({ boxes: newBoxes, config, settings })
       })
     },
     collect: monitor => ({
@@ -83,7 +79,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
   }
 
   const onResizeStop = (value: readonly Layout[]) => {
-    onChange({ boxes: value, config })
+    onChange({ boxes: value, config, settings })
   }
 
   const removeBox = (name: string) => {
@@ -93,6 +89,7 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
     onChange({
       boxes: boxes.filter(item => item.i !== name),
       config: restConfig,
+      settings,
     })
   }
 
@@ -103,25 +100,31 @@ export const Dashboard: React.FunctionComponent<DashboardProps> = props => {
         ...config,
         [name]: items,
       },
+      settings,
     })
   }
 
+  const scale = useMemo(() => (widthScale ? width / widthScale : 1), [widthScale, width])
+
+  const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [
+    scale,
+    widthScale,
+    baseMargin,
+  ])
+
+  const padding = useMemo(() => [scale * basePadding[0], scale * basePadding[1]], [
+    scale,
+    widthScale,
+    basePadding,
+  ])
+
   useLayoutEffect(() => {
-    const scale = widthScale ? width / widthScale : 1
-
-    if (widthScale) {
-      setMarginAndPadding({
-        margin: [scale * baseMargin[0], scale * baseMargin[1]],
-        padding: [scale * basePadding[0], scale * basePadding[1]],
-      })
-    }
-
     if (element) {
       element.style.setProperty('--base-size', `${baseFontSize * scale}`)
     }
-  }, [width])
+  }, [width, scale, element])
 
-  const rowHeight = (height - 2 * padding[1] + margin[1]) / rowsCount - margin[1]
+  const rowHeight = (height - 2 * basePadding[1] + baseMargin[1]) / rowsCount - baseMargin[1]
 
   return (
     <div
