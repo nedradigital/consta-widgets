@@ -42,10 +42,11 @@ export const createWidget = <
   name: string
   dataType: DataType | null
   defaultParams: Params
+  defaultHeight?: number
   Content: React.ComponentType<WidgetContentProps<Data, OriginalParams>>
   renderSettings?: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
 }) => {
-  const { name, dataType, defaultParams, Content, renderSettings, id } = opts
+  const { name, dataType, defaultParams, defaultHeight, Content, renderSettings, id } = opts
   const Widget: WidgetType<Data, Params> = ({
     data,
     datasets,
@@ -84,7 +85,7 @@ export const createWidget = <
   }
 
   Widget.showName = name
-  Widget.defaultParams = defaultParams
+  Widget.defaultParams = { ...defaultParams, height: defaultHeight }
   if (dataType) {
     Widget.mockData = getWidgetMockData(dataType) as Data
   }

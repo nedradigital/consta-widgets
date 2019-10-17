@@ -15,6 +15,7 @@ import css from './index.css'
 export type WrapperParams = WithDataset<{
   marginTop?: Size
   marginRight?: Size
+  height?: number
 }>
 
 type Props = {
@@ -61,6 +62,7 @@ export const WidgetWrapper: React.FC<Props> = ({
       style={{
         marginTop: params.marginTop && calcSize(sizeValues[params.marginTop]),
         marginRight: params.marginRight && calcSize(sizeValues[params.marginRight]),
+        height: params.height ? calcSize(params.height) : undefined,
       }}
       ref={ref}
       onMouseDown={showSettings ? stopDragWidget : undefined}
@@ -88,6 +90,13 @@ export const WidgetWrapper: React.FC<Props> = ({
                   </select>
                 </WidgetSettingsItem>
               ) : null}
+              <WidgetSettingsItem name="Высота">
+                <input
+                  type="number"
+                  value={params.height}
+                  onChange={e => onChangeParam('height', Number(e.target.value) || undefined)}
+                />
+              </WidgetSettingsItem>
               <MarginSettings params={params} onChangeParam={onChangeParam} />
               {additionalSettings}
             </div>

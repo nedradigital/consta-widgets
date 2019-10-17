@@ -51,36 +51,33 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
   data,
   dataset,
 }) => (
-  // TODO Нужно сделать растягивание виджетов с графиками по высоте внутри боксов
-  // @see https://jira.csssr.io/browse/GINF-50
-  <div style={{ height: 300 }}>
-    <LinearChart
-      gridConfig={{
-        x: {
-          labels: xLabels,
-          labelTicks: xLabelTicks,
-          gridTicks: xGridTicks,
-          guide: xGuide,
-        },
-        y: {
-          labels: yLabels,
-          labelTicks: yLabelTicks,
-          gridTicks: yGridTicks,
-          guide: yGuide,
-        },
-      }}
-      lines={data}
-      withZoom={withZoom}
-      isVertical={isVertical}
-      formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
-    />
-  </div>
+  <LinearChart
+    gridConfig={{
+      x: {
+        labels: xLabels,
+        labelTicks: xLabelTicks,
+        gridTicks: xGridTicks,
+        guide: xGuide,
+      },
+      y: {
+        labels: yLabels,
+        labelTicks: yLabelTicks,
+        gridTicks: yGridTicks,
+        guide: yGuide,
+      },
+    }}
+    lines={data}
+    withZoom={withZoom}
+    isVertical={isVertical}
+    formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
+  />
 )
 
 export const LinearChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Линейный график',
   defaultParams,
+  defaultHeight: 300,
   dataType: DataType.LinearChart,
   Content: LinearChartWidgetContent,
   renderSettings(params, onChangeParam) {
