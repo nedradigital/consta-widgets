@@ -4,36 +4,31 @@ import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
+import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { LinearChart } from '.'
+
+const MIN = -2
+const MAX = 8
+const COUNT_POINTS = 51
 
 const getCommonProps = () => ({
   lines: [
     {
       color: '#20B55F',
-      values: [
-        { x: 0, y: -1 },
-        { x: 1, y: 3 },
-        { x: 2, y: 1 },
-        { x: 3, y: 4 },
-        { x: 4, y: 2 },
-        { x: 5, y: -4 },
-        { x: 6, y: 5 },
-      ],
+      values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
+        x: Date.now() + x,
+        y,
+      })),
       dots: true,
     },
     {
       color: '#56B9F2',
-      values: [
-        { x: 0, y: -2 },
-        { x: 1, y: 4 },
-        { x: 2, y: 0 },
-        { x: 3, y: 5 },
-        { x: 4, y: 3 },
-        { x: 5, y: 4 },
-        { x: 6, y: -1 },
-      ],
+      values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
+        x: Date.now() + x,
+        y,
+      })),
     },
   ],
   gridConfig: object('gridConfig', {
@@ -51,6 +46,7 @@ const getCommonProps = () => ({
     },
   } as const),
   withZoom: true,
+  formatLabel: (v: number) => new Date(v).toLocaleDateString(),
 })
 
 storiesOf('components/LinearChart', module)

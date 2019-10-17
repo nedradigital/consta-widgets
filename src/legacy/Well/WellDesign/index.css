@@ -40,7 +40,6 @@
       transform: translate(-29px, 0);
 
       &-gradient {
-
         &-from {
           stop-color: var(--text-color-additional);
           stop-opacity: 0.58;
@@ -186,7 +185,6 @@
         }
 
         &-bit {
-
           &-left-0 & {
             left: auto;
             right: 26px;
@@ -335,7 +333,6 @@
     z-index: 10;
 
     &--bore {
-
       &::after {
         content: '';
         position: absolute;
@@ -371,7 +368,6 @@
     }
 
     &--boot {
-
       &::after {
         content: '';
         position: absolute;
@@ -409,7 +405,6 @@
 }
 
 .well-design__section--showprogress {
-
   &-gradient-from {
     stop-color: #d5e4ff;
   }
@@ -421,7 +416,6 @@
   .well-design__section-line,
   .well-design__section-inset-left-line,
   .well-design__section-inset-right-line {
-
     .default-well-line {
       stroke: url(#gradient);
     }
@@ -429,7 +423,6 @@
 }
 
 .engineering-screen-layout_rtl {
-
   .well-design__section-inset-right-info {
     left: 98px;
     bottom: -6px;

@@ -21,8 +21,9 @@ export const exampleDatasets: readonly Dataset[] = [
   },
   {
     name: 'Работа скважины',
-    type: DataType.Chart2D,
+    type: DataType.LinearChart,
     id: 'skvazhina',
+    formatLabel: (v: number) => new Date(v).toLocaleDateString(),
   },
   {
     name: 'Доля полезного продукта',

@@ -8,7 +8,6 @@
   height: 100%;
 
   &__svg {
-
     &-container {
       position: relative;
       top: -57px;
@@ -27,16 +26,13 @@
     }
 
     &-main {
-
       &-1 {
-
         &-0 .well-design__bit {
           transform: translate(0, 0);
         }
       }
 
       &-2 {
-
         &-0 .well-design__bit {
           transform: translate(-416px, -104px);
         }
@@ -47,7 +43,6 @@
       }
 
       &-3 {
-
         &-0 .well-design__bit {
           transform: translate(-439px, -132px);
         }
@@ -62,7 +57,6 @@
       }
 
       &-4 {
-
         &-0 .well-design__bit {
           transform: translate(-460px, -210px);
         }
@@ -81,7 +75,6 @@
       }
 
       &-5 {
-
         &-0 .well-design__bit {
           transform: translate(-460px, -210px);
         }
@@ -104,7 +97,6 @@
       }
 
       &-6 {
-
         &-0 .well-design__bit {
           transform: translate(-460px, -210px);
         }
@@ -131,7 +123,6 @@
       }
 
       &-7 {
-
         &-0 .well-design__bit {
           transform: translate(-464px, -230px);
         }
@@ -163,7 +154,6 @@
     }
 
     &-additional {
-
       &-0 .well-design__bit {
         transform: translate(-50px, 24px);
       }
@@ -194,7 +184,6 @@
     }
 
     &-fishbones {
-
       &-8 .well-design__bit {
         transform: translate(99px, -10px);
       }
@@ -233,7 +222,6 @@
     }
 
     &-pilot {
-
       &-1 .well-design__bit {
         transform: translate(-434px, -50px);
       }

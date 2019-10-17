@@ -17,12 +17,14 @@ export type Line = {
 }
 export type Item = { x: number; y: number }
 export type NumberRange = readonly [number, number]
+export type MainTickValues = readonly number[]
 
 type Props = {
   lines: readonly Line[]
   gridConfig: GridConfig
   withZoom?: boolean
   isVertical?: boolean
+  formatLabel: (n: number) => string
 }
 
 type State = {
@@ -32,6 +34,7 @@ type State = {
   height: number
   paddingX: number
   paddingY: number
+  mainTickValues: MainTickValues
 }
 
 export const TRANSITION_DURATIONS = {
@@ -112,6 +115,7 @@ export class LinearChart extends React.Component<Props, State> {
     height: 0,
     paddingX: 0,
     paddingY: 0,
+    mainTickValues: [],
   }
 
   targetSecondaryDomain = this.state.xDomain
@@ -152,8 +156,9 @@ export class LinearChart extends React.Component<Props, State> {
         withZoom,
         isVertical,
         lines,
+        formatLabel,
       },
-      state: { paddingX, paddingY, xDomain, yDomain },
+      state: { paddingX, paddingY, xDomain, yDomain, mainTickValues },
     } = this
     const { svgWidth, svgHeight } = this.getSvgSize()
     const { main: mainAxis } = this.getAxis()
@@ -200,6 +205,9 @@ export class LinearChart extends React.Component<Props, State> {
             gridConfig={gridConfig}
             lineClipPath={lineClipPath}
             onAxisSizeChange={this.onAxisSizeChange}
+            mainTickValues={mainTickValues}
+            isVertical={isVertical}
+            formatLabel={formatLabel}
           />
 
           {this.getLines().map(line => (
@@ -255,6 +263,17 @@ export class LinearChart extends React.Component<Props, State> {
     )
   }
 
+  getTickValues = (items: readonly Item[], domain: NumberRange): MainTickValues => {
+    const { isVertical, gridConfig } = this.props
+    const uniqValues = _.uniq(items.map(v => (isVertical ? v.y : v.x))).filter(i =>
+      isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
+    )
+    const ticks = gridConfig[isVertical ? 'y' : 'x'].labelTicks || 0
+    const indexes = d3.ticks(0, uniqValues.length - 1, ticks).filter(Number.isInteger)
+
+    return indexes.map(index => uniqValues[index])
+  }
+
   getLines = (): readonly Line[] => {
     const { lines, isVertical } = this.props
 
@@ -285,9 +304,14 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   updateDomains() {
+    const { isVertical } = this.props
+    const xDomain = this.getXDomain(this.getAllValues())
+    const yDomain = this.getYDomain(this.getAllValues())
+
     this.setState({
-      xDomain: this.getXDomain(this.getAllValues()),
-      yDomain: this.getYDomain(this.getAllValues()),
+      xDomain,
+      yDomain,
+      mainTickValues: this.getTickValues(this.getAllValues(), isVertical ? yDomain : xDomain),
     })
   }
 
@@ -379,12 +403,14 @@ export class LinearChart extends React.Component<Props, State> {
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
     const newMainDomain = newMainScale.domain()
+    const newMainTickValues = this.getTickValues(this.getAllValues(), newMainDomain)
 
     if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
       return
     }
 
     mainAxis.setDomain(newMainDomain)
+    this.setState({ mainTickValues: newMainTickValues })
 
     // Значения в домене не всегда идут от меньшего к большему: у вертикального графика домен перевёрнут, чтобы 0 был наверху графика
     const domainMin = Math.min(...newMainDomain)

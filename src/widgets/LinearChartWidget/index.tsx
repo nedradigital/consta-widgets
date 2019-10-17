@@ -49,6 +49,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yGuide,
   },
   data,
+  dataset,
 }) => (
   // TODO Нужно сделать растягивание виджетов с графиками по высоте внутри боксов
   // @see https://jira.csssr.io/browse/GINF-50
@@ -71,6 +72,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
       lines={data}
       withZoom={withZoom}
       isVertical={isVertical}
+      formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
     />
   </div>
 )
