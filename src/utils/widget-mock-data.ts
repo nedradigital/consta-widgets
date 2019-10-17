@@ -64,7 +64,7 @@ const mockData: DataMap = {
   ],
   [DataType.BarChart]: [
     {
-      categorie: 'март',
+      category: 'март',
       values: [
         {
           value: 410,
@@ -81,7 +81,7 @@ const mockData: DataMap = {
       ],
     },
     {
-      categorie: 'апрель',
+      category: 'апрель',
       values: [
         {
           value: 670,
@@ -98,7 +98,7 @@ const mockData: DataMap = {
       ],
     },
     {
-      categorie: 'май',
+      category: 'май',
       values: [
         {
           value: 1200,

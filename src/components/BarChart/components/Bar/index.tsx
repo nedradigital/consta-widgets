@@ -51,10 +51,10 @@ export const Bar: React.FC<Props> = ({
     if (ref) {
       const transform =
         orientation === 'horizontal'
-          ? `translate(0, ${(groupScale(data.categorie) || 0) +
+          ? `translate(0, ${(groupScale(data.category) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2})`
-          : `translate(${(groupScale(data.categorie) || 0) +
+          : `translate(${(groupScale(data.category) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2}, 0)`
 

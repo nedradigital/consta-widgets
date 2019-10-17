@@ -16,18 +16,22 @@ type Props = {
 }
 
 // TODO дефолтные ширина и отступы  , которые нужно потом подстроить под адаптив
-const sizeDonut = 16
-const padding = 8
+const getSizeDonut = () => 16
+const getPadding = () => 8
 
 export const DonutChart: React.FC<Props> = ({ data = [], colors }) => {
   const [ref, { width, height }, el] = useDimensions()
   const size = Math.min(width, height)
   const mainRadius = size / 2
+  const sizeDonut = getSizeDonut()
+  const padding = getPadding()
 
   useLayoutEffect(() => {
-    d3.select(el)
-      .select('svg')
-      .attr('viewBox', `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`)
+    if (mainRadius) {
+      d3.select(el)
+        .select('svg')
+        .attr('viewBox', `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`)
+    }
   })
 
   return (

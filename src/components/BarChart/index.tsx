@@ -1,8 +1,9 @@
-import * as React from 'react'
-import { uid } from 'react-uid'
+import React, { useState } from 'react'
+import { useUID } from 'react-uid'
+import useDimensions from 'react-use-dimensions'
 
 import * as d3 from 'd3'
-import * as _ from 'lodash'
+import { isEqual } from 'lodash'
 
 import { Axis } from './components/Axis'
 import { Bar } from './components/Bar'
@@ -18,7 +19,7 @@ type Value = {
 }
 
 export type Data = {
-  categorie: string
+  category: string
   values: readonly Value[]
 }
 
@@ -33,8 +34,8 @@ type Props = {
   valuesTick?: number
 }
 
-const defaultColumnSize = 12
-const defaultColumnPadding = 4
+const getColumnSize = () => 12
+const getColumnPadding = () => 4
 const getXRange = (width: number) => [0, width] as NumberRange
 const getYRange = (height: number) =>
   [
@@ -67,129 +68,92 @@ const getComain = (items: readonly Data[]): NumberRange => {
   return [0, d3.max(numbers)] as NumberRange
 }
 
-export class BarChart extends React.Component<Props> {
-  ref = React.createRef<HTMLDivElement>()
+export const BarChart: React.FC<Props> = ({
+  data = [],
+  orientation,
+  colors,
+  showValues,
+  valuesTick = 4,
+}) => {
+  const [ref, { width, height }] = useDimensions()
+  const [{ paddingX, paddingY }, changePadding] = useState({ paddingX: 0, paddingY: 0 })
+  const columnSize = getColumnSize()
+  const columnPadding = getColumnPadding()
 
-  resizeObserver = new ResizeObserver(() => this.updateSize())
+  const clipId = `barchart_clipPath_${useUID()}`
 
-  uid = uid(this)
-  clipId = `barchart_clipPath_${this.uid}`
-
-  state = {
-    width: 0,
-    height: 0,
-    paddingX: 0,
-    paddingY: 0,
-  }
-
-  targetPaddings = {
-    paddingX: this.state.paddingX,
-    paddingY: this.state.paddingY,
-  }
-
-  componentDidMount() {
-    this.updateSize()
-
-    this.resizeObserver.observe(this.ref.current!)
-  }
-
-  componentWillUnmount() {
-    this.resizeObserver.unobserve(this.ref.current!)
-  }
-
-  render() {
-    const { data = [], orientation, colors, showValues, valuesTick = 4 } = this.props
-    const { svgWidth, svgHeight } = this.getSvgSize()
-
-    const groupDomains = data.map(item => item.categorie)
-    const valuesDomains = getComain(data)
-    const barDomains = data.length ? data[0].values.map(item => item.description) : []
-
-    const barSize =
-      (defaultColumnSize + defaultColumnPadding) * (data.length ? data[0].values.length : 0)
-
-    const groupScale = getGroupScale(
-      groupDomains,
-      orientation === 'horizontal' ? svgHeight : svgWidth,
-      orientation
-    )
-    const valuesScale = getValuesScale(
-      valuesDomains,
-      orientation === 'horizontal' ? svgWidth : svgHeight,
-      orientation
-    )
-    const barScale = getGroupScale(barDomains, barSize, orientation)
-
-    return (
-      <div ref={this.ref} className={css.main}>
-        <svg className={css.svg} width={svgWidth} height={svgHeight}>
-          <defs>
-            <clipPath id={this.clipId}>
-              <rect width={svgWidth} height={svgHeight} />
-            </clipPath>
-          </defs>
-          <Axis
-            width={svgWidth}
-            height={svgHeight}
-            groupScale={groupScale}
-            valuesScale={valuesScale}
-            valuesTick={valuesTick}
-            orientation={orientation}
-            onAxisSizeChange={this.onAxisSizeChange}
-          />
-          {data.map(item => (
-            <Bar
-              key={item.categorie}
-              orientation={orientation}
-              data={item}
-              groupScale={groupScale}
-              valuesScale={valuesScale}
-              barScale={barScale}
-              barSize={barSize}
-              colors={colors}
-              clipId={this.clipId}
-              columnSize={defaultColumnSize}
-              padding={defaultColumnPadding}
-              showValues={showValues}
-            />
-          ))}
-        </svg>
-      </div>
-    )
-  }
-
-  updateSize = () => {
-    if (this.ref.current) {
-      const { width, height } = this.ref.current.getBoundingClientRect()
-      const newSize = { width, height }
-
-      if (!_.isEqual(_.pick(this.state, ['width', 'height']), newSize)) {
-        this.setState(newSize)
-      }
-    }
-  }
-
-  getSvgSize = () => {
-    const {
-      state: { width, height, paddingX, paddingY },
-    } = this
-
-    return {
-      svgWidth: Math.round(width - paddingX),
-      svgHeight: Math.round(height - paddingY),
-    }
-  }
-
-  onAxisSizeChange = ({ xAxisHeight, yAxisWidth }: { xAxisHeight: number; yAxisWidth: number }) => {
+  const onAxisSizeChange = ({
+    xAxisHeight,
+    yAxisWidth,
+  }: {
+    xAxisHeight: number
+    yAxisWidth: number
+  }) => {
     const newPaddings = {
       paddingX: yAxisWidth,
       paddingY: xAxisHeight,
     }
 
-    if (!_.isEqual(newPaddings, this.targetPaddings)) {
-      this.targetPaddings = newPaddings
-
-      this.setState(newPaddings)
+    if (!isEqual({ paddingX, paddingY }, newPaddings)) {
+      changePadding(newPaddings)
     }
   }
+
+  const svgWidth = Math.round(width - paddingX)
+  const svgHeight = Math.round(height - paddingY)
+
+  const groupDomains = data.map(item => item.category)
+  const valuesDomains = getComain(data)
+  const barDomains = data.length ? data[0].values.map(item => item.description) : []
+
+  const barSize = (columnSize + columnPadding) * (data.length ? data[0].values.length : 0)
+
+  const groupScale = getGroupScale(
+    groupDomains,
+    orientation === 'horizontal' ? svgHeight : svgWidth,
+    orientation
+  )
+  const valuesScale = getValuesScale(
+    valuesDomains,
+    orientation === 'horizontal' ? svgWidth : svgHeight,
+    orientation
+  )
+  const barScale = getGroupScale(barDomains, barSize, orientation)
+
+  return (
+    <div ref={ref} className={css.main}>
+      <svg className={css.svg} width={svgWidth} height={svgHeight}>
+        <defs>
+          <clipPath id={clipId}>
+            <rect width={svgWidth} height={svgHeight} />
+          </clipPath>
+        </defs>
+        <Axis
+          width={svgWidth}
+          height={svgHeight}
+          groupScale={groupScale}
+          valuesScale={valuesScale}
+          valuesTick={valuesTick}
+          orientation={orientation}
+          onAxisSizeChange={onAxisSizeChange}
+        />
+        {data.map(item => (
+          <Bar
+            key={item.category}
+            orientation={orientation}
+            data={item}
+            groupScale={groupScale}
+            valuesScale={valuesScale}
+            barScale={barScale}
+            barSize={barSize}
+            colors={colors}
+            clipId={clipId}
+            columnSize={columnSize}
+            padding={columnPadding}
+            showValues={showValues}
+          />
+        ))}
+      </svg>
+    </div>
+  )
 }

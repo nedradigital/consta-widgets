@@ -120,7 +120,9 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
   useLayoutEffect(() => {
     if (element) {
-      element.style.setProperty('--base-size', `${baseFontSize * scale}`)
+      const newSize = baseFontSize * scale
+
+      element.style.setProperty('--base-size', `${newSize}`)
     }
   }, [width, scale, element])
 
