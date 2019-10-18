@@ -11,7 +11,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { PyramidChart } from './index'
 
 storiesOf('components/PyramidChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '50vw', height: '50vh' } as React.CSSProperties))
   .add('interactive', () => (
     <PyramidChart
