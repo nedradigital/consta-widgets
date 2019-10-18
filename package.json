@@ -23,7 +23,8 @@
     "generate-css-types": "node node_modules/@gaz/configs/scripts/generate-css-types.js",
     "checktypes": "yarn generate-css-types && tsc --noEmit --extendedDiagnostics",
     "unit": "TZ=Europe/Moscow jest",
-    "test": "npm-run-all --parallel lint checktypes unit"
+    "test": "npm-run-all --parallel lint checktypes unit",
+    "prepublishOnly": "yarn build"
   },
   "browserslist": [
     "Chrome >= 75"
