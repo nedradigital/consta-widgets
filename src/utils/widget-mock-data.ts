@@ -126,6 +126,32 @@ const mockData: DataMap = {
       values: [{ x: 0, y: -2 }, { x: 1, y: 4 }, { x: 2, y: 0 }, { x: 3, y: 5 }],
     },
   ],
+  [DataType.Pyramid]: [
+    {
+      value: 3,
+      text: '1. Смертельные на производстве ',
+    },
+    {
+      value: 23,
+      text: '2. Уровень 1+Травмы с ВПТ',
+    },
+    {
+      value: 67,
+      text: '3. Уровень 2+Мед. помощь',
+    },
+    {
+      value: 459,
+      text: '4. Первая помощь',
+    },
+    {
+      value: 2950,
+      text: '5. Происшествия без последствий',
+    },
+    {
+      value: 12374,
+      text: '6. ОД и ОУ ',
+    },
+  ],
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

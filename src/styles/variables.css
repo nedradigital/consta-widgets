@@ -1,6 +1,7 @@
 /* Сделан запрет на root, что бы нельзя было его использовать, кроме текущего файла */
 /* stylelint-disable-next-line */
 :root {
+  --base-size: 16;
   --opaque-color: rgba(0, 0, 0, 0);
   --bg-color: rgb(0, 32, 51);
   --bg-color-white: rgba(255, 255, 255, 0.1);
