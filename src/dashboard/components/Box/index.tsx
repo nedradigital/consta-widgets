@@ -13,12 +13,14 @@ import { Columns, ColumnsItem, Items as ColumnItems } from '../Columns'
 
 import css from './index.css'
 
-type WidgetItem = {
+export type WidgetItem = {
   type: 'widget'
   name: string
   key: string
   id: string
-  params: {}
+  params: {
+    [key: string]: any
+  }
 }
 
 export type BoxItem = WidgetItem | ColumnsItem
