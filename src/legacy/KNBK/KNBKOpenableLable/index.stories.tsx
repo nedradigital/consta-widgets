@@ -32,7 +32,7 @@ const data = {
 }
 
 storiesOf('legacy/KNBK/OpenableLabel', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('has data', () => <KNBKOpenableLabel {...data} />)
   .add('empty data', () => <KNBKOpenableLabel absoluteValues={[]} relativeValues={[]} />)

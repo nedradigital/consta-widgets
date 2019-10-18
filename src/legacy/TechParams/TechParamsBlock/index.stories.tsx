@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { TechParamsBlock } from '.'
 
 storiesOf('legacy/TechParams/Block', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('colors with states', () => (
     <>

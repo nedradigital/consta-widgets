@@ -51,7 +51,7 @@ const props = {
 }
 
 storiesOf('legacy/LinearChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '50vh' }))
   .add('interactive', () => {
     const showHorizontalScale = boolean('Show horizontal scale:', true)

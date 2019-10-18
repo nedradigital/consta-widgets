@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ChartWithSubinfo } from '.'
 
 storiesOf('legacy/ChartWithSubinfo', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '1034px' }))
   .add('interactive', () => (
     <ChartWithSubinfo

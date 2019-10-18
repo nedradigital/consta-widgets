@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { WellKPI } from '.'
 
 storiesOf('legacy/Well/KPI', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .add('interactive', () => (
     <WellKPI

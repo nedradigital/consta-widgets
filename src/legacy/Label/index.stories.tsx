@@ -9,6 +9,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Label } from '.'
 
 storiesOf('legacy/Label', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <Label>{text('children', 'Забой: 2580 м')}</Label>)

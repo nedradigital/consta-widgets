@@ -10,7 +10,7 @@ import { TechnologyInfo } from '../TechnologyInfo'
 import { Separator, TechnologiesBlock } from '.'
 
 storiesOf('legacy/TechnologiesBlock', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .addParameters({
     props: {

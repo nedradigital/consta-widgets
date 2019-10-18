@@ -8,6 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { DirectionIndicator } from '.'
 
 storiesOf('legacy/DirectionIndicator', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <DirectionIndicator direction={'up'} />)

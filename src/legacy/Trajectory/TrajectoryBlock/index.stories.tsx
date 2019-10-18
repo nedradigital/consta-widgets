@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { TrajectoryBlock } from '.'
 
 storiesOf('legacy/Trajectory/TrajectoryBlock', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 250 }))
   .add('interactive', () => (
     <TrajectoryBlock

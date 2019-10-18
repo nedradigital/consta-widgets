@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { sizes, Title } from '.'
 
 storiesOf('ui/Title', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <Title size={select('size', sizes, sizes[0])}>{text('Text', 'Какой-то заголовок')}</Title>

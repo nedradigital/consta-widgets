@@ -26,6 +26,6 @@ const data: readonly LineProps[] = [
 ]
 
 storiesOf('components/HorizontalBarChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .add('interactive', () => <HorizontalBarChart data={data} />)

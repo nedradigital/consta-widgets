@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Switcher } from '.'
 
 storiesOf('legacy/Switcher', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   // @ts-ignore
   .add('interactive', () => <Switcher isEnabled={false} title={'Абсолют.'} />)

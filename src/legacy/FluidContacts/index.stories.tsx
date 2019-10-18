@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { FluidContacts } from '.'
 
 storiesOf('legacy/FluidContacts', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 226 }))
   .add('interactive', () => (
     <FluidContacts

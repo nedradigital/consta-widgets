@@ -10,7 +10,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { BarChart } from '.'
 
 storiesOf('components/BarChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
   .add('interactive', () => {
     return (

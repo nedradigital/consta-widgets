@@ -76,6 +76,6 @@ const wellDesignData = {
 }
 
 storiesOf('legacy/Well/Design', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <WellDesign {...wellDesignData} />)

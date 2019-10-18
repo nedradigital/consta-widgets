@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { KPIChart } from '.'
 
 storiesOf('legacy/KPI/KPIChart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '60vh' }))
   .add('interactive', () => (
     <KPIChart

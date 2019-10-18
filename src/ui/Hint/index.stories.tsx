@@ -9,6 +9,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Hint } from '.'
 
 storiesOf('ui/Hint', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <Hint>{text('children', '21')}</Hint>)

@@ -9,7 +9,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Pin } from '.'
 
 storiesOf('legacy/Pin', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <Pin title={'1540 м'}>{text('children', 'Высокий риск обвала породы')}</Pin>

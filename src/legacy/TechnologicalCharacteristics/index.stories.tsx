@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { TechnologicalCharacteristics } from '.'
 
 storiesOf('legacy/TechnologicalCharacteristics', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <TechnologicalCharacteristics

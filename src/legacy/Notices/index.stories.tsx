@@ -22,7 +22,7 @@ const notices = [
 ] as const
 
 storiesOf('legacy/Notices', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('single notice', () => {
     return <Notices notices={[notices[0]]} />

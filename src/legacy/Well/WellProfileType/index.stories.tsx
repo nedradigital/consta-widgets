@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { WellProfileType } from '.'
 
 storiesOf('legacy/Well/ProfileType', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 324 }))
   .add('interactive', () => (
     <WellProfileType

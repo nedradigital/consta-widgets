@@ -8,6 +8,6 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { NDTChart } from '.'
 
 storiesOf('legacy/NDT/Chart', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => <NDTChart />)

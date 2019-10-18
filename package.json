@@ -72,7 +72,7 @@
   },
   "devDependencies": {
     "@gaz/configs": "0.1.12",
-    "@nekitk/storybook-addon-smart-knobs": "5.0.0-nekitk.3",
+    "@nekitk/storybook-addon-smart-knobs": "5.0.0-nekitk.6",
     "@storybook/addon-actions": "5.1.9",
     "@storybook/addon-info": "5.1.11",
     "@storybook/addon-knobs": "5.1.9",

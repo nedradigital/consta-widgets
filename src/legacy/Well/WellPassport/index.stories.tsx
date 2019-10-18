@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { WellPassport } from '.'
 
 storiesOf('legacy/Well/Passport', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 1080 }))
   .add('interactive', () => (
     <WellPassport

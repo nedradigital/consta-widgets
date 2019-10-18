@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { withKnobs } from '@storybook/addon-knobs'
+import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -37,7 +37,7 @@ const data = {
 }
 
 storiesOf('legacy/Sludge/SludgeChart', module)
-  .addDecorator(withKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '380px', height: '250px', position: 'relative' }))
   .add('interactive', () => {
     return <SludgeChart {...data} />

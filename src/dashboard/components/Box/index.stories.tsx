@@ -75,7 +75,7 @@ const initialItems: readonly BoxItem[] = [
 ]
 
 storiesOf('dashboard/Box', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 600 }))
   .add('interactive', () => {
     const Wrapper = () => {

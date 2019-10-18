@@ -58,7 +58,7 @@ const setStateToStorage = (value: DashboardState | Config) => {
 }
 
 storiesOf('dashboard/Constructor', module)
-  .addDecorator(withSmartKnobs)
+  .addDecorator(withSmartKnobs())
   .add('default constructor', () => {
     return (
       <Constructor
