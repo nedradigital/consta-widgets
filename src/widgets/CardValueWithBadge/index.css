@@ -4,25 +4,26 @@
 }
 
 .title {
-  font-size: 13px;
-  line-height: 18px;
+  font-size: calc-size(13);
+  line-height: calc-size(18);
 }
 
 .value {
-  font-size: 24px;
-  line-height: 34px;
+  font-size: calc-size(24);
+  line-height: calc-size(34);
   vertical-align: middle;
   font-weight: bold;
 }
 
 .badge {
   vertical-align: middle;
-  margin-left: 4px;
+  margin-left: calc-size(4);
+  font-size: calc-size(11);
   font-weight: bold;
 }
 
 .unit {
-  font-size: 11px;
+  font-size: calc-size(11);
   color: var(--text-color-70);
-  margin-top: 4px;
+  margin-top: calc-size(4);
 }

@@ -18,7 +18,7 @@
 
 .labels {
   color: var(--text-color-70);
-  font-size: 11px;
+  font-size: calc-size(11);
 
   & > :global(.domain) {
     stroke: none;

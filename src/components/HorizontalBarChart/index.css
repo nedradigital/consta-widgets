@@ -1,10 +1,10 @@
 .diagram {
   color: var(--text-color-70);
-  font-size: 11px;
+  font-size: calc-size(11);
 }
 
 .line {
-  line-height: 15px;
+  line-height: calc-size(15);
   width: 100%;
 }
 
@@ -15,7 +15,7 @@
 .title {
   min-width: 80px;
   max-width: 25%;
-  padding-right: 10px;
+  padding-right: calc-size(10);
 }
 
 .progressWrapper {
@@ -24,7 +24,7 @@
 
 .value {
   text-align: right;
-  padding-left: 10px;
+  padding-left: calc-size(10);
   min-width: 25px;
 }
 

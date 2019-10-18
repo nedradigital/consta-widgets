@@ -1,12 +1,12 @@
 .hint {
   --arrow-size: 6px;
 
-  padding: 2px 8px;
+  padding: calc-size(2) calc-size(8);
   background: #fff;
   border-radius: 4px;
   color: #002033;
-  font-size: 13px;
-  line-height: 18px;
+  font-size: calc-size(13);
+  line-height: calc-size(18);
   position: absolute;
   font-weight: bold;
 
