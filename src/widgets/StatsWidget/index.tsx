@@ -21,30 +21,32 @@ type Params = {
   badgePosition: PositionNames
   topStyles: string
   size: Size
-  topUnit: FieldUnits
+  top: string
   bottomUnit: FieldUnits
+  rightUnit: FieldUnits
 }
 
 export const defaultParams: Params = {
   badgePosition: 'right',
   topStyles: 'label',
   size: 'xs',
-  topUnit: fieldUnits[0],
-  bottomUnit: fieldUnits[1],
+  top: fieldUnits[1],
+  bottomUnit: fieldUnits[2],
+  rightUnit: fieldUnits[0],
 }
 
 export const StatsWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { badgePosition, topStyles, size, topUnit, bottomUnit },
+  params: { badgePosition, topStyles, size, top, bottomUnit, rightUnit },
 }) => {
   const { percent } = data
-  const rightValue = percent && badgePosition === 'right' ? percent : bottomUnit
+  const rightValue = percent && badgePosition === 'right' ? percent : rightUnit
   const bottomValue = percent && badgePosition === 'bottom' ? percent : bottomUnit
 
   return (
     <Stats
       size={size}
-      top={topUnit}
+      top={top}
       topSublabel={topStyles === 'sublabel'}
       right={rightValue}
       rightBadge={badgePosition === 'right'}
@@ -74,17 +76,12 @@ export const StatsWidget = createWidget<Data, Params>({
             ))}
           </select>
         </WidgetSettingsItem>
-        <WidgetSettingsItem name="Единица измерения верхней строки">
-          <select
-            value={params.topUnit}
-            onChange={e => onChangeParam('topUnit', e.target.value as FieldUnits)}
-          >
-            {fieldUnits.map(unit => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </select>
+        <WidgetSettingsItem name="Текст верхней строки">
+          <input
+            type="text"
+            value={params.top}
+            onChange={e => onChangeParam('top', e.target.value)}
+          />
         </WidgetSettingsItem>
         <WidgetSettingsItem name="Вверхняя строка подзаголовок?">
           <select
@@ -94,6 +91,18 @@ export const StatsWidget = createWidget<Data, Params>({
             {topTypes.map(type => (
               <option key={type} value={type}>
                 {type}
+              </option>
+            ))}
+          </select>
+        </WidgetSettingsItem>
+        <WidgetSettingsItem name="Единица измерения правой строки">
+          <select
+            value={params.rightUnit}
+            onChange={e => onChangeParam('rightUnit', e.target.value as FieldUnits)}
+          >
+            {fieldUnits.map(unit => (
+              <option key={unit} value={unit}>
+                {unit}
               </option>
             ))}
           </select>
