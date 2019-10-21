@@ -57,6 +57,8 @@ const setStateToStorage = (value: DashboardState | Config) => {
   localStorage.setItem(storageName, JSON.stringify(value))
 }
 
+const INITIAL_VALUES: DashboardState = { boxes: [], config: {}, settings: {} }
+
 storiesOf('dashboard/Constructor', module)
   .addDecorator(withSmartKnobs())
   .add('default constructor', () => {
@@ -65,7 +67,7 @@ storiesOf('dashboard/Constructor', module)
         viewMode={false}
         datasets={exampleDatasets}
         cols={cols}
-        dashboard={{ boxes: [], config: {}, settings: {} }}
+        dashboard={INITIAL_VALUES}
         data={{}}
         onChange={() => {
           /**/
@@ -77,8 +79,12 @@ storiesOf('dashboard/Constructor', module)
   })
   .add('with state', () => {
     function Wrapper() {
-      const [dashboard, setDashboard] = React.useState<DashboardState>(getStateFromStorage())
+      const [dashboard, setDashboard] = React.useState<DashboardState>(INITIAL_VALUES)
       const [viewMode, setViewMode] = React.useState(false)
+
+      React.useEffect(() => {
+        setDashboard(getStateFromStorage())
+      }, [])
 
       const handler = (data: DashboardState) => {
         setDashboard(data)

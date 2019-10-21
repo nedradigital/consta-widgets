@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 import * as _ from 'lodash'
 
@@ -31,12 +31,10 @@ const removeName: RemoveNameFunc = name => {
 }
 
 export function useUniqueNameGenerator(initialNames?: readonly string[]) {
-  const isMounted = useRef(false)
-  useEffect(() => {
-    isMounted.current = true
-  }, [])
+  const prevNames = useRef<readonly string[]>([])
 
-  if (initialNames && !isMounted.current) {
+  if (initialNames && initialNames.length > 0 && !_.isEqual(prevNames.current, initialNames)) {
+    prevNames.current = initialNames
     addNames(...initialNames)
   }
 
