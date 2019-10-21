@@ -5,15 +5,15 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { defaultParams, TitleWidgetContent, typeNames } from '.'
+import { defaultParams, TextWidgetContent, typeNames } from '.'
 
-storiesOf('widgets/TitleWidget', module)
+storiesOf('widgets/TextWidget', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <TitleWidgetContent
-      data={undefined}
+    <TextWidgetContent
+      data={text('data', null)}
       params={{
-        title: text('title', defaultParams.title),
+        text: text('title', defaultParams.text),
         type: select('type', typeNames, defaultParams.type),
       }}
     />

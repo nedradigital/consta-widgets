@@ -6,11 +6,11 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { sizes, Title } from '.'
+import { sizes, Text } from '.'
 
-storiesOf('ui/Title', module)
+storiesOf('ui/Text', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <Title size={select('size', sizes, sizes[0])}>{text('Text', 'Какой-то заголовок')}</Title>
+    <Text size={select('size', sizes, sizes[0])}>{text('Text', 'Какой-то текст')}</Text>
   ))

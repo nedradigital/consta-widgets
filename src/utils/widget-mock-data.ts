@@ -152,6 +152,7 @@ const mockData: DataMap = {
       text: '6. ОД и ОУ ',
     },
   ],
+  [DataType.Text]: 'Какой-то текст',
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

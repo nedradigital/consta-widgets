@@ -17,10 +17,7 @@ import {
   defaultParams as cardWithBadgeDefaultParams,
   widgetId as cardWidgetId,
 } from '@/widgets/CardWithBadge'
-import {
-  defaultParams as titleDefaultParams,
-  widgetId as titleWidgetId,
-} from '@/widgets/TitleWidget'
+import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { Box, BoxItem } from '.'
 
@@ -30,8 +27,8 @@ const initialItems: readonly BoxItem[] = [
     type: 'widget',
     name: 'TitleWidget',
     key: getUniqueName('TitleWidget'),
-    id: titleWidgetId,
-    params: titleDefaultParams,
+    id: textWidgetId,
+    params: textDefaultParams,
   },
   {
     type: 'widget',

@@ -11,10 +11,7 @@ import {
   defaultParams as cardWithBadgeDefaultParams,
   widgetId as cardWidgetId,
 } from '@/widgets/CardWithBadge'
-import {
-  defaultParams as titleDefaultParams,
-  widgetId as titleWidgetId,
-} from '@/widgets/TitleWidget'
+import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { Columns, ColumnsItem } from '.'
 
@@ -33,8 +30,8 @@ const columnsItem: ColumnsItem = {
         type: 'widget',
         name: 'TitleWidget',
         key: getUniqueName('TitleWidget'),
-        id: titleWidgetId,
-        params: titleDefaultParams,
+        id: textWidgetId,
+        params: textDefaultParams,
       },
     ],
     [

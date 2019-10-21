@@ -1,7 +1,7 @@
 import * as _ from 'lodash'
 
 import { LinearChart } from '@/legacy/LinearChart'
-import { Title } from '@/ui/Title'
+import { Text } from '@/ui/Text'
 import { getAverageWeightedPercent } from '@/utils/math'
 
 import css from './index.css'
@@ -30,9 +30,9 @@ export const VerticalGraph: React.FC<Props> = ({
 
   return (
     <div className={css.main}>
-      <Title size={'s'} className={css.title}>
+      <Text size={'s'} className={css.title}>
         {title}
-      </Title>
+      </Text>
 
       <div className={css.chart}>
         <div className={css.scale} />
@@ -61,9 +61,9 @@ export const VerticalGraph: React.FC<Props> = ({
           </svg>
           <div className={css.averageText}>
             <div className={css.averageName}>медианное</div>
-            <Title size={'3xl'} className={css.averageValue}>
+            <Text size="3xl" className={css.averageValue}>
               {_.round(averageValue)} м
-            </Title>
+            </Text>
           </div>
         </div>
         <div className={css.from}>min {from}</div>
