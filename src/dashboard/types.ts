@@ -15,6 +15,7 @@ export enum DataType {
   BarChart,
   LinearChart,
   Pyramid,
+  Text,
 }
 
 export type DataMap = {
@@ -38,6 +39,7 @@ export type DataMap = {
   // tslint:disable-next-line:readonly-array
   [DataType.LinearChart]: Line[]
   [DataType.Pyramid]: readonly PyramidData[]
+  [DataType.Text]: string
 }
 
 export type Dataset = {

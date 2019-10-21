@@ -19,7 +19,7 @@ type Props = {
   children: React.ReactNode
 } & StyleProps
 
-export const Title: React.FC<Props> = ({
+export const Text: React.FC<Props> = ({
   children,
   size = 's',
   className,

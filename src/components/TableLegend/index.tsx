@@ -3,7 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
-import { Title } from '@/ui/Title'
+import { Text } from '@/ui/Text'
 
 import css from './index.css'
 
@@ -29,7 +29,7 @@ export const TableLegend: React.FC<Props> = ({ data, columnNames, valueNames }) 
           {columnNames.map((name, idx) =>
             idx === 0 ? (
               <th key={idx}>
-                <Title className={css.title}>{name}</Title>
+                <Text className={css.title}>{name}</Text>
               </th>
             ) : (
               <th key={idx} colSpan={valueNames.length} className={css.isPadded}>

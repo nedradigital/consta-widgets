@@ -1,10 +1,12 @@
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
-import { StyleProps, Title } from '@/ui/Title'
+import { DataMap, DataType } from '@/dashboard/types'
+import { StyleProps, Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
-type Data = typeof undefined
+const dataType = DataType.Text
+type Data = DataMap[typeof dataType] | typeof undefined
 
 export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
 
@@ -12,18 +14,18 @@ export const typeNames = ['heading1', 'heading2', 'heading3', 'text1', 'text2'] 
 export type TypeNames = typeof typeNames[number]
 
 type Params = {
-  title: string
+  text: string
   type: TypeNames
 }
 
-type TitleType = {
+type TextType = {
   [key in TypeNames]: {
     text: string
     props: StyleProps
   }
 }
 
-const titleType: TitleType = {
+const textType: TextType = {
   heading1: {
     text: 'Заголовок 1',
     props: {
@@ -61,30 +63,31 @@ const titleType: TitleType = {
   },
 }
 
-export const defaultParams: Params = { title: 'Заголовок', type: 'text1' }
+export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
 
-export const TitleWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { title, type },
+export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
+  data,
+  params: { text, type },
 }) => (
-  <Title {...titleType[type].props} className={css.title}>
-    {title}
-  </Title>
+  <Text {...textType[type].props} className={css.title}>
+    {data ? data : text}
+  </Text>
 )
 
-export const TitleWidget = createWidget<Data, Params>({
+export const TextWidget = createWidget<Data, Params>({
   id: widgetId,
-  name: 'Заголовок',
+  name: 'Текст',
   defaultParams,
-  dataType: null,
-  Content: TitleWidgetContent,
+  dataType,
+  Content: TextWidgetContent,
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Заголовок">
+        <WidgetSettingsItem name="Текст">
           <input
             type="text"
-            value={params.title}
-            onChange={e => onChangeParam('title', e.target.value)}
+            value={params.text}
+            onChange={e => onChangeParam('text', e.target.value)}
           />
         </WidgetSettingsItem>
         <WidgetSettingsItem name="Тип">
@@ -94,7 +97,7 @@ export const TitleWidget = createWidget<Data, Params>({
           >
             {typeNames.map(type => (
               <option key={type} value={type}>
-                {titleType[type].text}
+                {textType[type].text}
               </option>
             ))}
           </select>
