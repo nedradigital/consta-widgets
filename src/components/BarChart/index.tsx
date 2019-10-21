@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
+import { getCalculatedSize } from '@gaz/utils'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
@@ -34,8 +35,8 @@ type Props = {
   valuesTick?: number
 }
 
-const getColumnSize = () => 12
-const getColumnPadding = () => 4
+const getColumnSize = () => getCalculatedSize(12)
+const getColumnPadding = () => getCalculatedSize(4)
 const getXRange = (width: number) => [0, width] as NumberRange
 const getYRange = (height: number) =>
   [
@@ -99,8 +100,8 @@ export const BarChart: React.FC<Props> = ({
     }
   }
 
-  const svgWidth = Math.round(width - paddingX)
-  const svgHeight = Math.round(height - paddingY)
+  const svgWidth = width ? Math.round(width - paddingX) : 0
+  const svgHeight = height ? Math.round(height - paddingY) : 0
 
   const groupDomains = data.map(item => item.category)
   const valuesDomains = getComain(data)
@@ -121,7 +122,13 @@ export const BarChart: React.FC<Props> = ({
   const barScale = getGroupScale(barDomains, barSize, orientation)
 
   return (
-    <div ref={ref} className={css.main}>
+    <div
+      ref={ref}
+      className={css.main}
+      style={{
+        paddingLeft: paddingX,
+      }}
+    >
       <svg className={css.svg} width={svgWidth} height={svgHeight}>
         <defs>
           <clipPath id={clipId}>

@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
+import { getCalculatedSize } from '@gaz/utils'
 import * as d3 from 'd3'
 
 import { Data as DonutData, Donut } from './components/Donut'
@@ -15,13 +16,12 @@ type Props = {
   colors: Colors
 }
 
-// TODO дефолтные ширина и отступы  , которые нужно потом подстроить под адаптив
-const getSizeDonut = () => 16
-const getPadding = () => 8
+const getSizeDonut = () => getCalculatedSize(16)
+const getPadding = () => getCalculatedSize(8)
 
 export const DonutChart: React.FC<Props> = ({ data = [], colors }) => {
   const [ref, { width, height }, el] = useDimensions()
-  const size = Math.min(width, height)
+  const size = width && height ? Math.min(width, height) : 0
   const mainRadius = size / 2
   const sizeDonut = getSizeDonut()
   const padding = getPadding()

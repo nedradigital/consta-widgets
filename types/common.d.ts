@@ -40,6 +40,8 @@ declare module 'react-grid-layout-tmp-fork' {
 
 declare module '@gaz/utils' {
   export const calcSize: (size: number) => string
+  export const updateBaseSize: (size: number, element: HTMLElement | SVGSVGElement) => void
+  export const getCalculatedSize: (size: number) => number
 }
 
 declare module '@nekitk/storybook-addon-smart-knobs' {
