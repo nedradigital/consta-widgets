@@ -51,10 +51,10 @@ export const Bar: React.FC<Props> = ({
     if (ref) {
       const transform =
         orientation === 'horizontal'
-          ? `translate(0, ${(groupScale(data.category) || 0) +
+          ? `translate(0, ${(groupScale(data.groupName) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2})`
-          : `translate(${(groupScale(data.category) || 0) +
+          : `translate(${(groupScale(data.groupName) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2}, 0)`
 
@@ -66,13 +66,13 @@ export const Bar: React.FC<Props> = ({
         .data([...values])
         .join('rect')
         .attr('rx', 3)
-        .style('fill', d => colors[d.description])
+        .style('fill', (_, index) => colors[index])
 
       if (orientation === 'horizontal') {
         rect
           .attr('x', sizeBorderRadius * -1)
-          .attr('y', d => barScale(d.description) || 0)
-          .attr('width', d => valuesScale(d.value) + sizeBorderRadius)
+          .attr('y', (_, index) => barScale(String(index)) || 0)
+          .attr('width', d => valuesScale(d) + sizeBorderRadius)
           .attr('height', columnSize)
 
         if (textRef.current && showValues) {
@@ -82,21 +82,19 @@ export const Bar: React.FC<Props> = ({
             .selectAll('text')
             .data([...values])
             .join('text')
-            .attr('x', d => valuesScale(d.value) + 4)
-            .attr('y', d => (barScale(d.description) || 0) + padding / 2)
+            .attr('x', d => valuesScale(d) + 4)
+            .attr('y', (_, index) => (barScale(String(index)) || 0) + padding / 2)
             .attr('dy', barScale.bandwidth() / 2)
-            .text(d => d.value)
+            .text(d => d)
             .attr('fill', 'currentColor')
             .attr('class', css.label)
         }
       } else {
         rect
-          .attr('x', d => barScale(d.description) || 0)
-          .attr('y', d => valuesScale(d.value))
+          .attr('x', (_, index) => barScale(String(index)) || 0)
+          .attr('y', d => valuesScale(d))
           .attr('width', columnSize)
-          .attr('height', d =>
-            d.value ? valuesScale(0) - valuesScale(d.value) + sizeBorderRadius : 0
-          )
+          .attr('height', d => (d ? valuesScale(0) - valuesScale(d) + sizeBorderRadius : 0))
       }
     }
   })

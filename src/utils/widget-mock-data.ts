@@ -62,59 +62,23 @@ const mockData: DataMap = {
       },
     ],
   ],
-  [DataType.BarChart]: [
-    {
-      category: 'март',
-      values: [
-        {
-          value: 410,
-          description: 'blue',
-        },
-        {
-          value: 600,
-          description: 'red',
-        },
-        {
-          value: 270,
-          description: 'orange',
-        },
-      ],
-    },
-    {
-      category: 'апрель',
-      values: [
-        {
-          value: 670,
-          description: 'blue',
-        },
-        {
-          value: 1000,
-          description: 'red',
-        },
-        {
-          value: 1100,
-          description: 'orange',
-        },
-      ],
-    },
-    {
-      category: 'май',
-      values: [
-        {
-          value: 1200,
-          description: 'blue',
-        },
-        {
-          value: 630,
-          description: 'red',
-        },
-        {
-          value: 100,
-          description: 'orange',
-        },
-      ],
-    },
-  ],
+  [DataType.BarChart]: {
+    colors: ['#56B9F2', '#EB5757', '#FCA355'],
+    data: [
+      {
+        groupName: 'март',
+        values: [410, 600, 270],
+      },
+      {
+        groupName: 'апрель',
+        values: [670, 1000, 1100],
+      },
+      {
+        groupName: 'май',
+        values: [1200, 630, 100],
+      },
+    ],
+  },
   [DataType.LinearChart]: [
     {
       color: '#20B55F',
