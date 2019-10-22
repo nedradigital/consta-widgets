@@ -106,6 +106,20 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     })
   }
 
+  const updateBox = (_layout: readonly Layout[], _oldItem: Layout, box: Layout) => {
+    const index = boxes.findIndex(item => item.i === box.i)
+
+    onChange({
+      boxes: [
+        ...boxes.slice(0, index),
+        { i: box.i, x: box.x, y: box.y, w: box.w, h: box.h },
+        ...boxes.slice(index + 1),
+      ],
+      config,
+      settings,
+    })
+  }
+
   const scale = useMemo(() => (widthScale ? width / widthScale : 1), [widthScale, width])
 
   const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [
@@ -152,6 +166,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
         onDrop={onDrop}
         droppingPositionShift={{ x: -110, y: -80 }}
         onResizeStop={onResizeStop}
+        onDragStop={updateBox}
       >
         {boxes.map(box => (
           <div key={box.i} data-grid={{ x: box.x, y: box.y, w: box.w, h: box.h }}>
