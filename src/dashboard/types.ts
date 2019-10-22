@@ -3,6 +3,7 @@ import { Data as DonutChartData } from '@/components/DonutChart'
 import { Line } from '@/components/LinearChart'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
+import { Data as TableLegend } from '@/components/TableLegend'
 import { Status } from '@/ui/Badge'
 
 export enum DataType {
@@ -16,6 +17,7 @@ export enum DataType {
   LinearChart,
   Pyramid,
   Text,
+  TableLegend,
 }
 
 export type DataMap = {
@@ -40,6 +42,7 @@ export type DataMap = {
   [DataType.LinearChart]: Line[]
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: string
+  [DataType.TableLegend]: TableLegend
 }
 
 export type Dataset = {

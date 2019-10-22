@@ -1,28 +1,121 @@
+.container {
+  overflow: auto;
+}
+
+.divResizable {
+  top: 0;
+  right: 0;
+  width: 5px;
+  position: absolute;
+  cursor: col-resize;
+}
+
+.rowL {
+  height: 45px;
+}
+
+.rowM {
+  height: 37px;
+}
+
+.rowS {
+  height: 30px;
+}
+
 .table {
   width: 100%;
 
+  &.striped tr:nth-child(2) {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
   & tbody {
-    font-size: 15px;
-    line-height: 21px;
+    font-size: calc-size(15);
+    line-height: calc-size(20);
   }
 
   & th {
-    font-size: 11px;
-    line-height: 15px;
+    font-size: calc-size(10);
+    line-height: calc-size(15);
     color: var(--text-color-70);
+    text-transform: uppercase;
+
+    .icon {
+      display: none;
+    }
   }
 
   & th,
   & td {
-    padding: 0;
+    padding-top: 0;
+    padding-right: calc-size(16);
+    padding-bottom: 0;
+    padding-left: 0;
 
-    &.value {
-      text-align: right;
-      padding-left: 8px;
+    &.textLeftPosition {
+      text-align: left;
     }
 
-    &.isPadded {
-      padding-left: 40px;
+    &.textRightPosition {
+      text-align: right;
+    }
+
+    &.textCenterPosition {
+      text-align: center;
+    }
+  }
+
+  & th:hover {
+    cursor: pointer;
+
+    .divHelper {
+      display: inline-block;
+      position: relative;
+    }
+
+    .icon {
+      overflow: visible;
+      width: calc-size(12);
+      height: calc-size(8);
+      position: absolute;
+      right: calc-size(-12);
+      top: calc-size(3);
+
+      &:hover {
+        fill: white;
+      }
+    }
+
+    .iconNeutrally {
+      display: inline-block;
+    }
+
+    &.sortDesc {
+      .iconNeutrally {
+        display: none;
+      }
+
+      .iconAsc {
+        display: none;
+      }
+
+      .iconDesc {
+        display: inline-block;
+      }
+    }
+
+    &.sortAsc {
+      .iconNeutrally {
+        display: none;
+      }
+
+      .iconDesc {
+        display: none;
+      }
+
+      .iconAsc {
+        display: inline-block;
+      }
     }
   }
 }
@@ -35,14 +128,14 @@
 .circle {
   display: inline-block;
   margin-right: 8px;
-  width: 12px;
-  height: 12px;
+  width: calc-size(12);
+  height: calc-size(12);
   border-radius: 50%;
 }
 
 .values {
-  margin-top: 16px;
-  padding-top: 8px;
+  margin-top: calc-size(16);
+  padding-top: calc-size(8);
 
   display: flex;
   flex-wrap: wrap;
@@ -55,6 +148,6 @@
   display: inline-block;
 
   & + & {
-    margin-left: 20px;
+    margin-left: calc-size(20);
   }
 }
