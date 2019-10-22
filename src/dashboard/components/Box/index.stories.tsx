@@ -25,16 +25,16 @@ const cardValueWithBadgeKey = getUniqueName('CardValueWithBadge')
 const initialItems: readonly BoxItem[] = [
   {
     type: 'widget',
-    name: 'TitleWidget',
-    key: getUniqueName('TitleWidget'),
-    id: textWidgetId,
+    debugName: 'TitleWidget',
+    id: getUniqueName('TitleWidget'),
+    widgetType: textWidgetId,
     params: textDefaultParams,
   },
   {
     type: 'widget',
-    name: 'CardValueWithBadge',
-    key: cardValueWithBadgeKey,
-    id: cardValueWidgetId,
+    debugName: 'CardValueWithBadge',
+    id: cardValueWithBadgeKey,
+    widgetType: cardValueWidgetId,
     params: cardValueWithBadgeDefaultParams,
   },
   {
@@ -43,27 +43,27 @@ const initialItems: readonly BoxItem[] = [
       [
         {
           type: 'widget',
-          name: 'CardWithBadge',
-          key: getUniqueName('CardWithBadge'),
-          id: cardWidgetId,
+          debugName: 'CardWithBadge',
+          id: getUniqueName('CardWithBadge'),
+          widgetType: cardWidgetId,
           params: cardWithBadgeDefaultParams,
         },
       ],
       [
         {
           type: 'widget',
-          name: 'CardWithBadge',
-          key: getUniqueName('CardWithBadge'),
-          id: cardWidgetId,
+          debugName: 'CardWithBadge',
+          id: getUniqueName('CardWithBadge'),
+          widgetType: cardWidgetId,
           params: cardWithBadgeDefaultParams,
         },
       ],
       [
         {
           type: 'widget',
-          name: 'CardWithBadge',
-          key: getUniqueName('CardWithBadge'),
-          id: cardWidgetId,
+          debugName: 'CardWithBadge',
+          id: getUniqueName('CardWithBadge'),
+          widgetType: cardWidgetId,
           params: cardWithBadgeDefaultParams,
         },
       ],
