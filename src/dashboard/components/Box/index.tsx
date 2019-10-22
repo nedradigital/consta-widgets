@@ -15,9 +15,9 @@ import css from './index.css'
 
 export type WidgetItem = {
   type: 'widget'
-  name: string
-  key: string
   id: string
+  debugName: string
+  widgetType: string
   params: {
     [key: string]: any
   }
@@ -131,7 +131,7 @@ export const Box: React.FC<Props> = ({
   const [selectedItem, changeSelected] = useState(Object.keys(widgetsList)[0])
   const [editedIndex, changeEdited] = useState()
   const { getUniqueName, removeName } = useUniqueNameGenerator(
-    items.filter(isWidget).map(item => item.key)
+    items.filter(isWidget).map(item => item.id)
   )
 
   const addItem = () => {
@@ -140,14 +140,16 @@ export const Box: React.FC<Props> = ({
         onChange([...items, { type: 'columns', columns: [[], []] }])
         return
       default:
+        const { showName, id, defaultParams } = getWidget(selectedItem)
+
         onChange([
           ...items,
           {
             type: 'widget',
-            name: selectedItem,
-            key: getUniqueName(selectedItem),
-            id: getWidget(selectedItem).id,
-            params: getWidget(selectedItem).defaultParams,
+            debugName: showName,
+            id: getUniqueName(selectedItem),
+            widgetType: id,
+            params: defaultParams,
           },
         ])
         return
@@ -159,7 +161,7 @@ export const Box: React.FC<Props> = ({
     onChange(removeAt(items, index))
 
     if (isWidget(item)) {
-      removeName(item.key)
+      removeName(item.id)
     }
   }
 
@@ -235,12 +237,12 @@ export const Box: React.FC<Props> = ({
         let component
 
         if (item.type === 'widget') {
-          const Component = getWidget(item.id)
+          const Component = getWidget(item.widgetType)
           component = (
             <Component
-              key={item.key}
-              data={viewMode ? data : { [item.key]: Component.mockData }}
-              dataKey={item.key}
+              key={item.id}
+              data={viewMode ? data : { [item.id]: Component.mockData }}
+              dataKey={item.id}
               params={item.params}
               datasets={datasets}
               isEditing={isEditing}
