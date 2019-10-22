@@ -3,6 +3,8 @@ import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
 import useDimensions from 'react-use-dimensions'
 
+import { updateBaseSize } from '@gaz/utils'
+
 import { Box, BoxItem } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
 import { Data, Dataset, Settings } from '@/dashboard/types'
@@ -120,7 +122,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
   useLayoutEffect(() => {
     if (element) {
-      element.style.setProperty('--base-size', `${baseFontSize * scale}`)
+      updateBaseSize(baseFontSize * scale, element)
     }
   }, [width, scale, element])
 

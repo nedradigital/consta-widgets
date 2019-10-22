@@ -1254,10 +1254,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/utils@0.1.2":
-  version "0.1.2"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.2.tgz#7d77d39e9c102cbf9ead2622866b7349da9a68d6"
-  integrity sha512-7WCs2FuP8krNRjhGqvfc0Lt04Dae3qPhFvY3gtf03GAP1AjJEjoI7V9v8P2cMb+lJVxQnRcbzJKwbpyRCxagHw==
+"@gaz/utils@0.1.3":
+  version "0.1.3"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.3.tgz#d8f44b7562c941cfbd589b9ce8acc3b0e958302b"
+  integrity sha512-+MbXY4Po5g6sidt8BFsGjlhwjFkbLJM6wudWUJshj5IUOlIxu0ldAuQa0ZfYyRUs86PjMip8LIGuIg09RbYcuA==
 
 "@gaz/utils@0.1.3":
   version "0.1.3"

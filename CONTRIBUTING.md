@@ -106,3 +106,13 @@ type DateProps = {
   planDaysCount?: number;
 };
 ```
+
+### Обновление версии пакета
+Обновлять версию пакета нужно строго через `npm version (major | minor | patch | ...)` и в `master` ветке
+
+```sh
+> npm version patch
+> git push origin master
+> git push origin <tagname of new version> # git push origin v0.1.13
+> npm publish
+```
