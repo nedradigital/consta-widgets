@@ -396,6 +396,7 @@ export class LinearChart extends React.Component<Props, State> {
         }
   }
 
+  // TODO: подумать как можно организовать тест для проверки вычисляемого значения.
   onZoom = () => {
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
 
@@ -434,7 +435,7 @@ export class LinearChart extends React.Component<Props, State> {
       // Иначе мы берем домены точек, которые за экраном
       const valuesInZoomRange =
         countLines > 2
-          ? values.slice(zoomRangeIndexes[0] + (domainMin <= 0 ? 0 : 1), zoomRangeIndexes[1])
+          ? values.slice(zoomRangeIndexes[0] + (domainMin <= 0 ? 0 : 1), zoomRangeIndexes[1] + 1)
           : values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
 
       return secondaryAxis.getDomain(valuesInZoomRange)
