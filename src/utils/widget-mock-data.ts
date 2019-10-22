@@ -266,6 +266,10 @@ const mockData: DataMap = {
       },
     ],
   },
+  [DataType.TrafficLight]: {
+    status: 'normal',
+    text: 'Работа по расписанию',
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

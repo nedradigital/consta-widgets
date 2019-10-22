@@ -4,6 +4,7 @@ import { Line } from '@/components/LinearChart'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegend } from '@/components/TableLegend'
+import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { Status } from '@/ui/Badge'
 
 export enum DataType {
@@ -18,6 +19,7 @@ export enum DataType {
   Pyramid,
   Text,
   TableLegend,
+  TrafficLight,
 }
 
 export type DataMap = {
@@ -43,6 +45,7 @@ export type DataMap = {
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: string
   [DataType.TableLegend]: TableLegend
+  [DataType.TrafficLight]: TrafficLightData
 }
 
 export type Dataset = {

@@ -1,0 +1,56 @@
+@custom-selector :--small .sizeS;
+@custom-selector :--medium .sizeM;
+
+.background {
+  border-radius: 4px;
+  background-color: #001d2e;
+
+  &:--small {
+    width: calc-size(21);
+    height: calc-size(21);
+    padding: calc-size(3);
+  }
+
+  &:--medium {
+    width: calc-size(42);
+    height: calc-size(42);
+    padding: calc-size(6);
+  }
+}
+
+.foreground {
+  border-radius: calc-size(100);
+
+  width: 100%;
+  height: 100%;
+
+  &.normal {
+    background: linear-gradient(0deg, rgba(0, 204, 69, 0.9) 17.27%, rgba(93, 243, 65, 0.9) 84.44%);
+  }
+
+  &.warning {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 208, 0, 0.9) 15.56%,
+      rgba(212, 148, 29, 0.9) 83.18%
+    );
+  }
+
+  &.danger {
+    background: linear-gradient(0deg, rgba(204, 51, 57, 0.9) 0%, rgba(255, 0, 51, 0.9) 84.44%);
+  }
+}
+
+.text {
+  &:--small {
+    line-height: calc-size(14);
+    font-size: calc-size(10);
+    padding: calc-size(4) calc-size(8);
+  }
+
+  &:--medium {
+    line-height: calc-size(21);
+    font-size: calc-size(15);
+    padding: calc-size(9) calc-size(12);
+  }
+}
