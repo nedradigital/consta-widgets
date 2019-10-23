@@ -14,17 +14,12 @@ type NumberRange = readonly [number, number]
 
 export type Orientation = 'horizontal' | 'vertical'
 
-type Value = {
-  value: number
-  description: string
-}
-
 export type Data = {
-  category: string
-  values: readonly Value[]
+  groupName: string
+  values: readonly number[]
 }
 
-export type Colors = { [key in string]: string }
+export type Colors = readonly string[]
 
 type Props = {
   data: readonly Data[]
@@ -61,11 +56,13 @@ const getValuesScale = (domain: NumberRange, size: number, orientation: Orientat
     .domain([...domain])
     .range(orientation === 'horizontal' ? getXRange(size) : getYRange(size))
 
-const getComain = (items: readonly Data[]): NumberRange => {
-  const numbers = items.reduce(
-    (acc, curr) => acc.concat(curr.values.map(i => i.value)),
-    [] as readonly number[]
-  )
+const getDomain = (items: readonly Data[]): NumberRange => {
+  // tslint:disable-next-line:readonly-array
+  const numbers = items.reduce<number[]>((acc, curr) => {
+    acc.push(...curr.values)
+    return acc
+  }, [])
+
   return [0, d3.max(numbers)] as NumberRange
 }
 
@@ -103,9 +100,9 @@ export const BarChart: React.FC<Props> = ({
   const svgWidth = width ? Math.round(width - paddingX) : 0
   const svgHeight = height ? Math.round(height - paddingY) : 0
 
-  const groupDomains = data.map(item => item.category)
-  const valuesDomains = getComain(data)
-  const barDomains = data.length ? data[0].values.map(item => item.description) : []
+  const groupDomains = data.map(item => item.groupName)
+  const valuesDomains = getDomain(data)
+  const barDomains = data.length ? data[0].values.map((_, index) => String(index)) : []
 
   const barSize = (columnSize + columnPadding) * (data.length ? data[0].values.length : 0)
 
@@ -146,7 +143,7 @@ export const BarChart: React.FC<Props> = ({
         />
         {data.map(item => (
           <Bar
-            key={item.category}
+            key={item.groupName}
             orientation={orientation}
             data={item}
             groupScale={groupScale}

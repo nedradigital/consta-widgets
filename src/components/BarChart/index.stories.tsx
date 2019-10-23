@@ -15,15 +15,10 @@ storiesOf('components/BarChart', module)
   .add('interactive', () => {
     return (
       <BarChart
+        {...getWidgetMockData(DataType.BarChart)}
         orientation="vertical"
         showValues={false}
-        colors={{
-          blue: '#56B9F2',
-          red: '#EB5757',
-          orange: '#FCA355',
-        }}
         valuesTick={4}
-        data={getWidgetMockData(DataType.BarChart)}
       />
     )
   })

@@ -1,4 +1,4 @@
-import { BarChart, Colors, Orientation } from '@/components/BarChart'
+import { BarChart, Orientation } from '@/components/BarChart'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -9,7 +9,6 @@ type Data = DataMap[typeof dataType]
 type Params = {
   orientation: Orientation
   showValues: boolean
-  colors: Colors
 }
 
 const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
@@ -17,17 +16,12 @@ const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
 export const defaultParams: Params = {
   orientation: 'vertical',
   showValues: false,
-  colors: {
-    blue: '#56B9F2',
-    red: '#EB5757',
-    orange: '#FCA355',
-  },
 }
 
 export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { orientation, colors, showValues },
+  params: { orientation, showValues },
   data,
-}) => <BarChart data={data} showValues={showValues} colors={colors} orientation={orientation} />
+}) => <BarChart {...data} showValues={showValues} orientation={orientation} />
 
 export const BarChartWidget = createWidget<Data, Params>({
   id: widgetId,

@@ -1,4 +1,4 @@
-import { Data as BarChartData } from '@/components/BarChart'
+import { Colors as BarChartColors, Data as BarChartData } from '@/components/BarChart'
 import { Data as DonutChartData } from '@/components/DonutChart'
 import { Line } from '@/components/LinearChart'
 import { Data as PyramidData } from '@/components/PyramidChart'
@@ -36,8 +36,10 @@ export type DataMap = {
   }
   [DataType.Stats]: StatsData
   [DataType.Donut]: DonutChartData
-  // tslint:disable-next-line:readonly-array
-  [DataType.BarChart]: BarChartData[]
+  [DataType.BarChart]: {
+    colors: BarChartColors
+    data: readonly BarChartData[]
+  }
   // tslint:disable-next-line:readonly-array
   [DataType.LinearChart]: Line[]
   [DataType.Pyramid]: readonly PyramidData[]
