@@ -27,7 +27,8 @@ export const Constructor: React.FC<ConstructorProps> = props => {
     viewMode,
     datasets,
     data,
-    widthScale,
+    baseWidthForScaling,
+    baseHeightForScaling,
     baseFontSize,
     baseMargin,
     basePadding,
@@ -61,7 +62,8 @@ export const Constructor: React.FC<ConstructorProps> = props => {
           onChange={onChange}
           dashboard={dashboard}
           data={data}
-          widthScale={widthScale}
+          baseWidthForScaling={baseWidthForScaling}
+          baseHeightForScaling={baseHeightForScaling}
           baseFontSize={baseFontSize}
           baseMargin={margins}
           basePadding={basePadding}
