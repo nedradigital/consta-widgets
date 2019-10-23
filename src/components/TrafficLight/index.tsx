@@ -18,12 +18,12 @@ export const sizes = ['s', 'm'] as const
 export type Size = typeof sizes[number]
 
 type Props = {
-  size: Size
   data: Data
+  size?: Size
   type?: ValueType
 }
 
-export const TrafficLight: React.FC<Props> = ({ type = 'default', size, data }) => {
+export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', data }) => {
   const { status, text } = data
   const sizeClass = { s: css.sizeS, m: css.sizeM }[size]
 
