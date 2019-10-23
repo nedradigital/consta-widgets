@@ -110,7 +110,8 @@ storiesOf('dashboard/Constructor', module)
             onToggleMode={() => setViewMode(!viewMode)}
             viewMode={viewMode}
             data={{}}
-            widthScale={1024}
+            baseWidthForScaling={1024}
+            baseHeightForScaling={768}
             baseFontSize={16}
             basePadding={getPadding()}
             rowsCount={getRowsCount()}

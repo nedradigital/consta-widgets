@@ -32,7 +32,8 @@ export type DashboardProps = {
   dashboard: DashboardState
   data: Data
   baseFontSize: number
-  widthScale?: number
+  baseWidthForScaling?: number
+  baseHeightForScaling?: number
   rowsCount: number
 }
 
@@ -47,7 +48,8 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     baseFontSize,
     baseMargin = [0, 0],
     basePadding = [0, 0],
-    widthScale,
+    baseWidthForScaling,
+    baseHeightForScaling,
     rowsCount,
   } = props
   const { boxes, config, settings } = dashboard
@@ -120,17 +122,24 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     })
   }
 
-  const scale = useMemo(() => (widthScale ? width / widthScale : 1), [widthScale, width])
+  const scale = useMemo(() => {
+    const widthScale = baseWidthForScaling ? width / baseWidthForScaling : 1
+    const heightScale = baseHeightForScaling ? height / baseHeightForScaling : 1
+
+    return Math.min(widthScale, heightScale)
+  }, [baseHeightForScaling, baseWidthForScaling, width, height])
 
   const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [
     scale,
-    widthScale,
+    baseWidthForScaling,
+    baseHeightForScaling,
     baseMargin,
   ])
 
   const padding = useMemo(() => [scale * basePadding[0], scale * basePadding[1]], [
     scale,
-    widthScale,
+    baseWidthForScaling,
+    baseHeightForScaling,
     basePadding,
   ])
 
@@ -138,7 +147,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     if (element) {
       updateBaseSize(baseFontSize * scale, element)
     }
-  }, [width, scale, element])
+  }, [width, height, scale, element])
 
   const rowHeight = (height - 2 * basePadding[1] + baseMargin[1]) / rowsCount - baseMargin[1]
 
