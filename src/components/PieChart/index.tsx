@@ -1,6 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
+import { calcSize } from '@gaz/utils'
 import * as d3 from 'd3'
 
 import { ReactComponent as ChartBorder } from './images/chart-border.svg'
@@ -76,7 +77,7 @@ export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal
       ref={ref}
       className={css.pieChart}
       style={{
-        fontSize: (14 * size) / 300, // 300 — исходный размер из макета, используется как отправная точка
+        fontSize: calcSize(14),
       }}
     >
       <div className={css.container} style={{ width: size, height: size }}>

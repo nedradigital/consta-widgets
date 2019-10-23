@@ -4,7 +4,7 @@
   display: inline-block;
   letter-spacing: -0.02em;
   line-height: 1;
-  padding: 2px 4px;
+  padding: calc-size(2) calc-size(4);
   position: relative;
 
   &.normal {

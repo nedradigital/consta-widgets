@@ -146,6 +146,7 @@
 
 .valueName {
   display: inline-block;
+  font-size: calc-size(11);
 
   & + & {
     margin-left: calc-size(20);
