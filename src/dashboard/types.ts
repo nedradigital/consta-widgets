@@ -1,6 +1,7 @@
 import { Colors as BarChartColors, Data as BarChartData } from '@/components/BarChart'
 import { Data as DonutChartData } from '@/components/DonutChart'
 import { Line } from '@/components/LinearChart'
+import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegend } from '@/components/TableLegend'
@@ -20,6 +21,7 @@ export enum DataType {
   Text,
   TableLegend,
   TrafficLight,
+  MultiBarChart,
 }
 
 export type DataMap = {
@@ -48,6 +50,7 @@ export type DataMap = {
   [DataType.Text]: string
   [DataType.TableLegend]: TableLegend
   [DataType.TrafficLight]: TrafficLightData
+  [DataType.MultiBarChart]: MultiBarChartData
 }
 
 export type Dataset = {

@@ -234,6 +234,16 @@ const mockData: DataMap = {
     status: 'normal',
     text: 'Работа по расписанию',
   },
+  [DataType.MultiBarChart]: {
+    categories: ['apples', 'bananas', 'cherries', 'dates'],
+    values: [
+      { month: 'Q1-2016', apples: 3840, bananas: 1920, cherries: -23, dates: 400 },
+      { month: 'Q2-2016', apples: 1600, bananas: 1440, cherries: 45, dates: 400 },
+      { month: 'Q3-2016', apples: 640, bananas: 960, cherries: 73, dates: 600 },
+      { month: 'Q4-2016', apples: 320, bananas: 480, cherries: 85, dates: 400 },
+    ],
+    keyGroup: 'month',
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

@@ -25,6 +25,7 @@ type Props = {
   valuesScale: d3.ScaleLinear<number, number>
   groupScale: d3.ScaleBand<string>
   orientation: Orientation
+  valuesSpecifier?: string
 }
 
 export const Axis: React.FC<Props> = ({
@@ -35,6 +36,7 @@ export const Axis: React.FC<Props> = ({
   groupScale,
   valuesScale,
   orientation,
+  valuesSpecifier = 'd',
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
@@ -96,7 +98,7 @@ export const Axis: React.FC<Props> = ({
       >
       const axis = labels.tickOn
         ? d3[labels.direction](labels.scale as d3.ScaleLinear<number, number>)
-            .ticks(valuesTick)
+            .ticks(valuesTick, valuesSpecifier)
             .tickSize(4)
             .tickPadding(TICK_PADDING)
         : d3[labels.direction](labels.scale as d3.ScaleBand<string>)
