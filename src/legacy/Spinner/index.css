@@ -1,7 +1,7 @@
 .spinner {
+  transform-origin: center center;
   animation: rotate 1s linear infinite;
   stroke: currentColor;
-  transform-origin: center center;
 }
 
 .path {

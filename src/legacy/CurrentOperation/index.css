@@ -3,10 +3,11 @@
 }
 
 .infoLine {
-  align-items: center;
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: flex-start;
+
   margin-bottom: 16px;
 }
 
@@ -19,8 +20,8 @@
 }
 
 .switcher {
-  margin-left: 56px;
   margin-right: 17px;
+  margin-left: 56px;
 
   &:first-child {
     margin-left: 0;
@@ -34,7 +35,8 @@
 .title {
   font-size: 26px;
   font-weight: bold;
-  letter-spacing: 0.03em;
   line-height: 27px;
+
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }

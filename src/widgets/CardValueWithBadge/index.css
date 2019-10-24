@@ -10,20 +10,25 @@
 
 .value {
   font-size: calc-size(24);
-  line-height: calc-size(34);
-  vertical-align: middle;
   font-weight: bold;
+  line-height: calc-size(34);
+
+  vertical-align: middle;
 }
 
 .badge {
-  vertical-align: middle;
-  margin-left: calc-size(4);
   font-size: calc-size(11);
   font-weight: bold;
+
+  margin-left: calc-size(4);
+
+  vertical-align: middle;
 }
 
 .unit {
   font-size: calc-size(11);
-  color: var(--text-color-70);
+
   margin-top: calc-size(4);
+
+  color: var(--text-color-70);
 }

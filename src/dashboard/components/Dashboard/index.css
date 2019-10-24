@@ -2,7 +2,6 @@
   width: 100%;
 
   border: 1px solid gray;
-
   background-color: var(--bg-dashboard);
 
   /* эти стили нужны для корректной работы react-grid-layout */
@@ -11,8 +10,10 @@
     /* stylelint-disable selector-class-pattern */
 
     & .react-grid-layout {
-      min-height: 100%;
       position: relative;
+
+      min-height: 100%;
+
       transition: height 200ms ease;
     }
 
@@ -27,35 +28,43 @@
 
     & .react-grid-item.resizing {
       z-index: 1;
+
       will-change: width, height;
     }
 
     & .react-grid-item.react-draggable-dragging {
-      transition: none;
       z-index: 3;
+
+      transition: none;
       will-change: transform;
     }
 
     & .react-grid-item.react-grid-placeholder {
-      background: red;
-      opacity: 0.2;
-      transition-duration: 100ms;
       z-index: 2;
+
       user-select: none;
+
+      opacity: 0.2;
+      background: red;
+
+      transition-duration: 100ms;
     }
 
     & .react-grid-item > .react-resizable-handle {
       position: absolute;
+      right: 0;
+      bottom: 0;
+
       width: 20px;
       height: 20px;
-      bottom: 0;
-      right: 0;
-      background: url('data:image/svg+xml;base64, PHN2ZyBzdHlsZT0iZmlsbDojNTA2NTczIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTEwIDEwSDBWNi4yaDYuMlYwSDEwdjZ6Ij48L3BhdGg+PC9zdmc+');
-      background-position: bottom right;
       padding: 0 3px 3px 0;
-      background-repeat: no-repeat;
-      background-origin: content-box;
+
       cursor: se-resize;
+
+      background: url('data:image/svg+xml;base64, PHN2ZyBzdHlsZT0iZmlsbDojNTA2NTczIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCI+PHBhdGggZD0iTTEwIDEwSDBWNi4yaDYuMlYwSDEwdjZ6Ij48L3BhdGg+PC9zdmc+');
+      background-repeat: no-repeat;
+      background-position: bottom right;
+      background-origin: content-box;
     }
 
     & .react-grid-item.dropping > .react-resizable-handle {
@@ -75,5 +84,6 @@
   position: absolute;
   top: 0;
   right: 0;
+
   transform: translate(100%, -100%);
 }

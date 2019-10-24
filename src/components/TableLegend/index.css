@@ -3,10 +3,12 @@
 }
 
 .divResizable {
+  position: absolute;
   top: 0;
   right: 0;
+
   width: 5px;
-  position: absolute;
+
   cursor: col-resize;
 }
 
@@ -37,8 +39,10 @@
   & th {
     font-size: calc-size(10);
     line-height: calc-size(15);
-    color: var(--text-color-70);
+
     text-transform: uppercase;
+
+    color: var(--text-color-70);
 
     .icon {
       display: none;
@@ -69,17 +73,20 @@
     cursor: pointer;
 
     .divHelper {
-      display: inline-block;
       position: relative;
+
+      display: inline-block;
     }
 
     .icon {
+      position: absolute;
+      top: calc-size(3);
+      right: calc-size(-12);
+
       overflow: visible;
+
       width: calc-size(12);
       height: calc-size(8);
-      position: absolute;
-      right: calc-size(-12);
-      top: calc-size(3);
 
       &:hover {
         fill: white;
@@ -122,31 +129,35 @@
 
 .title {
   margin-bottom: 0;
+
   text-align: left;
 }
 
 .circle {
   display: inline-block;
-  margin-right: 8px;
+
   width: calc-size(12);
   height: calc-size(12);
+  margin-right: 8px;
+
   border-radius: 50%;
 }
 
 .values {
-  margin-top: calc-size(16);
-  padding-top: calc-size(8);
-
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
+
+  margin-top: calc-size(16);
+  padding-top: calc-size(8);
 
   border-top: 1px solid rgba(246, 251, 253, 0.28);
 }
 
 .valueName {
-  display: inline-block;
   font-size: calc-size(11);
+
+  display: inline-block;
 
   & + & {
     margin-left: calc-size(20);

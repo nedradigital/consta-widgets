@@ -24,11 +24,12 @@
 .dot {
   min-width: var(--dot-size);
   height: var(--dot-size);
+
   border-radius: 100px;
 
   @nest :--left & {
-    margin-right: 8px;
     margin-top: calc((var(--line-height-s) - var(--dot-size)) / 2);
+    margin-right: 8px;
   }
 
   @nest :--left:--medium & {
@@ -45,8 +46,8 @@
   }
 
   @nest :--left & {
-    margin-right: 8px;
     margin-top: calc((var(--line-height-s) - 2px) / 2);
+    margin-right: 8px;
   }
 
   @nest :--left:--medium & {
@@ -69,12 +70,12 @@
 
 .text {
   @nest :--small & {
-    line-height: var(--line-height-s);
     font-size: calc-size(13);
+    line-height: var(--line-height-s);
   }
 
   @nest :--medium & {
-    line-height: var(--line-height-m);
     font-size: calc-size(15);
+    line-height: var(--line-height-m);
   }
 }

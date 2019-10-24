@@ -1,19 +1,24 @@
 .badge {
-  background-color: var(--text-color-additional-semi);
-  border-radius: 2px;
-  display: inline-block;
-  letter-spacing: -0.02em;
   line-height: 1;
-  padding: calc-size(2) calc-size(4);
+
   position: relative;
+
+  display: inline-block;
+
+  padding: calc-size(2) calc-size(4);
+
+  letter-spacing: -0.02em;
+
+  border-radius: 2px;
+  background-color: var(--text-color-additional-semi);
 
   &.normal {
     background-color: var(--color-normal);
   }
 
   &.warning {
-    background-color: var(--color-warning);
     color: #000;
+    background-color: var(--color-warning);
   }
 
   &.danger {

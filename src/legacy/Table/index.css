@@ -1,12 +1,13 @@
 .table {
-  font-size: var(--main-font-size);
   font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
 }
 
 .row {
-  align-items: flex-start;
   display: flex;
+  align-items: flex-start;
   flex-direction: row;
+
   margin-bottom: calc(12rem / 14);
 
   &:last-child {
@@ -18,8 +19,9 @@
   padding-right: 5px;
 
   &:first-child {
-    color: var(--text-color-semi);
     flex-grow: 1;
+
+    color: var(--text-color-semi);
   }
 
   &:last-child {
@@ -28,7 +30,8 @@
 
   &.oneLine {
     overflow: hidden;
-    text-overflow: ellipsis;
+
     white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }

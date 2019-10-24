@@ -1,35 +1,36 @@
 .main {
-  border-top: 4px solid var(--additional-border-color-opacity-67);
+  position: absolute;
+  top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
+
+  border-top: 4px solid var(--additional-border-color-opacity-67);
 
   &.danger {
+    border-top-color: var(--warning-border-color-opacity-70);
     background-image: linear-gradient(
       165.63deg,
       rgba(201, 29, 50, 0.52) 5.81%,
       rgba(201, 29, 50, 0) 62.66%
     );
-    border-top-color: var(--warning-border-color-opacity-70);
   }
 
   &.important {
+    border-top-color: var(--important-border-color-opacity-70);
     background-image: linear-gradient(
       167.07deg,
       rgba(33, 92, 196, 0.44) 4.16%,
       rgba(33, 92, 196, 0) 61.42%
     );
-    border-top-color: var(--important-border-color-opacity-70);
   }
 
   &.warning {
+    border-top-color: var(--danger-border-color-opacity-70);
     background-image: linear-gradient(
       165.63deg,
       rgba(231, 177, 38, 0.36) 5.81%,
       rgba(232, 202, 47, 0) 62.66%
     );
-    border-top-color: var(--danger-border-color-opacity-70);
   }
 }

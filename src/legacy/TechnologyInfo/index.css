@@ -1,7 +1,6 @@
 .main {
-  max-width: 117px;
-
   width: 110px;
+  max-width: 117px;
   margin: 0 10px;
 
   &:last-child {
@@ -10,9 +9,11 @@
 }
 
 .icon {
-  display: inline-block;
-  margin-bottom: 9px;
   position: relative;
+
+  display: inline-block;
+
+  margin-bottom: 9px;
 
   &:last-child {
     margin-bottom: 0;
@@ -20,25 +21,33 @@
 }
 
 .newLabel {
-  background: #8bb1ff;
-  border-radius: 2px;
-  bottom: 100%;
-  color: #202020;
-  display: inline-block;
   font-size: 8px;
-  left: 100%;
   line-height: 1;
-  padding: 1px 2px 0;
+
   position: absolute;
+  bottom: 100%;
+  left: 100%;
+
+  display: inline-block;
+
+  padding: 1px 2px 0;
+
+  color: #202020;
+  border-radius: 2px;
+  background: #8bb1ff;
+
   transform: translate(-3px, 3px);
 }
 
 .title {
-  color: #878ca8;
   font-size: 13px;
   line-height: 15px;
+
   margin-bottom: 5px;
+
   word-wrap: break-word;
+
+  color: #878ca8;
 
   &:last-child {
     margin-bottom: 0;
@@ -46,10 +55,12 @@
 }
 
 .description {
-  color: var(--text-color);
   font-size: var(--font-size-medium);
   font-weight: bold;
-  letter-spacing: -0.0241em;
   line-height: 18px;
+
+  letter-spacing: -0.0241em;
   word-wrap: break-word;
+
+  color: var(--text-color);
 }

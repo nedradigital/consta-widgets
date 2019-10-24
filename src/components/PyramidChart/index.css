@@ -1,7 +1,8 @@
 .main {
+  position: relative;
+
   width: 100%;
   height: 100%;
-  position: relative;
 
   &.sizeS {
     font-size: calc-size(11);
@@ -15,27 +16,32 @@
 }
 
 .table {
-  height: 100%;
-  table-layout: fixed;
   position: relative;
   z-index: 1;
-  border-collapse: collapse;
+
+  height: 100%;
+
+  table-layout: fixed;
   border-spacing: 0;
+  border-collapse: collapse;
 
   & td {
-    vertical-align: middle;
     padding: 0 calc-size(16);
 
+    vertical-align: middle;
+
     &:first-child {
-      text-align: right;
       font-size: calc-size(24);
-      line-height: calc-size(34);
       font-weight: bold;
+      line-height: calc-size(34);
+
+      text-align: right;
     }
   }
 }
 
 .svgWrapper {
-  height: 100%;
   position: absolute;
+
+  height: 100%;
 }

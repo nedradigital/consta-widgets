@@ -1,33 +1,37 @@
 .timeline {
-  align-items: stretch;
   display: flex;
+  align-items: stretch;
   flex-direction: column;
   justify-content: space-between;
+
   height: 100%;
 }
 
 .item {
-  border: 1px solid transparent;
-  padding: 6px;
-  opacity: 0.5;
   width: 43px;
+  padding: 6px;
+
+  opacity: 0.5;
+  border: 1px solid transparent;
 
   &:last-child {
-    background: var(--bg-color-white-semi);
+    opacity: 1;
     border-color: var(--bg-color-white);
     border-radius: var(--border-radius);
-    opacity: 1;
+    background: var(--bg-color-white-semi);
   }
 }
 
 .time {
-  color: var(--text-color-additional);
   font-size: 13px;
   line-height: 15px;
+
+  color: var(--text-color-additional);
 }
 
 .value {
-  color: var(--text-color);
   font-size: 13px;
   line-height: 15px;
+
+  color: var(--text-color);
 }

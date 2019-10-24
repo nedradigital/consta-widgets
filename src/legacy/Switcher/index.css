@@ -2,10 +2,12 @@
 
 :--main {
   font-size: var(--main-font-size);
-  align-items: center;
+
   display: inline-flex;
-  cursor: pointer;
+  align-items: center;
   justify-content: center;
+
+  cursor: pointer;
   user-select: none;
 }
 
@@ -18,13 +20,17 @@
 }
 
 .wrapper {
-  background: rgba(#323f52, 0.5);
-  border-radius: 20px;
-  display: inline-block;
-  height: 13px;
   position: relative;
-  transition: background-color 0.3s ease-out;
+
+  display: inline-block;
+
   width: 24px;
+  height: 13px;
+
+  border-radius: 20px;
+  background: rgba(#323f52, 0.5);
+
+  transition: background-color 0.3s ease-out;
 
   @nest :--main.isEnabled & {
     background-color: #5e6f8a;
@@ -32,16 +38,19 @@
 }
 
 .icon {
+  position: absolute;
+  top: -2px;
+  left: -4px;
+
+  width: 17px;
+  height: 17px;
+
+  border-radius: 50%;
   background: #cfdef6;
   box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.41);
-  border-radius: 50%;
-  height: 17px;
-  position: absolute;
-  left: -4px;
-  top: -2px;
-  transform: translateX(0);
+
   transition: transform 0.3s ease-out;
-  width: 17px;
+  transform: translateX(0);
 
   @nest :--main.isEnabled & {
     transform: translateX(15px);

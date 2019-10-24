@@ -1,12 +1,14 @@
 .directionIndicator {
+  line-height: 0;
+
   display: block;
+  justify-content: center;
+
   width: 32px;
   height: 33px;
 
-  justify-content: center;
-  line-height: 0;
-  background: var(--color-important);
   border-radius: var(--border-radius);
+  background: var(--color-important);
 
   &.up {
     transform: rotate(180deg);

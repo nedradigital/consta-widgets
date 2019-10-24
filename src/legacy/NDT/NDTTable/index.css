@@ -1,26 +1,31 @@
 .main {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-color);
   font-size: var(--main-font-size);
+
+  color: var(--text-color);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .rowTitle {
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #878ca8;
   display: flex;
+  align-items: center;
   flex-direction: row;
   justify-content: space-between;
+
   padding: 0 10px 8px 8px;
+
+  color: #878ca8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .row {
-  align-items: center;
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 1px;
-  min-height: 35px;
   position: relative;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  min-height: 35px;
+  margin-bottom: 1px;
 
   &:last-child {
     margin-bottom: 0;
@@ -28,34 +33,41 @@
 }
 
 .progress {
-  background-color: rgba(81, 161, 255, 0.28);
   position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
   z-index: 0;
+  top: 0;
+  left: 0;
+
+  height: 100%;
+
+  background-color: rgba(81, 161, 255, 0.28);
+
   transition: width 0.5s ease;
 }
 
 .cell {
-  min-width: 0;
-  word-wrap: break-word;
   z-index: 10;
+
+  min-width: 0;
+
   white-space: nowrap;
+  word-wrap: break-word;
 }
 
 .cellName {
-  padding-left: 9px;
   width: 53%;
+  padding-left: 9px;
 }
 
 .cellPercent {
-  text-align: right;
   width: 18%;
+
+  text-align: right;
 }
 
 .cellHours {
-  padding-right: 10px;
-  text-align: right;
   width: 29%;
+  padding-right: 10px;
+
+  text-align: right;
 }

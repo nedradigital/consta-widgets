@@ -1,11 +1,15 @@
 .progressTimeBlock {
-  background-color: var(--bg-color);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--white-border-color-opacity-10);
-  color: var(--text-color);
-  display: grid;
-  height: 100%;
   font-size: var(--main-font-size);
+
+  display: grid;
+
+  height: 100%;
+  padding: 18px 27px;
+
+  color: var(--text-color);
+  border: 1px solid var(--white-border-color-opacity-10);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-color);
   grid-template-columns: 136px 50px 114px 5px auto;
   grid-template-rows: 26px 24px 51px 21px 21px 43px;
   grid-template-areas:
@@ -15,5 +19,4 @@
     'chart       . .         .    .'
     'chart       . recom     .    .'
     'chart       . recom     .    recom-ref';
-  padding: 18px 27px;
 }

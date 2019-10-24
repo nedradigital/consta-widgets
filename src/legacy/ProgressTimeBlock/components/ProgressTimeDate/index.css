@@ -1,14 +1,15 @@
 .currentDay {
-  font-weight: bold;
   font-size: 24px;
+  font-weight: bold;
   grid-area: current-day;
 }
 
 .content {
-  grid-area: date;
-  align-items: flex-end;
   display: flex;
+  align-items: flex-end;
+
   padding-bottom: 3px;
+  grid-area: date;
 }
 
 .icon {

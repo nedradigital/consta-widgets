@@ -1,25 +1,32 @@
 .main {
-  color: #8bb1ff;
   font-size: 16px;
   line-height: 18px;
-  padding-left: 30px;
+
   position: relative;
 
+  padding-left: 30px;
+
+  color: #8bb1ff;
+
   &::before {
-    background-color: rgba(204, 211, 255, 0.3);
-    content: '';
-    height: 78%;
-    left: 0;
     position: absolute;
     top: 0;
+    left: 0;
+
     width: 4px;
+    height: 78%;
+
+    content: '';
+
+    background-color: rgba(204, 211, 255, 0.3);
   }
 }
 
 .infoLine {
-  align-items: center;
   display: flex;
+  align-items: center;
   justify-content: flex-start;
+
   margin-bottom: 7px;
 
   &:last-child {
@@ -40,6 +47,7 @@
 
   & img {
     width: 15px;
+
     transform: translateY(2px);
   }
 
@@ -49,13 +57,16 @@
 }
 
 .title {
-  color: var(--text-color);
   font-size: 32px;
   font-weight: bold;
-  letter-spacing: 0.0121em;
   line-height: 40px;
+
   margin-bottom: 7px;
+
+  letter-spacing: 0.0121em;
   text-transform: uppercase;
+
+  color: var(--text-color);
 
   &:last-child {
     margin-bottom: 0;

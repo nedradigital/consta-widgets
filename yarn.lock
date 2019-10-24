@@ -1184,10 +1184,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA==
 
-"@gaz/configs@0.1.15":
-  version "0.1.15"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.15.tgz#576dbe8196d996e2e9925789046e64dd3ec73a8e"
-  integrity sha512-nsMOuzlhzcysmRaL/MIWiS2NU1x8FCRnT9/tzRVPpsXbTzcFpifuoZVCluMvlC4b+HP/FmmUPEXz+rS5TPmKhQ==
+"@gaz/configs@0.1.16":
+  version "0.1.16"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.16.tgz#6f1c511f17557e6ccb296e5867078f7b2a4c98b3"
+  integrity sha512-QD/94Y3i/SZvbVRovMeKB2/RrczDU0UVI2LiLj0D3FjUx1ObtG6NqCT3lhISt44lFDQ53hWCn9IX5gTN6mhVYw==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1197,7 +1197,7 @@
     "@babel/plugin-transform-runtime" "7.4.4"
     "@babel/preset-env" "7.4.5"
     "@babel/preset-react" "7.0.0"
-    "@gaz/utils" "0.1.3"
+    "@gaz/utils" "0.1.4"
     "@hot-loader/react-dom" "16.8.6"
     "@types/enzyme" "3.10.2"
     "@types/jest" "24.0.15"
@@ -1235,6 +1235,7 @@
     stylelint-config-prettier "5.2.0"
     stylelint-config-recommended "2.2.0"
     stylelint-config-standard "18.3.0"
+    stylelint-order "3.1.1"
     svgo "1.2.2"
     svgo-loader "2.2.1"
     terser-webpack-plugin "1.3.0"
@@ -1254,15 +1255,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/utils@0.1.3":
-  version "0.1.3"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.3.tgz#d8f44b7562c941cfbd589b9ce8acc3b0e958302b"
-  integrity sha512-+MbXY4Po5g6sidt8BFsGjlhwjFkbLJM6wudWUJshj5IUOlIxu0ldAuQa0ZfYyRUs86PjMip8LIGuIg09RbYcuA==
-
-"@gaz/utils@0.1.3":
-  version "0.1.3"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.3.tgz#d8f44b7562c941cfbd589b9ce8acc3b0e958302b"
-  integrity sha512-+MbXY4Po5g6sidt8BFsGjlhwjFkbLJM6wudWUJshj5IUOlIxu0ldAuQa0ZfYyRUs86PjMip8LIGuIg09RbYcuA==
+"@gaz/utils@0.1.4":
+  version "0.1.4"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.4.tgz#28c53e3f18c59e1801b85346db3da9c417888484"
+  integrity sha512-dMId+Z89JblrGEEXGfEwkJNUy0TaHm+ctSAgEJHRLcgVZDNmnyfqmEF8i4nXBi93CQb943RmCfC5hPpBgmVEAw==
 
 "@hot-loader/react-dom@16.8.6":
   version "16.8.6"
@@ -10698,6 +10694,14 @@ postcss-selector-parser@^6.0.0, postcss-selector-parser@^6.0.2:
     indexes-of "^1.0.1"
     uniq "^1.0.1"
 
+postcss-sorting@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/postcss-sorting/-/postcss-sorting-5.0.1.tgz#10d5d0059eea8334dacc820c0121864035bc3f11"
+  integrity sha512-Y9fUFkIhfrm6i0Ta3n+89j56EFqaNRdUKqXyRp6kvTcSXnmgEjaVowCXH+JBe9+YKWqd4nc28r2sgwnzJalccA==
+  dependencies:
+    lodash "^4.17.14"
+    postcss "^7.0.17"
+
 postcss-svgo@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/postcss-svgo/-/postcss-svgo-4.0.2.tgz#17b997bc711b333bab143aaed3b8d3d6e3d38258"
@@ -12729,6 +12733,15 @@ stylelint-config-standard@18.3.0:
   integrity sha512-Tdc/TFeddjjy64LvjPau9SsfVRexmTFqUhnMBrzz07J4p2dVQtmpncRF/o8yZn8ugA3Ut43E6o1GtjX80TFytw==
   dependencies:
     stylelint-config-recommended "^2.2.0"
+
+stylelint-order@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/stylelint-order/-/stylelint-order-3.1.1.tgz#ba9ea6844d1482f97f31204e7c9605c7b792c294"
+  integrity sha512-4gP/r8j/6JGZ/LL41b2sYtQqfwZl4VSqTp7WeIwI67v/OXNQ08dnn64BGXNwAUSgb2+YIvIOxQaMzqMyQMzoyQ==
+  dependencies:
+    lodash "^4.17.15"
+    postcss "^7.0.17"
+    postcss-sorting "^5.0.1"
 
 stylelint@10.1.0:
   version "10.1.0"

@@ -2,12 +2,14 @@
 @custom-selector :--cell .cellAdditional;
 
 :--main {
-  background: #111a28;
-  border-radius: 0 0 4px 4px;
-  border: 1px solid #29313d;
-  padding: 5px 0 10px 6px;
   position: relative;
+
   width: 100%;
+  padding: 5px 0 10px 6px;
+
+  border: 1px solid #29313d;
+  border-radius: 0 0 4px 4px;
+  background: #111a28;
 
   &.statusWarning {
     background-color: var(--color-warning);
@@ -19,9 +21,9 @@
   }
 
   &.statusWarningPossibleDanger {
-    background-color: var(--color-warning);
     border-color: var(--color-danger);
     border-top-color: inherit;
+    background-color: var(--color-warning);
   }
 
   &.statusPossibleDanger {
@@ -35,28 +37,29 @@
 }
 
 .rangeChart {
-  left: 0;
   position: absolute;
-  right: 0;
   top: -1px;
+  right: 0;
+  left: 0;
 }
 
 .rangeChartPadded {
-  left: 1px;
   position: absolute;
   right: 1px;
+  left: 1px;
 }
 
 .cells {
-  align-items: flex-start;
   display: flex;
+  align-items: flex-start;
   flex-direction: row;
 }
 
 .cell {
-  min-width: 0;
-  word-wrap: break-word;
   width: 50%;
+  min-width: 0;
+
+  word-wrap: break-word;
 
   &:only-child {
     width: 100%;
@@ -64,18 +67,21 @@
 }
 
 .state {
-  color: var(--text-color-semi);
   font-size: 14px;
   line-height: 16px;
+
   margin-bottom: 5px;
+
+  color: var(--text-color-semi);
 
   &:last-child {
     margin-bottom: 0;
   }
 
   &:empty::before {
-    content: ' ';
     display: inline-block;
+
+    content: ' ';
   }
 
   @nest :--main.statusWarning & {
@@ -120,12 +126,16 @@
 }
 
 .valueLine {
-  color: var(--text-color);
   line-height: 24px;
-  margin-bottom: 1px;
+
   overflow: hidden;
-  text-overflow: ellipsis;
+
+  margin-bottom: 1px;
+
   white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: var(--text-color);
 
   @nest :--cell & {
     color: var(--text-color-additional-semi);
@@ -154,19 +164,22 @@
 
 .value {
   font-size: 22px;
+
   letter-spacing: -0.03em;
 }
 
 .dimension {
   font-size: 15px;
   font-weight: bold;
+
   letter-spacing: -0.02em;
 }
 
 .name {
-  color: var(--text-color-additional);
   font-size: 14px;
   line-height: 16px;
+
+  color: var(--text-color-additional);
 
   &.minTwoLines {
     min-height: 32px;

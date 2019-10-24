@@ -1,6 +1,6 @@
 .main {
-  align-items: center;
   display: inline-flex;
+  align-items: center;
   flex-direction: row;
 
   & > * + * {
@@ -9,9 +9,10 @@
 }
 
 .icon {
-  color: inherit;
   display: inline-flex;
   flex-shrink: 0;
+
+  color: inherit;
 
   &.normal {
     color: var(--color-important);

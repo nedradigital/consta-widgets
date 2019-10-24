@@ -3,18 +3,22 @@
 }
 
 .item {
-  display: inline-flex;
   font-size: 13px;
   line-height: 18px;
-  margin-right: 15px;
+
+  display: inline-flex;
   align-items: center;
+
+  margin-right: 15px;
 }
 
 .marker {
   width: 8px;
   height: 8px;
-  vertical-align: middle;
   margin-right: 4px;
+
+  vertical-align: middle;
+
   border-radius: 10px;
 }
 
@@ -22,7 +26,8 @@
   font-weight: bold;
 
   &::before {
-    content: ':\00a0';
     font-weight: normal;
+
+    content: ':\00a0';
   }
 }
