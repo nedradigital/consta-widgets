@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { StoryDecorator } from '@storybook/react'
+import { DecoratorFn } from '@storybook/react'
 
 export const blockCenteringDecorator = (
   styles: React.CSSProperties = {}
-): StoryDecorator => storyFn => (
+): DecoratorFn => storyFn => (
   <div
     style={{
       alignItems: 'center',
