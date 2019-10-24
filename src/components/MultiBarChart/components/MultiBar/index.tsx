@@ -25,6 +25,7 @@ type Props = {
   xScale: d3.ScaleBand<string>
   yScale: d3.ScaleLinear<number, number>
   color: string
+  paddingX: number
 }
 
 const getLayerIndex = (d: Layer) => {
@@ -80,7 +81,8 @@ const getDynamicTooltipPosition = (
   layerFromGroup: Layer,
   self: HTMLElement,
   barSize: number,
-  isVertical: boolean
+  isVertical: boolean,
+  paddingX: number
 ) => {
   const size = getTooltipSize('.multibarTooltip', isVertical)
   let xPosition
@@ -103,9 +105,11 @@ const getDynamicTooltipPosition = (
   }
 
   if (!isVertical) {
-    yPosition = parseInt(d3.select(self).attr('y'), 10) + barSize - size.height
+    yPosition =
+      parseInt(d3.select(self).attr('y'), 10) + barSize - size.height + defaultColumnSize / 2
+    xPosition = xPosition + paddingX
   } else {
-    xPosition = parseInt(d3.select(self).attr('x'), 10) + barSize + defaultColumnSize
+    xPosition = parseInt(d3.select(self).attr('x'), 10) + barSize + defaultColumnSize + paddingX
   }
 
   return { xPosition, yPosition }
@@ -118,7 +122,8 @@ const createTooltipDynamic = (
   isVertical: boolean,
   barSize: number,
   self: HTMLElement,
-  colorValue: string
+  colorValue: string,
+  paddingX: number
 ) => {
   const tooltip = d3
     .select('.multibarTooltip')
@@ -134,7 +139,8 @@ const createTooltipDynamic = (
     layerFromGroup,
     self,
     barSize,
-    isVertical
+    isVertical,
+    paddingX
   )
 
   tooltip
@@ -154,6 +160,7 @@ const mouseMoveAction = (
   isVertical: boolean,
   barSize: number,
   colorValue: string,
+  paddingX: number,
   showValues?: boolean
 ) => {
   if (showValues) {
@@ -169,7 +176,8 @@ const mouseMoveAction = (
     isVertical,
     barSize,
     self,
-    colorValue
+    colorValue,
+    paddingX
   )
 }
 
@@ -186,6 +194,7 @@ export const MultiBar: React.FC<Props> = ({
   xScale,
   yScale,
   color,
+  paddingX,
 }) => {
   const ref = createRef<SVGGElement>()
   const staticTooltipsRef = createRef<SVGGElement>()
@@ -326,6 +335,7 @@ export const MultiBar: React.FC<Props> = ({
             isVertical,
             barSize,
             color,
+            paddingX,
             showValues
           )
         )

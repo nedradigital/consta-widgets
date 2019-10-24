@@ -384,7 +384,8 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
   }
 
   const barSize =
-    (!isVertical ? svgHeight : svgWidth - defaultColumnSize * values.length) / values.length / 2
+    ((isVertical ? svgWidth : svgHeight) - defaultColumnSize * values.length) / values.length / 2 -
+    defaultColumnSize / values.length / 2
   const groupDomains = values.map(d => String(d[keyGroup]))
   const layersTemp = getLayers() as readonly Layers[]
   const layers = (hasRatio ? convertPercentToOriginal(layersTemp) : layersTemp) as readonly Layers[]
@@ -408,7 +409,13 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
   const groupByKeys = calculateComplexTooltip((groupByKeysDatum as unknown) as GroupByKeys)
 
   return (
-    <div ref={ref} className={css.main}>
+    <div
+      ref={ref}
+      className={css.main}
+      style={{
+        paddingLeft: paddingX,
+      }}
+    >
       <svg className={css.icon} width={svgWidth} height={svgHeight}>
         <defs>
           <clipPath id={clipId}>
@@ -441,6 +448,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
             xScale={xScale}
             yScale={yScale}
             color={color[idx]}
+            paddingX={paddingX}
           />
         ))}
       </svg>
