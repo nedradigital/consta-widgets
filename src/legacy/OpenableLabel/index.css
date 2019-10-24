@@ -1,52 +1,67 @@
 .openableLabel {
-  color: #fff;
   font-size: var(--main-font-size);
+
   position: relative;
+
   max-width: 165px;
+
+  color: #fff;
 }
 
 .close {
-  align-items: center;
-  background: #fff;
-  border-radius: 50%;
-  cursor: pointer;
-  display: inline-flex;
-  height: 22px;
-  justify-content: center;
   position: absolute;
-  right: -11px;
-  top: -11px;
-  width: 22px;
   z-index: 1;
+  top: -11px;
+  right: -11px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 22px;
+  height: 22px;
+
+  cursor: pointer;
+
+  border-radius: 50%;
+  background: #fff;
 
   &::before {
-    background: #000;
-    content: '';
     display: inline-block;
-    height: 2px;
+
     width: 12px;
+    height: 2px;
+
+    content: '';
+
+    background: #000;
   }
 }
 
 .shortTitleBlock {
+  line-height: 16px;
+
+  display: flex;
   align-items: center;
-  background: rgba(18, 26, 40, 1);
+  flex-direction: row;
+
+  min-width: 100px;
+  padding: 8px 8px 7px 11px;
+
+  cursor: pointer;
+  letter-spacing: 0.03em;
 
   border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
-  cursor: pointer;
-  display: flex;
-  flex-direction: row;
-  line-height: 16px;
-  letter-spacing: 0.03em;
-  min-width: 100px;
-  padding: 8px 8px 7px 11px;
+  background: rgba(18, 26, 40, 1);
 }
 
 .shortTitle {
   flex-grow: 1;
+
   min-width: 0;
   padding-right: 5px;
+
   word-wrap: break-word;
 
   &:last-child {
@@ -55,19 +70,21 @@
 }
 
 .shortTitleIcon {
-  flex-shrink: 0;
   font-family: monospace;
   font-weight: bold;
+
   position: relative;
   top: -1px;
+
+  flex-shrink: 0;
 }
 
 .content {
-  background: rgba(18, 26, 40, 1);
+  display: block;
 
   border: 1px solid var(--white-border-color-opacity-10);
   border-radius: var(--border-radius);
-  display: block;
+  background: rgba(18, 26, 40, 1);
 }
 
 .title,
@@ -76,11 +93,13 @@
 }
 
 .title {
-  color: #efefef;
   font-size: 17px;
-  letter-spacing: 0.06em;
   line-height: 20px;
+
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+
+  color: #efefef;
 
   &:not(:only-child) {
     padding-bottom: 0;

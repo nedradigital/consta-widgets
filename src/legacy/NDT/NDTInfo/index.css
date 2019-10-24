@@ -1,6 +1,7 @@
 .main {
-  color: var(--text-color);
   font-size: var(--main-font-size);
+
+  color: var(--text-color);
 }
 
 .table {
@@ -14,8 +15,10 @@
 .hours {
   font-size: 20px;
   font-weight: bold;
+
   margin-bottom: 4px;
   padding-right: 10px;
+
   text-align: right;
 
   &:last-child {
@@ -25,5 +28,6 @@
 
 .percents {
   padding-right: 10px;
+
   text-align: right;
 }

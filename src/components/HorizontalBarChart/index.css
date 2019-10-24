@@ -1,10 +1,12 @@
 .diagram {
-  color: var(--text-color-70);
   font-size: calc-size(11);
+
+  color: var(--text-color-70);
 }
 
 .line {
   line-height: calc-size(15);
+
   width: 100%;
 }
 
@@ -23,14 +25,16 @@
 }
 
 .value {
-  text-align: right;
-  padding-left: calc-size(10);
   min-width: 25px;
+  padding-left: calc-size(10);
+
+  text-align: right;
 }
 
 .progress {
-  height: 2px;
-  background: #29b0ff;
-
   flex-basis: auto;
+
+  height: 2px;
+
+  background: #29b0ff;
 }

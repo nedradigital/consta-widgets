@@ -1,5 +1,6 @@
 .label {
   font-size: calc-size(12);
-  color: #edf3f5;
   font-weight: bold;
+
+  color: #edf3f5;
 }

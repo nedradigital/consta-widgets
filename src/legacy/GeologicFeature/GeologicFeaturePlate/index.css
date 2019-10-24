@@ -1,24 +1,27 @@
 .geologicFeaturePlate {
-  background: #111116;
-  border: 1px solid var(--white-border-color-opacity-10);
-  border-radius: var(--border-radius);
-  color: var(--text-color);
   position: relative;
 
-  padding: 14px 10px 10px 52px;
-  min-height: 50px;
   width: 226px;
+  min-height: 50px;
+  padding: 14px 10px 10px 52px;
+
+  color: var(--text-color);
+  border: 1px solid var(--white-border-color-opacity-10);
+  border-radius: var(--border-radius);
+  background: #111116;
 }
 
 .icon {
   position: absolute;
-  left: 14px;
   top: 14px;
+  left: 14px;
 }
 
 .title {
   font-size: 14px;
+
   margin-bottom: 1px;
+
   word-wrap: break-word;
 
   &:last-child {
@@ -29,5 +32,6 @@
 .text {
   font-size: 18px;
   font-weight: bold;
+
   word-wrap: break-word;
 }

@@ -1,29 +1,37 @@
 .techParamsBlockWithChart {
-  align-items: stretch;
   display: flex;
+  align-items: stretch;
   flex-direction: column;
   flex-grow: 1;
+
   height: 100%;
 }
 
 .chart {
-  padding-top: 1px;
-  background: var(--bg-color-white-semi);
-  border-left: 1px solid var(--white-border-color);
-  border-right: 1px solid var(--white-border-color);
-  box-sizing: border-box;
-  flex-grow: 1;
   position: relative;
 
+  flex-grow: 1;
+
+  box-sizing: border-box;
+  padding-top: 1px;
+
+  border-right: 1px solid var(--white-border-color);
+  border-left: 1px solid var(--white-border-color);
+  background: var(--bg-color-white-semi);
+
   &::after {
-    background: linear-gradient(180deg, var(--bg-color) 0%, var(--opaque-color) 100%);
-    content: '';
-    display: inline-block;
-    height: 150px;
-    left: -1px;
     position: absolute;
-    right: -1px;
     top: 0;
+    right: -1px;
+    left: -1px;
+
+    display: inline-block;
+
+    height: 150px;
+
+    content: '';
+
+    background: linear-gradient(180deg, var(--bg-color) 0%, var(--opaque-color) 100%);
   }
 }
 

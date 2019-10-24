@@ -1,10 +1,12 @@
 .main {
-  background-color: var(--bg-well-passport);
-  color: var(--text-color-additional);
   font-family: var(--main-font-family);
   font-size: 16px;
   line-height: 18px;
+
   position: relative;
+
+  color: var(--text-color-additional);
+  background-color: var(--bg-well-passport);
 
   &.isHoverable {
     cursor: pointer;
@@ -17,37 +19,44 @@
 }
 
 .cell {
-  border-right: 1px solid rgba(235, 64, 64, 0.05);
   min-width: 0;
   padding: 18px 20px 15px;
-  word-wrap: break-word;
+
   white-space: nowrap;
+  word-wrap: break-word;
+
+  border-right: 1px solid rgba(235, 64, 64, 0.05);
 
   &:first-child {
     padding-left: 34px;
   }
 
   &:last-child {
-    border-right: none;
     flex-grow: 1;
+
     padding-right: 74px;
+
+    border-right: none;
   }
 }
 
 .title {
   &:empty::before {
-    content: ' ';
     display: inline-block;
+
+    content: ' ';
   }
 }
 
 .content {
-  color: #fff;
   margin-top: 12px;
 
+  color: #fff;
+
   &:empty::before {
-    content: ' ';
     display: inline-block;
+
+    content: ' ';
   }
 
   &:first-child {
@@ -62,13 +71,16 @@
 .contentStrong {
   font-size: 24px;
   font-weight: bold;
-  letter-spacing: 0.03em;
   line-height: 28px;
-  margin-top: 6px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  max-width: 310px;
+
   overflow: hidden;
+
+  max-width: 310px;
+  margin-top: 6px;
+
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+  text-overflow: ellipsis;
 
   &:first-child {
     margin-top: 0;
@@ -94,8 +106,9 @@
 }
 
 .responsiblePerson {
-  letter-spacing: 0.03em;
   margin-right: 14px;
+
+  letter-spacing: 0.03em;
 
   &:last-child {
     margin-right: 0;
@@ -111,14 +124,16 @@
 }
 
 .responsiblePersonPhone {
-  color: rgba(#fff, 0.5);
   font-size: 14px;
+
+  color: rgba(#fff, 0.5);
 }
 
 .wellsNavigation {
   position: absolute;
-  right: 35px;
-  top: 50%;
-  transform: translate(50%, -50%);
   z-index: 100;
+  top: 50%;
+  right: 35px;
+
+  transform: translate(50%, -50%);
 }

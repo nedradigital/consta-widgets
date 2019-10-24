@@ -1,7 +1,9 @@
 .divResizable {
+  position: absolute;
   top: 0;
   right: 0;
+
   width: 5px;
-  position: absolute;
+
   cursor: col-resize;
 }

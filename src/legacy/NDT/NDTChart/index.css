@@ -1,9 +1,10 @@
 .main {
-  margin-top: 10px;
-  margin-left: 50px;
-  margin-bottom: 40px;
-  margin-right: 20px;
   position: relative;
+
+  margin-top: 10px;
+  margin-right: 20px;
+  margin-bottom: 40px;
+  margin-left: 50px;
 }
 
 .day {
@@ -12,11 +13,13 @@
   bottom: 0;
 
   &::before {
-    content: '';
     position: absolute;
-    left: 0;
-    bottom: 1px;
     top: 1px;
+    bottom: 1px;
+    left: 0;
+
+    content: '';
+
     border-left: 1px solid var(--white-border-color-opacity-04);
   }
 }
@@ -27,11 +30,13 @@
   bottom: 0;
 
   &::before {
-    content: '';
     position: absolute;
-    left: 0;
-    bottom: 0;
     top: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
     border-left: 1px solid var(--white-border-color-opacity-20);
   }
 
@@ -39,36 +44,43 @@
     position: absolute;
     top: 5px;
     left: 50%;
-    transform-origin: 100% 100%;
+
     transform: translate(-100%, -100%) rotate(-90deg);
+    transform-origin: 100% 100%;
   }
 }
 
 .line {
   position: absolute;
-  left: 0;
   right: 0;
+  left: 0;
+
   border-bottom: 1px solid var(--white-border-color-opacity-04);
 }
 
 .types {
   display: flex;
+  align-items: flex-end;
   flex-direction: column;
   justify-content: space-around;
-  align-items: flex-end;
+
   min-height: 100%;
+
   transform: translate(-100%, 0);
 
   &.type {
     position: relative;
+
     flex: 1;
 
     &.typeLabel {
       position: absolute;
-      right: 10px;
       top: 50%;
-      transform: translate(0, -50%);
+      right: 10px;
+
       white-space: nowrap;
+
+      transform: translate(0, -50%);
     }
   }
 }
@@ -79,19 +91,22 @@
   bottom: 0;
 
   &::before {
-    content: '';
     position: absolute;
-    left: 0;
     top: -10px;
     bottom: -40px;
+    left: 0;
+
+    content: '';
+
     border-left: 1px dashed var(--white-border-color);
   }
 }
 
 .selectedBox {
   position: absolute;
-  left: 0;
   top: 0;
   bottom: 0;
+  left: 0;
+
   background-image: var(--progress-gradient);
 }

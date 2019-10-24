@@ -1,10 +1,13 @@
 .label {
-  background: var(--bg-color-white-semi);
-  border-radius: 6px;
-  border: 1px solid var(--white-border-color-opacity-10);
   font-size: var(--main-font-size);
+
   max-width: 150px;
   padding: 13px 16px;
+
   text-align: center;
   word-wrap: break-word;
+
+  border: 1px solid var(--white-border-color-opacity-10);
+  border-radius: 6px;
+  background: var(--bg-color-white-semi);
 }

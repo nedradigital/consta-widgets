@@ -1,5 +1,6 @@
 .stats {
   width: 100%;
+
   text-align: left;
 }
 
@@ -9,14 +10,18 @@
 
 .number {
   display: inline-block;
+
   padding: 2px 4px;
+
   letter-spacing: -0.02em;
 }
 
 .middle span:first-child {
-  margin-right: 5px;
-  color: #f6fbfd;
   font-weight: bold;
+
+  margin-right: 5px;
+
+  color: #f6fbfd;
 }
 
 .sizeXS {

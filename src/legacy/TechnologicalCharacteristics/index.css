@@ -1,24 +1,29 @@
 .main {
-  align-items: stretch;
-  background-color: var(--bg-color);
-  border-radius: var(--border-radius);
-  border: 1px solid var(--white-border-color-opacity-10);
   display: flex;
+  align-items: stretch;
   flex-direction: row;
   justify-content: space-between;
+
   min-height: 120px;
+
+  border: 1px solid var(--white-border-color-opacity-10);
+  border-radius: var(--border-radius);
+  background-color: var(--bg-color);
 }
 
 .item {
-  align-items: center;
-  border-right: 1px solid var(--white-border-color-opacity-10);
   display: flex;
+  align-items: center;
   flex-direction: column;
   justify-content: flex-end;
+
+  width: 33.33333%;
   min-width: 0;
   padding: 0 10px;
-  width: 33.33333%;
+
   word-wrap: break-word;
+
+  border-right: 1px solid var(--white-border-color-opacity-10);
 
   &:last-child {
     border-right: none;
@@ -26,10 +31,11 @@
 }
 
 .icon {
-  align-items: center;
   display: flex;
-  height: 46px;
+  align-items: center;
   justify-content: center;
+
+  height: 46px;
   margin-bottom: 12px;
 
   &:last-child {
@@ -38,14 +44,17 @@
 }
 
 .text {
-  color: var(--text-color);
   font-size: var(--font-size-medium);
   font-weight: bold;
-  letter-spacing: -0.0241em;
   line-height: 18px;
+
+  min-width: 0;
   max-width: 100%;
   min-height: 40px;
-  min-width: 0;
+
   text-align: center;
+  letter-spacing: -0.0241em;
   word-wrap: break-word;
+
+  color: var(--text-color);
 }

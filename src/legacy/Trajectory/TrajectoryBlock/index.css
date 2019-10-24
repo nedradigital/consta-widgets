@@ -1,18 +1,21 @@
 .trajectoryBlock {
   --trajectory-border-color: #29313d;
-
-  align-items: stretch;
-  background: linear-gradient(#172949, #17202c);
-  border-radius: 4px;
-  border: 1px solid var(--trajectory-border-color);
-  color: var(--text-color);
-  display: flex;
-  flex-direction: column;
   font-family: var(--main-font-family);
   font-size: var(--main-font-size);
+
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
   justify-content: center;
-  letter-spacing: 0.03em;
+
   width: 100%;
+
+  letter-spacing: 0.03em;
+
+  color: var(--text-color);
+  border: 1px solid var(--trajectory-border-color);
+  border-radius: 4px;
+  background: linear-gradient(#172949, #17202c);
 
   &.success {
     border-color: var(--success-border-color-opacity-70);
@@ -28,23 +31,27 @@
 }
 
 .header {
-  border-bottom: 1px solid var(--trajectory-border-color);
   display: flex;
   flex-direction: row;
   flex-grow: 1;
+
+  border-bottom: 1px solid var(--trajectory-border-color);
 }
 
 .cell {
-  align-items: center;
-  border-right: 1px solid var(--trajectory-border-color);
   display: flex;
+  overflow: hidden;
+  align-items: center;
   justify-content: center;
-  text-align: center;
+
+  width: calc(100% / 3);
   min-width: 0;
   min-height: 34px;
-  overflow: hidden;
-  width: calc(100% / 3);
+
+  text-align: center;
   word-wrap: break-word;
+
+  border-right: 1px solid var(--trajectory-border-color);
 
   &:last-child {
     border-right: none;
@@ -53,80 +60,94 @@
 
 .cellContent {
   min-width: 0;
-  word-wrap: break-word;
+
   white-space: nowrap;
+  word-wrap: break-word;
 }
 
 .chartWrapper {
   position: relative;
+
   padding-top: 4px;
   padding-bottom: 30px;
 }
 
 .chart {
+  position: relative;
+
   width: 118px;
   height: 118px;
-  margin-left: auto;
   margin-right: auto;
-  position: relative;
+  margin-left: auto;
 }
 
 .chartTriangle {
   position: absolute;
-  left: 50%;
-  top: 50%;
   z-index: 10;
+  top: 50%;
+  left: 50%;
+
   opacity: 0.75;
 
   &::after {
-    border-bottom: 7px var(--text-color) solid;
-    border-left: transparent 4px solid;
-    border-right: transparent 4px solid;
-    content: '';
     position: absolute;
     bottom: calc(50% + 59px);
+
+    content: '';
+
+    border-right: transparent 4px solid;
+    border-bottom: 7px var(--text-color) solid;
+    border-left: transparent 4px solid;
+
     transform: translate(-50%, 3px);
   }
 }
 
 .chartIndicatorRight {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(69px, -50%);
   z-index: 1;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(69px, -50%);
 }
 
 .chartIndicatorBottom {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, 69px);
   z-index: 1;
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, 69px);
 }
 
 .depth {
   position: absolute;
-  left: -25px;
   top: 6px;
   bottom: 6px;
+  left: -25px;
+
   width: 15px;
 }
 
 .depthPlan {
   position: absolute;
-  left: 50%;
-  top: 50%;
   z-index: 1;
+  top: 50%;
+  left: 50%;
 
   &::after {
-    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
+
     width: 5px;
-    transform: translate(-50%, -50%);
+
+    content: '';
+
     border-bottom: 1px solid var(--text-color);
+
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -134,57 +155,68 @@
   position: absolute;
   bottom: 0;
   left: 50%;
+
   transform: translate(-50%, 32px);
 }
 
 .depthTriangle {
   position: absolute;
-  left: 50%;
-  top: 50%;
   z-index: 2;
+  top: 50%;
+  left: 50%;
 
   &::after {
-    content: '';
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-10px, -50%);
+
+    content: '';
+
     border-top: 4px transparent solid;
-    border-left: 6px var(--text-color) solid;
     border-bottom: 4px transparent solid;
+    border-left: 6px var(--text-color) solid;
+
+    transform: translate(-10px, -50%);
   }
 }
 
 .depthLine {
   position: absolute;
   top: 0;
-  left: 50%;
   bottom: 0;
+  left: 50%;
 
   &::after {
-    content: '';
     position: absolute;
     top: 0;
     bottom: 0;
     left: 50%;
+
+    content: '';
+
     border-right: 1px solid var(--white-border-color-opacity-29);
+
     transform: translate(-50%, 0);
   }
 }
 
 .footer {
-  align-items: center;
   display: flex;
+  overflow: hidden;
+  align-items: center;
   flex-grow: 1;
   justify-content: center;
+
   min-height: 34px;
-  overflow: hidden;
+
   text-align: center;
   word-wrap: break-word;
+
   border-top: 1px solid var(--trajectory-border-color);
 }
 
 .footerContent {
   min-width: 0;
+
   word-wrap: break-word;
 }

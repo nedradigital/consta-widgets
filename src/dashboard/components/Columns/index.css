@@ -1,22 +1,28 @@
 .plus {
+  font-size: 20px;
+
   position: absolute;
+  z-index: 2;
   top: 50%;
   left: 0;
-  transform: translate(-50%, -50%);
-  font-size: 20px;
-  z-index: 2;
+
   display: none;
 
+  transform: translate(-50%, -50%);
+
   &.right {
-    left: auto;
     right: 0;
+    left: auto;
+
     transform: translate(50%, -50%);
   }
 }
 
 .column {
   position: relative;
+
   flex: 1;
+
   min-width: 0;
 
   & + & {
@@ -25,10 +31,12 @@
 }
 
 .main {
+  position: relative;
+
   display: flex;
+
   width: 100%;
   height: 100%;
-  position: relative;
 
   &:hover .plus {
     display: block;
@@ -40,9 +48,11 @@
     right: 0;
     bottom: 0;
     left: 0;
+
     content: '';
-    border: 1px dashed gray;
     pointer-events: none;
+
+    border: 1px dashed gray;
   }
 }
 
@@ -52,8 +62,10 @@
 
 .remove {
   font-size: 20px;
+
   position: absolute;
   top: 0;
   right: 0;
+
   transform: translateY(-50%) translateX(-100%);
 }

@@ -9,11 +9,11 @@
 .dragHandle {
   position: absolute;
 
-  background: #d5dde2;
+  cursor: grab;
+
   opacity: 0.2;
   border-radius: 2px;
-
-  cursor: grab;
+  background: #d5dde2;
 
   transition: opacity var(--fast-transition);
 
@@ -26,8 +26,9 @@
   }
 
   &.isHidden {
-    opacity: 0;
     pointer-events: none;
+
+    opacity: 0;
   }
 
   &::before {
@@ -38,27 +39,31 @@
     right: calc(2 * var(--click-offset));
     bottom: var(--click-offset);
     left: calc(2 * var(--click-offset));
+
     content: '';
   }
 
   &:active {
-    opacity: 0.7;
     cursor: grabbing;
+
+    opacity: 0.7;
   }
 }
 
 .buttons {
   position: absolute;
+
   display: flex;
 
   @nest :--horizontal & {
-    bottom: 0;
     right: 8px;
+    bottom: 0;
   }
 
   @nest :--vertical & {
     bottom: 0;
     left: 0;
+
     flex-direction: column;
   }
 
@@ -69,11 +74,12 @@
 
 .buttonGroup {
   display: flex;
+
   background: #02273b;
 
   @nest :--horizontal & {
-    bottom: 0;
     right: 8px;
+    bottom: 0;
   }
 
   @nest :--vertical & {
@@ -97,8 +103,9 @@
 
   font-size: 13px;
   line-height: var(--button-size);
-  width: var(--button-size);
+
   box-sizing: content-box;
+  width: var(--button-size);
 
   color: var(--text-color-70);
   border: 1px solid currentColor;
@@ -112,8 +119,8 @@
     }
 
     @nest :--vertical & {
-      border-bottom-left-radius: var(--button-radius);
       border-bottom-right-radius: var(--button-radius);
+      border-bottom-left-radius: var(--button-radius);
     }
   }
 

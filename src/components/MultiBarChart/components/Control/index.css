@@ -4,8 +4,11 @@
 
 :--main {
   position: absolute;
-  text-align: right;
+
   height: 20px;
+
+  text-align: right;
+
   color: var(--text-color-70);
 }
 
@@ -20,16 +23,18 @@
 
 .controls {
   position: absolute;
+
   display: flex;
 
   @nest :--horizontal & {
-    bottom: 0;
     right: 8px;
+    bottom: 0;
   }
 
   @nest :--vertical & {
-    bottom: 0;
     right: 0;
+    bottom: 0;
+
     flex-direction: column;
   }
 
@@ -40,12 +45,13 @@
 
 .controlGroup {
   display: flex;
-  background-color: rgba(2, 39, 59, 0.6);
   align-items: center;
 
+  background-color: rgba(2, 39, 59, 0.6);
+
   @nest :--horizontal & {
-    bottom: 0;
     right: 8px;
+    bottom: 0;
     writing-mode: vertical-rl;
   }
 
@@ -72,25 +78,31 @@
   display: none;
 
   & + label {
-    border: 2px solid #0082cc;
-    box-sizing: border-box;
-    border-radius: 3px;
-    display: inline-block;
     position: relative;
+
+    display: inline-block;
+
+    box-sizing: border-box;
     width: 16px;
     height: 16px;
+
+    border: 2px solid #0082cc;
+    border-radius: 3px;
   }
 
   &:checked + label {
-    background-color: #00273d;
     color: #0082cc;
+    background-color: #00273d;
 
     &::after {
-      content: '\2714';
       font-size: 14px;
+
       position: absolute;
       top: -2px;
       left: 1px;
+
+      content: '\2714';
+
       color: #0082cc;
     }
   }
