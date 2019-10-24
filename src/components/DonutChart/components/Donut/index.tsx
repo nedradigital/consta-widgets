@@ -2,23 +2,23 @@ import React, { createRef, useLayoutEffect } from 'react'
 
 import * as d3 from 'd3'
 
-import { Colors } from '../../'
+import { ColorGroups } from '@/dashboard/types'
 
 type DataItem = {
-  color: string
   value: number
+  groupName: string
 }
 
 export type Data = readonly DataItem[]
 
 type Props = {
   data: Data
-  colors: Colors
+  colorGroups: ColorGroups
   innerRadius: number
   outerRadius: number
 }
 
-export const Donut: React.FC<Props> = ({ colors, data, innerRadius, outerRadius }) => {
+export const Donut: React.FC<Props> = ({ colorGroups, data, innerRadius, outerRadius }) => {
   const ref = createRef<SVGGElement>()
 
   useLayoutEffect(() => {
@@ -37,7 +37,7 @@ export const Donut: React.FC<Props> = ({ colors, data, innerRadius, outerRadius 
         .selectAll('path')
         .data(pieData)
         .join('path')
-        .attr('fill', d => colors[d.data.color])
+        .attr('fill', d => colorGroups[d.data.groupName])
         .attr('d', arc)
     }
   })

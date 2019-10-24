@@ -18,50 +18,57 @@ const mockData: DataMap = {
     number: '+217',
     percent: '+2.3%',
   },
-  [DataType.Donut]: [
-    [
-      {
-        color: 'red',
-        value: 20,
-      },
-      {
-        color: 'blue',
-        value: 15,
-      },
-      {
-        color: 'yellow',
-        value: 7,
-      },
+  [DataType.Donut]: {
+    colorGroups: {
+      first: '#EB5757',
+      second: '#F2C94C',
+      third: '#56B9F2',
+    },
+    data: [
+      [
+        {
+          groupName: 'first',
+          value: 20,
+        },
+        {
+          groupName: 'second',
+          value: 15,
+        },
+        {
+          groupName: 'third',
+          value: 7,
+        },
+      ],
+      [
+        {
+          groupName: 'first',
+          value: 20,
+        },
+        {
+          groupName: 'second',
+          value: 15,
+        },
+        {
+          groupName: 'third',
+          value: 7,
+        },
+      ],
+      [
+        {
+          groupName: 'first',
+          value: 25,
+        },
+        {
+          groupName: 'second',
+          value: 1,
+        },
+        {
+          groupName: 'third',
+          value: 5,
+        },
+      ],
     ],
-    [
-      {
-        color: 'red',
-        value: 20,
-      },
-      {
-        color: 'blue',
-        value: 15,
-      },
-      {
-        color: 'yellow',
-        value: 7,
-      },
-    ],
-    [
-      {
-        color: 'red',
-        value: 25,
-      },
-      {
-        color: 'blue',
-        value: 1,
-      },
-      {
-        color: 'yellow',
-        value: 5,
-      },
-    ],
-  ],
+  },
   [DataType.BarChart]: {
     colors: ['#56B9F2', '#EB5757', '#FCA355'],
     data: [

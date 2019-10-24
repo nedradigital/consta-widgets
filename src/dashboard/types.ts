@@ -24,6 +24,8 @@ export enum DataType {
   MultiBarChart,
 }
 
+export type ColorGroups = { [key: string]: string }
+
 export type DataMap = {
   [DataType.Chart2D]: {
     values: readonly number[]
@@ -39,7 +41,10 @@ export type DataMap = {
     status: Status
   }
   [DataType.Stats]: StatsData
-  [DataType.Donut]: DonutChartData
+  [DataType.Donut]: {
+    colorGroups: ColorGroups
+    data: DonutChartData
+  }
   [DataType.BarChart]: {
     colors: BarChartColors
     data: readonly BarChartData[]

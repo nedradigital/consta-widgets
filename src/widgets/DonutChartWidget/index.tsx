@@ -1,4 +1,4 @@
-import { Colors, DonutChart } from '@/components/DonutChart'
+import { DonutChart } from '@/components/DonutChart'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -7,22 +7,13 @@ type Data = DataMap[typeof dataType]
 
 const widgetId = 'c7709106-fe0d-4e7c-bfce-2e5b88aa6d50'
 
-type Params = {
-  colors: Colors
-}
+type Params = {}
 
-export const defaultParams: Params = {
-  colors: {
-    red: '#EB5757',
-    yellow: '#F2C94C',
-    blue: '#56B9F2',
-  },
-}
+export const defaultParams: Params = {}
 
-export const DonutChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  data,
-  params: { colors },
-}) => <DonutChart colors={colors} data={data} />
+export const DonutChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ data }) => (
+  <DonutChart {...data} />
+)
 
 export const DonutChartWidget = createWidget<Data, Params>({
   id: widgetId,
