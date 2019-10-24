@@ -11,7 +11,7 @@ storiesOf('widgets/TextWidget', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <TextWidgetContent
-      data={text('data', null)}
+      data={text('data', '')}
       params={{
         text: text('title', defaultParams.text),
         type: select('type', typeNames, defaultParams.type),

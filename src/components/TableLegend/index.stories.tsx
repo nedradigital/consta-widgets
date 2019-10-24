@@ -25,7 +25,7 @@ storiesOf('components/TableLegend', module)
     <TableLegend
       isShowLegend={false}
       size="l"
-      data={object('data', {
+      data={{
         list: [
           {
             field: 'Северный бур',
@@ -83,6 +83,6 @@ storiesOf('components/TableLegend', module)
             className: 'textCenterPosition',
           },
         ],
-      })}
+      }}
     />
   ))

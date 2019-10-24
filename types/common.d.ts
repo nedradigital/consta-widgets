@@ -45,9 +45,9 @@ declare module '@gaz/utils' {
 }
 
 declare module '@nekitk/storybook-addon-smart-knobs' {
-  import { StoryDecorator } from '@storybook/react'
+  import { DecoratorFn } from '@storybook/react'
 
-  export const withSmartKnobs: (options?: { ignoreProps?: readonly string[] }) => StoryDecorator
+  export const withSmartKnobs: (options?: { ignoreProps?: readonly string[] }) => DecoratorFn
 }
 
 // Source: https://github.com/Swizec/useDimensions/pull/17
