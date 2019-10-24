@@ -22,14 +22,14 @@ export type StyleProps = {
   size: Size
 }
 
+type Row = {
+  [key: string]: React.ReactNode
+}
+
 export type Data = {
   columnNames: readonly ColumnNames[]
   legendFields: ReadonlyArray<{ [key: string]: string }>
-  list: ReadonlyArray<{ [key: string]: string | number }>
-}
-
-type Row = {
-  [key: string]: string | number
+  list: readonly Row[]
 }
 
 type ColumnNames = {
