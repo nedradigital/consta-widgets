@@ -11,7 +11,7 @@ storiesOf('widgets/PyramidChartWidgetContent', module)
   .addDecorator(blockCenteringDecorator({ width: '50vw', height: '50vh' }))
   .add('interactive', () => (
     <PyramidChartWidgetContent
-      data={PyramidChartWidget.mockData}
+      data={object('data', PyramidChartWidget.mockData)}
       params={object('params', defaultParams)}
     />
   ))
