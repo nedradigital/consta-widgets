@@ -244,6 +244,57 @@ const mockData: DataMap = {
     ],
     keyGroup: 'month',
   },
+  [DataType.ProgressBar]: [
+    {
+      value: 70,
+      valueMin: 0,
+      valueMax: 120,
+      summary: 70,
+      color: '#FFBA3B',
+    },
+    {
+      value: 7000,
+      valueMin: 0,
+      valueMax: 15000,
+      ticks: [
+        {
+          label: '0',
+          value: 0,
+        },
+        {
+          label: 'Цель',
+          value: 5500,
+        },
+        {
+          label: 'Амцель',
+          value: 12000,
+        },
+      ],
+      summary: 7000,
+      color: 'green',
+    },
+    {
+      value: 3000,
+      valueMin: 0,
+      valueMax: 12000,
+      ticks: [
+        {
+          label: '0',
+          value: 0,
+        },
+        {
+          label: '',
+          value: 5500,
+        },
+        {
+          label: '12000',
+          value: 12000,
+        },
+      ],
+      summary: '3 тысячи',
+      color: '#00CFDE',
+    },
+  ],
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

@@ -2,54 +2,60 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Legend, Tick } from './components/Legend'
+import { Tick } from './components/Legend'
+import { Progress } from './components/Progress'
+import { Summary } from './components/Summary'
 import css from './index.css'
 
-const sizes = ['s', 'm', 'l'] as const
-type Size = typeof sizes[number]
+export const sizes = ['s', 'm', 'l'] as const
+export type Size = typeof sizes[number]
 
-type Props = {
-  size?: Size
+export type Data = {
   value: number
   valueMin: number
   valueMax: number
   ticks?: readonly Tick[]
-  color?: string
   summary: string | number
+  color: string
+}
+
+type Props = {
+  size?: Size
+  data: readonly Data[]
 }
 
 export const getValueRatio = (val: number, valMin: number, valMax: number) => {
   return ((val - valMin) / (valMax - valMin)) * 100
 }
 
-export const ProgressBar: React.FC<Props> = ({
-  size = 's',
-  value,
-  valueMin,
-  valueMax,
-  ticks = [],
-  color = '#FFBA3B',
-  summary,
-}) => {
-  const hasLegend = ticks.length
+export const ProgressBar: React.FC<Props> = ({ size = 'm', data }) => {
   const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
-  const valueNowRatio = getValueRatio(value, valueMin, valueMax)
-  const progressIsNotFull = valueNowRatio < 100
+  const getLegendClass = (legendData: Data['ticks']) =>
+    legendData && legendData.length ? css.withLegend : ''
 
   return (
-    <div className={classnames(css.progressBar, sizeClass)} style={{ color }}>
-      <div className={css.chart}>
-        <progress
-          max={100}
-          value={valueNowRatio}
-          className={classnames(css.progress, progressIsNotFull ? css.isNotFull : '')}
-          aria-valuemin={valueMin}
-          aria-valuenow={value}
-          aria-valuemax={valueMax}
-        />
-        {!!hasLegend && <Legend ticks={ticks} valueMin={valueMin} valueMax={valueMax} />}
+    <div className={css.progressBar}>
+      <div className={css.progress}>
+        {data.map((dataItem, i) => (
+          <div
+            className={classnames(css.progressLine, sizeClass, getLegendClass(dataItem.ticks))}
+            key={i}
+          >
+            <Progress size={size} data={dataItem} />
+          </div>
+        ))}
       </div>
-      <div className={css.summary}>{summary}</div>
+
+      <div>
+        {data.map((dataItem, i) => (
+          <div
+            className={classnames(css.progressLine, sizeClass, getLegendClass(dataItem.ticks))}
+            key={i}
+          >
+            <Summary summary={dataItem.summary} color={dataItem.color} size={size} />
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

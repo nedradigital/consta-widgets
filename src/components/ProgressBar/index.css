@@ -1,89 +1,37 @@
-.progress {
-  display: block;
-
-  width: 100%;
-  -webkit-appearance: progress-bar;
-
-  &[value] {
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  &[value]::-webkit-progress-bar {
-    border-radius: 3px;
-    background-color: #13384e;
-  }
-
-  &[value]::-webkit-progress-value {
-    border-radius: inherit;
-    background-color: currentColor;
-  }
-
-  &.isNotFull[value]::-webkit-progress-value {
-    border-radius: 3px 0 0 3px;
-  }
-}
-
-.chart {
-  position: relative;
-  top: calc-size(12);
-
-  flex-grow: 1;
-
-  transform: translateY(-50%);
-}
-
-.summary {
-  font-size: calc-size(24);
-  line-height: calc-size(24);
-
-  padding-left: calc-size(12);
-
-  white-space: nowrap;
-
-  color: inherit;
-}
-
-.progressBar {
-  display: flex;
-  align-items: flex-start;
-
-  width: 100%;
-
+.progressLine {
   &.sizeS {
-    min-height: 34px;
+    height: calc-size(20);
 
-    & .chart {
-      top: calc-size(10);
-    }
-
-    & .progress {
-      height: calc-size(4);
-    }
-
-    & .summary {
-      font-size: calc-size(20);
-      line-height: calc-size(20);
+    &.withLegend {
+      height: calc-size(34);
     }
   }
 
   &.sizeM {
-    min-height: 40px;
+    height: calc-size(24);
 
-    & .progress {
-      height: calc-size(12);
+    &.withLegend {
+      height: calc-size(40);
     }
   }
 
   &.sizeL {
-    min-height: 45px;
+    height: calc-size(24);
 
-    & .chart {
-      top: calc-size(12);
-    }
-
-    & .progress {
-      height: calc-size(20);
+    &.withLegend {
+      height: calc-size(45);
     }
   }
+}
+
+.progressBar {
+  display: flex;
+
+  & .progressLine:not(:last-child) {
+    margin-bottom: 18px;
+  }
+}
+
+.progress {
+  flex-grow: 1;
 }
