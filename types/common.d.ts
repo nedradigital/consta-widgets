@@ -44,7 +44,7 @@ declare module '@gaz/utils' {
   export const getCalculatedSize: (size: number) => number
 }
 
-declare module '@nekitk/storybook-addon-smart-knobs' {
+declare module 'storybook-addon-smart-knobs' {
   import { DecoratorFn } from '@storybook/react'
 
   export const withSmartKnobs: (options?: { ignoreProps?: readonly string[] }) => DecoratorFn

@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { storiesOf } from '@storybook/react'
+import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { Spinner, SpinnerSize } from '@/legacy/Spinner'
 import { blockCenteringDecorator } from '@/utils/Storybook'

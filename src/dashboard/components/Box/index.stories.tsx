@@ -2,9 +2,9 @@ import React from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { boolean } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
+import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { exampleDatasets } from '@/dashboard/index.stories'
 import { getUniqueName } from '@/utils/uniq-name-hook'

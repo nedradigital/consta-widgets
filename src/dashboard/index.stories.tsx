@@ -1,8 +1,8 @@
 import * as React from 'react'
 
-import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { number, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
+import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { Dataset, DataType } from '@/dashboard/types'
 
