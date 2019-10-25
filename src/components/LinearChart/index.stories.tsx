@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { withSmartKnobs } from '@nekitk/storybook-addon-smart-knobs'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
+import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
