@@ -16,8 +16,8 @@
     "lint": "npm-run-all --parallel lint:*",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "lint-fix": "npm-run-all format lint-fix:*",
-    "lint:ts": "tslint '{src,types}/**/*.ts{,x}'",
-    "lint-fix:ts": "tslint '{src,types}/**/*.ts{,x}' --fix",
+    "lint:ts": "eslint '{src,types}/**/*.ts{,x}'",
+    "lint-fix:ts": "eslint '{src,types}/**/*.ts{,x}' --fix",
     "lint:css": "stylelint 'src/**/*.css'",
     "lint-fix:css": "stylelint 'src/**/*.css' --fix",
     "generate-css-types": "node node_modules/@gaz/configs/scripts/generate-css-types.js",
@@ -39,7 +39,7 @@
   "lint-staged": {
     "{src,types}/**/*.{ts,tsx}": [
       "prettier --write",
-      "tslint --fix",
+      "eslint --fix",
       "git add"
     ],
     "{src}/**/*.css": [
@@ -72,7 +72,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
-    "@gaz/configs": "0.1.16",
+    "@gaz/configs": "0.1.19",
     "@storybook/addon-actions": "5.2.5",
     "@storybook/addon-info": "5.2.5",
     "@storybook/addon-knobs": "5.2.5",
