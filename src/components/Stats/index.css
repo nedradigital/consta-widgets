@@ -25,21 +25,41 @@
 }
 
 .sizeXS {
-  font-size: calc-size(32);
-  line-height: calc-size(42);
+  font-size: calc-size(13);
+  line-height: calc-size(18);
+
+  & .number {
+    font-size: calc-size(24);
+    line-height: calc-size(34);
+  }
 }
 
 .sizeS {
-  font-size: calc-size(20);
-  line-height: calc-size(28);
+  font-size: calc-size(18);
+  line-height: calc-size(25);
+
+  & .number {
+    font-size: calc-size(48);
+    line-height: calc-size(62);
+  }
 }
 
 .sizeM {
-  font-size: calc-size(13);
-  line-height: calc-size(18);
+  font-size: calc-size(20);
+  line-height: calc-size(28);
+
+  & .number {
+    font-size: calc-size(72);
+    line-height: calc-size(82);
+  }
 }
 
 .sizeL {
-  font-size: calc-size(11);
-  line-height: calc-size(15);
+  font-size: calc-size(24);
+  line-height: calc-size(34);
+
+  & .number {
+    font-size: calc-size(96);
+    line-height: calc-size(115);
+  }
 }
