@@ -1,0 +1,51 @@
+.legend {
+  position: absolute;
+  bottom: 0;
+
+  display: flex;
+  justify-content: space-between;
+
+  width: 100%;
+  min-height: calc-size(4);
+  padding-top: calc-size(5);
+
+  opacity: 0.7;
+  color: #f6fbfd;
+
+  transform: translateY(100%);
+}
+
+.marking {
+  position: absolute;
+  top: calc-size(4);
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  transform: translateX(-50%);
+
+  &.alignLeft {
+    align-items: flex-start;
+
+    transform: translateX(0);
+  }
+
+  &.alignRight {
+    align-items: flex-end;
+
+    transform: translateX(-100%);
+  }
+}
+
+.markingIcon {
+  width: calc-size(1);
+  height: calc-size(4);
+
+  background-color: currentColor;
+}
+
+.markingLabel {
+  font-size: calc-size(11);
+  line-height: calc-size(15);
+}
