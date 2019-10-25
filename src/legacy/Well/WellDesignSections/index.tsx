@@ -260,7 +260,7 @@ export const WellDesignSections: React.FC<WellDesignSectionsProps> = ({
       typeof bitRotates[type][sectionCount] !== 'undefined' &&
       typeof bitRotates[type][sectionCount][index] !== 'undefined'
         ? bitRotates[type][sectionCount][index]
-        : bitRotates['main'][0]
+        : bitRotates.main[0]
 
     const bitIndex = type + '-' + sectionCount + '-' + index
 
@@ -282,10 +282,10 @@ export const WellDesignSections: React.FC<WellDesignSectionsProps> = ({
       : false
 
   const isFractured =
-    (!isNil(voidType) && voidType == 'FRACTURED') ||
-    voidType == 'FRACTURED_VUGGY' ||
-    voidType == 'FRACTURED_POROUS' ||
-    voidType == 'FRACTURED_POROUS_VUGGY'
+    (!isNil(voidType) && voidType === 'FRACTURED') ||
+    voidType === 'FRACTURED_VUGGY' ||
+    voidType === 'FRACTURED_POROUS' ||
+    voidType === 'FRACTURED_POROUS_VUGGY'
 
   return (
     <div
@@ -1219,7 +1219,7 @@ export const WellDesignSections: React.FC<WellDesignSectionsProps> = ({
 
           {/* <WellsPilot1> */}
           {((!isNil(PilotSections) && PilotSections.length > 0) ||
-            (objective == 'ZBS' && motherboreSections.length)) && (
+            (objective === 'ZBS' && motherboreSections.length)) && (
             <g className={classNames(`${MAIN_CLASS_SVG}-pilot-1`)}>
               {/** Render "M" label */}
               {objective !== 'ZBS' && (

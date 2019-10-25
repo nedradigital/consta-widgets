@@ -123,7 +123,7 @@ export const WellPassport: React.FC<Props> = ({
                       {isNil(name)
                         ? profession === professionTypes[0]
                           ? `${professionMap[profession]}: --`
-                          : ``
+                          : ''
                         : name}
                     </div>
                     <div className={css.responsiblePersonPhone}>{phone}</div>

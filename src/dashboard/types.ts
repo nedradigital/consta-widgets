@@ -4,7 +4,7 @@ import { Line } from '@/components/LinearChart'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
-import { Data as TableLegend } from '@/components/TableLegend'
+import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { Status } from '@/ui/Badge'
 
@@ -48,7 +48,7 @@ export type DataMap = {
   [DataType.LinearChart]: Line[]
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: string
-  [DataType.TableLegend]: TableLegend
+  [DataType.TableLegend]: TableLegendData
   [DataType.TrafficLight]: TrafficLightData
   [DataType.MultiBarChart]: MultiBarChartData
 }

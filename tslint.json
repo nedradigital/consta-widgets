@@ -1,6 +1,0 @@
-{
-  "extends": "@gaz/configs/tslint",
-  "linterOptions": {
-    "exclude": [ "**/*.css.d.ts" ]
-  }
-}

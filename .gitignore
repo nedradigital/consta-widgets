@@ -39,3 +39,7 @@ lib
 
 # CSS typings
 *.css.d.ts
+
+# Yalc
+.yalc
+yalc.lock
