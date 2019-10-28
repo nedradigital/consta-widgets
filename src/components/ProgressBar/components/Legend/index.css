@@ -48,4 +48,6 @@
 .markingLabel {
   font-size: calc-size(11);
   line-height: calc-size(15);
+
+  white-space: nowrap;
 }

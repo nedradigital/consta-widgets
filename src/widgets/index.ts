@@ -8,3 +8,4 @@ export { LinearChartWidgetContent as LinearChartWidget } from './LinearChartWidg
 export { LegendWidgetContent as LegendWidget } from './LegendWidget'
 export { PyramidChartWidgetContent as PyramidChartWidget } from './PyramidChartWidget'
 export { TableLegendWidgetContent as TableLegendWidget } from './TableLegendWidget'
+export { ProgressBarWidgetContent as ProgressBarWidget } from './ProgressBarWidget'

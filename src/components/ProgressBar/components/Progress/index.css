@@ -1,0 +1,62 @@
+.chartLine {
+  display: block;
+
+  width: 100%;
+  -webkit-appearance: progress-bar;
+
+  &[value] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  &[value]::-webkit-progress-bar {
+    border-radius: 3px;
+    background-color: #13384e;
+  }
+
+  &[value]::-webkit-progress-value {
+    border-radius: inherit;
+    background-color: currentColor;
+  }
+
+  &.isNotFull[value]::-webkit-progress-value {
+    border-radius: 3px 0 0 3px;
+  }
+}
+
+.chart {
+  position: relative;
+  top: calc-size(12);
+
+  transform: translateY(-50%);
+}
+
+.progress {
+  width: 100%;
+
+  &.sizeS {
+    & .chart {
+      top: calc-size(10);
+    }
+
+    & .chartLine {
+      height: calc-size(4);
+    }
+  }
+
+  &.sizeM {
+    & .chartLine {
+      height: calc-size(12);
+    }
+  }
+
+  &.sizeL {
+    & .chart {
+      top: calc-size(12);
+    }
+
+    & .chartLine {
+      height: calc-size(20);
+    }
+  }
+}
