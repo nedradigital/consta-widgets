@@ -4,22 +4,22 @@ import useDimensions from 'react-use-dimensions'
 import { getCalculatedSize } from '@gaz/utils'
 import * as d3 from 'd3'
 
+import { ColorGroups } from '@/dashboard/types'
+
 import { Data as DonutData, Donut } from './components/Donut'
 import css from './index.css'
-
-export type Colors = { [key in string]: string }
 
 export type Data = readonly DonutData[]
 
 type Props = {
   data: Data
-  colors: Colors
+  colorGroups: ColorGroups
 }
 
 const getSizeDonut = () => getCalculatedSize(16)
 const getPadding = () => getCalculatedSize(8)
 
-export const DonutChart: React.FC<Props> = ({ data = [], colors }) => {
+export const DonutChart: React.FC<Props> = ({ data = [], colorGroups }) => {
   const [ref, { width, height }, el] = useDimensions()
   const size = width && height ? Math.min(width, height) : 0
   const mainRadius = size / 2
@@ -43,7 +43,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colors }) => {
           return (
             <Donut
               key={index}
-              colors={colors}
+              colorGroups={colorGroups}
               data={d}
               innerRadius={radius - sizeDonut}
               outerRadius={radius}

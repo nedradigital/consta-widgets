@@ -13,14 +13,5 @@ storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 200, height: 200 }))
   .add('interactive', () => {
-    return (
-      <DonutChart
-        colors={{
-          red: '#EB5757',
-          yellow: '#F2C94C',
-          blue: '#56B9F2',
-        }}
-        data={getWidgetMockData(DataType.Donut)}
-      />
-    )
+    return <DonutChart {...getWidgetMockData(DataType.Donut)} />
   })
