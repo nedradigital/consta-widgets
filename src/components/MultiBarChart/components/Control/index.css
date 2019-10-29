@@ -1,10 +1,11 @@
 @custom-selector :--main .control;
-@custom-selector :--horizontal :--main.isHorizontal;
-@custom-selector :--vertical :--main.isVertical;
 
 :--main {
   position: absolute;
+  bottom: 0;
+  left: 0;
 
+  width: 100%;
   height: 20px;
 
   text-align: right;
@@ -12,31 +13,13 @@
   color: var(--text-color-70);
 }
 
-:--vertical {
-  bottom: 0;
-  left: 0;
-}
-
-:--horizontal {
-  top: 0;
-}
-
 .controls {
   position: absolute;
+  right: 0;
+  bottom: 0;
 
   display: flex;
-
-  @nest :--horizontal & {
-    right: 8px;
-    bottom: 0;
-  }
-
-  @nest :--vertical & {
-    right: 0;
-    bottom: 0;
-
-    flex-direction: column;
-  }
+  flex-direction: column;
 
   @nest :--main:not(:hover) & {
     display: none;
@@ -46,27 +29,12 @@
 .controlGroup {
   display: flex;
   align-items: center;
+  flex-direction: row;
 
   background-color: rgba(2, 39, 59, 0.6);
 
-  @nest :--horizontal & {
-    right: 8px;
-    bottom: 0;
-    writing-mode: vertical-rl;
-  }
-
-  @nest :--vertical & {
-    flex-direction: row;
-  }
-
   & + & {
-    @nest :--horizontal & {
-      margin-left: 4px;
-    }
-
-    @nest :--vertical & {
-      margin-top: 4px;
-    }
+    margin-top: 4px;
   }
 }
 
