@@ -452,13 +452,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
           />
         ))}
       </svg>
-      <Control
-        isVertical={isVertical}
-        paddingY={paddingY}
-        height={svgHeight}
-        width={svgWidth}
-        changeDisplayValues={changeShowValues}
-      />
+      <Control paddingX={paddingX} changeDisplayValues={changeShowValues} />
       <Hint
         direction={!isVertical ? 'top' : 'right'}
         children={''}
