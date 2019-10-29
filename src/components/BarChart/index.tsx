@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
@@ -20,7 +19,7 @@ export type Data = {
   label: string
   values: ReadonlyArray<{
     colorGroupName: string
-    value: number
+    value: number | undefined
   }>
 }
 
@@ -33,8 +32,6 @@ type Props = {
   valuesTick?: number
 }
 
-const getColumnSize = () => getCalculatedSize(12)
-const getColumnPadding = () => getCalculatedSize(4)
 const getXRange = (width: number) => [0, width] as NumberRange
 const getYRange = (height: number) =>
   [
@@ -62,7 +59,7 @@ export const getValuesScale = (domain: NumberRange, size: number, orientation: O
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
   const numbers = items.reduce<number[]>((acc, curr) => {
-    acc.push(...curr.values.map(i => i.value))
+    acc.push(...curr.values.map(i => i.value).filter((v): v is number => v !== undefined))
     return acc
   }, [])
 
@@ -78,9 +75,6 @@ export const BarChart: React.FC<Props> = ({
 }) => {
   const [ref, { width, height }] = useDimensions()
   const [{ paddingX, paddingY }, changePadding] = useState({ paddingX: 0, paddingY: 0 })
-  const columnSize = getColumnSize()
-  const columnPadding = getColumnPadding()
-
   const clipId = `barchart_clipPath_${useUID()}`
 
   const onAxisSizeChange = ({
@@ -105,9 +99,6 @@ export const BarChart: React.FC<Props> = ({
 
   const groupDomains = data.map(item => item.label)
   const valuesDomains = getDomain(data)
-  const barDomains = data.length ? data[0].values.map(item => item.colorGroupName) : []
-
-  const barSize = (columnSize + columnPadding) * (data.length ? data[0].values.length : 0)
 
   const groupScale = getGroupScale(
     groupDomains,
@@ -119,7 +110,6 @@ export const BarChart: React.FC<Props> = ({
     orientation === 'horizontal' ? svgWidth : svgHeight,
     orientation
   )
-  const barScale = getGroupScale(barDomains, barSize, orientation)
 
   return (
     <div
@@ -151,12 +141,8 @@ export const BarChart: React.FC<Props> = ({
             data={item}
             groupScale={groupScale}
             valuesScale={valuesScale}
-            barScale={barScale}
-            barSize={barSize}
             colorGroups={colorGroups}
             clipId={clipId}
-            columnSize={columnSize}
-            padding={columnPadding}
             showValues={showValues}
           />
         ))}
