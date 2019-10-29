@@ -1,13 +1,11 @@
-import { useState } from 'react'
-
-import { removeAt } from '@gaz/utils/lib/array'
-
-import { DataItem, Direction, Legend } from '@/components/Legend'
+import { Direction, Legend } from '@/components/Legend'
 import { Position, Size, Type } from '@/components/LegendItem'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
-type Data = typeof undefined
+const dataType = DataType.Legend
+type Data = DataMap[typeof dataType]
 
 const widgetId = '2538ed91-7c6d-403e-9c3e-d68d3ecd8d00'
 
@@ -17,14 +15,9 @@ type Params = {
   fontSize: Size
   labelPosition: Position
   lineBold?: boolean
-  items: readonly DataItem[]
 }
 
 type ParamValues<T> = { value: T; name: string }
-
-type AddLabelProps = {
-  onAdd: (item: DataItem) => void
-}
 
 const labelTypes: ReadonlyArray<ParamValues<Type>> = [
   {
@@ -75,40 +68,14 @@ export const defaultParams: Params = {
   labelType: 'dot',
   labelPosition: 'left',
   direction: 'column',
-  items: [
-    {
-      text: 'Пример легенды',
-      color: 'red',
-    },
-  ],
-}
-
-const AddLabel: React.FC<AddLabelProps> = ({ onAdd }) => {
-  const [color, changeColor] = useState('rgb(0, 0, 0)')
-  const [text, changeText] = useState('пример текста')
-
-  const handler = () => {
-    onAdd({ color, text })
-    changeColor('')
-    changeText('')
-  }
-
-  return (
-    <div>
-      <input type="text" value={text} onChange={e => changeText(e.target.value)} />
-      <input type="color" value={color} onChange={e => changeColor(e.target.value)} />
-      <button type="button" onClick={handler}>
-        ➕
-      </button>
-    </div>
-  )
 }
 
 export const LegendWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { fontSize, labelType, labelPosition, direction, lineBold, items },
+  params: { fontSize, labelType, labelPosition, direction, lineBold },
+  data,
 }) => (
   <Legend
-    data={items}
+    {...data}
     fontSize={fontSize}
     labelType={labelType}
     labelPosition={labelPosition}
@@ -121,7 +88,7 @@ export const LegendWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Легенда',
   defaultParams,
-  dataType: null,
+  dataType,
   Content: LegendWidgetContent,
   renderSettings(params, onChangeParam) {
     return (
@@ -185,28 +152,6 @@ export const LegendWidget = createWidget<Data, Params>({
             ))}
           </select>
         </WidgetSettingsItem>
-
-        <WidgetSettingsItem name="Лейблы">
-          <div>
-            {params.items.map((item, index) => (
-              <div key={item.text}>
-                <div>{item.text}</div>
-                <button
-                  type="button"
-                  onClick={() => onChangeParam('items', removeAt(params.items, index))}
-                >
-                  ➖
-                </button>
-              </div>
-            ))}
-          </div>
-        </WidgetSettingsItem>
-
-        <AddLabel
-          onAdd={newItem => {
-            onChangeParam('items', [...params.items, newItem])
-          }}
-        />
       </>
     )
   },

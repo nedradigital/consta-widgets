@@ -13,10 +13,15 @@ const MIN = -2
 const MAX = 8
 const COUNT_POINTS = 51
 
+const colorGroups = {
+  first: '#20B55F',
+  second: '#56B9F2',
+}
+
 const getCommonProps = () => ({
   lines: [
     {
-      color: '#20B55F',
+      colorGroupName: 'first',
       values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
         x: Date.now() + x,
         y,
@@ -24,7 +29,7 @@ const getCommonProps = () => ({
       dots: true,
     },
     {
-      color: '#56B9F2',
+      colorGroupName: 'second',
       values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
         x: Date.now() + x,
         y,
@@ -53,12 +58,18 @@ storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '50vh' }))
   .add('horizontal', () => {
-    return <LinearChart {...getCommonProps()} />
+    return <LinearChart {...getCommonProps()} colorGroups={object('colorGroups', colorGroups)} />
   })
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: '80vh' }))
   .add('vertical', () => {
-    return <LinearChart {...getCommonProps()} isVertical />
+    return (
+      <LinearChart
+        {...getCommonProps()}
+        colorGroups={object('colorGroups', colorGroups)}
+        isVertical
+      />
+    )
   })

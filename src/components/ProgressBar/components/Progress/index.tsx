@@ -12,17 +12,18 @@ type Data = {
   valueMin: number
   valueMax: number
   ticks?: readonly Tick[]
-  color: string
 }
 
 export type Props = {
   size?: Size
   data: Data
+  color: string
 }
 
 export const Progress: React.FC<Props> = ({
   size = 'm',
-  data: { value, valueMin, valueMax, ticks = [], color = '#FFBA3B' },
+  data: { value, valueMin, valueMax, ticks = [] },
+  color = '#FFBA3B',
 }) => {
   const hasLegend = ticks.length
   const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]

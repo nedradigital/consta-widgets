@@ -6,6 +6,8 @@ import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
+import { ColorGroups } from '@/dashboard/types'
+
 import { Axis } from './components/Axis'
 import { Bar } from './components/Bar'
 import css from './index.css'
@@ -15,15 +17,16 @@ type NumberRange = readonly [number, number]
 export type Orientation = 'horizontal' | 'vertical'
 
 export type Data = {
-  groupName: string
-  values: readonly number[]
+  label: string
+  values: ReadonlyArray<{
+    colorGroupName: string
+    value: number
+  }>
 }
-
-export type Colors = readonly string[]
 
 type Props = {
   data: readonly Data[]
-  colors: Colors
+  colorGroups: ColorGroups
   orientation: Orientation
   /** Показывать значение рядом с линиями. Работает только при orientation: horizontal */
   showValues?: boolean
@@ -59,7 +62,7 @@ export const getValuesScale = (domain: NumberRange, size: number, orientation: O
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
   const numbers = items.reduce<number[]>((acc, curr) => {
-    acc.push(...curr.values)
+    acc.push(...curr.values.map(i => i.value))
     return acc
   }, [])
 
@@ -69,7 +72,7 @@ const getDomain = (items: readonly Data[]): NumberRange => {
 export const BarChart: React.FC<Props> = ({
   data = [],
   orientation,
-  colors,
+  colorGroups,
   showValues,
   valuesTick = 4,
 }) => {
@@ -100,9 +103,9 @@ export const BarChart: React.FC<Props> = ({
   const svgWidth = width ? Math.round(width - paddingX) : 0
   const svgHeight = height ? Math.round(height - paddingY) : 0
 
-  const groupDomains = data.map(item => item.groupName)
+  const groupDomains = data.map(item => item.label)
   const valuesDomains = getDomain(data)
-  const barDomains = data.length ? data[0].values.map((_, index) => String(index)) : []
+  const barDomains = data.length ? data[0].values.map(item => item.colorGroupName) : []
 
   const barSize = (columnSize + columnPadding) * (data.length ? data[0].values.length : 0)
 
@@ -143,14 +146,14 @@ export const BarChart: React.FC<Props> = ({
         />
         {data.map(item => (
           <Bar
-            key={item.groupName}
+            key={item.label}
             orientation={orientation}
             data={item}
             groupScale={groupScale}
             valuesScale={valuesScale}
             barScale={barScale}
             barSize={barSize}
-            colors={colors}
+            colorGroups={colorGroups}
             clipId={clipId}
             columnSize={columnSize}
             padding={columnPadding}

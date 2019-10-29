@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -15,7 +16,8 @@ storiesOf('components/BarChart', module)
   .add('interactive', () => {
     return (
       <BarChart
-        {...getWidgetMockData(DataType.BarChart)}
+        data={object('data', getWidgetMockData(DataType.BarChart).data)}
+        colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
         orientation="vertical"
         showValues={false}
         valuesTick={4}

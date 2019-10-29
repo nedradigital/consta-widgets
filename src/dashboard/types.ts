@@ -1,5 +1,6 @@
-import { Colors as BarChartColors, Data as BarChartData } from '@/components/BarChart'
+import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DonutChartData } from '@/components/DonutChart'
+import { Data as LegendData } from '@/components/Legend'
 import { Line } from '@/components/LinearChart'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
@@ -24,9 +25,11 @@ export enum DataType {
   TrafficLight,
   MultiBarChart,
   ProgressBar,
+  Legend,
 }
 
 export type ColorGroups = { [key: string]: string }
+type WithColorGroups = { colorGroups: ColorGroups }
 
 export type DataMap = {
   [DataType.Chart2D]: {
@@ -44,21 +47,27 @@ export type DataMap = {
   }
   [DataType.Stats]: StatsData
   [DataType.Donut]: {
-    colorGroups: ColorGroups
     data: DonutChartData
-  }
+  } & WithColorGroups
   [DataType.BarChart]: {
-    colors: BarChartColors
     data: readonly BarChartData[]
-  }
-  // tslint:disable-next-line:readonly-array
-  [DataType.LinearChart]: Line[]
+  } & WithColorGroups
+  [DataType.LinearChart]: {
+    data: readonly Line[]
+  } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: string
   [DataType.TableLegend]: TableLegendData
   [DataType.TrafficLight]: TrafficLightData
-  [DataType.MultiBarChart]: MultiBarChartData
-  [DataType.ProgressBar]: readonly ProgressBarData[]
+  [DataType.ProgressBar]: {
+    data: readonly ProgressBarData[]
+  } & WithColorGroups
+  [DataType.MultiBarChart]: {
+    data: MultiBarChartData
+  } & WithColorGroups
+  [DataType.Legend]: {
+    data: LegendData
+  } & WithColorGroups
 }
 
 export type Dataset = {

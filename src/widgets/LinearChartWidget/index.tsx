@@ -48,7 +48,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yGridTicks,
     yGuide,
   },
-  data,
+  data: { data, colorGroups },
   dataset,
 }) => (
   <LinearChart
@@ -67,6 +67,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
       },
     }}
     lines={data}
+    colorGroups={colorGroups}
     withZoom={withZoom}
     isVertical={isVertical}
     formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}

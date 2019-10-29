@@ -7,6 +7,7 @@ import * as d3 from 'd3'
 import { isEqual, isObject, isUndefined } from 'lodash'
 
 import { Axis } from '@/components/BarChart/components/Axis'
+import { ColorGroups } from '@/dashboard/types'
 import { Hint } from '@/ui/Hint'
 
 import { Control } from './components/Control'
@@ -35,6 +36,7 @@ type Props = {
   orientation: Orientation
   valuesTick?: number
   hasRatio?: boolean
+  colorGroups: ColorGroups
 }
 
 type RectParams = {
@@ -67,6 +69,7 @@ export type Layer = {
   layerFromGroup?: Layer
   value?: number
   paramsRect?: RectParams
+  layerGroupName?: string
 }
 
 export type Layers = readonly Layer[] & {
@@ -81,7 +84,13 @@ type Result = {
 export const defaultColumnSize = 12
 const minWidthForComplexTooltip = 28
 
-export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick = 4, hasRatio }) => {
+export const MultiBarChart: React.FC<Props> = ({
+  data,
+  orientation,
+  valuesTick = 4,
+  hasRatio,
+  colorGroups,
+}) => {
   const [paddingX, setPaddingX] = useState(0)
   const [paddingY, setPaddingY] = useState(0)
   const [showValues, setShowValues] = useState(false)
@@ -92,14 +101,13 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
   const keys = data.categories
   const { values, keyGroup } = data
   const isVertical = orientation !== 'horizontal'
-  const color: ReadonlyArray<string> = ['#56B9F2', '#EB5757', '#FCA355', 'aquamarine']
 
   useLayoutEffect(() => {
     const w = Math.round(width - paddingX) || 0
     const h = Math.round(height - paddingY) || 0
 
     setSizeSvg({ svgWidth: w, svgHeight: h })
-  }, [width, height])
+  }, [width, height, paddingX, paddingY])
 
   const changeShowValues = () => {
     setShowValues(!showValues)
@@ -130,7 +138,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
       stack.offset(d3.stackOffsetExpand)
     }
 
-    return stack([...values])
+    return stack([...values]) as readonly Layers[]
   }
 
   const convertPercentToOriginal = (datum: readonly Layers[]) => {
@@ -142,7 +150,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
       const itemsArray = Object.entries(items).map(([_, v]) => {
         total = 0
         if (Array.isArray(v)) {
-          const row = (v as object) as Layer
+          const row = v as Layer
 
           keys.forEach(k => {
             total += parseInt(row.data[k] as string, 10)
@@ -168,7 +176,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
     datum.forEach((layer: Layers, idx: number) => {
       Object.entries(layer).forEach(([_, value]) => {
         if (Array.isArray(value) || isObject(value)) {
-          const row = (value as object) as Layer
+          const row = value as Layer
 
           if (!objects.hasOwnProperty(row.data[keyGroup])) {
             objects[row.data[keyGroup]] = []
@@ -184,6 +192,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
             hasComplexTooltip: heightBar > 0 && heightBar <= minWidthForComplexTooltip,
             isDisplayTooltip: true,
             layerIndex: idx,
+            layerGroupName: layer.key,
           }
 
           objects[row.data[keyGroup]] = objects[row.data[keyGroup]].concat([obj])
@@ -258,14 +267,15 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
     heightBar: number,
     complexValue: readonly ComplexValue[]
   ) => {
-    const { layerIndex, original1, original0 } = layer
+    const { layerIndex, original1, original0, layerGroupName } = layer
     const val = hasRatio && original1 && original0 ? original1 - original0 : layer[1] - layer[0]
     complexHeight += heightBar
+
     complexValue = complexValue.concat([
       {
         value: Math.round(val) || 0,
         layerIndex: layerIndex || 0,
-        layerColor: color[layerIndex || 0],
+        layerColor: colorGroups[layerGroupName!],
       },
     ])
 
@@ -387,11 +397,10 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
     ((isVertical ? svgWidth : svgHeight) - defaultColumnSize * values.length) / values.length / 2 -
     defaultColumnSize / values.length / 2
   const groupDomains = values.map(d => String(d[keyGroup]))
-  const layersTemp = getLayers() as readonly Layers[]
+  const layersTemp = getLayers()
   const layers = (hasRatio ? convertPercentToOriginal(layersTemp) : layersTemp) as readonly Layers[]
 
-  const yStackMax =
-    d3.max(layers as readonly [], (layer: readonly Layer[]) => d3.max(layer, d => d[1])) || 0
+  const yStackMax = d3.max(layers, layer => d3.max(layer, d => d[1])) || 0
 
   const xScale = d3
     .scaleBand()
@@ -406,7 +415,7 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
     .range(!isVertical ? [0, svgWidth] : [svgHeight, 0])
 
   const groupByKeysDatum = calculateHeightBars(layers)
-  const groupByKeys = calculateComplexTooltip((groupByKeysDatum as unknown) as GroupByKeys)
+  const groupByKeys = calculateComplexTooltip(groupByKeysDatum)
 
   return (
     <div
@@ -447,8 +456,8 @@ export const MultiBarChart: React.FC<Props> = ({ data, orientation, valuesTick =
             isVertical={isVertical}
             xScale={xScale}
             yScale={yScale}
-            color={color[idx]}
             paddingX={paddingX}
+            color={colorGroups[d.key]}
           />
         ))}
       </svg>

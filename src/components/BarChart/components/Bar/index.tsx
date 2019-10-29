@@ -2,7 +2,9 @@ import { createRef, useLayoutEffect } from 'react'
 
 import * as d3 from 'd3'
 
-import { Colors, Data, Orientation } from '../../'
+import { ColorGroups } from '@/dashboard/types'
+
+import { Data, Orientation } from '../../'
 
 import css from './index.css'
 
@@ -12,7 +14,7 @@ type Props = {
   barScale: d3.ScaleBand<string>
   groupScale: d3.ScaleBand<string>
   valuesScale: d3.ScaleLinear<number, number>
-  colors: Colors
+  colorGroups: ColorGroups
   clipId: string
   columnSize: number
   padding: number
@@ -30,7 +32,7 @@ export const Bar: React.FC<Props> = ({
   barScale,
   barSize,
   orientation,
-  colors,
+  colorGroups,
   clipId,
   columnSize,
   padding,
@@ -51,10 +53,10 @@ export const Bar: React.FC<Props> = ({
     if (ref) {
       const transform =
         orientation === 'horizontal'
-          ? `translate(0, ${(groupScale(data.groupName) || 0) +
+          ? `translate(0, ${(groupScale(data.label) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2})`
-          : `translate(${(groupScale(data.groupName) || 0) +
+          : `translate(${(groupScale(data.label) || 0) +
               groupScale.bandwidth() / 2 -
               barSize / 2}, 0)`
 
@@ -66,13 +68,13 @@ export const Bar: React.FC<Props> = ({
         .data([...values])
         .join('rect')
         .attr('rx', 3)
-        .style('fill', (_, index) => colors[index])
+        .style('fill', d => colorGroups[d.colorGroupName])
 
       if (orientation === 'horizontal') {
         rect
           .attr('x', sizeBorderRadius * -1)
-          .attr('y', (_, index) => barScale(String(index)) || 0)
-          .attr('width', d => valuesScale(d) + sizeBorderRadius)
+          .attr('y', d => barScale(d.colorGroupName) || 0)
+          .attr('width', d => valuesScale(d.value) + sizeBorderRadius)
           .attr('height', columnSize)
 
         if (textRef.current && showValues) {
@@ -82,19 +84,19 @@ export const Bar: React.FC<Props> = ({
             .selectAll('text')
             .data([...values])
             .join('text')
-            .attr('x', d => valuesScale(d) + 4)
-            .attr('y', (_, index) => (barScale(String(index)) || 0) + padding / 2)
+            .attr('x', d => valuesScale(d.value) + 4)
+            .attr('y', d => (barScale(d.colorGroupName) || 0) + padding / 2)
             .attr('dy', barScale.bandwidth() / 2)
-            .text(d => d)
+            .text(d => d.value)
             .attr('fill', 'currentColor')
             .attr('class', css.label)
         }
       } else {
         rect
-          .attr('x', (_, index) => barScale(String(index)) || 0)
-          .attr('y', d => valuesScale(d))
+          .attr('x', d => barScale(d.colorGroupName) || 0)
+          .attr('y', d => valuesScale(d.value))
           .attr('width', columnSize)
-          .attr('height', d => (d ? valuesScale(0) - valuesScale(d) + sizeBorderRadius : 0))
+          .attr('height', d => (d ? valuesScale(0) - valuesScale(d.value) + sizeBorderRadius : 0))
       }
     }
   })

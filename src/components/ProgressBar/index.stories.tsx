@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -12,4 +13,10 @@ import { ProgressBar } from './'
 storiesOf('components/ProgressBar', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: 300 }))
-  .add('interactive', () => <ProgressBar size="m" data={getWidgetMockData(DataType.ProgressBar)} />)
+  .add('interactive', () => (
+    <ProgressBar
+      size="m"
+      data={getWidgetMockData(DataType.ProgressBar).data}
+      colorGroups={object('colorGroups', getWidgetMockData(DataType.ProgressBar).colorGroups)}
+    />
+  ))
