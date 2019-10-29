@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
-import { getCalculatedSize } from '@gaz/utils'
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 
 import { ColorGroups } from '@/dashboard/types'

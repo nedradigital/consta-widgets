@@ -54,11 +54,10 @@
     ]
   },
   "dependencies": {
-    "@gaz/utils": "0.1.4",
+    "@gaz/utils": "0.1.6",
     "classnames": "2.2.6",
     "d3": "5.12.0",
     "lodash": "4.17.11",
-    "pluralize-ru": "1.0.1",
     "react": "16.8.6",
     "react-dnd": "9.3.2",
     "react-dnd-html5-backend": "9.3.2",
@@ -72,7 +71,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
-    "@gaz/configs": "0.1.19",
+    "@gaz/configs": "0.1.20",
     "@storybook/addon-actions": "5.2.5",
     "@storybook/addon-info": "5.2.5",
     "@storybook/addon-knobs": "5.2.5",

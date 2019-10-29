@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { enumToStringMap } from '@gaz/utils/lib/enum'
 import { select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { enumToStringMap } from '@/utils/enum'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Spinner, SpinnerSize } from '.'

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
-import { getCalculatedSize } from '@gaz/utils'
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 

@@ -11,11 +11,6 @@ declare module '*.gif' {
   export default content
 }
 
-declare module 'pluralize-ru' {
-  const pluralize: (count: number | string, ...args: any) => string
-  export default pluralize
-}
-
 declare module 'react-grid-layout-tmp-fork' {
   import ReactGridLayout, { Layout, Responsive, WidthProviderProps } from 'react-grid-layout'
 
@@ -36,12 +31,6 @@ declare module 'react-grid-layout-tmp-fork' {
   export default ReactGridLayout
 
   export { Layout, Responsive, WidthProvider }
-}
-
-declare module '@gaz/utils' {
-  export const calcSize: (size: number) => string
-  export const updateBaseSize: (size: number, element: HTMLElement | SVGSVGElement) => void
-  export const getCalculatedSize: (size: number) => number
 }
 
 declare module 'storybook-addon-smart-knobs' {

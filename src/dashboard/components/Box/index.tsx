@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 
+import { move, removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
-import { move, removeAt, updateAt } from '@/utils/array'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { WidgetType } from '@/utils/WidgetFactory'
 

@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { subtractTime } from '@gaz/utils/lib/time'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { subtractTime } from '@/utils/time'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { CurrentOperation } from '.'

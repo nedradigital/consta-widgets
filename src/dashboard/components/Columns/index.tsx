@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
 import { Data, Dataset } from '@/dashboard/types'
-import { removeAt, updateAt } from '@/utils/array'
 
 import { Box, BoxItem } from '../Box'
 

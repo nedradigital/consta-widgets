@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { getArrayWithRandomInt } from '@gaz/utils/lib/array'
 import { number, object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { VerticalGraph } from '.'

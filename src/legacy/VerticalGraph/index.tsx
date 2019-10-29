@@ -1,8 +1,8 @@
+import { getAverageWeightedPercent } from '@gaz/utils/lib/math'
 import * as _ from 'lodash'
 
 import { LinearChart } from '@/legacy/LinearChart'
 import { Text } from '@/ui/Text'
-import { getAverageWeightedPercent } from '@/utils/math'
 
 import css from './index.css'
 

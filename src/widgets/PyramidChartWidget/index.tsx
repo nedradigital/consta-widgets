@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
+import { removeAt } from '@gaz/utils/lib/array'
+
 import { PyramidChart, Size, sizes } from '@/components/PyramidChart'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { DataMap, DataType } from '@/dashboard/types'
-import { removeAt } from '@/utils/array'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Pyramid

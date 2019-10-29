@@ -1,9 +1,10 @@
 import { useState } from 'react'
 
+import { removeAt } from '@gaz/utils/lib/array'
+
 import { DataItem, Direction, Legend } from '@/components/Legend'
 import { Position, Size, Type } from '@/components/LegendItem'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
-import { removeAt } from '@/utils/array'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 type Data = typeof undefined

@@ -1,9 +1,8 @@
 import * as React from 'react'
 
+import { getHourPlural } from '@gaz/utils/lib/pluralization'
 import classnames from 'classnames'
 import { isNil, round, sum } from 'lodash'
-
-import { getHourPlural } from '@/utils/pluralization'
 
 import { NDTTable } from '../NDTTable'
 

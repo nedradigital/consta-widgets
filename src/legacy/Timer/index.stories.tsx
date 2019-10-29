@@ -1,7 +1,7 @@
+import { subtractTime } from '@gaz/utils/lib/time'
 import { date } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { subtractTime } from '@/utils/time'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Timer } from '.'

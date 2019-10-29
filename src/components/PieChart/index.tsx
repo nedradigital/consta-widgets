@@ -1,7 +1,7 @@
 import React, { useLayoutEffect } from 'react'
 import useDimensions from 'react-use-dimensions'
 
-import { calcSize } from '@gaz/utils'
+import { calcSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 
 import { ReactComponent as ChartBorder } from './images/chart-border.svg'

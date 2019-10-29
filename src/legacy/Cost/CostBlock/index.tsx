@@ -1,10 +1,10 @@
 import React from 'react'
 
+import { getDayPlural } from '@gaz/utils/lib/pluralization'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
 import { ChartPopup, ChartWithSubinfo } from '@/legacy/ChartWithSubinfo'
-import { getDayPlural } from '@/utils/pluralization'
 
 import { CostChart, Day } from '../CostChart'
 import { CostInfo } from '../CostInfo'
