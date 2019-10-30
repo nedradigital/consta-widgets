@@ -2,11 +2,11 @@ import React from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
+import { getDurations, getDurationsGrid } from '@gaz/utils/lib/duration'
 import classnames from 'classnames'
 import { isNil } from 'lodash'
 
 import { LinearChart } from '@/legacy/LinearChart'
-import { getDurations, getDurationsGrid } from '@/utils/duration'
 
 import css from './index.css'
 

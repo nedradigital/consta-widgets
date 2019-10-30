@@ -3,7 +3,7 @@ import * as React from 'react'
 import ReactDOM from 'react-dom'
 import ClickOutHandler from 'react-onclickout'
 
-import { calcSize } from '@gaz/utils'
+import { calcSize } from '@gaz/utils/lib/css'
 
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { Dataset } from '@/dashboard/types'

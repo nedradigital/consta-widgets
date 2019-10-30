@@ -1,10 +1,10 @@
 import React from 'react'
 
+import { getArrayWithRandomInt } from '@gaz/utils/lib/array'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { LinearChart } from '.'

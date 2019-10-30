@@ -1,9 +1,9 @@
 import * as React from 'react'
 
+import { getDayPlural } from '@gaz/utils/lib/pluralization'
 import { isNil } from 'lodash'
 
 import { ChartPopup, ChartWithSubinfo } from '@/legacy/ChartWithSubinfo'
-import { getDayPlural } from '@/utils/pluralization'
 
 import { NDTChart } from '../NDTChart'
 import { NDTInfo } from '../NDTInfo'

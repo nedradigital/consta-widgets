@@ -3,7 +3,8 @@ import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
 import useDimensions from 'react-use-dimensions'
 
-import { updateBaseSize } from '@gaz/utils'
+import { updateAt } from '@gaz/utils/lib/array'
+import { updateBaseSize } from '@gaz/utils/lib/css'
 
 import { Box, BoxItem } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
@@ -112,11 +113,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     const index = boxes.findIndex(item => item.i === box.i)
 
     onChange({
-      boxes: [
-        ...boxes.slice(0, index),
-        { i: box.i, x: box.x, y: box.y, w: box.w, h: box.h },
-        ...boxes.slice(index + 1),
-      ],
+      boxes: updateAt(boxes, index, { i: box.i, x: box.x, y: box.y, w: box.w, h: box.h }),
       config,
       settings,
     })

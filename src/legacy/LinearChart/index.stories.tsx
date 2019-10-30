@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { getArrayWithRandomInt } from '@gaz/utils/lib/array'
 import { boolean, number } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
@@ -7,7 +8,6 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { GridLines } from '@/legacy/GridLines'
 import { HorizontalTicks } from '@/legacy/HorizontalTicks'
 import { VerticalTicks } from '@/legacy/VerticalTicks'
-import { getArrayWithRandomInt } from '@/utils/array'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Legend, LinearChart } from '.'

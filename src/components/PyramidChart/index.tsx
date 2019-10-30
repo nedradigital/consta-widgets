@@ -1,6 +1,6 @@
 import useDimensions from 'react-use-dimensions'
 
-import { calcSize } from '@gaz/utils'
+import { calcSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
 import css from './index.css'

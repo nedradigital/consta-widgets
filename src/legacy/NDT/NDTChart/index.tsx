@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { DraggableCore, DraggableData, DraggableEvent } from 'react-draggable'
 
+import { createArrayOfIndexes } from '@gaz/utils/lib/array'
+import { getDurations, getDurationsGrid } from '@gaz/utils/lib/duration'
 import classnames from 'classnames'
-
-import { createArrayOfIndexes } from '@/utils/array'
-import { getDurations, getDurationsGrid } from '@/utils/duration'
 
 import { npvDayType } from '../NDTBlock'
 
