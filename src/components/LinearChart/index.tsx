@@ -5,13 +5,14 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
+import { ColorGroups } from '@/dashboard/types'
 
 import { Line as LineComponent } from './components/Line'
 import { Zoom } from './components/Zoom'
 import css from './index.css'
 
 export type Line = {
-  color: string
+  colorGroupName: string
   values: readonly Item[]
   dots?: boolean
 }
@@ -25,6 +26,7 @@ type Props = {
   withZoom?: boolean
   isVertical?: boolean
   formatLabel: (n: number) => string
+  colorGroups: ColorGroups
 }
 
 type State = {
@@ -157,6 +159,7 @@ export class LinearChart extends React.Component<Props, State> {
         isVertical,
         lines,
         formatLabel,
+        colorGroups,
       },
       state: { paddingX, paddingY, xDomain, yDomain, mainTickValues },
     } = this
@@ -212,9 +215,9 @@ export class LinearChart extends React.Component<Props, State> {
 
           {this.getLines().map(line => (
             <LineComponent
-              key={line.color}
+              key={line.colorGroupName}
               values={[...line.values]}
-              color={line.color}
+              color={colorGroups[line.colorGroupName]}
               dotRadius={line.dots ? dotRadius : undefined}
               scaleX={scaleX}
               scaleY={scaleY}

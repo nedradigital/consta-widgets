@@ -4,6 +4,7 @@ import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { types } from '@/components/LegendItem'
 import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -26,6 +27,11 @@ storiesOf('components/TableLegend', module)
       isShowLegend={false}
       size="l"
       data={{
+        colorGroups: {
+          first: 'red',
+          second: 'yellow',
+          third: 'green',
+        },
         list: [
           {
             field: 'Северный бур',
@@ -52,18 +58,18 @@ storiesOf('components/TableLegend', module)
         legendFields: [
           {
             field: 'Северный бур',
-            color: 'red',
-            typeLegend: 'dot',
+            colorGroupName: 'first',
+            typeLegend: types[0],
           },
           {
             field: 'Южное месторождение',
-            color: 'yellow',
-            typeLegend: 'dot',
+            colorGroupName: 'second',
+            typeLegend: types[0],
           },
           {
             field: 'Западный разлом',
-            color: 'green',
-            typeLegend: 'dot',
+            colorGroupName: 'third',
+            typeLegend: types[0],
           },
         ],
         columnNames: [

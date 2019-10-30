@@ -25,7 +25,7 @@ export const MultiBarChartWidgetContent: React.FC<WidgetContentProps<Data, Param
   params: { orientation, hasRatio },
 }) => (
   <div style={{ height: 300 }}>
-    <MultiBarChart data={data} hasRatio={hasRatio} orientation={orientation} />
+    <MultiBarChart {...data} hasRatio={hasRatio} orientation={orientation} />
   </div>
 )
 

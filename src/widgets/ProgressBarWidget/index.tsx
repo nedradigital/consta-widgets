@@ -22,14 +22,14 @@ export const ProgressBarWidgetContent: React.FC<WidgetContentProps<Data, Params>
   data,
   params: { size },
 }) => {
-  return <ProgressBar size={size} data={data} />
+  return <ProgressBar size={size} {...data} />
 }
 
 export const ProgressBarWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Прогресс-бар ("градусник")',
   defaultParams,
-  dataType: DataType.ProgressBar,
+  dataType,
   Content: ProgressBarWidgetContent,
   renderSettings(params, onChangeParam) {
     return (

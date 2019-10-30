@@ -5,6 +5,7 @@ import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
 
 import { LegendItem, Type as TypeLegend, types as defaultTypeLegend } from '@/components/LegendItem'
+import { ColorGroups } from '@/dashboard/types'
 
 import { DivResizable } from './components/DivResizable'
 import { ReactComponent as IconSortAscSvg } from './images/sort-asc.svg'
@@ -26,16 +27,23 @@ type Row = {
   [key: string]: React.ReactNode
 }
 
+type LegendFields = {
+  field: string
+  colorGroupName: string
+  typeLegend: TypeLegend
+}
+
 export type Data = {
+  colorGroups: ColorGroups
   columnNames: readonly ColumnNames[]
-  legendFields: ReadonlyArray<{ [key: string]: string }>
+  legendFields: readonly LegendFields[]
   list: readonly Row[]
 }
 
 type ColumnNames = {
   title: string
   accessor: string
-  className: string
+  className: LocationClasses
 }
 
 type Props = {
@@ -47,7 +55,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
   const [refTable, { height }] = useDimensions()
   const [accessor, setAccessor] = useState('')
   const [isOrderByDesc, setOrderByDesc] = useState(false)
-  const { columnNames, legendFields, list } = data
+  const { columnNames, legendFields, list, colorGroups } = data
 
   const sortBy = (field: string) => {
     setAccessor(field)
@@ -62,7 +70,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
       <th
         key={idx}
         className={classnames(
-          css[obj.className as LocationClasses],
+          css[obj.className],
           sort ? (isOrderByDesc ? css.sortDesc : css.sortAsc) : ''
         )}
         data-accessor={obj.accessor}
@@ -90,17 +98,15 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
       const text = isNil(row[column.accessor]) ? '–' : row[column.accessor]
       if (index === 0) {
         const legend = legendFields.find(obj => obj.field === row[column.accessor])
+
         return (
-          <td
-            key={column.accessor + index}
-            className={classnames(css[column.className as LocationClasses])}
-          >
+          <td key={column.accessor + index} className={classnames(css[column.className])}>
             {isShowLegend ? (
               <LegendItem
                 text={String(text)}
-                color={(legend && legend.color) || ''}
+                color={(legend && colorGroups[legend.colorGroupName]) || ''}
                 fontSize="s"
-                type={(legend && (legend.typeLegend as TypeLegend)) || defaultTypeLegend[0]}
+                type={(legend && legend.typeLegend) || defaultTypeLegend[0]}
               />
             ) : (
               text
@@ -109,10 +115,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
         )
       } else {
         return (
-          <td
-            key={column.accessor + index}
-            className={classnames(css[column.className as LocationClasses])}
-          >
+          <td key={column.accessor + index} className={classnames(css[column.className])}>
             {text}
           </td>
         )

@@ -27,76 +27,98 @@ const mockData: DataMap = {
     data: [
       [
         {
-          groupName: 'first',
+          colorGroupName: 'first',
           value: 20,
         },
         {
-          groupName: 'second',
+          colorGroupName: 'second',
           value: 15,
         },
         {
-          groupName: 'third',
+          colorGroupName: 'third',
           value: 7,
         },
       ],
       [
         {
-          groupName: 'first',
+          colorGroupName: 'first',
           value: 20,
         },
         {
-          groupName: 'second',
+          colorGroupName: 'second',
           value: 15,
         },
         {
-          groupName: 'third',
+          colorGroupName: 'third',
           value: 7,
         },
       ],
       [
         {
-          groupName: 'first',
+          colorGroupName: 'first',
           value: 25,
         },
         {
-          groupName: 'second',
+          colorGroupName: 'second',
           value: 1,
         },
         {
-          groupName: 'third',
+          colorGroupName: 'third',
           value: 5,
         },
       ],
     ],
   },
   [DataType.BarChart]: {
-    colors: ['#56B9F2', '#EB5757', '#FCA355'],
+    colorGroups: {
+      first: '#56B9F2',
+      second: '#EB5757',
+      third: '#FCA355',
+    },
     data: [
       {
-        groupName: 'март',
-        values: [410, 600, 270],
+        label: 'март',
+        values: [
+          { value: 410, colorGroupName: 'first' },
+          { value: 600, colorGroupName: 'second' },
+          { value: 270, colorGroupName: 'third' },
+        ],
       },
       {
-        groupName: 'апрель',
-        values: [670, 1000, 1100],
+        label: 'апрель',
+        values: [
+          { value: 670, colorGroupName: 'first' },
+          { value: 1000, colorGroupName: 'second' },
+          { value: 1100, colorGroupName: 'third' },
+        ],
       },
       {
-        groupName: 'май',
-        values: [1200, 630, 100],
+        label: 'май',
+        values: [
+          { value: 1200, colorGroupName: 'first' },
+          { value: 630, colorGroupName: 'second' },
+          { value: 100, colorGroupName: 'third' },
+        ],
       },
     ],
   },
-  [DataType.LinearChart]: [
-    {
-      color: '#20B55F',
-      values: [{ x: 0, y: -1 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: 4 }],
-      dots: true,
+  [DataType.LinearChart]: {
+    colorGroups: {
+      first: '#20B55F',
+      second: '#56B9F2',
     },
-    {
-      color: '#56B9F2',
-      values: [{ x: 0, y: -2 }, { x: 1, y: 4 }, { x: 2, y: 0 }, { x: 3, y: 5 }],
-    },
-  ],
+    data: [
+      {
+        colorGroupName: 'first',
+        values: [{ x: 0, y: -1 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: 4 }],
+        dots: true,
+      },
+      {
+        colorGroupName: 'second',
+        values: [{ x: 0, y: -2 }, { x: 1, y: 4 }, { x: 2, y: 0 }, { x: 3, y: 5 }],
+      },
+    ],
+  },
   [DataType.Pyramid]: [
     {
       value: 3,
@@ -125,6 +147,13 @@ const mockData: DataMap = {
   ],
   [DataType.Text]: 'Какой-то текст',
   [DataType.TableLegend]: {
+    colorGroups: {
+      first: 'red',
+      second: 'yellow',
+      third: 'green',
+      fourth: 'yellowgreen',
+      fifth: 'white',
+    },
     list: [
       {
         field: 'Приобское',
@@ -175,27 +204,27 @@ const mockData: DataMap = {
     legendFields: [
       {
         field: 'Приобское',
-        color: 'red',
+        colorGroupName: 'first',
         typeLegend: 'dot',
       },
       {
         field: 'Уренгойское газонефтеконденстаное',
-        color: 'yellow',
+        colorGroupName: 'second',
         typeLegend: 'dot',
       },
       {
         field: 'Красноленинская группа',
-        color: 'green',
+        colorGroupName: 'third',
         typeLegend: 'dot',
       },
       {
         field: 'Великое',
-        color: 'yellowgreen',
+        colorGroupName: 'fourth',
         typeLegend: 'dot',
       },
       {
         field: 'Русское газонефтяное',
-        color: 'white',
+        colorGroupName: 'fifth',
         typeLegend: 'dot',
       },
     ],
@@ -242,66 +271,112 @@ const mockData: DataMap = {
     text: 'Работа по расписанию',
   },
   [DataType.MultiBarChart]: {
-    categories: ['apples', 'bananas', 'cherries', 'dates'],
-    values: [
-      { month: 'Q1-2016', apples: 3840, bananas: 1920, cherries: -23, dates: 400 },
-      { month: 'Q2-2016', apples: 1600, bananas: 1440, cherries: 45, dates: 400 },
-      { month: 'Q3-2016', apples: 640, bananas: 960, cherries: 73, dates: 600 },
-      { month: 'Q4-2016', apples: 320, bananas: 480, cherries: 85, dates: 400 },
-    ],
-    keyGroup: 'month',
+    colorGroups: {
+      apples: '#56B9F2',
+      bananas: '#EB5757',
+      cherries: '#FCA355',
+      dates: 'aquamarine',
+    },
+    data: {
+      categories: ['apples', 'bananas', 'cherries', 'dates'],
+      values: [
+        { month: 'Q1-2016', apples: 3840, bananas: 1920, cherries: -23, dates: 400 },
+        { month: 'Q2-2016', apples: 1600, bananas: 1440, cherries: 45, dates: 400 },
+        { month: 'Q3-2016', apples: 640, bananas: 960, cherries: 73, dates: 600 },
+        { month: 'Q4-2016', apples: 320, bananas: 480, cherries: 85, dates: 400 },
+      ],
+      keyGroup: 'month',
+    },
   },
-  [DataType.ProgressBar]: [
-    {
-      value: 70,
-      valueMin: 0,
-      valueMax: 120,
-      summary: 70,
-      color: '#FFBA3B',
+  [DataType.Legend]: {
+    colorGroups: {
+      first: 'red',
+      second: 'yellow',
+      third: 'aquamarine',
+      fourth: 'purple',
+      fifth: 'green',
     },
-    {
-      value: 7000,
-      valueMin: 0,
-      valueMax: 15000,
-      ticks: [
-        {
-          label: '0',
-          value: 0,
-        },
-        {
-          label: 'Цель',
-          value: 5500,
-        },
-        {
-          label: 'Амцель',
-          value: 12000,
-        },
-      ],
-      summary: 7000,
-      color: 'green',
+    data: [
+      {
+        colorGroupName: 'first',
+        text: 'Красноватый текст',
+      },
+      {
+        colorGroupName: 'second',
+        text: 'Желтоватый текст',
+      },
+      {
+        colorGroupName: 'third',
+        text: 'Убер длинный и превозмогающий усилия аквамариновый текст',
+      },
+      {
+        colorGroupName: 'fourth',
+        text: 'Пурпурный текст',
+      },
+      {
+        colorGroupName: 'fifth',
+        text: 'Зеленый цвет',
+      },
+    ],
+  },
+  [DataType.ProgressBar]: {
+    colorGroups: {
+      first: '#FFBA3B',
+      second: 'green',
+      third: '#00CFDE',
     },
-    {
-      value: 3000,
-      valueMin: 0,
-      valueMax: 12000,
-      ticks: [
-        {
-          label: '0',
-          value: 0,
-        },
-        {
-          label: '',
-          value: 5500,
-        },
-        {
-          label: '12000',
-          value: 12000,
-        },
-      ],
-      summary: '3 тысячи',
-      color: '#00CFDE',
-    },
-  ],
+    data: [
+      {
+        value: 70,
+        valueMin: 0,
+        valueMax: 120,
+        summary: 70,
+        colorGroupName: 'first',
+      },
+      {
+        value: 7000,
+        valueMin: 0,
+        valueMax: 15000,
+        ticks: [
+          {
+            label: '0',
+            value: 0,
+          },
+          {
+            label: 'Цель',
+            value: 5500,
+          },
+          {
+            label: 'Амцель',
+            value: 12000,
+          },
+        ],
+        summary: 7000,
+        colorGroupName: 'second',
+      },
+      {
+        value: 3000,
+        valueMin: 0,
+        valueMax: 12000,
+        ticks: [
+          {
+            label: '0',
+            value: 0,
+          },
+          {
+            label: '',
+            value: 5500,
+          },
+          {
+            label: '12000',
+            value: 12000,
+          },
+        ],
+        summary: '3 тысячи',
+        colorGroupName: 'third',
+      },
+    ],
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

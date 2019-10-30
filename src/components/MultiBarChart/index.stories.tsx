@@ -19,7 +19,8 @@ storiesOf('components/MultiBarChart', module)
         orientation="vertical"
         valuesTick={4}
         hasRatio={false}
-        data={object('data', getWidgetMockData(DataType.MultiBarChart))}
+        data={object('data', getWidgetMockData(DataType.MultiBarChart).data)}
+        colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
       />
     )
   })

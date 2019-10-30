@@ -6,7 +6,7 @@ import { ColorGroups } from '@/dashboard/types'
 
 type DataItem = {
   value: number
-  groupName: string
+  colorGroupName: string
 }
 
 export type Data = readonly DataItem[]
@@ -37,7 +37,7 @@ export const Donut: React.FC<Props> = ({ colorGroups, data, innerRadius, outerRa
         .selectAll('path')
         .data(pieData)
         .join('path')
-        .attr('fill', d => colorGroups[d.data.groupName])
+        .attr('fill', d => colorGroups[d.data.colorGroupName])
         .attr('d', arc)
     }
   })

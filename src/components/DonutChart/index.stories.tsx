@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -13,5 +14,10 @@ storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 200, height: 200 }))
   .add('interactive', () => {
-    return <DonutChart {...getWidgetMockData(DataType.Donut)} />
+    return (
+      <DonutChart
+        data={getWidgetMockData(DataType.Donut).data}
+        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
+      />
+    )
   })
