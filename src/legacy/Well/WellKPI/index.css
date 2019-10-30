@@ -1,9 +1,0 @@
-.main {
-  font-size: var(--main-font-size);
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  width: 100%;
-}
