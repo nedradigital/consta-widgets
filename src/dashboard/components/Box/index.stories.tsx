@@ -7,6 +7,7 @@ import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { exampleDatasets } from '@/dashboard/index.stories'
+import { BoxItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 import {
@@ -19,7 +20,7 @@ import {
 } from '@/widgets/CardWithBadge'
 import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
 
-import { Box, BoxItem } from '.'
+import { Box } from '.'
 
 const cardValueWithBadgeKey = getUniqueName('CardValueWithBadge')
 const initialItems: readonly BoxItem[] = [

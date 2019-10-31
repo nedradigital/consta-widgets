@@ -71,7 +71,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
-    "@gaz/configs": "0.1.22",
+    "@gaz/configs": "0.1.23",
     "@storybook/addon-actions": "5.2.5",
     "@storybook/addon-info": "5.2.5",
     "@storybook/addon-knobs": "5.2.5",

@@ -6,21 +6,18 @@ import useDimensions from 'react-use-dimensions'
 import { updateAt } from '@gaz/utils/lib/array'
 import { updateBaseSize } from '@gaz/utils/lib/css'
 
-import { Box, BoxItem } from '@/dashboard/components/Box'
+import { Box } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
-import { Data, Dataset, Settings } from '@/dashboard/types'
+import { BoxItem, DashboardState, Data, Dataset } from '@/dashboard/types'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 
 import css from './index.css'
 
 const GridLayout = WidthProvider(ReactGridLayout)
 
-export type Config = { [key: string]: readonly BoxItem[] }
-
-export type DashboardState = {
-  boxes: readonly Layout[]
-  config: Config
-  settings: Settings
+type Props = {
+  dashboard: DashboardState
+  onChange: (dashboard: Partial<DashboardState>) => void
 }
 
 export type DashboardProps = {
@@ -29,8 +26,6 @@ export type DashboardProps = {
   cols?: number
   datasets: readonly Dataset[]
   viewMode: boolean
-  onChange: (dashboard: DashboardState) => void
-  dashboard: DashboardState
   data: Data
   baseFontSize: number
   baseWidthForScaling?: number
@@ -38,7 +33,7 @@ export type DashboardProps = {
   rowsCount: number
 }
 
-export const Dashboard: React.FC<DashboardProps> = props => {
+export const Dashboard: React.FC<DashboardProps & Props> = props => {
   const {
     cols,
     viewMode,
@@ -53,7 +48,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     baseHeightForScaling,
     rowsCount,
   } = props
-  const { boxes, config, settings } = dashboard
+  const { boxes, config } = dashboard
 
   const [demensionRef, { width, height }, element] = useDimensions()
 
@@ -70,7 +65,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
           { i: getUniqueName(ItemTypes.BOX), x, y, w: 1, h: 1 },
         ]
 
-        onChange({ boxes: newBoxes, config, settings })
+        onChange({ boxes: newBoxes })
       })
     },
     collect: monitor => ({
@@ -84,7 +79,7 @@ export const Dashboard: React.FC<DashboardProps> = props => {
   }
 
   const onResizeStop = (value: readonly Layout[]) => {
-    onChange({ boxes: value, config, settings })
+    onChange({ boxes: value })
   }
 
   const removeBox = (name: string) => {
@@ -94,18 +89,15 @@ export const Dashboard: React.FC<DashboardProps> = props => {
     onChange({
       boxes: boxes.filter(item => item.i !== name),
       config: restConfig,
-      settings,
     })
   }
 
   const changeBox = (name: string, items: readonly BoxItem[]) => {
     onChange({
-      boxes,
       config: {
         ...config,
         [name]: items,
       },
-      settings,
     })
   }
 
@@ -114,8 +106,6 @@ export const Dashboard: React.FC<DashboardProps> = props => {
 
     onChange({
       boxes: updateAt(boxes, index, { i: box.i, x: box.x, y: box.y, w: box.w, h: box.h }),
-      config,
-      settings,
     })
   }
 

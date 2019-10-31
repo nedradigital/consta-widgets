@@ -3,28 +3,21 @@ import React from 'react'
 import { removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
-import { Data, Dataset } from '@/dashboard/types'
+import { BoxItem, ColumnsContent, Data, Dataset } from '@/dashboard/types'
 
-import { Box, BoxItem } from '../Box'
+import { Box } from '../Box'
 
 import css from './index.css'
 
-export type Items = ReadonlyArray<ReadonlyArray<BoxItem>>
-
-export type ColumnsItem = {
-  columns: Items
-  type: 'columns'
-}
-
 type Props = {
-  columns?: Items
+  columns?: ColumnsContent
   data: Data
   datasets: readonly Dataset[]
   viewMode: boolean
-  onChange: (columns: Items) => void
+  onChange: (columns: ColumnsContent) => void
 }
 
-const defaultColumns: Items = [[], []]
+const defaultColumns: ColumnsContent = [[], []]
 
 export const Columns: React.FC<Props> = ({
   datasets,

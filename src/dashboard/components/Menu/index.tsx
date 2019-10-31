@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { Box } from '@/dashboard/components/Box'
+import { migrations } from '@/dashboard/migration/migrations'
 import { MarginSize, Settings } from '@/dashboard/types'
 
 import css from './index.css'
@@ -16,7 +17,9 @@ const margins = Object.keys(marginSizes) as readonly MarginSize[]
 
 type Props = {
   settings: Settings
-  onChange?: (settings: Settings) => void
+  version: number
+  onChange: (settings: Settings) => void
+  onChangeVersion: (newVersion: number) => void
 }
 
 export type MenuProps = {
@@ -28,18 +31,22 @@ export type MenuProps = {
 export const Menu: React.FC<Props & MenuProps> = ({
   viewMode,
   settings,
+  version,
   onChange,
   onToggleMode,
   onClear,
+  onChangeVersion,
 }) => {
   const handleChangeMargin = React.useCallback(
     (event: React.ChangeEvent<HTMLSelectElement>) => {
-      if (!!onChange) {
-        onChange({ ...settings, margin: event.target.value as MarginSize })
-      }
+      onChange({ ...settings, margin: event.target.value as MarginSize })
     },
     [onChange]
   )
+
+  const handleChangeVersion = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    onChangeVersion(Number(event.target.value))
+  }
 
   return (
     <div className={css.menu}>
@@ -68,6 +75,15 @@ export const Menu: React.FC<Props & MenuProps> = ({
           {margins.map(size => (
             <option key={size} value={size}>
               {size}
+            </option>
+          ))}
+        </select>
+        <p>Версия данных:</p>
+        <select value={version} onChange={handleChangeVersion}>
+          <option value={0}>0</option>
+          {migrations.map(({ versionTo }) => (
+            <option key={versionTo} value={versionTo}>
+              {versionTo}
             </option>
           ))}
         </select>
