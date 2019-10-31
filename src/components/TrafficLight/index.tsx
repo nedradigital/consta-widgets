@@ -28,7 +28,12 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
   const sizeClass = { s: css.sizeS, m: css.sizeM }[size]
 
   if (type === 'default') {
-    const statusClass = { normal: css.normal, warning: css.warning, danger: css.danger }[status]
+    const statusClass = {
+      normal: css.normal,
+      warning: css.warning,
+      danger: css.danger,
+      empty: css.empty,
+    }[status]
 
     return (
       <div className={classnames(css.background, sizeClass)}>

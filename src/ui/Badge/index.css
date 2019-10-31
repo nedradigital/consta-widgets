@@ -24,4 +24,8 @@
   &.danger {
     background-color: var(--color-danger);
   }
+
+  &.empty {
+    background-color: transparent;
+  }
 }

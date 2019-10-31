@@ -4,7 +4,7 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const statuses = ['danger', 'normal', 'warning'] as const
+export const statuses = ['danger', 'normal', 'warning', 'empty'] as const
 export type Status = typeof statuses[number]
 
 type Props = {
