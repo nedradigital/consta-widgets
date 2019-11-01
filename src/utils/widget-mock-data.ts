@@ -382,12 +382,10 @@ const mockData: DataMap = {
   [DataType.DatePicker]: {
     value: new Date(),
     onChange: () => null,
-    onClear: () => null,
   },
   [DataType.RangePicker]: {
     value: [new Date(), new Date()],
     onChange: () => null,
-    onClear: () => null,
   },
 }
 

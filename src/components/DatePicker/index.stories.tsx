@@ -12,7 +12,7 @@ storiesOf('components/DatePicker', module)
     const Wrapper = () => {
       const [date, setDate] = React.useState<Date | undefined>(new Date())
 
-      return <DatePicker value={date} onChange={setDate} onClear={() => setDate(undefined)} />
+      return <DatePicker value={date} onChange={setDate} />
     }
 
     return <Wrapper />

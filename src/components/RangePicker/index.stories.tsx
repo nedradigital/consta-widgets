@@ -12,7 +12,7 @@ storiesOf('components/RangePicker', module)
     const Wrapper = () => {
       const [date, setDate] = React.useState<DateRange>([new Date(), new Date()])
 
-      return <RangePicker value={date} onChange={setDate} onClear={() => setDate([])} />
+      return <RangePicker value={date} onChange={setDate} />
     }
 
     return <Wrapper />
