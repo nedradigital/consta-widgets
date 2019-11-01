@@ -1,10 +1,12 @@
 import { Data as BarChartData } from '@/components/BarChart'
+import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
 import { Data as LegendData } from '@/components/Legend'
 import { Line } from '@/components/LinearChart'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
 import { Data as PyramidData } from '@/components/PyramidChart'
+import { Data as RangePickerData } from '@/components/RangePicker'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
@@ -39,6 +41,8 @@ export enum DataType {
   MultiBarChart,
   ProgressBar,
   Legend,
+  DatePicker,
+  RangePicker,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -81,6 +85,8 @@ export type DataMap = {
   [DataType.Legend]: {
     data: LegendData
   } & WithColorGroups
+  [DataType.DatePicker]: DatePickerData
+  [DataType.RangePicker]: RangePickerData
 }
 
 export type Dataset = {
