@@ -165,12 +165,12 @@ export const Axis: React.FC<Props> = ({
     const grids = [
       {
         el: xGridRef.current,
-        axis: isVertical ? xAxis : xGridBase.tickValues([...mainTickValues]),
+        axis: isVertical ? xAxis : xGridBase.tickValues(xLabelTicks ? [...mainTickValues] : [0]),
         withGuide: xGuide,
       },
       {
         el: yGridRef.current,
-        axis: isVertical ? yGridBase.tickValues([...mainTickValues]) : yAxis,
+        axis: isVertical ? yGridBase.tickValues(yGridTicks ? [...mainTickValues] : [0]) : yAxis,
         withGuide: yGuide,
       },
     ] as const
