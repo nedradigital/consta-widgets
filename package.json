@@ -11,8 +11,8 @@
   "scripts": {
     "build": "yarn generate-css-types && ROOT_PATH=./ NODE_ENV=production webpack --config node_modules/@gaz/configs/config/webpack/library.webpack.js",
     "build:watch": "yarn generate-css-types && ROOT_PATH=./ NODE_ENV=development webpack --config node_modules/@gaz/configs/config/webpack/library.webpack.js --watch",
-    "storybook": "NODE_ENV=development ROOT_PATH=./ start-storybook -c node_modules/@gaz/configs/config/storybook -p 6006 --ci",
-    "storybook:build": "NODE_ENV=production ROOT_PATH=./ build-storybook -c node_modules/@gaz/configs/config/storybook -o build/storybook",
+    "storybook": "NODE_ENV=development ROOT_PATH=./ NODE_PATH=./node_modules start-storybook -c node_modules/@gaz/configs/config/storybook -p 6006 --ci",
+    "storybook:build": "NODE_ENV=production ROOT_PATH=./ NODE_PATH=./node_modules build-storybook -c node_modules/@gaz/configs/config/storybook -o build/storybook",
     "lint": "npm-run-all --parallel lint:*",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "lint-fix": "npm-run-all format lint-fix:*",
