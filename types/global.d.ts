@@ -1,6 +1,7 @@
 import R from 'react'
 
 import 'jest-enzyme'
+import 'jest-extended'
 
 import { IResizeObserver } from './resize-observer'
 

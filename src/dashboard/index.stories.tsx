@@ -7,7 +7,6 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { Dataset, DataType } from '@/dashboard/types'
 
 import { Constructor, DashboardState } from './'
-import { Config } from './components/Dashboard'
 
 const getPadding = () => [number('padding x', 15), number('padding y', 15)] as const
 const getRowsCount = () => number('rowsCount', 4)
@@ -44,6 +43,8 @@ const cols = 12
 
 const storageName = 'story::dashboard'
 
+const EMPTY_DASHBOARD: DashboardState = { version: 2, boxes: [], config: {}, settings: {} }
+
 const getStateFromStorage = (): DashboardState => {
   const str = localStorage.getItem(storageName)
 
@@ -51,18 +52,12 @@ const getStateFromStorage = (): DashboardState => {
     return JSON.parse(str)
   }
 
-  return {
-    boxes: [],
-    config: {},
-    settings: {},
-  }
+  return EMPTY_DASHBOARD
 }
 
-const setStateToStorage = (value: DashboardState | Config) => {
+const setStateToStorage = (value: DashboardState) => {
   localStorage.setItem(storageName, JSON.stringify(value))
 }
-
-const INITIAL_VALUES: DashboardState = { boxes: [], config: {}, settings: {} }
 
 storiesOf('dashboard/Constructor', module)
   .addDecorator(withSmartKnobs())
@@ -72,7 +67,7 @@ storiesOf('dashboard/Constructor', module)
         viewMode={false}
         datasets={exampleDatasets}
         cols={cols}
-        dashboard={INITIAL_VALUES}
+        dashboard={EMPTY_DASHBOARD}
         data={{}}
         onChange={() => {
           /**/
@@ -84,7 +79,7 @@ storiesOf('dashboard/Constructor', module)
   })
   .add('with state', () => {
     function Wrapper() {
-      const [dashboard, setDashboard] = React.useState<DashboardState>(INITIAL_VALUES)
+      const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
       const [viewMode, setViewMode] = React.useState(false)
 
       React.useEffect(() => {

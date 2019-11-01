@@ -8,7 +8,20 @@ import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
+import { Dashboard2 } from '@/dashboard/migration/migrations/dashboard2'
 import { Status } from '@/ui/Badge'
+
+import Dashboard = Dashboard2
+
+export type MarginSize = Dashboard.MarginSize
+export type Settings = Dashboard.Settings
+export type WidgetItem = Dashboard.WidgetItem
+export type ColumnsItem = Dashboard.ColumnsItem
+export type ColumnsContent = Dashboard.ColumnsContent
+export type BoxItem = Dashboard.BoxItem
+export type Config = Dashboard.Config
+export type DashboardState = Dashboard.State
+export type DashboardVersion = DashboardState['version']
 
 export enum DataType {
   Chart2D,
@@ -78,10 +91,3 @@ export type Dataset = {
 }
 
 export type Data = { [k: string]: DataMap[DataType] }
-
-export type MarginSize = 's' | 'm' | 'l' | 'xl'
-
-export type Settings = {
-  cols?: number
-  margin?: MarginSize
-}

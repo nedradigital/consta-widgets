@@ -5,6 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { boolean } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
+import { ColumnsItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 import {
@@ -13,7 +14,7 @@ import {
 } from '@/widgets/CardWithBadge'
 import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
 
-import { Columns, ColumnsItem } from '.'
+import { Columns } from '.'
 
 const columnsItem: ColumnsItem = {
   type: 'columns',

@@ -8,22 +8,10 @@ import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { WidgetType } from '@/utils/WidgetFactory'
 
 import { ItemTypes } from '../../dnd-constants'
-import { Data, Dataset } from '../../types'
-import { Columns, ColumnsItem, Items as ColumnItems } from '../Columns'
+import { BoxItem, ColumnsContent, Data, Dataset, WidgetItem } from '../../types'
+import { Columns } from '../Columns'
 
 import css from './index.css'
-
-export type WidgetItem = {
-  type: 'widget'
-  id: string
-  debugName: string
-  widgetType: string
-  params: {
-    [key: string]: any
-  }
-}
-
-export type BoxItem = WidgetItem | ColumnsItem
 
 type Props = {
   datasets: readonly Dataset[]
@@ -169,7 +157,7 @@ export const Box: React.FC<Props> = ({
     onChange(move(items, index, index + direction))
   }
 
-  const changeColumnsConfig = (index: number, columns: ColumnItems) => {
+  const changeColumnsConfig = (index: number, columns: ColumnsContent) => {
     const item = items[index]
 
     if (item.type === 'columns') {
