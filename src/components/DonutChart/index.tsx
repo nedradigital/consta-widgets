@@ -37,7 +37,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups }) => {
   return (
     <div ref={ref} className={css.main}>
       <svg width={size} height={size}>
-        {data.map((d, index) => {
+        {data.slice(0, 3).map((d, index) => {
           const radius = mainRadius - (sizeDonut + padding) * index
 
           return (
