@@ -97,6 +97,52 @@ const getYScale = (domain: NumberRange, height: number) =>
     .domain([...domain])
     .range(getYRange(height))
 
+export const getXDomain = (isVertical: boolean, items: readonly Item[]): NumberRange => {
+  const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+  const domain = d3.extent(items, v => v.x) as NumberRange
+  return padDomain(domain, left, right)
+}
+
+export const getYDomain = (isVertical: boolean, items: readonly Item[]): NumberRange => {
+  const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+  const domain = d3.extent(items, v => v.y)
+  return padDomain(
+    (isVertical
+      ? [...domain].reverse() // Чтобы 0 был сверху
+      : domain) as NumberRange,
+    bottom,
+    top
+  )
+}
+
+export const calculateSecondaryDomain = (
+  isVertical: boolean,
+  mainDomainMin: number,
+  mainDomainMax: number,
+  lines: readonly Line[],
+  getValue: (v: Item) => number,
+  getDomain: (isVertical: boolean, items: readonly Item[]) => NumberRange
+) => {
+  const lineDomains = lines.map(({ values }) => {
+    const zoomRangeIndexes = _.sortBy([
+      getIndexWithFallbackToDefault(_.findLastIndex(values, v => getValue(v) <= mainDomainMin), 0),
+      getIndexWithFallbackToDefault(
+        _.findIndex(values, v => getValue(v) >= mainDomainMax),
+        values.length - 1
+      ),
+    ])
+
+    const valuesInZoomRange = values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
+
+    return getDomain(isVertical, valuesInZoomRange)
+  })
+
+  return [
+    Math.min(...lineDomains.map(d => d[0])),
+    Math.max(...lineDomains.map(d => d[1])),
+  ] as NumberRange
+}
+
 export class LinearChart extends React.Component<Props, State> {
   ref = React.createRef<HTMLDivElement>()
 
@@ -237,32 +283,12 @@ export class LinearChart extends React.Component<Props, State> {
             xLabelsPos={xLabelsPos}
             yLabelsPos={yLabelsPos}
             domain={mainAxis.currentDomain}
-            originalDomain={mainAxis.getDomain(this.getAllValues())}
+            originalDomain={mainAxis.getDomain(Boolean(isVertical), this.getAllValues())}
             onZoom={this.onZoom}
             lines={lines}
           />
         )}
       </div>
-    )
-  }
-
-  getXDomain = (items: readonly Item[]): NumberRange => {
-    const { isVertical } = this.props
-    const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
-    const domain = d3.extent(items, v => v.x) as NumberRange
-    return padDomain(domain, left, right)
-  }
-
-  getYDomain = (items: readonly Item[]): NumberRange => {
-    const { isVertical } = this.props
-    const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
-    const domain = d3.extent(items, v => v.y)
-    return padDomain(
-      (isVertical
-        ? [...domain].reverse() // Чтобы 0 был сверху
-        : domain) as NumberRange,
-      bottom,
-      top
     )
   }
 
@@ -308,8 +334,8 @@ export class LinearChart extends React.Component<Props, State> {
 
   updateDomains() {
     const { isVertical } = this.props
-    const xDomain = this.getXDomain(this.getAllValues())
-    const yDomain = this.getYDomain(this.getAllValues())
+    const xDomain = getXDomain(Boolean(isVertical), this.getAllValues())
+    const yDomain = getYDomain(Boolean(isVertical), this.getAllValues())
 
     this.setState({
       xDomain,
@@ -368,7 +394,7 @@ export class LinearChart extends React.Component<Props, State> {
       ? {
           main: {
             currentDomain: yDomain,
-            getDomain: this.getYDomain,
+            getDomain: getYDomain,
             setDomain: setYDomain,
             getScale: getYScale,
             rescale: 'rescaleY',
@@ -377,14 +403,14 @@ export class LinearChart extends React.Component<Props, State> {
           },
           secondary: {
             currentDomain: xDomain,
-            getDomain: this.getXDomain,
+            getDomain: getXDomain,
             setDomain: setXDomain,
           },
         }
       : {
           main: {
             currentDomain: xDomain,
-            getDomain: this.getXDomain,
+            getDomain: getXDomain,
             setDomain: setXDomain,
             getScale: getXScale,
             rescale: 'rescaleX',
@@ -393,20 +419,20 @@ export class LinearChart extends React.Component<Props, State> {
           },
           secondary: {
             currentDomain: yDomain,
-            getDomain: this.getYDomain,
+            getDomain: getYDomain,
             setDomain: setYDomain,
           },
         }
   }
 
-  // TODO: подумать как можно организовать тест для проверки вычисляемого значения.
   onZoom = () => {
+    const { isVertical } = this.props
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
 
-    const originalMainDomain = mainAxis.getDomain(this.getAllValues())
+    const originalMainDomain = mainAxis.getDomain(Boolean(isVertical), this.getAllValues())
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
-    const newMainDomain = newMainScale.domain()
+    const newMainDomain: NumberRange = newMainScale.domain()
     const newMainTickValues = this.getTickValues(this.getAllValues(), newMainDomain)
 
     if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
@@ -420,34 +446,14 @@ export class LinearChart extends React.Component<Props, State> {
     const domainMin = Math.min(...newMainDomain)
     const domainMax = Math.max(...newMainDomain)
 
-    const lineDomains = this.getLines().map(({ values }) => {
-      const zoomRangeIndexes = _.sortBy([
-        getIndexWithFallbackToDefault(
-          _.findLastIndex(values, v => mainAxis.getValue(v) <= domainMin),
-          0
-        ),
-        getIndexWithFallbackToDefault(
-          _.findIndex(values, v => mainAxis.getValue(v) >= domainMax),
-          values.length - 1
-        ),
-      ])
-
-      const countLines = zoomRangeIndexes[1] - zoomRangeIndexes[0]
-
-      // Если количество лучей, которое мы видим, больше двух, то нам нужен домен только видимых точек
-      // Иначе мы берем домены точек, которые за экраном
-      const valuesInZoomRange =
-        countLines > 2
-          ? values.slice(zoomRangeIndexes[0] + (domainMin <= 0 ? 0 : 1), zoomRangeIndexes[1] + 1)
-          : values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
-
-      return secondaryAxis.getDomain(valuesInZoomRange)
-    })
-
-    const newSecondaryDomain = [
-      Math.min(...lineDomains.map(d => d[0])),
-      Math.max(...lineDomains.map(d => d[1])),
-    ] as NumberRange
+    const newSecondaryDomain = calculateSecondaryDomain(
+      Boolean(isVertical),
+      domainMin,
+      domainMax,
+      this.getLines(),
+      mainAxis.getValue,
+      secondaryAxis.getDomain
+    )
 
     if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
       this.targetSecondaryDomain = newSecondaryDomain
