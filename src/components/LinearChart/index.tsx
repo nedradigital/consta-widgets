@@ -307,7 +307,7 @@ export class LinearChart extends React.Component<Props, State> {
     const ticks = gridConfig[isVertical ? 'y' : 'x'].labelTicks || 0
     const indexes = d3.ticks(0, uniqValues.length - 1, ticks).filter(Number.isInteger)
 
-    return indexes.map(index => uniqValues[index])
+    return indexes.map(index => uniqValues[index]).filter(Number.isInteger)
   }
 
   getLines = (): readonly Line[] => {
