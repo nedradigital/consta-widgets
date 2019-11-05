@@ -8,7 +8,16 @@ import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
 import { Dashboard, DashboardProps } from './components/Dashboard'
 import { marginSizes, Menu, MenuProps } from './components/Menu'
 import css from './index.css'
-import { DashboardState, DashboardVersion, Data, DataMap, Dataset } from './types'
+import {
+  BoxItem,
+  ColumnsItem,
+  DashboardState,
+  DashboardVersion,
+  Data,
+  DataMap,
+  Dataset,
+  WidgetItem,
+} from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -17,6 +26,9 @@ export type DashboardState = DashboardState
 export type Data = Data
 export type DataMap = DataMap
 export type Dataset = Dataset
+export type WidgetItem = WidgetItem
+export type BoxItem = BoxItem
+export type ColumnsItem = ColumnsItem
 
 type ConstructorProps = DashboardProps &
   MenuProps & {
