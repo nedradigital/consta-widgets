@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { WidgetWrapper } from '@/components/WidgetWrapper'
 import { Data as DashboardData, DataMap, Dataset, DataType } from '@/dashboard/types'
+import { dataColorsValidator } from '@/utils/validators'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 
 export type WidgetType<Data, Params> = React.FC<{
@@ -69,6 +70,19 @@ export const createWidget = <
         [paramName]: newValue,
       })
     const dataset = params.datasetId ? datasets.find(d => d.id === params.datasetId) : undefined
+
+    if (dataType) {
+      const errors = dataColorsValidator(dataType, widgetData)
+
+      if (errors.length) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `Проверьте данные в датасете: ${
+            dataset ? dataset.name : '[неизвестный датасет]'
+          }. Имя групп(ы) не найдено в описании colorGroups: ${errors.join(',')}`
+        )
+      }
+    }
 
     return (
       <WidgetWrapper
