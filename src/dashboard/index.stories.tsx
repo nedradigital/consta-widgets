@@ -105,8 +105,8 @@ storiesOf('dashboard/Constructor', module)
             onToggleMode={() => setViewMode(!viewMode)}
             viewMode={viewMode}
             data={{}}
-            baseWidthForScaling={1024}
-            baseHeightForScaling={768}
+            baseWidthForScaling={number('baseWidthForScaling', 1024)}
+            baseHeightForScaling={number('baseHeightForScaling', 768)}
             baseFontSize={16}
             basePadding={getPadding()}
             rowsCount={getRowsCount()}
