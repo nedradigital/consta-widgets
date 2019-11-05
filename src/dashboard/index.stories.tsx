@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { number, object } from '@storybook/addon-knobs'
+import { boolean, number, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -45,6 +45,8 @@ const storageName = 'story::dashboard'
 
 const EMPTY_DASHBOARD: DashboardState = { version: 2, boxes: [], config: {}, settings: {} }
 
+const viewMode = false
+
 const getStateFromStorage = (): DashboardState => {
   const str = localStorage.getItem(storageName)
 
@@ -80,7 +82,6 @@ storiesOf('dashboard/Constructor', module)
   .add('with state', () => {
     function Wrapper() {
       const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
-      const [viewMode, setViewMode] = React.useState(false)
 
       React.useEffect(() => {
         setDashboard(getStateFromStorage())
@@ -102,8 +103,7 @@ storiesOf('dashboard/Constructor', module)
               localStorage.removeItem(storageName)
               location.reload()
             }}
-            onToggleMode={() => setViewMode(!viewMode)}
-            viewMode={viewMode}
+            viewMode={boolean('viewMode', viewMode)}
             data={{}}
             baseWidthForScaling={1024}
             baseHeightForScaling={768}

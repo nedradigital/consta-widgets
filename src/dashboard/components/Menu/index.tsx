@@ -23,17 +23,13 @@ type Props = {
 }
 
 export type MenuProps = {
-  viewMode: boolean
-  onToggleMode?: () => void
   onClear?: () => void
 }
 
 export const Menu: React.FC<Props & MenuProps> = ({
-  viewMode,
   settings,
   version,
   onChange,
-  onToggleMode,
   onClear,
   onChangeVersion,
 }) => {
@@ -61,9 +57,6 @@ export const Menu: React.FC<Props & MenuProps> = ({
         data={{}}
       />
       <div className={css.buttons}>
-        <button type="button" onClick={onToggleMode}>
-          {viewMode ? 'Edit' : 'Preview'}
-        </button>
         <button type="button" onClick={onClear}>
           Clear
         </button>
