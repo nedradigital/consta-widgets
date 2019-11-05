@@ -181,11 +181,18 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines, isVertical },
+      props: { lines, isVertical, gridConfig },
     } = this
 
     if (lines !== prevProps.lines || isVertical !== prevProps.isVertical) {
       this.updateDomains()
+    }
+
+    if (gridConfig.y !== prevProps.gridConfig.y || gridConfig.x !== prevProps.gridConfig.x) {
+      const { main: mainAxis } = this.getAxis()
+      const mainTickValues = this.getTickValues(this.getAllValues(), mainAxis.currentDomain)
+
+      this.setState({ mainTickValues })
     }
   }
 
