@@ -188,7 +188,10 @@ export class LinearChart extends React.Component<Props, State> {
       this.updateDomains()
     }
 
-    if (gridConfig.y !== prevProps.gridConfig.y || gridConfig.x !== prevProps.gridConfig.x) {
+    if (
+      !_.isEqual(gridConfig.y, prevProps.gridConfig.y) ||
+      !_.isEqual(gridConfig.x, prevProps.gridConfig.x)
+    ) {
       const { main: mainAxis } = this.getAxis()
       const mainTickValues = this.getTickValues(this.getAllValues(), mainAxis.currentDomain)
 
