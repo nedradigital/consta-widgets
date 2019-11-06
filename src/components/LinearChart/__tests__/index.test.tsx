@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 
-import { calculateSecondaryDomain, Item, Line, NumberRange } from '../'
+import { calculateSecondaryDomain, getTickValues, Item, Line, NumberRange } from '../'
 
 const horizontalLine: readonly Line[] = [
   {
@@ -37,33 +37,78 @@ const getXDomain = (_: boolean, items: readonly Item[]) => d3.extent(items, v =>
 const getYDomain = (_: boolean, items: readonly Item[]) => d3.extent(items, v => v.y) as NumberRange
 
 describe('<LinearChart />', () => {
-  it('Calculate secondary domain for horizontal mode and single line', () => {
-    const domain = calculateSecondaryDomain(false, 2, 6, horizontalLine, v => v.x, getYDomain)
-    expect(domain).toEqual([0, 9])
+  describe('calculateSecondaryDomain', () => {
+    it('Calculate secondary domain for horizontal mode and single line', () => {
+      const domain = calculateSecondaryDomain(false, 2, 6, horizontalLine, v => v.x, getYDomain)
+      expect(domain).toEqual([0, 9])
+    })
+
+    it('Calculate secondary domain for horizontal mode and multiple lines', () => {
+      const domain = calculateSecondaryDomain(false, 2, 6, horizontalLines, v => v.x, getYDomain)
+      expect(domain).toEqual([-4, 10])
+    })
+
+    it('Calculate secondary domain for horizontal mode in max left position', () => {
+      const domain = calculateSecondaryDomain(false, 1, 2, horizontalLine, v => v.x, getYDomain)
+      expect(domain).toEqual([6, 9])
+    })
+
+    it('Calculate secondary domain for horizontal mode in max right position', () => {
+      const domain = calculateSecondaryDomain(false, 6, 7, horizontalLine, v => v.x, getYDomain)
+      expect(domain).toEqual([0, 3])
+    })
+
+    it('Calculate secondary domain for vertical mode and single line', () => {
+      const domain = calculateSecondaryDomain(true, 1.5, 7.5, verticalLine, v => v.y, getXDomain)
+      expect(domain).toEqual([0, 9])
+    })
+
+    it('Calculate secondary domain for vertical mode and multiple lines', () => {
+      const domain = calculateSecondaryDomain(true, 2, 6, verticalLines, v => v.y, getXDomain)
+      expect(domain).toEqual([-4, 10])
+    })
   })
 
-  it('Calculate secondary domain for horizontal mode and multiple lines', () => {
-    const domain = calculateSecondaryDomain(false, 2, 6, horizontalLines, v => v.x, getYDomain)
-    expect(domain).toEqual([-4, 10])
-  })
+  describe('getTickValues', () => {
+    const values = [{ x: 0, y: 9 }, { x: 1, y: 6 }, { x: 2, y: 3 }, { x: 3, y: 0 }] as const
+    const getGridConfig = ({ labelTicks = 0, gridTicks = 0, guide = false }) => ({
+      x: {
+        labelTicks,
+        gridTicks,
+        guide,
+      },
+      y: {},
+    })
+    const domain = [0, 3] as const
 
-  it('Calculate secondary domain for horizontal mode in max left position', () => {
-    const domain = calculateSecondaryDomain(false, 1, 2, horizontalLine, v => v.x, getYDomain)
-    expect(domain).toEqual([6, 9])
-  })
+    it('returns clean array', () => {
+      const result = getTickValues(values, domain, getGridConfig({}), false)
+      expect(result).toEqual([])
+    })
 
-  it('Calculate secondary domain for horizontal mode in max right position', () => {
-    const domain = calculateSecondaryDomain(false, 6, 7, horizontalLine, v => v.x, getYDomain)
-    expect(domain).toEqual([0, 3])
-  })
+    it('returns array with zero number', () => {
+      const result = getTickValues(values, domain, getGridConfig({ guide: true }), false)
+      expect(result).toEqual([0])
+    })
 
-  it('Calculate secondary domain for vertical mode and single line', () => {
-    const domain = calculateSecondaryDomain(true, 1.5, 7.5, verticalLine, v => v.y, getXDomain)
-    expect(domain).toEqual([0, 9])
-  })
+    it('returns array with uniq values', () => {
+      const result = getTickValues(
+        values,
+        domain,
+        getGridConfig({ labelTicks: 4, guide: true }),
+        false
+      )
+      expect(result).toEqual([0, 1, 2, 3])
+    })
 
-  it('Calculate secondary domain for vertical mode and multiple lines', () => {
-    const domain = calculateSecondaryDomain(true, 2, 6, verticalLines, v => v.y, getXDomain)
-    expect(domain).toEqual([-4, 10])
+    it('returns array if domain is small', () => {
+      const result = getTickValues(
+        values,
+        [0, 1],
+        getGridConfig({ labelTicks: 4, guide: true }),
+        false
+      )
+      expect(result).toEqual([0, 1])
+    })
   })
 })
