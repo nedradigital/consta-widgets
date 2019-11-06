@@ -6,7 +6,7 @@
   &:not(.isNested) {
     padding: 10px;
 
-    background-color: #00273d;
+    background: var(--bg-box);
   }
 
   &:not(.isViewMode) {

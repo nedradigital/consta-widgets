@@ -1,0 +1,10 @@
+.point {
+  fill: currentColor;
+}
+
+.line {
+  fill: currentColor;
+  fill-opacity: 10%;
+  stroke: currentColor;
+  stroke-width: 2;
+}
