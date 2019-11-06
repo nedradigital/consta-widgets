@@ -6,7 +6,7 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { Dataset, DataType } from '@/dashboard/types'
 
-import { Constructor, DashboardState } from './'
+import { Constructor, DashboardState, EMPTY_DASHBOARD } from './'
 
 const getPadding = () => [number('padding x', 15), number('padding y', 15)] as const
 const getRowsCount = () => number('rowsCount', 4)
@@ -42,8 +42,6 @@ export const exampleDatasets: readonly Dataset[] = [
 const cols = 12
 
 const storageName = 'story::dashboard'
-
-const EMPTY_DASHBOARD: DashboardState = { version: 2, boxes: [], config: {}, settings: {} }
 
 const viewMode = false
 

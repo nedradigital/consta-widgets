@@ -36,6 +36,8 @@ type ConstructorProps = DashboardProps &
     onChange: (state: DashboardState) => void
   }
 
+export const EMPTY_DASHBOARD: DashboardState = { version: 2, boxes: [], config: {}, settings: {} }
+
 const SUPPORTED_DASHBOARD_VERSION: DashboardVersion = 2
 
 export const Constructor: React.FC<ConstructorProps> = props => {
