@@ -1,6 +1,6 @@
 {
   "name": "@gaz/dashboard-constructor",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "lib/index.js",
   "author": "CSSSR",
   "license": "UNLICENSED",
