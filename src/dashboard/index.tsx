@@ -32,7 +32,6 @@ export const Constructor: React.FC<ConstructorProps> = props => {
     onChange,
     dashboard: originalDashboard,
     onClear,
-    onToggleMode,
     viewMode,
     datasets,
     data,
@@ -112,15 +111,15 @@ export const Constructor: React.FC<ConstructorProps> = props => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className={css.constructor}>
-        <Menu
-          onClear={onClear}
-          onToggleMode={onToggleMode}
-          onChange={settings => handleChange({ settings })}
-          viewMode={viewMode}
-          settings={dashboard.settings}
-          version={dashboardVersion}
-          onChangeVersion={newVersion => changeVersion(newVersion)}
-        />
+        {!viewMode && (
+          <Menu
+            onClear={onClear}
+            onChange={settings => handleChange({ settings })}
+            settings={dashboard.settings}
+            version={dashboardVersion}
+            onChangeVersion={newVersion => changeVersion(newVersion)}
+          />
+        )}
         <Dashboard
           cols={cols}
           datasets={datasets}
