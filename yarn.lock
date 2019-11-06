@@ -1257,10 +1257,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/configs@0.1.23":
-  version "0.1.23"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.23.tgz#1f7f1593fb341a54d1a40fc2b7c483e15be74e06"
-  integrity sha512-pqaaioyI1V0PDDoZbe1eRVKfxKMgvCB9O14GpYC3/jyMR8AGS6/RWCV5k5BqTfhXn40auHw5Crgx6VdlPvXgqA==
+"@gaz/configs@0.1.24":
+  version "0.1.24"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.24.tgz#fcce3d8f878f17e1407a848b859405e54ab4572d"
+  integrity sha512-jIpfAHJwwePBNA4vMQfm9/uAyooRUF1vOdnPD6Oz5ZSo35pjlc/Wme0cktvzeStCeEJOIYfNSeRwTLkI3CTebQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
