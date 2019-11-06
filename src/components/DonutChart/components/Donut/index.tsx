@@ -16,15 +16,23 @@ type Props = {
   colorGroups: ColorGroups
   innerRadius: number
   outerRadius: number
+  padAngle: number
 }
 
-export const Donut: React.FC<Props> = ({ colorGroups, data, innerRadius, outerRadius }) => {
+export const Donut: React.FC<Props> = ({
+  padAngle,
+  colorGroups,
+  data,
+  innerRadius,
+  outerRadius,
+}) => {
   const ref = createRef<SVGGElement>()
 
   useLayoutEffect(() => {
     if (ref.current) {
       const pieData = d3
         .pie<DataItem>()
+        .padAngle(padAngle)
         .sort(null)
         .value(d => d.value)([...data])
 
