@@ -4,7 +4,7 @@
   height: 100%;
 
   &:not(.isNested) {
-    padding: 10px;
+    padding: calc-size(20);
 
     background: var(--bg-box);
   }
