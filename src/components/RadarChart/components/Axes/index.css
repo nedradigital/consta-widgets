@@ -1,0 +1,42 @@
+.main {
+  --axis-color: #fff;
+}
+
+.label {
+  line-height: 1.3;
+
+  display: inline-block;
+
+  padding: 0 calc-size(2);
+
+  transform: translate(-50%, -50%);
+
+  &.sizeS {
+    font-size: calc-size(10);
+  }
+
+  &.sizeM {
+    font-size: calc-size(12);
+  }
+}
+
+.labelText {
+  opacity: 0.15;
+  color: var(--axis-color);
+}
+
+.innerCircle {
+  fill: var(--axis-color);
+}
+
+.circle {
+  opacity: 0.2;
+  fill: none;
+  stroke: var(--axis-color);
+  stroke-width: 2;
+}
+
+.axis {
+  stroke: var(--axis-color);
+  stroke-width: 1;
+}
