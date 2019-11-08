@@ -35,7 +35,7 @@ export const Axis: React.FC<Props> = ({
   onAxisSizeChange,
   groupScale,
   valuesScale,
-  orientation,
+  orientation = 'vertical',
   valuesSpecifier = 'd',
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
@@ -120,6 +120,10 @@ export const Axis: React.FC<Props> = ({
     })
 
     // Grid lines
+    if (!d3[AxisDirections[orientation]]) {
+      return
+    }
+
     const gridBase = d3[AxisDirections[orientation]](valuesScale)
       .tickSize(isHorizontal ? height : -width)
       .tickFormat(() => '')
