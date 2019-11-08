@@ -24,7 +24,7 @@
     transform: translate(50%, -50%);
 
     &::after {
-      top: 100%;
+      top: calc(100% - 1px);
       left: 50%;
 
       border-top: var(--arrow-size) solid #fff;
@@ -39,7 +39,7 @@
     transform: translate(50%, 50%);
 
     &::after {
-      bottom: 100%;
+      bottom: calc(100% - 1px);
       left: 50%;
 
       border-right: var(--arrow-size) solid transparent;
@@ -55,7 +55,7 @@
 
     &::after {
       top: 50%;
-      right: 100%;
+      right: calc(100% - 1px);
 
       border-top: var(--arrow-size) solid transparent;
       border-right: var(--arrow-size) solid #fff;
@@ -70,7 +70,7 @@
 
     &::after {
       top: 50%;
-      left: 100%;
+      left: calc(100% - 1px);
 
       border-top: var(--arrow-size) solid transparent;
       border-bottom: var(--arrow-size) solid transparent;

@@ -43,7 +43,7 @@ storiesOf('components/RadarChart', module)
             { axisName: 'endurance', value: 4 },
             { axisName: 'charisma', value: 8 },
             { axisName: 'intelligence', value: 9 },
-            { axisName: 'agility', value: 3 },
+            { axisName: 'agility', value: 2 },
           ],
         },
       ]}

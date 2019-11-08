@@ -1,13 +1,10 @@
-import css from './index.css'
+import { Point } from '../../'
 
-type Coords = {
-  xPercent: number
-  yPercent: number
-}
+import css from './index.css'
 
 type Props = {
   size: number
-  points: readonly Coords[]
+  points: readonly Point[]
   lineColor: string
   withFill: boolean
 }
@@ -26,26 +23,13 @@ export const RadarChartFigure: React.FC<Props> = ({ size, points, lineColor, wit
       .join(' ') + ' Z'
 
   return (
-    <g>
-      <path
-        d={linePathD}
-        className={css.line}
-        style={{
-          stroke: lineColor,
-          fill: withFill ? lineColor : 'transparent',
-        }}
-      />
-      {points.map((point, idx) => {
-        return (
-          <circle
-            style={{ fill: lineColor }}
-            key={idx}
-            cx={`${point.xPercent}%`}
-            cy={`${point.yPercent}%`}
-            r={2}
-          />
-        )
-      })}
-    </g>
+    <path
+      d={linePathD}
+      className={css.line}
+      style={{
+        stroke: lineColor,
+        fill: withFill ? lineColor : 'transparent',
+      }}
+    />
   )
 }

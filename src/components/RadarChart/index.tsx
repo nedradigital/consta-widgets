@@ -1,3 +1,4 @@
+import * as React from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
@@ -7,12 +8,19 @@ import { ColorGroups } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartFigure } from './components/Figure'
+import { RadarChartPoints } from './components/Points'
 import css from './index.css'
 
 export type RadarChartFormatLabel = (value: number) => string
 
 const radarChartLabelSizes = ['s', 'm'] as const
 export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
+
+export type Point = {
+  xPercent: number
+  yPercent: number
+  label: string
+}
 
 type Props = {
   maxValue: number
@@ -120,58 +128,85 @@ export const RadarChart: React.FC<Props> = ({
 
   const concentricColors = withConcentricColor ? concentricColorsByTicksAmount[ticks] : undefined
 
+  const pointsForFigures = figures.map(figure =>
+    _.compact(
+      figure.values.map(value => {
+        const theAxis = axesAngles.find(a => a.name === value.axisName)
+
+        return theAxis
+          ? {
+              ...angleToCoord(theAxis.angle, value.value / maxValue),
+              label: formatLabel(value.value),
+            }
+          : undefined
+      })
+    )
+  )
+
+  const colorsForFigures = figures.map(figure =>
+    concentricColors
+      ? {
+          lineColor: `url(#${gradientId})`,
+          withFill: false,
+        }
+      : {
+          lineColor: colorGroups[figure.colorGroupName],
+          withFill: true,
+        }
+  )
+
   return (
     <div ref={ref} className={css.main}>
-      <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} className={css.svg}>
-        {concentricColors && (
-          <defs>
-            <radialGradient id={gradientId} gradientUnits="userSpaceOnUse">
-              {concentricColors.gradient.map(([color, offset], idx) => (
-                <stop key={idx} offset={`${offset}%`} stopColor={color} />
-              ))}
-            </radialGradient>
-          </defs>
-        )}
+      <div
+        className={css.svgWrapper}
+        style={{
+          width: size,
+          height: size,
+        }}
+      >
+        <svg viewBox={`0 0 ${size} ${size}`} className={css.svg}>
+          {concentricColors && (
+            <defs>
+              <radialGradient id={gradientId} gradientUnits="userSpaceOnUse">
+                {concentricColors.gradient.map(([color, offset], idx) => (
+                  <stop key={idx} offset={`${offset}%`} stopColor={color} />
+                ))}
+              </radialGradient>
+            </defs>
+          )}
 
-        <RadarChartAxes
-          ticks={ticks}
-          maxValue={maxValue}
-          backgroundColor={backgroundColor}
-          axesAngles={axesAngles}
-          labelSize={labelSize}
-          formatLabel={formatLabel}
-          colors={concentricColors && concentricColors.circles}
-        />
+          <RadarChartAxes
+            ticks={ticks}
+            maxValue={maxValue}
+            backgroundColor={backgroundColor}
+            axesAngles={axesAngles}
+            labelSize={labelSize}
+            formatLabel={formatLabel}
+            colors={concentricColors && concentricColors.circles}
+          />
 
-        {figures.map(figure => {
-          const points = _.compact(
-            figure.values.map(value => {
-              const theAxis = axesAngles.find(a => a.name === value.axisName)
-
-              return theAxis ? angleToCoord(theAxis.angle, value.value / maxValue) : undefined
-            })
-          )
-
-          const figureColorProps = concentricColors
-            ? {
-                lineColor: `url(#${gradientId})`,
-                withFill: false,
-              }
-            : {
-                lineColor: colorGroups[figure.colorGroupName],
-                withFill: true,
-              }
-
-          return (
+          {figures.map((figure, idx) => (
             <RadarChartFigure
               key={figure.colorGroupName}
               size={size}
-              points={points}
-              {...figureColorProps}
+              points={pointsForFigures[idx]}
+              {...colorsForFigures[idx]}
             />
-          )
-        })}
-      </svg>
+          ))}
+        </svg>
+
+        {/* Точки пришлось положить отдельно, чтобы их хинты были поверх линий
+        (через z-index это сделать не получится, т.к. в svg он не работает) */}
+        <div className={css.points}>
+          {figures.map((figure, idx) => (
+            <RadarChartPoints
+              key={figure.colorGroupName}
+              points={pointsForFigures[idx]}
+              lineColor={colorsForFigures[idx].lineColor}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
