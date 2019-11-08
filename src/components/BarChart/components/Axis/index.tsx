@@ -41,12 +41,13 @@ export const Axis: React.FC<Props> = ({
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
   const gridRef = React.createRef<SVGGElement>()
+  const isHorizontal = orientation === 'horizontal'
 
   const labelsAxis = [
     {
       getEl: () => xLabelsRef.current,
       direction: AxisDirections.bottom,
-      scale: orientation === 'horizontal' ? valuesScale : groupScale,
+      scale: isHorizontal ? valuesScale : groupScale,
       classes: classnames(
         css.labels,
         css.labels_x,
@@ -54,18 +55,13 @@ export const Axis: React.FC<Props> = ({
         orientation === 'vertical' && css.hideLine
       ),
       transform: `translateY(${height}px)`,
-      tickOn: orientation === 'horizontal',
+      tickOn: isHorizontal,
     },
     {
       getEl: () => yLabelsRef.current,
       direction: AxisDirections.left,
-      scale: orientation === 'horizontal' ? groupScale : valuesScale,
-      classes: classnames(
-        css.labels,
-        css.labels_y,
-        css.labels_left,
-        orientation === 'horizontal' && css.hideLine
-      ),
+      scale: isHorizontal ? groupScale : valuesScale,
+      classes: classnames(css.labels, css.labels_y, css.labels_left, isHorizontal && css.hideLine),
       transform: '',
       tickOn: orientation === 'vertical',
     },
@@ -107,11 +103,25 @@ export const Axis: React.FC<Props> = ({
         .attr('class', labels.classes)
         .style('transform', labels.transform)
         .call(axis)
+        .selectAll('text')
+        .style('text-anchor', (_, index, el) => {
+          if (isHorizontal && ['axisBottom', 'axisTop'].includes(labels.direction)) {
+            if (index === 0) {
+              return 'start'
+            }
+            if (index === el.length - 1) {
+              return 'end'
+            }
+            return 'middle'
+          } else {
+            return ''
+          }
+        })
     })
 
     // Grid lines
     const gridBase = d3[AxisDirections[orientation]](valuesScale)
-      .tickSize(orientation === 'horizontal' ? height : -width)
+      .tickSize(isHorizontal ? height : -width)
       .tickFormat(() => '')
 
     if (gridRef.current) {
