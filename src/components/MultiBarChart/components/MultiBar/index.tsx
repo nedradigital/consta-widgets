@@ -2,7 +2,6 @@ import * as React from 'react'
 import { createRef, useLayoutEffect } from 'react'
 import ReactDOMServer from 'react-dom/server'
 
-import classnames from 'classnames'
 import * as d3 from 'd3'
 import { isUndefined } from 'lodash'
 
@@ -259,11 +258,7 @@ export const MultiBar: React.FC<Props> = ({
         return ReactDOMServer.renderToString(
           <Hint
             direction={!isVertical ? 'top' : 'right'}
-            className={classnames(
-              'tooltip_' + idx + layerIndex,
-              css.tooltip,
-              !isVertical ? css.top : css.right
-            )}
+            className={'tooltip_' + idx + layerIndex}
             styles={{
               color,
               transform: !isVertical

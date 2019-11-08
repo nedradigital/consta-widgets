@@ -17,17 +17,3 @@
 .tooltipVertical {
   display: block;
 }
-
-.tooltip {
-  &.right {
-    &::after {
-      right: 98%;
-    }
-  }
-
-  &.top {
-    &::after {
-      top: 97%;
-    }
-  }
-}
