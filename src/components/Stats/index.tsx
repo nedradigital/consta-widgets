@@ -10,9 +10,6 @@ import css from './index.css'
 export const sizes = ['xs', 's', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
-export const fieldUnits = ['', 'сроки', 'суток'] as const
-export type FieldUnits = typeof fieldUnits[number]
-
 export type StyleProps = {
   size?: Size
 }
@@ -20,6 +17,8 @@ export type StyleProps = {
 export type Data = {
   number: string
   percent?: string
+  bottomUnit: string
+  rightUnit: string
 }
 
 type Props = {

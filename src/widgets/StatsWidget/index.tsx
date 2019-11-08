@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Stats } from '@/components/Stats'
-import { fieldUnits, FieldUnits, Size, sizes } from '@/components/Stats'
+import { Size, sizes } from '@/components/Stats'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -22,24 +22,20 @@ type Params = {
   topStyles: string
   size: Size
   top: string
-  bottomUnit: FieldUnits
-  rightUnit: FieldUnits
 }
 
 export const defaultParams: Params = {
   badgePosition: 'right',
   topStyles: 'label',
   size: 'xs',
-  top: fieldUnits[1],
-  bottomUnit: fieldUnits[2],
-  rightUnit: fieldUnits[0],
+  top: 'сроки',
 }
 
 export const StatsWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { badgePosition, topStyles, size, top, bottomUnit, rightUnit },
+  params: { badgePosition, topStyles, size, top },
 }) => {
-  const { percent } = data
+  const { percent, bottomUnit, rightUnit } = data
   const rightValue = percent && badgePosition === 'right' ? percent : rightUnit
   const bottomValue = percent && badgePosition === 'bottom' ? percent : bottomUnit
 
@@ -91,30 +87,6 @@ export const StatsWidget = createWidget<Data, Params>({
             {topTypes.map(type => (
               <option key={type} value={type}>
                 {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Единица измерения правой строки">
-          <select
-            value={params.rightUnit}
-            onChange={e => onChangeParam('rightUnit', e.target.value as FieldUnits)}
-          >
-            {fieldUnits.map(unit => (
-              <option key={unit} value={unit}>
-                {unit}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Единица измерения нижней строки">
-          <select
-            value={params.bottomUnit}
-            onChange={e => onChangeParam('bottomUnit', e.target.value as FieldUnits)}
-          >
-            {fieldUnits.map(unit => (
-              <option key={unit} value={unit}>
-                {unit}
               </option>
             ))}
           </select>

@@ -17,6 +17,8 @@ const mockData: DataMap = {
   [DataType.Stats]: {
     number: '+217',
     percent: '+2.3%',
+    bottomUnit: 'суток',
+    rightUnit: '',
   },
   [DataType.Donut]: {
     colorGroups: {
