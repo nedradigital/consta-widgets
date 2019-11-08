@@ -37,6 +37,7 @@ type State = {
   paddingX: number
   paddingY: number
   mainTickValues: MainTickValues
+  zoom: number
 }
 
 export const TRANSITION_DURATIONS = {
@@ -46,7 +47,7 @@ export const TRANSITION_DURATIONS = {
 
 const DOT_SIZE = 5
 
-const domainPaddings = {
+export const domainPaddings = {
   horizontal: {
     top: 0.055,
     right: 0.06,
@@ -64,18 +65,16 @@ const domainPaddings = {
 const getIndexWithFallbackToDefault = (index: number, def: number): number =>
   index < 0 ? def : index
 
-const padDomain = (
+export const padDomain = (
   domain: NumberRange,
-  paddingStart?: number,
-  paddingEnd?: number
+  paddingStart: number,
+  paddingEnd: number,
+  zoom: number
 ): NumberRange => {
   const [start, end] = domain
   const delta = domain[1] - domain[0]
 
-  return [
-    paddingStart ? start - paddingStart * delta : start,
-    paddingEnd ? end + paddingEnd * delta : end,
-  ]
+  return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
 }
 
 const getXRange = (width: number) => [0, width] as NumberRange
@@ -97,31 +96,12 @@ const getYScale = (domain: NumberRange, height: number) =>
     .domain([...domain])
     .range(getYRange(height))
 
-export const getXDomain = (isVertical: boolean, items: readonly Item[]): NumberRange => {
-  const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
-  const domain = d3.extent(items, v => v.x) as NumberRange
-  return padDomain(domain, left, right)
-}
-
-export const getYDomain = (isVertical: boolean, items: readonly Item[]): NumberRange => {
-  const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
-  const domain = d3.extent(items, v => v.y)
-  return padDomain(
-    (isVertical
-      ? [...domain].reverse() // Чтобы 0 был сверху
-      : domain) as NumberRange,
-    bottom,
-    top
-  )
-}
-
 export const calculateSecondaryDomain = (
-  isVertical: boolean,
   mainDomainMin: number,
   mainDomainMax: number,
   lines: readonly Line[],
   getValue: (v: Item) => number,
-  getDomain: (isVertical: boolean, items: readonly Item[]) => NumberRange
+  getDomain: (items: readonly Item[]) => NumberRange
 ) => {
   const lineDomains = lines.map(({ values }) => {
     const zoomRangeIndexes = _.sortBy([
@@ -134,7 +114,7 @@ export const calculateSecondaryDomain = (
 
     const valuesInZoomRange = values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
 
-    return getDomain(isVertical, valuesInZoomRange)
+    return getDomain(valuesInZoomRange)
   })
 
   return [
@@ -185,6 +165,7 @@ export class LinearChart extends React.Component<Props, State> {
     paddingX: 0,
     paddingY: 0,
     mainTickValues: [],
+    zoom: 1,
   }
 
   targetSecondaryDomain = this.state.xDomain
@@ -319,12 +300,35 @@ export class LinearChart extends React.Component<Props, State> {
             xLabelsPos={xLabelsPos}
             yLabelsPos={yLabelsPos}
             domain={mainAxis.currentDomain}
-            originalDomain={mainAxis.getDomain(Boolean(isVertical), this.getAllValues())}
+            originalDomain={mainAxis.getDomain(this.getAllValues())}
             onZoom={this.onZoom}
             lines={lines}
           />
         )}
       </div>
+    )
+  }
+
+  getXDomain = (items: readonly Item[]): NumberRange => {
+    const { isVertical } = this.props
+    const { zoom } = this.state
+    const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const domain = d3.extent(items, v => v.x) as NumberRange
+    return padDomain(domain, left, right, zoom)
+  }
+
+  getYDomain = (items: readonly Item[]): NumberRange => {
+    const { isVertical } = this.props
+    const { zoom } = this.state
+    const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const domain = d3.extent(items, v => v.y)
+    return padDomain(
+      (isVertical
+        ? [...domain].reverse() // Чтобы 0 был сверху
+        : domain) as NumberRange,
+      bottom,
+      top,
+      zoom
     )
   }
 
@@ -359,8 +363,8 @@ export class LinearChart extends React.Component<Props, State> {
 
   updateDomains() {
     const { isVertical, gridConfig } = this.props
-    const xDomain = getXDomain(Boolean(isVertical), this.getAllValues())
-    const yDomain = getYDomain(Boolean(isVertical), this.getAllValues())
+    const xDomain = this.getXDomain(this.getAllValues())
+    const yDomain = this.getYDomain(this.getAllValues())
 
     this.setState({
       xDomain,
@@ -424,7 +428,7 @@ export class LinearChart extends React.Component<Props, State> {
       ? {
           main: {
             currentDomain: yDomain,
-            getDomain: getYDomain,
+            getDomain: this.getYDomain,
             setDomain: setYDomain,
             getScale: getYScale,
             rescale: 'rescaleY',
@@ -433,14 +437,14 @@ export class LinearChart extends React.Component<Props, State> {
           },
           secondary: {
             currentDomain: xDomain,
-            getDomain: getXDomain,
+            getDomain: this.getXDomain,
             setDomain: setXDomain,
           },
         }
       : {
           main: {
             currentDomain: xDomain,
-            getDomain: getXDomain,
+            getDomain: this.getXDomain,
             setDomain: setXDomain,
             getScale: getXScale,
             rescale: 'rescaleX',
@@ -449,7 +453,7 @@ export class LinearChart extends React.Component<Props, State> {
           },
           secondary: {
             currentDomain: yDomain,
-            getDomain: getYDomain,
+            getDomain: this.getYDomain,
             setDomain: setYDomain,
           },
         }
@@ -459,7 +463,9 @@ export class LinearChart extends React.Component<Props, State> {
     const { isVertical, gridConfig } = this.props
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
 
-    const originalMainDomain = mainAxis.getDomain(Boolean(isVertical), this.getAllValues())
+    this.setState({ zoom: d3.event.transform.k })
+
+    const originalMainDomain = mainAxis.getDomain(this.getAllValues())
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
     const newMainDomain: NumberRange = newMainScale.domain()
@@ -482,7 +488,6 @@ export class LinearChart extends React.Component<Props, State> {
     const domainMax = Math.max(...newMainDomain)
 
     const newSecondaryDomain = calculateSecondaryDomain(
-      Boolean(isVertical),
       domainMin,
       domainMax,
       this.getLines(),
