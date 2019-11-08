@@ -143,6 +143,27 @@ export const calculateSecondaryDomain = (
   ] as NumberRange
 }
 
+export const getTickValues = (
+  items: readonly Item[],
+  domain: NumberRange,
+  gridConfig: GridConfig,
+  isVertical?: boolean
+): MainTickValues => {
+  const config = gridConfig[isVertical ? 'y' : 'x']
+  const uniqValues = _.uniq(items.map(v => (isVertical ? v.y : v.x))).filter(i =>
+    isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
+  )
+  const ticks = config.labelTicks || 0
+  const indexes = d3.ticks(0, uniqValues.length - 1, ticks).filter(Number.isInteger)
+
+  return _.uniq(
+    indexes
+      .map(index => uniqValues[index])
+      .filter(Number.isInteger)
+      .concat(config.guide ? [0] : [])
+  )
+}
+
 export class LinearChart extends React.Component<Props, State> {
   ref = React.createRef<HTMLDivElement>()
 
@@ -193,7 +214,12 @@ export class LinearChart extends React.Component<Props, State> {
       !_.isEqual(gridConfig.x, prevProps.gridConfig.x)
     ) {
       const { main: mainAxis } = this.getAxis()
-      const mainTickValues = this.getTickValues(this.getAllValues(), mainAxis.currentDomain)
+      const mainTickValues = getTickValues(
+        this.getAllValues(),
+        mainAxis.currentDomain,
+        gridConfig,
+        isVertical
+      )
 
       this.setState({ mainTickValues })
     }
@@ -302,17 +328,6 @@ export class LinearChart extends React.Component<Props, State> {
     )
   }
 
-  getTickValues = (items: readonly Item[], domain: NumberRange): MainTickValues => {
-    const { isVertical, gridConfig } = this.props
-    const uniqValues = _.uniq(items.map(v => (isVertical ? v.y : v.x))).filter(i =>
-      isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
-    )
-    const ticks = gridConfig[isVertical ? 'y' : 'x'].labelTicks || 0
-    const indexes = d3.ticks(0, uniqValues.length - 1, ticks).filter(Number.isInteger)
-
-    return indexes.map(index => uniqValues[index]).filter(Number.isInteger)
-  }
-
   getLines = (): readonly Line[] => {
     const { lines, isVertical } = this.props
 
@@ -343,14 +358,19 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   updateDomains() {
-    const { isVertical } = this.props
+    const { isVertical, gridConfig } = this.props
     const xDomain = getXDomain(Boolean(isVertical), this.getAllValues())
     const yDomain = getYDomain(Boolean(isVertical), this.getAllValues())
 
     this.setState({
       xDomain,
       yDomain,
-      mainTickValues: this.getTickValues(this.getAllValues(), isVertical ? yDomain : xDomain),
+      mainTickValues: getTickValues(
+        this.getAllValues(),
+        isVertical ? yDomain : xDomain,
+        gridConfig,
+        isVertical
+      ),
     })
   }
 
@@ -436,14 +456,19 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   onZoom = () => {
-    const { isVertical } = this.props
+    const { isVertical, gridConfig } = this.props
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
 
     const originalMainDomain = mainAxis.getDomain(Boolean(isVertical), this.getAllValues())
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
     const newMainDomain: NumberRange = newMainScale.domain()
-    const newMainTickValues = this.getTickValues(this.getAllValues(), newMainDomain)
+    const newMainTickValues = getTickValues(
+      this.getAllValues(),
+      newMainDomain,
+      gridConfig,
+      isVertical
+    )
 
     if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
       return
