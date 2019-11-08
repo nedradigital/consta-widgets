@@ -146,6 +146,20 @@ export const Axis: React.FC<Props> = ({
           .attr('class', labels.classes)
           .style('transform', labels.transform)
           .call(axis)
+          .selectAll('text')
+          .style('text-anchor', (_, index, el) => {
+            if (['axisBottom', 'axisTop'].includes(labels.direction)) {
+              if (index === 0) {
+                return 'start'
+              }
+              if (index === el.length - 1) {
+                return 'end'
+              }
+              return 'middle'
+            } else {
+              return ''
+            }
+          })
       }
     })
 
