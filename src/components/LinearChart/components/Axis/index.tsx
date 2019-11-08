@@ -132,15 +132,16 @@ export const Axis: React.FC<Props> = ({
           null,
           undefined
         >
-        const axis = labels.values
-          ? d3[labels.direction](labels.scale)
-              .tickValues([...labels.values])
-              .tickPadding(TICK_PADDING)
-              .tickFormat(v => formatLabel(v as number))
-          : d3[labels.direction](labels.scale)
-              .ticks(labels.ticks)
-              .tickSize(4)
-              .tickPadding(TICK_PADDING)
+        const axis =
+          labels.values && labels.ticks
+            ? d3[labels.direction](labels.scale)
+                .tickValues([...labels.values])
+                .tickPadding(TICK_PADDING)
+                .tickFormat(v => formatLabel(v as number))
+            : d3[labels.direction](labels.scale)
+                .ticks(labels.ticks)
+                .tickSize(4)
+                .tickPadding(TICK_PADDING)
 
         axisSelection
           .attr('class', labels.classes)
