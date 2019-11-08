@@ -14,6 +14,7 @@ type Props = {
   axesAngles: readonly Axis[]
   labelSize: RadarChartLabelSize
   formatLabel: RadarChartFormatLabel
+  colors?: readonly string[]
 }
 
 export const RadarChartAxes: React.FC<Props> = ({
@@ -23,6 +24,7 @@ export const RadarChartAxes: React.FC<Props> = ({
   axesAngles,
   labelSize,
   formatLabel,
+  colors,
 }) => {
   const circles = _.times(ticks, v => {
     const fraction = (v + 1) / ticks
@@ -34,26 +36,43 @@ export const RadarChartAxes: React.FC<Props> = ({
 
   return (
     <g className={css.main}>
-      {circles.map((circle, idx) => (
-        <Fragment key={idx}>
-          <circle cx="50%" cy="50%" r={`${circle.r * 100}%`} className={css.circle} />
-          <foreignObject x="50%" y={`${50 - 100 * circle.r}%`}>
-            <div
-              key={idx}
-              className={classnames(
-                css.label,
-                {
-                  s: css.sizeS,
-                  m: css.sizeM,
-                }[labelSize]
-              )}
-              style={{ backgroundColor }}
-            >
-              <span className={css.labelText}>{circle.label}</span>
-            </div>
-          </foreignObject>
-        </Fragment>
-      ))}
+      {circles.map((circle, idx) => {
+        const circleColor = colors && colors[idx]
+
+        return (
+          <Fragment key={idx}>
+            <circle
+              cx="50%"
+              cy="50%"
+              r={`${circle.r * 100}%`}
+              className={css.circle}
+              style={
+                circleColor
+                  ? {
+                      stroke: circleColor,
+                      opacity: 0.3,
+                    }
+                  : undefined
+              }
+            />
+            <foreignObject x="50%" y={`${50 - 100 * circle.r}%`}>
+              <div
+                key={idx}
+                className={classnames(
+                  css.label,
+                  {
+                    s: css.sizeS,
+                    m: css.sizeM,
+                  }[labelSize]
+                )}
+                style={{ backgroundColor }}
+              >
+                <span className={css.labelText}>{circle.label}</span>
+              </div>
+            </foreignObject>
+          </Fragment>
+        )
+      })}
 
       <g opacity={0.2}>
         <circle cx="50%" cy="50%" r={3} className={css.innerCircle} />

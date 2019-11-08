@@ -6,12 +6,13 @@ type Coords = {
 }
 
 type Props = {
-  color: string
   size: number
   points: readonly Coords[]
+  lineColor: string
+  withFill: boolean
 }
 
-export const RadarChartFigure: React.FC<Props> = ({ size, color, points }) => {
+export const RadarChartFigure: React.FC<Props> = ({ size, points, lineColor, withFill }) => {
   const linePathD =
     points
       .map((point, idx) =>
@@ -25,12 +26,19 @@ export const RadarChartFigure: React.FC<Props> = ({ size, color, points }) => {
       .join(' ') + ' Z'
 
   return (
-    <g style={{ color }}>
-      <path d={linePathD} className={css.line} />
+    <g>
+      <path
+        d={linePathD}
+        className={css.line}
+        style={{
+          stroke: lineColor,
+          fill: withFill ? lineColor : 'transparent',
+        }}
+      />
       {points.map((point, idx) => {
         return (
           <circle
-            className={css.point}
+            style={{ fill: lineColor }}
             key={idx}
             cx={`${point.xPercent}%`}
             cy={`${point.yPercent}%`}

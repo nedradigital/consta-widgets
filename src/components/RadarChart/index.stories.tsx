@@ -52,5 +52,6 @@ storiesOf('components/RadarChart', module)
       formatLabel={
         boolean('format labels as percents', false) ? v => `${Math.round(v)}%` : undefined
       }
+      withConcentricColor={false}
     />
   ))

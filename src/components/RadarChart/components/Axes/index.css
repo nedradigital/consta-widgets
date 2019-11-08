@@ -17,6 +17,7 @@
 
   &.sizeM {
     font-size: calc-size(12);
+    font-weight: bold;
   }
 }
 
