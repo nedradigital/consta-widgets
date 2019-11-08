@@ -36,7 +36,7 @@ export const Axis: React.FC<Props> = ({
   groupScale,
   valuesScale,
   orientation = 'vertical',
-  valuesSpecifier = 'd',
+  valuesSpecifier,
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
@@ -63,7 +63,7 @@ export const Axis: React.FC<Props> = ({
       scale: isHorizontal ? groupScale : valuesScale,
       classes: classnames(css.labels, css.labels_y, css.labels_left, isHorizontal && css.hideLine),
       transform: '',
-      tickOn: orientation === 'vertical',
+      tickOn: !isHorizontal,
     },
   ] as const
 
@@ -94,9 +94,16 @@ export const Axis: React.FC<Props> = ({
       >
       const axis = labels.tickOn
         ? d3[labels.direction](labels.scale as d3.ScaleLinear<number, number>)
-            .ticks(valuesTick, valuesSpecifier)
+            .ticks(valuesTick)
             .tickSize(4)
             .tickPadding(TICK_PADDING)
+            .tickFormat(d => {
+              if (valuesSpecifier) {
+                return d3.format(valuesSpecifier)(d)
+              }
+
+              return String(d)
+            })
         : d3[labels.direction](labels.scale as d3.ScaleBand<string>)
 
       axisSelection
