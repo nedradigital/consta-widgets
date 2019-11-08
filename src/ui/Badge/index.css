@@ -1,4 +1,7 @@
 .badge {
+  --color-normal: #20b55f;
+  --color-warning: rgb(255, 219, 31);
+  --color-danger: #db3333;
   line-height: 1;
 
   position: relative;

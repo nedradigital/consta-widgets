@@ -2,7 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Badge } from '@/ui/Badge'
+import { Badge, Status } from '@/ui/Badge'
 
 import { Cell } from './components/Cell'
 import css from './index.css'
@@ -29,11 +29,20 @@ type Props = {
   topSublabel?: boolean
   rightBadge?: boolean
   bottomBadge?: boolean
-  children: React.ReactNode
+  statusBadge: Status
+  number: string
 } & StyleProps
 
+const renderBadgeOrCell = (statusBadge: Status, isBadge?: boolean, value?: string) => {
+  return isBadge ? (
+    <Badge status={statusBadge}> {value} </Badge>
+  ) : (
+    <Cell type={'sublabel'}>{value}</Cell>
+  )
+}
+
 export const Stats: React.FC<Props> = ({
-  children,
+  number,
   size = 'xs',
   top,
   right,
@@ -41,11 +50,9 @@ export const Stats: React.FC<Props> = ({
   topSublabel,
   rightBadge,
   bottomBadge,
+  statusBadge,
   className,
 }) => {
-  const numberBottomValue = bottom ? parseFloat(bottom) : false
-  const numberRightValue = right ? parseFloat(right) : false
-
   return (
     <div
       className={classnames(
@@ -63,24 +70,10 @@ export const Stats: React.FC<Props> = ({
         <Cell type={topSublabel ? 'sublabel' : 'label'}>{top}</Cell>
       </div>
       <div>
-        <span className={css.number}>{children}</span>
-        {rightBadge && numberRightValue ? (
-          <Badge status={numberRightValue > 0 ? 'normal' : 'danger'} className={css.badge}>
-            {right}
-          </Badge>
-        ) : (
-          <Cell type={'sublabel'}>{right}</Cell>
-        )}
+        <span className={css.number}>{number}</span>
+        {renderBadgeOrCell(statusBadge, rightBadge, right)}
       </div>
-      <div className={css.row}>
-        {bottomBadge && numberBottomValue ? (
-          <Badge status={numberBottomValue > 0 ? 'normal' : 'danger'} className={css.badge}>
-            {bottom}
-          </Badge>
-        ) : (
-          <Cell type={'sublabel'}>{bottom}</Cell>
-        )}
-      </div>
+      <div className={css.row}>{renderBadgeOrCell(statusBadge, bottomBadge, bottom)}</div>
     </div>
   )
 }
