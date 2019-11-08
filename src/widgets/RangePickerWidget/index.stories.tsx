@@ -16,7 +16,7 @@ storiesOf('widgets/RangePickerWidget', module)
 
       return (
         <RangePickerWidgetContent
-          data={{ value: dates, onChange: setDates, onClear: () => setDates([]) }}
+          data={{ value: dates, onChange: setDates }}
           params={object('params', {})}
         />
       )

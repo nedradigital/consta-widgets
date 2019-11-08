@@ -18,7 +18,6 @@ storiesOf('widgets/DatePickerWidget', module)
           data={{
             value: date,
             onChange: setDate,
-            onClear: () => setDate(undefined),
           }}
           params={object('params', {})}
         />
