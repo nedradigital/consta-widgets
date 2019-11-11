@@ -1,3 +1,28 @@
+@custom-selector :--small .sizeXS;
+@custom-selector :--medium .sizeS;
+@custom-selector :--large .sizeM;
+@custom-selector :--biggest .sizeL;
+
+:--small {
+  font-size: calc-size(14);
+  line-height: calc-size(18);
+}
+
+:--medium {
+  font-size: calc-size(18);
+  line-height: calc-size(25);
+}
+
+:--large {
+  font-size: calc-size(20);
+  line-height: calc-size(28);
+}
+
+:--biggest {
+  font-size: calc-size(24);
+  line-height: calc-size(34);
+}
+
 .stats {
   width: 100%;
 
@@ -6,6 +31,10 @@
 
 .row {
   margin: 3px 0;
+
+  @nest :--small &:last-child {
+    font-size: calc-size(12);
+  }
 }
 
 .number {
@@ -20,48 +49,28 @@
   letter-spacing: -0.02em;
 
   color: #f6fbfd;
+
+  @nest :--small & {
+    font-size: calc-size(24);
+    line-height: calc-size(34);
+  }
+
+  @nest :--medium & {
+    font-size: calc-size(48);
+    line-height: calc-size(62);
+  }
+
+  @nest :--large & {
+    font-size: calc-size(72);
+    line-height: calc-size(82);
+  }
+
+  @nest :--biggest & {
+    font-size: calc-size(96);
+    line-height: calc-size(115);
+  }
 }
 
 .badge {
   vertical-align: 0.25em;
-}
-
-.sizeXS {
-  font-size: calc-size(13);
-  line-height: calc-size(18);
-
-  & .number {
-    font-size: calc-size(24);
-    line-height: calc-size(34);
-  }
-}
-
-.sizeS {
-  font-size: calc-size(18);
-  line-height: calc-size(25);
-
-  & .number {
-    font-size: calc-size(48);
-    line-height: calc-size(62);
-  }
-}
-
-.sizeM {
-  font-size: calc-size(20);
-  line-height: calc-size(28);
-
-  & .number {
-    font-size: calc-size(72);
-    line-height: calc-size(82);
-  }
-}
-
-.sizeL {
-  font-size: calc-size(24);
-  line-height: calc-size(34);
-
-  & .number {
-    font-size: calc-size(96);
-    line-height: calc-size(115);
-  }
 }
