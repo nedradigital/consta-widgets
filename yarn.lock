@@ -1257,10 +1257,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/configs@0.1.26":
-  version "0.1.26"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.26.tgz#f759e58b6568f1c0e03158f911cc2bf7ad92e626"
-  integrity sha512-3/lP2JAYjaIlPasVPfAtUhy0tVW4yj9bJmOYTFHCYIlN2KM1FJQRF54T89dKN+u+FIfWCIR5xulBYHRoUkUWCw==
+"@gaz/configs@0.1.27":
+  version "0.1.27"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.27.tgz#f40baa8008ff8df10e6e2076b0d734edac6a7bd4"
+  integrity sha512-rALSGGzqHeerQ3W10PyixifJ95DADN7r2MBlPfZ1TzZEy5bO6bSaA+dHjXJODKcMhKQ+RHz5S5YcnyUyBMpSUw==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1272,6 +1272,7 @@
     "@babel/preset-react" "7.0.0"
     "@gaz/utils" "0.1.6"
     "@hot-loader/react-dom" "16.8.6"
+    "@svgr/webpack" "4.3.3"
     "@types/enzyme" "3.10.2"
     "@types/jest" "24.0.15"
     "@types/react-hot-loader" "4.1.0"
@@ -1994,7 +1995,7 @@
     merge-deep "^3.0.2"
     svgo "^1.2.2"
 
-"@svgr/webpack@^4.0.3":
+"@svgr/webpack@4.3.3", "@svgr/webpack@^4.0.3":
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/@svgr/webpack/-/webpack-4.3.3.tgz#13cc2423bf3dff2d494f16b17eb7eacb86895017"
   integrity sha512-bjnWolZ6KVsHhgyCoYRFmbd26p8XVbulCzSG53BDQqAr+JOAderYK7CuYrB3bDjHJuF6LJ7Wrr42+goLRV9qIg==
