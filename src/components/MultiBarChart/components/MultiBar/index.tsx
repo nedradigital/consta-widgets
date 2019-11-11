@@ -4,8 +4,14 @@ import { createRef, useLayoutEffect } from 'react'
 import * as d3 from 'd3'
 import { isUndefined } from 'lodash'
 
-import { Layer, Layers } from '../../'
-import { displayTooltip, hideTooltip, updateTooltipStyle } from '../Tooltip'
+import { Layer, Layers, Value } from '../../'
+import {
+  displayStaticTooltips,
+  displayTooltip,
+  getTooltipPosition,
+  hideTooltip,
+  updateTooltipStyleAndPosition,
+} from '../Tooltip'
 
 import * as css from './index.css'
 
@@ -43,40 +49,51 @@ const mouseMoveAction = (
     return false
   }
 
-  return updateTooltipStyle(
-    String(d.data[key] || 0),
-    isVertical,
-    barSize,
+  const { xPosition, yPosition } = getTooltipPosition(
     self,
-    colorValue,
+    barSize,
+    isVertical,
     paddingX,
     positionByXScale || 0,
     additionalKeyGroup
   )
+
+  updateTooltipStyleAndPosition(String(d.data[key] || 0), colorValue, xPosition, yPosition)
 }
 
 export const defaultColumnSize = 12
 
 const getXPosition = (
-  data: Layers,
-  rect: Layer,
+  data: Value,
   keyGroup: string,
-  barSize: number,
   xScale: XScale,
+  xByAdditionalKeyGroup: XScale,
   additionalKeyGroup?: string
 ) => {
   if (!isUndefined(additionalKeyGroup)) {
-    const x1 = d3
-      .scaleBand()
-      .padding(0.05)
-      .domain(data.map(d => String(d.data[additionalKeyGroup])))
-      .rangeRound([0, barSize])
-      .padding(0.05)
-
-    return x1(String(rect.data[additionalKeyGroup])) || 0
+    return xByAdditionalKeyGroup(String(data[additionalKeyGroup])) || 0
   }
 
-  return xScale(String(rect.data[keyGroup])) || 0
+  return xScale(String(data[keyGroup])) || 0
+}
+
+const getRectSizeAndPosition = (
+  d: Layer,
+  isVertical: boolean,
+  xPosition: number,
+  yScale: d3.ScaleLinear<number, number>
+) => {
+  const x = isVertical ? xPosition : yScale(d[0])
+  const y = isVertical ? yScale(d[1]) : xPosition
+  const width = isVertical ? defaultColumnSize : yScale(d[1]) - yScale(d[0])
+  const height = isVertical ? yScale(d[0]) - yScale(d[1]) : defaultColumnSize
+
+  return {
+    x,
+    y,
+    width,
+    height,
+  }
 }
 
 export const MultiBar: React.FC<Props> = ({
@@ -100,6 +117,42 @@ export const MultiBar: React.FC<Props> = ({
     ((isVertical ? svgWidth : svgHeight) - defaultColumnSize * countLayers) / countLayers / 2 -
     defaultColumnSize / countLayers / 2
 
+  const { key } = data
+  const additionalKeyGroupDomain = new Set(data.map(d => String(d.data[additionalKeyGroup || 0])))
+
+  const xByAdditionalKeyGroup = d3
+    .scaleBand()
+    .padding(0.05)
+    .domain([...additionalKeyGroupDomain])
+    .rangeRound([0, barSize])
+    .padding(0.05)
+
+  const dataWithPositionTooltip = data.map(d => {
+    let xScaleByKeyGroup = xScale(String(d.data[keyGroup])) || 0
+
+    if (!isUndefined(additionalKeyGroup)) {
+      xScaleByKeyGroup += xByAdditionalKeyGroup(String(d.data[additionalKeyGroup])) || 0
+    }
+
+    const xBar = (isVertical ? xScaleByKeyGroup : yScale(d[0])) || 0
+    const yBar = (isVertical ? yScale(d[1]) : xScaleByKeyGroup) || 0
+    const middleSizeBar = yScale(d[1]) + (yScale(d[0]) - yScale(d[1])) / 2
+
+    return {
+      ...d,
+      position: {
+        x: isVertical ? xBar + defaultColumnSize : middleSizeBar,
+        y: isVertical ? middleSizeBar : yBar,
+      },
+    }
+  })
+
+  useLayoutEffect(() => {
+    d3.select(staticTooltipsRef.current)
+      .selectAll('foreignObject')
+      .remove()
+  }, [isVertical, showValues])
+
   useLayoutEffect(() => {
     if (ref) {
       const svgOffset = isUndefined(additionalKeyGroup)
@@ -115,20 +168,22 @@ export const MultiBar: React.FC<Props> = ({
         .data([...data])
         .join('rect')
         .attr('class', css.rectBarChart)
+        .each((d, idx, nodes) => {
+          const xPosition = getXPosition(
+            d.data,
+            keyGroup,
+            xScale,
+            xByAdditionalKeyGroup,
+            additionalKeyGroup
+          )
+          const { x, y, width, height } = getRectSizeAndPosition(d, isVertical, xPosition, yScale)
 
-      if (!isVertical) {
-        rect
-          .attr('x', d => yScale(d[0]))
-          .attr('y', d => getXPosition(data, d, keyGroup, barSize, xScale, additionalKeyGroup))
-          .attr('height', () => defaultColumnSize)
-          .attr('width', d => yScale(d[1]) - yScale(d[0]))
-      } else {
-        rect
-          .attr('x', d => getXPosition(data, d, keyGroup, barSize, xScale, additionalKeyGroup))
-          .attr('y', d => yScale(d[1]) || 0)
-          .attr('height', d => yScale(d[0]) - yScale(d[1]))
-          .attr('width', () => defaultColumnSize)
-      }
+          d3.select(nodes[idx])
+            .attr('x', x)
+            .attr('y', y)
+            .attr('height', height)
+            .attr('width', width)
+        })
 
       if (!isUndefined(additionalKeyGroup)) {
         rect.attr('transform', d => {
@@ -148,12 +203,25 @@ export const MultiBar: React.FC<Props> = ({
             svgOffset,
             color,
             paddingX,
-            data.key,
+            key,
             showValues,
             additionalKeyGroup,
             xScale(String(d.data[keyGroup]))
           )
         )
+
+      if (showValues) {
+        displayStaticTooltips(
+          transform,
+          staticTooltipsRef,
+          dataWithPositionTooltip,
+          key,
+          isVertical,
+          color,
+          additionalKeyGroupDomain,
+          additionalKeyGroup || ''
+        )
+      }
     }
   })
 

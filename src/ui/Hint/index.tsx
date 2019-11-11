@@ -4,10 +4,12 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
+export type Direction = 'top' | 'left' | 'bottom' | 'right'
+
 type Props = {
   children: React.ReactNode
   /** В какую сторону открывается */
-  direction?: 'top' | 'left' | 'bottom' | 'right'
+  direction?: Direction
   styles?: React.CSSProperties
   className?: string
 }
