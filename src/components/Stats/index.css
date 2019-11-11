@@ -9,19 +9,21 @@
 }
 
 .number {
+
+  font-weight: bold;
+
   display: inline-block;
 
+  margin-right: 5px;
   padding: 2px 4px;
 
   letter-spacing: -0.02em;
-}
-
-.middle span:first-child {
-  font-weight: bold;
-
-  margin-right: 5px;
 
   color: #f6fbfd;
+}
+
+.badge {
+  vertical-align: 0.25em;
 }
 
 .sizeXS {

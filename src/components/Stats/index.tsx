@@ -62,17 +62,21 @@ export const Stats: React.FC<Props> = ({
       <div className={css.row}>
         <Cell type={topSublabel ? 'sublabel' : 'label'}>{top}</Cell>
       </div>
-      <div className={css.middle}>
+      <div>
         <span className={css.number}>{children}</span>
         {rightBadge && numberRightValue ? (
-          <Badge status={numberRightValue > 0 ? 'normal' : 'danger'}>{right}</Badge>
+          <Badge status={numberRightValue > 0 ? 'normal' : 'danger'} className={css.badge}>
+            {right}
+          </Badge>
         ) : (
           <Cell type={'sublabel'}>{right}</Cell>
         )}
       </div>
       <div className={css.row}>
         {bottomBadge && numberBottomValue ? (
-          <Badge status={numberBottomValue > 0 ? 'normal' : 'danger'}>{bottom}</Badge>
+          <Badge status={numberBottomValue > 0 ? 'normal' : 'danger'} className={css.badge}>
+            {bottom}
+          </Badge>
         ) : (
           <Cell type={'sublabel'}>{bottom}</Cell>
         )}
