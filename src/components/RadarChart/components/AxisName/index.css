@@ -1,0 +1,14 @@
+.axisName {
+  font-size: calc-size(16);
+
+  position: absolute;
+
+  display: -webkit-box;
+  overflow: hidden;
+
+  box-sizing: content-box;
+
+  hyphens: auto;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

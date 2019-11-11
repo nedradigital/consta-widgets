@@ -10,7 +10,7 @@ import { RadarChart } from './'
 
 storiesOf('components/RadarChart', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '50vw', height: '50vh' } as React.CSSProperties))
+  .addDecorator(blockCenteringDecorator({ width: '50vw', height: '60vh' } as React.CSSProperties))
   .add('interactive', () => (
     <RadarChart
       colorGroups={object('colorGroups', {
@@ -18,10 +18,10 @@ storiesOf('components/RadarChart', module)
         partyMember: '#56B9F2',
       })}
       axesLabels={{
-        strength: 'Сила',
-        endurance: 'Выносливость',
+        strength: 'Сила сила сила сила сила сила сила сила сила сила сила сила сила',
+        endurance: 'Выносливая выносливость',
         charisma: 'Харизма',
-        intelligence: 'Интеллект',
+        intelligence: 'Гиперинтеллектуальный интеллект',
         agility: 'Ловкость',
       }}
       maxValue={10}

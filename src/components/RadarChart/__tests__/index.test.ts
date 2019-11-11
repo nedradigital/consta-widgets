@@ -1,3 +1,5 @@
+import * as _ from 'lodash'
+
 import { angleToCoord, deg2rad } from '../'
 
 describe('angleToCoord', () => {
@@ -15,17 +17,24 @@ describe('angleToCoord', () => {
     })
   })
 
-  it('calculates coordinates for the far bottom right point', () => {
-    expect(angleToCoord(deg2rad(45), 1)).toEqual({
-      xPercent: 50 + (Math.sqrt(2) / 2) * 50,
-      yPercent: 50 + (Math.sqrt(2) / 2) * 50,
-    })
-  })
-
   it('calculates coordinates for the halfway left point', () => {
     expect(angleToCoord(deg2rad(180), 0.5)).toEqual({
       xPercent: 25,
       yPercent: 50,
+    })
+  })
+
+  it('rounds percentage', () => {
+    expect(angleToCoord(deg2rad(180), 1)).toEqual({
+      xPercent: 0,
+      yPercent: 50,
+    })
+  })
+
+  it('calculates coordinates for the far bottom right point', () => {
+    expect(angleToCoord(deg2rad(45), 1)).toEqual({
+      xPercent: _.round(50 + (Math.sqrt(2) / 2) * 50, 2),
+      yPercent: _.round(50 + (Math.sqrt(2) / 2) * 50, 2),
     })
   })
 })

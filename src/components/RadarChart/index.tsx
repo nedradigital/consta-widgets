@@ -2,11 +2,13 @@ import * as React from 'react'
 import { useUID } from 'react-uid'
 import useDimensions from 'react-use-dimensions'
 
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as _ from 'lodash'
 
 import { ColorGroups } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
+import { RadarChartAxisName } from './components/AxisName'
 import { RadarChartFigure } from './components/Figure'
 import { RadarChartPoints } from './components/Points'
 import css from './index.css'
@@ -49,7 +51,7 @@ export type Axis = {
 export const deg2rad = (deg: number) => deg * (Math.PI / 180)
 
 // Преобразуем кординаты от центра круга в координаты svg: 0 -> 50%, 1 -> 100%
-const circleCoordToRelative = (circlePos: number) => 50 * (1 + circlePos)
+const circleCoordToRelative = (circlePos: number) => _.round(50 * (1 + circlePos), 2)
 
 /**
  * @param angle - угол в радианах
@@ -108,8 +110,15 @@ export const RadarChart: React.FC<Props> = ({
   const ticks = withConcentricColor ? _.clamp(originalTicks, 3, 5) : originalTicks
   const figures = withConcentricColor ? originalFigures.slice(0, 1) : originalFigures
 
+  const axisNameWidth = getCalculatedSize(130)
+  const axisNameLineHeight = getCalculatedSize(20)
+  const axisNameOffset = getCalculatedSize(15)
   const [ref, { width = 0, height = 0 }] = useDimensions()
-  const size = Math.min(width, height)
+  // Вписываем радар в квадрат, оставляя по бокам место под надписи
+  const size = Math.min(
+    width - 2 * (axisNameWidth + axisNameOffset),
+    height - 2 * (2 * axisNameLineHeight + axisNameOffset)
+  )
 
   const gradientId = `radarchart_gradient_${useUID()}`
 
@@ -157,56 +166,74 @@ export const RadarChart: React.FC<Props> = ({
 
   return (
     <div ref={ref} className={css.main}>
-      <div
-        className={css.svgWrapper}
-        style={{
-          width: size,
-          height: size,
-        }}
-      >
-        <svg viewBox={`0 0 ${size} ${size}`} className={css.svg}>
-          {concentricColors && (
-            <defs>
-              <radialGradient id={gradientId} gradientUnits="userSpaceOnUse">
-                {concentricColors.gradient.map(([color, offset], idx) => (
-                  <stop key={idx} offset={`${offset}%`} stopColor={color} />
-                ))}
-              </radialGradient>
-            </defs>
-          )}
+      {size > 0 && (
+        <div
+          className={css.svgWrapper}
+          style={{
+            width: size,
+            height: size,
+          }}
+        >
+          <svg viewBox={`0 0 ${size} ${size}`} className={css.svg}>
+            {concentricColors && (
+              <defs>
+                <radialGradient id={gradientId} gradientUnits="userSpaceOnUse">
+                  {concentricColors.gradient.map(([color, offset], idx) => (
+                    <stop key={idx} offset={`${offset}%`} stopColor={color} />
+                  ))}
+                </radialGradient>
+              </defs>
+            )}
 
-          <RadarChartAxes
-            ticks={ticks}
-            maxValue={maxValue}
-            backgroundColor={backgroundColor}
-            axesAngles={axesAngles}
-            labelSize={labelSize}
-            formatLabel={formatLabel}
-            colors={concentricColors && concentricColors.circles}
-          />
-
-          {figures.map((figure, idx) => (
-            <RadarChartFigure
-              key={figure.colorGroupName}
-              size={size}
-              points={pointsForFigures[idx]}
-              {...colorsForFigures[idx]}
+            <RadarChartAxes
+              ticks={ticks}
+              maxValue={maxValue}
+              backgroundColor={backgroundColor}
+              axesAngles={axesAngles}
+              labelSize={labelSize}
+              formatLabel={formatLabel}
+              colors={concentricColors && concentricColors.circles}
             />
-          ))}
-        </svg>
 
-        {/* Точки пришлось положить отдельно, чтобы их хинты были поверх линий
-        (через z-index это сделать не получится, т.к. в svg он не работает) */}
-        <div className={css.points}>
-          {figures.map((figure, idx) => (
-            <RadarChartPoints
-              key={figure.colorGroupName}
-              points={pointsForFigures[idx]}
-              lineColor={colorsForFigures[idx].lineColor}
-            />
-          ))}
+            {figures.map((figure, idx) => (
+              <RadarChartFigure
+                key={figure.colorGroupName}
+                size={size}
+                points={pointsForFigures[idx]}
+                {...colorsForFigures[idx]}
+              />
+            ))}
+          </svg>
+
+          {/* Точки пришлось положить отдельно, чтобы их хинты были поверх линий
+          (через z-index это сделать не получится, т.к. в svg он не работает) */}
+          <div className={css.points}>
+            {figures.map((figure, idx) => (
+              <RadarChartPoints
+                key={figure.colorGroupName}
+                points={pointsForFigures[idx]}
+                lineColor={colorsForFigures[idx].lineColor}
+              />
+            ))}
+          </div>
+
+          {axesAngles.map(axis => {
+            const { xPercent, yPercent } = angleToCoord(axis.angle, 1)
+
+            return (
+              <RadarChartAxisName
+                key={axis.name}
+                xPercent={xPercent}
+                yPercent={yPercent}
+                label={axis.label}
+                width={axisNameWidth}
+                lineHeight={axisNameLineHeight}
+                offset={axisNameOffset}
+              />
+            )
+          })}
         </div>
-      </div>
+      )}
     </div>
   )
 }
