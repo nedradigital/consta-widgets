@@ -13,7 +13,7 @@ import css from './index.css'
 
 export type RadarChartFormatLabel = (value: number) => string
 
-const radarChartLabelSizes = ['s', 'm'] as const
+export const radarChartLabelSizes = ['s', 'm'] as const
 export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
 
 export type Point = {
@@ -22,11 +22,22 @@ export type Point = {
   label: string
 }
 
-type Props = {
+export type Data = {
   maxValue: number
+  axesLabels: { [key: string]: string }
+  figures: ReadonlyArray<{
+    colorGroupName: string
+    values: ReadonlyArray<{
+      axisName: string
+      value: number
+    }>
+  }>
+  formatLabel?: RadarChartFormatLabel
+}
+
+type Props = {
   ticks: number
   colorGroups: ColorGroups
-  axesLabels: { [key: string]: string }
   figures: ReadonlyArray<{
     colorGroupName: string
     values: ReadonlyArray<{
@@ -36,9 +47,8 @@ type Props = {
   }>
   backgroundColor: string
   withConcentricColor: boolean
-  formatLabel?: RadarChartFormatLabel
-  labelSize?: RadarChartLabelSize
-}
+  labelSize: RadarChartLabelSize
+} & Data
 
 export type Axis = {
   name: string
@@ -100,7 +110,7 @@ export const RadarChart: React.FC<Props> = ({
   axesLabels,
   figures: originalFigures,
   backgroundColor,
-  labelSize = 's',
+  labelSize,
   formatLabel = String,
   withConcentricColor,
 }) => {

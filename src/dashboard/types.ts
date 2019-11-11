@@ -6,6 +6,7 @@ import { Line } from '@/components/LinearChart'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
 import { Data as PyramidData } from '@/components/PyramidChart'
+import { Data as RadarChartData } from '@/components/RadarChart'
 import { Data as RangePickerData } from '@/components/RangePicker'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
@@ -43,6 +44,7 @@ export enum DataType {
   Legend,
   DatePicker,
   RangePicker,
+  RadarChart,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -87,6 +89,7 @@ export type DataMap = {
   } & WithColorGroups
   [DataType.DatePicker]: DatePickerData
   [DataType.RangePicker]: RangePickerData
+  [DataType.RadarChart]: RadarChartData & WithColorGroups
 }
 
 export type Dataset = {
