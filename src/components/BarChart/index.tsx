@@ -32,13 +32,10 @@ type Props = {
   valuesTick?: number
 }
 
-const getXRange = (width: number) => [0, width] as NumberRange
-const getYRange = (height: number) =>
-  [
-    // Чтобы нарисовался гридлайн на нижней оси
-    height - 1,
-    0,
-  ] as NumberRange
+const getXRange = (width: number, orientation: Orientation): NumberRange =>
+  orientation === 'horizontal' ? [-1, width] : [0, width]
+const getYRange = (height: number, orientation: Orientation): NumberRange =>
+  orientation === 'horizontal' ? [0, height] : [height, 0]
 
 export const getGroupScale = (domain: readonly string[], size: number, orientation: Orientation) =>
   d3
@@ -46,15 +43,17 @@ export const getGroupScale = (domain: readonly string[], size: number, orientati
     .domain([...domain])
     .range(
       orientation === 'horizontal'
-        ? [getYRange(size)[0], getYRange(size)[1]]
-        : [getXRange(size)[0], getXRange(size)[1]]
+        ? [getYRange(size, orientation)[0], getYRange(size, orientation)[1]]
+        : [getXRange(size, orientation)[0], getXRange(size, orientation)[1]]
     )
 
 export const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
   d3
     .scaleLinear()
     .domain([...domain])
-    .range(orientation === 'horizontal' ? getXRange(size) : getYRange(size))
+    .range(
+      orientation === 'horizontal' ? getXRange(size, orientation) : getYRange(size, orientation)
+    )
 
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
