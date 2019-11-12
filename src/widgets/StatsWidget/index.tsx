@@ -4,6 +4,7 @@ import { Stats } from '@/components/Stats'
 import { Size, sizes } from '@/components/Stats'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { DataMap, DataType } from '@/dashboard/types'
+import { Status, statuses } from '@/ui/Badge'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Stats
@@ -22,6 +23,7 @@ type Params = {
   topStyles: string
   size: Size
   top: string
+  statusBadge: Status
 }
 
 export const defaultParams: Params = {
@@ -29,11 +31,12 @@ export const defaultParams: Params = {
   topStyles: 'label',
   size: 'xs',
   top: 'сроки',
+  statusBadge: 'normal',
 }
 
 export const StatsWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { badgePosition, topStyles, size, top },
+  params: { badgePosition, topStyles, size, top, statusBadge },
 }) => {
   const { percent, bottomUnit, rightUnit } = data
   const rightValue = percent && badgePosition === 'right' ? percent : rightUnit
@@ -48,9 +51,9 @@ export const StatsWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       rightBadge={badgePosition === 'right'}
       bottom={bottomValue}
       bottomBadge={badgePosition === 'bottom'}
-    >
-      {data.number}
-    </Stats>
+      statusBadge={statusBadge}
+      number={data.number}
+    />
   )
 }
 
@@ -99,6 +102,18 @@ export const StatsWidget = createWidget<Data, Params>({
             {positionNames.map(position => (
               <option key={position} value={position}>
                 {position}
+              </option>
+            ))}
+          </select>
+        </WidgetSettingsItem>
+        <WidgetSettingsItem name="Статус Badge">
+          <select
+            value={params.statusBadge}
+            onChange={e => onChangeParam('statusBadge', e.target.value as Status)}
+          >
+            {statuses.map(status => (
+              <option key={status} value={status}>
+                {status}
               </option>
             ))}
           </select>

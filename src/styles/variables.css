@@ -38,9 +38,6 @@
   --border-radius: 4px;
   --color-important: rgb(85, 146, 255);
   --color-important-opacity-10: rgba(85, 146, 255, 0.1);
-  --color-normal: rgb(28, 156, 82);
-  --color-warning: rgb(255, 219, 31);
-  --color-danger: rgb(202, 29, 50);
   --color-success: rgb(134, 255, 160);
   --color-success-semi: rgb(134, 255, 160, 0.5);
   --main-font-family: 'Roboto Condensed', sans-serif;
