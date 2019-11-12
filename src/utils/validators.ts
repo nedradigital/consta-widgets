@@ -2,6 +2,9 @@ import { flatten } from 'lodash'
 
 import { DataMap, DataType } from '@/dashboard/types'
 
+/**
+ * @return имена невалидных цветовых групп, для которых не задан цвет
+ */
 export const dataColorsValidator = (
   dataType: DataType,
   widgetData: DataMap[keyof DataMap] | typeof undefined
@@ -104,6 +107,14 @@ export const dataColorsValidator = (
           }
         })
         .filter((i): i is string => i !== undefined)
+    }
+
+    case DataType.RadarChart: {
+      const { colorGroups, figures } = widgetData as DataMap[DataType.RadarChart]
+
+      return figures
+        .filter(figure => !colorGroups[figure.colorGroupName])
+        .map(figure => figure.colorGroupName)
     }
 
     default:

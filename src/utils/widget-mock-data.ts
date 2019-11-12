@@ -387,6 +387,54 @@ const mockData: DataMap = {
     value: [new Date(), new Date()],
     onChange: () => null,
   },
+  [DataType.RadarChart]: {
+    colorGroups: {
+      first: '#fff',
+      second: '#56B9F2',
+    },
+    axesLabels: {
+      job: 'Охрана труда',
+      industrial: 'Промышленная безопасность',
+      fire: 'Пожарная безопасность',
+      electricity: 'Электробезопасность',
+      health: 'Охрана здоровья',
+      emergencies: 'ГО и ЧС',
+      ecology: 'Экологическая безопасность',
+      transport: 'Транспортная безопасность',
+      occupational: 'Безопасность на производстве',
+    },
+    maxValue: 800,
+    figures: [
+      {
+        colorGroupName: 'first',
+        values: [
+          { axisName: 'job', value: 550 },
+          { axisName: 'industrial', value: 700 },
+          { axisName: 'fire', value: 180 },
+          { axisName: 'electricity', value: 800 },
+          { axisName: 'health', value: 450 },
+          { axisName: 'emergencies', value: 675 },
+          { axisName: 'ecology', value: 740 },
+          { axisName: 'transport', value: 450 },
+          { axisName: 'occupational', value: 250 },
+        ],
+      },
+      {
+        colorGroupName: 'second',
+        values: [
+          { axisName: 'job', value: 160 },
+          { axisName: 'industrial', value: 450 },
+          { axisName: 'fire', value: 390 },
+          { axisName: 'electricity', value: 460 },
+          { axisName: 'health', value: 620 },
+          { axisName: 'emergencies', value: 500 },
+          { axisName: 'ecology', value: 600 },
+          { axisName: 'transport', value: 700 },
+          { axisName: 'occupational', value: 410 },
+        ],
+      },
+    ],
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
