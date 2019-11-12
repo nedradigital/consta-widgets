@@ -27,6 +27,7 @@ type Props = {
   isVertical?: boolean
   formatLabel: (n: number) => string
   colorGroups: ColorGroups
+  secondaryScaleUnit?: string
 }
 
 type State = {
@@ -223,6 +224,7 @@ export class LinearChart extends React.Component<Props, State> {
         lines,
         formatLabel,
         colorGroups,
+        secondaryScaleUnit,
       },
       state: { paddingX, paddingY, xDomain, yDomain, mainTickValues },
     } = this
@@ -274,6 +276,7 @@ export class LinearChart extends React.Component<Props, State> {
             mainTickValues={mainTickValues}
             isVertical={isVertical}
             formatLabel={formatLabel}
+            secondaryScaleUnit={secondaryScaleUnit}
           />
 
           {this.getLines().map(line => (

@@ -20,6 +20,7 @@ type Params = {
   yLabelTicks?: number
   yGridTicks?: number
   yGuide?: boolean
+  secondaryScaleUnit?: string
 }
 
 export const defaultParams: Params = {
@@ -33,6 +34,7 @@ export const defaultParams: Params = {
   yLabelTicks: 0,
   yGridTicks: 0,
   yGuide: false,
+  secondaryScaleUnit: '',
 }
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -47,6 +49,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yLabelTicks,
     yGridTicks,
     yGuide,
+    secondaryScaleUnit,
   },
   data: { data, colorGroups },
   dataset,
@@ -71,6 +74,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     withZoom={withZoom}
     isVertical={isVertical}
     formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
+    secondaryScaleUnit={secondaryScaleUnit}
   />
 )
 
@@ -168,6 +172,13 @@ export const LinearChartWidget = createWidget<Data, Params>({
             type="checkbox"
             checked={params.yGuide}
             onChange={e => onChangeParam('yGuide', e.target.checked)}
+          />
+        </WidgetSettingsItem>
+        <WidgetSettingsItem name="Еидиница измерения оси Y">
+          <input
+            type="text"
+            value={params.secondaryScaleUnit}
+            onChange={e => onChangeParam('secondaryScaleUnit', e.target.value)}
           />
         </WidgetSettingsItem>
       </>
