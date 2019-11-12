@@ -3,17 +3,3 @@
     cursor: pointer;
   }
 }
-
-.tooltipHorizontal {
-  display: inline;
-
-  margin-right: 5px;
-
-  &:last-child {
-    margin-right: 0;
-  }
-}
-
-.tooltipVertical {
-  display: block;
-}
