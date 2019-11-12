@@ -1,5 +1,6 @@
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { DataMap, DataType } from '@/dashboard/types'
+import { Hint } from '@/ui/Hint'
 import { StyleProps, Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -68,11 +69,26 @@ export const defaultParams: Params = { text: 'Заголовок', type: 'text1'
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
   params: { text, type },
-}) => (
-  <Text {...textType[type].props} className={css.title}>
-    {data ? data : text}
-  </Text>
-)
+}) => {
+  const [tooltipVisible, setTooltipVisibility] = React.useState(false)
+  const onToggleClick = () => setTooltipVisibility(!tooltipVisible)
+
+  return (
+    <div className={css.text}>
+      <Text {...textType[type].props} className={css.content}>
+        {data && data.text ? data.text : text}
+      </Text>
+      {data && data.tooltip && (
+        <div className={css.toggleable}>
+          <button className={css.button} onClick={onToggleClick}>
+            Скрыть/отобразить настройки
+          </button>
+          {tooltipVisible && <Hint className={css.tooltip}>{data.tooltip}</Hint>}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export const TextWidget = createWidget<Data, Params>({
   id: widgetId,

@@ -1,5 +1,5 @@
 .hint {
-  --arrow-size: 6px;
+  --arrow-size: var(--hint-arrow-size);
   font-size: calc-size(13);
   font-weight: bold;
   line-height: calc-size(18);

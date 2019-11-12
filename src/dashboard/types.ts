@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
@@ -75,7 +77,7 @@ export type DataMap = {
     data: readonly Line[]
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
-  [DataType.Text]: string
+  [DataType.Text]: { text: string; tooltip: React.ReactNode }
   [DataType.TableLegend]: TableLegendData
   [DataType.TrafficLight]: TrafficLightData
   [DataType.ProgressBar]: {
