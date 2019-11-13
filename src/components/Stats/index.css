@@ -5,7 +5,7 @@
 
 :--small {
   font-size: calc-size(14);
-  line-height: calc-size(18);
+  line-height: calc-size(20);
 }
 
 :--medium {
@@ -34,11 +34,11 @@
 
   @nest :--small &:last-child {
     font-size: calc-size(12);
+    line-height: calc-size(17);
   }
 }
 
 .number {
-
   font-weight: bold;
 
   display: inline-block;
@@ -71,6 +71,29 @@
   }
 }
 
+.cell {
+  @nest :--small & {
+    font-size: calc-size(12);
+    line-height: calc-size(17);
+  }
+}
+
 .badge {
-  vertical-align: 0.25em;
+  @nest :--small & {
+    padding: calc-size(1) calc-size(6);
+
+    vertical-align: 0.35em;
+  }
+
+  @nest :--medium & {
+    vertical-align: 0.35em;
+  }
+
+  @nest :--large & {
+    vertical-align: 0.3em;
+  }
+
+  @nest :--biggest & {
+    vertical-align: 0.3em;
+  }
 }
