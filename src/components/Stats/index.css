@@ -76,6 +76,18 @@
     font-size: calc-size(12);
     line-height: calc-size(17);
   }
+
+  @nest :--medium & {
+    line-height: calc-size(25);
+  }
+
+  @nest :--large & {
+    line-height: calc-size(28);
+  }
+
+  @nest :--biggest & {
+    line-height: calc-size(34);
+  }
 }
 
 .badge {
@@ -86,14 +98,14 @@
   }
 
   @nest :--medium & {
-    vertical-align: 0.35em;
+    vertical-align: 0.55em;
   }
 
   @nest :--large & {
-    vertical-align: 0.3em;
+    vertical-align: 0.5em;
   }
 
   @nest :--biggest & {
-    vertical-align: 0.3em;
+    vertical-align: 0.5em;
   }
 }
