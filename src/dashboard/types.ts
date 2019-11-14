@@ -77,7 +77,7 @@ export type DataMap = {
     data: readonly Line[]
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
-  [DataType.Text]: { text: string; tooltip: React.ReactNode }
+  [DataType.Text]: { text: string; tooltip?: React.ReactNode }
   [DataType.TableLegend]: TableLegendData
   [DataType.TrafficLight]: TrafficLightData
   [DataType.ProgressBar]: {
