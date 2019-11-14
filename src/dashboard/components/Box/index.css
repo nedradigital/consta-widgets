@@ -1,5 +1,9 @@
-.box {
+@custom-selector :--main .box;
+
+:--main {
+  display: flex;
   overflow: auto;
+  flex-direction: column;
 
   height: 100%;
 
@@ -29,96 +33,18 @@
   & > select {
     width: 100%;
   }
-}
 
-.box:not(:hover) > .panel {
-  display: none;
-}
-
-.arrow {
-  position: absolute;
-  z-index: 2;
-  left: 50%;
-
-  display: block;
-
-  text-align: center;
-
-  transform: translate(-50%, -50%);
-
-  &.down {
-    top: 100%;
+  @nest :--main:not(:hover) > & {
+    display: none;
   }
 }
 
-.button {
+.add {
   font-size: 20px;
 
   &:hover {
     cursor: pointer;
   }
-}
-
-.editButtons {
-  position: absolute;
-  z-index: 3;
-  right: 0;
-  bottom: 10px;
-
-  display: flex;
-
-  & > .button {
-    font-size: 12px;
-
-    position: relative;
-
-    margin-left: 16px;
-
-    &::before {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      bottom: -8px;
-      left: -8px;
-
-      content: '';
-
-      border-radius: 3px;
-    }
-
-    &:hover::before {
-      background: var(--bg-color-white);
-    }
-  }
-}
-
-.item {
-  position: relative;
-
-  & + & {
-    margin-top: 16px;
-  }
-
-  &:not(:hover) {
-    & .button:not(.add) {
-      display: none;
-    }
-  }
-
-  &:not(.isViewMode) {
-    &:hover,
-    &.isEditing {
-      box-shadow: 0 0 5px aquamarine inset;
-    }
-  }
-}
-
-.item.isCustomItem > .editButtons {
-  top: 0;
-  bottom: auto;
-}
-
-.add {
   margin-left: 5px;
 
   vertical-align: middle;

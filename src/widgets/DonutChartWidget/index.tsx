@@ -18,8 +18,10 @@ export const DonutChartWidgetContent: React.FC<WidgetContentProps<Data, Params>>
 export const DonutChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Пончик',
-  defaultParams,
-  defaultHeight: 200,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   dataType: DataType.Donut,
   Content: DonutChartWidgetContent,
 })

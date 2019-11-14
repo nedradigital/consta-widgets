@@ -40,6 +40,7 @@ const initialItems: readonly BoxItem[] = [
   },
   {
     type: 'columns',
+    params: {},
     columns: [
       [
         {

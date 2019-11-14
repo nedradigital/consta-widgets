@@ -1,0 +1,84 @@
+@custom-selector :--main .main;
+
+:--main {
+  position: relative;
+
+  &:not(.isViewMode) {
+    &:hover,
+    &.isEditingSettings {
+      box-shadow: 0 0 5px aquamarine inset;
+    }
+  }
+}
+
+.editButtons {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 10px;
+
+  display: flex;
+
+  @nest :--main.isCustomItem & {
+    top: 0;
+    bottom: auto;
+  }
+}
+
+.button {
+  font-size: 12px;
+
+  position: relative;
+
+  margin-left: 16px;
+
+  @nest :--main:not(:hover) & {
+    display: none;
+  }
+
+  &::before {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    bottom: -8px;
+    left: -8px;
+
+    content: '';
+
+    border-radius: 3px;
+  }
+
+  &:hover::before {
+    background: var(--bg-color-white);
+  }
+}
+
+.arrow {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+
+  display: block;
+
+  text-align: center;
+
+  transform: translate(-50%, -50%);
+
+  &.down {
+    top: 100%;
+  }
+}
+
+.portal {
+  visibility: visible;
+}
+
+.settings {
+  position: absolute;
+
+  margin-left: 10px;
+
+  color: black;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}

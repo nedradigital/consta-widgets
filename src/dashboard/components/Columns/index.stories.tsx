@@ -18,6 +18,7 @@ import { Columns } from '.'
 
 const columnsItem: ColumnsItem = {
   type: 'columns',
+  params: {},
   columns: [
     [
       {

@@ -4,11 +4,14 @@ import { useDrag } from 'react-dnd'
 import { move, removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
+import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
+import { Settings } from '@/dashboard/components/Settings'
+import { isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { WidgetType } from '@/utils/WidgetFactory'
 
 import { ItemTypes } from '../../dnd-constants'
-import { BoxItem, ColumnsContent, Data, Dataset, WidgetItem } from '../../types'
+import { BoxItem, ColumnsContent, Data, Dataset } from '../../types'
 import { Columns } from '../Columns'
 
 import css from './index.css'
@@ -25,16 +28,6 @@ type Props = {
   isNestedBox?: boolean
 }
 
-type WidgetEditorBoxProps = {
-  lastElement: boolean
-  isEditing: boolean
-  isCustomItem: boolean
-  index: number
-  changePosition: (index: number, direction: 1 | -1) => void
-  removeItem: (index: number) => void
-  editWidget: (index: number) => void
-}
-
 const widgetsList: { [key: string]: any } = {}
 const req = require.context('../../../widgets', true, /index.tsx$/)
 req.keys().forEach(key => {
@@ -47,64 +40,11 @@ req.keys().forEach(key => {
   }
 })
 
-const getWidget = (id: string): WidgetType<any, any> => {
+export const getWidget = (id: string): WidgetType<any, any> => {
   const name = widgetsList[id].widgetName
 
   return widgetsList[id][name]
 }
-
-const WidgetEditorBox: React.FC<WidgetEditorBoxProps> = ({
-  children,
-  index,
-  changePosition,
-  lastElement,
-  removeItem,
-  editWidget,
-  isEditing,
-  isCustomItem,
-}) => {
-  return (
-    <div
-      className={classnames(css.item, isEditing && css.isEditing, isCustomItem && css.isCustomItem)}
-    >
-      {index > 0 ? (
-        <button
-          className={classnames(css.button, css.arrow)}
-          type="button"
-          onClick={() => changePosition(index, -1)}
-          children="⬆️"
-        />
-      ) : null}
-      {!lastElement ? (
-        <button
-          className={classnames(css.button, css.arrow, css.down)}
-          type="button"
-          onClick={() => changePosition(index, 1)}
-          children="⬇️"
-        />
-      ) : null}
-      <div className={css.editButtons}>
-        <button
-          className={css.button}
-          type="button"
-          children="💀"
-          onClick={() => removeItem(index)}
-        />
-        {!isCustomItem && (
-          <button
-            className={css.button}
-            type="button"
-            children="✏️"
-            onClick={() => editWidget(index)}
-          />
-        )}
-      </div>
-      {children}
-    </div>
-  )
-}
-
-const isWidget = (item: BoxItem): item is WidgetItem => item.type === 'widget'
 
 export const Box: React.FC<Props> = ({
   viewMode,
@@ -117,7 +57,7 @@ export const Box: React.FC<Props> = ({
   isNestedBox,
 }) => {
   const [selectedItem, changeSelected] = useState(Object.keys(widgetsList)[0])
-  const [editedIndex, changeEdited] = useState()
+  const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
   const { getUniqueName, removeName } = useUniqueNameGenerator(
     items.filter(isWidget).map(item => item.id)
   )
@@ -125,7 +65,7 @@ export const Box: React.FC<Props> = ({
   const addItem = () => {
     switch (selectedItem) {
       case 'columns':
-        onChange([...items, { type: 'columns', columns: [[], []] }])
+        onChange([...items, { type: 'columns', columns: [[], []], params: {} }])
         return
       default:
         const { showName, id, defaultParams } = getWidget(selectedItem)
@@ -168,13 +108,11 @@ export const Box: React.FC<Props> = ({
   const updateParams = (index: number, params: any) => {
     const item = items[index]
 
-    if (isWidget(item)) {
-      onChange(updateAt(items, index, { ...item, params }))
-    }
+    onChange(updateAt(items, index, { ...item, params }))
   }
 
-  const editWidget = (index?: number) => {
-    changeEdited(index)
+  const openSettings = (index?: number) => {
+    changeSettingsOpenedFor(index)
   }
 
   const [{ opacity }, dragRef] = useDrag({
@@ -215,13 +153,12 @@ export const Box: React.FC<Props> = ({
               </optgroup>
             )}
           </select>
-          <button className={classnames(css.button, css.add)} type="button" onClick={addItem}>
+          <button className={css.add} type="button" onClick={addItem}>
             ➕
           </button>
         </div>
       )}
       {items.map((item, index) => {
-        const isEditing = index === editedIndex
         let component
 
         if (item.type === 'widget') {
@@ -233,11 +170,6 @@ export const Box: React.FC<Props> = ({
               dataKey={item.id}
               params={item.params}
               datasets={datasets}
-              isEditing={isEditing}
-              onChangeParams={newParams => {
-                updateParams(index, newParams)
-              }}
-              requestCloseSettings={() => editWidget(undefined)}
             />
           )
         }
@@ -256,23 +188,32 @@ export const Box: React.FC<Props> = ({
           )
         }
 
-        if (viewMode) {
-          return <div className={classnames(css.item, css.isViewMode)}>{component}</div>
-        }
+        const settings = (
+          <Settings
+            item={item}
+            datasets={datasets}
+            onChangeParams={newParams => {
+              updateParams(index, newParams)
+            }}
+          />
+        )
 
         return (
-          <WidgetEditorBox
+          <BoxItemWrapper
             key={index}
             index={index}
-            changePosition={changePosition}
+            viewMode={viewMode}
             lastElement={Boolean(index === items.length - 1)}
-            removeItem={removeItem}
-            editWidget={editWidget}
-            isEditing={isEditing}
+            isEditingSettings={index === settingsOpenedFor}
             isCustomItem={!isWidget(item)}
+            params={item.params}
+            settings={settings}
+            onChangePosition={changePosition}
+            onRemoveItem={removeItem}
+            onOpenSettings={openSettings}
           >
             {component}
-          </WidgetEditorBox>
+          </BoxItemWrapper>
         )
       })}
     </div>

@@ -26,8 +26,10 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
 export const BarChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Барчарт',
-  defaultParams,
-  defaultHeight: 300,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   dataType: DataType.BarChart,
   Content: BarChartWidgetContent,
   renderSettings(params, onChangeParam) {
