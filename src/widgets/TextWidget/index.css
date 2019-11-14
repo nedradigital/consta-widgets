@@ -1,3 +1,40 @@
-.title {
+.text {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  margin-right: calc-size(10);
   margin-bottom: 0;
+}
+
+.toggleable {
+  position: relative;
+}
+
+.button {
+  font-size: 0;
+
+  width: calc-size(20);
+  height: calc-size(20);
+
+  cursor: pointer;
+
+  background-image: url('./icons/settings.svg');
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  &:hover {
+    opacity: 0.5;
+  }
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(-1 * var(--hint-arrow-size));
+  left: 50%;
+
+  transform: translate(-50%, 100%) !important;
 }

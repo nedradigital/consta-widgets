@@ -147,7 +147,10 @@ const mockData: DataMap = {
       text: '6. ОД и ОУ ',
     },
   ],
-  [DataType.Text]: 'Какой-то текст',
+  [DataType.Text]: {
+    text: 'Какой-то текст',
+    tooltip: <p>Контент тултипа</p>,
+  },
   [DataType.TableLegend]: {
     colorGroups: {
       first: 'red',

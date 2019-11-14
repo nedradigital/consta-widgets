@@ -11,7 +11,10 @@ storiesOf('widgets/TextWidget', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
     <TextWidgetContent
-      data={text('data', '')}
+      data={{
+        text: text('data', ''),
+        tooltip: <p>Контент тултипа</p>,
+      }}
       params={{
         text: text('title', defaultParams.text),
         type: select('type', typeNames, defaultParams.type),
