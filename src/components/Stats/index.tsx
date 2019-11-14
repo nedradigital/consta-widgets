@@ -35,9 +35,13 @@ type Props = {
 
 const renderBadgeOrCell = (statusBadge: Status, isBadge?: boolean, value?: string) => {
   return isBadge ? (
-    <Badge status={statusBadge}> {value} </Badge>
+    <Badge status={statusBadge} className={classnames(css.badge, css.cell)}>
+      {value}
+    </Badge>
   ) : (
-    <Cell type={'sublabel'}>{value}</Cell>
+    <Cell type={'sublabel'} className={css.cell}>
+      {value}
+    </Cell>
   )
 }
 
