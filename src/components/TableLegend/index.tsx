@@ -71,7 +71,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
         key={idx}
         className={classnames(
           css[obj.className],
-          sort ? (isOrderByDesc ? css.sortDesc : css.sortAsc) : ''
+          (sort && (isOrderByDesc ? css.sortDesc : css.sortAsc)) || undefined
         )}
         data-accessor={obj.accessor}
         style={{ position: 'relative' }}

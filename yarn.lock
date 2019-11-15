@@ -1257,10 +1257,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/configs@0.1.28":
-  version "0.1.28"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.28.tgz#5318ddc6ee8616c4939eb10838989e6a97cb1997"
-  integrity sha512-omcjHJTNdgEmAfGoftI6IOIMIEhtnz4Gkm+Y1QCzcuEmKlNG4L3E1JSh0bEvK3Y2dhyO0Y39tBapirbvkig//A==
+"@gaz/configs@0.1.30":
+  version "0.1.30"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.30.tgz#a71e6948d36f2f08c1621a92a2c4271e25456d7d"
+  integrity sha512-S9kDIx+JZunQTP4A/pggcbLOtGHXgEidp9exP50cLUyhXDPg9pvsBswzp1Pe8X1wc3EYFI4optfVurblX2rolQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1270,7 +1270,7 @@
     "@babel/plugin-transform-runtime" "7.4.4"
     "@babel/preset-env" "7.4.5"
     "@babel/preset-react" "7.0.0"
-    "@gaz/utils" "0.1.6"
+    "@gaz/utils" "0.1.7"
     "@hot-loader/react-dom" "16.8.6"
     "@svgr/webpack" "4.3.3"
     "@types/enzyme" "3.10.2"
@@ -1339,12 +1339,12 @@
 "@gaz/utils@0.1.4":
   version "0.1.4"
   resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.4.tgz#28c53e3f18c59e1801b85346db3da9c417888484"
-  integrity sha512-dMId+Z89JblrGEEXGfEwkJNUy0TaHm+ctSAgEJHRLcgVZDNmnyfqmEF8i4nXBi93CQb943RmCfC5hPpBgmVEAw==
+  integrity sha512-+tqHAvnLRDRVgPUByLqXe7iRZZ++CX4+abGTS6pMhGFZiUehFvjNovBOVRX9mSm5GQLOTf+iCw0Fhe2b19/haQ==
 
-"@gaz/utils@0.1.6":
-  version "0.1.6"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.6.tgz#35729d0c2b125c35aa0f4888ed76e5a77b0c87e0"
-  integrity sha512-NMBKpF5Zj6x1RMijEk7JEmAJvATm7AVK8Amo1sH+rWTirkWtUdjd0Nqvnw8ULf7s0gJijmMMIa4x0gKSrtYcKA==
+"@gaz/utils@0.1.7":
+  version "0.1.7"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.1.7.tgz#dbef7f88a8e9fb72e1ae254bad30521673627786"
+  integrity sha512-w5fP/HiFx+lhvJIi/0n7yuZ5SCUL294x7AWftAopbD7agyGg6WzowDGWLyzrLmrHS3yk5V8QhhDG6B3ZXo9Z3Q==
   dependencies:
     "@gaz/configs" "0.1.16"
     lodash "4.17.11"
