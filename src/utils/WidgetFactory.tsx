@@ -46,8 +46,18 @@ export const createWidget = <
   defaultHeight?: number
   Content: React.ComponentType<WidgetContentProps<Data, OriginalParams>>
   renderSettings?: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
+  allowEmptyData?: boolean
 }) => {
-  const { name, dataType, defaultParams, defaultHeight, Content, renderSettings, id } = opts
+  const {
+    name,
+    dataType,
+    defaultParams,
+    defaultHeight,
+    Content,
+    renderSettings,
+    id,
+    allowEmptyData,
+  } = opts
   const Widget: WidgetType<Data, Params> = ({
     data,
     datasets,
@@ -59,7 +69,7 @@ export const createWidget = <
   }) => {
     const widgetData: Data = data[dataKey] as any
 
-    if (dataType && !widgetData) {
+    if (!allowEmptyData && dataType && !widgetData) {
       return <div>Нет данных для виджета "{name}"</div>
     }
 

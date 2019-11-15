@@ -96,6 +96,7 @@ export const TextWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: TextWidgetContent,
+  allowEmptyData: true,
   renderSettings(params, onChangeParam) {
     return (
       <>
