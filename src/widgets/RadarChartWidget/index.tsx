@@ -29,8 +29,10 @@ export const RadarChartWidget = createWidget<Data, Params>({
   id: '94456b61-fba4-4121-a29c-a313cac4f4c0',
   name: 'Радар',
   dataType,
-  defaultParams,
-  defaultHeight: 300,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   Content: RadarChartWidgetContent,
   renderSettings(params, onChangeParam) {
     return (

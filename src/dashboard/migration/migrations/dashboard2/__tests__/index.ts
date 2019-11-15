@@ -1,7 +1,7 @@
 import { Dashboard2, migration2 } from '../'
 import { Dashboard1 } from '../../dashboard1'
 
-describe('migration1', () => {
+describe('migration2', () => {
   it('upgrades without settings', () => {
     const source: Dashboard1.State = {
       version: 1,

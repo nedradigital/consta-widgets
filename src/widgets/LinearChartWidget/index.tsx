@@ -77,8 +77,10 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
 export const LinearChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Линейный график',
-  defaultParams,
-  defaultHeight: 300,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   dataType: DataType.LinearChart,
   Content: LinearChartWidgetContent,
   renderSettings(params, onChangeParam) {

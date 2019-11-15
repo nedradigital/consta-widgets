@@ -1,0 +1,9 @@
+.main {
+  display: grid;
+  align-items: baseline;
+
+  padding: 10px;
+  grid-template-columns: 1fr auto;
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+}
