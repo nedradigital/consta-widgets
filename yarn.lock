@@ -1189,7 +1189,7 @@
 "@gaz/configs@0.1.16":
   version "0.1.16"
   resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.1.16.tgz#6f1c511f17557e6ccb296e5867078f7b2a4c98b3"
-  integrity sha512-QD/94Y3i/SZvbVRovMeKB2/RrczDU0UVI2LiLj0D3FjUx1ObtG6NqCT3lhISt44lFDQ53hWCn9IX5gTN6mhVYw==
+  integrity sha512-LmQeEqQRSgQISnPksKqlpNyifP/WhvsW8Le2cmH9cP3b1ji0Ay4dt9lN82groGIy64Y6hE9XUtfzl0xkM9nkqQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
