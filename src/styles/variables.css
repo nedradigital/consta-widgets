@@ -51,6 +51,7 @@
   --fast-transition: 0.15s ease-out;
   --bg-box: #00273d;
   --hint-arrow-size: 6px;
+  --table-even-row-background: rgba(0, 0, 0, 0.05);
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;
