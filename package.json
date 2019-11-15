@@ -54,7 +54,7 @@
     ]
   },
   "dependencies": {
-    "@gaz/utils": "0.1.7",
+    "@gaz/utils": "0.1.8",
     "classnames": "2.2.6",
     "d3": "5.12.0",
     "lodash": "4.17.11",
@@ -71,7 +71,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
-    "@gaz/configs": "0.1.30",
+    "@gaz/configs": "0.1.31",
     "@storybook/addon-actions": "5.2.5",
     "@storybook/addon-info": "5.2.5",
     "@storybook/addon-knobs": "5.2.5",
@@ -96,6 +96,6 @@
   },
   "engines": {
     "node": ">=10",
-    "yarn": ">=1.16"
+    "yarn": ">=1.19.1"
   }
 }
