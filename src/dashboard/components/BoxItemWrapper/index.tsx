@@ -72,6 +72,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
       )}
       style={{
         flexGrow: params.growRatio,
+        flexBasis: params.growRatio ? 0 : undefined,
         marginTop: params.marginTop && calcSize(sizeValues[params.marginTop]),
       }}
       ref={ref}
