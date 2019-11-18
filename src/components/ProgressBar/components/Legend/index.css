@@ -42,6 +42,7 @@
   width: calc-size(1);
   height: calc-size(4);
 
+  opacity: 0.5;
   background-color: currentColor;
 }
 
@@ -50,4 +51,6 @@
   line-height: calc-size(15);
 
   white-space: nowrap;
+
+  opacity: 0.7;
 }
