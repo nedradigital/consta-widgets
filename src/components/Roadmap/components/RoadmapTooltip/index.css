@@ -1,0 +1,161 @@
+@custom-selector :--main .main;
+
+:--main {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+
+  text-align: left;
+
+  &::after {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+
+    display: block;
+
+    width: 0;
+    height: 0;
+
+    content: '';
+
+    border-top: 6px solid #fff;
+    border-right: 6px solid transparent;
+  }
+
+  &.top {
+    bottom: 100%;
+  }
+
+  &.bottom {
+    top: 100%;
+  }
+
+  &.bottom::after {
+    top: 0;
+    left: 0;
+
+    border-top: none;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid #fff;
+  }
+}
+
+.buttons {
+  display: inline-block;
+  overflow: hidden;
+
+  height: 26px;
+
+  white-space: nowrap;
+
+  border-radius: 4px 4px 4px 0;
+
+  :--main.opened & {
+    border-radius: 0 0 4px 0;
+  }
+
+  :--main.bottom & {
+    margin-top: 6px;
+
+    border-radius: 0 4px 4px 4px;
+  }
+
+  :--main.opened.bottom & {
+    border-radius: 0 4px 0 0;
+  }
+}
+
+.button {
+  display: inline-flex;
+
+  width: 26px;
+  height: 26px;
+
+  vertical-align: middle;
+
+  background-color: #fff;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  &:hover,
+  &.active {
+    background-color: #e5e9eb;
+  }
+
+  &.dates {
+    background-image: url('./icon_calendar_s.svg');
+  }
+
+  &.comment {
+    width: 27px;
+
+    border-left: 1px solid #e5e9eb;
+    background-image: url('./icon_chat_s.svg');
+  }
+}
+
+.content {
+  font-size: calc-size(12);
+  line-height: calc-size(17);
+
+  width: calc-size(315);
+  padding: calc-size(11) calc-size(8);
+
+  color: #002033;
+  border-radius: 4px 4px 4px 0;
+  background: #fff;
+
+  &.dates {
+    width: auto;
+
+    white-space: nowrap;
+  }
+
+  :--main.bottom & {
+    margin-top: -6px;
+
+    border-radius: 0 4px 4px 4px;
+  }
+}
+
+.circle {
+  display: inline-flex;
+
+  width: calc-size(12);
+  height: calc-size(12);
+
+  vertical-align: middle;
+
+  border-radius: 100px;
+  background: black;
+
+  &.transparent {
+    opacity: 0.4;
+  }
+}
+
+.label {
+  display: inline-flex;
+
+  margin: 0 4px;
+
+  vertical-align: middle;
+}
+
+.title {
+  font-size: calc-size(11);
+  font-weight: bold;
+  line-height: calc-size(15);
+
+  margin-bottom: 5px;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.dateBlock {
+  & + & {
+    margin-top: 4px;
+  }
+}
