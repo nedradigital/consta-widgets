@@ -327,7 +327,7 @@ const mockData: DataMap = {
   [DataType.ProgressBar]: {
     colorGroups: {
       first: '#FFBA3B',
-      second: 'green',
+      second: '#39BA21',
       third: '#00CFDE',
     },
     data: [
