@@ -1,3 +1,4 @@
+import * as React from 'react'
 import useDimensions from 'react-use-dimensions'
 
 import { calcSize } from '@gaz/utils/lib/css'
@@ -20,7 +21,9 @@ type Props = {
   fontSize?: Size
 }
 
-const widthPyramid = 312
+const pyramidWidth = 312
+const sectionHeight = 45
+const sectionTextWidth = 300
 
 const getLineCoords = (
   countLines: number,
@@ -49,32 +52,58 @@ const getLineCoords = (
     )
 }
 
+const buildTriangleSectionPath = (
+  data: readonly Data[],
+  height: number,
+  width: number,
+  isGradient: boolean,
+  colors: readonly string[]
+) => {
+  const fillBlackSemi = 'rgba(0,0,0,.5)'
+
+  return getLineCoords(data.length, height, width, isGradient).map((item, index) => (
+    <path key={index} d={`M${item}`} fill={isGradient ? fillBlackSemi : colors[index]} />
+  ))
+}
+
 export const PyramidChart: React.FC<Props> = ({
   data,
   colors,
   constraint = true,
   fontSize = 's',
 }) => {
-  const [ref, { height, width }] = useDimensions()
+  const [ref, { width, height }] = useDimensions()
+  const containerHeightResponsive = calcSize(data.length * sectionHeight)
+  const tableWidthResponsive = calcSize(
+    constraint ? pyramidWidth : pyramidWidth / 2 + sectionTextWidth
+  )
 
   return (
     <div className={classnames(css.main, { s: css.sizeS, m: css.sizeM }[fontSize])}>
-      <div className={css.svgWrapper} ref={ref} style={{ width: calcSize(widthPyramid) }}>
-        <svg width={width} height={height}>
-          {getLineCoords(data.length, height, width, false).map((item, index) => (
-            <path key={index} d={`M${item}`} fill={colors[index]} />
-          ))}
-          {getLineCoords(data.length, height, width, true).map((item, index) => (
-            <path key={index} d={`M${item}`} fill="rgba(0,0,0,.5)" />
-          ))}
+      <div
+        className={css.svgWrapper}
+        ref={ref}
+        style={{ width: calcSize(pyramidWidth), height: containerHeightResponsive }}
+      >
+        <svg width={calcSize(pyramidWidth)} height={containerHeightResponsive}>
+          {buildTriangleSectionPath(data, height, width, false, colors)}
+          {buildTriangleSectionPath(data, height, width, true, colors)}
         </svg>
       </div>
-      <table className={css.table} style={{ width: constraint ? calcSize(widthPyramid) : '100%' }}>
+      <table
+        className={css.table}
+        style={{
+          width: tableWidthResponsive,
+          height: containerHeightResponsive,
+        }}
+      >
         <tbody>
           {data.map(item => (
             <tr key={item.value}>
-              <td style={{ width: calcSize(widthPyramid / 2) }}>{item.value}</td>
-              <td>{item.text}</td>
+              <td style={{ width: calcSize(pyramidWidth / 2) }}>{item.value}</td>
+              <td>
+                <div className={css.textEllipsis}>{item.text}</div>
+              </td>
             </tr>
           ))}
         </tbody>
