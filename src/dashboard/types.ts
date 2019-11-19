@@ -13,10 +13,10 @@ import { Data as RangePickerData } from '@/components/RangePicker'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
-import { Dashboard3 } from '@/dashboard/migration/migrations/dashboard3'
+import { Dashboard4 } from '@/dashboard/migration/migrations/dashboard4'
 import { Status } from '@/ui/Badge'
 
-import Dashboard = Dashboard3
+import Dashboard = Dashboard4
 
 export type MarginSize = Dashboard.MarginSize
 export type Settings = Dashboard.Settings
