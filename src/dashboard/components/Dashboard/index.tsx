@@ -136,7 +136,7 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
     }
   }, [width, height, scale, element])
 
-  const rowHeight = (height - 2 * basePadding[1] + baseMargin[1]) / rowsCount - baseMargin[1]
+  const rowHeight = (height - padding[1] * 2 - margin[1] * (rowsCount - 1)) / rowsCount
 
   return (
     <div
