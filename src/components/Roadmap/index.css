@@ -1,0 +1,188 @@
+.main {
+  --label-column-width: calc-size(186);
+  --separate-line-color: rgba(255, 255, 255, 0.1);
+
+  display: grid;
+
+  width: 100%;
+  grid-template-columns: calc(var(--label-column-width) * 2) auto;
+  grid-template-areas: 'left calendar';
+}
+
+.left {
+  grid-area: left;
+
+  z-index: 1;
+
+  &.shadow {
+    box-shadow: 5px 0 14px rgba(0, 29, 46, 0.4);
+  }
+}
+
+.calendar {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  border-right: 1px solid var(--separate-line-color);
+  border-left: 1px solid var(--separate-line-color);
+  grid-area: calendar;
+}
+
+.fakeBlock {
+  visibility: hidden;
+
+  width: var(--label-column-width);
+}
+
+.labelsTable {
+  width: 100%;
+
+  table-layout: fixed;
+}
+
+.table {
+  margin: 0;
+  padding: 0;
+
+  border-spacing: 0;
+  border-collapse: separate;
+
+  border: none;
+  background: none;
+
+  & td {
+    font-size: calc-size(16);
+    line-height: calc-size(22);
+
+    padding: calc-size(10) 0;
+
+    text-align: center;
+    vertical-align: top;
+  }
+
+  & th {
+    font-size: calc-size(11);
+    font-weight: bold;
+    line-height: calc-size(15);
+
+    padding: calc-size(12) calc-size(16);
+
+    text-align: center;
+    text-transform: uppercase;
+
+    color: #f6fbfd;
+    border-bottom: 1px solid var(--separate-line-color);
+  }
+
+  & td:first-child,
+  & th:first-child {
+    text-align: left;
+  }
+
+  & tr:nth-child(even) td {
+    background: var(--table-even-row-background);
+  }
+}
+
+.calendarTable {
+  width: 100%;
+  min-width: calc-size(600);
+
+  table-layout: fixed;
+
+  & tbody {
+    background-image: url('./background.svg');
+    background-repeat: repeat;
+  }
+}
+
+.plan {
+  position: absolute;
+  top: 0;
+
+  height: 24px;
+
+  opacity: 0.4;
+}
+
+.fact,
+.forecast {
+  position: absolute;
+  top: 6px;
+
+  height: 12px;
+}
+
+.forecast {
+  opacity: 0.4;
+}
+
+.wrapper {
+  position: relative;
+
+  width: 100%;
+
+  &.hidden > .fact:not(.hovered),
+  &.hidden > .plan:not(.hovered) {
+    opacity: 0.25;
+  }
+}
+
+.currentDay {
+  position: absolute;
+  top: -10px;
+
+  width: 1px;
+  height: 100%;
+
+  background: #0096eb;
+
+  &::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 7px;
+    height: 7px;
+
+    content: '';
+
+    border-radius: 10px;
+    background: inherit;
+
+    transform: translate(-50%, -50%);
+  }
+}
+
+.titleWrapper {
+  position: relative;
+}
+
+.periodWrapper {
+  position: absolute;
+  top: -12px;
+  bottom: -12px;
+  left: -17px;
+
+  width: 1px;
+
+  background: var(--separate-line-color);
+}
+
+.periodText {
+  font-size: calc-size(8);
+  font-weight: normal;
+  line-height: calc-size(11);
+
+  position: absolute;
+  top: 0;
+  left: 1px;
+
+  width: calc-size(31);
+  height: calc-size(10);
+
+  white-space: nowrap;
+
+  color: #f6fbfd;
+  background: var(--separate-line-color);
+}

@@ -50,7 +50,7 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
   } = props
   const { boxes, config } = dashboard
 
-  const [demensionRef, { width, height }, element] = useDimensions()
+  const [dimensionRef, { width, height }, element] = useDimensions()
 
   const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
@@ -141,7 +141,7 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
   return (
     <div
       ref={el => {
-        demensionRef(el)
+        dimensionRef(el)
         dropRef(el)
       }}
       className={css.dashboard}
