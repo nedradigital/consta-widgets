@@ -1,0 +1,6 @@
+.tooltip {
+  font-size: calc-size(11);
+  line-height: calc-size(15);
+
+  padding: calc-size(2) calc-size(5);
+}

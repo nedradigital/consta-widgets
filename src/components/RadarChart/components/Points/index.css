@@ -36,11 +36,8 @@
 }
 
 .hint {
-  font-size: calc-size(16);
-  line-height: calc(22 / 16);
-
   right: 50%;
-  bottom: 0;
+  bottom: calc(-1 * var(--hint-arrow-size));
 
   @nest :--point:not(:hover) & {
     visibility: hidden;
