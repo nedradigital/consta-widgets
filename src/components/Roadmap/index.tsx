@@ -4,18 +4,21 @@ import useDimensions from 'react-use-dimensions'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
+import { getDayMonthYearFromTimestamp, getDaysInMonth } from '@/utils/time'
 
+import { RoadmapTooltip } from './components/RoadmapTooltip'
 import css from './index.css'
 
-type Item = {
+export type Item = {
   startDate: number
   endDate: number
   groupName: string
+  comment?: string
 }
 
 export type Data = {
-  place: string
-  complex: string
+  firstColumn: string
+  secondColumn: string
   plan: readonly Item[]
   fact: readonly Item[]
   forecast: readonly Item[]
@@ -26,6 +29,11 @@ type Props = {
   titles: readonly [string, string]
   currentDay: number
   colorGroups: ColorGroups
+}
+
+type ActiveLineState = {
+  groupName?: string
+  index?: number
 }
 
 const months = [
@@ -42,6 +50,7 @@ const months = [
   'ноя',
   'дек',
 ] as const
+
 const periods: { [key: number]: string } = {
   0: 'I 2019',
   3: 'II 2019',
@@ -49,16 +58,8 @@ const periods: { [key: number]: string } = {
   9: 'IV 2019',
 }
 
-const getDaysInMonth = (month: number, year: number) => {
-  return new Date(year, month, 0).getDate()
-}
-
 const getCoordsByDate = (ms: number, monthWidth: number) => {
-  const d = new Date(ms)
-
-  const month = d.getMonth()
-  const day = d.getDate()
-  const year = d.getFullYear()
+  const [day, month, year] = getDayMonthYearFromTimestamp(ms)
   const countDaysInMonth = getDaysInMonth(month, year)
 
   const startPrecent = monthWidth * month
@@ -67,27 +68,50 @@ const getCoordsByDate = (ms: number, monthWidth: number) => {
 }
 
 const renderItem = ({
+  key,
   className,
+  index,
   colorGroups,
   monthWidth,
+  activeLine,
+  onClick,
+  plans,
 }: {
+  key: string
   className: string
   index?: number
   colorGroups: ColorGroups
   monthWidth: number
-}) => ({ startDate, endDate, groupName }: Item) => {
+  activeLine?: ActiveLineState
+  onClick?: (v: ActiveLineState) => void
+  plans?: readonly Item[]
+}) => (item: Item) => {
+  const { startDate, endDate, groupName } = item
   const left = getCoordsByDate(startDate, monthWidth)
   const width = getCoordsByDate(endDate, monthWidth)
+  const active = activeLine && activeLine.index === index && activeLine.groupName === groupName
+  const plan = plans ? plans.find(i => i.groupName === groupName) : false
 
   return (
     <div
-      className={classnames(className, false && css.hovered)}
+      key={key + groupName}
+      className={classnames(className, active && css.active)}
       style={{
         left,
         width: `calc(${width}px - ${left}px)`,
         background: colorGroups[groupName],
       }}
-    />
+      onClick={onClick ? () => onClick({ index, groupName }) : undefined}
+    >
+      {active && plan && key === 'fact' ? (
+        <RoadmapTooltip
+          fact={item}
+          plan={plan}
+          colorGroups={colorGroups}
+          direction={index && index > 2 ? 'top' : 'bottom'}
+        />
+      ) : null}
+    </div>
   )
 }
 
@@ -101,7 +125,7 @@ const Table: React.FC<TableProps> = ({
   children,
   titles,
   className,
-  renderTitle = title => <th>{title}</th>,
+  renderTitle = title => <th key={title}>{title}</th>,
 }) => (
   <table className={classnames(css.table, className)}>
     <thead>
@@ -117,17 +141,30 @@ export const Roadmap: React.FC<Props> = props => {
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
   const [dimensionRef, { height }, element] = useDimensions()
+  const [activeLine, changeActiveLine] = useState<ActiveLineState>({
+    index: undefined,
+    groupName: undefined,
+  })
+
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
+  }, [])
+
+  const handleWindowClick = useCallback(event => {
+    if (!event.target.classList.contains(css.fact)) {
+      changeActiveLine({ index: undefined, groupName: undefined })
+    }
   }, [])
 
   useLayoutEffect(() => {
     if (element) {
       element.addEventListener('scroll', scrollHandler)
+      window.addEventListener('click', handleWindowClick)
 
       changeMonthWidth(element.querySelector('th')!.offsetWidth)
 
       return () => {
+        window.removeEventListener('click', handleWindowClick)
         element.removeEventListener('scroll', scrollHandler)
       }
     }
@@ -139,9 +176,9 @@ export const Roadmap: React.FC<Props> = props => {
         <Table className={css.labelsTable} titles={titles}>
           <tbody>
             {data.map(item => (
-              <tr key={name}>
-                <td>{item.place}</td>
-                <td>{item.complex}</td>
+              <tr key={item.firstColumn}>
+                <td>{item.firstColumn}</td>
+                <td>{item.secondColumn}</td>
               </tr>
             ))}
           </tbody>
@@ -167,14 +204,45 @@ export const Roadmap: React.FC<Props> = props => {
           }}
         >
           <tbody style={{ backgroundSize: `${monthWidth}px 20px` }}>
-            {data.map(({ plan, fact, forecast, place }, index) => (
+            {data.map(({ plan, fact, forecast, firstColumn, secondColumn }, index) => (
               <tr key={index}>
                 <td colSpan={months.length}>
-                  <div className={classnames(css.wrapper, false && css.hidden)}>
-                    <div className={css.fakeBlock}>{place}</div>
-                    {plan.map(renderItem({ className: css.plan, colorGroups, monthWidth }))}
-                    {fact.map(renderItem({ className: css.fact, colorGroups, monthWidth }))}
-                    {forecast.map(renderItem({ className: css.forecast, colorGroups, monthWidth }))}
+                  <div
+                    className={classnames(css.wrapper, activeLine.groupName && css.hideInactive)}
+                  >
+                    <div className={css.fakeBlock}>
+                      {firstColumn.length > secondColumn.length ? firstColumn : secondColumn}
+                    </div>
+                    {plan.map(
+                      renderItem({
+                        key: 'plan',
+                        className: css.plan,
+                        index,
+                        colorGroups,
+                        monthWidth,
+                        activeLine,
+                      })
+                    )}
+                    {fact.map(
+                      renderItem({
+                        key: 'fact',
+                        className: css.fact,
+                        index,
+                        colorGroups,
+                        monthWidth,
+                        activeLine,
+                        onClick: changeActiveLine,
+                        plans: plan,
+                      })
+                    )}
+                    {forecast.map(
+                      renderItem({
+                        key: 'forecast',
+                        className: css.forecast,
+                        colorGroups,
+                        monthWidth,
+                      })
+                    )}
                     {index === 0 && (
                       <div
                         className={css.currentDay}

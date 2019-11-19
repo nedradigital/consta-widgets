@@ -105,15 +105,21 @@
   opacity: 0.4;
 }
 
-.fact,
+.fact {
+  position: absolute;
+  top: 6px;
+
+  height: 12px;
+
+  cursor: pointer;
+}
+
 .forecast {
   position: absolute;
   top: 6px;
 
   height: 12px;
-}
 
-.forecast {
   opacity: 0.4;
 }
 
@@ -122,8 +128,8 @@
 
   width: 100%;
 
-  &.hidden > .fact:not(.hovered),
-  &.hidden > .plan:not(.hovered) {
+  &.hideInactive > .fact:not(.active),
+  &.hideInactive > .plan:not(.active) {
     opacity: 0.25;
   }
 }
@@ -165,6 +171,8 @@
   left: -17px;
 
   width: 1px;
+
+  text-align: center;
 
   background: var(--separate-line-color);
 }
