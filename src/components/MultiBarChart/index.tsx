@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useUID } from 'react-uid'
-import useDimensions from 'react-use-dimensions'
 
+import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
@@ -59,7 +59,8 @@ export const MultiBarChart: React.FC<Props> = ({
   const [paddingX, setPaddingX] = useState(0)
   const [paddingY, setPaddingY] = useState(0)
   const [showValues, setShowValues] = useState(false)
-  const [ref, { width, height }] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
   const [{ svgWidth, svgHeight }, setSizeSvg] = useState({ svgWidth: 0, svgHeight: 0 })
   const uid = useUID()
   const clipId = `multibarchart_clipPath_${uid}`

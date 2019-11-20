@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useUID } from 'react-uid'
-import useDimensions from 'react-use-dimensions'
 
+import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
@@ -72,7 +72,8 @@ export const BarChart: React.FC<Props> = ({
   showValues,
   valuesTick = 4,
 }) => {
-  const [ref, { width, height }] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
   const [{ paddingX, paddingY }, changePadding] = useState({ paddingX: 0, paddingY: 0 })
   const clipId = `barchart_clipPath_${useUID()}`
 

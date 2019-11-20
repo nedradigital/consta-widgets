@@ -26,6 +26,14 @@
   border-right: 1px solid var(--separate-line-color);
   border-left: 1px solid var(--separate-line-color);
   grid-area: calendar;
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--opaque-color);
+  }
+
+  &:hover::-webkit-scrollbar-thumb {
+    background-color: var(--scroll-bar-color);
+  }
 }
 
 .fakeBlock {
@@ -100,25 +108,25 @@
   position: absolute;
   top: 0;
 
-  height: 24px;
+  height: calc-size(24);
 
   opacity: 0.4;
 }
 
 .fact {
   position: absolute;
-  top: 6px;
+  top: calc-size(6);
 
-  height: 12px;
+  height: calc-size(12);
 
   cursor: pointer;
 }
 
 .forecast {
   position: absolute;
-  top: 6px;
+  top: calc-size(6);
 
-  height: 12px;
+  height: calc-size(12);
 
   opacity: 0.4;
 }

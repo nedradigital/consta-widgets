@@ -29,9 +29,5 @@ button {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
-  background-color: rgba(255, 255, 255, 0);
-}
-
-*:hover::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: var(--scroll-bar-color);
 }

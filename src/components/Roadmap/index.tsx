@@ -1,6 +1,6 @@
-import { useCallback, useLayoutEffect, useState } from 'react'
-import useDimensions from 'react-use-dimensions'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
@@ -140,7 +140,8 @@ export const Roadmap: React.FC<Props> = props => {
 
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
-  const [dimensionRef, { height }, element] = useDimensions()
+  const ref = useRef<HTMLDivElement>(null)
+  const { height, width } = useComponentSize(ref)
   const [activeLine, changeActiveLine] = useState<ActiveLineState>({
     index: undefined,
     groupName: undefined,
@@ -157,18 +158,22 @@ export const Roadmap: React.FC<Props> = props => {
   }, [])
 
   useLayoutEffect(() => {
-    if (element) {
-      element.addEventListener('scroll', scrollHandler)
+    if (ref.current) {
+      ref.current.addEventListener('scroll', scrollHandler)
       window.addEventListener('click', handleWindowClick)
-
-      changeMonthWidth(element.querySelector('th')!.offsetWidth)
 
       return () => {
         window.removeEventListener('click', handleWindowClick)
-        element.removeEventListener('scroll', scrollHandler)
+        ref.current!.removeEventListener('scroll', scrollHandler)
       }
     }
-  }, [element])
+  }, [ref])
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      changeMonthWidth(ref.current.querySelector('th')!.offsetWidth)
+    }
+  }, [width])
 
   return (
     <div className={css.main}>
@@ -184,7 +189,7 @@ export const Roadmap: React.FC<Props> = props => {
           </tbody>
         </Table>
       </div>
-      <div ref={dimensionRef} className={css.calendar}>
+      <div ref={ref} className={css.calendar}>
         <Table
           className={css.calendarTable}
           titles={months}

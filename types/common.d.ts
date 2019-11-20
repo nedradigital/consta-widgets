@@ -39,34 +39,6 @@ declare module 'storybook-addon-smart-knobs' {
   export const withSmartKnobs: (options?: { ignoreProps?: readonly string[] }) => DecoratorFn
 }
 
-// Source: https://github.com/Swizec/useDimensions/pull/17
-declare module 'react-use-dimensions' {
-  interface IDimensionObject {
-    width: number
-    height: number
-    top: number
-    left: number
-    x: number
-    y: number
-    right: number
-    bottom: number
-  }
-
-  export type UseDimensionsHook = readonly [
-    (node: HTMLElement | SVGSVGElement | null) => void,
-    IDimensionObject,
-    HTMLElement | SVGSVGElement | null
-  ]
-
-  interface IUseDimensionsArgs {
-    liveMeasure?: boolean
-  }
-
-  function useDimensions({ liveMeasure }?: IUseDimensionsArgs): UseDimensionsHook
-
-  export default useDimensions
-}
-
 declare module 'react-onclickout' {
   /* tslint:disable-next-line:ordered-imports */
   import { ComponentType } from 'react'

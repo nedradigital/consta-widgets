@@ -1,7 +1,7 @@
-import React, { useLayoutEffect } from 'react'
-import useDimensions from 'react-use-dimensions'
+import React, { useLayoutEffect, useRef } from 'react'
 
 import { calcSize } from '@gaz/utils/lib/css'
+import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 
 import { ReactComponent as ChartBorder } from './images/chart-border.svg'
@@ -45,7 +45,9 @@ type Props = {
 }
 
 export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal }) => {
-  const [ref, { width, height }, el] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
+
   const size = Math.min(width, height) || 0
 
   useLayoutEffect(() => {
@@ -61,7 +63,7 @@ export const PieChart: React.FC<Props> = ({ data, total, subTotalTitle, subTotal
       .innerRadius(0)
       .outerRadius(radius)
 
-    d3.select(el)
+    d3.select(ref.current)
       .select('svg')
       .attr('viewBox', `${-radius}, ${-radius}, ${radius * 2}, ${radius * 2}`)
       .select('g')
