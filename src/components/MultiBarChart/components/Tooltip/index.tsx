@@ -1,6 +1,7 @@
 import * as React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
+import classnames from 'classnames'
 import * as d3 from 'd3'
 import { BaseType } from 'd3-selection'
 import { isUndefined } from 'lodash'
@@ -9,6 +10,8 @@ import { Direction, Hint } from '@/ui/Hint'
 
 import { Layer } from '../..'
 import { defaultColumnSize } from '../MultiBar'
+
+import css from './index.css'
 
 type Props = {
   isVertical: boolean
@@ -161,7 +164,7 @@ const addHtmlContent = (
     ReactDOMServer.renderToString(
       <Hint
         direction={direction}
-        className={tooltipName}
+        className={classnames(tooltipName, css.tooltip)}
         styles={{
           color,
           transform: translate,
@@ -203,6 +206,6 @@ export const Tooltip: React.FC<Props> = ({ isVertical }) => (
     direction={isVertical ? 'right' : 'top'}
     children={''}
     styles={{ display: 'none', transform: isVertical ? 'inherit' : 'translate(0, 0)' }}
-    className="tooltip"
+    className={classnames('tooltip', css.tooltip)}
   />
 )
