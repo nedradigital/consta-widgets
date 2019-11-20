@@ -66,6 +66,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
 
   const thRender = columnNames.map((obj, idx) => {
     const sort = accessor === obj.accessor
+
     return (
       <th
         key={idx}

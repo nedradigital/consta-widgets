@@ -43,6 +43,24 @@ type Props = {
   mainTickValues: MainTickValues
   isVertical?: boolean
   formatLabel: (n: number) => string
+  secondaryScaleUnit?: string
+}
+
+const getTransformForSecondaryScaleUnit = (
+  labelsRef: React.RefObject<SVGGElement>,
+  xOnBottom: boolean,
+  yOnLeft: boolean,
+  isVertical?: boolean
+) => {
+  const { height, width } = (labelsRef.current && labelsRef.current.getBoundingClientRect()) || {
+    height: 0,
+    width: 0,
+  }
+
+  const transformByVertical = xOnBottom ? height : (-1 * height) / 2
+  const transformByHorizontal = yOnLeft ? -1 * width : width / 2
+
+  return isVertical ? transformByVertical : transformByHorizontal
 }
 
 export const Axis: React.FC<Props> = ({
@@ -58,11 +76,13 @@ export const Axis: React.FC<Props> = ({
   mainTickValues,
   isVertical,
   formatLabel,
+  secondaryScaleUnit,
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
   const xGridRef = React.createRef<SVGGElement>()
   const yGridRef = React.createRef<SVGGElement>()
+  const secondaryScaleUnitRef = React.createRef<SVGGElement>()
 
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
@@ -211,6 +231,42 @@ export const Axis: React.FC<Props> = ({
     onAxisSizeChange({ xAxisHeight, yAxisWidth })
   })
 
+  useLayoutEffect(() => {
+    const secondaryScaleUnitElement = d3.select(secondaryScaleUnitRef.current)
+    secondaryScaleUnitElement.select('text').remove()
+
+    const ticks = isVertical ? xLabelTicks : yLabelTicks
+
+    if (!ticks) {
+      return
+    }
+
+    if (secondaryScaleUnit) {
+      const x = isVertical || !yOnLeft ? width : 0
+      const y = !isVertical || !xOnBottom ? 0 : height
+
+      secondaryScaleUnitElement
+        .append('text')
+        .text(secondaryScaleUnit)
+        .attr('fill', 'currentColor')
+        .attr('class', css.labels)
+        .attr('x', x)
+        .attr('y', y)
+
+      const transform = getTransformForSecondaryScaleUnit(
+        isVertical ? xLabelsRef : yLabelsRef,
+        xOnBottom,
+        yOnLeft,
+        isVertical
+      )
+
+      secondaryScaleUnitElement.attr(
+        'transform',
+        isVertical ? `translate(0, ${transform})` : `translate(${transform}, -16)`
+      )
+    }
+  })
+
   return (
     <g className={css.main}>
       <g clipPath={lineClipPath}>
@@ -220,6 +276,7 @@ export const Axis: React.FC<Props> = ({
 
       <g ref={xLabelsRef} />
       <g ref={yLabelsRef} />
+      <g ref={secondaryScaleUnitRef} />
     </g>
   )
 }
