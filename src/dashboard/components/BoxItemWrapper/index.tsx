@@ -16,6 +16,7 @@ export const sizeValues: { [key in BoxItemMarginSize]: number } = {
   m: 16,
   s: 12,
   xs: 8,
+  '2xs': 4,
 }
 
 type Props = {
