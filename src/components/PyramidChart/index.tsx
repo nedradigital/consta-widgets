@@ -1,7 +1,6 @@
-import { useRef } from 'react'
+import React from 'react'
 
-import { calcSize } from '@gaz/utils/lib/css'
-import useComponentSize from '@rehooks/component-size'
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
 import css from './index.css'
@@ -21,9 +20,9 @@ type Props = {
   fontSize?: Size
 }
 
-const pyramidWidth = 312
-const sectionHeight = 45
-const sectionTextWidth = 300
+const getPyramidWidth = () => getCalculatedSize(312)
+const getSectionHeight = () => getCalculatedSize(45)
+const getSectionTextWidth = () => getCalculatedSize(300)
 
 const getLineCoords = (
   countLines: number,
@@ -72,23 +71,22 @@ export const PyramidChart: React.FC<Props> = ({
   constraint = true,
   fontSize = 's',
 }) => {
-  const ref = useRef(null)
-  const { width, height } = useComponentSize(ref)
-  const containerHeightResponsive = calcSize(data.length * sectionHeight)
-  const tableWidthResponsive = calcSize(
-    constraint ? pyramidWidth : pyramidWidth / 2 + sectionTextWidth
-  )
+  const pyramidWidth = getPyramidWidth()
+  const sectionHeight = getSectionHeight()
+  const sectionTextWidth = getSectionTextWidth()
+  const containerHeightResponsive = data.length * sectionHeight
+  const pyramidWidthHalf = pyramidWidth / 2
+  const tableWidthResponsive = constraint ? pyramidWidth : pyramidWidthHalf + sectionTextWidth
 
   return (
     <div className={classnames(css.main, { s: css.sizeS, m: css.sizeM }[fontSize])}>
       <div
         className={css.svgWrapper}
-        ref={ref}
-        style={{ width: calcSize(pyramidWidth), height: containerHeightResponsive }}
+        style={{ width: pyramidWidth, height: containerHeightResponsive }}
       >
-        <svg width={calcSize(pyramidWidth)} height={containerHeightResponsive}>
-          {buildTriangleSectionPath(data, height, width, false, colors)}
-          {buildTriangleSectionPath(data, height, width, true, colors)}
+        <svg viewBox={`0 0 ${pyramidWidth} ${containerHeightResponsive}`}>
+          {buildTriangleSectionPath(data, containerHeightResponsive, pyramidWidth, false, colors)}
+          {buildTriangleSectionPath(data, containerHeightResponsive, pyramidWidth, true, colors)}
         </svg>
       </div>
       <table
@@ -101,7 +99,7 @@ export const PyramidChart: React.FC<Props> = ({
         <tbody>
           {data.map((item, index) => (
             <tr key={index}>
-              <td style={{ width: calcSize(pyramidWidth / 2) }}>{item.value}</td>
+              <td style={{ width: pyramidWidthHalf }}>{item.value}</td>
               <td>
                 <div className={css.textEllipsis}>{item.text}</div>
               </td>
