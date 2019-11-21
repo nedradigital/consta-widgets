@@ -1,8 +1,7 @@
-import React, { useLayoutEffect } from 'react'
-import useDimensions from 'react-use-dimensions'
+import React, { useRef } from 'react'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
-import * as d3 from 'd3'
+import useComponentSize from '@rehooks/component-size'
 
 import { ColorGroups } from '@/dashboard/types'
 
@@ -29,22 +28,16 @@ const getPadAngle = (mainRadius: number, index: number) => {
 }
 
 export const DonutChart: React.FC<Props> = ({ data = [], colorGroups }) => {
-  const [ref, { width, height }, el] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
   const size = width && height ? Math.min(width, height) : 0
   const mainRadius = size / 2
   const sizeDonut = getSizeDonut()
-
-  useLayoutEffect(() => {
-    if (mainRadius) {
-      d3.select(el)
-        .select('svg')
-        .attr('viewBox', `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`)
-    }
-  })
+  const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
 
   return (
     <div ref={ref} className={css.main}>
-      <svg width={size} height={size}>
+      <svg viewBox={viewBox}>
         {data.slice(0, 3).map((d, index) => {
           const outerRadius = getDonutRadius(mainRadius, index)
           const innerRadius = outerRadius - sizeDonut

@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useUID } from 'react-uid'
-import useDimensions from 'react-use-dimensions'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
+import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
 import { ColorGroups } from '@/dashboard/types'
@@ -123,7 +123,8 @@ export const RadarChart: React.FC<Props> = ({
   const axisNameWidth = getCalculatedSize(130)
   const axisNameLineHeight = getCalculatedSize(20)
   const axisNameOffset = getCalculatedSize(15)
-  const [ref, { width = 0, height = 0 }] = useDimensions()
+  const ref = React.useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(ref)
   // Вписываем радар в квадрат, оставляя по бокам место под надписи
   const size = Math.min(
     width - 2 * (axisNameWidth + axisNameOffset),

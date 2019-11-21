@@ -1,10 +1,10 @@
-import React, { useLayoutEffect, useMemo } from 'react'
+import React, { useLayoutEffect, useMemo, useRef } from 'react'
 import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
-import useDimensions from 'react-use-dimensions'
 
 import { updateAt } from '@gaz/utils/lib/array'
 import { updateBaseSize } from '@gaz/utils/lib/css'
+import useComponentSize from '@rehooks/component-size'
 
 import { Box } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
@@ -49,8 +49,8 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
     rowsCount,
   } = props
   const { boxes, config } = dashboard
-
-  const [dimensionRef, { width, height }, element] = useDimensions()
+  const dimensionRef = useRef<HTMLDivElement>()
+  const { width, height } = useComponentSize(dimensionRef)
 
   const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
@@ -131,18 +131,20 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
   ])
 
   useLayoutEffect(() => {
-    if (element) {
-      updateBaseSize(baseFontSize * scale, element)
+    if (dimensionRef.current) {
+      updateBaseSize(baseFontSize * scale, dimensionRef.current)
     }
-  }, [width, height, scale, element])
+  }, [width, height, scale, dimensionRef])
 
   const rowHeight = (height - padding[1] * 2 - margin[1] * (rowsCount - 1)) / rowsCount
 
   return (
     <div
       ref={el => {
-        dimensionRef(el)
-        dropRef(el)
+        if (el) {
+          dimensionRef.current = el
+          dropRef(el)
+        }
       }}
       className={css.dashboard}
     >

@@ -55,6 +55,7 @@
   },
   "dependencies": {
     "@gaz/utils": "0.2.0",
+    "@rehooks/component-size": "1.0.3",
     "classnames": "2.2.6",
     "d3": "5.12.0",
     "lodash": "4.17.11",
@@ -64,8 +65,7 @@
     "react-dom": "16.8.6",
     "react-grid-layout-tmp-fork": "0.18.0",
     "react-onclickout": "2.0.8",
-    "react-uid": "2.2.0",
-    "react-use-dimensions": "1.2.1"
+    "react-uid": "2.2.0"
   },
   "resolutions": {
     "@types/react": "16.8.23"

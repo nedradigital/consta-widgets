@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import useDimensions from 'react-use-dimensions'
+import React, { useRef, useState } from 'react'
 
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
 
@@ -52,7 +52,8 @@ type Props = {
 } & StyleProps
 
 export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
-  const [refTable, { height }] = useDimensions()
+  const ref = useRef(null)
+  const { height } = useComponentSize(ref)
   const [accessor, setAccessor] = useState('')
   const [isOrderByDesc, setOrderByDesc] = useState(false)
   const { columnNames, legendFields, list, colorGroups } = data
@@ -125,7 +126,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
 
   return (
     <div className={css.container}>
-      <table className={classnames(css.table, css.striped)} ref={refTable}>
+      <table className={classnames(css.table, css.striped)} ref={ref}>
         <thead>
           <tr>{thRender}</tr>
         </thead>

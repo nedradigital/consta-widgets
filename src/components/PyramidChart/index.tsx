@@ -1,7 +1,7 @@
-import * as React from 'react'
-import useDimensions from 'react-use-dimensions'
+import { useRef } from 'react'
 
 import { calcSize } from '@gaz/utils/lib/css'
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import css from './index.css'
@@ -72,7 +72,8 @@ export const PyramidChart: React.FC<Props> = ({
   constraint = true,
   fontSize = 's',
 }) => {
-  const [ref, { width, height }] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
   const containerHeightResponsive = calcSize(data.length * sectionHeight)
   const tableWidthResponsive = calcSize(
     constraint ? pyramidWidth : pyramidWidth / 2 + sectionTextWidth
