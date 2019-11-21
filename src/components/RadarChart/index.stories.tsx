@@ -10,7 +10,7 @@ import { RadarChart } from './'
 
 storiesOf('components/RadarChart', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '50vw', height: '60vh' } as React.CSSProperties))
+  .addDecorator(blockCenteringDecorator({ width: '50vw', height: '60vh' }))
   .add('interactive', () => (
     <RadarChart
       colorGroups={object('colorGroups', {

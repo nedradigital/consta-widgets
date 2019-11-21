@@ -73,7 +73,7 @@ export type DataMap = {
   }
   [DataType.Stats]: StatsData
   [DataType.Donut]: {
-    data: DonutChartData
+    data: readonly DonutChartData[]
   } & WithColorGroups
   [DataType.BarChart]: {
     data: readonly BarChartData[]
