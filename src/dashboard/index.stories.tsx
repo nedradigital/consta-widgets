@@ -105,7 +105,7 @@ storiesOf('dashboard/Constructor', module)
             data={{}}
             baseWidthForScaling={number('baseWidthForScaling', 1024)}
             baseHeightForScaling={number('baseHeightForScaling', 768)}
-            baseFontSize={16}
+            baseFontSize={number('baseFontSize', 16)}
             basePadding={getPadding()}
             rowsCount={getRowsCount()}
           />
