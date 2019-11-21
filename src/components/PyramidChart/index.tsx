@@ -99,8 +99,8 @@ export const PyramidChart: React.FC<Props> = ({
         }}
       >
         <tbody>
-          {data.map(item => (
-            <tr key={item.value}>
+          {data.map((item, index) => (
+            <tr key={index}>
               <td style={{ width: calcSize(pyramidWidth / 2) }}>{item.value}</td>
               <td>
                 <div className={css.textEllipsis}>{item.text}</div>
