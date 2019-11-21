@@ -14,6 +14,8 @@
 
   padding: calc-size(10) calc-size(12);
 
+  pointer-events: none;
+
   color: #002033;
   border-radius: 4px;
   background-color: var(--hint-bg-color);

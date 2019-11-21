@@ -4,9 +4,10 @@ import * as d3 from 'd3'
 
 import { ColorGroups } from '@/dashboard/types'
 
-type DataItem = {
+export type DataItem = {
   value: number
   colorGroupName: string
+  unit: string
 }
 
 export type Data = readonly DataItem[]
@@ -17,6 +18,9 @@ type Props = {
   innerRadius: number
   outerRadius: number
   padAngle: number
+  handleMouseOver: (index: number, data: DataItem) => void
+  handleMouseOut: () => void
+  isTooltipVisible: boolean
 }
 
 export const Donut: React.FC<Props> = ({
@@ -25,6 +29,9 @@ export const Donut: React.FC<Props> = ({
   data,
   innerRadius,
   outerRadius,
+  handleMouseOver,
+  handleMouseOut,
+  isTooltipVisible,
 }) => {
   const ref = createRef<SVGGElement>()
 
@@ -45,8 +52,11 @@ export const Donut: React.FC<Props> = ({
         .selectAll('path')
         .data(pieData)
         .join('path')
+        .on('mouseover', (d, index) => handleMouseOver(index, d.data))
+        .on('mouseout', handleMouseOut)
         .attr('fill', d => colorGroups[d.data.colorGroupName])
         .attr('d', arc)
+        .style('opacity', isTooltipVisible ? 0.4 : 1)
     }
   })
 

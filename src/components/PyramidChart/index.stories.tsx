@@ -12,7 +12,7 @@ import { PyramidChart } from './index'
 
 storiesOf('components/PyramidChart', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '50vw' } as React.CSSProperties))
+  .addDecorator(blockCenteringDecorator({ width: '50vw' }))
   .add('interactive', () => (
     <PyramidChart
       data={getWidgetMockData(DataType.Pyramid)}

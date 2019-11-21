@@ -27,48 +27,66 @@ const mockData: DataMap = {
       third: '#56B9F2',
     },
     data: [
-      [
-        {
-          colorGroupName: 'first',
-          value: 20,
-        },
-        {
-          colorGroupName: 'second',
-          value: 15,
-        },
-        {
-          colorGroupName: 'third',
-          value: 7,
-        },
-      ],
-      [
-        {
-          colorGroupName: 'first',
-          value: 20,
-        },
-        {
-          colorGroupName: 'second',
-          value: 15,
-        },
-        {
-          colorGroupName: 'third',
-          value: 7,
-        },
-      ],
-      [
-        {
-          colorGroupName: 'first',
-          value: 25,
-        },
-        {
-          colorGroupName: 'second',
-          value: 1,
-        },
-        {
-          colorGroupName: 'third',
-          value: 5,
-        },
-      ],
+      {
+        values: [
+          {
+            colorGroupName: 'first',
+            value: 20,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'second',
+            value: 15,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'third',
+            value: 7,
+            unit: 'тыс м3',
+          },
+        ],
+        name: 'Северный бур',
+      },
+      {
+        values: [
+          {
+            colorGroupName: 'first',
+            value: 20,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'second',
+            value: 15,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'third',
+            value: 7,
+            unit: 'тыс м3',
+          },
+        ],
+        name: 'Южный бур',
+      },
+      {
+        values: [
+          {
+            colorGroupName: 'first',
+            value: 25,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'second',
+            value: 1,
+            unit: 'тыс м3',
+          },
+          {
+            colorGroupName: 'third',
+            value: 5,
+            unit: 'тыс м3',
+          },
+        ],
+        name: 'Западный бур',
+      },
     ],
   },
   [DataType.BarChart]: {
