@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
-import useDimensions from 'react-use-dimensions'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
+import useComponentSize from '@rehooks/component-size'
 
 import { Direction, Hint } from '@/ui/Hint'
 
@@ -57,7 +57,8 @@ const covertCoordinatesToStyles = ({
 }
 
 export const Tooltip: React.FC<Props> = ({ children, isVisible, direction, x, y }) => {
-  const [ref, { width, height }] = useDimensions()
+  const ref = useRef(null)
+  const { width, height } = useComponentSize(ref)
 
   if (!isVisible || !x || !y) {
     return null
