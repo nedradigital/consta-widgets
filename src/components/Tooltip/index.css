@@ -1,0 +1,9 @@
+.tooltip {
+  z-index: initial;
+
+  &:not(.open) {
+    z-index: -1;
+
+    visibility: hidden;
+  }
+}

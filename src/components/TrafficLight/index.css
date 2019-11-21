@@ -60,3 +60,16 @@
     padding: calc-size(9) calc-size(12);
   }
 }
+
+.tooltipTitle {
+  font-weight: bold;
+
+  margin-top: calc-size(2);
+
+  text-transform: uppercase;
+}
+
+.tooltipContent {
+  max-width: calc-size(324);
+  margin-top: calc-size(5);
+}
