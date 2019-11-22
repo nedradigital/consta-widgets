@@ -292,6 +292,7 @@ const mockData: DataMap = {
   [DataType.TrafficLight]: {
     status: 'normal',
     text: 'Работа по расписанию',
+    comment: 'Хотели как лучше, а получилось как всегда.',
   },
   [DataType.MultiBarChart]: {
     colorGroups: {
