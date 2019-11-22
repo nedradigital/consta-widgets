@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import React, { Fragment } from 'react'
 
 import classnames from 'classnames'
 import * as _ from 'lodash'
@@ -15,6 +15,9 @@ type Props = {
   labelSize: RadarChartLabelSize
   formatLabel: RadarChartFormatLabel
   colors?: readonly string[]
+  activeAxis?: Axis
+  onMouseEnter: (axis: Axis) => void
+  onMouseLeave: () => void
 }
 
 export const RadarChartAxes: React.FC<Props> = ({
@@ -25,6 +28,9 @@ export const RadarChartAxes: React.FC<Props> = ({
   labelSize,
   formatLabel,
   colors,
+  activeAxis,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const circles = _.times(ticks, v => {
     const fraction = (v + 1) / ticks
@@ -33,6 +39,10 @@ export const RadarChartAxes: React.FC<Props> = ({
       label: formatLabel(_.round(fraction * maxValue, 2)),
     }
   })
+
+  const activeAxisCoords = activeAxis
+    ? angleToCoord(activeAxis.angle, 1)
+    : { xPercent: 0, yPercent: 0 }
 
   return (
     <g className={css.main}>
@@ -80,17 +90,37 @@ export const RadarChartAxes: React.FC<Props> = ({
           const coords = angleToCoord(axis.angle, 1)
 
           return (
-            <line
-              key={idx}
-              x1="50%"
-              y1="50%"
-              x2={`${coords.xPercent}%`}
-              y2={`${coords.yPercent}%`}
-              className={css.axis}
-            />
+            <g key={idx}>
+              <line
+                x1="50%"
+                y1="50%"
+                x2={`${coords.xPercent}%`}
+                y2={`${coords.yPercent}%`}
+                className={css.axisArea}
+                onMouseEnter={() => onMouseEnter(axis)}
+                onMouseLeave={onMouseLeave}
+              />
+              <line
+                x1="50%"
+                y1="50%"
+                x2={`${coords.xPercent}%`}
+                y2={`${coords.yPercent}%`}
+                className={css.axis}
+              />
+            </g>
           )
         })}
       </g>
+
+      {activeAxis && (
+        <line
+          x1="50%"
+          y1="50%"
+          x2={`${activeAxisCoords.xPercent}%`}
+          y2={`${activeAxisCoords.yPercent}%`}
+          className={css.axis}
+        />
+      )}
     </g>
   )
 }

@@ -38,6 +38,17 @@
 }
 
 .axis {
+  pointer-events: none;
+
   stroke: var(--axis-color);
   stroke-width: 1;
+  stroke-linecap: butt;
+}
+
+.axisArea {
+  stroke: transparent;
+  stroke-width: 10;
+  stroke-linecap: butt;
+
+  cursor: pointer;
 }

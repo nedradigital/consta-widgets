@@ -14,7 +14,7 @@ storiesOf('components/RadarChart', module)
   .add('interactive', () => (
     <RadarChart
       colorGroups={object('colorGroups', {
-        mainCharacter: '#fff',
+        mainCharacter: '#20B55F',
         partyMember: '#56B9F2',
       })}
       axesLabels={{
@@ -28,6 +28,7 @@ storiesOf('components/RadarChart', module)
       figures={[
         {
           colorGroupName: 'mainCharacter',
+          name: 'Северный бур',
           values: [
             { axisName: 'strength', value: 10 },
             { axisName: 'endurance', value: 9 },
@@ -38,6 +39,7 @@ storiesOf('components/RadarChart', module)
         },
         {
           colorGroupName: 'partyMember',
+          name: 'Южное месторождение',
           values: [
             { axisName: 'strength', value: 2 },
             { axisName: 'endurance', value: 4 },

@@ -12,7 +12,7 @@
 
   position: absolute;
 
-  padding: calc-size(10) calc-size(12);
+  padding: calc-size(var(--hint-vertical-padding)) calc-size(var(--hint-horizontal-padding));
 
   pointer-events: none;
 

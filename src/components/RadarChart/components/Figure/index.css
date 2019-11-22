@@ -1,4 +1,6 @@
 .line {
   fill-opacity: 0.1;
   stroke-width: 2;
+
+  pointer-events: none;
 }
