@@ -14,3 +14,4 @@ export { MultiBarChartWidgetContent as MultiBarChartWidget } from './MultiBarCha
 export { RadarChartWidgetContent as RadarChartWidget } from './RadarChartWidget'
 export { RangePickerWidgetContent as RangePickerWidget } from './RangePickerWidget'
 export { TrafficLightWidgetContent as TrafficLightWidget } from './TrafficLightWidget'
+export { ImagesWidgetContent as ImagesWidget } from './ImagesWidget'

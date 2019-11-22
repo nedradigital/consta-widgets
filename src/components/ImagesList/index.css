@@ -1,7 +1,7 @@
 .main {
-  position: relative;
-
   --active-border-width: 2px;
+
+  position: relative;
 
   &:not(.isAdaptive) {
     --base-size: 16;
@@ -94,7 +94,7 @@
 .toLeft {
   transform-origin: center;
 
-  & .icon {
+  .icon {
     transform: scaleX(-1);
   }
 }

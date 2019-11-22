@@ -1,4 +1,10 @@
-.main {
+@custom-selector :--main .main;
+@custom-selector :--isHidden :not(.isVisible);
+
+:--main {
+  --button-size: 48px;
+  --show-transition: 0.15s ease-out;
+
   position: fixed;
   top: 0;
   right: 0;
@@ -11,7 +17,32 @@
 
   background-color: rgba(0, 32, 51, 0.9);
 
-  --button-size: 48px;
+  transition: opacity var(--show-transition);
+
+  &:--isHidden {
+    pointer-events: none;
+
+    opacity: 0;
+  }
+}
+
+.content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  transition: transform var(--show-transition);
+
+  @nest :--main:--isHidden & {
+    transform: scale(0.8);
+  }
+
+  @nest :--main.isOpening & * {
+    /* Чтобы не было видно пролистывания картинок в момент открытия */
+    transition-duration: 0s;
+  }
 }
 
 .items {
@@ -85,7 +116,7 @@
   &.toLeft {
     left: 0;
 
-    & .icon {
+    .icon {
       transform: scale(-1);
     }
   }
