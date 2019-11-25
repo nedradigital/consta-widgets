@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { object } from '@storybook/addon-knobs'
+import { object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -18,6 +18,7 @@ storiesOf('components/DonutChart', module)
       <DonutChart
         data={getWidgetMockData(DataType.Donut).data}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
+        unit={text('unit', getWidgetMockData(DataType.Donut).unit)}
       />
     )
   })

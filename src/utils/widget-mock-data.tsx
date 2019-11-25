@@ -26,66 +26,22 @@ const mockData: DataMap = {
       second: '#F2C94C',
       third: '#56B9F2',
     },
+    unit: 'тыс м3',
     data: [
       {
-        values: [
-          {
-            colorGroupName: 'first',
-            value: 20,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'second',
-            value: 15,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'third',
-            value: 7,
-            unit: 'тыс м3',
-          },
-        ],
         name: 'Северный бур',
+        colorGroupName: 'first',
+        values: [1, 2, 3],
       },
       {
-        values: [
-          {
-            colorGroupName: 'first',
-            value: 20,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'second',
-            value: 15,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'third',
-            value: 7,
-            unit: 'тыс м3',
-          },
-        ],
         name: 'Южный бур',
+        colorGroupName: 'second',
+        values: [4, 5, 6],
       },
       {
-        values: [
-          {
-            colorGroupName: 'first',
-            value: 25,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'second',
-            value: 1,
-            unit: 'тыс м3',
-          },
-          {
-            colorGroupName: 'third',
-            value: 5,
-            unit: 'тыс м3',
-          },
-        ],
         name: 'Западный бур',
+        colorGroupName: 'third',
+        values: [7, 8, 9],
       },
     ],
   },
