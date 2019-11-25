@@ -68,6 +68,7 @@ export const defaultParams: Params = {
   labelType: 'dot',
   labelPosition: 'left',
   direction: 'column',
+  lineBold: false,
 }
 
 export const LegendWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
