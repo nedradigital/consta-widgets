@@ -32,15 +32,13 @@ export const dataColorsValidator = (
       const colors = Object.keys(colorGroups)
 
       return flatten(
-        data.map(({ values }) => {
-          return values
-            .map(({ colorGroupName }) => {
-              if (!colors.includes(colorGroupName)) {
-                return colorGroupName
-              }
-            })
-            .filter((i): i is string => i !== undefined)
-        })
+        data
+          .map(({ colorGroupName }) => {
+            if (!colors.includes(colorGroupName)) {
+              return colorGroupName
+            }
+          })
+          .filter((i): i is string => i !== undefined)
       )
     }
 

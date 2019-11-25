@@ -7,7 +7,7 @@ import { ColorGroups } from '@/dashboard/types'
 export type DataItem = {
   value: number
   colorGroupName: string
-  unit: string
+  name: string
 }
 
 export type Data = readonly DataItem[]
@@ -18,7 +18,7 @@ type Props = {
   innerRadius: number
   outerRadius: number
   padAngle: number
-  handleMouseOver: (index: number, data: DataItem) => void
+  handleMouseOver: (data: DataItem) => void
   handleMouseOut: () => void
   isTooltipVisible: boolean
 }
@@ -52,7 +52,7 @@ export const Donut: React.FC<Props> = ({
         .selectAll('path')
         .data(pieData)
         .join('path')
-        .on('mouseover', (d, index) => handleMouseOver(index, d.data))
+        .on('mouseover', d => handleMouseOver(d.data))
         .on('mouseout', handleMouseOut)
         .attr('fill', d => colorGroups[d.data.colorGroupName])
         .attr('d', arc)
