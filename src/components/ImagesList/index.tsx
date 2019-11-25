@@ -7,16 +7,19 @@ import * as _ from 'lodash'
 import { ReactComponent as IconForwardSvg } from './icon_forward.svg'
 import css from './index.css'
 
-type ImageItem = {
+export type ImageItem = {
   preview?: string
   large: string
 }
 
 type Props = {
   images: readonly ImageItem[]
+  activeItem?: number
+  isAdaptive?: boolean
+  onClick: (idx: number) => void
 }
 
-export const ImagesList: React.FC<Props> = ({ images }) => {
+export const ImagesList: React.FC<Props> = ({ images, activeItem, isAdaptive = true, onClick }) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const { width: wrapperWidth } = useComponentSize(wrapperRef)
@@ -42,7 +45,7 @@ export const ImagesList: React.FC<Props> = ({ images }) => {
   }
 
   return (
-    <div className={css.main}>
+    <div className={classnames(css.main, isAdaptive && css.isAdaptive)}>
       <div className={css.wrapper} ref={wrapperRef}>
         <div
           ref={listRef}
@@ -52,7 +55,12 @@ export const ImagesList: React.FC<Props> = ({ images }) => {
           }}
         >
           {images.map((image, idx) => (
-            <button key={idx} type="button" className={css.item}>
+            <button
+              key={idx}
+              type="button"
+              className={classnames(css.item, idx === activeItem && css.isActive)}
+              onClick={() => onClick(idx)}
+            >
               <img src={image.preview || image.large} className={css.image} />
             </button>
           ))}

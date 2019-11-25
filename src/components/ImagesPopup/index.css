@@ -1,0 +1,96 @@
+.main {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(0, 32, 51, 0.9);
+
+  --button-size: 48px;
+}
+
+.items {
+  position: relative;
+
+  flex-grow: 1;
+
+  width: 100%;
+  height: 100%;
+
+  transition: transform 0.25s ease;
+}
+
+.item {
+  position: absolute;
+  top: 0;
+
+  width: 100%;
+  height: 100%;
+  padding: 170px;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.preview {
+  position: absolute;
+  right: 0;
+  bottom: 64px;
+  left: 0;
+
+  display: flex;
+  justify-content: center;
+
+  width: 60vw;
+  margin: auto;
+}
+
+.button {
+  position: absolute;
+
+  width: var(--button-size);
+  height: var(--button-size);
+
+  cursor: pointer;
+
+  transition: transform 0.1s ease-out;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &.close {
+    top: 32px;
+    right: 32px;
+  }
+
+  &.toLeft,
+  &.toRight {
+    top: calc(50% - var(--button-size) / 2);
+  }
+
+  &.toLeft {
+    left: 0;
+
+    & .icon {
+      transform: scale(-1);
+    }
+  }
+
+  &.toRight {
+    right: 0;
+  }
+}
