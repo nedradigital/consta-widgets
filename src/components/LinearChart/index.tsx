@@ -18,7 +18,7 @@ export type Line = {
 }
 export type Item = { x: number; y: number }
 export type NumberRange = readonly [number, number]
-export type MainTickValues = readonly number[]
+export type TickValues = readonly number[]
 
 type Props = {
   lines: readonly Line[]
@@ -37,8 +37,9 @@ type State = {
   height: number
   paddingX: number
   paddingY: number
-  mainTickValues: MainTickValues
   zoom: number
+  xGuideValue: number
+  yGuideValue: number
 }
 
 export const TRANSITION_DURATIONS = {
@@ -124,25 +125,73 @@ export const calculateSecondaryDomain = (
   ] as NumberRange
 }
 
-export const getTickValues = (
+export const getUniqValues = (
   items: readonly Item[],
   domain: NumberRange,
-  gridConfig: GridConfig,
+  type: 'x' | 'y',
   isVertical?: boolean
-): MainTickValues => {
-  const config = gridConfig[isVertical ? 'y' : 'x']
-  const uniqValues = _.uniq(items.map(v => (isVertical ? v.y : v.x))).filter(i =>
-    isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
+) =>
+  _.sortBy(
+    _.uniq(items.map(v => v[type])).filter(i =>
+      isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
+    )
   )
-  const ticks = config.labelTicks || 0
-  const indexes = d3.ticks(0, uniqValues.length - 1, ticks).filter(Number.isInteger)
 
-  return _.uniq(
-    indexes
-      .map(index => uniqValues[index])
-      .filter(Number.isInteger)
-      .concat(config.guide ? [0] : [])
-  )
+export const getMainTickValues = ({
+  items,
+  domain,
+  gridConfig,
+  tickType,
+  guideValue,
+  isVertical,
+}: {
+  items: readonly Item[]
+  domain: NumberRange
+  gridConfig: GridConfig
+  tickType: 'labelTicks' | 'gridTicks'
+  guideValue: number
+  isVertical?: boolean
+}): TickValues => {
+  const config = gridConfig[isVertical ? 'y' : 'x']
+  const uniqValues = getUniqValues(items, domain, isVertical ? 'y' : 'x', isVertical)
+  const ticks = config[tickType] || 0
+  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
+  const result =
+    ticks === 0 ? [] : _.chunk(uniqValues, Math.ceil(uniqValues.length / ticks)).map(arr => arr[0])
+
+  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
+    return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
+  }
+
+  return _.uniq(result.concat(isGuide ? [guideValue] : []))
+}
+
+export const getSecondaryTickValues = ({
+  items,
+  domain,
+  gridConfig,
+  tickType,
+  guideValue,
+  isVertical,
+}: {
+  items: readonly Item[]
+  domain: NumberRange
+  gridConfig: GridConfig
+  tickType: 'labelTicks' | 'gridTicks'
+  guideValue: number
+  isVertical?: boolean
+}) => {
+  const config = gridConfig[isVertical ? 'x' : 'y']
+  const uniqValues = getUniqValues(items, domain, isVertical ? 'x' : 'y', false)
+  const ticks = config[tickType] || 0
+  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
+  const result = ticks === 0 ? [] : d3.ticks(domain[0], domain[1], ticks)
+
+  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
+    return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
+  }
+
+  return _.uniq(result.concat(isGuide ? [guideValue] : []))
 }
 
 export class LinearChart extends React.Component<Props, State> {
@@ -165,8 +214,9 @@ export class LinearChart extends React.Component<Props, State> {
     height: 0,
     paddingX: 0,
     paddingY: 0,
-    mainTickValues: [],
     zoom: 1,
+    xGuideValue: 0,
+    yGuideValue: 0,
   }
 
   targetSecondaryDomain = this.state.xDomain
@@ -184,26 +234,11 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines, isVertical, gridConfig },
+      props: { lines, isVertical },
     } = this
 
     if (lines !== prevProps.lines || isVertical !== prevProps.isVertical) {
       this.updateDomains()
-    }
-
-    if (
-      !_.isEqual(gridConfig.y, prevProps.gridConfig.y) ||
-      !_.isEqual(gridConfig.x, prevProps.gridConfig.x)
-    ) {
-      const { main: mainAxis } = this.getAxis()
-      const mainTickValues = getTickValues(
-        this.getAllValues(),
-        mainAxis.currentDomain,
-        gridConfig,
-        isVertical
-      )
-
-      this.setState({ mainTickValues })
     }
   }
 
@@ -226,10 +261,16 @@ export class LinearChart extends React.Component<Props, State> {
         colorGroups,
         secondaryScaleUnit,
       },
-      state: { paddingX, paddingY, xDomain, yDomain, mainTickValues },
+      state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue },
     } = this
     const { svgWidth, svgHeight } = this.getSvgSize()
     const { main: mainAxis } = this.getAxis()
+    const {
+      mainLabelTickValues,
+      mainGridTickValues,
+      secondaryLabelTickValues,
+      secondaryGridTickValues,
+    } = this.getTicks()
 
     const lineClipPath = `url(#${this.lineClipId})`
     const scaleX = getXScale(xDomain, svgWidth)
@@ -273,10 +314,15 @@ export class LinearChart extends React.Component<Props, State> {
             gridConfig={gridConfig}
             lineClipPath={lineClipPath}
             onAxisSizeChange={this.onAxisSizeChange}
-            mainTickValues={mainTickValues}
+            mainLabelTickValues={mainLabelTickValues}
+            mainGridTickValues={mainGridTickValues}
+            secondaryLabelTickValues={secondaryLabelTickValues}
+            secondaryGridTickValues={secondaryGridTickValues}
             isVertical={isVertical}
             formatLabel={formatLabel}
             secondaryScaleUnit={secondaryScaleUnit}
+            xGuideValue={xGuideValue}
+            yGuideValue={yGuideValue}
           />
 
           {this.getLines().map(line => (
@@ -364,20 +410,57 @@ export class LinearChart extends React.Component<Props, State> {
     }
   }
 
-  updateDomains() {
+  getTicks = () => {
     const { isVertical, gridConfig } = this.props
+    const { xGuideValue, yGuideValue, xDomain, yDomain } = this.state
+
+    return {
+      mainLabelTickValues: getMainTickValues({
+        items: this.getAllValues(),
+        domain: isVertical ? yDomain : xDomain,
+        gridConfig,
+        tickType: 'labelTicks',
+        guideValue: isVertical ? yGuideValue : xGuideValue,
+        isVertical,
+      }),
+      mainGridTickValues: getMainTickValues({
+        items: this.getAllValues(),
+        domain: isVertical ? yDomain : xDomain,
+        gridConfig,
+        tickType: 'gridTicks',
+        guideValue: isVertical ? yGuideValue : xGuideValue,
+        isVertical,
+      }),
+      secondaryLabelTickValues: getSecondaryTickValues({
+        items: this.getAllValues(),
+        domain: isVertical ? xDomain : yDomain,
+        gridConfig,
+        tickType: 'labelTicks',
+        guideValue: isVertical ? xGuideValue : yGuideValue,
+        isVertical,
+      }),
+      secondaryGridTickValues: getSecondaryTickValues({
+        items: this.getAllValues(),
+        domain: isVertical ? xDomain : yDomain,
+        gridConfig,
+        tickType: 'gridTicks',
+        guideValue: isVertical ? xGuideValue : yGuideValue,
+        isVertical,
+      }),
+    }
+  }
+
+  updateDomains() {
     const xDomain = this.getXDomain(this.getAllValues())
     const yDomain = this.getYDomain(this.getAllValues())
+    const [xGuideValue] = d3.extent(this.getAllValues(), v => v.x) as NumberRange
+    const [yGuideValue] = d3.extent(this.getAllValues(), v => v.y) as NumberRange
 
     this.setState({
       xDomain,
       yDomain,
-      mainTickValues: getTickValues(
-        this.getAllValues(),
-        isVertical ? yDomain : xDomain,
-        gridConfig,
-        isVertical
-      ),
+      xGuideValue,
+      yGuideValue,
     })
   }
 
@@ -463,7 +546,6 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   onZoom = () => {
-    const { isVertical, gridConfig } = this.props
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
 
     this.setState({ zoom: d3.event.transform.k })
@@ -472,19 +554,12 @@ export class LinearChart extends React.Component<Props, State> {
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
     const newMainDomain: NumberRange = newMainScale.domain()
-    const newMainTickValues = getTickValues(
-      this.getAllValues(),
-      newMainDomain,
-      gridConfig,
-      isVertical
-    )
 
     if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
       return
     }
 
     mainAxis.setDomain(newMainDomain)
-    this.setState({ mainTickValues: newMainTickValues })
 
     // Значения в домене не всегда идут от меньшего к большему: у вертикального графика домен перевёрнут, чтобы 0 был наверху графика
     const domainMin = Math.min(...newMainDomain)

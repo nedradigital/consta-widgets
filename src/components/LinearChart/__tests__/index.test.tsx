@@ -1,6 +1,14 @@
 import * as d3 from 'd3'
 
-import { calculateSecondaryDomain, getTickValues, Item, Line, NumberRange, padDomain } from '../'
+import {
+  calculateSecondaryDomain,
+  getMainTickValues,
+  getSecondaryTickValues,
+  Item,
+  Line,
+  NumberRange,
+  padDomain,
+} from '../'
 
 const horizontalLine: readonly Line[] = [
   {
@@ -69,7 +77,7 @@ describe('<LinearChart />', () => {
     })
   })
 
-  describe('getTickValues', () => {
+  describe('getMainTickValues', () => {
     const values = [{ x: 0, y: 9 }, { x: 1, y: 6 }, { x: 2, y: 3 }, { x: 3, y: 0 }] as const
     const getGridConfig = ({ labelTicks = 0, gridTicks = 0, guide = false }) => ({
       x: {
@@ -81,34 +89,198 @@ describe('<LinearChart />', () => {
     })
     const domain = [0, 3] as const
 
-    it('returns clean array', () => {
-      const result = getTickValues(values, domain, getGridConfig({}), false)
+    it('вернет пустой массив', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({}),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
       expect(result).toEqual([])
     })
 
-    it('returns array with zero number', () => {
-      const result = getTickValues(values, domain, getGridConfig({ guide: true }), false)
+    it('вернет массив со значением нулевой оси, если передан аргумент gridTicks', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ guide: true }),
+        tickType: 'gridTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
       expect(result).toEqual([0])
     })
 
-    it('returns array with uniq values', () => {
-      const result = getTickValues(
-        values,
+    it('вернет пустой массив, если передан аргумент gridTicks и значение нулевой оси меньше минимального значения домена', () => {
+      const result = getMainTickValues({
+        items: values,
         domain,
-        getGridConfig({ labelTicks: 4, guide: true }),
-        false
-      )
+        gridConfig: getGridConfig({ guide: true }),
+        tickType: 'gridTicks',
+        guideValue: -2,
+        isVertical: false,
+      })
+      expect(result).toEqual([])
+    })
+
+    it('вернет пустой массив, если передан аргумент labelTicks', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 1,
+        isVertical: false,
+      })
+      expect(result).toEqual([])
+    })
+
+    it('вернет массив с уникальными значениями', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
       expect(result).toEqual([0, 1, 2, 3])
     })
 
-    it('returns array if domain is small', () => {
-      const result = getTickValues(
-        values,
-        [0, 1],
-        getGridConfig({ labelTicks: 4, guide: true }),
-        false
-      )
+    it('вернет массив нужной длинны', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain: [0, 1],
+        gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
       expect(result).toEqual([0, 1])
+    })
+
+    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain: [0, 1],
+        gridConfig: getGridConfig({ labelTicks: 1, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0, 1])
+    })
+
+    it('вернет массив с максимальным и минимальным значением, если labelTicks = 2', () => {
+      const result = getMainTickValues({
+        items: values,
+        domain: [0, 1],
+        gridConfig: getGridConfig({ labelTicks: 2, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0, 1])
+    })
+
+    it('вернет массив без дробей', () => {
+      const result = getMainTickValues({
+        items: [{ x: 0, y: 0 }, { x: 1, y: 0 }],
+        domain: [0, 1],
+        gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+
+      expect(result).toEqual([0, 1])
+    })
+  })
+
+  describe('getSecondaryTickValues', () => {
+    const values = [{ x: 0, y: 9 }, { x: 1, y: 6 }, { x: 2, y: 3 }, { x: 3, y: 0 }] as const
+    const getGridConfig = ({ labelTicks = 0, gridTicks = 0, guide = false }) => ({
+      x: {},
+      y: {
+        labelTicks,
+        gridTicks,
+        guide,
+      },
+    })
+    const domain = [0, 10] as const
+
+    it('вернет пустой массив', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({}),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([])
+    })
+
+    it('вернет массив со значением нулевой оси, если передан аргумент gridTicks', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ guide: true }),
+        tickType: 'gridTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0])
+    })
+
+    it('вернет пустой массив, если передан аргумент gridTicks и значение нулевой оси меньше минимального значения домена', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ guide: true }),
+        tickType: 'gridTicks',
+        guideValue: -2,
+        isVertical: false,
+      })
+      expect(result).toEqual([])
+    })
+
+    it('вернет массив с уникальными значениями', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain,
+        gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0, 2, 4, 6, 8, 10])
+    })
+
+    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain: [0, 4],
+        gridConfig: getGridConfig({ labelTicks: 1, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0, 3])
+    })
+
+    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+      const result = getSecondaryTickValues({
+        items: values,
+        domain: [0, 4],
+        gridConfig: getGridConfig({ labelTicks: 2, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isVertical: false,
+      })
+      expect(result).toEqual([0, 3])
     })
   })
 
