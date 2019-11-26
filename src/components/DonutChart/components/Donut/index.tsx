@@ -1,4 +1,4 @@
-import React, { createRef, useLayoutEffect } from 'react'
+import React from 'react'
 
 import * as d3 from 'd3'
 
@@ -33,32 +33,31 @@ export const Donut: React.FC<Props> = ({
   handleMouseOut,
   isTooltipVisible,
 }) => {
-  const ref = createRef<SVGGElement>()
+  const pieData = d3
+    .pie<DataItem>()
+    .padAngle(padAngle)
+    .sort(null)
+    .value(d => d.value)([...data])
 
-  useLayoutEffect(() => {
-    if (ref.current) {
-      const pieData = d3
-        .pie<DataItem>()
-        .padAngle(padAngle)
-        .sort(null)
-        .value(d => d.value)([...data])
+  const arc = d3
+    .arc<d3.PieArcDatum<DataItem>>()
+    .innerRadius(innerRadius)
+    .outerRadius(outerRadius)
 
-      const arc = d3
-        .arc<d3.PieArcDatum<DataItem>>()
-        .innerRadius(innerRadius)
-        .outerRadius(outerRadius)
-
-      d3.select(ref.current)
-        .selectAll('path')
-        .data(pieData)
-        .join('path')
-        .on('mouseover', d => handleMouseOver(d.data))
-        .on('mouseout', handleMouseOut)
-        .attr('fill', d => colorGroups[d.data.colorGroupName])
-        .attr('d', arc)
-        .style('opacity', isTooltipVisible ? 0.4 : 1)
-    }
-  })
-
-  return <g ref={ref} />
+  return (
+    <g>
+      {pieData.map((pieDatum, idx) => (
+        <path
+          key={idx}
+          d={arc(pieDatum) || undefined}
+          fill={colorGroups[pieDatum.data.colorGroupName]}
+          onMouseOver={() => handleMouseOver(pieDatum.data)}
+          onMouseOut={handleMouseOut}
+          style={{
+            opacity: isTooltipVisible ? 0.4 : 1,
+          }}
+        />
+      ))}
+    </g>
+  )
 }
