@@ -46,32 +46,32 @@ const getYDomain = (items: readonly Item[]) => d3.extent(items, v => v.y) as Num
 
 describe('<LinearChart />', () => {
   describe('calculateSecondaryDomain', () => {
-    it('Calculate secondary domain for horizontal mode and single line', () => {
+    it('рассчитать второстепенный домен для горизонтального режима и одной линии', () => {
       const domain = calculateSecondaryDomain(2, 6, horizontalLine, v => v.x, getYDomain)
       expect(domain).toEqual([0, 9])
     })
 
-    it('Calculate secondary domain for horizontal mode and multiple lines', () => {
+    it('рассчитать второстепенный домен для горизонтального режима и нескольких линии', () => {
       const domain = calculateSecondaryDomain(2, 6, horizontalLines, v => v.x, getYDomain)
       expect(domain).toEqual([-4, 10])
     })
 
-    it('Calculate secondary domain for horizontal mode in max left position', () => {
+    it('рассчитать второстепенный домен для горизонтального режима и максимальном левом положении', () => {
       const domain = calculateSecondaryDomain(1, 2, horizontalLine, v => v.x, getYDomain)
       expect(domain).toEqual([6, 9])
     })
 
-    it('Calculate secondary domain for horizontal mode in max right position', () => {
+    it('рассчитать второстепенный домен для горизонтального режима и максимальном правом положении', () => {
       const domain = calculateSecondaryDomain(6, 7, horizontalLine, v => v.x, getYDomain)
       expect(domain).toEqual([0, 3])
     })
 
-    it('Calculate secondary domain for vertical mode and single line', () => {
+    it('рассчитать второстепенный домен для вертикального режима и одной линии', () => {
       const domain = calculateSecondaryDomain(1.5, 7.5, verticalLine, v => v.y, getXDomain)
       expect(domain).toEqual([0, 9])
     })
 
-    it('Calculate secondary domain for vertical mode and multiple lines', () => {
+    it('рассчитать второстепенный домен для вертикального режима и нескольких линии', () => {
       const domain = calculateSecondaryDomain(2, 6, verticalLines, v => v.y, getXDomain)
       expect(domain).toEqual([-4, 10])
     })
@@ -101,7 +101,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([])
     })
 
-    it('вернет массив со значением нулевой оси, если передан аргумент gridTicks', () => {
+    it('вернет массив со значением нулевой оси для сетки', () => {
       const result = getMainTickValues({
         items: values,
         domain,
@@ -113,7 +113,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0])
     })
 
-    it('вернет пустой массив, если передан аргумент gridTicks и значение нулевой оси меньше минимального значения домена', () => {
+    it('вернет пустой массив для сетки, если значение нулевой оси мне входит в диапазон домена', () => {
       const result = getMainTickValues({
         items: values,
         domain,
@@ -125,7 +125,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([])
     })
 
-    it('вернет пустой массив, если передан аргумент labelTicks', () => {
+    it('вернет пустой массив для засечек', () => {
       const result = getMainTickValues({
         items: values,
         domain,
@@ -161,7 +161,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0, 1])
     })
 
-    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+    it('вместо 1 засечки возвращает 2: минимальную и максимальную', () => {
       const result = getMainTickValues({
         items: values,
         domain: [0, 1],
@@ -173,7 +173,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0, 1])
     })
 
-    it('вернет массив с максимальным и минимальным значением, если labelTicks = 2', () => {
+    it('возвращает 2 засечки: минимальную и максимальную', () => {
       const result = getMainTickValues({
         items: values,
         domain: [0, 1],
@@ -223,7 +223,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([])
     })
 
-    it('вернет массив со значением нулевой оси, если передан аргумент gridTicks', () => {
+    it('вернет массив со значением нулевой оси для сетки', () => {
       const result = getSecondaryTickValues({
         items: values,
         domain,
@@ -235,7 +235,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0])
     })
 
-    it('вернет пустой массив, если передан аргумент gridTicks и значение нулевой оси меньше минимального значения домена', () => {
+    it('вернет пустой массив для сетки, если значение нулевой оси мне входит в диапазон домена', () => {
       const result = getSecondaryTickValues({
         items: values,
         domain,
@@ -259,7 +259,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0, 2, 4, 6, 8, 10])
     })
 
-    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+    it('вместо 1 засечки возвращает 2: минимальную и максимальную', () => {
       const result = getSecondaryTickValues({
         items: values,
         domain: [0, 4],
@@ -271,7 +271,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0, 3])
     })
 
-    it('вернет массив с максимальным и минимальным значением, если labelTicks = 1', () => {
+    it('возвращает 2 засечки: минимальную и максимальную', () => {
       const result = getSecondaryTickValues({
         items: values,
         domain: [0, 4],
@@ -287,22 +287,22 @@ describe('<LinearChart />', () => {
   describe('padDomain', () => {
     const padding = 0.1
 
-    it('returns domain with paddings when zoom is 1', () => {
+    it('вернет домен с отступами когда зум = 1', () => {
       const paddedDomain = padDomain([0, 10], padding, padding, 1)
       expect(paddedDomain).toEqual([-1, 11])
     })
 
-    it('returns domain with paddings when zoom is 2', () => {
+    it('вернет домен с отступами когда зум = 2', () => {
       const paddedDomain = padDomain([-10, 10], padding, padding, 2)
       expect(paddedDomain).toEqual([-11, 11])
     })
 
-    it('returns domain with paddings when zoom is 4', () => {
+    it('вернет домен с отступами когда зум = 4', () => {
       const paddedDomain = padDomain([40, 100], padding, padding, 4)
       expect(paddedDomain).toEqual([38.5, 101.5])
     })
 
-    it('returns domain with paddings when zoom is 8', () => {
+    it('вернет домен с отступами когда зум = 8', () => {
       const paddedDomain = padDomain([-50, 50], padding, padding, 8)
       expect(paddedDomain).toEqual([-51.25, 51.25])
     })
