@@ -27,6 +27,7 @@ const getCommonProps = () => ({
         y,
       })),
       dots: true,
+      lineName: 'Северный бур',
     },
     {
       colorGroupName: 'second',
@@ -34,6 +35,7 @@ const getCommonProps = () => ({
         x: Date.now() + x,
         y,
       })),
+      lineName: 'Южное месторождение',
     },
   ],
   gridConfig: object('gridConfig', {
@@ -52,6 +54,9 @@ const getCommonProps = () => ({
   } as const),
   withZoom: true,
   formatLabel: (v: number) => new Date(v).toLocaleDateString(),
+  formatLabelForTooltip: (v: number) =>
+    new Date(v).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).replace('г.', ''),
+  secondaryScaleUnit: 'тыс. м3',
 })
 
 storiesOf('components/LinearChart', module)

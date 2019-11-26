@@ -7,7 +7,9 @@ import * as _ from 'lodash'
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups } from '@/dashboard/types'
 
+import { HoverLines } from './components/HoverLines'
 import { Line as LineComponent } from './components/Line'
+import { HoverLine, LineTooltip } from './components/LineTooltip'
 import { Zoom } from './components/Zoom'
 import css from './index.css'
 
@@ -15,17 +17,21 @@ export type Line = {
   colorGroupName: string
   values: readonly Item[]
   dots?: boolean
+  lineName: string
 }
 export type Item = { x: number; y: number }
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
+export type ScaleLinear = d3.ScaleLinear<number, number>
+type FormatLabel = (n: number) => string
 
 type Props = {
   lines: readonly Line[]
   gridConfig: GridConfig
   withZoom?: boolean
   isVertical?: boolean
-  formatLabel: (n: number) => string
+  formatLabel: FormatLabel
+  formatLabelForTooltip?: FormatLabel
   colorGroups: ColorGroups
   secondaryScaleUnit?: string
 }
@@ -40,6 +46,7 @@ type State = {
   zoom: number
   xGuideValue: number
   yGuideValue: number
+  activeHoverLine?: number
 }
 
 export const TRANSITION_DURATIONS = {
@@ -194,8 +201,51 @@ export const getSecondaryTickValues = ({
   return _.uniq(result.concat(isGuide ? [guideValue] : []))
 }
 
+const defaultPosition = {
+  x: 0,
+  y: 0,
+}
+
+const getOffsetPosition = (
+  position: Item,
+  svgRef: React.RefObject<SVGGElement>,
+  scaleX: ScaleLinear,
+  scaleY: ScaleLinear
+) => {
+  if (!svgRef.current) {
+    return defaultPosition
+  }
+
+  const { left, top } = svgRef.current.getBoundingClientRect()
+
+  return {
+    x: scaleX(position.x) + left,
+    y: scaleY(position.y) + top,
+  }
+}
+
+const getTitleTooltip = (
+  line: HoverLine,
+  formatLabel: FormatLabel,
+  formatLabelForTooltip?: FormatLabel,
+  isVertical?: boolean
+) => {
+  if (!line) {
+    return ''
+  }
+
+  const value = line.value[isVertical ? 'y' : 'x']
+
+  if (!_.isUndefined(formatLabelForTooltip)) {
+    return formatLabelForTooltip(value)
+  }
+
+  return formatLabel(value)
+}
+
 export class LinearChart extends React.Component<Props, State> {
   ref = React.createRef<HTMLDivElement>()
+  svgWrapperRef = React.createRef<SVGSVGElement>()
 
   resizeObserver = new ResizeObserver(() => this.updateSize())
 
@@ -258,10 +308,11 @@ export class LinearChart extends React.Component<Props, State> {
         isVertical,
         lines,
         formatLabel,
+        formatLabelForTooltip,
         colorGroups,
         secondaryScaleUnit,
       },
-      state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue },
+      state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, activeHoverLine },
     } = this
     const { svgWidth, svgHeight } = this.getSvgSize()
     const { main: mainAxis } = this.getAxis()
@@ -279,9 +330,44 @@ export class LinearChart extends React.Component<Props, State> {
     const xOnBottom = xLabelsPos === 'bottom'
     const yOnLeft = yLabelsPos === 'left'
 
+    const linesOnTheActiveHoverLine = this.getLines().map(obj => {
+      const value =
+        obj.values.find(position => position[isVertical ? 'y' : 'x'] === activeHoverLine) ||
+        defaultPosition
+
+      return {
+        color: colorGroups[obj.colorGroupName],
+        name: obj.lineName,
+        value,
+      }
+    })
+
+    const maxAxisValue =
+      _.maxBy(
+        linesOnTheActiveHoverLine.map(obj => obj.value),
+        item => item[isVertical ? 'x' : 'y']
+      ) || defaultPosition
+
+    const tooltipPosition = getOffsetPosition(maxAxisValue, this.svgWrapperRef, scaleX, scaleY)
+    const tooltipTitle = getTitleTooltip(
+      linesOnTheActiveHoverLine[0],
+      formatLabel,
+      formatLabelForTooltip,
+      isVertical
+    )
+
     return (
       <div ref={this.ref} className={css.main}>
+        <LineTooltip
+          isVisible={!!activeHoverLine}
+          position={tooltipPosition}
+          secondaryScaleUnit={secondaryScaleUnit}
+          linesOnTheActiveHoverLine={linesOnTheActiveHoverLine}
+          title={tooltipTitle}
+          isVertical={isVertical}
+        />
         <svg
+          ref={this.svgWrapperRef}
           className={css.svg}
           width={svgWidth}
           height={svgHeight}
@@ -330,13 +416,28 @@ export class LinearChart extends React.Component<Props, State> {
               key={line.colorGroupName}
               values={[...line.values]}
               color={colorGroups[line.colorGroupName]}
-              dotRadius={line.dots ? dotRadius : undefined}
+              hasDotRadius={line.dots}
+              defaultDotRadius={dotRadius}
               scaleX={scaleX}
               scaleY={scaleY}
               lineClipPath={lineClipPath}
               dotsClipPath={`url(#${this.dotsClipId})`}
+              activeHoverLine={activeHoverLine}
+              isVertical={Boolean(isVertical)}
+              setActiveHoverLine={this.setActiveHoverLine}
             />
           ))}
+
+          <HoverLines
+            line={this.getLines()[0]}
+            scaleX={scaleX}
+            scaleY={scaleY}
+            setActiveHoverLine={this.setActiveHoverLine}
+            width={svgWidth}
+            height={svgHeight}
+            isVertical={Boolean(isVertical)}
+            activeHoverLine={activeHoverLine}
+          />
         </svg>
 
         {withZoom && (
@@ -589,4 +690,6 @@ export class LinearChart extends React.Component<Props, State> {
         })
     }
   }
+
+  setActiveHoverLine = (line?: number) => this.setState({ activeHoverLine: line })
 }

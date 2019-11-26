@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { TickValues } from '../..'
+import { ScaleLinear, TickValues } from '../..'
 
 import css from './index.css'
 
@@ -36,7 +36,7 @@ type Props = {
   height: number
   lineClipPath: string
   scales: {
-    [key in 'x' | 'y']: d3.ScaleLinear<number, number>
+    [key in 'x' | 'y']: ScaleLinear
   }
   gridConfig: GridConfig
   onAxisSizeChange: (sizes: { xAxisHeight: number; yAxisWidth: number }) => void

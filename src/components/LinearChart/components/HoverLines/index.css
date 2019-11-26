@@ -1,0 +1,15 @@
+.hoverLine {
+  stroke: transparent;
+  stroke-width: 2;
+  stroke-linecap: butt;
+
+  cursor: pointer;
+
+  &.isActive {
+    stroke: #fff;
+  }
+
+  &.isSubstrate {
+    stroke-width: 10;
+  }
+}
