@@ -14,11 +14,14 @@ storiesOf('components/Roadmap', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '80vw' }))
   .add('interactive', () => {
-    const { titles, data, currentDay, colorGroups } = getWidgetMockData(DataType.Roadmap)
+    const {
+      data: { titles, values, currentDay },
+      colorGroups,
+    } = getWidgetMockData(DataType.Roadmap)[0]
 
     return (
       <Roadmap
-        data={object('data', data)}
+        data={object('data', values)}
         currentDay={number('currentDay', currentDay)}
         titles={[text('firstColumn', titles[0]), text('secondColumn', titles[1])]}
         colorGroups={object('colorGroups', colorGroups)}

@@ -16,7 +16,7 @@ export type Item = {
   comment?: string
 }
 
-type Data = {
+export type Data = {
   firstColumn: string
   secondColumn: string
   plan: readonly Item[]
@@ -24,7 +24,7 @@ type Data = {
   forecast: readonly Item[]
 }
 
-export type Props = {
+type Props = {
   data: readonly Data[]
   titles: readonly [string, string]
   currentDay: number

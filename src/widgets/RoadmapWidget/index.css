@@ -1,0 +1,10 @@
+.content {
+  & + & {
+    margin-top: calc-size(20);
+  }
+}
+
+.table {
+  margin-top: calc-size(10);
+  margin-bottom: calc-size(10);
+}
