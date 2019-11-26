@@ -367,7 +367,7 @@ const mockData: DataMap = {
   },
   [DataType.RadarChart]: {
     colorGroups: {
-      first: '#fff',
+      first: '#20B55F',
       second: '#56B9F2',
     },
     axesLabels: {
@@ -385,6 +385,7 @@ const mockData: DataMap = {
     figures: [
       {
         colorGroupName: 'first',
+        name: 'Северный бур',
         values: [
           { axisName: 'job', value: 550 },
           { axisName: 'industrial', value: 700 },
@@ -399,6 +400,7 @@ const mockData: DataMap = {
       },
       {
         colorGroupName: 'second',
+        name: 'Южное месторождение',
         values: [
           { axisName: 'job', value: 160 },
           { axisName: 'industrial', value: 450 },

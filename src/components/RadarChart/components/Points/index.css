@@ -3,13 +3,20 @@
 :--point {
   position: absolute;
 
+  box-sizing: content-box;
   width: calc-size(4);
   height: calc-size(4);
+
+  pointer-events: initial;
 
   border-radius: 50%;
   background-color: currentColor;
 
   transform: translate(-50%, -50%);
+
+  &.isActive {
+    border: calc-size(4) solid transparent;
+  }
 
   &:hover {
     z-index: 1;
