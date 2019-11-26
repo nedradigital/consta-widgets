@@ -3,6 +3,7 @@ import React from 'react'
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
+import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
 import { Line } from '@/components/LinearChart'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
@@ -52,6 +53,7 @@ export enum DataType {
   RangePicker,
   RadarChart,
   Roadmap,
+  Images,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -99,6 +101,7 @@ export type DataMap = {
   [DataType.RangePicker]: RangePickerData
   [DataType.RadarChart]: RadarChartData & WithColorGroups
   [DataType.Roadmap]: RoadmapData
+  [DataType.Images]: readonly ImageItem[]
 }
 
 export type Dataset = {

@@ -11,25 +11,29 @@ import { ReactComponent as IconCloseSvg } from './images/close.svg'
 import css from './index.css'
 
 type Props = {
-  isVisible: boolean
   images: readonly ImageItem[]
-  activeImage: number
+  openOnImage?: number
   onRequestClose: () => void
 }
 
-export const ImagesPopup: React.FC<Props> = ({
-  isVisible,
-  images,
-  activeImage: originalActiveImage,
-  onRequestClose,
-}) => {
-  const [currentImageIdx, setCurrentImageIdx] = useState(originalActiveImage)
+export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClose }) => {
+  const isVisible = openOnImage !== undefined
+  const [currentImageIdx, setCurrentImageIdx] = useState(openOnImage || 0)
+  const [isOpening, setIsOpening] = useState(false)
 
   useEffect(() => {
-    if (originalActiveImage !== currentImageIdx) {
-      setCurrentImageIdx(originalActiveImage)
+    // Чтобы выключить анимации в момент открытия
+    if (isVisible) {
+      setIsOpening(true)
+      requestAnimationFrame(() => setIsOpening(false))
     }
-  }, [originalActiveImage])
+  }, [isVisible])
+
+  useEffect(() => {
+    if (openOnImage !== undefined && openOnImage !== currentImageIdx) {
+      setCurrentImageIdx(openOnImage)
+    }
+  }, [openOnImage])
 
   useLayoutEffect(() => {
     const clampedIdx = _.clamp(currentImageIdx, 0, images.length - 1)
@@ -37,10 +41,6 @@ export const ImagesPopup: React.FC<Props> = ({
       setCurrentImageIdx(clampedIdx)
     }
   }, [currentImageIdx])
-
-  if (!isVisible) {
-    return null
-  }
 
   const goLeft = () => setCurrentImageIdx(currentImageIdx - 1)
   const goRight = () => setCurrentImageIdx(currentImageIdx + 1)
@@ -57,46 +57,56 @@ export const ImagesPopup: React.FC<Props> = ({
   }
 
   return ReactDOM.createPortal(
-    <div className={css.main} onKeyDown={handleKeyPress} tabIndex={-1}>
-      <div
-        className={css.items}
-        style={{
-          transform: `translateX(${-1 * currentImageIdx * 100}%)`,
-        }}
-      >
-        {images.map((image, idx) => (
-          <div
-            key={idx}
-            className={css.item}
-            style={{
-              left: `${idx * 100}%`,
-            }}
-          >
-            <img src={image.large} className={css.image} />
-          </div>
-        ))}
-      </div>
-      <div className={css.preview}>
-        <ImagesList
-          images={images}
-          activeItem={currentImageIdx}
-          isAdaptive={false}
-          onClick={setCurrentImageIdx}
-        />
-      </div>
-      {currentImageIdx > 0 && (
-        <button type="button" className={classnames(css.button, css.toLeft)} onClick={goLeft}>
-          <IconArrowSvg className={css.icon} />
+    <div
+      className={classnames(css.main, isVisible && css.isVisible, isOpening && css.isOpening)}
+      tabIndex={-1}
+      onKeyDown={handleKeyPress}
+    >
+      <div className={css.content}>
+        <div
+          className={css.items}
+          style={{
+            transform: `translateX(${-1 * currentImageIdx * 100}%)`,
+          }}
+        >
+          {images.map((image, idx) => (
+            <div
+              key={idx}
+              className={css.item}
+              style={{
+                left: `${idx * 100}%`,
+              }}
+            >
+              <img src={image.large} className={css.image} />
+            </div>
+          ))}
+        </div>
+        <div className={css.preview}>
+          <ImagesList
+            images={images}
+            activeItem={currentImageIdx}
+            isAdaptive={false}
+            onClick={setCurrentImageIdx}
+          />
+        </div>
+        {currentImageIdx > 0 && (
+          <button type="button" className={classnames(css.button, css.toLeft)} onClick={goLeft}>
+            <IconArrowSvg className={css.icon} />
+          </button>
+        )}
+        {currentImageIdx < images.length - 1 && (
+          <button type="button" className={classnames(css.button, css.toRight)} onClick={goRight}>
+            <IconArrowSvg className={css.icon} />
+          </button>
+        )}
+        <button
+          type="button"
+          className={classnames(css.button, css.close)}
+          onClick={onRequestClose}
+        >
+          <IconCloseSvg className={css.icon} />
         </button>
-      )}
-      {currentImageIdx < images.length - 1 && (
-        <button type="button" className={classnames(css.button, css.toRight)} onClick={goRight}>
-          <IconArrowSvg className={css.icon} />
-        </button>
-      )}
-      <button type="button" className={classnames(css.button, css.close)} onClick={onRequestClose}>
-        <IconCloseSvg className={css.icon} />
-      </button>
+      </div>
     </div>,
     window.document.body
   )
