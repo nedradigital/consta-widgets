@@ -48,3 +48,7 @@
   padding-right: calc-size(12);
   padding-left: calc-size(8);
 }
+
+.value {
+  font-weight: bold;
+}

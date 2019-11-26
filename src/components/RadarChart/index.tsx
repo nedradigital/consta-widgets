@@ -243,6 +243,7 @@ export const RadarChart: React.FC<Props> = ({
               axesAngles={axesAngles}
               labelSize={labelSize}
               formatLabel={formatLabel}
+              isHoverable={figures.length > 1}
               colors={concentricColors && concentricColors.circles}
               activeAxis={activeAxis}
               onMouseEnter={setActiveAxis}
@@ -269,6 +270,7 @@ export const RadarChart: React.FC<Props> = ({
                 lineColor={colorsForFigures[idx].lineColor}
                 activeAxis={activeAxis ? activeAxis.name : ''}
                 backgroundColor={backgroundColor}
+                isHoverable={figures.length === 1}
               />
             ))}
           </div>
