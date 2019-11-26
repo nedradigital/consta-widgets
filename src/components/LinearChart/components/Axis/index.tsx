@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { MainTickValues } from '../..'
+import { TickValues } from '../..'
 
 import css from './index.css'
 
@@ -40,10 +40,15 @@ type Props = {
   }
   gridConfig: GridConfig
   onAxisSizeChange: (sizes: { xAxisHeight: number; yAxisWidth: number }) => void
-  mainTickValues: MainTickValues
+  mainLabelTickValues: TickValues
+  mainGridTickValues: TickValues
+  secondaryLabelTickValues: TickValues
+  secondaryGridTickValues: TickValues
   isVertical?: boolean
   formatLabel: (n: number) => string
   secondaryScaleUnit?: string
+  xGuideValue: number
+  yGuideValue: number
 }
 
 const getTransformForSecondaryScaleUnit = (
@@ -63,6 +68,8 @@ const getTransformForSecondaryScaleUnit = (
   return isVertical ? transformByVertical : transformByHorizontal
 }
 
+const defaultFormatLabel = (v: number) => String(v)
+
 export const Axis: React.FC<Props> = ({
   width,
   height,
@@ -73,10 +80,15 @@ export const Axis: React.FC<Props> = ({
     y: { labels: yLabelsPos, labelTicks: yLabelTicks, gridTicks: yGridTicks, guide: yGuide },
   },
   onAxisSizeChange,
-  mainTickValues,
+  mainLabelTickValues,
+  mainGridTickValues,
   isVertical,
   formatLabel,
   secondaryScaleUnit,
+  xGuideValue,
+  yGuideValue,
+  secondaryLabelTickValues,
+  secondaryGridTickValues,
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
@@ -106,7 +118,8 @@ export const Axis: React.FC<Props> = ({
           }[xLabelsPos]
       ),
       transform: xOnBottom ? `translateY(${height}px)` : '',
-      values: isVertical ? null : mainTickValues,
+      values: isVertical ? secondaryLabelTickValues : mainLabelTickValues,
+      formatLabel: isVertical ? defaultFormatLabel : formatLabel,
     },
     {
       getEl: () => yLabelsRef.current,
@@ -124,7 +137,8 @@ export const Axis: React.FC<Props> = ({
           }[yLabelsPos]
       ),
       transform: yOnLeft ? '' : `translateX(${width}px)`,
-      values: isVertical ? mainTickValues : null,
+      values: isVertical ? mainLabelTickValues : secondaryLabelTickValues,
+      formatLabel: isVertical ? formatLabel : defaultFormatLabel,
     },
   ] as const
 
@@ -152,16 +166,10 @@ export const Axis: React.FC<Props> = ({
           null,
           undefined
         >
-        const axis =
-          labels.values && labels.ticks
-            ? d3[labels.direction](labels.scale)
-                .tickValues([...labels.values])
-                .tickPadding(TICK_PADDING)
-                .tickFormat(v => formatLabel(v as number))
-            : d3[labels.direction](labels.scale)
-                .ticks(labels.ticks)
-                .tickSize(4)
-                .tickPadding(TICK_PADDING)
+        const axis = d3[labels.direction](labels.scale)
+          .tickValues([...labels.values])
+          .tickPadding(TICK_PADDING)
+          .tickFormat(v => labels.formatLabel(v as number))
 
         axisSelection
           .attr('class', labels.classes)
@@ -194,32 +202,38 @@ export const Axis: React.FC<Props> = ({
       .tickSize(-width)
       .tickFormat(() => '')
 
-    const xAxis = xGridTicks ? xGridBase.ticks(xGridTicks) : xGridBase.tickValues([0])
-    const yAxis = yGridTicks ? yGridBase.ticks(yGridTicks) : yGridBase.tickValues([0])
+    const xAxis = xGridTicks
+      ? xGridBase.tickValues([...secondaryGridTickValues])
+      : xGridBase.tickValues([xGuideValue])
+    const yAxis = yGridTicks
+      ? yGridBase.tickValues([...secondaryGridTickValues])
+      : yGridBase.tickValues([yGuideValue])
 
-    const xTicks = !xGridTicks && xGuide ? [0] : [...mainTickValues]
-    const yTicks = !yGridTicks && yGuide ? [0] : [...mainTickValues]
+    const xTicks = !xGridTicks && xGuide ? [xGuideValue] : [...mainGridTickValues]
+    const yTicks = !yGridTicks && yGuide ? [yGuideValue] : [...mainGridTickValues]
 
     const grids = [
       {
         el: xGridRef.current,
         axis: isVertical ? xAxis : xGridBase.tickValues(xTicks),
         withGuide: xGuide,
+        guideValue: xGuideValue,
       },
       {
         el: yGridRef.current,
         axis: isVertical ? yGridBase.tickValues(yTicks) : yAxis,
         withGuide: yGuide,
+        guideValue: yGuideValue,
       },
     ] as const
+
     grids.forEach(grid => {
       if (grid.el) {
         d3.select(grid.el)
           .call(grid.axis)
           .selectAll('.tick')
-          .filter(d => d === 0)
           .select('line')
-          .attr('class', grid.withGuide ? css.axisLine : '')
+          .attr('class', d => (grid.withGuide && d === grid.guideValue ? css.axisLine : ''))
       }
     })
   })
