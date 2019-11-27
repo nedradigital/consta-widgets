@@ -1,5 +1,7 @@
 import React from 'react'
 
+import classnames from 'classnames'
+
 import { Tooltip } from '@/components/Tooltip'
 
 import { Axis, Figure, FigureColor } from '../..'
@@ -38,7 +40,7 @@ export const AxisTooltip: React.FC<Props> = ({ colors, figures, position, values
 
             <div>
               {values.map((value, idx) => (
-                <div key={idx} className={css.row}>
+                <div key={idx} className={classnames(css.row, css.value)}>
                   {value}
                 </div>
               ))}

@@ -1,4 +1,5 @@
 @custom-selector :--point .point;
+@custom-selector :--isHoverable .isHoverable;
 
 :--point {
   position: absolute;
@@ -6,8 +7,6 @@
   box-sizing: content-box;
   width: calc-size(4);
   height: calc-size(4);
-
-  pointer-events: initial;
 
   border-radius: 50%;
   background-color: currentColor;
@@ -18,7 +17,12 @@
     border: calc-size(4) solid transparent;
   }
 
-  &:hover {
+  &:--isHoverable {
+    cursor: pointer;
+    pointer-events: initial;
+  }
+
+  &:--isHoverable:hover {
     z-index: 1;
 
     width: calc-size(6);
@@ -46,7 +50,7 @@
   right: 50%;
   bottom: calc(-1 * var(--hint-arrow-size));
 
-  @nest :--point:not(:hover) & {
+  @nest :--point:not(:hover) &, &:not(:--isHoverable) {
     visibility: hidden;
   }
 }

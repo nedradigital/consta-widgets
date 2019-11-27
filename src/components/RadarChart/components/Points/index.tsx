@@ -11,6 +11,7 @@ type Props = {
   lineColor: string
   activeAxis: string
   backgroundColor: string
+  isHoverable: boolean
 }
 
 export const RadarChartPoints: React.FC<Props> = ({
@@ -18,6 +19,7 @@ export const RadarChartPoints: React.FC<Props> = ({
   lineColor,
   activeAxis,
   backgroundColor,
+  isHoverable,
 }) => {
   return (
     <>
@@ -27,7 +29,11 @@ export const RadarChartPoints: React.FC<Props> = ({
         return (
           <div
             key={idx}
-            className={classnames(css.point, isActive && css.isActive)}
+            className={classnames(
+              css.point,
+              isActive && css.isActive,
+              isHoverable && css.isHoverable
+            )}
             style={{
               color: lineColor,
               top: `${point.yPercent}%`,
@@ -35,7 +41,7 @@ export const RadarChartPoints: React.FC<Props> = ({
               borderColor: backgroundColor,
             }}
           >
-            <Hint className={css.hint} direction="top">
+            <Hint className={classnames(css.hint, isHoverable && css.isHoverable)} direction="top">
               {point.label}
             </Hint>
           </div>
