@@ -1,6 +1,10 @@
+import { Legend } from '@/components/Legend'
 import { Roadmap } from '@/components/Roadmap'
 import { DataMap, DataType } from '@/dashboard/types'
+import { Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
+
+import css from './index.css'
 
 const dataType = DataType.Roadmap
 type Data = DataMap[typeof dataType]
@@ -12,7 +16,35 @@ type Params = {}
 export const defaultParams = {}
 
 export const RoadmapWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ data }) => (
-  <Roadmap {...data} />
+  <>
+    {data.map((item, index) => (
+      <div className={css.content} key={index}>
+        {item.title ? (
+          <Text size="xl" bold>
+            {item.title}
+          </Text>
+        ) : null}
+        <div className={css.table}>
+          <Roadmap
+            data={item.data.values}
+            titles={item.data.titles}
+            currentDay={item.data.currentDay}
+            colorGroups={item.colorGroups}
+          />
+        </div>
+        {item.legend ? (
+          <Legend
+            fontSize="s"
+            labelType="dot"
+            labelPosition="left"
+            direction="row"
+            colorGroups={item.colorGroups}
+            data={item.legend}
+          />
+        ) : null}
+      </div>
+    ))}
+  </>
 )
 
 export const RoadmapWidget = createWidget<Data, Params>({

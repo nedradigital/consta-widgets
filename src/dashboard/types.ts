@@ -11,7 +11,7 @@ import { Data as ProgressBarData } from '@/components/ProgressBar'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as RadarChartData } from '@/components/RadarChart'
 import { Data as RangePickerData } from '@/components/RangePicker'
-import { Props as RoadmapData } from '@/components/Roadmap'
+import { Data as RoadmapData } from '@/components/Roadmap'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
@@ -100,7 +100,17 @@ export type DataMap = {
   [DataType.DatePicker]: DatePickerData
   [DataType.RangePicker]: RangePickerData
   [DataType.RadarChart]: RadarChartData & WithColorGroups
-  [DataType.Roadmap]: RoadmapData
+  [DataType.Roadmap]: ReadonlyArray<
+    {
+      title?: string
+      data: {
+        values: readonly RoadmapData[]
+        titles: readonly [string, string]
+        currentDay: number
+      }
+      legend?: LegendData
+    } & WithColorGroups
+  >
   [DataType.Images]: readonly ImageItem[]
 }
 

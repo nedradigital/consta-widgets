@@ -12,3 +12,9 @@ storiesOf('widgets/RoadmapWidget', module)
   .add('interactive', () => (
     <RoadmapWidgetContent data={object('data', RoadmapWidget.mockData)} params={defaultParams} />
   ))
+  .add('multiple roadmap', () => (
+    <RoadmapWidgetContent
+      data={object('data', RoadmapWidget.mockData.concat(RoadmapWidget.mockData))}
+      params={object('params', defaultParams)}
+    />
+  ))
