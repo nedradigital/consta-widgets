@@ -526,12 +526,11 @@ const mockData: DataMap = {
       year: 'aquamarine',
     },
     data: {
-      categories: ['apples', 'bananas', 'cherries', 'year'],
+      categories: ['apples', 'bananas', 'cherries'],
       values: [
-        { month: 'Q1-2016', apples: 3840, bananas: 1920, cherries: -23, year: 400 },
-        { month: 'Q2-2016', apples: 1600, bananas: 1440, cherries: 45, year: 400 },
-        { month: 'Q3-2016', apples: 640, bananas: 960, cherries: 73, year: 600 },
-        { month: 'Q4-2016', apples: 320, bananas: 480, cherries: 85, year: 400 },
+        { month: 'Q1-2016', column1: { apples: 30, bananas: 20, cherries: 23 } },
+        { month: 'Q2-2016', column1: { apples: 1600, bananas: 40, cherries: 45 } },
+        { month: 'Q3-2016', column1: { apples: 640, bananas: 960, cherries: 73 } },
       ],
       keyGroup: 'month',
     },

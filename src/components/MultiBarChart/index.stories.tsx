@@ -11,23 +11,31 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { MultiBarChart } from '.'
 
 export const DataWithTwoColumnsOnDate = {
-  categories: ['apples', 'bananas', 'cherries', 'year'],
+  categories: ['apples', 'bananas', 'cherries'],
   values: [
-    { month: 'Q1-2016', apples: 3840, bananas: 1920, cherries: -23, year: 1990 },
-    { month: 'Q1-2016', apples: 1840, bananas: 920, cherries: 230, year: 2000 },
-    { month: 'Q2-2016', apples: 1600, bananas: 1440, cherries: 45, year: 1990 },
-    { month: 'Q2-2016', apples: 600, bananas: 440, cherries: 450, year: 2000 },
-    { month: 'Q3-2016', apples: 640, bananas: 960, cherries: 73, year: 1990 },
-    { month: 'Q3-2016', apples: 1640, bananas: 1960, cherries: 730, year: 2000 },
+    {
+      month: 'Q1-2016',
+      column1: { apples: 3840, bananas: 1920, cherries: 23 },
+      column2: { apples: 1840, bananas: 920, cherries: 230 },
+    },
+    {
+      month: 'Q2-2016',
+      column1: { apples: 1600, bananas: 14, cherries: 45 },
+      column2: { apples: 600, bananas: 440, cherries: 450 },
+    },
+    {
+      month: 'Q3-2016',
+      column1: { apples: 640, bananas: 960, cherries: 73 },
+      column2: { apples: 1640, bananas: 1960, cherries: 730 },
+    },
   ],
   keyGroup: 'month',
-  additionalKeyGroup: 'year',
 }
 
 storiesOf('components/MultiBarChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
-  .add('interactive', () => {
+  .add('с одним столбцом', () => {
     return (
       <MultiBarChart
         orientation="vertical"
@@ -38,7 +46,7 @@ storiesOf('components/MultiBarChart', module)
       />
     )
   })
-  .add('interactive/2 columns', () => {
+  .add('с двумя столбцами', () => {
     return (
       <MultiBarChart
         orientation="vertical"

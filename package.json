@@ -24,6 +24,7 @@
     "generate-css-types": "node node_modules/@gaz/configs/scripts/generate-css-types.js",
     "checktypes": "yarn generate-css-types && tsc --noEmit --extendedDiagnostics",
     "unit": "TZ=Europe/Moscow jest",
+    "unit:watch": "TZ=Europe/Moscow jest --watchAll",
     "test": "npm-run-all --parallel lint checktypes unit",
     "prepublishOnly": "yarn && yarn build && node node_modules/@gaz/configs/scripts/typescript-validations.js"
   },
