@@ -1,7 +1,6 @@
 .dashboard {
   width: 100%;
 
-  border: 1px solid gray;
   background-color: var(--bg-dashboard);
 
   /* эти стили нужны для корректной работы react-grid-layout */
