@@ -54,6 +54,7 @@
     ]
   },
   "dependencies": {
+    "@amcharts/amcharts4-geodata": "4.1.9",
     "@gaz/utils": "0.2.0",
     "@rehooks/component-size": "1.0.3",
     "classnames": "2.2.6",
