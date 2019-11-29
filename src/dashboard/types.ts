@@ -107,6 +107,8 @@ export type DataMap = {
         values: readonly RoadmapData[]
         titles: readonly [string, string]
         currentDay: number
+        startDate: number
+        endDate: number
       }
       legend?: LegendData
     } & WithColorGroups

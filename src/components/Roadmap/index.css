@@ -42,12 +42,6 @@
   width: var(--label-column-width);
 }
 
-.labelsTable {
-  width: 100%;
-
-  table-layout: fixed;
-}
-
 .table {
   margin: 0;
   padding: 0;
@@ -73,6 +67,7 @@
     font-weight: bold;
     line-height: calc-size(15);
 
+    width: 50px;
     padding: calc-size(12) calc-size(16);
 
     text-align: center;
@@ -80,11 +75,6 @@
 
     color: #f6fbfd;
     border-bottom: 1px solid var(--separate-line-color);
-  }
-
-  & td:first-child,
-  & th:first-child {
-    text-align: left;
   }
 
   & tr:nth-child(even) td {
@@ -101,6 +91,23 @@
   & tbody {
     background-image: url('./background.svg');
     background-repeat: repeat;
+  }
+
+  & th {
+    padding: 0;
+
+    text-align: center;
+  }
+}
+
+.labelsTable {
+  width: 100%;
+
+  table-layout: fixed;
+
+  & tbody td:first-child,
+  & thead th:first-child {
+    text-align: left;
   }
 }
 
@@ -170,13 +177,15 @@
 
 .titleWrapper {
   position: relative;
+
+  padding: calc-size(12) calc-size(16);
 }
 
 .periodWrapper {
   position: absolute;
-  top: -12px;
-  bottom: -12px;
-  left: -17px;
+  top: 0;
+  bottom: 0;
+  left: -1px;
 
   width: 1px;
 

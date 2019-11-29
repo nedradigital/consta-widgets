@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
 
+import { getDayPlural } from '@gaz/utils/lib/pluralization'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
 import { ColorGroups } from '@/dashboard/types'
-import { formatDate } from '@/utils/time'
+import { daysDiff, formatDate } from '@/utils/time'
 
 import { Item } from '../..'
 
@@ -15,6 +17,9 @@ type Props = {
   direction?: 'top' | 'bottom'
   plan: Item
   fact: Item
+  left: number
+  top?: number
+  bottom?: number
 }
 
 const MAX_LENGTH_COMMENT = 280
@@ -22,17 +27,21 @@ const CLEAN_COMMENT = 'Комментария нет'
 
 const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation()
 
+const getDayText = (start: number, end: number) => getDayPlural(daysDiff(start, end))
+
 const renderDates = (color: string, fact: Item, plan: Item) => (
   <>
     <div className={css.dateBlock}>
       <span className={classnames(css.circle, css.transparent)} style={{ background: color }} />
       <span className={css.label}>План:</span>
-      {formatDate(plan.startDate)} – {formatDate(plan.endDate)}
+      {formatDate(plan.startDate)} – {formatDate(plan.endDate)}{' '}
+      <b>({getDayText(plan.startDate, plan.endDate)})</b>
     </div>
     <div className={css.dateBlock}>
       <span className={css.circle} style={{ background: color }} />
       <span className={css.label}>Факт:</span>
-      {formatDate(fact.startDate)} – {formatDate(fact.endDate)}
+      {formatDate(fact.startDate)} – {formatDate(fact.endDate)}{' '}
+      <b>({getDayText(fact.startDate, fact.endDate)})</b>
     </div>
   </>
 )
@@ -49,7 +58,15 @@ const renderComment = (comment: string) => {
   )
 }
 
-export const RoadmapTooltip: React.FC<Props> = ({ fact, plan, colorGroups, direction = 'top' }) => {
+export const RoadmapTooltip: React.FC<Props> = ({
+  fact,
+  plan,
+  colorGroups,
+  direction = 'top',
+  left,
+  top,
+  bottom,
+}) => {
   const [activeSection, changeActiveSection] = useState('')
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
@@ -73,9 +90,14 @@ export const RoadmapTooltip: React.FC<Props> = ({ fact, plan, colorGroups, direc
     </div>,
   ] as const
 
-  return (
-    <div className={classnames(css.main, isOpened && css.opened, css[direction])} onClick={onClick}>
+  return ReactDOM.createPortal(
+    <div
+      className={classnames(css.main, isOpened && css.opened, css[direction])}
+      onClick={onClick}
+      style={{ left, top, bottom }}
+    >
       {direction === 'top' ? content : reverse(content)}
-    </div>
+    </div>,
+    window.document.body
   )
 }

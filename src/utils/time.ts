@@ -1,3 +1,5 @@
+const ONE_DAY = 1000 * 60 * 60 * 24
+
 export const formatDateToInputString = (value?: Date) => {
   if (!value || !(value instanceof Date)) {
     return ''
@@ -37,3 +39,15 @@ export const getDayMonthYearFromTimestamp = (date: number) => {
 export const getDaysInMonth = (month: number, year: number) => {
   return new Date(year, month, 0).getDate()
 }
+
+export const monthsDiff = (start: number, end: number) => {
+  const startDate = new Date(start)
+  const endDate = new Date(end)
+
+  return (
+    Math.abs(endDate.getMonth() - startDate.getMonth()) +
+    12 * Math.abs(endDate.getFullYear() - startDate.getFullYear())
+  )
+}
+
+export const daysDiff = (start: number, end: number) => Math.round(Math.abs(end - start) / ONE_DAY)
