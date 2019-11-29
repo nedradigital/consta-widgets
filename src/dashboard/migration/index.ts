@@ -23,7 +23,7 @@ export const getApplicableMigrations = (
   )
   const sortedMigrations = _.sortBy(filteredMigrations, m => m.versionTo)
 
-  return goingUp ? sortedMigrations : sortedMigrations.reverse()
+  return goingUp ? sortedMigrations : [...sortedMigrations].reverse()
 }
 
 export const migrate = (data: AnyDashboardStateVersion, toVersion: number) => {
