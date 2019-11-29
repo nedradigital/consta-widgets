@@ -137,6 +137,7 @@ export const RadarChart: React.FC<Props> = ({
     width - 2 * (axisNameWidth + axisNameOffset),
     height - 2 * (2 * axisNameLineHeight + axisNameOffset)
   )
+  const percentSize = size / 100
 
   const gradientId = `radarchart_gradient_${useUID()}`
 
@@ -184,17 +185,16 @@ export const RadarChart: React.FC<Props> = ({
         }
   )
 
-  const getOffsetPosition = (xPercent: number, yPercent: number) => {
+  const getTooltipPosition = (xPercent: number, yPercent: number) => {
     if (!svgWrapperRef.current) {
       return { x: 0, y: 0 }
     }
 
-    const percentSize = size / 100
-    const svgWrapper = svgWrapperRef.current
+    const { top, left } = svgWrapperRef.current.getBoundingClientRect()
 
     return {
-      x: percentSize * xPercent + svgWrapper.offsetLeft,
-      y: percentSize * yPercent + svgWrapper.offsetTop,
+      x: percentSize * xPercent + left,
+      y: percentSize * yPercent + top,
     }
   }
 
@@ -209,7 +209,7 @@ export const RadarChart: React.FC<Props> = ({
     yPercent: 0,
   }
 
-  const tooltipPosition = getOffsetPosition(
+  const tooltipPosition = getTooltipPosition(
     itemWithMaxValueOnAxis.xPercent,
     itemWithMaxValueOnAxis.yPercent
   )
