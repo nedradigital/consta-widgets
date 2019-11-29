@@ -4,7 +4,9 @@
     "baseUrl": ".",
     "paths": {
       "*": ["types/modules/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@amcharts/amcharts4-geodata/*": ["types/amcharts-stub"],
+      "@amcharts/amcharts4-geodata/lang/*": ["@amcharts/amcharts4-geodata/lang"]
     },
     "declarationDir": "lib/@types"
   },

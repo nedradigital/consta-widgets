@@ -39,7 +39,7 @@ const getLineCoords = (
   const heightPart = height / countLines
   const startingPoint = isGradient ? 0 : 1
 
-  return Array(countLines)
+  return new Array(countLines)
     .fill(null)
     .map((_, index) =>
       [

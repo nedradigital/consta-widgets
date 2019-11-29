@@ -57,9 +57,9 @@ export const getValuesScale = (domain: NumberRange, size: number, orientation: O
 
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
-  const numbers = items.reduce<number[]>((acc, curr) => {
-    acc.push(...curr.values.map(i => i.value).filter((v): v is number => v !== undefined))
-    return acc
+  const numbers = items.reduce<number[]>((mutableAcc, curr) => {
+    mutableAcc.push(...curr.values.map(i => i.value).filter((v): v is number => v !== undefined))
+    return mutableAcc
   }, [])
 
   return [0, d3.max(numbers)] as NumberRange
