@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 
-import { angleToCoord, deg2rad } from '../'
+import { angleToCoord, deg2rad, sortFigureValues } from '../'
 
 describe('angleToCoord', () => {
   it('calculates coordinates for the far right point', () => {
@@ -36,5 +36,22 @@ describe('angleToCoord', () => {
       xPercent: _.round(50 + (Math.sqrt(2) / 2) * 50, 2),
       yPercent: _.round(50 + (Math.sqrt(2) / 2) * 50, 2),
     })
+  })
+})
+
+describe('sortFigureValues', () => {
+  it('Сортировка значений фигуры по названию осей', () => {
+    const axesNames: readonly string[] = ['force', 'agility', 'intelligence']
+    const values = [
+      { axisName: 'agility', value: 0 },
+      { axisName: 'intelligence', value: 0 },
+      { axisName: 'force', value: 0 },
+    ] as const
+
+    expect(sortFigureValues(values, axesNames)).toEqual([
+      { axisName: 'force', value: 0 },
+      { axisName: 'agility', value: 0 },
+      { axisName: 'intelligence', value: 0 },
+    ])
   })
 })

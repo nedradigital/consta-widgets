@@ -26,13 +26,15 @@ export type Point = {
   axisName: string
 }
 
+export type FigureValue = {
+  axisName: string
+  value: number
+}
+
 export type Figure = {
   colorGroupName: string
   name: string
-  values: ReadonlyArray<{
-    axisName: string
-    value: number
-  }>
+  values: readonly FigureValue[]
 }
 
 export type Data = {
@@ -75,6 +77,10 @@ export const angleToCoord = (angle: number, valueFraction: number) => ({
   xPercent: circleCoordToRelative(Math.cos(angle) * valueFraction),
   yPercent: circleCoordToRelative(Math.sin(angle) * valueFraction),
 })
+
+export const sortFigureValues = (values: readonly FigureValue[], axesNames: readonly string[]) => {
+  return _.sortBy(values, item => axesNames.indexOf(item.axisName))
+}
 
 type ConcentricColorInfo = {
   circles: readonly string[]
@@ -157,7 +163,7 @@ export const RadarChart: React.FC<Props> = ({
 
   const pointsForFigures = figures.map(figure =>
     _.compact(
-      figure.values.map(value => {
+      sortFigureValues(figure.values, axesNames).map(value => {
         const theAxis = axesAngles.find(a => a.name === value.axisName)
 
         return theAxis
