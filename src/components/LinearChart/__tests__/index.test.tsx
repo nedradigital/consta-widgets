@@ -14,6 +14,7 @@ const horizontalLine: readonly Line[] = [
   {
     colorGroupName: 'red',
     values: [{ x: 1, y: 9 }, { x: 3, y: 6 }, { x: 5, y: 3 }, { x: 7, y: 0 }],
+    lineName: 'Северный бур',
   },
 ]
 
@@ -21,6 +22,7 @@ const verticalLine: readonly Line[] = [
   {
     colorGroupName: 'red',
     values: [{ x: 9, y: 1 }, { x: 6, y: 3 }, { x: 3, y: 5 }, { x: 0, y: 7 }],
+    lineName: 'Северный бур',
   },
 ]
 
@@ -29,6 +31,7 @@ const horizontalLines: readonly Line[] = [
   {
     colorGroupName: 'blue',
     values: [{ x: 1, y: -4 }, { x: 3, y: 2 }, { x: 5, y: 6 }, { x: 7, y: 10 }],
+    lineName: 'Южное месторождение',
   },
 ]
 
@@ -37,6 +40,7 @@ const verticalLines: readonly Line[] = [
   {
     colorGroupName: 'blue',
     values: [{ x: -4, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 5 }, { x: 10, y: 7 }],
+    lineName: 'Южное месторождение',
   },
 ]
 

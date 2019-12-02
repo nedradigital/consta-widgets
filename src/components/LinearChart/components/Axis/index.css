@@ -2,6 +2,7 @@
 
 .main {
   --grid-line-color: rgba(213, 221, 226, 0.5);
+  pointer-events: none;
 }
 
 .grid {
