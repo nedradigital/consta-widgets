@@ -17,14 +17,18 @@ type Props = {
   colorGroups: ColorGroups
   innerRadius: number
   outerRadius: number
-  padAngle: number
   handleMouseOver: (data: DataItem) => void
   handleMouseOut: () => void
   isTooltipVisible: boolean
 }
 
+/**
+ * Отступ между D3.arc элементами, указывается в пикселях.
+ */
+const ARC_PAD = 1
+const ARC_RADIUS = 100
+
 export const Donut: React.FC<Props> = ({
-  padAngle,
   colorGroups,
   data,
   innerRadius,
@@ -35,7 +39,6 @@ export const Donut: React.FC<Props> = ({
 }) => {
   const pieData = d3
     .pie<DataItem>()
-    .padAngle(padAngle)
     .sort(null)
     .value(d => d.value)([...data])
 
@@ -43,6 +46,28 @@ export const Donut: React.FC<Props> = ({
     .arc<d3.PieArcDatum<DataItem>>()
     .innerRadius(innerRadius)
     .outerRadius(outerRadius)
+    /**
+     * padAngle для каждого D3.arc расчитывается по формуле:
+     *
+     * `padRadius * [переданное значение]`
+     *
+     * https://github.com/d3/d3-shape#arc_padAngle
+     */
+    .padAngle(ARC_PAD / ARC_RADIUS)
+    /**
+     * Указывается специфичный радиус для правильного расчета `padAngle`, если
+     * не указать значение или указать `null`, то расчет этого параметра
+     * производится по формуле:
+     *
+     * `sqrt(innerRadius * innerRadius + outerRadius * outerRadius)`
+     *
+     * Т.е. для каждого вложенного компонента Donut, размер отступа будет меньше
+     * чем у предыдущего, чтобы это исправить указываем фиксированное значение
+     * которое исправляет расчеты.
+     *
+     * https://github.com/d3/d3-shape#arc_padRadius
+     */
+    .padRadius(ARC_RADIUS)
 
   return (
     <g>

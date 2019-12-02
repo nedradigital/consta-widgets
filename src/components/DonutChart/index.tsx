@@ -34,12 +34,6 @@ const getPadding = () => getCalculatedSize(8)
 const getDonutRadius = (mainRadius: number, index: number) =>
   mainRadius - (getSizeDonut() + getPadding()) * index
 
-const MIN_VISIBLE_GAP_WIDTH_RATIO = 0.0002
-const revertIndexes = [2, 1, 0] as const
-const getPadAngle = (mainRadius: number, index: number) => {
-  return getDonutRadius(mainRadius, revertIndexes[index]) * MIN_VISIBLE_GAP_WIDTH_RATIO
-}
-
 export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState | null>(null)
   const [mousePosition, changeMousePosition] = useState({ x: 0, y: 0 })
@@ -99,12 +93,10 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
         {values.map((d, index) => {
           const outerRadius = getDonutRadius(mainRadius, index)
           const innerRadius = outerRadius - sizeDonut
-          const padAngle = getPadAngle(mainRadius, index)
 
           return (
             <Donut
               key={index}
-              padAngle={padAngle}
               colorGroups={colorGroups}
               data={d}
               innerRadius={innerRadius}
