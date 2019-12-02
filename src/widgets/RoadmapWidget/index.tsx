@@ -30,6 +30,8 @@ export const RoadmapWidgetContent: React.FC<WidgetContentProps<Data, Params>> = 
             titles={item.data.titles}
             currentDay={item.data.currentDay}
             colorGroups={item.colorGroups}
+            startDate={item.data.startDate}
+            endDate={item.data.endDate}
           />
         </div>
         {item.legend ? (

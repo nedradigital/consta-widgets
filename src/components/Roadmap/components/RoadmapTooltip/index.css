@@ -1,6 +1,8 @@
 @custom-selector :--main .main;
 
 :--main {
+  --angle-size: 6px;
+
   position: absolute;
   z-index: 3;
   left: 0;
@@ -19,16 +21,12 @@
 
     content: '';
 
-    border-top: 6px solid #fff;
-    border-right: 6px solid transparent;
-  }
-
-  &.top {
-    bottom: 100%;
+    border-top: var(--angle-size) solid #fff;
+    border-right: var(--angle-size) solid transparent;
   }
 
   &.bottom {
-    top: 100%;
+    margin-top: var(--angle-size);
   }
 
   &.bottom::after {
@@ -36,8 +34,8 @@
     left: 0;
 
     border-top: none;
-    border-right: 6px solid transparent;
-    border-bottom: 6px solid #fff;
+    border-right: var(--angle-size) solid transparent;
+    border-bottom: var(--angle-size) solid #fff;
   }
 }
 
@@ -47,6 +45,7 @@
 
   height: 26px;
 
+  vertical-align: bottom;
   white-space: nowrap;
 
   border-radius: 4px 4px 4px 0;
@@ -55,8 +54,12 @@
     border-radius: 0 0 4px 0;
   }
 
+  :--main.top & {
+    margin-bottom: var(--angle-size);
+  }
+
   :--main.bottom & {
-    margin-top: 6px;
+    margin-top: var(--angle-size);
 
     border-radius: 0 4px 4px 4px;
   }
@@ -113,8 +116,6 @@
   }
 
   :--main.bottom & {
-    margin-top: -6px;
-
     border-radius: 0 4px 4px 4px;
   }
 }

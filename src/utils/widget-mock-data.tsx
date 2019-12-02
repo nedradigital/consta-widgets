@@ -1,6 +1,8 @@
 import { DataMap, DataType } from '@/dashboard/types'
 
 const roadmapData = {
+  startDate: Date.UTC(2019, 0, 1),
+  endDate: Date.UTC(2020, 11, 31),
   values: [
     {
       firstColumn: '1. Ямбургское НГКМ',
@@ -18,8 +20,13 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 4, 12),
-          endDate: Date.UTC(2019, 6, 10),
+          endDate: Date.UTC(2019, 9, 15),
           groupName: 'blue',
+        },
+        {
+          startDate: Date.UTC(2019, 9, 15),
+          endDate: Date.UTC(2019, 11, 31),
+          groupName: 'orange',
         },
       ],
       fact: [
@@ -70,8 +77,13 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 4, 12),
-          endDate: Date.UTC(2019, 6, 10),
+          endDate: Date.UTC(2019, 8, 18),
           groupName: 'blue',
+        },
+        {
+          startDate: Date.UTC(2019, 8, 18),
+          endDate: Date.UTC(2019, 11, 31),
+          groupName: 'orange',
         },
       ],
       fact: [
@@ -124,8 +136,13 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 4, 12),
-          endDate: Date.UTC(2019, 6, 10),
+          endDate: Date.UTC(2019, 7, 1),
           groupName: 'blue',
+        },
+        {
+          startDate: Date.UTC(2019, 7, 1),
+          endDate: Date.UTC(2019, 11, 31),
+          groupName: 'orange',
         },
       ],
       fact: [
@@ -177,8 +194,13 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 4, 12),
-          endDate: Date.UTC(2019, 6, 10),
+          endDate: Date.UTC(2019, 9, 15),
           groupName: 'blue',
+        },
+        {
+          startDate: Date.UTC(2019, 9, 15),
+          endDate: Date.UTC(2019, 11, 31),
+          groupName: 'orange',
         },
       ],
       fact: [
@@ -231,8 +253,13 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 4, 12),
-          endDate: Date.UTC(2019, 6, 10),
+          endDate: Date.UTC(2019, 7, 31),
           groupName: 'blue',
+        },
+        {
+          startDate: Date.UTC(2019, 7, 31),
+          endDate: Date.UTC(2020, 11, 31),
+          groupName: 'orange',
         },
       ],
       fact: [
@@ -264,7 +291,7 @@ const roadmapData = {
         },
         {
           startDate: Date.UTC(2019, 7, 31),
-          endDate: Date.UTC(2019, 11, 31),
+          endDate: Date.UTC(2020, 11, 15),
           groupName: 'orange',
         },
       ],

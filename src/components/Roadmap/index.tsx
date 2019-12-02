@@ -1,10 +1,11 @@
-import { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
-import { getDayMonthYearFromTimestamp, getDaysInMonth } from '@/utils/time'
+import { getDayMonthYearFromTimestamp, getDaysInMonth, monthsDiff } from '@/utils/time'
 
 import { RoadmapTooltip } from './components/RoadmapTooltip'
 import css from './index.css'
@@ -29,14 +30,19 @@ type Props = {
   titles: readonly [string, string]
   currentDay: number
   colorGroups: ColorGroups
+  startDate: number
+  endDate: number
 }
 
 type ActiveLineState = {
   groupName?: string
   index?: number
+  top: number
+  bottom: number
+  left: number
 }
 
-const months = [
+const monthNames = [
   'янв',
   'фев',
   'мар',
@@ -51,21 +57,68 @@ const months = [
   'дек',
 ] as const
 
-const periods: { [key: number]: string } = {
-  0: 'I 2019',
-  3: 'II 2019',
-  6: 'III 2019',
-  9: 'IV 2019',
+const periods = {
+  янв: 'I',
+  фев: 'I',
+  мар: 'I',
+  апр: 'II',
+  май: 'II',
+  июн: 'II',
+  июл: 'III',
+  авг: 'III',
+  сен: 'III',
+  окт: 'IV',
+  ноя: 'IV',
+  дек: 'IV',
 }
 
-const getCoordsByDate = (ms: number, monthWidth: number) => {
+const periodPositions: readonly number[] = [0, 3, 6, 9]
+
+type MonthItem = {
+  value: typeof monthNames[number]
+  year: number
+  period?: string
+}
+
+const getMonths = (startDate: number, endDate: number): readonly MonthItem[] => {
+  const [, startMonth, startYear] = getDayMonthYearFromTimestamp(startDate)
+  const countMonths = monthsDiff(startDate, endDate) + 1
+  let monthCounter = startMonth
+  let yearCounter = startYear
+  const mutableMonths = []
+
+  for (let i = 0; i < countMonths; i++) {
+    if (monthCounter > 11) {
+      monthCounter = 0
+      yearCounter++
+    }
+
+    const value = monthNames[monthCounter]
+    const isPeriod = i === 0 || periodPositions.includes(monthCounter)
+
+    mutableMonths.push({
+      value,
+      year: yearCounter,
+      period: isPeriod ? periods[value] : undefined,
+    })
+
+    monthCounter++
+  }
+
+  return mutableMonths
+}
+
+const getCoordsByDate = (ms: number, monthWidth: number, startDate: number) => {
   const [day, month, year] = getDayMonthYearFromTimestamp(ms)
   const countDaysInMonth = getDaysInMonth(month, year)
+  const countMonths = monthsDiff(startDate, ms)
 
-  const startPrecent = monthWidth * month
+  const startPrecent = monthWidth * countMonths
 
   return startPrecent + (monthWidth / countDaysInMonth) * (day - 1)
 }
+
+const getFactBlockSize = () => getCalculatedSize(6)
 
 const renderItem = ({
   key,
@@ -76,6 +129,7 @@ const renderItem = ({
   activeLine,
   onClick,
   plans,
+  startDate,
 }: {
   key: string
   className: string
@@ -83,12 +137,13 @@ const renderItem = ({
   colorGroups: ColorGroups
   monthWidth: number
   activeLine?: ActiveLineState
-  onClick?: (v: ActiveLineState) => void
+  onClick?: (event: React.MouseEvent, index: number, groupName: string) => void
   plans?: readonly Item[]
+  startDate: number
 }) => (item: Item) => {
-  const { startDate, endDate, groupName } = item
-  const left = getCoordsByDate(startDate, monthWidth)
-  const width = getCoordsByDate(endDate, monthWidth)
+  const { startDate: start, endDate, groupName } = item
+  const left = getCoordsByDate(start, monthWidth, startDate)
+  const width = getCoordsByDate(endDate, monthWidth, startDate)
   const active = activeLine && activeLine.index === index && activeLine.groupName === groupName
   const plan = plans ? plans.find(i => i.groupName === groupName) : false
 
@@ -101,32 +156,32 @@ const renderItem = ({
         width: `calc(${width}px - ${left}px)`,
         background: colorGroups[groupName],
       }}
-      onClick={onClick ? () => onClick({ index, groupName }) : undefined}
+      onClick={
+        onClick && index !== undefined ? event => onClick(event, index, groupName) : undefined
+      }
     >
-      {active && plan && key === 'fact' ? (
+      {activeLine && active && plan && key === 'fact' ? (
         <RoadmapTooltip
           fact={item}
           plan={plan}
           colorGroups={colorGroups}
           direction={index && index > 2 ? 'top' : 'bottom'}
+          left={activeLine.left}
+          top={index && index > 2 ? undefined : activeLine.top}
+          bottom={index && index > 2 ? activeLine.bottom : undefined}
         />
       ) : null}
     </div>
   )
 }
 
-type TableProps = {
-  titles: readonly string[]
+type TableProps<T extends string | MonthItem = string | MonthItem> = {
+  titles: readonly T[]
   className?: string
-  renderTitle?: (title: string, index: number) => React.ReactNode
+  renderTitle: (item: T, index: number) => React.ReactNode
 }
 
-const Table: React.FC<TableProps> = ({
-  children,
-  titles,
-  className,
-  renderTitle = title => <th key={title}>{title}</th>,
-}) => (
+const Table: React.FC<TableProps> = ({ children, titles, className, renderTitle }) => (
   <table className={classnames(css.table, className)}>
     <thead>
       <tr>{titles.map(renderTitle)}</tr>
@@ -135,8 +190,11 @@ const Table: React.FC<TableProps> = ({
   </table>
 )
 
+const TableWithStringTitles = Table as React.FC<TableProps<string>>
+const TableWithMonthTitles = Table as React.FC<TableProps<MonthItem>>
+
 export const Roadmap: React.FC<Props> = props => {
-  const { currentDay, data, colorGroups, titles } = props
+  const { currentDay, data, colorGroups, titles, startDate, endDate } = props
 
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
@@ -145,16 +203,32 @@ export const Roadmap: React.FC<Props> = props => {
   const [activeLine, changeActiveLine] = useState<ActiveLineState>({
     index: undefined,
     groupName: undefined,
+    top: 0,
+    left: 0,
+    bottom: 0,
   })
 
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
+    changeActiveLine({ index: undefined, groupName: undefined, top: 0, left: 0, bottom: 0 })
   }, [])
 
   const handleWindowClick = useCallback(event => {
     if (!event.target.classList.contains(css.fact)) {
-      changeActiveLine({ index: undefined, groupName: undefined })
+      changeActiveLine({ index: undefined, groupName: undefined, top: 0, left: 0, bottom: 0 })
     }
+  }, [])
+
+  const handleClick = useCallback((event, index, groupName) => {
+    const { top, left } = event.target.getBoundingClientRect()
+
+    changeActiveLine({
+      index,
+      groupName,
+      left,
+      top: top + getFactBlockSize(),
+      bottom: window.innerHeight - top,
+    })
   }, [])
 
   useLayoutEffect(() => {
@@ -175,10 +249,16 @@ export const Roadmap: React.FC<Props> = props => {
     }
   }, [width])
 
+  const months = getMonths(startDate, endDate)
+
   return (
     <div className={css.main}>
       <div className={classnames(css.left, shadow && css.shadow)}>
-        <Table className={css.labelsTable} titles={titles}>
+        <TableWithStringTitles
+          className={css.labelsTable}
+          titles={titles}
+          renderTitle={title => <th key={title}>{title}</th>}
+        >
           <tbody>
             {data.map(item => (
               <tr key={item.firstColumn}>
@@ -187,22 +267,24 @@ export const Roadmap: React.FC<Props> = props => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </TableWithStringTitles>
       </div>
       <div ref={ref} className={css.calendar}>
-        <Table
+        <TableWithMonthTitles
           className={css.calendarTable}
           titles={months}
-          renderTitle={(title, index) => {
+          renderTitle={(item, index) => {
             return (
-              <th key={title}>
+              <th key={index}>
                 <div className={css.titleWrapper}>
-                  {index in periods ? (
+                  {item.period ? (
                     <div className={css.periodWrapper}>
-                      <div className={css.periodText}>{periods[index]}</div>
+                      <div className={css.periodText}>
+                        {item.period} {item.year}
+                      </div>
                     </div>
                   ) : null}
-                  {title}
+                  {item.value}
                 </div>
               </th>
             )
@@ -226,6 +308,7 @@ export const Roadmap: React.FC<Props> = props => {
                         colorGroups,
                         monthWidth,
                         activeLine,
+                        startDate,
                       })
                     )}
                     {fact.map(
@@ -236,8 +319,9 @@ export const Roadmap: React.FC<Props> = props => {
                         colorGroups,
                         monthWidth,
                         activeLine,
-                        onClick: changeActiveLine,
+                        onClick: handleClick,
                         plans: plan,
+                        startDate,
                       })
                     )}
                     {forecast.map(
@@ -246,12 +330,13 @@ export const Roadmap: React.FC<Props> = props => {
                         className: css.forecast,
                         colorGroups,
                         monthWidth,
+                        startDate,
                       })
                     )}
                     {index === 0 && (
                       <div
                         className={css.currentDay}
-                        style={{ left: getCoordsByDate(currentDay, monthWidth), height }}
+                        style={{ left: getCoordsByDate(currentDay, monthWidth, startDate), height }}
                       />
                     )}
                   </div>
@@ -259,7 +344,7 @@ export const Roadmap: React.FC<Props> = props => {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </TableWithMonthTitles>
       </div>
     </div>
   )
