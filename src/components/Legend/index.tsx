@@ -46,6 +46,7 @@ export const Legend: React.FC<Props> = ({
           type={labelType}
           position={labelPosition}
           lineBold={lineBold}
+          shouldCropText
         />
       ))}
     </div>

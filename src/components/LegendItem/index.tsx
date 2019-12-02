@@ -21,6 +21,8 @@ type Props = {
   position?: Position
   lineBold?: boolean
   className?: string
+  /** Обрезать текст, если он больше 2 строк */
+  shouldCropText?: boolean
 }
 
 export const LegendItem: React.FC<Props> = ({
@@ -31,6 +33,7 @@ export const LegendItem: React.FC<Props> = ({
   lineBold,
   fontSize,
   className,
+  shouldCropText,
 }) => {
   const sizeTextClass = { s: css.sizeS, m: css.sizeM }[fontSize]
   const positionClass = type === 'dot' ? css.left : css[position]
@@ -38,7 +41,7 @@ export const LegendItem: React.FC<Props> = ({
   return (
     <div className={classnames(css.main, positionClass, sizeTextClass, className)}>
       <div className={classnames(css[type], lineBold && css.bold)} style={{ background: color }} />
-      <div className={classnames(css.text)}>{text}</div>
+      <div className={classnames(css.text, shouldCropText && css.isSeparating)}>{text}</div>
     </div>
   )
 }
