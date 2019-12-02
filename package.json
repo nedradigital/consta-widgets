@@ -4,7 +4,7 @@
   "main": "lib/index.js",
   "author": "CSSSR",
   "license": "UNLICENSED",
-  "types": "lib/@types/index.d.ts",
+  "types": "lib/@types/src/index.d.ts",
   "files": [
     "lib"
   ],
