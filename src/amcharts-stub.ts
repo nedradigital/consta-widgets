@@ -4,4 +4,5 @@ import { ExtendedFeatureCollection } from 'd3'
 // Через declare module перебить не удаётся: https://github.com/microsoft/TypeScript/issues/17042
 const content = {} as ExtendedFeatureCollection
 
+// eslint-disable-next-line import/no-default-export
 export default content
