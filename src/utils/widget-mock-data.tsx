@@ -332,17 +332,17 @@ const mockData: DataMap = {
       {
         name: 'Северный бур',
         colorGroupName: 'first',
-        values: [1, 2, 3],
+        sections: [{ value: 1 }, { value: 2 }, { value: 3 }],
       },
       {
         name: 'Южный бур',
         colorGroupName: 'second',
-        values: [4, 5, 6],
+        sections: [{ value: 4 }, { value: 5 }, { value: 6 }],
       },
       {
         name: 'Западный бур',
         colorGroupName: 'third',
-        values: [7, 8, 9],
+        sections: [{ value: 7 }, { value: 8 }, { value: 9 }],
       },
     ],
   },

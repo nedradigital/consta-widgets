@@ -22,3 +22,23 @@ storiesOf('components/DonutChart', module)
       />
     )
   })
+  .add('with tooltip text', () => {
+    return (
+      <DonutChart
+        data={[
+          {
+            name: 'План',
+            colorGroupName: 'first',
+            sections: [{ value: 3, tooltipText: '60' }],
+          },
+          {
+            name: 'Факт',
+            colorGroupName: 'second',
+            sections: [{ value: 1, tooltipText: '15' }],
+          },
+        ]}
+        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
+        unit={text('unit', getWidgetMockData(DataType.Donut).unit)}
+      />
+    )
+  })
