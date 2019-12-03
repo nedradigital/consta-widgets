@@ -76,7 +76,7 @@ export const PyramidChart: React.FC<Props> = ({
   const sectionTextWidth = getSectionTextWidth()
   const containerHeightResponsive = data.length * sectionHeight
   const pyramidWidthHalf = pyramidWidth / 2
-  const tableWidthResponsive = constraint ? pyramidWidth : pyramidWidthHalf + sectionTextWidth
+  const tableWidthResponsive = constraint ? pyramidWidth : '100%'
 
   return (
     <div className={classnames(css.main, { s: css.sizeS, m: css.sizeM }[fontSize])}>
@@ -92,6 +92,8 @@ export const PyramidChart: React.FC<Props> = ({
       <table
         className={css.table}
         style={{
+          minWidth: pyramidWidth,
+          maxWidth: pyramidWidthHalf + sectionTextWidth,
           width: tableWidthResponsive,
           height: containerHeightResponsive,
         }}
