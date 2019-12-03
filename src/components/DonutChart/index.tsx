@@ -13,7 +13,10 @@ import css from './index.css'
 export type Data = ReadonlyArray<{
   name: string
   colorGroupName: string
-  values: readonly number[]
+  sections: ReadonlyArray<{
+    value: number
+    tooltipText?: string
+  }>
 }>
 
 type Props = {
@@ -23,7 +26,7 @@ type Props = {
 }
 
 type TooltipDataState = {
-  value: number
+  value: string
   color: string
   name: string
 }
@@ -45,11 +48,11 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
   const sizeDonut = getSizeDonut()
   const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
   const isTooltipVisible = Boolean(tooltipData)
-  const maxCirclesCount = Math.min(...data.map(i => i.values.length), 3)
+  const maxCirclesCount = Math.min(...data.map(i => i.sections.length), 3)
 
   const handleMouseOver = (d: DataItem) => {
     changeTooltipData({
-      value: d.value,
+      value: d.tooltipText,
       color: colorGroups[d.colorGroupName],
       name: d.name,
     })
@@ -68,10 +71,11 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
 
   const values = zip(
     ...data.map(item =>
-      item.values.slice(0, maxCirclesCount).map(value => ({
+      item.sections.slice(0, maxCirclesCount).map(section => ({
         colorGroupName: item.colorGroupName,
         name: item.name,
-        value: value || 0,
+        value: section.value || 0,
+        tooltipText: section.tooltipText || section.value,
       }))
     )
   ) as readonly DonutData[]
