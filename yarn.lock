@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity "sha1-Yipyvr0eP0jZIVY7S2CnYilagfw= sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA=="
 
-"@gaz/configs@0.2.2":
-  version "0.2.2"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.2.tgz#1a979056ac533028c7a8f5d24dceabad1142f054"
-  integrity sha512-zIhV0PGC3io0iwBUKYKksG2ZxF99ZOtKQvsZtdxXGYzodHaa7Qkmimo4ACU0l3rBj0nIbnI1oR83qbKOaO5XZA==
+"@gaz/configs@0.2.4":
+  version "0.2.4"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.4.tgz#d6f440f83217bf77ab9862b99f69dad2016a9e77"
+  integrity sha512-2IQZCGcsZiZLu3mHmHQi8oNv0/a+gurI3QNLE1bkZA2G6rAyMFT6yVyCJB2Dm46v7M4PjCF6m9hZdRIvne8Klg==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1234,6 +1234,7 @@
     jest "24.8.0"
     jest-enzyme "7.0.2"
     jest-extended "0.11.2"
+    json-loader "0.5.7"
     lint-staged "9.0.1"
     lodash "4.17.15"
     mini-css-extract-plugin "0.7.0"
@@ -8542,6 +8543,11 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
   integrity sha1-597mbjXW/Bb3EP6R1c9p9w8IkR0=
+
+json-loader@0.5.7:
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
+  integrity sha512-QLPs8Dj7lnf3e3QYS1zkCo+4ZwqOiF9d/nZnYozTISxXWCfNs9yuky5rJw4/W34s7POaNlbZmQGaB5NiXCbP4w==
 
 json-parse-better-errors@^1.0.1, json-parse-better-errors@^1.0.2:
   version "1.0.2"
