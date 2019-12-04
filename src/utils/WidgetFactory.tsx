@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { isEmpty } from 'lodash'
+
 import {
   CommonBoxItemParams,
   Data as DashboardData,
@@ -52,7 +54,7 @@ export const createWidget = <
   const Widget: WidgetType<Data, Params> = ({ data, datasets, dataKey, params }) => {
     const widgetData: Data = data[dataKey] as any
 
-    if (!allowEmptyData && dataType && !widgetData) {
+    if (!allowEmptyData && dataType && isEmpty(widgetData)) {
       return <div>Нет данных для виджета "{name}"</div>
     }
 
