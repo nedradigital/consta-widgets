@@ -1,6 +1,5 @@
 import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
 
-import ruCountryNames from '@amcharts/amcharts4-geodata/lang/RU'
 import russiaHigh from '@amcharts/amcharts4-geodata/russiaCrimeaHigh'
 import russiaLow from '@amcharts/amcharts4-geodata/russiaCrimeaLow'
 import worldHigh from '@amcharts/amcharts4-geodata/worldHigh'
@@ -13,13 +12,29 @@ import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 
 import { Tooltip } from '@/components/Tooltip'
 
-import { DEPOSITS, WELL_POINTS } from './example-data'
 import css from './index.css'
+import { ruNames } from './ru-geo-names'
 
 type ExtendedFeatureOrCollection = ExtendedFeature | ExtendedFeatureCollection
-type CountryCode = keyof typeof ruCountryNames
 
-type Props = {}
+export type GeoObjectLocation = {
+  id: string
+  type: 'location'
+  geoData: ExtendedFeature
+  parentId: string
+}
+
+export type GeoObject =
+  | {
+      id: string
+      type: 'country' | 'region'
+      geoData: ExtendedFeatureOrCollection
+    }
+  | GeoObjectLocation
+
+type Props = {
+  locations: readonly GeoObjectLocation[]
+}
 
 type Zoom = {
   scale: number
@@ -27,30 +42,30 @@ type Zoom = {
   translateY: number
 }
 
-const DEFAULT_CENTERED_OBJECT = russiaLow
-const CENTERING_PADDING = 20
+const CENTERING_PADDING = 30
 const SPB_COORDS = [30.311515, 59.942568] as const
 const ZOOM_HIGH_THRESHOLD = 3000
 
-const getObjectName = (object: ExtendedFeatureOrCollection | undefined): string | undefined => {
+const featureToObject = (type: 'country' | 'region') => (feature: ExtendedFeature): GeoObject => ({
+  type,
+  id: String(feature.id),
+  geoData: feature,
+})
+
+export const getObjectName = (object: GeoObject | undefined): string | undefined => {
   if (!object) {
     return
   }
 
-  if ('id' in object && object.id) {
-    const countryName = ruCountryNames[object.id as CountryCode]
-    if (countryName) {
-      return countryName
-    }
+  const ruName = ruNames[object.id]
+  if (ruName) {
+    return ruName
   }
 
-  if ('properties' in object && object.properties) {
-    return object.properties.name
+  if ('properties' in object.geoData && object.geoData.properties) {
+    return object.geoData.properties.name
   }
 }
-
-const isSameObject = (a: ExtendedFeatureOrCollection, b: ExtendedFeatureOrCollection): boolean =>
-  'id' in a && 'id' in b && a.id === b.id
 
 const getMaps = (
   isZooming: boolean,
@@ -67,14 +82,44 @@ const getMaps = (
   return [worldHigh, russiaLow]
 }
 
-export const Map: React.FC<Props> = () => {
+export const getVisibleObjects = (
+  objects: readonly GeoObject[],
+  selectedObject: GeoObject | undefined
+) => {
+  return objects.filter(o => {
+    if (!selectedObject) {
+      return ['country', 'region'].includes(o.type)
+    }
+
+    switch (selectedObject.type) {
+      case 'country':
+        return (
+          ['country', 'region'].includes(o.type) ||
+          // Области выбранной страны
+          (o.type === 'location' && o.parentId === selectedObject.id)
+        )
+      case 'region':
+        return (
+          o.type === 'region' ||
+          // Области выбранного региона
+          (o.type === 'location' && o.parentId === selectedObject.id)
+        )
+      case 'location':
+        return (
+          o.id === selectedObject.parentId ||
+          // Области в том же регионе, что и выбранная
+          (o.type === 'location' && o.parentId === selectedObject.parentId)
+        )
+    }
+  })
+}
+
+export const Map: React.FC<Props> = ({ locations }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-  const [hoveredObject, setHoveredObject] = useState<ExtendedFeatureOrCollection | undefined>()
-  const [centeredObject, setCenteredObject] = useState<ExtendedFeatureOrCollection | undefined>(
-    DEFAULT_CENTERED_OBJECT
-  )
+  const [hoveredObjectId, setHoveredObjectId] = useState<string>()
+  const [selectedObjectId, setSelectedObjectId] = useState<string>()
   const [zoom, setZoom] = useState<Zoom | undefined>()
   const [isZooming, setIsZooming] = useState(false)
 
@@ -86,6 +131,10 @@ export const Map: React.FC<Props> = () => {
     }),
     [world]
   )
+
+  const isClickable = (object: GeoObject): boolean =>
+    object.id !== selectedObjectId &&
+    (object.type === 'location' || locations.some(loc => loc.parentId === object.id))
 
   const getProjection = useCallback(() => {
     return d3
@@ -105,19 +154,130 @@ export const Map: React.FC<Props> = () => {
     return p
   }, [getProjection, zoom])
 
+  const geoPath = useMemo(() => d3.geoPath(projection), [projection])
+
+  const allObjects = useMemo(() => {
+    return [
+      ...worldWithoutRussia.features.map(featureToObject('country')),
+      {
+        type: 'country',
+        id: 'RU',
+        geoData: russia,
+      },
+      ...russia.features.map(featureToObject('region')),
+      ...locations,
+    ] as const
+  }, [worldWithoutRussia, russia, locations])
+
+  const hoveredObject = allObjects.find(o => o.id === hoveredObjectId)
+  const hoveredObjectName = getObjectName(hoveredObject)
+  const selectedObject = allObjects.find(o => o.id === selectedObjectId)
+
+  const visibleObjects = useMemo(() => getVisibleObjects(allObjects, selectedObject), [
+    allObjects,
+    selectedObject,
+  ])
+
+  const paths: ReadonlyArray<{
+    object: GeoObject
+    d?: string
+    className?: string
+  }> = useMemo(() => {
+    return visibleObjects.map(object => ({
+      object,
+      d: geoPath(object.geoData) || undefined,
+      className: object.id === 'RU' ? css.russia : undefined,
+    }))
+  }, [visibleObjects, geoPath])
+
+  const objectsWithPoints = useMemo(
+    () =>
+      selectedObjectId
+        ? locations.filter(loc => loc.parentId === selectedObjectId)
+        : visibleObjects.filter(isClickable),
+    [visibleObjects, locations, selectedObjectId]
+  )
+
+  const points = useMemo(() => {
+    return objectsWithPoints.map(object => {
+      const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
+      const [x, y] = projection(coords) || [0, 0]
+
+      const linePath =
+        geoPath({
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [[...SPB_COORDS], coords],
+          },
+          properties: {},
+        }) || undefined
+      return { object, x, y, linePath }
+    })
+  }, [objectsWithPoints, geoPath, projection])
+
+  const handleMouseMove = (event: React.MouseEvent) => {
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY,
+    })
+  }
+
+  const getMouseHandlers = (object: GeoObject) => {
+    if (isClickable(object)) {
+      return {
+        onClick: (e: React.MouseEvent) => {
+          e.stopPropagation()
+          setSelectedObjectId(object.id)
+          setHoveredObjectId(undefined)
+        },
+        onMouseEnter: () => setHoveredObjectId(object.id),
+        onMouseLeave: () => setHoveredObjectId(undefined),
+      }
+    }
+
+    if (selectedObjectId === object.id) {
+      return {
+        onClick: (e: React.MouseEvent) => e.stopPropagation(),
+      }
+    }
+
+    return undefined
+  }
+
   // Анимация зума
   useLayoutEffect(() => {
     if (!width || !height) {
       return
     }
 
-    const animateToZoom = (zoomTo: Zoom) => {
+    const featureToZoomOn = selectedObject
+      ? selectedObject.geoData
+      : {
+          type: 'FeatureCollection',
+          features: visibleObjects.filter(isClickable).map(o => o.geoData),
+        }
+    const targetProjection = getProjection().fitExtent(
+      [
+        [CENTERING_PADDING, CENTERING_PADDING],
+        [width - CENTERING_PADDING, height - CENTERING_PADDING],
+      ],
+      featureToZoomOn as ExtendedFeature
+    )
+    const [targetTrX, targetTrY] = targetProjection.translate()
+    const targetZoom = {
+      scale: targetProjection.scale(),
+      translateX: targetTrX,
+      translateY: targetTrY,
+    }
+
+    if (zoom) {
       d3.select(ref.current)
         .transition()
         .duration(1000)
         .tween('mapZoomTween', () => {
           const initialZoom = { ...zoom }
-          const i = d3.interpolateObject(initialZoom, zoomTo)
+          const i = d3.interpolateObject(initialZoom, targetZoom)
 
           return (t: number) => {
             setZoom({ ...i(t) })
@@ -129,131 +289,58 @@ export const Map: React.FC<Props> = () => {
         .on('end', () => {
           setIsZooming(false)
         })
-    }
-
-    if (!centeredObject) {
-      return animateToZoom({
-        scale: 100,
-        translateX: width / 2,
-        translateY: height / 2,
-      })
-    }
-
-    const targetProjection = getProjection().fitExtent(
-      [
-        [CENTERING_PADDING, CENTERING_PADDING],
-        [width - CENTERING_PADDING, height - CENTERING_PADDING],
-      ],
-      centeredObject as ExtendedFeature
-    )
-    const [targetTrX, targetTrY] = targetProjection.translate()
-    const targetZoom = {
-      scale: targetProjection.scale(),
-      translateX: targetTrX,
-      translateY: targetTrY,
-    }
-
-    if (zoom) {
-      animateToZoom(targetZoom)
     } else {
       // При первом рендере не анимируем
       setZoom(targetZoom)
     }
-  }, [centeredObject, getProjection])
-
-  const geoPath = useMemo(() => d3.geoPath(projection), [projection])
-
-  const items: ReadonlyArray<{
-    feature: ExtendedFeatureOrCollection
-    d?: string
-    className?: string
-  }> = useMemo(() => {
-    return [...worldWithoutRussia.features, russia, ...russia.features, ...DEPOSITS].map(
-      feature => ({
-        feature,
-        d: geoPath(feature) || undefined,
-        className: feature === russia ? css.russia : undefined,
-      })
-    )
-  }, [geoPath, worldWithoutRussia, russia])
-
-  const points = useMemo(
-    () =>
-      WELL_POINTS.map(point => {
-        // tslint:disable-next-line:readonly-array
-        const [x, y] = projection(point.geometry.coordinates as [number, number]) || [0, 0]
-        return { x, y, feature: point }
-      }),
-    [projection]
-  )
-
-  const lines: readonly (string | null)[] = useMemo(
-    () =>
-      WELL_POINTS.map(point =>
-        geoPath({
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: [[...SPB_COORDS], point.geometry.coordinates],
-          },
-          properties: {},
-        })
-      ),
-    [geoPath]
-  )
-
-  const handleMouseMove = (event: React.MouseEvent) => {
-    setMousePosition({
-      x: event.clientX,
-      y: event.clientY,
-    })
-  }
-
-  const hoveredObjectName = getObjectName(hoveredObject)
+  }, [
+    // Тут нельзя делать зависимость от selectedObject, т.к. его изменения зацикливают событие зума
+    // (во время зума снижается детализация мира и из-за этого обновляется геометрия selectedObject, хотя selectedObjectId остаётся тем же)
+    selectedObjectId,
+    getProjection,
+  ])
 
   return (
     <div ref={ref} className={css.main}>
       {width && height && (
-        <svg viewBox={`0 0 ${width} ${height}`} className={css.svg} onMouseMove={handleMouseMove}>
-          {items.map((item, idx) => (
+        <svg
+          viewBox={`0 0 ${width} ${height}`}
+          className={css.svg}
+          onMouseMove={handleMouseMove}
+          onClick={() => setSelectedObjectId(undefined)}
+        >
+          {paths.map(item => (
             <path
-              key={idx}
+              key={item.object.id}
               d={item.d}
               className={classnames(
                 css.item,
                 item.className,
-                centeredObject && isSameObject(centeredObject, item.feature) && css.isSelected
+                item.object.id === hoveredObjectId && css.isHovered,
+                item.object.id === selectedObjectId && css.isSelected,
+                isClickable(item.object) && css.isClickable
               )}
-              onMouseEnter={() => setHoveredObject(item.feature)}
-              onMouseLeave={() => setHoveredObject(undefined)}
-              onClick={() => setCenteredObject(item.feature)}
+              {...getMouseHandlers(item.object)}
             />
           ))}
 
-          {lines.map((line, idx) => line && <path key={idx} d={line} className={css.line} />)}
+          {points.map(point => (
+            <path key={point.object.id} d={point.linePath} className={css.line} />
+          ))}
 
-          {points.map((point, idx) => (
+          {points.map(point => (
             <circle
-              key={idx}
+              key={point.object.id}
               cx={point.x}
               cy={point.y}
-              r={18}
-              onMouseEnter={() => setHoveredObject(point.feature)}
-              onMouseLeave={() => setHoveredObject(undefined)}
+              r={8}
               className={css.circle}
+              {...getMouseHandlers(point.object)}
             />
           ))}
         </svg>
       )}
-      {centeredObject !== DEFAULT_CENTERED_OBJECT && (
-        <button
-          type="button"
-          className={css.resetZoom}
-          onClick={() => setCenteredObject(DEFAULT_CENTERED_OBJECT)}
-        >
-          RESET ZOOM
-        </button>
-      )}
+
       {hoveredObjectName && (
         <Tooltip isVisible direction="top" x={mousePosition.x} y={mousePosition.y}>
           {hoveredObjectName}
