@@ -760,6 +760,19 @@ const mockData: DataMap = {
     content: 'Кнопка',
     onClick: () => alert('Клик!'),
   },
+  [DataType.ChoiceGroup]: {
+    items: [
+      {
+        label: 'Месяц',
+        value: 'month',
+      },
+      {
+        label: 'Сутки',
+        value: 'day',
+      },
+    ],
+    disabled: false,
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

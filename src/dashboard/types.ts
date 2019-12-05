@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { ChoiceT as ChoiceGroupData } from '@gpn-design/uikit'
+
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
@@ -55,6 +57,7 @@ export enum DataType {
   Roadmap,
   Images,
   Button,
+  ChoiceGroup,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -119,6 +122,10 @@ export type DataMap = {
     content: React.ReactNode
     disabled?: boolean
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  }
+  [DataType.ChoiceGroup]: {
+    disabled: boolean
+    items: readonly ChoiceGroupData<number | string>[]
   }
 }
 
