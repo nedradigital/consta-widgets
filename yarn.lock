@@ -1270,10 +1270,10 @@
     webpack-merge "4.2.1"
     webpack-node-externals "1.7.2"
 
-"@gaz/utils@0.2.0":
-  version "0.2.0"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.2.0.tgz#568db0523e73edc7eceeb79a47c34b44f1b9d048"
-  integrity sha512-4/7WsuEi6uUgzPzd3z0O+4VDg/By3d+rrc9FjD99FZRU5D+PbCvz1+b800VIAmLBTogWo6nn9IeLDal48CuDkQ==
+"@gaz/utils@0.2.2":
+  version "0.2.2"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.2.2.tgz#4fad86ba3b3e43243707c84989722ae16a2a6e95"
+  integrity sha512-VuAhW6x0sNr/GKSX1mFUxc8MlfN29ZccRzm4w82LlVxU0gw4bVtQm5T5TyHHFQ4MwR1bc0Cx4tG4D+XcdwrfMQ==
 
 "@hot-loader/react-dom@16.8.6":
   version "16.8.6"

@@ -2,6 +2,7 @@ import * as React from 'react'
 import { useUID } from 'react-uid'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
+import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
@@ -163,8 +164,8 @@ export const RadarChart: React.FC<Props> = ({
   const concentricColors = withConcentricColor ? concentricColorsByTicksAmount[ticks] : undefined
 
   const pointsForFigures = figures.map(figure =>
-    _.compact(
-      sortFigureValues(figure.values, axesNames).map(value => {
+    sortFigureValues(figure.values, axesNames)
+      .map(value => {
         const theAxis = axesAngles.find(a => a.name === value.axisName)
 
         return theAxis
@@ -176,7 +177,7 @@ export const RadarChart: React.FC<Props> = ({
             }
           : undefined
       })
-    )
+      .filter(isDefined)
   )
 
   const colorsForFigures: readonly FigureColor[] = figures.map(figure =>

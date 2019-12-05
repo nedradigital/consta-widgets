@@ -1,4 +1,4 @@
-import { flatten } from 'lodash'
+import { isDefined } from '@gaz/utils/lib/type-guards'
 
 import { DataMap, DataType } from '@/dashboard/types'
 
@@ -14,32 +14,30 @@ export const dataColorsValidator = (
       const { data, colorGroups } = widgetData as DataMap[DataType.BarChart]
       const colors = Object.keys(colorGroups)
 
-      return flatten(
-        data.map(item => {
+      return data
+        .map(item => {
           return item.values
             .map(({ colorGroupName }) => {
               if (!colors.includes(colorGroupName)) {
                 return colorGroupName
               }
             })
-            .filter((i): i is string => i !== undefined)
+            .filter(isDefined)
         })
-      )
+        .flat()
     }
 
     case DataType.Donut: {
       const { data, colorGroups } = widgetData as DataMap[DataType.Donut]
       const colors = Object.keys(colorGroups)
 
-      return flatten(
-        data
-          .map(({ colorGroupName }) => {
-            if (!colors.includes(colorGroupName)) {
-              return colorGroupName
-            }
-          })
-          .filter((i): i is string => i !== undefined)
-      )
+      return data
+        .map(({ colorGroupName }) => {
+          if (!colors.includes(colorGroupName)) {
+            return colorGroupName
+          }
+        })
+        .filter(isDefined)
     }
 
     case DataType.Legend: {
@@ -52,7 +50,7 @@ export const dataColorsValidator = (
             return colorGroupName
           }
         })
-        .filter((i): i is string => i !== undefined)
+        .filter(isDefined)
     }
 
     case DataType.LinearChart: {
@@ -65,7 +63,7 @@ export const dataColorsValidator = (
             return colorGroupName
           }
         })
-        .filter((i): i is string => i !== undefined)
+        .filter(isDefined)
     }
 
     case DataType.MultiBarChart: {
@@ -78,7 +76,7 @@ export const dataColorsValidator = (
             return item
           }
         })
-        .filter((i): i is string => i !== undefined)
+        .filter(isDefined)
     }
 
     case DataType.ProgressBar: {
@@ -91,7 +89,7 @@ export const dataColorsValidator = (
             return colorGroupName
           }
         })
-        .filter((i): i is string => i !== undefined)
+        .filter(isDefined)
     }
 
     case DataType.TableLegend: {
@@ -104,7 +102,7 @@ export const dataColorsValidator = (
             return colorGroupName
           }
         })
-        .filter((i): i is string => i !== undefined)
+        .filter(isDefined)
     }
 
     case DataType.RadarChart: {
