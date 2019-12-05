@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity "sha1-Yipyvr0eP0jZIVY7S2CnYilagfw= sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA=="
 
-"@gaz/configs@0.2.4":
-  version "0.2.4"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.4.tgz#d6f440f83217bf77ab9862b99f69dad2016a9e77"
-  integrity sha512-2IQZCGcsZiZLu3mHmHQi8oNv0/a+gurI3QNLE1bkZA2G6rAyMFT6yVyCJB2Dm46v7M4PjCF6m9hZdRIvne8Klg==
+"@gaz/configs@0.2.5":
+  version "0.2.5"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.5.tgz#8ed7e9922a104f04a369dfca291ab2742f66259f"
+  integrity sha512-CiM/x5weeOaxnQ8BxuNkL6Pn1tcSGNce3mEeJqE13zruxcmJA+s+hXhrFzE1KCF598LfXr9I1u4vENlR+3QVSA==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1212,6 +1212,7 @@
     "@typescript-eslint/eslint-plugin" "2.5.0"
     "@typescript-eslint/eslint-plugin-tslint" "2.5.0"
     "@typescript-eslint/parser" "2.5.0"
+    babel-jest "24.9.0"
     babel-loader "8.0.6"
     babel-plugin-named-asset-import "0.3.2"
     babel-plugin-transform-react-remove-prop-types "0.4.24"
@@ -2233,7 +2234,7 @@
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
 
-"@types/geojson@*":
+"@types/geojson@*", "@types/geojson@7946.0.7":
   version "7946.0.7"
   resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
   integrity "sha1-yPpTK2CgBCIZzfFzyiGpde8GZq0= sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ=="
@@ -3225,7 +3226,7 @@ babel-helpers@^6.24.1:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-jest@^24.9.0:
+babel-jest@24.9.0, babel-jest@^24.9.0:
   version "24.9.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-24.9.0.tgz#3fc327cb8467b89d14d7bc70e315104a783ccd54"
   integrity sha512-ntuddfyiN+EhMw58PTNL1ph4C9rECiQXjI4nMMBKBaNjXvqLdkXpPRcMSr4iyBrJg/+wz9brFUD6RhOAT6r4Iw==

@@ -91,3 +91,8 @@ declare module 'd3' {
     accessor: (datum: T, index: number, array: ReadonlyArray<T>) => U | undefined | null
   ): readonly [U, U] | readonly [undefined, undefined]
 }
+
+declare module '*.geojson' {
+  const content: d3.ExtendedFeatureCollection
+  export = content
+}
