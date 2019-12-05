@@ -33,5 +33,9 @@ button {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 2px;
+  background-color: var(--opaque-color);
+}
+
+*:hover::-webkit-scrollbar-thumb {
   background-color: var(--scroll-bar-color);
 }
