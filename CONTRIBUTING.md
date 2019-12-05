@@ -112,7 +112,6 @@ type DateProps = {
 
 ```sh
 > npm version patch
-> git push origin master
-> git push origin <tagname of new version> # git push origin v0.1.13
+> git push origin master --follow-tags
 > npm publish
 ```
