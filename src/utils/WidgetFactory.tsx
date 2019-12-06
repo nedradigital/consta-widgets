@@ -1,7 +1,5 @@
 import * as React from 'react'
 
-import { isEmpty } from 'lodash'
-
 import {
   CommonBoxItemParams,
   Data as DashboardData,
@@ -9,7 +7,7 @@ import {
   Dataset,
   DataType,
 } from '@/dashboard/types'
-import { dataColorsValidator } from '@/utils/validators'
+import { dataColorsValidator, widgetDataIsEmpty } from '@/utils/validators'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 
 export type WidgetType<Data, Params> = React.FC<{
@@ -54,8 +52,8 @@ export const createWidget = <
   const Widget: WidgetType<Data, Params> = ({ data, datasets, dataKey, params }) => {
     const widgetData: Data = data[dataKey] as any
 
-    if (!allowEmptyData && dataType && isEmpty(widgetData)) {
-      return <div>Нет данных для виджета "{name}"</div>
+    if (!allowEmptyData && dataType && widgetDataIsEmpty(dataType, widgetData)) {
+      return <div>{params.fallbackPlaceholderText || `Нет данных для виджета "${name}"`}</div>
     }
 
     const dataset = params.datasetId ? datasets.find(d => d.id === params.datasetId) : undefined
