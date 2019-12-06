@@ -26,14 +26,6 @@
   border-right: 1px solid var(--separate-line-color);
   border-left: 1px solid var(--separate-line-color);
   grid-area: calendar;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: var(--opaque-color);
-  }
-
-  &:hover::-webkit-scrollbar-thumb {
-    background-color: var(--scroll-bar-color);
-  }
 }
 
 .fakeBlock {
