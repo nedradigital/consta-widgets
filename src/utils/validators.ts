@@ -113,7 +113,8 @@ export const dataColorsValidator = (
         .map(figure => figure.colorGroupName)
     }
 
-    default:
+    default: {
       return []
+    }
   }
 }

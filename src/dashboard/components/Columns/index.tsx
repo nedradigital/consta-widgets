@@ -28,12 +28,14 @@ export const Columns: React.FC<Props> = ({
 }) => {
   const addColumn = (type: 'start' | 'end') => {
     switch (type) {
-      case 'start':
+      case 'start': {
         onChange([[], ...columns])
         break
-      case 'end':
+      }
+      case 'end': {
         onChange([...columns, []])
         break
+      }
     }
   }
 
