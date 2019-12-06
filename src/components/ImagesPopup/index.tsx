@@ -47,12 +47,15 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>) => {
     switch (e.key) {
-      case 'Escape':
+      case 'Escape': {
         return onRequestClose()
-      case 'ArrowLeft':
+      }
+      case 'ArrowLeft': {
         return goLeft()
-      case 'ArrowRight':
+      }
+      case 'ArrowRight': {
         return goRight()
+      }
     }
   }
 

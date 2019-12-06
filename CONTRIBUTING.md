@@ -115,3 +115,21 @@ type DateProps = {
 > git push origin master --follow-tags
 > npm publish
 ```
+
+### Стилизация switch конструкций
+Поскольку в eslint нет такого правила, то договорились, что в switch все конструкции case нужно обрамлять фигурными скобками:
+```js
+// Хорошо
+switch (value) {
+  case 'top': {
+    // ...
+    return ''
+  }
+}
+
+// Плохо
+switch (value) {
+  case 'top':
+    return ''
+}
+```

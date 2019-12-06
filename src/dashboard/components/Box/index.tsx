@@ -64,10 +64,11 @@ export const Box: React.FC<Props> = ({
 
   const addItem = () => {
     switch (selectedItem) {
-      case 'columns':
+      case 'columns': {
         onChange([...items, { type: 'columns', columns: [[], []], params: {} }])
         return
-      default:
+      }
+      default: {
         const { showName, id, defaultParams } = getWidget(selectedItem)
 
         onChange([
@@ -81,6 +82,7 @@ export const Box: React.FC<Props> = ({
           },
         ])
         return
+      }
     }
   }
 

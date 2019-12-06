@@ -36,26 +36,30 @@ const convertCoordinatesToStyles = ({
   const triangleSize = getTriangleSize()
 
   switch (direction) {
-    case 'top':
+    case 'top': {
       return {
         top: y - height - triangleSize,
         left: x - width / 2,
       }
-    case 'right':
+    }
+    case 'right': {
       return {
         top: y - height / 2,
         left: x + triangleSize,
       }
-    case 'bottom':
+    }
+    case 'bottom': {
       return {
         top: y + triangleSize,
         left: x - width / 2,
       }
-    case 'left':
+    }
+    case 'left': {
       return {
         top: y - height / 2,
         left: x - width - triangleSize,
       }
+    }
   }
 }
 
