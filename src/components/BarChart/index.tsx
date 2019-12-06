@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useUID } from 'react-uid'
 
+import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
@@ -58,7 +59,7 @@ export const getValuesScale = (domain: NumberRange, size: number, orientation: O
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
   const numbers = items.reduce<number[]>((mutableAcc, curr) => {
-    mutableAcc.push(...curr.values.map(i => i.value).filter((v): v is number => v !== undefined))
+    mutableAcc.push(...curr.values.map(i => i.value).filter(isDefined))
     return mutableAcc
   }, [])
 

@@ -32,8 +32,33 @@ export type GeoObject =
     }
   | GeoObjectLocation
 
+type Coords = readonly [number, number]
+
+export type GeoPoint = {
+  id: string
+  parentId: string
+  coords: Coords
+  name: string
+}
+
+type CommonCircleParams = {
+  x: number
+  y: number
+  linePath?: string
+}
+
+type ObjectCircle = CommonCircleParams & {
+  object: GeoObject
+  count: number
+}
+
+type PointCircle = CommonCircleParams & {
+  point: GeoPoint
+}
+
 type Props = {
   locations: readonly GeoObjectLocation[]
+  points: readonly GeoPoint[]
 }
 
 type Zoom = {
@@ -114,7 +139,23 @@ export const getVisibleObjects = (
   })
 }
 
-export const Map: React.FC<Props> = ({ locations }) => {
+const getLinePath = (geoPath: d3.GeoPath, coords1: Coords, coords2: Coords) => {
+  return (
+    geoPath({
+      type: 'Feature',
+      geometry: {
+        type: 'LineString',
+        coordinates: [[...coords1], [...coords2]],
+      },
+      properties: {},
+    }) || undefined
+  )
+}
+
+const isPointCircle = (circle: PointCircle | ObjectCircle): circle is PointCircle =>
+  'point' in circle
+
+export const Map: React.FC<Props> = ({ locations, points }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -190,31 +231,41 @@ export const Map: React.FC<Props> = ({ locations }) => {
     }))
   }, [visibleObjects, geoPath])
 
-  const objectsWithPoints = useMemo(
-    () =>
-      selectedObjectId
-        ? locations.filter(loc => loc.parentId === selectedObjectId)
-        : visibleObjects.filter(isClickable),
-    [visibleObjects, locations, selectedObjectId]
-  )
+  const objectsWithCircles = selectedObjectId
+    ? locations.filter(loc => loc.parentId === selectedObjectId)
+    : visibleObjects.filter(isClickable)
 
-  const points = useMemo(() => {
-    return objectsWithPoints.map(object => {
-      const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
-      const [x, y] = projection(coords) || [0, 0]
+  const objectCircles: readonly ObjectCircle[] = objectsWithCircles.map(object => {
+    const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
+    const [x, y] = projection(coords) || [0, 0]
+    const count =
+      object.type === 'location'
+        ? points.filter(p => p.parentId === object.id).length
+        : allObjects.filter(o => o.type === 'location' && o.parentId === object.id).length
 
-      const linePath =
-        geoPath({
-          type: 'Feature',
-          geometry: {
-            type: 'LineString',
-            coordinates: [[...SPB_COORDS], coords],
-          },
-          properties: {},
-        }) || undefined
-      return { object, x, y, linePath }
+    return {
+      object,
+      count,
+      x,
+      y,
+      linePath: getLinePath(geoPath, SPB_COORDS, coords),
+    }
+  })
+
+  const pointCircles: readonly PointCircle[] = points
+    .filter(point => (selectedObject ? point.parentId === selectedObject.id : false))
+    .map(point => {
+      const [x, y] = projection([point.coords[0], point.coords[1]]) || [0, 0]
+
+      return {
+        point,
+        x,
+        y,
+        linePath: getLinePath(geoPath, SPB_COORDS, point.coords),
+      }
     })
-  }, [objectsWithPoints, geoPath, projection])
+
+  const allCircles = [...objectCircles, ...pointCircles] as const
 
   const handleMouseMove = (event: React.MouseEvent) => {
     setMousePosition({
@@ -223,7 +274,7 @@ export const Map: React.FC<Props> = ({ locations }) => {
     })
   }
 
-  const getMouseHandlers = (object: GeoObject) => {
+  const getObjectMouseHandlers = (object: GeoObject) => {
     if (isClickable(object)) {
       return {
         onClick: (e: React.MouseEvent) => {
@@ -320,24 +371,36 @@ export const Map: React.FC<Props> = ({ locations }) => {
                 item.object.id === selectedObjectId && css.isSelected,
                 isClickable(item.object) && css.isClickable
               )}
-              {...getMouseHandlers(item.object)}
+              {...getObjectMouseHandlers(item.object)}
             />
           ))}
 
-          {points.map(point => (
-            <path key={point.object.id} d={point.linePath} className={css.line} />
+          {/* Все линии идут до кругов, чтобы линии всегда были под кругами */}
+          {allCircles.map((circle, idx) => (
+            <path key={idx} d={circle.linePath} className={css.line} />
           ))}
 
-          {points.map(point => (
-            <circle
-              key={point.object.id}
-              cx={point.x}
-              cy={point.y}
-              r={8}
-              className={css.circle}
-              {...getMouseHandlers(point.object)}
-            />
-          ))}
+          {allCircles.map((circle, idx) => {
+            const { x, y } = circle
+            const handlers = isPointCircle(circle)
+              ? { onClick: (e: React.MouseEvent) => e.stopPropagation() }
+              : getObjectMouseHandlers(circle.object)
+
+            return (
+              <React.Fragment key={idx}>
+                <circle cx={x} cy={y} r={10} className={css.circle} {...handlers} />
+                <text
+                  className={css.circleText}
+                  x={x}
+                  y={y}
+                  dominantBaseline="middle"
+                  textAnchor="middle"
+                >
+                  {isPointCircle(circle) ? circle.point.name : String(circle.count)}
+                </text>
+              </React.Fragment>
+            )
+          })}
         </svg>
       )}
 

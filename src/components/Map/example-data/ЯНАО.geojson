@@ -286,14 +286,14 @@
       "type": "Feature",
       "id": 3,
       "geometry": {
+        "type": "Point",
         "coordinates": [
-          80.005397,
-          66.086435
-        ],
-        "type": "Point"
+          70.99118064528167,
+          65.96577397780811
+        ]
       },
       "properties": {
-        "description": "Yamalo-Nenets Autonomous Area, Russia",
+        "iconCaption": "Скважина 3-2",
         "marker-color": "#1e98ff"
       }
     },
@@ -301,13 +301,44 @@
       "type": "Feature",
       "id": 4,
       "geometry": {
+        "type": "Point",
         "coordinates": [
-          69.55197166090673,
-          66.07088480216306
-        ],
-        "type": "Point"
+          69.04660056715633,
+          66.1220765426193
+        ]
       },
       "properties": {
+        "iconCaption": "Скважина 3-1",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.5173036921566,
+          66.20208683443572
+        ]
+      },
+      "properties": {
+        "iconCaption": "Скважина 1-1",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          75.69332908278163,
+          68.43918282446568
+        ]
+      },
+      "properties": {
+        "iconCaption": "Скважина 2-1",
         "marker-color": "#1e98ff"
       }
     }

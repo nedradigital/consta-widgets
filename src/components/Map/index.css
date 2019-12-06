@@ -38,6 +38,14 @@
   cursor: pointer;
 }
 
+.circleText {
+  fill: #fff;
+
+  font-size: 12px;
+
+  pointer-events: none;
+}
+
 .line {
   fill: none;
   stroke: #0aa5ff;
