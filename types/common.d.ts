@@ -96,3 +96,35 @@ declare module '*.geojson' {
   const content: d3.ExtendedFeatureCollection
   export = content
 }
+
+declare module '@gpn-design/uikit' {
+  // TODO: заменить на типы, экспортированные из ui-кита
+  import { FocusEventHandler } from 'react'
+
+  export type WpSize = 'xs' | 's' | 'm' | 'l'
+
+  type ButtonProps = {
+    type: 'submit' | 'reset' | 'button'
+    disabled?: boolean
+    wpSize: 'xs' | 's' | 'm' | 'l'
+    view: 'clear' | 'ghost' | 'primary' | 'secondary'
+    width?: 'auto' | 'full'
+    form?:
+      | 'default'
+      | 'brick'
+      | 'round'
+      | 'brick-round'
+      | 'round-brick'
+      | 'brick-default'
+      | 'default-brick'
+    iconOnly?: boolean
+    withIcon?: 'left' | 'right'
+    children?: React.ReactNode
+    className?: string
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    onBlur?: FocusEventHandler<HTMLElement>
+    tabIndex?: number
+  }
+
+  export const Button: React.ComponentType<ButtonProps>
+}
