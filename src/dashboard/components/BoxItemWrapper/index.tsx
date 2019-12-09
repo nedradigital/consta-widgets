@@ -113,7 +113,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
         </>
       )}
 
-      {children}
+      <div className={css.content}>{children}</div>
 
       {isEditingSettings &&
         portalEl &&
