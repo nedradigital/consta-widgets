@@ -51,7 +51,7 @@ const figures: readonly Figure[] = [
 const getFormatLabel = () => {
   return boolean('format labels as percents', false)
     ? (v: number) => `${Math.round(v)}%`
-    : undefined
+    : (v: number) => `${v} тыс м3`
 }
 
 storiesOf('components/RadarChart', module)
