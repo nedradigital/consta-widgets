@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, object } from '@storybook/addon-knobs'
+import { boolean, object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -54,6 +54,11 @@ const getFormatLabel = () => {
     : undefined
 }
 
+const getFormatTooltipLabel = () => {
+  const unit = text('format tooltip label unit', ' тыс м3')
+  return (v: number) => `${v}${unit}`
+}
+
 storiesOf('components/RadarChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '50vw', height: '60vh' }))
@@ -66,6 +71,7 @@ storiesOf('components/RadarChart', module)
       ticks={4}
       backgroundColor="var(--bg-color)"
       formatLabel={getFormatLabel()}
+      formatTooltipLabel={getFormatTooltipLabel()}
       withConcentricColor={false}
       labelSize="s"
     />
