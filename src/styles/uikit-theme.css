@@ -1,0 +1,7 @@
+:global {
+  .gpnThemeColor {
+    --color-control-typo-default: #f6fbfd;
+    --color-control-bg-border-default: rgba(246, 251, 253, 0.14);
+    --color-control-bg-border-default-hover: rgba(246, 251, 253, 0.44);
+  }
+}

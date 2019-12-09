@@ -26,7 +26,8 @@ addDecorator(storyFn => {
     'theme_font_small',
     'theme_gap_small',
     'theme_size_gpn-default',
-    'theme_space_default'
+    'theme_space_default',
+    'gpnThemeColor',
   )
 
   return storyFn()
