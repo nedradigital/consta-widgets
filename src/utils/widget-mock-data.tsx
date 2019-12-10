@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { DataMap, DataType } from '@/dashboard/types'
 
 const roadmapData = {
@@ -754,6 +756,10 @@ const mockData: DataMap = {
     { large: 'https://via.placeholder.com/400x200' },
     { large: 'https://via.placeholder.com/200x400' },
   ],
+  [DataType.Button]: {
+    content: 'Кнопка',
+    onClick: () => alert('Клик!'),
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

@@ -54,6 +54,7 @@ export enum DataType {
   RadarChart,
   Roadmap,
   Images,
+  Button,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -114,6 +115,11 @@ export type DataMap = {
     } & WithColorGroups
   >
   [DataType.Images]: readonly ImageItem[]
+  [DataType.Button]: {
+    content: React.ReactNode
+    disabled?: boolean
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  }
 }
 
 export type Dataset = {
