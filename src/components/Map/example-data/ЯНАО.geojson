@@ -293,6 +293,7 @@
         ]
       },
       "properties": {
+        "description": "ЦУБ=Тюмень",
         "iconCaption": "Скважина 3-2",
         "marker-color": "#1e98ff"
       }
@@ -308,6 +309,7 @@
         ]
       },
       "properties": {
+        "description": "ЦУБ=Спб",
         "iconCaption": "Скважина 3-1",
         "marker-color": "#1e98ff"
       }
@@ -323,6 +325,7 @@
         ]
       },
       "properties": {
+        "description": "ЦУБ=Спб",
         "iconCaption": "Скважина 1-1",
         "marker-color": "#1e98ff"
       }
@@ -338,6 +341,7 @@
         ]
       },
       "properties": {
+        "description": "ЦУБ=Спб",
         "iconCaption": "Скважина 2-1",
         "marker-color": "#1e98ff"
       }

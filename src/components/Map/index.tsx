@@ -5,10 +5,12 @@ import russiaLow from '@amcharts/amcharts4-geodata/russiaCrimeaLow'
 import worldHigh from '@amcharts/amcharts4-geodata/worldHigh'
 import worldLow from '@amcharts/amcharts4-geodata/worldLow'
 import worldUltra from '@amcharts/amcharts4-geodata/worldUltra'
+import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
+import { LineString } from 'geojson'
 
 import { Tooltip } from '@/components/Tooltip'
 
@@ -37,14 +39,20 @@ type Coords = readonly [number, number]
 export type GeoPoint = {
   id: string
   parentId: string
+  connectionPointId?: string
   coords: Coords
   name: string
+}
+
+type Line = {
+  d: string
+  measure: number
 }
 
 type CommonCircleParams = {
   x: number
   y: number
-  linePath?: string
+  lines?: readonly Line[]
 }
 
 type ObjectCircle = CommonCircleParams & {
@@ -56,9 +64,16 @@ type PointCircle = CommonCircleParams & {
   point: GeoPoint
 }
 
+export type ConnectionPoint = {
+  id: string
+  coords: Coords
+  name: string
+}
+
 type Props = {
   locations: readonly GeoObjectLocation[]
   points: readonly GeoPoint[]
+  connectionPoints: readonly ConnectionPoint[]
 }
 
 type Zoom = {
@@ -68,7 +83,6 @@ type Zoom = {
 }
 
 const CENTERING_PADDING = 30
-const SPB_COORDS = [30.311515, 59.942568] as const
 const ZOOM_HIGH_THRESHOLD = 3000
 
 const featureToObject = (type: 'country' | 'region') => (feature: ExtendedFeature): GeoObject => ({
@@ -139,23 +153,36 @@ export const getVisibleObjects = (
   })
 }
 
-const getLinePath = (geoPath: d3.GeoPath, coords1: Coords, coords2: Coords) => {
-  return (
-    geoPath({
-      type: 'Feature',
-      geometry: {
-        type: 'LineString',
-        coordinates: [[...coords1], [...coords2]],
-      },
-      properties: {},
-    }) || undefined
-  )
+const getLine = (geoPath: d3.GeoPath, coords1: Coords, coords2: Coords): Line | undefined => {
+  const lineString: ExtendedFeature<LineString> = {
+    type: 'Feature',
+    geometry: {
+      type: 'LineString',
+      coordinates: [[...coords1], [...coords2]],
+    },
+    properties: {},
+  }
+  const d = geoPath(lineString)
+  return d
+    ? {
+        d,
+        measure: geoPath.measure(lineString),
+      }
+    : undefined
 }
 
 const isPointCircle = (circle: PointCircle | ObjectCircle): circle is PointCircle =>
   'point' in circle
 
-export const Map: React.FC<Props> = ({ locations, points }) => {
+const geoCoordsToPixels = (
+  projection: d3.GeoProjection,
+  geoCoords: Coords
+): { x: number; y: number } | undefined => {
+  const pixelCoords = projection([geoCoords[0], geoCoords[1]])
+  return pixelCoords ? { x: pixelCoords[0], y: pixelCoords[1] } : undefined
+}
+
+export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -235,35 +262,75 @@ export const Map: React.FC<Props> = ({ locations, points }) => {
     ? locations.filter(loc => loc.parentId === selectedObjectId)
     : visibleObjects.filter(isClickable)
 
-  const objectCircles: readonly ObjectCircle[] = objectsWithCircles.map(object => {
-    const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
-    const [x, y] = projection(coords) || [0, 0]
-    const count =
-      object.type === 'location'
-        ? points.filter(p => p.parentId === object.id).length
-        : allObjects.filter(o => o.type === 'location' && o.parentId === object.id).length
+  const objectCircles: readonly ObjectCircle[] = objectsWithCircles
+    .map(object => {
+      const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
+      const pixelCoords = geoCoordsToPixels(projection, coords)
 
-    return {
-      object,
-      count,
-      x,
-      y,
-      linePath: getLinePath(geoPath, SPB_COORDS, coords),
-    }
-  })
+      if (!pixelCoords) {
+        return undefined
+      }
+
+      const { x, y } = pixelCoords
+
+      const includedPoints = (() => {
+        switch (object.type) {
+          case 'country':
+          case 'region':
+            return [
+              // Точки внутри региона
+              ...points.filter(p => p.parentId === object.id),
+              // Точки внутри локаций региона
+              ...locations
+                .filter(l => l.parentId === object.id)
+                .map(l => points.filter(p => p.parentId === l.id))
+                .flat(),
+            ]
+          case 'location':
+            return points.filter(p => p.parentId === object.id)
+        }
+      })()
+      const connectedPoints = connectionPoints.filter(connectionPoint =>
+        includedPoints.some(point => point.connectionPointId === connectionPoint.id)
+      )
+
+      return {
+        object,
+        count: includedPoints.length,
+        x,
+        y,
+        lines: connectedPoints
+          .map(connectedPoint => getLine(geoPath, connectedPoint.coords, coords))
+          .filter(isDefined),
+      }
+    })
+    .filter(isDefined)
 
   const pointCircles: readonly PointCircle[] = points
     .filter(point => (selectedObject ? point.parentId === selectedObject.id : false))
     .map(point => {
-      const [x, y] = projection([point.coords[0], point.coords[1]]) || [0, 0]
+      const pixelCoords = geoCoordsToPixels(projection, point.coords)
+
+      if (!pixelCoords) {
+        return undefined
+      }
+
+      const { x, y } = pixelCoords
+      const theConnectionPoint = connectionPoints.find(
+        connectionPoint => connectionPoint.id === point.connectionPointId
+      )
+      const theLine = theConnectionPoint
+        ? getLine(geoPath, theConnectionPoint.coords, point.coords)
+        : undefined
 
       return {
         point,
         x,
         y,
-        linePath: getLinePath(geoPath, SPB_COORDS, point.coords),
+        lines: theLine ? [theLine] : undefined,
       }
     })
+    .filter(isDefined)
 
   const allCircles = [...objectCircles, ...pointCircles] as const
 
@@ -376,9 +443,27 @@ export const Map: React.FC<Props> = ({ locations, points }) => {
           ))}
 
           {/* Все линии идут до кругов, чтобы линии всегда были под кругами */}
-          {allCircles.map((circle, idx) => (
-            <path key={idx} d={circle.linePath} className={css.line} />
-          ))}
+          {allCircles.map((circle, circleIdx) =>
+            circle.lines ? (
+              <g key={circleIdx}>
+                {circle.lines.map(({ d, measure }, lineIdx) => (
+                  <React.Fragment key={lineIdx}>
+                    <path d={d} className={css.line} />
+                    <path
+                      d={d}
+                      className={classnames(css.line, css.isAnimated)}
+                      style={{
+                        ['--line-length' as string]: measure,
+                        animation: isZooming ? 'none' : undefined,
+                        animationDelay: isZooming ? undefined : `${circleIdx}s`,
+                        animationDuration: isZooming ? undefined : `${allCircles.length}s`,
+                      }}
+                    />
+                  </React.Fragment>
+                ))}
+              </g>
+            ) : null
+          )}
 
           {allCircles.map((circle, idx) => {
             const { x, y } = circle
@@ -397,6 +482,28 @@ export const Map: React.FC<Props> = ({ locations, points }) => {
                   textAnchor="middle"
                 >
                   {isPointCircle(circle) ? circle.point.name : String(circle.count)}
+                </text>
+              </React.Fragment>
+            )
+          })}
+
+          {connectionPoints.map(connectionPoint => {
+            const r = 10
+            const { coords } = connectionPoint
+            const [x, y] = projection([coords[0], coords[1]]) || [0, 0]
+
+            return (
+              <React.Fragment key={connectionPoint.id}>
+                <circle cx={x} cy={y} r={r} className={css.connectionPoint} />
+                <text
+                  className={css.circleText}
+                  x={x}
+                  y={y}
+                  dominantBaseline="hanging"
+                  textAnchor="middle"
+                  transform={`translate(0, ${r + 3})`}
+                >
+                  {connectionPoint.name}
                 </text>
               </React.Fragment>
             )

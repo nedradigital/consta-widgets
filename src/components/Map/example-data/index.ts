@@ -3,10 +3,13 @@ import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'
 
-import { GeoObject, GeoObjectLocation, GeoPoint } from '../'
+import { ConnectionPoint, GeoObject, GeoObjectLocation, GeoPoint } from '../'
 
 const locationsData: ReadonlyArray<readonly [string, ExtendedFeatureCollection]> = [
   ['RU-YAN', require('./ЯНАО.geojson')],
+  ['RU-KHM', require('./ХМАО.geojson')],
+  ['RU-TOM', require('./Томск.geojson')],
+  ['RU-IRK', require('./Иркутск.geojson')],
   ['RS', require('./Сербия.geojson')],
 ] as const
 
@@ -54,6 +57,28 @@ export const EXAMPLE_LOCATIONS: readonly GeoObjectLocation[] = locationsData
   .map(([id, data]) => yaMapsToGeoObject(id, data))
   .flat()
 
+export const EXAMPLE_CONNECTION_POINTS: readonly ConnectionPoint[] = [
+  {
+    id: 'Спб',
+    coords: [30.311515, 59.942568],
+    name: 'ЦУБ Санкт-Петербург',
+  },
+  {
+    id: 'Тюмень',
+    coords: [65.534328, 57.153033],
+    name: 'ЦУБ Тюмень',
+  },
+]
+
+const getConnectionPointId = (point: ExtendedFeature<Point>): string | undefined => {
+  if (!point.properties) {
+    return
+  }
+
+  const found = point.properties.description.match(/^ЦУБ=(?<id>.*)$/)
+  return found ? found.groups.id : undefined
+}
+
 const yaMapsToGeoPoint = (
   yaMapsObject: ExtendedFeatureCollection,
   locations: readonly GeoObjectLocation[]
@@ -61,14 +86,9 @@ const yaMapsToGeoPoint = (
   return yaMapsObject.features
     .filter(isPoint)
     .map((point, idx): GeoPoint | undefined => {
-      const coords = [point.geometry.coordinates[0], point.geometry.coordinates[1]] as const
-
+      const { coordinates } = point.geometry
       const parentLocation = locations.find(location =>
-        d3.geoContains(
-          location.geoData,
-          // tslint:disable-next-line:readonly-array
-          coords as [number, number]
-        )
+        d3.geoContains(location.geoData, [coordinates[0], coordinates[1]])
       )
 
       return parentLocation
@@ -76,7 +96,8 @@ const yaMapsToGeoPoint = (
             id: `${parentLocation.id}-${idx}`,
             name: point.properties ? point.properties.iconCaption : undefined,
             parentId: parentLocation.id,
-            coords,
+            connectionPointId: getConnectionPointId(point),
+            coords: [coordinates[0], coordinates[1]] as const,
           }
         : undefined
     })

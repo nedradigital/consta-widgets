@@ -42,8 +42,11 @@
   fill: #fff;
 
   font-size: 12px;
+  font-weight: bold;
 
   pointer-events: none;
+
+  text-shadow: 1px 1px 2px black;
 }
 
 .line {
@@ -54,4 +57,28 @@
   pointer-events: none;
 
   opacity: 0.4;
+
+  &.isAnimated {
+    --line-length: 1000; /* переопределяется в js */
+    --animated-segment: 30;
+
+    opacity: 1;
+    stroke-dasharray: var(--animated-segment) var(--line-length);
+    stroke-dashoffset: calc(-1 * var(--line-length));
+
+    animation: dash ease-in infinite;
+
+    @keyframes dash {
+      20%,
+      100% {
+        stroke-dashoffset: var(--animated-segment);
+      }
+    }
+  }
+}
+
+.connectionPoint {
+  fill: #0aa5ff;
+  stroke: white;
+  stroke-width: 2;
 }
