@@ -16,3 +16,4 @@ export { RangePickerWidgetContent as RangePickerWidget } from './RangePickerWidg
 export { TrafficLightWidgetContent as TrafficLightWidget } from './TrafficLightWidget'
 export { ImagesWidgetContent as ImagesWidget } from './ImagesWidget'
 export { ButtonWidgetContent as ButtonWidget } from './ButtonWidget'
+export { ChoiceGroupWidgetContent as ChoiceGroup } from './ChoiceGroupWidget'

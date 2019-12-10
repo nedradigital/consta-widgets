@@ -127,4 +127,31 @@ declare module '@gpn-design/uikit' {
   }
 
   export const Button: React.ComponentType<ButtonProps>
+
+  export type ChoiceT<T> = {
+    value: T
+    label: string
+  }
+
+  type SingleValueSpecificProps<T> = {
+    isMultiple: false
+    value?: T | null
+    onChange?: (value: T | null) => void
+  }
+  type MultiValueSpecificProps<T> = {
+    isMultiple: true
+    value: T[]
+    onChange?: (value: T[]) => void
+  }
+
+  type ChoiceGroupProps<T> = {
+    items: ChoiceT<T>[]
+    wpSize: WpSize
+    form?: 'default' | 'brick' | 'round'
+    className?: string
+    disabled?: boolean
+    onBlur?: FocusEventHandler<HTMLElement>
+  } & (SingleValueSpecificProps<T> | MultiValueSpecificProps<T>)
+
+  export const ChoiceGroup: React.ComponentType<ChoiceGroupProps<string | number>>
 }
