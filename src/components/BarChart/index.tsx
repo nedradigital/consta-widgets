@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useUID } from 'react-uid'
 
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
@@ -66,6 +67,9 @@ const getDomain = (items: readonly Data[]): NumberRange => {
   return [0, d3.max(numbers)] as NumberRange
 }
 
+const getPaddingRight = (orientation: Orientation, showValues?: boolean) =>
+  orientation === 'horizontal' && showValues ? getCalculatedSize(50) : 0
+
 export const BarChart: React.FC<Props> = ({
   data = [],
   orientation,
@@ -95,7 +99,9 @@ export const BarChart: React.FC<Props> = ({
     }
   }
 
-  const svgWidth = width ? Math.round(width - paddingX) : 0
+  const svgWidth = width
+    ? Math.round(width - paddingX - getPaddingRight(orientation, showValues))
+    : 0
   const svgHeight = height ? Math.round(height - paddingY) : 0
 
   const groupDomains = data.map(item => item.label)
