@@ -492,7 +492,7 @@ const mockData: DataMap = {
         typeLegend: 'dot',
       },
       {
-        field: 'Уренгойское газонефтеконденстаное',
+        field: 'Уренгойское газонефтеконденсатное',
         colorGroupName: 'second',
         typeLegend: 'dot',
       },
