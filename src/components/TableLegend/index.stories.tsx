@@ -5,12 +5,80 @@ import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { types } from '@/components/LegendItem'
+import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import { defaultParams, TrafficLightWidgetContent } from '@/widgets/TrafficLightWidget'
+import { WidgetContentProps } from '@/utils/WidgetFactory'
+import {
+  defaultParams as defaultTrafficLightParams,
+  Params as TrafficLightParams,
+  TrafficLightWidgetContent,
+} from '@/widgets/TrafficLightWidget'
 
 import { TableLegend } from '.'
+
+type TrafficLightProps = WidgetContentProps<TrafficLightData, TrafficLightParams>
+
+type ListItem = Record<string, string | number | TrafficLightProps>
+
+const convertItem = (obj: ListItem) => {
+  return Object.keys(obj).reduce<Record<string, React.ReactNode>>((acc, key) => {
+    const item = obj[key]
+
+    acc[key] =
+      typeof item !== 'string' && typeof item !== 'number' ? (
+        <TrafficLightWidgetContent {...item} />
+      ) : (
+        item
+      )
+
+    return acc
+  }, {})
+}
+
+const getList = () => {
+  const data: readonly ListItem[] = object('list', [
+    {
+      field: 'Северный бур',
+      sum: 20,
+      status: {
+        data: {
+          status: 'normal',
+          text: '',
+          comment: '',
+        },
+        params: defaultTrafficLightParams,
+      },
+    },
+    {
+      field: 'Южное месторождение',
+      sum: 15,
+      status: {
+        data: {
+          status: 'warning',
+          text: '',
+          comment: '',
+        },
+        params: defaultTrafficLightParams,
+      },
+    },
+    {
+      field: 'Западный разлом',
+      sum: 7,
+      status: {
+        data: {
+          status: 'danger',
+          text: '',
+          comment: '',
+        },
+        params: defaultTrafficLightParams,
+      },
+    },
+  ])
+
+  return data.map(convertItem)
+}
 
 storiesOf('components/TableLegend', module)
   .addDecorator(withSmartKnobs())
@@ -27,35 +95,13 @@ storiesOf('components/TableLegend', module)
       isShowLegend={false}
       size="l"
       data={{
-        colorGroups: {
+        colorGroups: object('colorGroups', {
           first: 'red',
           second: 'yellow',
           third: 'green',
-        },
-        list: [
-          {
-            field: 'Северный бур',
-            sum: 20,
-            status: (
-              <TrafficLightWidgetContent params={defaultParams} data={{ status: 'normal' }} />
-            ),
-          },
-          {
-            field: 'Южное месторождение',
-            sum: 15,
-            status: (
-              <TrafficLightWidgetContent params={defaultParams} data={{ status: 'warning' }} />
-            ),
-          },
-          {
-            field: 'Западный разлом',
-            sum: 7,
-            status: (
-              <TrafficLightWidgetContent params={defaultParams} data={{ status: 'danger' }} />
-            ),
-          },
-        ],
-        legendFields: [
+        }),
+        list: getList(),
+        legendFields: object('legendFields', [
           {
             field: 'Северный бур',
             colorGroupName: 'first',
@@ -71,8 +117,8 @@ storiesOf('components/TableLegend', module)
             colorGroupName: 'third',
             typeLegend: types[0],
           },
-        ],
-        columnNames: [
+        ]),
+        columnNames: object('columnNames', [
           {
             title: 'Локация',
             accessor: 'field',
@@ -88,7 +134,7 @@ storiesOf('components/TableLegend', module)
             accessor: 'status',
             className: 'textCenterPosition',
           },
-        ],
+        ]),
       }}
     />
   ))

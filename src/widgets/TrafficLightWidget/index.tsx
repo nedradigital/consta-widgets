@@ -10,7 +10,7 @@ type Data = DataMap[typeof dataType]
 
 const widgetId = 'fbeb7619-ae6b-4742-ae62-deea18e1382d'
 
-type Params = {
+export type Params = {
   type: ValueType
   size?: Size
 }
