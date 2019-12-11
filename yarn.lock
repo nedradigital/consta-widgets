@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity "sha1-Yipyvr0eP0jZIVY7S2CnYilagfw= sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA=="
 
-"@gaz/configs@0.2.8":
-  version "0.2.8"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.8.tgz#b8ce7f4b9a8f04490a9263d7810acf53bfe771a4"
-  integrity sha512-8SwBAreJ+VqiiMtyUlUnuNCNdKLpKi8pOWnqTiIfBtiBhdRV2d3ZLvaHzfL+G7ar0J44V4Fw2nYexwWFwIe0ig==
+"@gaz/configs@0.2.9":
+  version "0.2.9"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.9.tgz#124497195ba88b63834001e9f0f6c4e51b338536"
+  integrity sha512-O8QRn2ovwgF9NpiGxew1GYlXVe1hPsxP/BjhrMBgk/u7BRgEsm37aHpG4bGKqamvUJSHsKa2on+Vo1LrMftU4Q==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1228,6 +1228,7 @@
     eslint "6.5.1"
     eslint-plugin-import "github:evless/eslint-plugin-import#2.17.3-1"
     eslint-plugin-prefer-arrow "1.1.6"
+    eslint-plugin-react-hooks "2.3.0"
     eslint-plugin-unicorn "12.1.0"
     file-loader "4.0.0"
     fork-ts-checker-webpack-plugin "1.3.7"
@@ -1261,7 +1262,6 @@
     tslint-immutable "6.0.1"
     tslint-plugin-prettier "2.0.1"
     tslint-react "4.0.0"
-    tslint-react-hooks "2.1.1"
     ttypescript "1.5.7"
     typescript "3.5.2"
     typescript-transform-paths "1.1.11"
@@ -5983,6 +5983,11 @@ eslint-plugin-prettier@^2.2.0:
   dependencies:
     fast-diff "^1.1.1"
     jest-docblock "^21.0.0"
+
+eslint-plugin-react-hooks@2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-2.3.0.tgz#53e073961f1f5ccf8dd19558036c1fac8c29d99a"
+  integrity sha512-gLKCa52G4ee7uXzdLiorca7JIQZPPXRAQDXV83J4bUEeUuc5pIEyZYAZ45Xnxe5IuupxEqHS+hUhSLIimK1EMw==
 
 eslint-plugin-unicorn@12.1.0:
   version "12.1.0"
@@ -13980,11 +13985,6 @@ tslint-plugin-prettier@2.0.1:
     eslint-plugin-prettier "^2.2.0"
     lines-and-columns "^1.1.6"
     tslib "^1.7.1"
-
-tslint-react-hooks@2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/tslint-react-hooks/-/tslint-react-hooks-2.1.1.tgz#d6066d0eef45b0ff8f5457c79e7cca2271e816a7"
-  integrity sha512-QdOog0JgU6hvMOWBcSK9n/Av+MOJoLl9W8VruvmsIfkgDgMfuwSwoVO6mpxB+8tpQCU/PDJvcLu3oo4qwiLCxw==
 
 tslint-react@4.0.0:
   version "4.0.0"

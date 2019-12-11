@@ -56,6 +56,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
       setPosition({ left: rect.right, top: rect.top })
 
       if (!portalEl) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         portalEl = document.createElement('div')
         portalEl.classList.add(css.portal)
         document.body.append(portalEl)

@@ -36,7 +36,7 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, isAdaptive = t
     if (clampedOffset !== offset) {
       setOffset(clampedOffset)
     }
-  })
+  }, [offset, scrollWidth, wrapperWidth])
 
   const handleMove = (direction: 'left' | 'right') => () => {
     const toRight = direction === 'right'

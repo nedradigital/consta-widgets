@@ -116,17 +116,10 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
     return Math.min(widthScale, heightScale)
   }, [baseHeightForScaling, baseWidthForScaling, width, height])
 
-  const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [
-    scale,
-    baseWidthForScaling,
-    baseHeightForScaling,
-    baseMargin,
-  ])
+  const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [scale, baseMargin])
 
   const padding = useMemo(() => [scale * basePadding[0], scale * basePadding[1]], [
     scale,
-    baseWidthForScaling,
-    baseHeightForScaling,
     basePadding,
   ])
 
@@ -134,7 +127,7 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
     if (dimensionRef.current) {
       updateBaseSize(baseFontSize * scale, dimensionRef.current)
     }
-  }, [width, height, scale, dimensionRef])
+  }, [width, height, scale, dimensionRef, baseFontSize])
 
   const rowHeight = (height - padding[1] * 2 - margin[1] * (rowsCount - 1)) / rowsCount
 

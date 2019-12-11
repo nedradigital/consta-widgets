@@ -210,7 +210,7 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
       .fitSize([width, height], world)
       .clipExtent([[0, 0], [width, height]])
       .rotate([-90, 0])
-  }, [width, height])
+  }, [world, width, height])
 
   const projection = useMemo(() => {
     const p = getProjection()
@@ -411,12 +411,11 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
       // При первом рендере не анимируем
       setZoom(targetZoom)
     }
-  }, [
+
     // Тут нельзя делать зависимость от selectedObject, т.к. его изменения зацикливают событие зума
     // (во время зума снижается детализация мира и из-за этого обновляется геометрия selectedObject, хотя selectedObjectId остаётся тем же)
-    selectedObjectId,
-    getProjection,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedObjectId, getProjection])
 
   return (
     <div ref={ref} className={css.main}>

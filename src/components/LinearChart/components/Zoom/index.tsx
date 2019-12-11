@@ -80,6 +80,7 @@ export const Zoom: React.FC<Props> = ({
     Promise.resolve()
       .then(() => setZoom(1))
       .then(() => setZoom(zoom))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lines])
 
   useLayoutEffect(() => {
@@ -109,7 +110,7 @@ export const Zoom: React.FC<Props> = ({
         d3.select(zoomRef.current).call(zoomBehaviorRef.current!.translateBy, ...deltaCoords)
       })
     d3.select(dragHandleRef.current as Element).call(drag)
-  }, [isVertical])
+  }, [dragHandleRef, isVertical])
 
   // Zoom bar position
   const xOnBottom = xLabelsPos === 'bottom'

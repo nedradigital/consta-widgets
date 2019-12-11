@@ -53,7 +53,7 @@ export const Bar: React.FC<Props> = ({
     d3.select(textRef.current)
       .selectAll('text')
       .remove()
-  }, [orientation, showValues])
+  }, [textRef, orientation, showValues])
 
   useLayoutEffect(() => {
     if (ref) {

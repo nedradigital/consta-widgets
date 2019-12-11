@@ -233,15 +233,16 @@ export const Roadmap: React.FC<Props> = props => {
 
   useLayoutEffect(() => {
     if (ref.current) {
-      ref.current.addEventListener('scroll', scrollHandler)
+      const element = ref.current
+      element.addEventListener('scroll', scrollHandler)
       window.addEventListener('click', handleWindowClick)
 
       return () => {
         window.removeEventListener('click', handleWindowClick)
-        ref.current!.removeEventListener('scroll', scrollHandler)
+        element.removeEventListener('scroll', scrollHandler)
       }
     }
-  }, [ref])
+  }, [ref, handleWindowClick, scrollHandler])
 
   useLayoutEffect(() => {
     if (ref.current) {

@@ -154,7 +154,7 @@ export const Axis: React.FC<Props> = ({
         labelsSelection.append('g')
       }
     })
-  }, [xLabelsPos, yLabelsPos])
+  }, [labelsAxis, xLabelsPos, yLabelsPos])
 
   useLayoutEffect(() => {
     // Labels
