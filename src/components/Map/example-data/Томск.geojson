@@ -1,0 +1,108 @@
+{
+  "type": "FeatureCollection",
+  "metadata": { "name": "Томская область", "creator": "Yandex Map Constructor" },
+  "features": [
+    {
+      "type": "Feature",
+      "id": 0,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.34648322851545, 58.96182156965575],
+            [77.24760627539047, 58.76262871087383],
+            [77.80790900976547, 58.68262909418685],
+            [78.02763557226547, 58.79685779355084],
+            [77.80790900976547, 59.001522213656884],
+            [77.34648322851545, 58.96182156965575]
+          ]
+        ]
+      },
+      "properties": {
+        "description": "Томск 1",
+        "fill": "#ed4543",
+        "fill-opacity": 0.6,
+        "stroke": "#ed4543",
+        "stroke-width": "5",
+        "stroke-opacity": 0.9
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 1,
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.2913074472655, 57.59034841153742],
+            [78.3572254160155, 57.34765095101221],
+            [78.68681525976547, 57.28821075303877],
+            [79.08232307226548, 57.31199841213908],
+            [79.30204963476547, 57.38326876826235],
+            [79.02739143164047, 57.55493272938174],
+            [78.62089729101547, 57.67873636777266],
+            [78.2913074472655, 57.59034841153742]
+          ]
+        ]
+      },
+      "properties": {
+        "description": "Томск 2",
+        "fill": "#ed4543",
+        "fill-opacity": 0.6,
+        "stroke": "#ed4543",
+        "stroke-width": "5",
+        "stroke-opacity": 0.9
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 2,
+      "geometry": { "coordinates": [77.44536018164045, 58.916393162239494], "type": "Point" },
+      "properties": {
+        "description": "ЦУБ=Спб",
+        "iconCaption": "Томск 1-1",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 3,
+      "geometry": { "coordinates": [77.82988166601544, 58.74550146928487], "type": "Point" },
+      "properties": {
+        "description": "ЦУБ=Спб",
+        "iconCaption": "Томск 1-2",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 4,
+      "geometry": { "coordinates": [78.5110340097654, 57.501744320679336], "type": "Point" },
+      "properties": {
+        "description": "ЦУБ=Спб",
+        "iconCaption": "Томск 2-1",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 5,
+      "geometry": { "coordinates": [78.63737678320288, 57.368432229382066], "type": "Point" },
+      "properties": {
+        "description": "ЦУБ=Тюмень",
+        "iconCaption": "Томск 2-2",
+        "marker-color": "#1e98ff"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": 6,
+      "geometry": { "coordinates": [78.96696662695291, 57.432186610532526], "type": "Point" },
+      "properties": {
+        "description": "ЦУБ=Спб",
+        "iconCaption": "Томск 2-3",
+        "marker-color": "#1e98ff"
+      }
+    }
+  ]
+}
