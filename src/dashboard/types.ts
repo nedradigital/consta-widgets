@@ -1,7 +1,5 @@
 import React from 'react'
 
-import { ChoiceT as ChoiceGroupData } from '@gpn-design/uikit'
-
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
@@ -126,7 +124,7 @@ export type DataMap = {
   }
   [DataType.ChoiceGroup]: {
     disabled: boolean
-    items: readonly ChoiceGroupData<number | string>[]
+    items: any
   }
   [DataType.Checkbox]: {
     content: React.ReactNode
