@@ -1,0 +1,119 @@
+.multiSelect {
+  position: relative;
+
+  width: 242px;
+}
+
+.iconArrow {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+
+  width: 0;
+  height: 0;
+
+  content: '';
+
+  opacity: 0.7;
+  border-top: 4px solid #f6fbfd;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+
+  transition: transform 0.25s;
+  transform: translateY(-50%);
+}
+
+.selectedList {
+  position: relative;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  min-height: 24px;
+  padding-right: 25px;
+  padding-left: 11px;
+
+  cursor: pointer;
+
+  border-width: 2px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+
+  &:hover {
+    border-color: rgba(246, 251, 253, 0.44);
+  }
+
+  &.isActive {
+    border-color: rgba(255, 255, 255, 0.9);
+
+    .iconArrow {
+      transform: rotate(180deg) translateY(50%);
+    }
+  }
+}
+
+.selectedOptionWrapper {
+  padding-top: 2px;
+  padding-bottom: 2px;
+
+  &:not(:last-child) {
+    padding-right: 4px;
+  }
+}
+
+.placeholder {
+  font-size: 12px;
+  line-height: 20px;
+
+  overflow: hidden;
+
+  max-width: 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.optionsList {
+  --option-height: 29px;
+
+  position: absolute;
+
+  width: 100%;
+  padding-top: 8px;
+  padding-bottom: 8px;
+
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  background-color: #002033;
+
+  transform: translateY(4px);
+}
+
+.scrollableOptions {
+  overflow: auto;
+
+  max-height: calc(4 * var(--option-height));
+}
+
+.option {
+  width: 100%;
+  max-height: var(--option-height);
+  padding: 7px 13px 5px;
+
+  &.isSelected {
+    background-color: #07384b;
+  }
+}
+
+.optionCheckbox {
+  --checkbox-font-size: 12px;
+  --offset: 14px;
+
+  line-height: 14px;
+
+  width: 100%;
+
+  user-select: none;
+}
