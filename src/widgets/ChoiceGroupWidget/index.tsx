@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { ChoiceGroup, WpSize } from '@gpn-design/uikit'
+import { ChoiceGroup } from '@gpn-design/uikit'
 
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -16,7 +16,7 @@ const forms = ['default', 'round', 'brick'] as const
 type Form = typeof forms[number]
 
 type Params = {
-  size: WpSize
+  size: any
   form?: Form
   isMultiple: boolean
 }

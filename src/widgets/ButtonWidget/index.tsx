@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, WpSize } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit'
 
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -32,7 +32,7 @@ type Form = typeof forms[number]
 
 type Params = {
   content?: React.ReactNode
-  size: WpSize
+  size: any
   view: View
   width?: Width
   form?: Form
