@@ -1,6 +1,9 @@
 import { LinearChart } from '@/components/LinearChart'
 import { XLabelsPosition, YLabelsPosition } from '@/components/LinearChart/components/Axis'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -90,97 +93,85 @@ export const LinearChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Вертикальное отображение">
-          <input
-            type="checkbox"
-            checked={params.isVertical}
-            onChange={e => onChangeParam('isVertical', e.target.checked)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Зум">
-          <input
-            type="checkbox"
-            checked={params.withZoom}
-            onChange={e => onChangeParam('withZoom', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsCheckbox
+          name="Вертикальное отображение"
+          value={params.isVertical}
+          onChange={value => onChangeParam('isVertical', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Зум"
+          value={params.withZoom}
+          onChange={value => onChangeParam('withZoom', value)}
+        />
 
         <p>Настройка оси Х</p>
-        <WidgetSettingsItem name="Расположение оси">
-          <select
-            value={params.xLabels}
-            onChange={e => onChangeParam('xLabels', e.target.value as XLabelsPosition)}
-          >
-            {['top', 'bottom'].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Частота обновления подписей">
-          <input
-            type="text"
-            value={params.xLabelTicks}
-            onChange={e => onChangeParam('xLabelTicks', Number(e.target.value))}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Частота обновления линий">
-          <input
-            type="text"
-            value={params.xGridTicks}
-            onChange={e => onChangeParam('xGridTicks', Number(e.target.value))}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Отображать нулевую ось">
-          <input
-            type="checkbox"
-            checked={params.xGuide}
-            onChange={e => onChangeParam('xGuide', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Расположение оси"
+          value={params.xLabels}
+          onChange={value => onChangeParam('xLabels', value)}
+          values={[
+            {
+              name: 'Сверху',
+              value: 'top',
+            },
+            {
+              name: 'Снизу',
+              value: 'bottom',
+            },
+          ]}
+        />
+        <WidgetSettingsNumber
+          name="Частота обновления подписей"
+          value={params.xLabelTicks}
+          onChange={value => onChangeParam('xLabelTicks', value)}
+        />
+        <WidgetSettingsNumber
+          name="Частота обновления линий"
+          value={params.xGridTicks}
+          onChange={value => onChangeParam('xGridTicks', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Отображать нулевую ось"
+          value={params.xGuide}
+          onChange={value => onChangeParam('xGuide', value)}
+        />
 
         <p>Настройка оси Y</p>
-        <WidgetSettingsItem name="Расположение оси">
-          <select
-            value={params.yLabels}
-            onChange={e => onChangeParam('yLabels', e.target.value as YLabelsPosition)}
-          >
-            {['left', 'right'].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Частота обновления подписей">
-          <input
-            type="text"
-            value={params.yLabelTicks}
-            onChange={e => onChangeParam('yLabelTicks', Number(e.target.value))}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Частота обновления линий">
-          <input
-            type="text"
-            value={params.yGridTicks}
-            onChange={e => onChangeParam('yGridTicks', Number(e.target.value))}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Отображать нулевую ось">
-          <input
-            type="checkbox"
-            checked={params.yGuide}
-            onChange={e => onChangeParam('yGuide', e.target.checked)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Еидиница измерения оси Y">
-          <input
-            type="text"
-            value={params.secondaryScaleUnit}
-            onChange={e => onChangeParam('secondaryScaleUnit', e.target.value)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Расположение оси"
+          value={params.yLabels}
+          onChange={value => onChangeParam('yLabels', value)}
+          values={[
+            {
+              name: 'Слева',
+              value: 'left',
+            },
+            {
+              name: 'Справа',
+              value: 'right',
+            },
+          ]}
+        />
+        <WidgetSettingsNumber
+          name="Частота обновления подписей"
+          value={params.yLabelTicks}
+          onChange={value => onChangeParam('yLabelTicks', value)}
+        />
+        <WidgetSettingsNumber
+          name="Частота обновления линий"
+          value={params.yGridTicks}
+          onChange={value => onChangeParam('yGridTicks', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Отображать нулевую ось"
+          value={params.yGuide}
+          onChange={value => onChangeParam('yGuide', value)}
+        />
+        <WidgetSettingsText
+          name="Единица измерения оси Y"
+          value={params.secondaryScaleUnit}
+          onChange={value => onChangeParam('secondaryScaleUnit', value)}
+        />
       </>
     )
   },

@@ -3,7 +3,9 @@ import { useState } from 'react'
 import { removeAt } from '@gaz/utils/lib/array'
 
 import { PyramidChart, Size, sizes } from '@/components/PyramidChart'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -60,25 +62,17 @@ export const PyramidChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Перенос текста">
-          <input
-            type="checkbox"
-            checked={params.constraint}
-            onChange={e => onChangeParam('constraint', e.target.checked)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Размер текста">
-          <select
-            value={params.fontSize}
-            onChange={e => onChangeParam('fontSize', e.target.value as Size)}
-          >
-            {sizes.map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsCheckbox
+          name="Перенос текста"
+          value={params.constraint}
+          onChange={value => onChangeParam('constraint', value)}
+        />
+        <WidgetSettingsSelect
+          name="Размер текста"
+          value={params.fontSize}
+          onChange={value => onChangeParam('fontSize', value)}
+          values={sizes.map(i => ({ name: i, value: i }))}
+        />
         <WidgetSettingsItem name="Цвета">
           <div>
             {params.colors.map((color, index) => (

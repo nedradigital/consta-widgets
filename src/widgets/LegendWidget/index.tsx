@@ -1,6 +1,7 @@
 import { Direction, Legend } from '@/components/Legend'
 import { Position, Size, Type } from '@/components/LegendItem'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -94,65 +95,39 @@ export const LegendWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Направление легенды">
-          <select
-            value={params.direction}
-            onChange={e => onChangeParam('direction', e.target.value as Direction)}
-          >
-            {directions.map(direction => (
-              <option key={direction.value} value={direction.value}>
-                {direction.name}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Тип лейбла">
-          <select
-            value={params.labelType}
-            onChange={e => onChangeParam('labelType', e.target.value as Type)}
-          >
-            {labelTypes.map(type => (
-              <option key={type.value} value={type.value}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Направление легенды"
+          value={params.direction}
+          onChange={value => onChangeParam('direction', value)}
+          values={directions}
+        />
+        <WidgetSettingsSelect
+          name="Тип лейбла"
+          value={params.labelType}
+          onChange={value => onChangeParam('labelType', value)}
+          values={labelTypes}
+        />
         {params.labelType === 'line' ? (
-          <WidgetSettingsItem name="Положение лейбла">
-            <select
-              value={params.labelPosition}
-              onChange={e => onChangeParam('labelPosition', e.target.value as Position)}
-            >
-              {labelPositions.map(pos => (
-                <option key={pos.value} value={pos.value}>
-                  {pos.name}
-                </option>
-              ))}
-            </select>
-          </WidgetSettingsItem>
+          <WidgetSettingsSelect
+            name="Положение лейбла"
+            value={params.labelPosition}
+            onChange={value => onChangeParam('labelPosition', value)}
+            values={labelPositions}
+          />
         ) : null}
         {params.labelType === 'line' ? (
-          <WidgetSettingsItem name="Жирность линии">
-            <input
-              type="checkbox"
-              checked={params.lineBold}
-              onChange={e => onChangeParam('lineBold', e.target.checked)}
-            />
-          </WidgetSettingsItem>
+          <WidgetSettingsCheckbox
+            name="Жирность линии"
+            value={params.lineBold}
+            onChange={value => onChangeParam('lineBold', value)}
+          />
         ) : null}
-        <WidgetSettingsItem name="Размер текста">
-          <select
-            value={params.fontSize}
-            onChange={e => onChangeParam('fontSize', e.target.value as Size)}
-          >
-            {sizes.map(size => (
-              <option key={size.value} value={size.value}>
-                {size.name}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Размер текста"
+          value={params.fontSize}
+          onChange={value => onChangeParam('fontSize', value)}
+          values={sizes}
+        />
       </>
     )
   },

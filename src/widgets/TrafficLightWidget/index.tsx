@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Size, sizes, TrafficLight, ValueType, valueTypes } from '@/components/TrafficLight'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -34,27 +34,18 @@ export const TrafficLightWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Тип">
-          <select
-            value={params.type}
-            onChange={e => onChangeParam('type', e.target.value as ValueType)}
-          >
-            {valueTypes.map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Размер">
-          <select value={params.size} onChange={e => onChangeParam('size', e.target.value as Size)}>
-            {sizes.map(size => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Тип"
+          value={params.type}
+          onChange={value => onChangeParam('type', value)}
+          values={valueTypes.map(i => ({ name: i, value: i }))}
+        />
+        <WidgetSettingsSelect
+          name="Размер"
+          value={params.size}
+          onChange={value => onChangeParam('size', value)}
+          values={sizes.map(i => ({ name: i, value: i }))}
+        />
       </>
     )
   },

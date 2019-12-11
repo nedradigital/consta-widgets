@@ -1,5 +1,6 @@
 import { BarChart, Orientation } from '@/components/BarChart'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -35,26 +36,27 @@ export const BarChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Ориентация">
-          <select
-            value={params.orientation}
-            onChange={e => onChangeParam('orientation', e.target.value as Orientation)}
-          >
-            {['vertical', 'horizontal'].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Ориентация"
+          value={params.orientation}
+          onChange={value => onChangeParam('orientation', value)}
+          values={[
+            {
+              name: 'Вертикальная',
+              value: 'vertical',
+            },
+            {
+              name: 'Горизонтальная',
+              value: 'horizontal',
+            },
+          ]}
+        />
         {params.orientation === 'horizontal' ? (
-          <WidgetSettingsItem name="Показывать значения">
-            <input
-              type="checkbox"
-              checked={params.showValues}
-              onChange={e => onChangeParam('showValues', e.target.checked)}
-            />
-          </WidgetSettingsItem>
+          <WidgetSettingsCheckbox
+            name="Показывать значения"
+            value={params.showValues}
+            onChange={value => onChangeParam('showValues', value)}
+          />
         ) : null}
       </>
     )

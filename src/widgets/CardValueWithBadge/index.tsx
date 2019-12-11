@@ -1,4 +1,4 @@
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { Badge } from '@/ui/Badge'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -42,20 +42,16 @@ export const CardValueWithBadge = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Заголовок">
-          <input
-            type="text"
-            value={params.title}
-            onChange={e => onChangeParam('title', e.target.value)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Лэйбл">
-          <input
-            type="text"
-            value={params.label}
-            onChange={e => onChangeParam('label', e.target.value)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsText
+          name="Заголовок"
+          value={params.title}
+          onChange={value => onChangeParam('title', value)}
+        />
+        <WidgetSettingsText
+          name="Лэйбл"
+          value={params.label}
+          onChange={value => onChangeParam('label', value)}
+        />
       </>
     )
   },

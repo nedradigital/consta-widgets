@@ -1,7 +1,8 @@
 import * as React from 'react'
 
 import { MultiBarChart, Orientation } from '@/components/MultiBarChart'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -37,25 +38,26 @@ export const MultiBarChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Ориентация">
-          <select
-            value={params.orientation}
-            onChange={e => onChangeParam('orientation', e.target.value as Orientation)}
-          >
-            {['vertical', 'horizontal'].map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Нормализовать значения">
-          <input
-            type="checkbox"
-            checked={params.hasRatio}
-            onChange={e => onChangeParam('hasRatio', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Ориентация"
+          value={params.orientation}
+          onChange={value => onChangeParam('orientation', value)}
+          values={[
+            {
+              name: 'Вертикальная',
+              value: 'vertical',
+            },
+            {
+              name: 'Горизонтальная',
+              value: 'horizontal',
+            },
+          ]}
+        />
+        <WidgetSettingsCheckbox
+          name="Нормализовать значения"
+          value={params.hasRatio}
+          onChange={value => onChangeParam('hasRatio', value)}
+        />
       </>
     )
   },
