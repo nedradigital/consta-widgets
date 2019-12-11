@@ -12,11 +12,11 @@ const dashboard1Data: Dashboard1.State = {
 }
 
 describe('migration1', () => {
-  it('upgrades', () => {
+  it('повышает версию', () => {
     expect(migration1.up(dashboard0Data)).toEqual(dashboard1Data)
   })
 
-  it('downgrades', () => {
+  it('понижает версию', () => {
     expect(migration1.down(dashboard1Data)).toEqual(dashboard0Data)
   })
 })

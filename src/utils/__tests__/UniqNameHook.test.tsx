@@ -18,7 +18,7 @@ const TestHook: React.FC<{
 describe('useUniqueNameGenerator', () => {
   afterEach(clearUniqueNamesList)
 
-  it('generates unique name', () => {
+  it('генерирует уникальное имя', () => {
     const wrapper = mount(<TestHook />)
     expect(wrapper).toHaveText('TEST_0')
 
@@ -26,7 +26,7 @@ describe('useUniqueNameGenerator', () => {
     expect(wrapper2).toHaveText('TEST_1')
   })
 
-  it('respects initial names list', () => {
+  it('учитывает первоначальный список имён', () => {
     const wrapper = mount(<TestHook initialNames={['TEST_0', 'TEST_1', 'TEST_3']} />)
     expect(wrapper).toHaveText('TEST_2')
 
@@ -34,7 +34,7 @@ describe('useUniqueNameGenerator', () => {
     expect(wrapper2).toHaveText('TEST_5')
   })
 
-  it('removes name from the list', () => {
+  it('удаляет имя из списка', () => {
     const wrapper = mount(<TestHook />)
     expect(wrapper).toHaveText('TEST_0')
 

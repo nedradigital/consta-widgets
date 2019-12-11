@@ -2,7 +2,7 @@ import { Dashboard2, migration2 } from '../'
 import { Dashboard1 } from '../../dashboard1'
 
 describe('migration2', () => {
-  it('upgrades without settings', () => {
+  it('повышает версию без настроек', () => {
     const source: Dashboard1.State = {
       version: 1,
       boxes: [],
@@ -18,7 +18,7 @@ describe('migration2', () => {
     expect(migration2.up(source)).toEqual(result)
   })
 
-  it('upgrades with settings', () => {
+  it('повышает версию с настройками', () => {
     const source: Dashboard1.State = {
       version: 1,
       boxes: [],
@@ -35,7 +35,7 @@ describe('migration2', () => {
     expect(migration2.up(source)).toEqual(result)
   })
 
-  it('downgrades and keeps settings', () => {
+  it('понижает версию и сохраняет настройки', () => {
     const source: Dashboard2.State = {
       version: 2,
       boxes: [],

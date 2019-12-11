@@ -2,7 +2,7 @@ import { Dashboard3, migration3 } from '../'
 import { Dashboard2 } from '../../dashboard2'
 
 describe('migration3', () => {
-  it('upgrades', () => {
+  it('повышает версию', () => {
     const source: Dashboard2.State = {
       version: 2,
       boxes: [],
@@ -98,7 +98,7 @@ describe('migration3', () => {
     expect(migration3.up(source)).toEqual(result)
   })
 
-  it('downgrades', () => {
+  it('понижает версию', () => {
     const source: Dashboard3.State = {
       version: 3,
       boxes: [],
