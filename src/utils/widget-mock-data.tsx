@@ -617,6 +617,7 @@ const mockData: DataMap = {
         valueMax: 120,
         summary: 70,
         colorGroupName: 'first',
+        caption: 'Стратегия Ступени + УИД',
       },
       {
         value: 7000,
@@ -659,6 +660,7 @@ const mockData: DataMap = {
         ],
         summary: '3 тысячи',
         colorGroupName: 'third',
+        caption: 'Стратегия Ступени + УИД',
       },
     ],
   },

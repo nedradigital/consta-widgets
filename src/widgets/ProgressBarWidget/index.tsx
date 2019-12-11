@@ -12,17 +12,19 @@ const widgetId = '944a8e67-5604-444f-afe0-f4a3263b734a'
 
 type Params = {
   size: Size
+  isCaptionBold?: boolean
 }
 
 export const defaultParams: Params = {
   size: 'm',
+  isCaptionBold: false,
 }
 
 export const ProgressBarWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { size },
+  params: { size, isCaptionBold },
 }) => {
-  return <ProgressBar size={size} {...data} />
+  return <ProgressBar size={size} isCaptionBold={isCaptionBold} {...data} />
 }
 
 export const ProgressBarWidget = createWidget<Data, Params>({
@@ -42,6 +44,13 @@ export const ProgressBarWidget = createWidget<Data, Params>({
               </option>
             ))}
           </select>
+        </WidgetSettingsItem>
+        <WidgetSettingsItem name="Заголовок жирный">
+          <input
+            type="checkbox"
+            checked={params.isCaptionBold}
+            onChange={e => onChangeParam('isCaptionBold', e.target.checked)}
+          />
         </WidgetSettingsItem>
       </>
     )

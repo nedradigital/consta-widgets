@@ -5,6 +5,14 @@
     &.withLegend {
       height: calc-size(34);
     }
+
+    &.hasCaption {
+      height: calc-size(34);
+    }
+
+    &.withLegend.hasCaption {
+      height: calc-size(48);
+    }
   }
 
   &.sizeM {
@@ -12,6 +20,14 @@
 
     &.withLegend {
       height: calc-size(40);
+    }
+
+    &.hasCaption {
+      height: calc-size(38);
+    }
+
+    &.withLegend.hasCaption {
+      height: calc-size(54);
     }
   }
 
@@ -21,6 +37,14 @@
     &.withLegend {
       height: calc-size(45);
     }
+
+    &.hasCaption {
+      height: calc-size(38);
+    }
+
+    &.withLegend.hasCaption {
+      height: calc-size(59);
+    }
   }
 }
 
@@ -28,10 +52,28 @@
   display: flex;
 
   & .progressLine:not(:last-child) {
-    margin-bottom: 18px;
+    margin-bottom: calc-size(18);
   }
 }
 
 .progress {
   flex-grow: 1;
+}
+
+.caption {
+  font-size: calc-size(10);
+  line-height: calc-size(14);
+
+  overflow: hidden;
+
+  margin-bottom: calc-size(8);
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  color: #f6fbfd;
+
+  &.isCaptionBold {
+    font-weight: bold;
+  }
 }

@@ -18,4 +18,8 @@
     font-size: calc-size(24);
     line-height: calc-size(24);
   }
+
+  &.hasCaption {
+    padding-top: calc-size(14);
+  }
 }
