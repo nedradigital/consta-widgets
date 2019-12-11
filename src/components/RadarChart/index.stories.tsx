@@ -49,14 +49,25 @@ const figures: readonly Figure[] = [
 ]
 
 const getFormatLabel = () => {
-  return boolean('format labels as percents', false)
-    ? (v: number) => `${Math.round(v)}%`
-    : (v: number) => `${v} тыс м3`
+  const unit = text('format label unit', '')
+  const useFormatPercents = boolean('format label as percents', false)
+
+  if (useFormatPercents) {
+    return (v: number) => `${Math.round(v)}%`
+  }
+
+  if (unit) {
+    return (v: number) => `${v}${unit}`
+  }
+
+  return undefined
 }
 
 const getFormatTooltipLabel = () => {
   const unit = text('format tooltip label unit', ' тыс м3')
-  return (v: number) => `${v}${unit}`
+  const isActive = boolean('format tooltip label active', false)
+
+  return isActive ? (v: number) => `${v}${unit}` : undefined
 }
 
 storiesOf('components/RadarChart', module)
