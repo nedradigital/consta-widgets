@@ -99,7 +99,7 @@ declare module '*.geojson' {
 
 declare module '@gpn-design/uikit' {
   // TODO: заменить на типы, экспортированные из ui-кита
-  import { FocusEventHandler } from 'react'
+  import React from 'react'
 
   export type WpSize = 'xs' | 's' | 'm' | 'l'
 
@@ -122,7 +122,7 @@ declare module '@gpn-design/uikit' {
     children?: React.ReactNode
     className?: string
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
-    onBlur?: FocusEventHandler<HTMLElement>
+    onBlur?: React.FocusEventHandler<HTMLElement>
     tabIndex?: number
   }
 
@@ -150,8 +150,18 @@ declare module '@gpn-design/uikit' {
     form?: 'default' | 'brick' | 'round'
     className?: string
     disabled?: boolean
-    onBlur?: FocusEventHandler<HTMLElement>
+    onBlur?: React.FocusEventHandler<HTMLElement>
   } & (SingleValueSpecificProps<T> | MultiValueSpecificProps<T>)
 
   export const ChoiceGroup: React.ComponentType<ChoiceGroupProps<string | number>>
+
+  type CheckboxProps = {
+    wpSize: 'm' | 'l'
+    value?: boolean
+    disabled?: boolean
+    intermediate?: boolean
+    className?: string
+  } & Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value'>
+
+  export const Checkbox: React.ComponentType<CheckboxProps>
 }

@@ -773,6 +773,12 @@ const mockData: DataMap = {
     ],
     disabled: false,
   },
+  [DataType.Checkbox]: {
+    content: undefined,
+    value: false,
+    disabled: false,
+    intermediate: false,
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

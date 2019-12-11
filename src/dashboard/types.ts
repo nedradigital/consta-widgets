@@ -58,6 +58,7 @@ export enum DataType {
   Images,
   Button,
   ChoiceGroup,
+  Checkbox,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -126,6 +127,13 @@ export type DataMap = {
   [DataType.ChoiceGroup]: {
     disabled: boolean
     items: readonly ChoiceGroupData<number | string>[]
+  }
+  [DataType.Checkbox]: {
+    content: React.ReactNode
+    value?: boolean
+    disabled?: boolean
+    intermediate?: boolean
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   }
 }
 
