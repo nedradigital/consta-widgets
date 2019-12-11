@@ -42,6 +42,13 @@ const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
         />
       </WidgetSettingsItem>
       <MarginSettings params={params} onChangeParam={onChangeParam} />
+      <WidgetSettingsItem name="Замещающий текст">
+        <input
+          type="text"
+          value={params.fallbackPlaceholderText}
+          onChange={e => onChangeParam('fallbackPlaceholderText', e.target.value || undefined)}
+        />
+      </WidgetSettingsItem>
     </>
   )
 

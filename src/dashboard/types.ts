@@ -17,10 +17,10 @@ import { Data as RoadmapData } from '@/components/Roadmap'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
-import { Dashboard4 } from '@/dashboard/migration/migrations/dashboard4'
+import { Dashboard5 } from '@/dashboard/migration/migrations/dashboard5'
 import { Status } from '@/ui/Badge'
 
-import Dashboard = Dashboard4
+import Dashboard = Dashboard5
 
 export type MarginSize = Dashboard.MarginSize
 export type Settings = Dashboard.Settings

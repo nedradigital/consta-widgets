@@ -1,4 +1,5 @@
 import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isEmpty } from 'lodash'
 
 import { DataMap, DataType } from '@/dashboard/types'
 
@@ -115,6 +116,52 @@ export const dataColorsValidator = (
 
     default: {
       return []
+    }
+  }
+}
+
+export const widgetDataIsEmpty = (
+  type: DataType,
+  data: DataMap[keyof DataMap] | typeof undefined
+) => {
+  switch (type) {
+    case DataType.BarChart: {
+      const widgetData = data as DataMap[DataType.BarChart] | undefined
+      return !widgetData || widgetData.data.length === 0
+    }
+    case DataType.Donut: {
+      const widgetData = data as DataMap[DataType.Donut] | undefined
+
+      if (!widgetData) {
+        return true
+      }
+
+      const sections = widgetData.data.map(item => item.sections).flat()
+
+      return sections.length > 0
+    }
+    case DataType.Legend: {
+      const widgetData = data as DataMap[DataType.Legend] | undefined
+      return !widgetData || widgetData.data.length === 0
+    }
+    case DataType.LinearChart: {
+      const widgetData = data as DataMap[DataType.LinearChart] | undefined
+      return !widgetData || widgetData.data.length === 0
+    }
+    case DataType.MultiBarChart: {
+      const widgetData = data as DataMap[DataType.MultiBarChart] | undefined
+      return !widgetData || widgetData.data.values.length === 0
+    }
+    case DataType.ProgressBar: {
+      const widgetData = data as DataMap[DataType.ProgressBar] | undefined
+      return !widgetData || widgetData.data.length === 0
+    }
+    case DataType.RadarChart: {
+      const widgetData = data as DataMap[DataType.RadarChart] | undefined
+      return !widgetData || widgetData.figures.length === 0
+    }
+    default: {
+      return isEmpty(data)
     }
   }
 }
