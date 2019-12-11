@@ -4,7 +4,6 @@ const path = require('path')
 const webpackMerge = require('webpack-merge')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
 const getCommonConfig = require('@gaz/configs/config/webpack/common.webpack')
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -37,7 +36,6 @@ const libConfig = {
   },
   plugins: [
     isProduction && new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([{ from: 'types', to: 'types' }]),
     process.env.ANALYZE && new BundleAnalyzerPlugin()
   ].filter(Boolean),
   externals: {
