@@ -50,6 +50,8 @@
   right: 50%;
   bottom: calc(-1 * var(--hint-arrow-size));
 
+  white-space: nowrap;
+
   @nest :--point:not(:hover) &, &:not(:--isHoverable) {
     visibility: hidden;
   }

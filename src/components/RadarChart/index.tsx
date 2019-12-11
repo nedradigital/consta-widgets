@@ -43,6 +43,7 @@ export type Data = {
   axesLabels: { [key: string]: string }
   figures: readonly Figure[]
   formatLabel?: RadarChartFormatLabel
+  formatTooltipLabel?: RadarChartFormatLabel
 }
 
 type Props = {
@@ -125,6 +126,7 @@ export const RadarChart: React.FC<Props> = ({
   backgroundColor,
   labelSize,
   formatLabel = String,
+  formatTooltipLabel,
   withConcentricColor,
 }) => {
   // В радаре с градиентом может быть только 1 фигура и 3-5 колец
@@ -209,7 +211,11 @@ export const RadarChart: React.FC<Props> = ({
     ? pointsForFigures.flat().filter(item => item.axisName === activeAxis.name)
     : []
 
-  const tooltipValues = pointsOnAxis.map(point => point.label)
+  const tooltipValues = pointsOnAxis.map(point => {
+    return formatTooltipLabel
+      ? formatTooltipLabel(point.originalValue)
+      : formatLabel(point.originalValue)
+  })
 
   const itemWithMaxValueOnAxis = _.maxBy(pointsOnAxis, item => item.originalValue) || {
     xPercent: 0,

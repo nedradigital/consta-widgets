@@ -22,6 +22,9 @@
 }
 
 .labelText {
+
+  white-space: nowrap;
+
   opacity: 0.15;
   color: var(--axis-color);
 }
