@@ -1,6 +1,6 @@
 import { GeoObject, getVisibleObjects } from '../'
 
-import { EMPTY_GEO_DATA } from './get-object-name'
+const EMPTY_GEO_DATA = { type: 'Polygon', geometry: null, properties: null } as const
 
 const countryA: GeoObject = {
   type: 'country',
@@ -31,6 +31,7 @@ const locationA1: GeoObject = {
   id: 'Location A1',
   parentId: countryA.id,
   geoData: EMPTY_GEO_DATA,
+  name: 'A1',
 }
 
 const locationC1: GeoObject = {
@@ -38,6 +39,7 @@ const locationC1: GeoObject = {
   id: 'Location C1',
   parentId: regionC.id,
   geoData: EMPTY_GEO_DATA,
+  name: 'C1',
 }
 
 const locationC2: GeoObject = {
@@ -45,6 +47,7 @@ const locationC2: GeoObject = {
   id: 'Location C2',
   parentId: regionC.id,
   geoData: EMPTY_GEO_DATA,
+  name: 'C2',
 }
 
 const locationD1: GeoObject = {
@@ -52,6 +55,7 @@ const locationD1: GeoObject = {
   id: 'Location D1',
   parentId: regionD.id,
   geoData: EMPTY_GEO_DATA,
+  name: 'D1',
 }
 
 const allObjects = [
@@ -71,7 +75,7 @@ describe('getVisibleObjects', () => {
   })
 
   it('если выбрана страна, возвращает все страны, все регионы и локации внутри выбранной страны', () => {
-    expect(getVisibleObjects(allObjects, countryA)).toEqual([
+    expect(getVisibleObjects(allObjects, countryA.id)).toEqual([
       countryA,
       countryB,
       regionC,
@@ -81,7 +85,7 @@ describe('getVisibleObjects', () => {
   })
 
   it('если выбран регион, возвращает все регионы и локации в выбранном регионе', () => {
-    expect(getVisibleObjects(allObjects, regionC)).toEqual([
+    expect(getVisibleObjects(allObjects, regionC.id)).toEqual([
       regionC,
       regionD,
       locationC1,
@@ -90,6 +94,6 @@ describe('getVisibleObjects', () => {
   })
 
   it('если выбрана локация, возвращает регион, в котором она расположена, и все локации в том же регионе', () => {
-    expect(getVisibleObjects(allObjects, locationC1)).toEqual([regionC, locationC1, locationC2])
+    expect(getVisibleObjects(allObjects, locationC1.id)).toEqual([regionC, locationC1, locationC2])
   })
 })

@@ -6,8 +6,14 @@
 }
 
 .svg {
+  display: block;
+
   width: 100%;
   height: 100%;
+
+  & foreignObject {
+    overflow: visible;
+  }
 }
 
 .item {
@@ -15,7 +21,7 @@
   stroke: rgba(246, 251, 253);
   stroke-opacity: 0.28;
 
-  &.isClickable {
+  &.isSelectable {
     cursor: pointer;
   }
 
@@ -28,25 +34,6 @@
     stroke-opacity: 0.8;
     stroke-width: 2;
   }
-}
-
-.circle {
-  fill: #012031;
-  stroke: #0aa5ff;
-  stroke-width: 4;
-
-  cursor: pointer;
-}
-
-.circleText {
-  fill: #fff;
-
-  font-size: 12px;
-  font-weight: bold;
-
-  pointer-events: none;
-
-  text-shadow: 1px 1px 2px black;
 }
 
 .line {
@@ -77,8 +64,8 @@
   }
 }
 
-.connectionPoint {
-  fill: #0aa5ff;
-  stroke: white;
-  stroke-width: 2;
+.foreignObjectWrapper {
+  display: inline-block;
+
+  transform: translate(-50%, -50%);
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
 
 import russiaHigh from '@amcharts/amcharts4-geodata/russiaCrimeaHigh'
 import russiaLow from '@amcharts/amcharts4-geodata/russiaCrimeaLow'
@@ -12,8 +12,6 @@ import * as d3 from 'd3'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import { LineString } from 'geojson'
 
-import { Tooltip } from '@/components/Tooltip'
-
 import css from './index.css'
 import { ruNames } from './ru-geo-names'
 
@@ -24,6 +22,7 @@ export type GeoObjectLocation = {
   type: 'location'
   geoData: ExtendedFeature
   parentId: string
+  name: string
 }
 
 export type GeoObject =
@@ -70,11 +69,34 @@ export type ConnectionPoint = {
   name: string
 }
 
-type Props = {
-  locations: readonly GeoObjectLocation[]
+export type RenderPoint = (point: GeoPoint) => React.ReactNode
+export type RenderObjectPoint = (
+  location: GeoObject,
+  info: {
+    name: string
+    count: number
+  },
+  mouseHandlers: {
+    onClick: (e: React.MouseEvent) => void
+    onMouseEnter: (e: React.MouseEvent) => void
+  }
+) => React.ReactNode
+export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactNode
+type SelectedObjectId = string | undefined
+
+export type Data = {
   points: readonly GeoPoint[]
+  locations: readonly GeoObjectLocation[]
   connectionPoints: readonly ConnectionPoint[]
+  /** id выбранной страны, региона или локации */
+  selectedObjectId: SelectedObjectId
+  onSelectedObjectIdChange: (selectedObjectId: SelectedObjectId) => void
+  renderPoint: RenderPoint
+  renderObjectPoint: RenderObjectPoint
+  renderConnectionPoint: RenderConnectionPoint
 }
+
+type Props = Data
 
 type Zoom = {
   scale: number
@@ -90,21 +112,6 @@ const featureToObject = (type: 'country' | 'region') => (feature: ExtendedFeatur
   id: String(feature.id),
   geoData: feature,
 })
-
-export const getObjectName = (object: GeoObject | undefined): string | undefined => {
-  if (!object) {
-    return
-  }
-
-  const ruName = ruNames[object.id]
-  if (ruName) {
-    return ruName
-  }
-
-  if ('properties' in object.geoData && object.geoData.properties) {
-    return object.geoData.properties.name
-  }
-}
 
 const getMaps = (
   isZooming: boolean,
@@ -123,8 +130,10 @@ const getMaps = (
 
 export const getVisibleObjects = (
   objects: readonly GeoObject[],
-  selectedObject: GeoObject | undefined
+  selectedObjectId: SelectedObjectId
 ) => {
+  const selectedObject = objects.find(o => o.id === selectedObjectId)
+
   return objects.filter(o => {
     if (!selectedObject) {
       return ['country', 'region'].includes(o.type)
@@ -182,14 +191,31 @@ const geoCoordsToPixels = (
   return pixelCoords ? { x: pixelCoords[0], y: pixelCoords[1] } : undefined
 }
 
-export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) => {
+const getProjection = (width: number, height: number): d3.GeoProjection => {
+  return d3
+    .geoMercator()
+    .clipExtent([[0, 0], [width, height]])
+    .rotate([-90, 0])
+}
+
+export const Map: React.FC<Props> = ({
+  locations,
+  points,
+  connectionPoints,
+  selectedObjectId,
+  onSelectedObjectIdChange,
+  renderPoint,
+  renderObjectPoint,
+  renderConnectionPoint,
+}) => {
   const ref = useRef(null)
+  const svgRef = useRef(null)
   const { width, height } = useComponentSize(ref)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [hoveredObjectId, setHoveredObjectId] = useState<string>()
-  const [selectedObjectId, setSelectedObjectId] = useState<string>()
   const [zoom, setZoom] = useState<Zoom | undefined>()
   const [isZooming, setIsZooming] = useState(false)
+  const setSelectedObjectId = (newId: SelectedObjectId) =>
+    newId !== selectedObjectId && onSelectedObjectIdChange(newId)
 
   const [world, russia] = getMaps(isZooming, zoom && zoom.scale)
   const worldWithoutRussia = useMemo(
@@ -200,27 +226,19 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
     [world]
   )
 
-  const isClickable = (object: GeoObject): boolean =>
+  const isSelectable = (object: GeoObject): boolean =>
     object.id !== selectedObjectId &&
     (object.type === 'location' || locations.some(loc => loc.parentId === object.id))
 
-  const getProjection = useCallback(() => {
-    return d3
-      .geoMercator()
-      .fitSize([width, height], world)
-      .clipExtent([[0, 0], [width, height]])
-      .rotate([-90, 0])
-  }, [world, width, height])
-
   const projection = useMemo(() => {
-    const p = getProjection()
+    const p = getProjection(width, height)
 
     if (zoom) {
       p.scale(zoom.scale).translate([zoom.translateX, zoom.translateY])
     }
 
     return p
-  }, [getProjection, zoom])
+  }, [zoom, width, height])
 
   const geoPath = useMemo(() => d3.geoPath(projection), [projection])
 
@@ -237,13 +255,9 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
     ] as const
   }, [worldWithoutRussia, russia, locations])
 
-  const hoveredObject = allObjects.find(o => o.id === hoveredObjectId)
-  const hoveredObjectName = getObjectName(hoveredObject)
-  const selectedObject = allObjects.find(o => o.id === selectedObjectId)
-
-  const visibleObjects = useMemo(() => getVisibleObjects(allObjects, selectedObject), [
+  const visibleObjects = useMemo(() => getVisibleObjects(allObjects, selectedObjectId), [
     allObjects,
-    selectedObject,
+    selectedObjectId,
   ])
 
   const paths: ReadonlyArray<{
@@ -260,7 +274,7 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
 
   const objectsWithCircles = selectedObjectId
     ? locations.filter(loc => loc.parentId === selectedObjectId)
-    : visibleObjects.filter(isClickable)
+    : visibleObjects.filter(isSelectable)
 
   const objectCircles: readonly ObjectCircle[] = objectsWithCircles
     .map(object => {
@@ -307,7 +321,7 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
     .filter(isDefined)
 
   const pointCircles: readonly PointCircle[] = points
-    .filter(point => (selectedObject ? point.parentId === selectedObject.id : false))
+    .filter(point => selectedObjectId && point.parentId === selectedObjectId)
     .map(point => {
       const pixelCoords = geoCoordsToPixels(projection, point.coords)
 
@@ -334,48 +348,20 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
 
   const allCircles = [...objectCircles, ...pointCircles] as const
 
-  const handleMouseMove = (event: React.MouseEvent) => {
-    setMousePosition({
-      x: event.clientX,
-      y: event.clientY,
-    })
-  }
-
-  const getObjectMouseHandlers = (object: GeoObject) => {
-    if (isClickable(object)) {
-      return {
-        onClick: (e: React.MouseEvent) => {
-          e.stopPropagation()
-          setSelectedObjectId(object.id)
-          setHoveredObjectId(undefined)
-        },
-        onMouseEnter: () => setHoveredObjectId(object.id),
-        onMouseLeave: () => setHoveredObjectId(undefined),
-      }
-    }
-
-    if (selectedObjectId === object.id) {
-      return {
-        onClick: (e: React.MouseEvent) => e.stopPropagation(),
-      }
-    }
-
-    return undefined
-  }
-
   // Анимация зума
   useLayoutEffect(() => {
     if (!width || !height) {
       return
     }
 
+    const selectedObject = allObjects.find(o => o.id === selectedObjectId)
     const featureToZoomOn = selectedObject
       ? selectedObject.geoData
       : {
           type: 'FeatureCollection',
-          features: visibleObjects.filter(isClickable).map(o => o.geoData),
+          features: visibleObjects.filter(isSelectable).map(o => o.geoData),
         }
-    const targetProjection = getProjection().fitExtent(
+    const targetProjection = getProjection(width, height).fitExtent(
       [
         [CENTERING_PADDING, CENTERING_PADDING],
         [width - CENTERING_PADDING, height - CENTERING_PADDING],
@@ -387,6 +373,10 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
       scale: targetProjection.scale(),
       translateX: targetTrX,
       translateY: targetTrY,
+    }
+
+    if (!targetZoom.scale) {
+      return
     }
 
     if (zoom) {
@@ -412,34 +402,55 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
       setZoom(targetZoom)
     }
 
-    // Тут нельзя делать зависимость от selectedObject, т.к. его изменения зацикливают событие зума
-    // (во время зума снижается детализация мира и из-за этого обновляется геометрия selectedObject, хотя selectedObjectId остаётся тем же)
+    // Тут нельзя делать зависимость от объектов, т.к. их изменения зацикливают событие зума
+    // (во время зума снижается детализация мира и из-за этого обновляется геометрия объектов)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedObjectId, getProjection])
+  }, [selectedObjectId, width, height])
 
   return (
     <div ref={ref} className={css.main}>
       {width && height && (
         <svg
+          ref={svgRef}
           viewBox={`0 0 ${width} ${height}`}
           className={css.svg}
-          onMouseMove={handleMouseMove}
-          onClick={() => setSelectedObjectId(undefined)}
+          onClick={e => {
+            if (e.target === svgRef.current) {
+              setSelectedObjectId(undefined)
+            }
+          }}
         >
-          {paths.map(item => (
-            <path
-              key={item.object.id}
-              d={item.d}
-              className={classnames(
-                css.item,
-                item.className,
-                item.object.id === hoveredObjectId && css.isHovered,
-                item.object.id === selectedObjectId && css.isSelected,
-                isClickable(item.object) && css.isClickable
-              )}
-              {...getObjectMouseHandlers(item.object)}
-            />
-          ))}
+          {paths.map(item => {
+            const isItemSelected = item.object.id === selectedObjectId
+            const isItemSelectable = isSelectable(item.object)
+
+            return (
+              <path
+                key={item.object.id}
+                d={item.d}
+                className={classnames(
+                  css.item,
+                  item.className,
+                  item.object.id === hoveredObjectId && css.isHovered,
+                  isItemSelected && css.isSelected,
+                  isItemSelectable && css.isSelectable
+                )}
+                onClick={() => {
+                  if (!isItemSelected) {
+                    setSelectedObjectId(isItemSelectable ? item.object.id : undefined)
+                  }
+                }}
+                onMouseEnter={() => {
+                  setHoveredObjectId(isItemSelectable ? item.object.id : undefined)
+                }}
+                onMouseLeave={e => {
+                  if (e.relatedTarget === svgRef.current) {
+                    setHoveredObjectId(undefined)
+                  }
+                }}
+              />
+            )
+          })}
 
           {/* Все линии идут до кругов, чтобы линии всегда были под кругами */}
           {allCircles.map((circle, circleIdx) =>
@@ -466,54 +477,43 @@ export const Map: React.FC<Props> = ({ locations, points, connectionPoints }) =>
 
           {allCircles.map((circle, idx) => {
             const { x, y } = circle
-            const handlers = isPointCircle(circle)
-              ? { onClick: (e: React.MouseEvent) => e.stopPropagation() }
-              : getObjectMouseHandlers(circle.object)
 
             return (
-              <React.Fragment key={idx}>
-                <circle cx={x} cy={y} r={10} className={css.circle} {...handlers} />
-                <text
-                  className={css.circleText}
-                  x={x}
-                  y={y}
-                  dominantBaseline="middle"
-                  textAnchor="middle"
-                >
-                  {isPointCircle(circle) ? circle.point.name : String(circle.count)}
-                </text>
-              </React.Fragment>
+              <foreignObject key={idx} x={x} y={y}>
+                <div className={css.foreignObjectWrapper}>
+                  {isPointCircle(circle)
+                    ? renderPoint(circle.point)
+                    : renderObjectPoint(
+                        circle.object,
+                        {
+                          count: circle.count,
+                          name:
+                            circle.object.type === 'location'
+                              ? circle.object.name
+                              : ruNames[circle.object.id],
+                        },
+                        {
+                          onClick: () => setSelectedObjectId(circle.object.id),
+                          onMouseEnter: () => setHoveredObjectId(circle.object.id),
+                        }
+                      )}
+                </div>
+              </foreignObject>
             )
           })}
 
           {connectionPoints.map(connectionPoint => {
-            const r = 10
-            const { coords } = connectionPoint
-            const [x, y] = projection([coords[0], coords[1]]) || [0, 0]
+            const coords = geoCoordsToPixels(projection, connectionPoint.coords)
 
-            return (
-              <React.Fragment key={connectionPoint.id}>
-                <circle cx={x} cy={y} r={r} className={css.connectionPoint} />
-                <text
-                  className={css.circleText}
-                  x={x}
-                  y={y}
-                  dominantBaseline="hanging"
-                  textAnchor="middle"
-                  transform={`translate(0, ${r + 3})`}
-                >
-                  {connectionPoint.name}
-                </text>
-              </React.Fragment>
-            )
+            return coords ? (
+              <foreignObject key={connectionPoint.id} x={coords.x} y={coords.y}>
+                <div className={css.foreignObjectWrapper}>
+                  {renderConnectionPoint(connectionPoint)}
+                </div>
+              </foreignObject>
+            ) : null
           })}
         </svg>
-      )}
-
-      {hoveredObjectName && (
-        <Tooltip isVisible direction="top" x={mousePosition.x} y={mousePosition.y}>
-          {hoveredObjectName}
-        </Tooltip>
       )}
     </div>
   )

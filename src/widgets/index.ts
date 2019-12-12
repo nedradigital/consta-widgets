@@ -17,3 +17,4 @@ export { TrafficLightWidgetContent as TrafficLightWidget } from './TrafficLightW
 export { ImagesWidgetContent as ImagesWidget } from './ImagesWidget'
 export { ButtonWidgetContent as ButtonWidget } from './ButtonWidget'
 export { ChoiceGroupWidgetContent as ChoiceGroup } from './ChoiceGroupWidget'
+export { MapWidgetContent as MapWidget } from './MapWidget'

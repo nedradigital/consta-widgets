@@ -1,9 +1,21 @@
+import React from 'react'
+
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'
 
-import { ConnectionPoint, GeoObject, GeoObjectLocation, GeoPoint } from '../'
+import {
+  ConnectionPoint,
+  GeoObject,
+  GeoObjectLocation,
+  GeoPoint,
+  RenderConnectionPoint,
+  RenderObjectPoint,
+  RenderPoint,
+} from '../'
+
+import css from './index.css'
 
 const locationsData: ReadonlyArray<readonly [string, ExtendedFeatureCollection]> = [
   ['RU-YAN', require('./ЯНАО.geojson')],
@@ -49,6 +61,7 @@ const yaMapsToGeoObject = (
       id,
       parentId,
       geoData: transformFeature(id, feature),
+      name: feature.properties ? feature.properties.description : id,
     }
   })
 }
@@ -109,3 +122,36 @@ export const EXAMPLE_POINTS: readonly GeoPoint[] = locationsData
     yaMapsToGeoPoint(data, EXAMPLE_LOCATIONS.filter(location => location.parentId === id))
   )
   .flat()
+
+export const renderExampleConnectionPoint: RenderConnectionPoint = connectionPoint => {
+  return (
+    <button
+      type="button"
+      className={css.connectionPoint}
+      onClick={() => alert(`Клик на ЦУБ:\n${JSON.stringify(connectionPoint)}`)}
+    >
+      <span className={css.connectionPointText}>{connectionPoint.name}</span>
+    </button>
+  )
+}
+
+export const renderExamplePoint: RenderPoint = point => {
+  return (
+    <button
+      type="button"
+      className={css.point}
+      onClick={() => alert(`Клик по скважине:\n${JSON.stringify(point)}`)}
+    >
+      <span className={css.pointText}>{point.name}</span>
+    </button>
+  )
+}
+
+export const renderExampleObjectPoint: RenderObjectPoint = (_, info, mouseHandlers) => {
+  return (
+    <button type="button" className={css.point} {...mouseHandlers}>
+      {info.count}
+      <span className={css.pointText}>{info.name}</span>
+    </button>
+  )
+}
