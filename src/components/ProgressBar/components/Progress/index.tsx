@@ -2,8 +2,8 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { getValueRatio, Size } from '@/components/ProgressBar'
-import { Legend, Tick } from '@/components/ProgressBar/components/Legend'
+import { getValueRatio, Size } from '../../'
+import { Legend, Tick } from '../Legend'
 
 import css from './index.css'
 

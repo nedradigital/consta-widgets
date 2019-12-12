@@ -19,19 +19,21 @@ export type Data = {
   ticks?: readonly Tick[]
   summary: string | number
   colorGroupName: string
+  caption?: string
 }
 
 type Props = {
   size?: Size
   colorGroups: ColorGroups
   data: readonly Data[]
+  isCaptionBold?: boolean
 }
 
 export const getValueRatio = (val: number, valMin: number, valMax: number) => {
   return ((val - valMin) / (valMax - valMin)) * 100
 }
 
-export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) => {
+export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
   const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
   const getLegendClass = (legendData: Data['ticks']) =>
     legendData && legendData.length ? css.withLegend : ''
@@ -41,9 +43,19 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) 
       <div className={css.progress}>
         {data.map((dataItem, i) => (
           <div
-            className={classnames(css.progressLine, sizeClass, getLegendClass(dataItem.ticks))}
+            className={classnames(
+              css.progressLine,
+              sizeClass,
+              getLegendClass(dataItem.ticks),
+              dataItem.caption && css.hasCaption
+            )}
             key={i}
           >
+            {dataItem.caption && (
+              <span className={classnames(css.caption, isCaptionBold && css.isCaptionBold)}>
+                {dataItem.caption}
+              </span>
+            )}
             <Progress size={size} data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
           </div>
         ))}
@@ -52,13 +64,19 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) 
       <div>
         {data.map((dataItem, i) => (
           <div
-            className={classnames(css.progressLine, sizeClass, getLegendClass(dataItem.ticks))}
+            className={classnames(
+              css.progressLine,
+              sizeClass,
+              getLegendClass(dataItem.ticks),
+              dataItem.caption && css.hasCaption
+            )}
             key={i}
           >
             <Summary
               summary={dataItem.summary}
               color={colorGroups[dataItem.colorGroupName]}
               size={size}
+              hasCaption={!!dataItem.caption}
             />
           </div>
         ))}
