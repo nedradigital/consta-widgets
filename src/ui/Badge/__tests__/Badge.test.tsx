@@ -6,13 +6,13 @@ import { Badge, statuses } from '../'
 import css from '../index.css'
 
 describe('Badge', () => {
-  it('has text', () => {
+  it('отображает текст', () => {
     const wrapper = shallow(<Badge children="text" />)
 
     expect(wrapper.text()).toEqual('text')
   })
 
-  it('has class with default status', () => {
+  it('отображается без класса статуса, если статус не задан', () => {
     const wrapper = shallow(<Badge children="text" />)
 
     expect(wrapper).toHaveClassName(css.badge)
@@ -21,7 +21,7 @@ describe('Badge', () => {
     expect(wrapper).not.toHaveClassName(css.danger)
   })
 
-  it('has class with custom status', () => {
+  it('отображается с классом заданного статуса', () => {
     statuses.forEach(status => {
       const wrapper = shallow(<Badge status={status} children="text" />)
 

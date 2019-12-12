@@ -21,7 +21,7 @@ describe('migration', () => {
     jest.clearAllMocks()
   })
 
-  it('migrates up', () => {
+  it('мигрирует вверх', () => {
     const migration1Spy = jest.spyOn(migration1, 'up')
     const migration2Spy = jest.spyOn(migration2, 'up')
 
@@ -39,7 +39,7 @@ describe('migration', () => {
     )
   })
 
-  it('migrates down', () => {
+  it('мигрирует вниз', () => {
     const migration1Spy = jest.spyOn(migration1, 'down')
     const migration2Spy = jest.spyOn(migration2, 'down')
 
@@ -57,7 +57,7 @@ describe('migration', () => {
     )
   })
 
-  it('does nothing whe version are the same', () => {
+  it('ничего не делает, если версия та же самая', () => {
     expect(migrate(dashboard0Data, 0)).toEqual(dashboard0Data)
   })
 })
