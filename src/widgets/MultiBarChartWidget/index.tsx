@@ -23,16 +23,15 @@ export const defaultParams: Params = {
 export const MultiBarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
   params: { orientation, hasRatio },
-}) => (
-  <div style={{ height: 300 }}>
-    <MultiBarChart {...data} hasRatio={hasRatio} orientation={orientation} />
-  </div>
-)
+}) => <MultiBarChart {...data} hasRatio={hasRatio} orientation={orientation} />
 
 export const MultiBarChartWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'МультиБарчарт',
-  defaultParams,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   dataType: DataType.MultiBarChart,
   Content: MultiBarChartWidgetContent,
   renderSettings(params, onChangeParam) {
