@@ -37,7 +37,7 @@ export const Menu: React.FC<Props & MenuProps> = ({
     (event: React.ChangeEvent<HTMLSelectElement>) => {
       onChange({ ...settings, margin: event.target.value as MarginSize })
     },
-    [onChange]
+    [onChange, settings]
   )
 
   const handleChangeVersion = (event: React.ChangeEvent<HTMLSelectElement>) => {

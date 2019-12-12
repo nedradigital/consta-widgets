@@ -33,6 +33,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
     if (openOnImage !== undefined && openOnImage !== currentImageIdx) {
       setCurrentImageIdx(openOnImage)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openOnImage])
 
   useLayoutEffect(() => {
@@ -40,7 +41,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
     if (clampedIdx !== currentImageIdx) {
       setCurrentImageIdx(clampedIdx)
     }
-  }, [currentImageIdx])
+  }, [currentImageIdx, images])
 
   const goLeft = () => setCurrentImageIdx(currentImageIdx - 1)
   const goRight = () => setCurrentImageIdx(currentImageIdx + 1)

@@ -81,7 +81,7 @@ export const Axis: React.FC<Props> = ({
     d3.select(gridRef.current)
       .selectAll('g')
       .remove()
-  }, [orientation])
+  }, [labelsAxis, gridRef, orientation])
 
   useLayoutEffect(() => {
     // Labels

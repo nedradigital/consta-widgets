@@ -151,7 +151,7 @@ export const MultiBar: React.FC<Props> = ({
     d3.select(staticTooltipsRef.current)
       .selectAll('foreignObject')
       .remove()
-  }, [isVertical, showValues])
+  }, [isVertical, showValues, staticTooltipsRef])
 
   useLayoutEffect(() => {
     if (ref) {
