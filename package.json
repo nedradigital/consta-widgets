@@ -11,6 +11,7 @@
   "scripts": {
     "build": "yarn generate-css-types && ROOT_PATH=./ NODE_ENV=production webpack --config webpack/webpack.config.js",
     "build:watch": "yarn generate-css-types && ROOT_PATH=./ NODE_ENV=development webpack --config webpack/webpack.config.js --watch",
+    "build:analyze": "ANALYZE=1 yarn build",
     "storybook": "NODE_ENV=development ROOT_PATH=./ NODE_PATH=./node_modules start-storybook -p 6006 --ci",
     "storybook:build": "NODE_ENV=production ROOT_PATH=./ NODE_PATH=./node_modules build-storybook -o build/storybook",
     "lint": "npm-run-all --parallel lint:*",
@@ -54,7 +55,9 @@
     ]
   },
   "peerDependencies": {
-    "@gpn-design/uikit": "0.0.9"
+    "@gpn-design/uikit": "0.0.9",
+    "react": "16.8.6",
+    "react-dom": "16.8.6"
   },
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
@@ -97,9 +100,12 @@
     "npm-run-all": "4.1.5",
     "ora": "3.4.0",
     "postcss-functions": "3.0.0",
+    "react": "16.8.6",
+    "react-dom": "16.8.6",
     "storybook-addon-react-docgen": "1.2.6",
     "storybook-addon-smart-knobs": "6.0.0",
     "terser-webpack-plugin": "1.3.0",
+    "webpack-bundle-analyzer": "3.6.0",
     "webpack-cli": "3.3.9",
     "webpack-merge": "4.2.2"
   },

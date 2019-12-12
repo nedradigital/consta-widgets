@@ -7,6 +7,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const getCommonConfig = require('@gaz/configs/config/webpack/common.webpack')
 
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
 const isProduction = process.env.NODE_ENV === 'production'
 const rootPath = process.env.ROOT_PATH
 const srcPath = path.resolve(rootPath, 'src')
@@ -35,8 +37,13 @@ const libConfig = {
   },
   plugins: [
     isProduction && new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([{ from: 'types', to: 'types' }])
+    new CopyWebpackPlugin([{ from: 'types', to: 'types' }]),
+    process.env.ANALYZE && new BundleAnalyzerPlugin()
   ].filter(Boolean),
+  externals: {
+    react: 'react',
+    'react-dom': 'react-dom',
+  }
 }
 
 module.exports = withCustomRules(
