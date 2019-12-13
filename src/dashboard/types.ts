@@ -6,6 +6,7 @@ import { Data as DonutChartData } from '@/components/DonutChart'
 import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
 import { Line } from '@/components/LinearChart'
+import { Data as MapData } from '@/components/Map'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
 import { Data as PyramidData } from '@/components/PyramidChart'
@@ -57,6 +58,7 @@ export enum DataType {
   Button,
   ChoiceGroup,
   Checkbox,
+  Map,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -133,6 +135,7 @@ export type DataMap = {
     intermediate?: boolean
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   }
+  [DataType.Map]: MapData
 }
 
 export type Dataset = {

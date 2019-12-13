@@ -781,6 +781,16 @@ const mockData: DataMap = {
     disabled: false,
     intermediate: false,
   },
+  [DataType.Map]: {
+    connectionPoints: [],
+    locations: [],
+    points: [],
+    selectedObjectId: undefined,
+    renderConnectionPoint: () => null,
+    renderObjectPoint: () => null,
+    renderPoint: () => null,
+    onSelectedObjectIdChange: () => {},
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
