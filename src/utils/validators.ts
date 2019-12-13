@@ -138,7 +138,7 @@ export const widgetDataIsEmpty = (
 
       const sections = widgetData.data.map(item => item.sections).flat()
 
-      return sections.length > 0
+      return sections.length === 0
     }
     case DataType.Legend: {
       const widgetData = data as DataMap[DataType.Legend] | undefined
