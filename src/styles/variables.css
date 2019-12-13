@@ -8,9 +8,9 @@
   --bg-color-white-semi: rgba(255, 255, 255, 0.05);
   --bg-color-additional: #b1c4e3;
   --bg-color-additional-opacity-30: rgba(177, 196, 227, 0.3);
-  --text-color: rgb(246, 251, 253);
+  --text-color: rgb(255, 255, 255);
   --text-color-semi: rgba(255, 255, 255, 0.5);
-  --text-color-70: rgba(246, 251, 253, 0.7);
+  --text-color-70: rgba(255, 255, 255, 0.7);
   --text-color-black: #000;
   --text-color-black-semi: rgba(0, 0, 0, 0.5);
   --text-color-additional: #b1c4e3;
