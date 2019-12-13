@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity "sha1-Yipyvr0eP0jZIVY7S2CnYilagfw= sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA=="
 
-"@gaz/configs@0.2.9":
-  version "0.2.9"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.9.tgz#124497195ba88b63834001e9f0f6c4e51b338536"
-  integrity sha512-O8QRn2ovwgF9NpiGxew1GYlXVe1hPsxP/BjhrMBgk/u7BRgEsm37aHpG4bGKqamvUJSHsKa2on+Vo1LrMftU4Q==
+"@gaz/configs@0.2.10":
+  version "0.2.10"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.10.tgz#d741e1041781a2ca2585e09f0f2a23a922560758"
+  integrity sha512-bFjsI9PUcM10GcXbkFaIaCnUs5pi1KDipYmR8LhYy0YhDbhru7kIzEwJqiT4DcnVhIAVjacqBsdS7QSmoJSPPw==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"

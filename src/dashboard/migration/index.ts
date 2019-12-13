@@ -15,7 +15,7 @@ export type Migration<
 export const getApplicableMigrations = (
   fromVersion: number,
   toVersion: number
-): readonly Migration<any, any>[] => {
+): ReadonlyArray<Migration<any, any>> => {
   const goingUp = toVersion > fromVersion
   const [minVersion, maxVersion] = _.sortBy([fromVersion, toVersion])
   const filteredMigrations = migrations.filter(

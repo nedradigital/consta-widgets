@@ -1,7 +1,7 @@
 import { Layout } from 'react-grid-layout'
 
 export namespace Dashboard0 {
-  export type ColumnsContent = ReadonlyArray<ReadonlyArray<BoxItem>>
+  export type ColumnsContent = ReadonlyArray<readonly BoxItem[]>
 
   export type ColumnsItem = {
     columns: ColumnsContent

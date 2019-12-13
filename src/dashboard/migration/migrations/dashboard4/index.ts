@@ -4,7 +4,7 @@ import { Migration } from '../..'
 import { Dashboard3 } from '../dashboard3'
 
 export namespace Dashboard4 {
-  export type ColumnsContent = ReadonlyArray<ReadonlyArray<BoxItem>>
+  export type ColumnsContent = ReadonlyArray<readonly BoxItem[]>
 
   export type BoxItemMarginSize = '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl'
 
