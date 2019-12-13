@@ -102,7 +102,7 @@ storiesOf('dashboard/Constructor', module)
               location.reload()
             }}
             viewMode={boolean('viewMode', viewMode)}
-            data={{}}
+            data={object('data', {})}
             baseWidthForScaling={number('baseWidthForScaling', 1024)}
             baseHeightForScaling={number('baseHeightForScaling', 768)}
             baseFontSize={number('baseFontSize', 16)}

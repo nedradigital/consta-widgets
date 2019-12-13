@@ -58,6 +58,7 @@ const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
 
     return (
       <>
+        <WidgetSettingsItem name="id">{item.id}</WidgetSettingsItem>
         {dataType && (
           <WidgetSettingsItem name="Датасет">
             <select
