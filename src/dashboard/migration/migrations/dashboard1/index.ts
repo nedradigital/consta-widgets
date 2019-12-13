@@ -6,7 +6,7 @@ import { Migration } from '../../index'
 import { Dashboard0 } from '../dashboard0'
 
 export namespace Dashboard1 {
-  export type ColumnsContent = ReadonlyArray<ReadonlyArray<BoxItem>>
+  export type ColumnsContent = ReadonlyArray<readonly BoxItem[]>
 
   export type ColumnsItem = {
     columns: ColumnsContent
