@@ -8,7 +8,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Images
 type Data = DataMap[typeof dataType]
 
-const widgetId = 'd1a60ed1-96de-49b2-badd-052e0408d55a'
+export const widgetId = 'd1a60ed1-96de-49b2-badd-052e0408d55a'
 
 type Params = { [key: string]: never }
 
