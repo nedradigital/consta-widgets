@@ -11,28 +11,6 @@ declare module '*.gif' {
   export default content
 }
 
-declare module 'react-grid-layout-tmp-fork' {
-  import ReactGridLayout, { Layout, Responsive, WidthProviderProps } from 'react-grid-layout'
-
-  function WidthProvider<P>(
-    component: React.ComponentClass<P>
-  ): React.ComponentClass<
-    P &
-      WidthProviderProps & {
-        isDroppable: boolean
-        onDrop: (params: { x: number; y: number }) => void
-        droppingPositionShift?: {
-          x: number
-          y: number
-        }
-      }
-  >
-
-  export default ReactGridLayout
-
-  export { Layout, Responsive, WidthProvider }
-}
-
 declare module 'storybook-addon-smart-knobs' {
   import { DecoratorFn } from '@storybook/react'
 

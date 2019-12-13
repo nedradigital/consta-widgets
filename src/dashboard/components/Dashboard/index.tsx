@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useMemo, useRef } from 'react'
 import { useDrop } from 'react-dnd'
-import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout-tmp-fork'
+import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout'
 
 import { updateAt } from '@gaz/utils/lib/array'
 import { updateBaseSize } from '@gaz/utils/lib/css'
@@ -155,7 +155,6 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
         isDraggable={!viewMode}
         isResizable={!viewMode}
         onDrop={onDrop}
-        droppingPositionShift={{ x: -110, y: -80 }}
         onResizeStop={onResizeStop}
         onDragStop={updateBox}
       >
