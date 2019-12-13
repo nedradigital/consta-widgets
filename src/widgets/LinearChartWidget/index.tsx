@@ -77,6 +77,9 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     withZoom={withZoom}
     isVertical={isVertical}
     formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
+    formatLabelForTooltip={
+      dataset && dataset.formatLabelForTooltip ? dataset.formatLabelForTooltip : undefined
+    }
     secondaryScaleUnit={secondaryScaleUnit}
   />
 )
