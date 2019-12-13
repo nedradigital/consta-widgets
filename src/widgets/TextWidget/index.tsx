@@ -1,4 +1,5 @@
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { Hint } from '@/ui/Hint'
 import { StyleProps, Text } from '@/ui/Text'
@@ -100,25 +101,17 @@ export const TextWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Текст">
-          <input
-            type="text"
-            value={params.text}
-            onChange={e => onChangeParam('text', e.target.value)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Тип">
-          <select
-            value={params.type}
-            onChange={e => onChangeParam('type', e.target.value as TypeNames)}
-          >
-            {typeNames.map(type => (
-              <option key={type} value={type}>
-                {textType[type].text}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsText
+          name="Текст"
+          value={params.text}
+          onChange={value => onChangeParam('text', value)}
+        />
+        <WidgetSettingsSelect
+          name="Тип"
+          value={params.type}
+          onChange={value => onChangeParam('type', value)}
+          values={typeNames.map(i => ({ value: i, name: i }))}
+        />
       </>
     )
   },

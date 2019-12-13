@@ -1,7 +1,8 @@
 import * as React from 'react'
 
 import { ProgressBar, Size, sizes } from '@/components/ProgressBar'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -36,22 +37,17 @@ export const ProgressBarWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Размер">
-          <select value={params.size} onChange={e => onChangeParam('size', e.target.value as Size)}>
-            {sizes.map(size => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Заголовок жирный">
-          <input
-            type="checkbox"
-            checked={params.isCaptionBold}
-            onChange={e => onChangeParam('isCaptionBold', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Размер"
+          value={params.size}
+          onChange={value => onChangeParam('size', value)}
+          values={sizes.map(i => ({ name: i, value: i }))}
+        />
+        <WidgetSettingsCheckbox
+          name="Заголовок жирный"
+          value={params.isCaptionBold}
+          onChange={value => onChangeParam('isCaptionBold', value)}
+        />
       </>
     )
   },

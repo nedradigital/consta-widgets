@@ -2,7 +2,8 @@ import * as React from 'react'
 
 import { Stats } from '@/components/Stats'
 import { Size, sizes } from '@/components/Stats'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { Status, statuses } from '@/ui/Badge'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -20,7 +21,7 @@ export type PositionNames = typeof positionNames[number]
 
 type Params = {
   badgePosition: PositionNames
-  topStyles: string
+  topStyles: TopTypes
   size: Size
   top: string
   statusBadge: Status
@@ -66,58 +67,35 @@ export const StatsWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Размер">
-          <select value={params.size} onChange={e => onChangeParam('size', e.target.value as Size)}>
-            {sizes.map(size => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Текст верхней строки">
-          <input
-            type="text"
-            value={params.top}
-            onChange={e => onChangeParam('top', e.target.value)}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Вверхняя строка подзаголовок?">
-          <select
-            value={params.topStyles}
-            onChange={e => onChangeParam('topStyles', e.target.value as TopTypes)}
-          >
-            {topTypes.map(type => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Позиция Badge">
-          <select
-            value={params.badgePosition}
-            onChange={e => onChangeParam('badgePosition', e.target.value as PositionNames)}
-          >
-            {positionNames.map(position => (
-              <option key={position} value={position}>
-                {position}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Статус Badge">
-          <select
-            value={params.statusBadge}
-            onChange={e => onChangeParam('statusBadge', e.target.value as Status)}
-          >
-            {statuses.map(status => (
-              <option key={status} value={status}>
-                {status}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Размер"
+          value={params.size}
+          onChange={value => onChangeParam('size', value)}
+          values={sizes.map(i => ({ value: i, name: i }))}
+        />
+        <WidgetSettingsText
+          name="Текст верхней строки"
+          value={params.top}
+          onChange={value => onChangeParam('top', value)}
+        />
+        <WidgetSettingsSelect
+          name="Вверхняя строка подзаголовок?"
+          value={params.topStyles}
+          onChange={value => onChangeParam('topStyles', value)}
+          values={topTypes.map(i => ({ value: i, name: i }))}
+        />
+        <WidgetSettingsSelect
+          name="Позиция Badge"
+          value={params.badgePosition}
+          onChange={value => onChangeParam('badgePosition', value)}
+          values={positionNames.map(i => ({ value: i, name: i }))}
+        />
+        <WidgetSettingsSelect
+          name="Статус Badge"
+          value={params.statusBadge}
+          onChange={value => onChangeParam('statusBadge', value)}
+          values={statuses.map(i => ({ value: i, name: i }))}
+        />
       </>
     )
   },

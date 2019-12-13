@@ -1,8 +1,8 @@
-import { ChangeEvent } from 'react'
 import * as React from 'react'
 
 import { Size, sizes, TableLegend } from '@/components/TableLegend'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -34,27 +34,17 @@ export const TableLegendWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Высота строки">
-          <select
-            value={params.size}
-            onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-              onChangeParam('size', e.target.value as Size)
-            }}
-          >
-            {sizes.map(size => (
-              <option key={size} value={size}>
-                {size}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Показать легенду">
-          <input
-            type="checkbox"
-            checked={params.isShowLegend}
-            onChange={e => onChangeParam('isShowLegend', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsSelect
+          name="Высота строки"
+          value={params.size}
+          onChange={value => onChangeParam('size', value)}
+          values={sizes.map(i => ({ name: i, value: i }))}
+        />
+        <WidgetSettingsCheckbox
+          name="Показать легенду"
+          value={params.isShowLegend}
+          onChange={value => onChangeParam('isShowLegend', value)}
+        />
       </>
     )
   },

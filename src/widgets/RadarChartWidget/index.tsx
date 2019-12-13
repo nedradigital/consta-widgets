@@ -1,7 +1,9 @@
 import * as React from 'react'
 
 import { RadarChart, RadarChartLabelSize, radarChartLabelSizes } from '@/components/RadarChart'
-import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -37,32 +39,22 @@ export const RadarChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
-        <WidgetSettingsItem name="Количество засечек">
-          <input
-            type="number"
-            value={params.ticks}
-            onChange={e => onChangeParam('ticks', Number(e.target.value))}
-          />
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Размер подписи у засечек">
-          <select
-            value={params.labelSize}
-            onChange={e => onChangeParam('labelSize', e.target.value as RadarChartLabelSize)}
-          >
-            {radarChartLabelSizes.map(labelSize => (
-              <option key={labelSize} value={labelSize}>
-                {labelSize}
-              </option>
-            ))}
-          </select>
-        </WidgetSettingsItem>
-        <WidgetSettingsItem name="Раскрасить градиентом">
-          <input
-            type="checkbox"
-            checked={params.withConcentricColor}
-            onChange={e => onChangeParam('withConcentricColor', e.target.checked)}
-          />
-        </WidgetSettingsItem>
+        <WidgetSettingsNumber
+          name="Количество засечек"
+          value={params.ticks}
+          onChange={value => onChangeParam('ticks', value)}
+        />
+        <WidgetSettingsSelect
+          name="Размер подписи у засечек"
+          value={params.labelSize}
+          onChange={value => onChangeParam('labelSize', value)}
+          values={radarChartLabelSizes.map(i => ({ name: i, value: i }))}
+        />
+        <WidgetSettingsCheckbox
+          name="Раскрасить градиентом"
+          value={params.withConcentricColor}
+          onChange={value => onChangeParam('withConcentricColor', value)}
+        />
       </>
     )
   },
