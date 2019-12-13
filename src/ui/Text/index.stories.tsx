@@ -14,3 +14,11 @@ storiesOf('ui/Text', module)
   .add('interactive', () => (
     <Text size={select('size', sizes, sizes[0])}>{text('Text', 'Какой-то текст')}</Text>
   ))
+  .add('with text wrapping', () => (
+    <Text size={select('size', sizes, sizes[0])}>
+      {text(
+        'Text',
+        'Текст, который мы хотим перенести вот тут\nВот тут вот да и тут\nНу думаю смысл понятен'
+      )}
+    </Text>
+  ))
