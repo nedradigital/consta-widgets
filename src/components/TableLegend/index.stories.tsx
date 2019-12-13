@@ -83,14 +83,14 @@ const getList = () => {
 storiesOf('components/TableLegend', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => (
+  .add('обычная', () => (
     <TableLegend
       isShowLegend={false}
       size="l"
       data={object('data', getWidgetMockData(DataType.TableLegend))}
     />
   ))
-  .add('with <TrafficLight />', () => (
+  .add('со "Светофором"', () => (
     <TableLegend
       isShowLegend={false}
       size="l"

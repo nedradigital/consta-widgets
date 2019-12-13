@@ -1,5 +1,9 @@
 import React from 'react'
 
+import {
+  filters as tableLegendFilters,
+  list as tableLegendList,
+} from '@/components/TableLegend/mockData'
 import { DataMap, DataType } from '@/dashboard/types'
 
 const roadmapData = {
@@ -438,53 +442,7 @@ const mockData: DataMap = {
       fourth: 'yellowgreen',
       fifth: 'white',
     },
-    list: [
-      {
-        field: 'Приобское',
-        year: 1982,
-        type: 'Нефтяное',
-        estimatedReserves: 5000,
-        remainingReserves: 1700,
-        production: 33,
-        total: 313,
-      },
-      {
-        field: 'Уренгойское газонефтеконденсатное',
-        year: 2001,
-        type: 'Конденсатное',
-        estimatedReserves: 7540,
-        remainingReserves: 7540,
-        production: 363,
-        total: 88,
-      },
-      {
-        field: 'Красноленинская группа',
-        year: 1985,
-        type: 'Комбинированное',
-        estimatedReserves: 8766,
-        remainingReserves: 3374,
-        production: 256,
-        total: 434,
-      },
-      {
-        field: 'Великое',
-        year: 1989,
-        type: 'Конденсатное',
-        estimatedReserves: 1697,
-        remainingReserves: 4818,
-        production: 250,
-        total: 236,
-      },
-      {
-        field: 'Русское газонефтяное',
-        year: 1997,
-        type: 'Нефтяное',
-        estimatedReserves: 5169,
-        remainingReserves: 3712,
-        production: 292,
-        total: 417,
-      },
-    ],
+    list: tableLegendList,
     legendFields: [
       {
         field: 'Приобское',
@@ -519,7 +477,7 @@ const mockData: DataMap = {
         className: 'textLeftPosition',
       },
       {
-        title: 'Год октрытия',
+        title: 'Год открытия',
         accessor: 'year',
         className: 'textCenterPosition',
       },
@@ -549,6 +507,7 @@ const mockData: DataMap = {
         className: 'textRightPosition',
       },
     ],
+    filters: tableLegendFilters,
   },
   [DataType.TrafficLight]: {
     status: 'normal',
