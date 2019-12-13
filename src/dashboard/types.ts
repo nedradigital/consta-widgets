@@ -147,6 +147,7 @@ export type Dataset = {
   id: string
   type: DataType
   formatLabel?: (n: number) => string
+  formatLabelForTooltip?: (n: number) => string
 }
 
 export type Data = { [k: string]: DataMap[DataType] }
