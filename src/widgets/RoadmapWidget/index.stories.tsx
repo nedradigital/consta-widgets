@@ -8,7 +8,7 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { defaultParams, RoadmapWidget, RoadmapWidgetContent } from '.'
 
 storiesOf('widgets/RoadmapWidget', module)
-  .addDecorator(blockCenteringDecorator())
+  .addDecorator(blockCenteringDecorator({ width: '100vw' }))
   .add('interactive', () => (
     <RoadmapWidgetContent data={object('data', RoadmapWidget.mockData)} params={defaultParams} />
   ))

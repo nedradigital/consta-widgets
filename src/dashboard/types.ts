@@ -108,6 +108,10 @@ export type DataMap = {
   [DataType.Roadmap]: ReadonlyArray<
     {
       title?: string
+      subTitle?: {
+        name: string
+        value: string
+      }
       data: {
         values: readonly RoadmapData[]
         titles: readonly [string, string]

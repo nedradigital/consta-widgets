@@ -1,7 +1,41 @@
-.content {
+.block {
+  width: 100%;
+
   & + & {
     margin-top: calc-size(20);
   }
+}
+
+.text {
+  display: inline-flex;
+}
+
+.button {
+  cursor: pointer;
+}
+
+.icon {
+  display: inline-flex;
+
+  width: calc-size(24);
+  height: calc-size(24);
+  margin-right: calc-size(8);
+
+  vertical-align: bottom;
+
+  transition: transform 0.3s;
+  transform: rotate(180deg);
+
+  fill: var(--text-color);
+
+  &.isOpened {
+    transform: rotate(0);
+  }
+}
+
+.subTitle {
+  margin-right: calc-size(8);
+  margin-left: calc-size(32);
 }
 
 .table {

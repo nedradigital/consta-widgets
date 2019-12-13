@@ -66,6 +66,7 @@
     "classnames": "2.2.6",
     "d3": "5.12.0",
     "lodash": "4.17.11",
+    "react-animate-height": "2.0.17",
     "react-dnd": "9.3.2",
     "react-dnd-html5-backend": "9.3.2",
     "react-grid-layout-tmp-fork": "0.18.0",

@@ -125,6 +125,7 @@
 
   width: calc-size(12);
   height: calc-size(12);
+  margin-top: calc-size(-2);
 
   vertical-align: middle;
 
@@ -140,8 +141,6 @@
   display: inline-flex;
 
   margin: 0 4px;
-
-  vertical-align: middle;
 }
 
 .title {

@@ -725,6 +725,10 @@ const mockData: DataMap = {
   [DataType.Roadmap]: [
     {
       title: 'ДО 1',
+      subTitle: {
+        name: 'объектов',
+        value: '5',
+      },
       colorGroups: {
         green: '#219653',
         violet: '#AB63EE',
