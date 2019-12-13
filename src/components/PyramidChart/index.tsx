@@ -79,7 +79,13 @@ export const PyramidChart: React.FC<Props> = ({
   const tableWidthResponsive = constraint ? pyramidWidth : '100%'
 
   return (
-    <div className={classnames(css.main, { s: css.sizeS, m: css.sizeM }[fontSize])}>
+    <div
+      className={classnames(
+        css.main,
+        { s: css.sizeS, m: css.sizeM }[fontSize],
+        constraint && css.isConstraint
+      )}
+    >
       <div
         className={css.svgWrapper}
         style={{ width: pyramidWidth, height: containerHeightResponsive }}
