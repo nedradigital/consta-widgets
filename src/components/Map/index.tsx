@@ -13,7 +13,6 @@ import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import { LineString } from 'geojson'
 
 import css from './index.css'
-import { ruNames } from './ru-geo-names'
 
 type ExtendedFeatureOrCollection = ExtendedFeature | ExtendedFeatureCollection
 
@@ -73,7 +72,6 @@ export type RenderPoint = (point: GeoPoint) => React.ReactNode
 export type RenderObjectPoint = (
   location: GeoObject,
   info: {
-    name: string
     count: number
   },
   mouseHandlers: {
@@ -90,6 +88,7 @@ export type Data = {
   connectionPoints: readonly ConnectionPoint[]
   /** id выбранной страны, региона или локации */
   selectedObjectId: SelectedObjectId
+  allowClickOnSelectedObject?: boolean
   onSelectedObjectIdChange: (selectedObjectId: SelectedObjectId) => void
   renderPoint: RenderPoint
   renderObjectPoint: RenderObjectPoint
@@ -203,6 +202,7 @@ export const Map: React.FC<Props> = ({
   points,
   connectionPoints,
   selectedObjectId,
+  allowClickOnSelectedObject,
   onSelectedObjectIdChange,
   renderPoint,
   renderObjectPoint,
@@ -214,8 +214,7 @@ export const Map: React.FC<Props> = ({
   const [hoveredObjectId, setHoveredObjectId] = useState<string>()
   const [zoom, setZoom] = useState<Zoom | undefined>()
   const [isZooming, setIsZooming] = useState(false)
-  const setSelectedObjectId = (newId: SelectedObjectId) =>
-    newId !== selectedObjectId && onSelectedObjectIdChange(newId)
+  const setSelectedObjectId = (newId: SelectedObjectId) => onSelectedObjectIdChange(newId)
 
   const [world, russia] = getMaps(isZooming, zoom && zoom.scale)
   const worldWithoutRussia = useMemo(
@@ -227,7 +226,7 @@ export const Map: React.FC<Props> = ({
   )
 
   const isSelectable = (object: GeoObject): boolean =>
-    object.id !== selectedObjectId &&
+    (allowClickOnSelectedObject || object.id !== selectedObjectId) &&
     (object.type === 'location' || locations.some(loc => loc.parentId === object.id))
 
   const projection = useMemo(() => {
@@ -436,7 +435,9 @@ export const Map: React.FC<Props> = ({
                   isItemSelectable && css.isSelectable
                 )}
                 onClick={() => {
-                  if (!isItemSelected) {
+                  if (isItemSelected) {
+                    allowClickOnSelectedObject && setSelectedObjectId(item.object.id)
+                  } else {
                     setSelectedObjectId(isItemSelectable ? item.object.id : undefined)
                   }
                 }}
@@ -485,13 +486,7 @@ export const Map: React.FC<Props> = ({
                     ? renderPoint(circle.point)
                     : renderObjectPoint(
                         circle.object,
-                        {
-                          count: circle.count,
-                          name:
-                            circle.object.type === 'location'
-                              ? circle.object.name
-                              : ruNames[circle.object.id],
-                        },
+                        { count: circle.count },
                         {
                           onClick: () => setSelectedObjectId(circle.object.id),
                           onMouseEnter: () => setHoveredObjectId(circle.object.id),
