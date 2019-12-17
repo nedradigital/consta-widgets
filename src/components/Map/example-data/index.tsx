@@ -154,7 +154,7 @@ export const renderExampleObjectPoint: RenderObjectPoint = (object, info, mouseH
 
   return (
     <button type="button" className={css.point} {...mouseHandlers}>
-      {info.count}
+      {info.pointsInsideObject.length}
       <span className={css.pointText}>{name}</span>
     </button>
   )
