@@ -78,7 +78,10 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
   }
 
   return (
-    <Badge className={classnames(css.text, sizeClass)} status={status}>
+    <Badge
+      className={classnames(css.text, sizeClass, status === 'empty' && css.isEmpty)}
+      status={status}
+    >
       {text}
     </Badge>
   )

@@ -51,6 +51,8 @@
     line-height: calc-size(14);
 
     padding: calc-size(4) calc-size(8);
+
+    border-radius: 4px;
   }
 
   &:--medium {
@@ -58,6 +60,12 @@
     line-height: calc-size(21);
 
     padding: calc-size(9) calc-size(12);
+
+    border-radius: 5px;
+  }
+
+  &.isEmpty {
+    border: 1px solid rgba(246, 251, 253, 0.5);
   }
 }
 
