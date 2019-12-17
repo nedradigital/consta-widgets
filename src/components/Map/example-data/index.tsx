@@ -5,9 +5,10 @@ import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'
 
+import { getGeoObjectName } from '@/utils/geo-names'
+
 import {
   ConnectionPoint,
-  GeoObject,
   GeoObjectLocation,
   GeoPoint,
   RenderConnectionPoint,
@@ -52,7 +53,7 @@ const isPoint = (feature: ExtendedFeature): feature is ExtendedFeature<Point> =>
 const yaMapsToGeoObject = (
   parentId: string,
   yaMapsObject: ExtendedFeatureCollection
-): readonly GeoObject[] => {
+): readonly GeoObjectLocation[] => {
   return yaMapsObject.features.filter(isPolygon).map((feature, idx) => {
     const id = `${parentId}-${idx}`
 
@@ -147,11 +148,14 @@ export const renderExamplePoint: RenderPoint = point => {
   )
 }
 
-export const renderExampleObjectPoint: RenderObjectPoint = (_, info, mouseHandlers) => {
+export const renderExampleObjectPoint: RenderObjectPoint = (object, info, mouseHandlers) => {
+  const location = EXAMPLE_LOCATIONS.find(l => l.id === object.id)
+  const name = location ? location.name : getGeoObjectName(object.id)
+
   return (
     <button type="button" className={css.point} {...mouseHandlers}>
       {info.count}
-      <span className={css.pointText}>{info.name}</span>
+      <span className={css.pointText}>{name}</span>
     </button>
   )
 }

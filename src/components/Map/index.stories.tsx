@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-import { object } from '@storybook/addon-knobs'
+import { boolean, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
-import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
@@ -17,7 +16,6 @@ import {
 } from './example-data'
 
 storiesOf('components/Map', module)
-  .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
   .add('interactive', () => {
     const Wrapper = () => {
@@ -25,6 +23,7 @@ storiesOf('components/Map', module)
 
       return (
         <Map
+          allowClickOnSelectedObject={boolean('allowClickOnSelectedObject', false)}
           locations={object('locations', EXAMPLE_LOCATIONS)}
           points={object('points', EXAMPLE_POINTS)}
           connectionPoints={object('connectionPoints', EXAMPLE_CONNECTION_POINTS)}

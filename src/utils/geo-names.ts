@@ -1,6 +1,6 @@
 import ruCountryNames from '@amcharts/amcharts4-geodata/lang/RU'
 
-export const ruNames: { [key: string]: string } = {
+const ruNames: { [key: string]: string } = {
   ...ruCountryNames,
   'RU-AD': 'Республика Адыгея',
   'RU-ALT': 'Алтайский край',
@@ -87,3 +87,5 @@ export const ruNames: { [key: string]: string } = {
   'RU-YEV': 'Еврейская АО',
   'RU-ZAB': 'Забайкальский край',
 }
+
+export const getGeoObjectName = (id?: string): string | undefined => (id ? ruNames[id] : undefined)
