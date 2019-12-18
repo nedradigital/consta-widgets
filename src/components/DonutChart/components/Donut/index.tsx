@@ -8,7 +8,7 @@ export type DataItem = {
   value: number
   colorGroupName: string
   name: string
-  tooltipText: string
+  showValue?: number
 }
 
 export type Data = readonly DataItem[]

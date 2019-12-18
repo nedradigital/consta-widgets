@@ -18,27 +18,30 @@ storiesOf('components/DonutChart', module)
       <DonutChart
         data={getWidgetMockData(DataType.Donut).data}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
-        unit={text('unit', getWidgetMockData(DataType.Donut).unit)}
+        formatValueForTooltip={v => `${v}${text('unit', ' тыс м3')}`}
       />
     )
   })
-  .add('with tooltip text', () => {
+  .add('Как прогресс бар', () => {
     return (
       <DonutChart
         data={[
           {
-            name: 'План',
-            colorGroupName: 'first',
-            sections: [{ value: 3, tooltipText: '60' }],
+            name: 'Факт',
+            colorGroupName: 'fact',
+            sections: [{ value: 1, showValue: 15 }],
           },
           {
-            name: 'Факт',
-            colorGroupName: 'second',
-            sections: [{ value: 1, tooltipText: '15' }],
+            name: 'План',
+            colorGroupName: 'plan',
+            sections: [{ value: 3, showValue: 60 }],
           },
         ]}
-        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
-        unit={text('unit', getWidgetMockData(DataType.Donut).unit)}
+        colorGroups={{
+          fact: '#F38B00',
+          plan: 'rgba(86, 185, 242, 0.19)',
+        }}
+        formatValueForTooltip={v => `${v}${text('unit', '')}`}
       />
     )
   })

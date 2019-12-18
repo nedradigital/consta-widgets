@@ -7,16 +7,16 @@ import { Item } from '../..'
 
 export type HoverLine = {
   color: string
-  value: Item
+  formattedValue: string
   name: string
 }
 
 type Props = {
   isVisible: boolean
   position: Item
-  secondaryScaleUnit?: string
   linesOnTheActiveHoverLine: readonly HoverLine[]
   title: string
+  direction: 'right' | 'top'
   isVertical?: boolean
 }
 
@@ -24,22 +24,15 @@ export const LineTooltip: React.FC<Props> = ({
   isVisible,
   position,
   linesOnTheActiveHoverLine,
-  secondaryScaleUnit,
   title,
-  isVertical,
-}) => {
-  const direction = isVertical ? 'right' : 'top'
-  const lineType = isVertical ? 'x' : 'y'
-
-  return (
-    <Tooltip isVisible={isVisible} x={position.x} y={position.y} direction={direction}>
-      <TooltipContentForMultipleValues
-        colors={linesOnTheActiveHoverLine.map(obj => obj.color)}
-        nameLines={linesOnTheActiveHoverLine.map(obj => obj.name)}
-        title={title}
-        values={linesOnTheActiveHoverLine.map(obj => obj.value[lineType].toString())}
-        secondaryScaleUnit={secondaryScaleUnit}
-      />
-    </Tooltip>
-  )
-}
+  direction,
+}) => (
+  <Tooltip isVisible={isVisible} x={position.x} y={position.y} direction={direction}>
+    <TooltipContentForMultipleValues
+      colors={linesOnTheActiveHoverLine.map(obj => obj.color)}
+      nameLines={linesOnTheActiveHoverLine.map(obj => obj.name)}
+      title={title}
+      values={linesOnTheActiveHoverLine.map(obj => obj.formattedValue)}
+    />
+  </Tooltip>
+)

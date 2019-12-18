@@ -3,6 +3,8 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
+import { FormatValue } from '@/dashboard/types'
+
 import { ScaleLinear, TickValues } from '../..'
 
 import css from './index.css'
@@ -45,7 +47,7 @@ type Props = {
   secondaryLabelTickValues: TickValues
   secondaryGridTickValues: TickValues
   isVertical?: boolean
-  formatLabel: (n: number) => string
+  formatValueForLabel: FormatValue
   secondaryScaleUnit?: string
   xGuideValue: number
   yGuideValue: number
@@ -83,7 +85,7 @@ export const Axis: React.FC<Props> = ({
   mainLabelTickValues,
   mainGridTickValues,
   isVertical,
-  formatLabel,
+  formatValueForLabel,
   secondaryScaleUnit,
   xGuideValue,
   yGuideValue,
@@ -119,7 +121,7 @@ export const Axis: React.FC<Props> = ({
       ),
       transform: xOnBottom ? `translateY(${height}px)` : '',
       values: isVertical ? secondaryLabelTickValues : mainLabelTickValues,
-      formatLabel: isVertical ? defaultFormatLabel : formatLabel,
+      formatLabel: isVertical ? defaultFormatLabel : formatValueForLabel,
     },
     {
       getEl: () => yLabelsRef.current,
@@ -138,7 +140,7 @@ export const Axis: React.FC<Props> = ({
       ),
       transform: yOnLeft ? '' : `translateX(${width}px)`,
       values: isVertical ? mainLabelTickValues : secondaryLabelTickValues,
-      formatLabel: isVertical ? formatLabel : defaultFormatLabel,
+      formatLabel: isVertical ? formatValueForLabel : defaultFormatLabel,
     },
   ] as const
 

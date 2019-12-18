@@ -23,7 +23,7 @@ type Params = {
   yLabelTicks?: number
   yGridTicks?: number
   yGuide?: boolean
-  secondaryScaleUnit?: string
+  unit?: string
 }
 
 export const defaultParams: Params = {
@@ -37,7 +37,7 @@ export const defaultParams: Params = {
   yLabelTicks: 0,
   yGridTicks: 0,
   yGuide: false,
-  secondaryScaleUnit: '',
+  unit: '',
 }
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -52,10 +52,15 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yLabelTicks,
     yGridTicks,
     yGuide,
-    secondaryScaleUnit,
+    unit,
   },
-  data: { data, colorGroups },
-  dataset,
+  data: {
+    data,
+    colorGroups,
+    formatValueForLabel,
+    foematValueForTooltip,
+    formatValueForTooltipTitle,
+  },
 }) => (
   <LinearChart
     gridConfig={{
@@ -76,11 +81,10 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     colorGroups={colorGroups}
     withZoom={withZoom}
     isVertical={isVertical}
-    formatLabel={dataset && dataset.formatLabel ? dataset.formatLabel : v => String(v)}
-    formatLabelForTooltip={
-      dataset && dataset.formatLabelForTooltip ? dataset.formatLabelForTooltip : undefined
-    }
-    secondaryScaleUnit={secondaryScaleUnit}
+    formatValueForLabel={formatValueForLabel ? formatValueForLabel : v => String(v)}
+    foematValueForTooltip={foematValueForTooltip}
+    formatValueForTooltipTitle={formatValueForTooltipTitle}
+    unit={unit}
   />
 )
 
@@ -172,8 +176,8 @@ export const LinearChartWidget = createWidget<Data, Params>({
         />
         <WidgetSettingsText
           name="Единица измерения оси Y"
-          value={params.secondaryScaleUnit}
-          onChange={value => onChangeParam('secondaryScaleUnit', value)}
+          value={params.unit}
+          onChange={value => onChangeParam('unit', value)}
         />
       </>
     )

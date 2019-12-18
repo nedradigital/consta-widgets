@@ -329,7 +329,6 @@ const mockData: DataMap = {
       second: '#F2C94C',
       third: '#56B9F2',
     },
-    unit: 'тыс м3',
     data: [
       {
         name: 'Северный бур',

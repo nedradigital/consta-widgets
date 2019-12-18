@@ -3,7 +3,6 @@ import React from 'react'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { DataType } from '@/dashboard'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { defaultParams, LinearChartWidget, LinearChartWidgetContent } from '.'
@@ -18,16 +17,16 @@ storiesOf('widgets/LinearChartWidget', module)
   ))
   .add('С полной датой в тултипе', () => (
     <LinearChartWidgetContent
-      data={object('data', LinearChartWidget.mockData)}
-      params={object('params', defaultParams)}
-      dataset={{
-        name: '',
-        id: '',
-        type: DataType.LinearChart,
-        formatLabelForTooltip: (v: number) =>
-          new Date(v)
+      data={{
+        ...object('data', LinearChartWidget.mockData),
+        formatValueForTooltipTitle: v => {
+          const title = new Date(v)
             .toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })
-            .replace('г.', ''),
+            .replace('г.', '')
+
+          return title[0].toUpperCase() + title.slice(1)
+        },
       }}
+      params={object('params', defaultParams)}
     />
   ))

@@ -64,6 +64,8 @@ export enum DataType {
 export type ColorGroups = { [key: string]: string }
 type WithColorGroups = { colorGroups: ColorGroups }
 
+export type FormatValue = (value: number) => string
+
 export type DataMap = {
   [DataType.Chart2D]: {
     values: readonly number[]
@@ -81,13 +83,16 @@ export type DataMap = {
   [DataType.Stats]: StatsData
   [DataType.Donut]: {
     data: DonutChartData
-    unit: string
+    formatValueForTooltip?: FormatValue
   } & WithColorGroups
   [DataType.BarChart]: {
     data: readonly BarChartData[]
   } & WithColorGroups
   [DataType.LinearChart]: {
     data: readonly Line[]
+    formatValueForLabel?: FormatValue
+    foematValueForTooltip?: FormatValue
+    formatValueForTooltipTitle?: FormatValue
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: { text: string; tooltip?: React.ReactNode }
