@@ -56,8 +56,8 @@
   }
 
   &:--medium {
-    font-size: calc-size(15);
-    line-height: calc-size(21);
+    font-size: calc-size(16);
+    line-height: calc-size(22);
 
     padding: calc-size(9) calc-size(12);
 
