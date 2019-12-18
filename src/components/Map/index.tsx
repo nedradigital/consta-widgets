@@ -55,7 +55,7 @@ type CommonCircleParams = {
 
 type ObjectCircle = CommonCircleParams & {
   object: GeoObject
-  count: number
+  pointsInsideObject: readonly GeoPoint[]
 }
 
 type PointCircle = CommonCircleParams & {
@@ -72,7 +72,7 @@ export type RenderPoint = (point: GeoPoint) => React.ReactNode
 export type RenderObjectPoint = (
   location: GeoObject,
   info: {
-    count: number
+    pointsInsideObject: readonly GeoPoint[]
   },
   mouseHandlers: {
     onClick: (e: React.MouseEvent) => void
@@ -286,7 +286,7 @@ export const Map: React.FC<Props> = ({
 
       const { x, y } = pixelCoords
 
-      const includedPoints = (() => {
+      const pointsInsideObject = (() => {
         switch (object.type) {
           case 'country':
           case 'region':
@@ -304,12 +304,12 @@ export const Map: React.FC<Props> = ({
         }
       })()
       const connectedPoints = connectionPoints.filter(connectionPoint =>
-        includedPoints.some(point => point.connectionPointId === connectionPoint.id)
+        pointsInsideObject.some(point => point.connectionPointId === connectionPoint.id)
       )
 
       return {
         object,
-        count: includedPoints.length,
+        pointsInsideObject,
         x,
         y,
         lines: connectedPoints
@@ -486,7 +486,7 @@ export const Map: React.FC<Props> = ({
                     ? renderPoint(circle.point)
                     : renderObjectPoint(
                         circle.object,
-                        { count: circle.count },
+                        { pointsInsideObject: circle.pointsInsideObject },
                         {
                           onClick: () => setSelectedObjectId(circle.object.id),
                           onMouseEnter: () => setHoveredObjectId(circle.object.id),
