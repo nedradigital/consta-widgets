@@ -34,7 +34,7 @@ type Props = {
 } & StyleProps
 
 const renderBadgeOrCell = (statusBadge: Status, isBadge?: boolean, value?: string) => {
-  return isBadge ? (
+  return isBadge && value ? (
     <Badge status={statusBadge} className={classnames(css.badge, css.cell)}>
       {value}
     </Badge>
