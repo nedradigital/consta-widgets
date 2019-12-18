@@ -2,6 +2,7 @@ import React, { useRef } from 'react'
 import ReactDOM from 'react-dom'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
+import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
@@ -14,6 +15,8 @@ type Props = {
   direction: Direction
   x?: number
   y?: number
+  className?: string
+  onClickOutside?: (event: MouseEvent) => void
 }
 
 type CoordinatesOptions = {
@@ -63,16 +66,29 @@ const convertCoordinatesToStyles = ({
   }
 }
 
-export const Tooltip: React.FC<Props> = ({ children, isVisible, direction, x, y }) => {
-  const ref = useRef(null)
+export const Tooltip: React.FC<Props> = ({
+  children,
+  isVisible,
+  direction,
+  x,
+  y,
+  className,
+  onClickOutside,
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+
   const { width, height } = useComponentSize(ref)
+
+  useClickOutside([ref], event => {
+    onClickOutside && onClickOutside(event)
+  })
 
   return ReactDOM.createPortal(
     <Hint
-      containerRef={ref}
-      className={classnames(css.tooltip, isVisible && css.open)}
+      ref={ref}
+      className={classnames(css.tooltip, isVisible && css.open, className)}
       direction={direction}
-      styles={{
+      style={{
         ...convertCoordinatesToStyles({ width, height, x, y, direction }),
         transform: 'initial',
       }}

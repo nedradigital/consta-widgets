@@ -1269,10 +1269,10 @@
     webpack-cli "3.3.9"
     webpack-merge "4.2.1"
 
-"@gaz/utils@0.2.2":
-  version "0.2.2"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.2.2.tgz#4fad86ba3b3e43243707c84989722ae16a2a6e95"
-  integrity sha512-VuAhW6x0sNr/GKSX1mFUxc8MlfN29ZccRzm4w82LlVxU0gw4bVtQm5T5TyHHFQ4MwR1bc0Cx4tG4D+XcdwrfMQ==
+"@gaz/utils@0.2.3":
+  version "0.2.3"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.2.3.tgz#ed3e09787f847471faebb05482480a1506cb3ea2"
+  integrity sha512-fYbr0hiZotOi0asU9PkP2JS/2IAdhoKuSNnnsQjglaKgaQ96RdVU2lx9/jS9rbkQmauhRmDvH/pWQ4Iu+0fERg==
 
 "@gpn-design/uikit@0.0.9":
   version "0.0.9"
