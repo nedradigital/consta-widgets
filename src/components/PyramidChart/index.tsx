@@ -7,7 +7,7 @@ import css from './index.css'
 
 export type Data = {
   text: string
-  value: number
+  value: string | number
 }
 
 export const sizes = ['s', 'm'] as const
