@@ -50,12 +50,16 @@ describe('time', () => {
   })
 
   describe('getDaysInMonth', () => {
-    it('возвращает количество дней в месяце', () => {
-      expect(getDaysInMonth(2, 2019)).toBe(28)
+    it('возвращает количество дней в январе', () => {
+      expect(getDaysInMonth(0, 2019)).toBe(31)
+    })
+
+    it('возвращает количество дней в феврале', () => {
+      expect(getDaysInMonth(1, 2019)).toBe(28)
     })
 
     it('возвращает количество дней в феврале для высокосного года', () => {
-      expect(getDaysInMonth(2, 2020)).toBe(29)
+      expect(getDaysInMonth(1, 2020)).toBe(29)
     })
   })
 })
