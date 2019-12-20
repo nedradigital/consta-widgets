@@ -789,6 +789,7 @@ const mockData: DataMap = {
     connectionPoints: [],
     locations: [],
     points: [],
+    padding: [0, 0],
     selectedObjectId: undefined,
     renderConnectionPoint: () => null,
     renderObjectPoint: () => null,
