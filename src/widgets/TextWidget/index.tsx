@@ -1,7 +1,7 @@
+import { Tooltip } from '@/components/Tooltip'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
-import { Hint } from '@/ui/Hint'
 import { StyleProps, Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -71,8 +71,37 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
   params: { text, type },
 }) => {
+  const ref = React.useRef<HTMLButtonElement>(null)
+
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
+  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 })
+
   const onToggleClick = () => setTooltipVisibility(!tooltipVisible)
+
+  React.useEffect(() => {
+    if (!ref.current) {
+      return
+    }
+
+    const { top, left, width, height } = ref.current.getBoundingClientRect()
+
+    const x = left + width / 2
+    const y = top + height
+
+    if (tooltipPosition.x === x && tooltipPosition.y === y) {
+      return
+    }
+
+    setTooltipPosition({ x, y })
+  }, [ref, tooltipVisible, tooltipPosition, setTooltipPosition])
+
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as Node
+
+    if (target !== ref.current) {
+      setTooltipVisibility(false)
+    }
+  }
 
   return (
     <div className={css.text}>
@@ -81,10 +110,19 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       </Text>
       {data && data.tooltip && (
         <div className={css.toggleable}>
-          <button className={css.button} onClick={onToggleClick}>
+          <button ref={ref} className={css.button} onClick={onToggleClick}>
             Скрыть/отобразить настройки
           </button>
-          {tooltipVisible && <Hint className={css.tooltip}>{data.tooltip}</Hint>}
+          <Tooltip
+            className={css.tooltip}
+            isVisible={tooltipVisible}
+            direction="bottom"
+            x={tooltipPosition.x}
+            y={tooltipPosition.y}
+            onClickOutside={handleClickOutside}
+          >
+            {data.tooltip}
+          </Tooltip>
         </div>
       )}
     </div>

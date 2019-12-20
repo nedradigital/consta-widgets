@@ -165,7 +165,7 @@ const addHtmlContent = (
       <Hint
         direction={direction}
         className={classnames(tooltipName, css.tooltip)}
-        styles={{
+        style={{
           color,
           transform: translate,
         }}
@@ -205,7 +205,7 @@ export const Tooltip: React.FC<Props> = ({ isVertical }) => (
   <Hint
     direction={isVertical ? 'right' : 'top'}
     children={''}
-    styles={{ display: 'none', transform: isVertical ? 'inherit' : 'translate(0, 0)' }}
+    style={{ display: 'none', transform: isVertical ? 'inherit' : 'translate(0, 0)' }}
     className={classnames('tooltip', css.tooltip)}
   />
 )

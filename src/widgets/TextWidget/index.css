@@ -32,11 +32,5 @@
 }
 
 .tooltip {
-  position: absolute;
-  bottom: calc(-1 * var(--hint-arrow-size));
-  left: 50%;
-
   pointer-events: auto;
-
-  transform: translate(-50%, 100%) !important;
 }

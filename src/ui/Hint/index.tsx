@@ -10,23 +10,16 @@ type Props = {
   children: React.ReactNode
   /** В какую сторону открывается */
   direction?: Direction
-  styles?: React.CSSProperties
   className?: string
-  containerRef?: React.Ref<HTMLDivElement>
+  style?: React.CSSProperties
 }
 
-export const Hint: React.FC<Props> = ({
-  children,
-  direction = 'bottom',
-  styles,
-  className,
-  containerRef,
-}) => (
-  <div
-    ref={containerRef}
-    className={classnames(css.hint, css[direction], className)}
-    style={styles}
-  >
-    {children}
-  </div>
+export const Hint = React.forwardRef<HTMLDivElement, Props>(
+  ({ direction, className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={classnames(css.hint, direction && css[direction], className)}
+      {...props}
+    />
+  )
 )
