@@ -48,7 +48,7 @@ const figures: readonly Figure[] = [
   },
 ]
 
-const getFormatLabel = () => {
+const getFormatterValueForLabel = () => {
   const unit = text('format label unit', '')
   const useFormatPercents = boolean('format label as percents', false)
 
@@ -63,7 +63,7 @@ const getFormatLabel = () => {
   return undefined
 }
 
-const getFormatTooltipLabel = () => {
+const getFormatterValueForTooltip = () => {
   const unit = text('format tooltip label unit', ' тыс м3')
   const isActive = boolean('format tooltip label active', false)
 
@@ -81,8 +81,8 @@ storiesOf('components/RadarChart', module)
       figures={figures}
       ticks={4}
       backgroundColor="var(--bg-color)"
-      formatLabel={getFormatLabel()}
-      formatTooltipLabel={getFormatTooltipLabel()}
+      formatValueForLabel={getFormatterValueForLabel()}
+      formatValueForTooltip={getFormatterValueForTooltip()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -95,7 +95,7 @@ storiesOf('components/RadarChart', module)
       figures={figures.slice(0, 1)}
       ticks={4}
       backgroundColor="var(--bg-color)"
-      formatLabel={getFormatLabel()}
+      formatValueForLabel={getFormatterValueForLabel()}
       withConcentricColor={false}
       labelSize="s"
     />

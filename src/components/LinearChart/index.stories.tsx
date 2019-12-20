@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { getArrayWithRandomInt } from '@gaz/utils/lib/array'
-import { object } from '@storybook/addon-knobs'
+import { object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -18,46 +18,56 @@ const colorGroups = {
   second: '#56B9F2',
 }
 
-const getCommonProps = () => ({
-  lines: [
-    {
-      colorGroupName: 'first',
-      values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
-        x: Date.now() + x,
-        y,
-      })),
-      dots: true,
-      lineName: 'Северный бур',
+const getCommonProps = () => {
+  const unit = text('unit', 'тыс м3')
+
+  return {
+    lines: [
+      {
+        colorGroupName: 'first',
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
+          x: Date.now() + x,
+          y,
+        })),
+        dots: true,
+        lineName: 'Северный бур',
+      },
+      {
+        colorGroupName: 'second',
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
+          x: Date.now() + x,
+          y,
+        })),
+        lineName: 'Южное месторождение',
+      },
+    ],
+    gridConfig: object('gridConfig', {
+      x: {
+        labels: 'bottom',
+        labelTicks: 5,
+        gridTicks: 10,
+        guide: true,
+      },
+      y: {
+        labels: 'left',
+        labelTicks: 4,
+        gridTicks: 4,
+        guide: true,
+      },
+    } as const),
+    withZoom: true,
+    formatValueForLabel: (v: number) => new Date(v).toLocaleDateString(),
+    foematValueForTooltip: (v: number) => `${v} ${unit}`,
+    formatValueForTooltipTitle: (v: number) => {
+      const title = new Date(v)
+        .toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })
+        .replace('г.', '')
+
+      return title[0].toUpperCase() + title.slice(1)
     },
-    {
-      colorGroupName: 'second',
-      values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
-        x: Date.now() + x,
-        y,
-      })),
-      lineName: 'Южное месторождение',
-    },
-  ],
-  gridConfig: object('gridConfig', {
-    x: {
-      labels: 'bottom',
-      labelTicks: 5,
-      gridTicks: 10,
-      guide: true,
-    },
-    y: {
-      labels: 'left',
-      labelTicks: 4,
-      gridTicks: 4,
-      guide: true,
-    },
-  } as const),
-  withZoom: true,
-  formatLabel: (v: number) => new Date(v).toLocaleDateString(),
-  formatLabelForTooltip: (v: number) =>
-    new Date(v).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).replace('г.', ''),
-  secondaryScaleUnit: 'тыс. м3',
-})
+    unit,
+  }
+}
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())

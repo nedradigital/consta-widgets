@@ -5,7 +5,7 @@ import useComponentSize from '@rehooks/component-size'
 import { zip } from 'lodash'
 
 import { Tooltip } from '@/components/Tooltip'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { Data as DonutData, DataItem, Donut } from './components/Donut'
 import css from './index.css'
@@ -15,14 +15,14 @@ export type Data = ReadonlyArray<{
   colorGroupName: string
   sections: ReadonlyArray<{
     value: number
-    tooltipText?: string
+    showValue?: number
   }>
 }>
 
 type Props = {
   data: Data
   colorGroups: ColorGroups
-  unit: string
+  formatValueForTooltip?: FormatValue
 }
 
 type TooltipDataState = {
@@ -37,7 +37,7 @@ const getPadding = () => getCalculatedSize(8)
 const getDonutRadius = (mainRadius: number, index: number) =>
   mainRadius - (getSizeDonut() + getPadding()) * index
 
-export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) => {
+export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValueForTooltip }) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState | null>(null)
   const [mousePosition, changeMousePosition] = useState({ x: 0, y: 0 })
 
@@ -51,8 +51,10 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
   const maxCirclesCount = Math.min(...data.map(i => i.sections.length), 3)
 
   const handleMouseOver = (d: DataItem) => {
+    const value = d.showValue ? d.showValue : d.value
+
     changeTooltipData({
-      value: d.tooltipText,
+      value: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
       color: colorGroups[d.colorGroupName],
       name: d.name,
     })
@@ -75,7 +77,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
         colorGroupName: item.colorGroupName,
         name: item.name,
         value: section.value || 0,
-        tooltipText: section.tooltipText || section.value,
+        showValue: section.showValue,
       }))
     )
   ) as readonly DonutData[]
@@ -87,9 +89,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, unit }) =>
           <>
             <span className={css.tooltipColor} style={{ background: tooltipData.color }} />
             {tooltipData.name}
-            <span className={css.tooltipValue}>
-              {tooltipData.value} {unit}
-            </span>
+            <span className={css.tooltipValue}>{tooltipData.value}</span>
           </>
         ) : null}
       </Tooltip>

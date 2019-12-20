@@ -3,7 +3,9 @@ import React, { Fragment } from 'react'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { angleToCoord, Axis, RadarChartFormatLabel, RadarChartLabelSize } from '../../'
+import { FormatValue } from '@/dashboard/types'
+
+import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 
 import css from './index.css'
 
@@ -17,7 +19,7 @@ type Props = {
   backgroundColor: string
   axesAngles: readonly Axis[]
   labelSize: RadarChartLabelSize
-  formatLabel: RadarChartFormatLabel
+  formatValueForLabel: FormatValue
   isHoverable: boolean
   colors?: readonly string[]
   activeAxis?: Axis
@@ -31,7 +33,7 @@ export const RadarChartAxes: React.FC<Props> = ({
   backgroundColor,
   axesAngles,
   labelSize,
-  formatLabel,
+  formatValueForLabel,
   isHoverable,
   colors,
   activeAxis,
@@ -42,7 +44,7 @@ export const RadarChartAxes: React.FC<Props> = ({
     const fraction = (v + 1) / ticks
     return {
       r: fraction / 2,
-      label: formatLabel(_.round(fraction * maxValue, 2)),
+      label: formatValueForLabel(_.round(fraction * maxValue, 2)),
     }
   })
 

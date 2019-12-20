@@ -6,7 +6,7 @@ import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'
@@ -14,8 +14,6 @@ import { AxisTooltip } from './components/AxisTooltip'
 import { RadarChartFigure } from './components/Figure'
 import { RadarChartPoints } from './components/Points'
 import css from './index.css'
-
-export type RadarChartFormatLabel = (value: number) => string
 
 export const radarChartLabelSizes = ['s', 'm'] as const
 export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
@@ -42,8 +40,8 @@ export type Data = {
   maxValue: number
   axesLabels: { [key: string]: string }
   figures: readonly Figure[]
-  formatLabel?: RadarChartFormatLabel
-  formatTooltipLabel?: RadarChartFormatLabel
+  formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
 }
 
 type Props = {
@@ -125,8 +123,8 @@ export const RadarChart: React.FC<Props> = ({
   figures: originalFigures,
   backgroundColor,
   labelSize,
-  formatLabel = String,
-  formatTooltipLabel,
+  formatValueForLabel = String,
+  formatValueForTooltip,
   withConcentricColor,
 }) => {
   // В радаре с градиентом может быть только 1 фигура и 3-5 колец
@@ -173,7 +171,7 @@ export const RadarChart: React.FC<Props> = ({
         return theAxis
           ? {
               ...angleToCoord(theAxis.angle, value.value / maxValue),
-              label: formatLabel(value.value),
+              label: formatValueForLabel(value.value),
               axisName: value.axisName,
               originalValue: value.value,
             }
@@ -212,9 +210,9 @@ export const RadarChart: React.FC<Props> = ({
     : []
 
   const tooltipValues = pointsOnAxis.map(point => {
-    return formatTooltipLabel
-      ? formatTooltipLabel(point.originalValue)
-      : formatLabel(point.originalValue)
+    return formatValueForTooltip
+      ? formatValueForTooltip(point.originalValue)
+      : formatValueForLabel(point.originalValue)
   })
 
   const itemWithMaxValueOnAxis = _.maxBy(pointsOnAxis, item => item.originalValue) || {
@@ -255,7 +253,7 @@ export const RadarChart: React.FC<Props> = ({
               backgroundColor={backgroundColor}
               axesAngles={axesAngles}
               labelSize={labelSize}
-              formatLabel={formatLabel}
+              formatValueForLabel={formatValueForLabel}
               isHoverable={figures.length > 1}
               colors={concentricColors && concentricColors.circles}
               activeAxis={activeAxis}

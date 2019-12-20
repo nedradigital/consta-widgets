@@ -9,7 +9,6 @@ type Props = {
   nameLines: readonly string[]
   values: readonly string[]
   colors: readonly string[]
-  secondaryScaleUnit?: string
 }
 
 export const TooltipContentForMultipleValues: React.FC<Props> = ({
@@ -17,7 +16,6 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({
   nameLines,
   values,
   colors,
-  secondaryScaleUnit,
 }) => {
   return (
     <div className={css.container}>
@@ -38,7 +36,7 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({
         <div>
           {values.map((value, idx) => (
             <div key={idx} className={classnames(css.row, css.value)}>
-              {value} {secondaryScaleUnit}
+              {value}
             </div>
           ))}
         </div>

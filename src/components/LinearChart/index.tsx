@@ -5,11 +5,11 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { HoverLines } from './components/HoverLines'
 import { Line as LineComponent } from './components/Line'
-import { HoverLine, LineTooltip } from './components/LineTooltip'
+import { LineTooltip } from './components/LineTooltip'
 import { Zoom } from './components/Zoom'
 import css from './index.css'
 
@@ -23,17 +23,17 @@ export type Item = { x: number; y: number }
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
-type FormatLabel = (n: number) => string
 
 type Props = {
   lines: readonly Line[]
   gridConfig: GridConfig
   withZoom?: boolean
   isVertical?: boolean
-  formatLabel: FormatLabel
-  formatLabelForTooltip?: FormatLabel
+  formatValueForLabel: FormatValue
+  foematValueForTooltip?: FormatValue
+  formatValueForTooltipTitle?: FormatValue
   colorGroups: ColorGroups
-  secondaryScaleUnit?: string
+  unit?: string
 }
 
 type State = {
@@ -225,22 +225,11 @@ const getOffsetPosition = (
 }
 
 const getTitleTooltip = (
-  line: HoverLine,
-  formatLabel: FormatLabel,
-  formatLabelForTooltip?: FormatLabel,
-  isVertical?: boolean
+  value: number,
+  formatValueForLabel: FormatValue,
+  formatValueForTooltipTitle?: FormatValue
 ) => {
-  if (!line) {
-    return ''
-  }
-
-  const value = line.value[isVertical ? 'y' : 'x']
-
-  if (!_.isUndefined(formatLabelForTooltip)) {
-    return formatLabelForTooltip(value)
-  }
-
-  return formatLabel(value)
+  return formatValueForTooltipTitle ? formatValueForTooltipTitle(value) : formatValueForLabel(value)
 }
 
 export class LinearChart extends React.Component<Props, State> {
@@ -307,10 +296,11 @@ export class LinearChart extends React.Component<Props, State> {
         withZoom,
         isVertical,
         lines,
-        formatLabel,
-        formatLabelForTooltip,
+        formatValueForLabel,
+        foematValueForTooltip,
+        formatValueForTooltipTitle,
         colorGroups,
-        secondaryScaleUnit,
+        unit,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, activeHoverLine },
     } = this
@@ -331,40 +321,40 @@ export class LinearChart extends React.Component<Props, State> {
     const yOnLeft = yLabelsPos === 'left'
 
     const linesOnTheActiveHoverLine = this.getLines().map(obj => {
-      const value =
+      const item =
         obj.values.find(position => position[isVertical ? 'y' : 'x'] === activeHoverLine) ||
         defaultPosition
+
+      const value = isVertical ? item.x : item.y
 
       return {
         color: colorGroups[obj.colorGroupName],
         name: obj.lineName,
-        value,
+        item,
+        formattedValue: foematValueForTooltip ? foematValueForTooltip(value) : String(value),
       }
     })
 
     const maxAxisValue =
       _.maxBy(
-        linesOnTheActiveHoverLine.map(obj => obj.value),
+        linesOnTheActiveHoverLine.map(obj => obj.item),
         item => item[isVertical ? 'x' : 'y']
       ) || defaultPosition
 
     const tooltipPosition = getOffsetPosition(maxAxisValue, this.svgWrapperRef, scaleX, scaleY)
-    const tooltipTitle = getTitleTooltip(
-      linesOnTheActiveHoverLine[0],
-      formatLabel,
-      formatLabelForTooltip,
-      isVertical
-    )
+    const tooltipDirection = isVertical ? 'right' : 'top'
+    const tooltipTitle = activeHoverLine
+      ? getTitleTooltip(activeHoverLine, formatValueForLabel, formatValueForTooltipTitle)
+      : ''
 
     return (
       <div ref={this.ref} className={css.main}>
         <LineTooltip
           isVisible={!!activeHoverLine}
           position={tooltipPosition}
-          secondaryScaleUnit={secondaryScaleUnit}
           linesOnTheActiveHoverLine={linesOnTheActiveHoverLine}
           title={tooltipTitle}
-          isVertical={isVertical}
+          direction={tooltipDirection}
         />
         <svg
           ref={this.svgWrapperRef}
@@ -405,8 +395,8 @@ export class LinearChart extends React.Component<Props, State> {
             secondaryLabelTickValues={secondaryLabelTickValues}
             secondaryGridTickValues={secondaryGridTickValues}
             isVertical={isVertical}
-            formatLabel={formatLabel}
-            secondaryScaleUnit={secondaryScaleUnit}
+            formatValueForLabel={formatValueForLabel}
+            secondaryScaleUnit={unit}
             xGuideValue={xGuideValue}
             yGuideValue={yGuideValue}
           />
