@@ -38,7 +38,7 @@
 }
 
 .line {
-  min-width: 20px;
+  width: calc-size(20);
   height: 2px;
 
   &.bold {
@@ -63,7 +63,6 @@
   }
 
   @nest :--top & {
-    width: 30px;
     margin-bottom: 4px;
   }
 }
