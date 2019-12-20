@@ -10,7 +10,7 @@
 }
 
 .row .item {
-  margin-right: 20px;
+  margin-right: calc-size(13);
   margin-bottom: 8px;
 }
 
