@@ -79,6 +79,7 @@
   --option-height: 29px;
 
   position: absolute;
+  z-index: var(--z-multi-select);
 
   width: 100%;
   padding-top: 8px;

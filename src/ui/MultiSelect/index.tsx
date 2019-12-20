@@ -5,13 +5,13 @@ import { Checkbox } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { SelectedOption } from './components/SelectedOption'
+import { SelectedOption } from '../SelectedOption'
+
 import css from './index.css'
 
 export type Option = {
   id: string
   name: string
-  initialValue?: boolean
 }
 
 type Values = readonly string[]

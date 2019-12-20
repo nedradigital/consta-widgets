@@ -55,6 +55,8 @@
   --hint-horizontal-padding: 12px;
   --table-even-row-background: rgba(0, 0, 0, 0.05);
   --scroll-bar-color: rgba(255, 255, 255, 0.7);
+  --z-filter--tooltip: 1;
+  --z-multi-select: calc(var(--z-filter--tooltip) + 1);
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;

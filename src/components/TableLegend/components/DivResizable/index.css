@@ -1,7 +1,7 @@
 .divResizable {
   position: absolute;
   top: 0;
-  right: 0;
+  right: -2px;
 
   width: 5px;
 

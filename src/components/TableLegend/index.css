@@ -2,16 +2,6 @@
   overflow: auto;
 }
 
-.divResizable {
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  width: 5px;
-
-  cursor: col-resize;
-}
-
 .rowL {
   height: 45px;
 }
@@ -22,6 +12,10 @@
 
 .rowS {
   height: 30px;
+}
+
+.iconFilter {
+  opacity: 0;
 }
 
 .table {
@@ -37,6 +31,8 @@
   }
 
   & th {
+    --icon-offset: calc-size(4);
+
     font-size: calc-size(10);
     line-height: calc-size(15);
 
@@ -44,17 +40,37 @@
 
     color: var(--text-color-70);
 
+    .divHelper {
+      position: relative;
+
+      display: inline-block;
+    }
+
     .icon {
-      display: none;
+      position: absolute;
+      top: calc-size(2);
+
+      &:not(.iconFilter) {
+        display: none;
+      }
+    }
+
+    .iconFilter {
+      left: calc-size(-12);
+
+      transition: opacity var(--show-transition);
+      transform: translateX(calc(var(--icon-offset) * -1));
     }
   }
 
   & th,
   & td {
+    --column-padding: calc-size(18);
+
     padding-top: 0;
-    padding-right: calc-size(16);
+    padding-right: var(--column-padding);
     padding-bottom: 0;
-    padding-left: 0;
+    padding-left: var(--column-padding);
 
     &.textLeftPosition {
       text-align: left;
@@ -69,18 +85,25 @@
     }
   }
 
+  .isFilterOpened .iconFilter {
+    opacity: 1;
+    fill: white;
+  }
+
   & th:hover {
     cursor: pointer;
 
-    .divHelper {
-      position: relative;
-
-      display: inline-block;
+    .icon {
+      &:hover {
+        fill: white;
+      }
     }
 
-    .icon {
-      position: absolute;
-      top: calc-size(3);
+    .iconFilter {
+      opacity: 1;
+    }
+
+    .iconSort {
       right: calc-size(-12);
 
       overflow: visible;
@@ -88,9 +111,7 @@
       width: calc-size(12);
       height: calc-size(8);
 
-      &:hover {
-        fill: white;
-      }
+      transform: translateX(calc(var(--icon-offset)));
     }
 
     .iconNeutrally {
@@ -162,4 +183,8 @@
   & + & {
     margin-left: calc-size(20);
   }
+}
+
+.selectedFiltersRow {
+  background: none !important;
 }
