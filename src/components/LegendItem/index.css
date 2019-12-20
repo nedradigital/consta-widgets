@@ -5,8 +5,8 @@
 @custom-selector :--medium :--main.sizeM;
 
 :--main {
-  --line-height-s: calc-size(18);
-  --line-height-m: calc-size(21);
+  --line-height-s: calc-size(20);
+  --line-height-m: calc-size(22);
   --dot-size: calc-size(12);
 
   display: inline-flex;
@@ -70,12 +70,12 @@
 
 .text {
   @nest :--small & {
-    font-size: calc-size(13);
+    font-size: calc-size(14);
     line-height: var(--line-height-s);
   }
 
   @nest :--medium & {
-    font-size: calc-size(15);
+    font-size: calc-size(16);
     line-height: var(--line-height-m);
   }
 
