@@ -52,14 +52,14 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yLabelTicks,
     yGridTicks,
     yGuide,
-    unit,
   },
   data: {
     data,
     colorGroups,
     formatValueForLabel,
-    foematValueForTooltip,
+    formatValueForTooltip,
     formatValueForTooltipTitle,
+    unit,
   },
 }) => (
   <LinearChart
@@ -82,7 +82,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     withZoom={withZoom}
     isVertical={isVertical}
     formatValueForLabel={formatValueForLabel ? formatValueForLabel : v => String(v)}
-    foematValueForTooltip={foematValueForTooltip}
+    formatValueForTooltip={formatValueForTooltip}
     formatValueForTooltipTitle={formatValueForTooltipTitle}
     unit={unit}
   />

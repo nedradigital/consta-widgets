@@ -91,8 +91,9 @@ export type DataMap = {
   [DataType.LinearChart]: {
     data: readonly Line[]
     formatValueForLabel?: FormatValue
-    foematValueForTooltip?: FormatValue
+    formatValueForTooltip?: FormatValue
     formatValueForTooltipTitle?: FormatValue
+    unit?: string
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: { text: string; tooltip?: React.ReactNode }
@@ -151,8 +152,6 @@ export type Dataset = {
   name: string
   id: string
   type: DataType
-  formatLabel?: (n: number) => string
-  formatLabelForTooltip?: (n: number) => string
 }
 
 export type Data = { [k: string]: DataMap[DataType] }
