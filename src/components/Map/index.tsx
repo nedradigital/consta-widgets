@@ -77,6 +77,7 @@ export type RenderObjectPoint = (
   mouseHandlers: {
     onClick: (e: React.MouseEvent) => void
     onMouseEnter: (e: React.MouseEvent) => void
+    onMouseLeave: (e: React.MouseEvent) => void
   }
 ) => React.ReactNode
 export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactNode
@@ -451,6 +452,12 @@ export const Map: React.FC<Props> = ({
           {paths.map(item => {
             const isItemSelected = item.object.id === selectedObjectId
             const isItemSelectable = isSelectable(item.object)
+            const mouseHandlers = isItemSelectable
+              ? {
+                  onMouseEnter: () => setHoveredObjectId(item.object.id),
+                  onMouseLeave: () => setHoveredObjectId(undefined),
+                }
+              : {}
 
             return (
               <path
@@ -470,14 +477,7 @@ export const Map: React.FC<Props> = ({
                     setSelectedObjectId(isItemSelectable ? item.object.id : undefined)
                   }
                 }}
-                onMouseEnter={() => {
-                  setHoveredObjectId(isItemSelectable ? item.object.id : undefined)
-                }}
-                onMouseLeave={e => {
-                  if (e.relatedTarget === svgRef.current) {
-                    setHoveredObjectId(undefined)
-                  }
-                }}
+                {...mouseHandlers}
               />
             )
           })}
@@ -519,6 +519,7 @@ export const Map: React.FC<Props> = ({
                         {
                           onClick: () => setSelectedObjectId(circle.object.id),
                           onMouseEnter: () => setHoveredObjectId(circle.object.id),
+                          onMouseLeave: () => setHoveredObjectId(undefined),
                         }
                       )}
                 </div>
