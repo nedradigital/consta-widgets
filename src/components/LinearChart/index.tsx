@@ -30,7 +30,7 @@ type Props = {
   withZoom?: boolean
   isVertical?: boolean
   formatValueForLabel: FormatValue
-  foematValueForTooltip?: FormatValue
+  formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
   colorGroups: ColorGroups
   unit?: string
@@ -297,7 +297,7 @@ export class LinearChart extends React.Component<Props, State> {
         isVertical,
         lines,
         formatValueForLabel,
-        foematValueForTooltip,
+        formatValueForTooltip,
         formatValueForTooltipTitle,
         colorGroups,
         unit,
@@ -331,7 +331,7 @@ export class LinearChart extends React.Component<Props, State> {
         color: colorGroups[obj.colorGroupName],
         name: obj.lineName,
         item,
-        formattedValue: foematValueForTooltip ? foematValueForTooltip(value) : String(value),
+        formattedValue: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
       }
     })
 
