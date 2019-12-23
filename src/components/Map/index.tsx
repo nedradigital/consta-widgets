@@ -10,7 +10,7 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
-import { LineString } from 'geojson'
+import { LineString, MultiPoint } from 'geojson'
 
 import css from './index.css'
 
@@ -36,7 +36,7 @@ type Coords = readonly [number, number]
 
 export type GeoPoint = {
   id: string
-  parentId: string
+  parentId: string | undefined
   connectionPointId?: string
   coords: Coords
   name: string
@@ -84,15 +84,17 @@ type SelectedObjectId = string | undefined
 
 export type Data = {
   points: readonly GeoPoint[]
-  locations: readonly GeoObjectLocation[]
-  connectionPoints: readonly ConnectionPoint[]
+  locations?: readonly GeoObjectLocation[]
+  connectionPoints?: readonly ConnectionPoint[]
+  /** Отступы от краёв карты до объекта центрирования: [вертикальный, горизонтальный] */
+  padding: readonly [number, number]
   /** id выбранной страны, региона или локации */
   selectedObjectId: SelectedObjectId
   allowClickOnSelectedObject?: boolean
   onSelectedObjectIdChange: (selectedObjectId: SelectedObjectId) => void
   renderPoint: RenderPoint
-  renderObjectPoint: RenderObjectPoint
-  renderConnectionPoint: RenderConnectionPoint
+  renderObjectPoint?: RenderObjectPoint
+  renderConnectionPoint?: RenderConnectionPoint
 }
 
 type Props = Data
@@ -103,7 +105,6 @@ type Zoom = {
   translateY: number
 }
 
-const CENTERING_PADDING = 30
 const ZOOM_HIGH_THRESHOLD = 3000
 
 const featureToObject = (type: 'country' | 'region') => (feature: ExtendedFeature): GeoObject => ({
@@ -194,19 +195,51 @@ const getProjection = (width: number, height: number): d3.GeoProjection => {
   return d3
     .geoMercator()
     .clipExtent([[0, 0], [width, height]])
-    .rotate([-90, 0])
+    .rotate([-60, 0])
+}
+
+const GEOPOINT_ZOOM_DELTA = 30
+const geoPointsToExtendedFeature = (
+  points: readonly GeoPoint[],
+  forceMultiPoint?: boolean
+): ExtendedFeature<MultiPoint> => {
+  // Если точка одна, то возвращаем область радиусом GEOPOINT_ZOOM_DELTA вокруг неё
+  if (forceMultiPoint && points.length === 1) {
+    const { coords } = points[0]
+    return {
+      type: 'Feature',
+      geometry: {
+        type: 'MultiPoint',
+        coordinates: [
+          [coords[0] - GEOPOINT_ZOOM_DELTA, coords[1] - GEOPOINT_ZOOM_DELTA],
+          [coords[0] + GEOPOINT_ZOOM_DELTA, coords[1] + GEOPOINT_ZOOM_DELTA],
+        ],
+      },
+      properties: {},
+    }
+  }
+
+  return {
+    type: 'Feature',
+    geometry: {
+      type: 'MultiPoint',
+      coordinates: points.map(point => [...point.coords]),
+    },
+    properties: {},
+  }
 }
 
 export const Map: React.FC<Props> = ({
-  locations,
+  locations = [],
   points,
-  connectionPoints,
+  connectionPoints = [],
+  padding,
   selectedObjectId,
   allowClickOnSelectedObject,
   onSelectedObjectIdChange,
   renderPoint,
-  renderObjectPoint,
-  renderConnectionPoint,
+  renderObjectPoint = () => null,
+  renderConnectionPoint = () => null,
 }) => {
   const ref = useRef(null)
   const svgRef = useRef(null)
@@ -277,15 +310,6 @@ export const Map: React.FC<Props> = ({
 
   const objectCircles: readonly ObjectCircle[] = objectsWithCircles
     .map(object => {
-      const coords = d3.geoCentroid(object.geoData as ExtendedFeature)
-      const pixelCoords = geoCoordsToPixels(projection, coords)
-
-      if (!pixelCoords) {
-        return undefined
-      }
-
-      const { x, y } = pixelCoords
-
       const pointsInsideObject = (() => {
         switch (object.type) {
           case 'country':
@@ -303,6 +327,16 @@ export const Map: React.FC<Props> = ({
             return points.filter(p => p.parentId === object.id)
         }
       })()
+
+      const coords = d3.geoCentroid(geoPointsToExtendedFeature(pointsInsideObject))
+      const pixelCoords = geoCoordsToPixels(projection, coords)
+
+      if (!pixelCoords) {
+        return undefined
+      }
+
+      const { x, y } = pixelCoords
+
       const connectedPoints = connectionPoints.filter(connectionPoint =>
         pointsInsideObject.some(point => point.connectionPointId === connectionPoint.id)
       )
@@ -320,7 +354,7 @@ export const Map: React.FC<Props> = ({
     .filter(isDefined)
 
   const pointCircles: readonly PointCircle[] = points
-    .filter(point => selectedObjectId && point.parentId === selectedObjectId)
+    .filter(point => point.parentId === selectedObjectId)
     .map(point => {
       const pixelCoords = geoCoordsToPixels(projection, point.coords)
 
@@ -356,15 +390,10 @@ export const Map: React.FC<Props> = ({
     const selectedObject = allObjects.find(o => o.id === selectedObjectId)
     const featureToZoomOn = selectedObject
       ? selectedObject.geoData
-      : {
-          type: 'FeatureCollection',
-          features: visibleObjects.filter(isSelectable).map(o => o.geoData),
-        }
+      : geoPointsToExtendedFeature(points, true)
+    const [paddingY, paddingX] = padding
     const targetProjection = getProjection(width, height).fitExtent(
-      [
-        [CENTERING_PADDING, CENTERING_PADDING],
-        [width - CENTERING_PADDING, height - CENTERING_PADDING],
-      ],
+      [[paddingX, paddingY], [width - paddingX, height - paddingY]],
       featureToZoomOn as ExtendedFeature
     )
     const [targetTrX, targetTrY] = targetProjection.translate()
@@ -404,7 +433,7 @@ export const Map: React.FC<Props> = ({
     // Тут нельзя делать зависимость от объектов, т.к. их изменения зацикливают событие зума
     // (во время зума снижается детализация мира и из-за этого обновляется геометрия объектов)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedObjectId, width, height])
+  }, [selectedObjectId, width, height, points, padding])
 
   return (
     <div ref={ref} className={css.main}>

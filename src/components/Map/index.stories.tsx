@@ -14,19 +14,21 @@ import {
   renderExampleObjectPoint,
   renderExamplePoint,
 } from './example-data'
+import { GinfPrototype } from './example-data/ginf-prototype'
 
 storiesOf('components/Map', module)
   .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
-  .add('interactive', () => {
+  .add('Пример для ЦУБ-а', () => {
     const Wrapper = () => {
       const [selectedObjectId, setSelectedObjectId] = useState()
 
       return (
         <Map
           allowClickOnSelectedObject={boolean('allowClickOnSelectedObject', false)}
-          locations={object('locations', EXAMPLE_LOCATIONS)}
-          points={object('points', EXAMPLE_POINTS)}
-          connectionPoints={object('connectionPoints', EXAMPLE_CONNECTION_POINTS)}
+          locations={EXAMPLE_LOCATIONS}
+          points={EXAMPLE_POINTS}
+          connectionPoints={EXAMPLE_CONNECTION_POINTS}
+          padding={object('padding', [50, 160])}
           selectedObjectId={selectedObjectId}
           onSelectedObjectIdChange={setSelectedObjectId}
           renderPoint={renderExamplePoint}
@@ -37,4 +39,7 @@ storiesOf('components/Map', module)
     }
 
     return <Wrapper />
+  })
+  .add('Пример для Инфопанелей', () => {
+    return <GinfPrototype />
   })
