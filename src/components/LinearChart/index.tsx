@@ -1,6 +1,7 @@
 import React from 'react'
 import { uid } from 'react-uid'
 
+import { isDefined } from '@gaz/utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
@@ -48,6 +49,8 @@ type State = {
   yGuideValue: number
   activeHoverLine?: number
 }
+
+const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
 export const TRANSITION_DURATIONS = {
   ZOOM: 750,
@@ -159,6 +162,10 @@ export const getMainTickValues = ({
   guideValue: number
   isVertical?: boolean
 }): TickValues => {
+  if (domain === INITIAL_DOMAIN) {
+    return []
+  }
+
   const config = gridConfig[isVertical ? 'y' : 'x']
   const uniqValues = getUniqValues(items, domain, isVertical ? 'y' : 'x', isVertical)
   const ticks = config[tickType] || 0
@@ -188,6 +195,10 @@ export const getSecondaryTickValues = ({
   guideValue: number
   isVertical?: boolean
 }) => {
+  if (domain === INITIAL_DOMAIN) {
+    return []
+  }
+
   const config = gridConfig[isVertical ? 'x' : 'y']
   const uniqValues = getUniqValues(items, domain, isVertical ? 'x' : 'y', false)
   const ticks = config[tickType] || 0
@@ -247,8 +258,8 @@ export class LinearChart extends React.Component<Props, State> {
   dotsClipId = `dots_clipPath_${this.uid}`
 
   state: State = {
-    xDomain: [0, 0],
-    yDomain: [0, 0],
+    xDomain: INITIAL_DOMAIN,
+    yDomain: INITIAL_DOMAIN,
     width: 0,
     height: 0,
     paddingX: 0,
@@ -320,20 +331,26 @@ export class LinearChart extends React.Component<Props, State> {
     const xOnBottom = xLabelsPos === 'bottom'
     const yOnLeft = yLabelsPos === 'left'
 
-    const linesOnTheActiveHoverLine = this.getLines().map(obj => {
-      const item =
-        obj.values.find(position => position[isVertical ? 'y' : 'x'] === activeHoverLine) ||
-        defaultPosition
+    const linesOnTheActiveHoverLine = this.getLines()
+      .map(obj => {
+        const item = obj.values.find(
+          position => position[isVertical ? 'y' : 'x'] === activeHoverLine
+        )
 
-      const value = isVertical ? item.x : item.y
+        if (!item) {
+          return undefined
+        }
 
-      return {
-        color: colorGroups[obj.colorGroupName],
-        name: obj.lineName,
-        item,
-        formattedValue: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
-      }
-    })
+        const value = isVertical ? item.x : item.y
+
+        return {
+          color: colorGroups[obj.colorGroupName],
+          name: obj.lineName,
+          item,
+          formattedValue: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
+        }
+      })
+      .filter(isDefined)
 
     const maxAxisValue =
       _.maxBy(
