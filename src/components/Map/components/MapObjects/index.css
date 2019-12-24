@@ -1,0 +1,19 @@
+.item {
+  fill: #002d47;
+  stroke: rgba(246, 251, 253);
+  stroke-opacity: 0.28;
+
+  &.isSelectable {
+    cursor: pointer;
+  }
+
+  &.isHovered,
+  &.isSelected {
+    fill: #163d53;
+  }
+
+  &.russia {
+    stroke-opacity: 0.8;
+    stroke-width: 2;
+  }
+}
