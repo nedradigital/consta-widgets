@@ -143,6 +143,8 @@ export const Axis: React.FC<Props> = ({
       formatLabel: isVertical ? formatValueForLabel : defaultFormatLabel,
     },
   ] as const
+  const showXLabels = Boolean(labelsAxis[0].values.length)
+  const showYLabels = Boolean(labelsAxis[1].values.length)
 
   // d3 некорректно обновляет направление оси, поэтому приходится удалять ось и пересоздавать заново
   // @see https://github.com/d3/d3-axis/issues/45
@@ -241,8 +243,8 @@ export const Axis: React.FC<Props> = ({
   })
 
   useLayoutEffect(() => {
-    const xAxisHeight = xLabelsRef.current!.getBoundingClientRect().height
-    const yAxisWidth = yLabelsRef.current!.getBoundingClientRect().width
+    const xAxisHeight = xLabelsRef.current ? xLabelsRef.current.getBoundingClientRect().height : 0
+    const yAxisWidth = yLabelsRef.current ? yLabelsRef.current.getBoundingClientRect().width : 0
 
     onAxisSizeChange({ xAxisHeight, yAxisWidth })
   })
@@ -290,8 +292,8 @@ export const Axis: React.FC<Props> = ({
         {showYGrid && <g className={css.grid} ref={yGridRef} />}
       </g>
 
-      <g ref={xLabelsRef} />
-      <g ref={yLabelsRef} />
+      {showXLabels && <g ref={xLabelsRef} />}
+      {showYLabels && <g ref={yLabelsRef} />}
       <g ref={secondaryScaleUnitRef} />
     </g>
   )
