@@ -1,43 +1,60 @@
-@custom-selector :--tick-line :global(.tick) > line;
+.wrapper {
+  display: grid;
+
+  height: 100%;
+
+  grid-template-areas:
+    'topLeft topTicks topRight'
+    'leftTicks main rightTicks'
+    'bottomLeftTicks bottomTicks bottomRightTicks'
+    'bottomLeft bottomUnit bottomRight';
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: auto 1fr auto;
+}
+
+.leftTicks,
+.rightTicks {
+  max-width: calc-size(160);
+}
+
+.topLeft {
+  grid-area: topLeft;
+
+  margin-right: calc-size(17);
+  margin-bottom: calc-size(9);
+}
+
+.topTicks {
+  grid-area: topTicks;
+}
+
+.leftTicks {
+  grid-area: leftTicks;
+}
 
 .main {
-  --grid-line-color: rgba(213, 221, 226, 0.5);
+  grid-area: main;
 }
 
-.grid {
-  color: var(--grid-line-color);
-
-  & > :global(.domain) {
-    stroke: none;
-  }
-
-  & > :global(.tick) {
-    stroke-dasharray: 1, 3;
-  }
+.rightTicks {
+  grid-area: rightTicks;
 }
 
-.labels {
+.bottomTicks {
+  grid-area: bottomTicks;
+}
+
+.bottomUnit {
+  grid-area: bottomUnit;
+
+  margin-top: calc-size(5);
+
+  text-align: right;
+}
+
+.unit {
   font-size: calc-size(11);
+  line-height: calc-size(15);
 
-  color: var(--text-color-70);
-
-  & > :global(.domain) {
-    stroke: none;
-  }
-
-  & > :--tick-line {
-    color: var(--grid-line-color);
-  }
-
-  &_x&_bottom > :--tick-line {
-    transform: translateY(9px);
-  }
-
-  &_y&_left > :--tick-line {
-    transform: translateX(-10px);
-  }
-}
-
-.hideLine line {
-  display: none;
+  color: rgba(246, 251, 253, 0.7);
 }

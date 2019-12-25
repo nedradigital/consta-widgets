@@ -383,6 +383,7 @@ const mockData: DataMap = {
         ],
       },
     ],
+    unit: 'тыс м3',
   },
   [DataType.LinearChart]: {
     colorGroups: {
