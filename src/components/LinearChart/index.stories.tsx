@@ -41,6 +41,16 @@ const getCommonProps = () => {
         lineName: 'Южное месторождение',
       },
     ],
+    threshold: object('threshold', {
+      max: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => ({
+        x: Date.now() + x,
+        y: 6,
+      })),
+      min: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => ({
+        x: Date.now() + x,
+        y: 1,
+      })),
+    }),
     gridConfig: object('gridConfig', {
       x: {
         labels: 'bottom',

@@ -60,6 +60,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     formatValueForTooltip,
     formatValueForTooltipTitle,
     unit,
+    threshold,
   },
 }) => (
   <LinearChart
@@ -85,6 +86,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     formatValueForTooltip={formatValueForTooltip}
     formatValueForTooltipTitle={formatValueForTooltipTitle}
     unit={unit}
+    threshold={threshold}
   />
 )
 

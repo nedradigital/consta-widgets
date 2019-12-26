@@ -5,43 +5,26 @@ import {
   getMainTickValues,
   getSecondaryTickValues,
   Item,
-  Line,
   NumberRange,
   padDomain,
 } from '../'
 
-const horizontalLine: readonly Line[] = [
-  {
-    colorGroupName: 'red',
-    values: [{ x: 1, y: 9 }, { x: 3, y: 6 }, { x: 5, y: 3 }, { x: 7, y: 0 }],
-    lineName: 'Северный бур',
-  },
+const horizontalLine: ReadonlyArray<readonly Item[]> = [
+  [{ x: 1, y: 9 }, { x: 3, y: 6 }, { x: 5, y: 3 }, { x: 7, y: 0 }],
 ]
 
-const verticalLine: readonly Line[] = [
-  {
-    colorGroupName: 'red',
-    values: [{ x: 9, y: 1 }, { x: 6, y: 3 }, { x: 3, y: 5 }, { x: 0, y: 7 }],
-    lineName: 'Северный бур',
-  },
+const verticalLine: ReadonlyArray<readonly Item[]> = [
+  [{ x: 9, y: 1 }, { x: 6, y: 3 }, { x: 3, y: 5 }, { x: 0, y: 7 }],
 ]
 
-const horizontalLines: readonly Line[] = [
+const horizontalLines: ReadonlyArray<readonly Item[]> = [
   ...horizontalLine,
-  {
-    colorGroupName: 'blue',
-    values: [{ x: 1, y: -4 }, { x: 3, y: 2 }, { x: 5, y: 6 }, { x: 7, y: 10 }],
-    lineName: 'Южное месторождение',
-  },
+  [{ x: 1, y: -4 }, { x: 3, y: 2 }, { x: 5, y: 6 }, { x: 7, y: 10 }],
 ]
 
-const verticalLines: readonly Line[] = [
+const verticalLines: ReadonlyArray<readonly Item[]> = [
   ...verticalLine,
-  {
-    colorGroupName: 'blue',
-    values: [{ x: -4, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 5 }, { x: 10, y: 7 }],
-    lineName: 'Южное месторождение',
-  },
+  [{ x: -4, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 5 }, { x: 10, y: 7 }],
 ]
 
 // Заменяем методы из LinearChart на более простую реализацию чтобы в расчетах не использовались константные отступы.

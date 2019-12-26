@@ -1,0 +1,13 @@
+.wrapper {
+  color: #f2c94c;
+}
+
+.line {
+  stroke-dasharray: 5;
+}
+
+.fill {
+  fill: currentColor;
+
+  opacity: 0.05;
+}
