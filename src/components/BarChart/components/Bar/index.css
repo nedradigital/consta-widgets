@@ -1,6 +1,29 @@
+.bar {
+  --round-radius: calc-size(2);
+
+  width: 100%;
+  height: 100%;
+
+  &.borderTop {
+    border-radius: var(--round-radius) var(--round-radius) 0 0;
+  }
+
+  &.borderRight {
+    border-radius: 0 var(--round-radius) var(--round-radius) 0;
+  }
+
+  &.borderBottom {
+    border-radius: 0 0 var(--round-radius) var(--round-radius);
+  }
+
+  &.borderLeft {
+    border-radius: var(--round-radius) 0 0 var(--round-radius);
+  }
+}
+
 .label {
   font-size: calc-size(12);
   font-weight: bold;
 
-  color: #edf3f5;
+  fill: #edf3f5;
 }

@@ -1,12 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import { useUID } from 'react-uid'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
-import { isEqual } from 'lodash'
 
+import { Grid } from '@/components/Grid'
 import { ColorGroups } from '@/dashboard/types'
 
 import { Axis } from './components/Axis'
@@ -32,10 +32,12 @@ type Props = {
   /** Показывать значение рядом с линиями. Работает только при orientation: horizontal */
   showValues?: boolean
   valuesTick?: number
+  showUnitLeft?: boolean
+  showUnitBottom?: boolean
+  unit?: string
 }
 
-const getXRange = (width: number, orientation: Orientation): NumberRange =>
-  orientation === 'horizontal' ? [-1, width] : [0, width]
+const getXRange = (width: number): NumberRange => [0, width]
 const getYRange = (height: number, orientation: Orientation): NumberRange =>
   orientation === 'horizontal' ? [0, height] : [height, 0]
 
@@ -46,16 +48,14 @@ export const getGroupScale = (domain: readonly string[], size: number, orientati
     .range(
       orientation === 'horizontal'
         ? [getYRange(size, orientation)[0], getYRange(size, orientation)[1]]
-        : [getXRange(size, orientation)[0], getXRange(size, orientation)[1]]
+        : [getXRange(size)[0], getXRange(size)[1]]
     )
 
 export const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
   d3
     .scaleLinear()
     .domain([...domain])
-    .range(
-      orientation === 'horizontal' ? getXRange(size, orientation) : getYRange(size, orientation)
-    )
+    .range(orientation === 'horizontal' ? getXRange(size) : getYRange(size, orientation))
 
 const getDomain = (items: readonly Data[]): NumberRange => {
   // tslint:disable-next-line:readonly-array
@@ -64,10 +64,18 @@ const getDomain = (items: readonly Data[]): NumberRange => {
     return mutableAcc
   }, [])
 
-  return [0, d3.max(numbers)] as NumberRange
+  const minNumber = d3.min(numbers) || 0
+  const maxNumber = d3.max(numbers) || 0
+  const maxInDomain = d3.max([-minNumber, maxNumber]) || 0
+
+  if (minNumber < 0) {
+    return [-maxInDomain, maxInDomain]
+  }
+
+  return [0, maxNumber] as NumberRange
 }
 
-const getPaddingRight = (orientation: Orientation, showValues?: boolean) =>
+const getPadding = (orientation: Orientation, showValues?: boolean) =>
   orientation === 'horizontal' && showValues ? getCalculatedSize(50) : 0
 
 export const BarChart: React.FC<Props> = ({
@@ -76,84 +84,90 @@ export const BarChart: React.FC<Props> = ({
   colorGroups,
   showValues,
   valuesTick = 4,
+  showUnitLeft,
+  showUnitBottom,
+  unit,
 }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
-  const [{ paddingX, paddingY }, changePadding] = useState({ paddingX: 0, paddingY: 0 })
+
   const clipId = `barchart_clipPath_${useUID()}`
-
-  const onAxisSizeChange = ({
-    xAxisHeight,
-    yAxisWidth,
-  }: {
-    xAxisHeight: number
-    yAxisWidth: number
-  }) => {
-    const newPaddings = {
-      paddingX: yAxisWidth,
-      paddingY: xAxisHeight,
-    }
-
-    if (!isEqual({ paddingX, paddingY }, newPaddings)) {
-      changePadding(newPaddings)
-    }
-  }
-
-  const svgWidth = width
-    ? Math.round(width - paddingX - getPaddingRight(orientation, showValues))
-    : 0
-  const svgHeight = height ? Math.round(height - paddingY) : 0
+  const isHorizontal = orientation === 'horizontal'
 
   const groupDomains = data.map(item => item.label)
   const valuesDomains = getDomain(data)
+  const isNegative = Math.min(...valuesDomains) < 0
 
-  const groupScale = getGroupScale(
-    groupDomains,
-    orientation === 'horizontal' ? svgHeight : svgWidth,
-    orientation
-  )
+  const paddingCount = isNegative ? 2 : 1
+  const padding = getPadding(orientation, showValues)
+  const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
+  const svgHeight = height ? Math.round(height) : 0
+
+  const groupScale = getGroupScale(groupDomains, isHorizontal ? svgHeight : svgWidth, orientation)
   const valuesScale = getValuesScale(
     valuesDomains,
-    orientation === 'horizontal' ? svgWidth : svgHeight,
+    isHorizontal ? svgWidth : svgHeight,
     orientation
   )
 
+  const gridTickValues = valuesScale.ticks(valuesTick)
+  const gridXTickValues = isHorizontal ? gridTickValues : []
+  const gridYTickValues = isHorizontal ? [] : gridTickValues
+
+  const axisShowPositions = {
+    top: !isHorizontal && isNegative,
+    right: isHorizontal && isNegative,
+    bottom: true,
+    left: true,
+  }
+
+  const style = {
+    paddingLeft: isNegative ? padding : 0,
+    paddingRight: padding,
+  }
+
   return (
-    <div
-      ref={ref}
-      className={css.main}
-      style={{
-        paddingLeft: paddingX,
-      }}
+    <Axis
+      ticks={valuesScale.ticks(valuesTick)}
+      labels={groupScale.domain()}
+      ticksScaler={valuesScale}
+      labelsScaler={groupScale}
+      isHorizontal={isHorizontal}
+      showPositions={axisShowPositions}
+      unit={unit}
+      showUnitLeft={showUnitLeft}
+      showUnitBottom={showUnitBottom}
+      horizontalStyles={style}
     >
-      <svg className={css.svg} width={svgWidth} height={svgHeight}>
-        <defs>
-          <clipPath id={clipId}>
-            <rect width={svgWidth} height={svgHeight} />
-          </clipPath>
-        </defs>
-        <Axis
-          width={svgWidth}
-          height={svgHeight}
-          groupScale={groupScale}
-          valuesScale={valuesScale}
-          valuesTick={valuesTick}
-          orientation={orientation}
-          onAxisSizeChange={onAxisSizeChange}
-        />
-        {data.map(item => (
-          <Bar
-            key={item.label}
-            orientation={orientation}
-            data={item}
-            groupScale={groupScale}
-            valuesScale={valuesScale}
-            colorGroups={colorGroups}
-            clipId={clipId}
-            showValues={showValues}
+      <div ref={ref} className={css.main} style={style}>
+        <svg className={css.svg} width={svgWidth} height={svgHeight}>
+          <defs>
+            <clipPath id={clipId}>
+              <rect width={svgWidth} height={svgHeight} />
+            </clipPath>
+          </defs>
+          <Grid
+            scalerX={valuesScale}
+            scalerY={valuesScale}
+            xTickValues={gridXTickValues}
+            yTickValues={gridYTickValues}
+            width={svgWidth}
+            height={svgHeight}
           />
-        ))}
-      </svg>
-    </div>
+          {data.map(item => (
+            <Bar
+              key={item.label}
+              orientation={orientation}
+              data={item}
+              groupScale={groupScale}
+              valuesScale={valuesScale}
+              colorGroups={colorGroups}
+              clipId={clipId}
+              showValues={showValues}
+            />
+          ))}
+        </svg>
+      </div>
+    </Axis>
   )
 }

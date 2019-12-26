@@ -5,9 +5,9 @@ import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 import { isEqual } from 'lodash'
 
-import { Axis } from '@/components/BarChart/components/Axis'
 import { ColorGroups } from '@/dashboard/types'
 
+import { Axis } from './components/Axis'
 import { Control } from './components/Control'
 import { MultiBar } from './components/MultiBar'
 import { Tooltip } from './components/Tooltip'

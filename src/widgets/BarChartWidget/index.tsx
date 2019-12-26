@@ -10,6 +10,8 @@ type Data = DataMap[typeof dataType]
 type Params = {
   orientation: Orientation
   showValues: boolean
+  showUnitLeft: boolean
+  showUnitBottom: boolean
 }
 
 const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
@@ -17,12 +19,22 @@ const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
 export const defaultParams: Params = {
   orientation: 'vertical',
   showValues: false,
+  showUnitLeft: false,
+  showUnitBottom: false,
 }
 
 export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { orientation, showValues },
+  params: { orientation, showValues, showUnitLeft, showUnitBottom },
   data,
-}) => <BarChart {...data} showValues={showValues} orientation={orientation} />
+}) => (
+  <BarChart
+    {...data}
+    showValues={showValues}
+    showUnitLeft={showUnitLeft}
+    showUnitBottom={showUnitBottom}
+    orientation={orientation}
+  />
+)
 
 export const BarChartWidget = createWidget<Data, Params>({
   id: widgetId,
@@ -58,6 +70,17 @@ export const BarChartWidget = createWidget<Data, Params>({
             onChange={value => onChangeParam('showValues', value)}
           />
         ) : null}
+        <b>Единицы измерения</b>
+        <WidgetSettingsCheckbox
+          name="Показывать слева"
+          value={params.showUnitLeft}
+          onChange={value => onChangeParam('showUnitLeft', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Показывать снизу"
+          value={params.showUnitBottom}
+          onChange={value => onChangeParam('showUnitBottom', value)}
+        />
       </>
     )
   },

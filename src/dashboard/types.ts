@@ -87,6 +87,7 @@ export type DataMap = {
   } & WithColorGroups
   [DataType.BarChart]: {
     data: readonly BarChartData[]
+    unit?: string
   } & WithColorGroups
   [DataType.LinearChart]: {
     data: readonly Line[]

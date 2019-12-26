@@ -1,157 +1,111 @@
-import React, { useLayoutEffect } from 'react'
-
 import classnames from 'classnames'
-import * as d3 from 'd3'
 
-import { Orientation } from '../../'
+import { Position, Scaler, Ticks } from '@/components/Ticks'
 
 import css from './index.css'
 
-const TICK_PADDING = 15
-
-enum AxisDirections {
-  bottom = 'axisBottom',
-  left = 'axisLeft',
-
-  vertical = 'axisLeft',
-  horizontal = 'axisBottom',
+type ShowPositions = {
+  [key in Position]: boolean
 }
 
 type Props = {
-  width: number
-  height: number
-  onAxisSizeChange: (sizes: { xAxisHeight: number; yAxisWidth: number }) => void
-  valuesTick: number
-  valuesScale: d3.ScaleLinear<number, number>
-  groupScale: d3.ScaleBand<string>
-  orientation: Orientation
-  valuesSpecifier?: string
+  ticks: readonly number[]
+  labels: readonly string[]
+  ticksScaler: Scaler<number>
+  labelsScaler: Scaler<string>
+  isHorizontal?: boolean
+  showPositions?: ShowPositions
+  showTickLine?: boolean
+  showLabelLine?: boolean
+  showUnitLeft?: boolean
+  showUnitBottom?: boolean
+  unit?: string
+  horizontalStyles?: React.CSSProperties
+  verticalStyles?: React.CSSProperties
 }
 
+const defaultShow: ShowPositions = {
+  top: false,
+  right: false,
+  bottom: true,
+  left: true,
+}
+
+const HORIZONTAL_POSITIONS: readonly Position[] = ['left', 'right']
+const VERTICAL_POSITIONS: readonly Position[] = ['top', 'bottom']
+
+const positionClass = {
+  top: css.topTicks,
+  right: css.rightTicks,
+  bottom: css.bottomTicks,
+  left: css.leftTicks,
+}
+
+const getPositionsForShow = (positions: readonly Position[], showing: ShowPositions) => {
+  return positions.filter(position => showing[position])
+}
+
+const renderUnit = (className: string, unit: string) => (
+  <div className={classnames(css.unit, className)}>{unit}</div>
+)
+
 export const Axis: React.FC<Props> = ({
-  width,
-  height,
-  valuesTick,
-  onAxisSizeChange,
-  groupScale,
-  valuesScale,
-  orientation = 'vertical',
-  valuesSpecifier,
+  children,
+  labels,
+  labelsScaler,
+  ticks,
+  ticksScaler,
+  isHorizontal,
+  showPositions = defaultShow,
+  showTickLine = true,
+  showLabelLine = false,
+  unit,
+  showUnitLeft,
+  showUnitBottom,
+  horizontalStyles = {},
+  verticalStyles = {},
 }) => {
-  const xLabelsRef = React.createRef<SVGGElement>()
-  const yLabelsRef = React.createRef<SVGGElement>()
-  const gridRef = React.createRef<SVGGElement>()
-  const isHorizontal = orientation === 'horizontal'
+  const labelPosition = getPositionsForShow(
+    isHorizontal ? HORIZONTAL_POSITIONS : VERTICAL_POSITIONS,
+    showPositions
+  )
+  const ticksPosition = getPositionsForShow(
+    isHorizontal ? VERTICAL_POSITIONS : HORIZONTAL_POSITIONS,
+    showPositions
+  )
 
-  const labelsAxis = [
-    {
-      getEl: () => xLabelsRef.current,
-      direction: AxisDirections.bottom,
-      scale: isHorizontal ? valuesScale : groupScale,
-      classes: classnames(
-        css.labels,
-        css.labels_x,
-        css.labels_bottom,
-        orientation === 'vertical' && css.hideLine
-      ),
-      transform: `translateY(${height}px)`,
-      tickOn: isHorizontal,
-    },
-    {
-      getEl: () => yLabelsRef.current,
-      direction: AxisDirections.left,
-      scale: isHorizontal ? groupScale : valuesScale,
-      classes: classnames(css.labels, css.labels_y, css.labels_left, isHorizontal && css.hideLine),
-      transform: '',
-      tickOn: !isHorizontal,
-    },
-  ] as const
-
-  // d3 некорректно обновляет направление оси, поэтому приходится удалять ось и пересоздавать заново
-  // @see https://github.com/d3/d3-axis/issues/45
-  useLayoutEffect(() => {
-    labelsAxis.forEach(labels => {
-      const labelsSelection = d3.select(labels.getEl())
-
-      labelsSelection.select('g').remove()
-
-      labelsSelection.append('g')
-    })
-
-    d3.select(gridRef.current)
-      .selectAll('g')
-      .remove()
-  }, [labelsAxis, gridRef, orientation])
-
-  useLayoutEffect(() => {
-    // Labels
-    labelsAxis.forEach(labels => {
-      const axisSelection = d3.select(labels.getEl()).select('g') as d3.Selection<
-        SVGGElement,
-        unknown,
-        null,
-        undefined
-      >
-      const axis = labels.tickOn
-        ? d3[labels.direction](labels.scale as d3.ScaleLinear<number, number>)
-            .ticks(valuesTick)
-            .tickSize(4)
-            .tickPadding(TICK_PADDING)
-            .tickFormat(d => {
-              if (valuesSpecifier) {
-                return d3.format(valuesSpecifier)(d)
-              }
-
-              return String(d)
-            })
-        : d3[labels.direction](labels.scale as d3.ScaleBand<string>)
-
-      axisSelection
-        .attr('class', labels.classes)
-        .style('transform', labels.transform)
-        .call(axis)
-        .selectAll('text')
-        .style('text-anchor', (_, index, el) => {
-          if (isHorizontal && ['axisBottom', 'axisTop'].includes(labels.direction)) {
-            if (index === 0) {
-              return 'start'
-            }
-            if (index === el.length - 1) {
-              return 'end'
-            }
-            return 'middle'
-          } else {
-            return ''
-          }
-        })
-    })
-
-    // Grid lines
-    if (!d3[AxisDirections[orientation]]) {
-      return
-    }
-
-    const gridBase = d3[AxisDirections[orientation]](valuesScale)
-      .tickSize(isHorizontal ? height : -width)
-      .tickFormat(() => '')
-
-    if (gridRef.current) {
-      d3.select(gridRef.current).call(gridBase.ticks(4))
-    }
-  })
-
-  useLayoutEffect(() => {
-    const xAxisHeight = xLabelsRef.current!.getBoundingClientRect().height
-    const yAxisWidth = yLabelsRef.current!.getBoundingClientRect().width
-
-    onAxisSizeChange({ xAxisHeight, yAxisWidth })
-  })
+  const getStyles = (position: Position) => {
+    return position === 'top' || position === 'bottom' ? horizontalStyles : verticalStyles
+  }
 
   return (
-    <g className={css.main}>
-      <g className={css.grid} ref={gridRef} />
-      <g ref={xLabelsRef} />
-      <g ref={yLabelsRef} />
-    </g>
+    <div className={css.wrapper}>
+      {unit && showUnitLeft && renderUnit(css.topLeft, unit)}
+      {labelPosition.map((position, idx) => (
+        <Ticks
+          className={positionClass[position]}
+          key={idx}
+          values={labels}
+          scaler={labelsScaler}
+          position={position}
+          showLine={showLabelLine}
+          style={getStyles(position)}
+        />
+      ))}
+      {ticksPosition.map((position, idx) => (
+        <Ticks
+          className={positionClass[position]}
+          key={idx}
+          values={ticks}
+          scaler={ticksScaler}
+          position={position}
+          showLine={showTickLine}
+          isTicksSnuggleOnEdge={isHorizontal}
+          style={getStyles(position)}
+        />
+      ))}
+      <div className={css.main}>{children}</div>
+      {unit && showUnitBottom && renderUnit(css.bottomUnit, unit)}
+    </div>
   )
 }

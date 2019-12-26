@@ -1,0 +1,97 @@
+@custom-selector :--isTop .isTop;
+@custom-selector :--isRight .isRight;
+@custom-selector :--isBottom .isBottom;
+@custom-selector :--isLeft .isLeft;
+
+.group {
+  --tick-margin: calc-size(9);
+  --tick-line-color: rgba(213, 221, 226, 0.5);
+  --tick-line-size: calc-size(4);
+
+  display: flex;
+
+  &:--isTop,
+  &:--isBottom {
+    width: 100%;
+  }
+
+  &:--isRight,
+  &:--isLeft {
+    flex-direction: column;
+
+    height: 100%;
+  }
+}
+
+.tick {
+  display: flex;
+
+  &:--isTop,
+  &:--isBottom {
+    flex-direction: column;
+
+    width: 0;
+  }
+
+  &:--isRight,
+  &:--isLeft {
+    height: 0;
+
+    word-break: break-word;
+  }
+
+  &:--isTop {
+    margin-bottom: var(--tick-margin);
+  }
+
+  &:--isRight {
+    justify-content: flex-start;
+
+    margin-left: var(--tick-margin);
+
+    text-align: left;
+  }
+
+  &:--isBottom {
+    margin-top: var(--tick-margin);
+  }
+
+  &:--isLeft {
+    justify-content: flex-end;
+
+    margin-right: var(--tick-margin);
+
+    text-align: right;
+  }
+}
+
+.line {
+  background-color: var(--tick-line-color);
+
+  &:--isTop,
+  &:--isBottom {
+    width: 1px;
+    height: var(--tick-line-size);
+  }
+
+  &:--isRight,
+  &:--isLeft {
+    width: var(--tick-line-size);
+    height: 1px;
+  }
+
+  &:--isRight {
+    margin-right: var(--tick-line-size);
+  }
+
+  &:--isLeft {
+    margin-left: var(--tick-line-size);
+  }
+}
+
+.text {
+  font-size: calc-size(12);
+  line-height: calc-size(17);
+
+  color: var(--text-color-70);
+}
