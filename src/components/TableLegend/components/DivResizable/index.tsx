@@ -6,6 +6,10 @@ type Props = {
   height: number
 }
 
+const getStyleVal = (element: HTMLElement, cssProperty: string) => {
+  return window.getComputedStyle(element, null).getPropertyValue(cssProperty)
+}
+
 const calcPaddingDiff = (column?: HTMLElement) => {
   if (!column || getStyleVal(column, 'box-sizing') === 'border-box') {
     return 0
@@ -15,10 +19,6 @@ const calcPaddingDiff = (column?: HTMLElement) => {
   const paddingRight = getStyleVal(column, 'padding-right')
 
   return parseInt(paddingLeft, 10) + parseInt(paddingRight, 10)
-}
-
-const getStyleVal = (element: HTMLElement, cssProperty: string) => {
-  return window.getComputedStyle(element, null).getPropertyValue(cssProperty)
 }
 
 const minWidth = 150

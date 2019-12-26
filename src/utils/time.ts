@@ -15,6 +15,16 @@ type FormatDateOptions = {
 
 const addZero = (n: number) => String(n).padStart(2, '0')
 
+export const getDayMonthYearFromTimestamp = (date: number) => {
+  const d = new Date(date)
+
+  const month = d.getMonth()
+  const day = d.getDate()
+  const year = d.getFullYear()
+
+  return [day, month, year]
+}
+
 export const formatDate = (date: number, options: FormatDateOptions = {}): string => {
   const { withoutZero, separator = '.' } = options
   const [day, month, year] = getDayMonthYearFromTimestamp(date)
@@ -24,16 +34,6 @@ export const formatDate = (date: number, options: FormatDateOptions = {}): strin
   }
 
   return [addZero(day), addZero(month + 1), year].join(separator)
-}
-
-export const getDayMonthYearFromTimestamp = (date: number) => {
-  const d = new Date(date)
-
-  const month = d.getMonth()
-  const day = d.getDate()
-  const year = d.getFullYear()
-
-  return [day, month, year]
 }
 
 export const getDaysInMonth = (month: number, year: number) => {
