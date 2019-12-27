@@ -23,6 +23,7 @@ export type Point = {
   yPercent: number
   label: string
   axisName: string
+  originalValue: number
 }
 
 export type FigureValue = {
@@ -59,9 +60,12 @@ export type Axis = {
   angle: number
 }
 
-export type FigureColor = {
-  lineColor: string
-  withFill: boolean
+export type ExtendedFigure = Figure & {
+  points: readonly Point[]
+  color: {
+    lineColor: string
+    withFill: boolean
+  }
 }
 
 export const deg2rad = (deg: number) => deg * (Math.PI / 180)
@@ -144,7 +148,6 @@ export const RadarChart: React.FC<Props> = ({
     width - 2 * (axisNameWidth + axisNameOffset),
     height - 2 * (2 * axisNameLineHeight + axisNameOffset)
   )
-  const percentSize = size / 100
 
   const gradientId = `radarchart_gradient_${useUID()}`
 
@@ -163,8 +166,8 @@ export const RadarChart: React.FC<Props> = ({
 
   const concentricColors = withConcentricColor ? concentricColorsByTicksAmount[ticks] : undefined
 
-  const pointsForFigures = figures.map(figure =>
-    sortFigureValues(figure.values, axesNames)
+  const extendedFigures: readonly ExtendedFigure[] = figures.map(figure => {
+    const points = sortFigureValues(figure.values, axesNames)
       .map(value => {
         const theAxis = axesAngles.find(a => a.name === value.axisName)
 
@@ -178,10 +181,8 @@ export const RadarChart: React.FC<Props> = ({
           : undefined
       })
       .filter(isDefined)
-  )
 
-  const colorsForFigures: readonly FigureColor[] = figures.map(figure =>
-    concentricColors
+    const color = concentricColors
       ? {
           lineColor: `url(#${gradientId})`,
           withFill: false,
@@ -190,40 +191,13 @@ export const RadarChart: React.FC<Props> = ({
           lineColor: colorGroups[figure.colorGroupName],
           withFill: true,
         }
-  )
-
-  const getTooltipPosition = (xPercent: number, yPercent: number) => {
-    if (!svgWrapperRef.current) {
-      return { x: 0, y: 0 }
-    }
-
-    const { top, left } = svgWrapperRef.current.getBoundingClientRect()
 
     return {
-      x: percentSize * xPercent + left,
-      y: percentSize * yPercent + top,
+      ...figure,
+      points,
+      color,
     }
-  }
-
-  const pointsOnAxis = activeAxis
-    ? pointsForFigures.flat().filter(item => item.axisName === activeAxis.name)
-    : []
-
-  const tooltipValues = pointsOnAxis.map(point => {
-    return formatValueForTooltip
-      ? formatValueForTooltip(point.originalValue)
-      : formatValueForLabel(point.originalValue)
   })
-
-  const itemWithMaxValueOnAxis = _.maxBy(pointsOnAxis, item => item.originalValue) || {
-    xPercent: 0,
-    yPercent: 0,
-  }
-
-  const tooltipPosition = getTooltipPosition(
-    itemWithMaxValueOnAxis.xPercent,
-    itemWithMaxValueOnAxis.yPercent
-  )
 
   return (
     <div ref={ref} className={css.main}>
@@ -254,37 +228,25 @@ export const RadarChart: React.FC<Props> = ({
               axesAngles={axesAngles}
               labelSize={labelSize}
               formatValueForLabel={formatValueForLabel}
-              isHoverable={figures.length > 1}
               colors={concentricColors && concentricColors.circles}
               activeAxis={activeAxis}
-              onMouseEnter={setActiveAxis}
-              onMouseLeave={() => setActiveAxis(undefined)}
+              onChangeActiveAxis={setActiveAxis}
             />
 
-            {figures.map((figure, idx) => (
-              <RadarChartFigure
-                key={figure.colorGroupName}
-                size={size}
-                points={pointsForFigures[idx]}
-                {...colorsForFigures[idx]}
+            {extendedFigures.map((f, idx) => (
+              <RadarChartFigure key={idx} size={size} points={f.points} {...f.color} />
+            ))}
+
+            {extendedFigures.map((f, idx) => (
+              <RadarChartPoints
+                key={idx}
+                points={f.points}
+                lineColor={f.color.lineColor}
+                activeAxis={activeAxis ? activeAxis.name : ''}
+                backgroundColor={backgroundColor}
               />
             ))}
           </svg>
-
-          {/* Точки пришлось положить отдельно, чтобы их хинты были поверх линий
-          (через z-index это сделать не получится, т.к. в svg он не работает) */}
-          <div className={css.points}>
-            {figures.map((figure, idx) => (
-              <RadarChartPoints
-                key={figure.colorGroupName}
-                points={pointsForFigures[idx]}
-                lineColor={colorsForFigures[idx].lineColor}
-                activeAxis={activeAxis ? activeAxis.name : ''}
-                backgroundColor={backgroundColor}
-                isHoverable={figures.length === 1}
-              />
-            ))}
-          </div>
 
           {axesAngles.map(axis => {
             const { xPercent, yPercent } = angleToCoord(axis.angle, 1)
@@ -302,13 +264,12 @@ export const RadarChart: React.FC<Props> = ({
             )
           })}
 
-          {figures.length > 1 && (
+          {svgWrapperRef.current && activeAxis && (
             <AxisTooltip
-              colors={colorsForFigures}
-              figures={figures}
-              position={tooltipPosition}
-              values={tooltipValues}
+              extendedFigures={extendedFigures}
               axis={activeAxis}
+              anchorEl={svgWrapperRef.current}
+              formatValue={formatValueForTooltip || formatValueForLabel}
             />
           )}
         </div>

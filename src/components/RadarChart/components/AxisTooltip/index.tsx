@@ -1,32 +1,50 @@
 import React from 'react'
 
+import { isDefined } from '@gaz/utils/lib/type-guards'
+import * as _ from 'lodash'
+
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
+import { FormatValue } from '@/dashboard/types'
 
-import { Axis, Figure, FigureColor } from '../..'
+import { Axis, ExtendedFigure } from '../..'
 
 type Props = {
-  colors: readonly FigureColor[]
-  figures: readonly Figure[]
-  position: {
-    x: number
-    y: number
-  }
-  values: readonly string[]
-  axis?: Axis
+  extendedFigures: readonly ExtendedFigure[]
+  axis: Axis
+  formatValue: FormatValue
+  anchorEl: Element
 }
 
-export const AxisTooltip: React.FC<Props> = ({ colors, figures, position, values, axis }) => {
+export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValue, anchorEl }) => {
+  const pointsOnAxis = extendedFigures
+    .map(f => f.points.find(p => p.axisName === axis.name))
+    .filter(isDefined)
+  const values = pointsOnAxis.map(point => formatValue(point.originalValue))
+  const itemWithMaxValue = _.maxBy(pointsOnAxis, item => item.originalValue)
+
+  if (!itemWithMaxValue) {
+    return null
+  }
+
+  const { top, left, width, height } = anchorEl.getBoundingClientRect()
+  const x = (width / 100) * itemWithMaxValue.xPercent + left
+  const y = (height / 100) * itemWithMaxValue.yPercent + top
+
   return (
-    <Tooltip isVisible={!!axis} x={position.x} y={position.y} direction="top">
-      {axis ? (
+    <Tooltip isVisible x={x} y={y} direction="top">
+      {extendedFigures.length === 1 ? (
+        values[0]
+      ) : (
         <TooltipContentForMultipleValues
-          colors={colors.map(obj => obj.lineColor)}
-          nameLines={figures.map(obj => obj.name)}
           title={axis.label}
-          values={values}
+          items={extendedFigures.map((f, idx) => ({
+            name: f.name,
+            color: f.color.lineColor,
+            value: values[idx],
+          }))}
         />
-      ) : null}
+      )}
     </Tooltip>
   )
 }

@@ -9,10 +9,6 @@ import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 
 import css from './index.css'
 
-function mapHandlerByCondition<T>(condition: boolean, handler: T) {
-  return condition ? handler : undefined
-}
-
 type Props = {
   ticks: number
   maxValue: number
@@ -20,11 +16,9 @@ type Props = {
   axesAngles: readonly Axis[]
   labelSize: RadarChartLabelSize
   formatValueForLabel: FormatValue
-  isHoverable: boolean
   colors?: readonly string[]
   activeAxis?: Axis
-  onMouseEnter: (axis: Axis) => void
-  onMouseLeave: () => void
+  onChangeActiveAxis: (axis?: Axis) => void
 }
 
 export const RadarChartAxes: React.FC<Props> = ({
@@ -34,11 +28,9 @@ export const RadarChartAxes: React.FC<Props> = ({
   axesAngles,
   labelSize,
   formatValueForLabel,
-  isHoverable,
   colors,
   activeAxis,
-  onMouseEnter,
-  onMouseLeave,
+  onChangeActiveAxis,
 }) => {
   const circles = _.times(ticks, v => {
     const fraction = (v + 1) / ticks
@@ -104,9 +96,9 @@ export const RadarChartAxes: React.FC<Props> = ({
                 y1="50%"
                 x2={`${coords.xPercent}%`}
                 y2={`${coords.yPercent}%`}
-                className={classnames(css.axisArea, isHoverable && css.isHoverable)}
-                onMouseEnter={mapHandlerByCondition(isHoverable, () => onMouseEnter(axis))}
-                onMouseLeave={mapHandlerByCondition(isHoverable, onMouseLeave)}
+                className={css.axisArea}
+                onMouseEnter={() => onChangeActiveAxis(axis)}
+                onMouseLeave={() => onChangeActiveAxis(undefined)}
               />
               <line
                 x1="50%"
@@ -120,7 +112,7 @@ export const RadarChartAxes: React.FC<Props> = ({
         })}
       </g>
 
-      {activeAxis && isHoverable && (
+      {activeAxis && (
         <line
           x1="50%"
           y1="50%"
