@@ -403,6 +403,10 @@ const mockData: DataMap = {
         lineName: 'Южное месторождение',
       },
     ],
+    threshold: {
+      max: [{ x: 0, y: 4 }, { x: 3, y: 4 }],
+      min: [{ x: 0, y: 0 }, { x: 3, y: 0 }],
+    },
   },
   [DataType.Pyramid]: [
     {

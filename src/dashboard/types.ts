@@ -5,7 +5,7 @@ import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData } from '@/components/DonutChart'
 import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
-import { Line } from '@/components/LinearChart'
+import { Line, Threshold } from '@/components/LinearChart'
 import { Data as MapData } from '@/components/Map'
 import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
@@ -95,6 +95,7 @@ export type DataMap = {
     formatValueForTooltip?: FormatValue
     formatValueForTooltipTitle?: FormatValue
     unit?: string
+    threshold?: Threshold
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: { text: string; tooltip?: React.ReactNode }

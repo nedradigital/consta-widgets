@@ -9,10 +9,18 @@ import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { HoverLines } from './components/HoverLines'
-import { Line as LineComponent } from './components/Line'
 import { LineTooltip } from './components/LineTooltip'
+import { LineWithDots as LineComponent } from './components/LineWithDots'
+import { Threshold } from './components/Threshold'
 import { Zoom } from './components/Zoom'
 import css from './index.css'
+
+export type Item = { x: number; y: number }
+
+export type Threshold = {
+  max: readonly Item[]
+  min?: readonly Item[]
+}
 
 export type Line = {
   colorGroupName: string
@@ -20,7 +28,6 @@ export type Line = {
   dots?: boolean
   lineName: string
 }
-export type Item = { x: number; y: number }
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
@@ -28,6 +35,7 @@ export type ScaleLinear = d3.ScaleLinear<number, number>
 type Props = {
   lines: readonly Line[]
   gridConfig: GridConfig
+  threshold?: Threshold
   withZoom?: boolean
   isVertical?: boolean
   formatValueForLabel: FormatValue
@@ -84,7 +92,8 @@ export const padDomain = (
   zoom: number
 ): NumberRange => {
   const [start, end] = domain
-  const delta = domain[1] - domain[0]
+  const diff = domain[1] - domain[0]
+  const delta = diff === 0 ? domain[0] : diff
 
   return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
 }
@@ -111,11 +120,11 @@ const getYScale = (domain: NumberRange, height: number) =>
 export const calculateSecondaryDomain = (
   mainDomainMin: number,
   mainDomainMax: number,
-  lines: readonly Line[],
+  linesValues: ReadonlyArray<readonly Item[]>,
   getValue: (v: Item) => number,
   getDomain: (items: readonly Item[]) => NumberRange
 ) => {
-  const lineDomains = lines.map(({ values }) => {
+  const lineDomains = linesValues.map(values => {
     const zoomRangeIndexes = _.sortBy([
       getIndexWithFallbackToDefault(_.findLastIndex(values, v => getValue(v) <= mainDomainMin), 0),
       getIndexWithFallbackToDefault(
@@ -235,6 +244,15 @@ const getOffsetPosition = (
   }
 }
 
+const flipPointsOnAxes = (items: readonly Item[], shouldFlip?: boolean) => {
+  return shouldFlip
+    ? items.map(item => ({
+        x: item.y,
+        y: item.x,
+      }))
+    : items
+}
+
 const getTitleTooltip = (
   value: number,
   formatValueForLabel: FormatValue,
@@ -284,10 +302,14 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines, isVertical },
+      props: { lines, threshold, isVertical },
     } = this
 
-    if (lines !== prevProps.lines || isVertical !== prevProps.isVertical) {
+    if (
+      lines !== prevProps.lines ||
+      isVertical !== prevProps.isVertical ||
+      threshold !== prevProps.threshold
+    ) {
       this.updateDomains()
     }
   }
@@ -312,6 +334,7 @@ export class LinearChart extends React.Component<Props, State> {
         formatValueForTooltipTitle,
         colorGroups,
         unit,
+        threshold,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, activeHoverLine },
     } = this
@@ -325,6 +348,7 @@ export class LinearChart extends React.Component<Props, State> {
     } = this.getTicks()
 
     const lineClipPath = `url(#${this.lineClipId})`
+    const dotsClipPath = `url(#${this.dotsClipId})`
     const scaleX = getXScale(xDomain, svgWidth)
     const scaleY = getYScale(yDomain, svgHeight)
     const dotRadius = DOT_SIZE / 2
@@ -418,6 +442,16 @@ export class LinearChart extends React.Component<Props, State> {
             yGuideValue={yGuideValue}
           />
 
+          {threshold && (
+            <Threshold
+              scaleX={scaleX}
+              scaleY={scaleY}
+              maxPoints={flipPointsOnAxes(threshold.max, isVertical)}
+              minPoints={threshold.min ? flipPointsOnAxes(threshold.min, isVertical) : undefined}
+              clipPath={lineClipPath}
+            />
+          )}
+
           {this.getLines().map(line => (
             <LineComponent
               key={line.colorGroupName}
@@ -428,7 +462,7 @@ export class LinearChart extends React.Component<Props, State> {
               scaleX={scaleX}
               scaleY={scaleY}
               lineClipPath={lineClipPath}
-              dotsClipPath={`url(#${this.dotsClipId})`}
+              dotsClipPath={dotsClipPath}
               activeHoverLine={activeHoverLine}
               isVertical={Boolean(isVertical)}
               setActiveHoverLine={this.setActiveHoverLine}
@@ -489,22 +523,31 @@ export class LinearChart extends React.Component<Props, State> {
     )
   }
 
+  getThresholdLines = () => {
+    const { threshold, isVertical } = this.props
+
+    if (!threshold) {
+      return []
+    }
+
+    const { max, min = [] } = threshold
+
+    return [flipPointsOnAxes(max, isVertical), flipPointsOnAxes(min, isVertical)]
+  }
+
+  getAllThresholdValues = (): readonly Item[] => _.flatten(this.getThresholdLines())
+
   getLines = (): readonly Line[] => {
     const { lines, isVertical } = this.props
 
     return isVertical
       ? lines.map(line => ({
           ...line,
-          values: _.sortBy(
-            line.values.map(v => ({
-              x: v.y,
-              y: v.x,
-            })),
-            'y'
-          ),
+          values: _.sortBy(flipPointsOnAxes(line.values, isVertical), 'y'),
         }))
       : lines
   }
+
   getAllValues = (): readonly Item[] => _.flatten(this.getLines().map(l => l.values))
 
   getSvgSize = () => {
@@ -559,10 +602,20 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   updateDomains() {
-    const xDomain = this.getXDomain(this.getAllValues())
-    const yDomain = this.getYDomain(this.getAllValues())
-    const [xGuideValue] = d3.extent(this.getAllValues(), v => v.x) as NumberRange
-    const [yGuideValue] = d3.extent(this.getAllValues(), v => v.y) as NumberRange
+    const { zoom } = this.state
+
+    /**
+     * Включаем в расчеты значения из линий порога только при первоначальной
+     * отрисовке или при изменениях данных с учетом того что зум равняется 1.
+     */
+    const linesValues = this.getAllValues()
+    const thresholdValues = zoom === 1 ? this.getAllThresholdValues() : []
+    const values: readonly Item[] = [...linesValues, ...thresholdValues]
+
+    const xDomain = this.getXDomain(values)
+    const yDomain = this.getYDomain(values)
+    const [xGuideValue] = d3.extent(values, v => v.x) as NumberRange
+    const [yGuideValue] = d3.extent(values, v => v.y) as NumberRange
 
     this.setState({
       xDomain,
@@ -655,28 +708,39 @@ export class LinearChart extends React.Component<Props, State> {
 
   onZoom = () => {
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
+    const newZoom: number = d3.event.transform.k
 
-    this.setState({ zoom: d3.event.transform.k })
+    this.setState({ zoom: newZoom })
 
     const originalMainDomain = mainAxis.getDomain(this.getAllValues())
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
     const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
     const newMainDomain: NumberRange = newMainScale.domain()
 
-    if (_.isEqual(mainAxis.currentDomain, newMainDomain)) {
-      return
+    if (!_.isEqual(mainAxis.currentDomain, newMainDomain)) {
+      mainAxis.setDomain(newMainDomain)
     }
 
-    mainAxis.setDomain(newMainDomain)
-
-    // Значения в домене не всегда идут от меньшего к большему: у вертикального графика домен перевёрнут, чтобы 0 был наверху графика
+    /**
+     * Значения в домене не всегда идут от меньшего к большему: у вертикального
+     * графика домен перевёрнут, чтобы 0 был наверху графика.
+     */
     const domainMin = Math.min(...newMainDomain)
     const domainMax = Math.max(...newMainDomain)
+
+    /**
+     * Включаем в расчет домена значения из линий порогов только если зум
+     * возвращается к стандартному значению.
+     */
+    const secondaryDomainValues = [
+      ...this.getLines().map(item => item.values),
+      ...(newZoom === 1 ? this.getThresholdLines() : []),
+    ].filter(item => item.length)
 
     const newSecondaryDomain = calculateSecondaryDomain(
       domainMin,
       domainMax,
-      this.getLines(),
+      secondaryDomainValues,
       mainAxis.getValue,
       secondaryAxis.getDomain
     )
