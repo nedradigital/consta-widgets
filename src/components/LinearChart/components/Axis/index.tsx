@@ -10,6 +10,8 @@ import { ScaleLinear, TickValues } from '../..'
 import css from './index.css'
 
 const TICK_PADDING = 15
+const UNIT_X_OFFSET = 20
+const UNIT_Y_OFFSET = 2
 
 export type XLabelsPosition = 'top' | 'bottom'
 export type YLabelsPosition = 'left' | 'right'
@@ -53,23 +55,6 @@ type Props = {
   yGuideValue: number
 }
 
-const getTransformForSecondaryScaleUnit = (
-  labelsRef: React.RefObject<SVGGElement>,
-  xOnBottom: boolean,
-  yOnLeft: boolean,
-  isVertical?: boolean
-) => {
-  const { height, width } = (labelsRef.current && labelsRef.current.getBoundingClientRect()) || {
-    height: 0,
-    width: 0,
-  }
-
-  const transformByVertical = xOnBottom ? height : (-1 * height) / 2
-  const transformByHorizontal = yOnLeft ? -1 * width : width / 2
-
-  return isVertical ? transformByVertical : transformByHorizontal
-}
-
 const defaultFormatLabel = (v: number) => String(v)
 
 export const Axis: React.FC<Props> = ({
@@ -94,9 +79,12 @@ export const Axis: React.FC<Props> = ({
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
+  const yLabelsAndUnitRef = React.createRef<SVGSVGElement>()
   const xGridRef = React.createRef<SVGGElement>()
   const yGridRef = React.createRef<SVGGElement>()
-  const secondaryScaleUnitRef = React.createRef<SVGGElement>()
+
+  const [xAxisHeight, setXAxisHeight] = React.useState(0)
+  const [yAxisWidth, setYAxisWidth] = React.useState(0)
 
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
@@ -243,47 +231,20 @@ export const Axis: React.FC<Props> = ({
   })
 
   useLayoutEffect(() => {
-    const xAxisHeight = xLabelsRef.current ? xLabelsRef.current.getBoundingClientRect().height : 0
-    const yAxisWidth = yLabelsRef.current ? yLabelsRef.current.getBoundingClientRect().width : 0
+    const newXAxisHeight = xLabelsRef.current
+      ? xLabelsRef.current.getBoundingClientRect().height
+      : 0
+    setXAxisHeight(newXAxisHeight)
 
-    onAxisSizeChange({ xAxisHeight, yAxisWidth })
-  })
+    const newYAxisWidth = yLabelsAndUnitRef.current
+      ? yLabelsAndUnitRef.current.getBoundingClientRect().width
+      : 0
+    setYAxisWidth(newYAxisWidth)
+  }, [xLabelsRef, setXAxisHeight, yLabelsAndUnitRef, setYAxisWidth])
 
   useLayoutEffect(() => {
-    const secondaryScaleUnitElement = d3.select(secondaryScaleUnitRef.current)
-    secondaryScaleUnitElement.select('text').remove()
-
-    const ticks = isVertical ? xLabelTicks : yLabelTicks
-
-    if (!ticks) {
-      return
-    }
-
-    if (secondaryScaleUnit) {
-      const x = isVertical || !yOnLeft ? width : 0
-      const y = !isVertical || !xOnBottom ? 0 : height
-
-      secondaryScaleUnitElement
-        .append('text')
-        .text(secondaryScaleUnit)
-        .attr('fill', 'currentColor')
-        .attr('class', css.labels)
-        .attr('x', x)
-        .attr('y', y)
-
-      const transform = getTransformForSecondaryScaleUnit(
-        isVertical ? xLabelsRef : yLabelsRef,
-        xOnBottom,
-        yOnLeft,
-        isVertical
-      )
-
-      secondaryScaleUnitElement.attr(
-        'transform',
-        isVertical ? `translate(0, ${transform})` : `translate(${transform}, -16)`
-      )
-    }
-  })
+    onAxisSizeChange({ xAxisHeight, yAxisWidth })
+  }, [onAxisSizeChange, xAxisHeight, yAxisWidth])
 
   return (
     <g className={css.main}>
@@ -292,9 +253,37 @@ export const Axis: React.FC<Props> = ({
         {showYGrid && <g className={css.grid} ref={yGridRef} />}
       </g>
 
-      {showXLabels && <g ref={xLabelsRef} />}
-      {showYLabels && <g ref={yLabelsRef} />}
-      <g ref={secondaryScaleUnitRef} />
+      {showXLabels && (
+        <g>
+          <g ref={xLabelsRef} />
+          {isVertical && (
+            <text
+              className={classnames(css.labels, css.unit)}
+              x="100%"
+              y={xOnBottom ? height + xAxisHeight - UNIT_Y_OFFSET : -xAxisHeight + UNIT_Y_OFFSET}
+              dominantBaseline={xOnBottom ? 'bottom' : 'hanging'}
+            >
+              {secondaryScaleUnit}
+            </text>
+          )}
+        </g>
+      )}
+
+      {showYLabels && (
+        <g ref={yLabelsAndUnitRef}>
+          <g ref={yLabelsRef} />
+          {!isVertical && (
+            <text
+              className={classnames(css.labels, css.unit, css.unit_y)}
+              x={yOnLeft ? -UNIT_X_OFFSET : width + UNIT_X_OFFSET}
+              y={0}
+              textAnchor={yOnLeft ? 'end' : 'start'}
+            >
+              {secondaryScaleUnit}
+            </text>
+          )}
+        </g>
+      )}
     </g>
   )
 }

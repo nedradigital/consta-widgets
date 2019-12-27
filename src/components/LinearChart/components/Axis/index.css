@@ -50,3 +50,11 @@
 .axisLine {
   stroke-dasharray: none;
 }
+
+.unit {
+  fill: currentColor;
+
+  &_y {
+    transform: translateY(calc-size(-16));
+  }
+}

@@ -100,36 +100,6 @@ export const updateTooltipStyleAndPosition = (
     .style('display', 'block')
 }
 
-export const displayStaticTooltips = (
-  transform: string,
-  staticTooltipsRef: React.RefObject<SVGGElement>,
-  data: Data,
-  key: string,
-  isVertical: boolean,
-  color: string,
-  additionalKeyGroupDomain: Set<string>,
-  additionalKeyGroup: string
-) => {
-  d3.select(staticTooltipsRef.current)
-    .attr('transform', transform)
-    .selectAll('foreignObject')
-    .data([...data])
-    .join('foreignObject')
-    .each((d, idx, nodes) => {
-      const isLeftColumn =
-        additionalKeyGroupDomain.size > 1 &&
-        [...additionalKeyGroupDomain].indexOf(String(d.data[additionalKeyGroup])) === 0
-      const self = d3.select(nodes[idx])
-      const tooltipName = 'tooltip_' + idx + key
-      const value = d.data[key] || 0
-
-      const { direction, translate } = getTooltipDirectionWithTranslate(isVertical, isLeftColumn)
-
-      addHtmlContent(self, color, value, tooltipName, direction, translate)
-      setTooltipSizeAndCoordinate(self, d.position, tooltipName, isVertical, isLeftColumn)
-    })
-}
-
 const getTooltipDirectionWithTranslate = (isVertical: boolean, isLeftColumn: boolean) => {
   let direction: Direction
   let translate
@@ -199,6 +169,36 @@ const setTooltipSizeAndCoordinate = (
     .attr('height', height)
     .attr('x', x)
     .attr('y', y)
+}
+
+export const displayStaticTooltips = (
+  transform: string,
+  staticTooltipsRef: React.RefObject<SVGGElement>,
+  data: Data,
+  key: string,
+  isVertical: boolean,
+  color: string,
+  additionalKeyGroupDomain: Set<string>,
+  additionalKeyGroup: string
+) => {
+  d3.select(staticTooltipsRef.current)
+    .attr('transform', transform)
+    .selectAll('foreignObject')
+    .data([...data])
+    .join('foreignObject')
+    .each((d, idx, nodes) => {
+      const isLeftColumn =
+        additionalKeyGroupDomain.size > 1 &&
+        [...additionalKeyGroupDomain].indexOf(String(d.data[additionalKeyGroup])) === 0
+      const self = d3.select(nodes[idx])
+      const tooltipName = 'tooltip_' + idx + key
+      const value = d.data[key] || 0
+
+      const { direction, translate } = getTooltipDirectionWithTranslate(isVertical, isLeftColumn)
+
+      addHtmlContent(self, color, value, tooltipName, direction, translate)
+      setTooltipSizeAndCoordinate(self, d.position, tooltipName, isVertical, isLeftColumn)
+    })
 }
 
 export const Tooltip: React.FC<Props> = ({ isVertical }) => (
