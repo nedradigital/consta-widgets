@@ -410,7 +410,7 @@ const mockData: DataMap = {
   },
   [DataType.Pyramid]: [
     {
-      value: 3,
+      value: null,
       text: '1. Смертельные на производстве ',
     },
     {
@@ -418,7 +418,7 @@ const mockData: DataMap = {
       text: '2. Уровень 1+Травмы с ВПТ',
     },
     {
-      value: 67,
+      value: null,
       text: '3. Уровень 2+Мед. помощь',
     },
     {

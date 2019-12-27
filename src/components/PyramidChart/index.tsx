@@ -1,13 +1,14 @@
 import React from 'react'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
+import { isNotNil } from '@gaz/utils/lib/type-guards'
 import classnames from 'classnames'
 
 import css from './index.css'
 
 export type Data = {
   text: string
-  value: string | number
+  value: string | number | null | undefined
 }
 
 export const sizes = ['s', 'm'] as const
@@ -78,6 +79,15 @@ export const PyramidChart: React.FC<Props> = ({
   const pyramidWidthHalf = pyramidWidth / 2
   const tableWidthResponsive = constraint ? pyramidWidth : '100%'
 
+  const items = data.map(item => {
+    const value = isNotNil(item.value) ? item.value : '–'
+
+    return {
+      text: item.text,
+      value,
+    }
+  })
+
   return (
     <div
       className={classnames(
@@ -105,7 +115,7 @@ export const PyramidChart: React.FC<Props> = ({
         }}
       >
         <tbody>
-          {data.map((item, index) => (
+          {items.map((item, index) => (
             <tr key={index}>
               <td style={{ width: pyramidWidthHalf }}>{item.value}</td>
               <td>
