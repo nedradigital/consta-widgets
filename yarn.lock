@@ -13219,10 +13219,10 @@ storybook-addon-react-docgen@1.2.6:
     react-addons-create-fragment "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-storybook-addon-smart-knobs@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/storybook-addon-smart-knobs/-/storybook-addon-smart-knobs-6.0.0.tgz#4fcd370444f0d1c5202ca065dc43154f84693523"
-  integrity "sha1-T803BETw0cUgLKBl3EMVT4RpNSM= sha512-Yel+M+rvv4BVxmLGrLcfGTeNqlVub4YHrVO+TrqPpfRW1BX2YJ0qnkUjT5moRp2+wKzGub6tN18aBFab22xBQQ=="
+storybook-addon-smart-knobs@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/storybook-addon-smart-knobs/-/storybook-addon-smart-knobs-6.0.1.tgz#1634fb7dd966faed7350c9e3dc8f2c777d564ab0"
+  integrity sha512-NYbssFxXEBCp1VvlTw31cqFo0biXSKccfKaOlnQUxzHWdGq9FePe3RbMeTeOa5jCFm/q4QfgfTO5AYYjfK/kIA==
   dependencies:
     storybook-chromatic "^3.0.3"
 
