@@ -1,11 +1,8 @@
 import * as React from 'react'
 
-import { Stats } from '@/components/Stats'
-import { Size, sizes } from '@/components/Stats'
+import { Layout, layouts, Size, sizes, Stats } from '@/components/Stats'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
-import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
-import { Status, statuses } from '@/ui/Badge'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Stats
@@ -20,43 +17,19 @@ export const positionNames = ['right', 'bottom'] as const
 export type PositionNames = typeof positionNames[number]
 
 type Params = {
-  badgePosition: PositionNames
-  topStyles: TopTypes
   size: Size
-  top: string
-  statusBadge: Status
+  layout: Layout
 }
 
 export const defaultParams: Params = {
-  badgePosition: 'right',
-  topStyles: 'label',
   size: 'xs',
-  top: 'сроки',
-  statusBadge: 'normal',
+  layout: 'full',
 }
 
 export const StatsWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { badgePosition, topStyles, size, top, statusBadge },
-}) => {
-  const { percent, bottomUnit, rightUnit } = data
-  const rightValue = percent && badgePosition === 'right' ? percent : rightUnit
-  const bottomValue = percent && badgePosition === 'bottom' ? percent : bottomUnit
-
-  return (
-    <Stats
-      size={size}
-      top={top}
-      topSublabel={topStyles === 'sublabel'}
-      right={rightValue}
-      rightBadge={badgePosition === 'right'}
-      bottom={bottomValue}
-      bottomBadge={badgePosition === 'bottom'}
-      statusBadge={statusBadge}
-      number={data.number}
-    />
-  )
-}
+  params,
+}) => <Stats {...data} {...params} />
 
 export const StatsWidget = createWidget<Data, Params>({
   id: widgetId,
@@ -73,28 +46,11 @@ export const StatsWidget = createWidget<Data, Params>({
           onChange={value => onChangeParam('size', value)}
           values={sizes.map(i => ({ value: i, name: i }))}
         />
-        <WidgetSettingsText
-          name="Текст верхней строки"
-          value={params.top}
-          onChange={value => onChangeParam('top', value)}
-        />
         <WidgetSettingsSelect
-          name="Вверхняя строка подзаголовок?"
-          value={params.topStyles}
-          onChange={value => onChangeParam('topStyles', value)}
-          values={topTypes.map(i => ({ value: i, name: i }))}
-        />
-        <WidgetSettingsSelect
-          name="Позиция Badge"
-          value={params.badgePosition}
-          onChange={value => onChangeParam('badgePosition', value)}
-          values={positionNames.map(i => ({ value: i, name: i }))}
-        />
-        <WidgetSettingsSelect
-          name="Статус Badge"
-          value={params.statusBadge}
-          onChange={value => onChangeParam('statusBadge', value)}
-          values={statuses.map(i => ({ value: i, name: i }))}
+          name="Расположение элементов"
+          value={params.layout}
+          onChange={value => onChangeParam('layout', value)}
+          values={layouts.map(i => ({ value: i, name: i }))}
         />
       </>
     )

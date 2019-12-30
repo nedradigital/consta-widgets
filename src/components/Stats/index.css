@@ -1,111 +1,161 @@
-@custom-selector :--small .sizeXS;
-@custom-selector :--medium .sizeS;
-@custom-selector :--large .sizeM;
-@custom-selector :--biggest .sizeL;
+@custom-selector :--container .container;
+@custom-selector :--extra-small .sizeXS;
+@custom-selector :--small .sizeS;
+@custom-selector :--medium .sizeM;
+@custom-selector :--large .sizeL;
+@custom-selector :--compact-title .compact-title;
+@custom-selector :--compact-unit .compact-unit;
+@custom-selector :--full .full;
+@custom-selector :--full-without-title .full-without-title;
+@custom-selector :--full-reversed .full-reversed;
 
-:--small {
-  font-size: calc-size(14);
-  line-height: calc-size(20);
-}
+:--container {
+  display: grid;
 
-:--medium {
-  font-size: calc-size(18);
-  line-height: calc-size(25);
-}
+  grid-auto-columns: max-content;
 
-:--large {
-  font-size: calc-size(20);
-  line-height: calc-size(28);
-}
+  justify-items: start;
 
-:--biggest {
-  font-size: calc-size(24);
-  line-height: calc-size(34);
-}
+  align-items: end;
 
-.stats {
-  width: 100%;
+  &:--compact-title {
+    grid-template-areas:
+      'title'
+      'number';
+  }
 
-  text-align: left;
-}
+  &:--compact-unit {
+    grid-template-areas:
+      'number'
+      'unit';
+  }
 
-.row {
-  margin: 3px 0;
+  &:--full {
+    grid-template-areas:
+      'title title'
+      'number badge'
+      'unit unit';
+  }
 
-  @nest :--small &:last-child {
+  &:--full-without-title {
+    grid-template-areas:
+      'number badge'
+      'unit unit';
+  }
+
+  &:--full-reversed {
+    grid-template-areas:
+      'title title'
+      'number unit'
+      'badge badge';
+
+    align-items: baseline;
+  }
+
+  &:--extra-small {
     font-size: calc-size(12);
     line-height: calc-size(17);
+  }
+
+  &:--small {
+    font-size: calc-size(18);
+    line-height: calc-size(25);
+  }
+
+  &:--medium {
+    font-size: calc-size(20);
+    line-height: calc-size(28);
+  }
+
+  &:--large {
+    font-size: calc-size(24);
+    line-height: calc-size(34);
+  }
+}
+
+.title {
+  grid-area: title;
+
+  @nest :--full-without-title &, :--compact-unit & {
+    display: none;
+  }
+
+  @nest :--extra-small & {
+    font-size: calc-size(14);
+    line-height: calc-size(20);
   }
 }
 
 .number {
-  font-weight: bold;
+  grid-area: number;
 
-  display: inline-block;
+  font-weight: 700;
 
-  margin-right: 5px;
-  padding: 2px 4px;
+  letter-spacing: 0.02em;
 
-  letter-spacing: -0.02em;
-
-  color: #f6fbfd;
-
-  @nest :--small & {
+  @nest :--extra-small & {
     font-size: calc-size(24);
     line-height: calc-size(34);
+
+    margin-right: calc-size(4);
   }
 
-  @nest :--medium & {
+  @nest :--small &, :--medium & {
+    margin-right: calc-size(12);
+  }
+
+  @nest :--small & {
     font-size: calc-size(48);
     line-height: calc-size(62);
   }
 
-  @nest :--large & {
+  @nest :--medium & {
     font-size: calc-size(72);
     line-height: calc-size(82);
   }
 
-  @nest :--biggest & {
+  @nest :--large & {
     font-size: calc-size(96);
     line-height: calc-size(115);
-  }
-}
 
-.cell {
-  @nest :--small & {
-    font-size: calc-size(12);
-    line-height: calc-size(17);
-  }
-
-  @nest :--medium & {
-    line-height: calc-size(25);
-  }
-
-  @nest :--large & {
-    line-height: calc-size(28);
-  }
-
-  @nest :--biggest & {
-    line-height: calc-size(34);
+    margin-right: calc-size(27);
   }
 }
 
 .badge {
-  @nest :--small & {
-    padding: calc-size(1) calc-size(6);
+  grid-area: badge;
 
-    vertical-align: 0.35em;
+  font-weight: 700;
+
+  @nest :--compact-title &, :--compact-unit & {
+    display: none;
   }
 
-  @nest :--medium & {
-    vertical-align: 0.55em;
+  /**
+   * Расчитываем отступ от нижнего края когда `bagde` отображается справа,
+   * чтобы выровнять его относительно визуального края `.number`.
+   */
+
+  @nest :--extra-small & {
+    margin-bottom: 0.79em;
+    padding: calc-size(1) calc-size(4);
   }
 
-  @nest :--large & {
-    vertical-align: 0.5em;
+  @nest :--small:not(:--full-reversed) &, :--medium:not(:--full-reversed) & {
+    margin-bottom: 0.8em;
   }
 
-  @nest :--biggest & {
-    vertical-align: 0.5em;
+  @nest :--large:not(:--full-reversed) & {
+    margin-bottom: 1em;
+  }
+}
+
+.unit {
+  grid-area: unit;
+
+  color: rgba(246, 251, 253, 0.6);
+
+  @nest :--compact-title & {
+    display: none;
   }
 }

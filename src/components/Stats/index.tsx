@@ -1,83 +1,75 @@
-import React from 'react'
-
 import classnames from 'classnames'
 
 import { Badge, Status } from '@/ui/Badge'
 
-import { Cell } from './components/Cell'
 import css from './index.css'
 
 export const sizes = ['xs', 's', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
-export type StyleProps = {
-  size?: Size
-}
+export const layouts = [
+  'compact-title',
+  'compact-unit',
+  'full',
+  'full-without-title',
+  'full-reversed',
+] as const
+export type Layout = typeof layouts[number]
 
 export type Data = {
-  number: string
-  percent?: string
-  bottomUnit: string
-  rightUnit: string
+  value: number
+  title?: string
+  badge?: {
+    percentage: number
+    status: Status
+  }
+  unit?: string
 }
 
-type Props = {
-  className?: string
-  top?: string
-  right?: string
-  bottom?: string
-  topSublabel?: boolean
-  rightBadge?: boolean
-  bottomBadge?: boolean
-  statusBadge: Status
-  number: string
-} & StyleProps
+type Props = Data & {
+  size: Size
+  layout?: Layout
+  withSign?: boolean
+}
 
-const renderBadgeOrCell = (statusBadge: Status, isBadge?: boolean, value?: string) => {
-  return isBadge && value ? (
-    <Badge status={statusBadge} className={classnames(css.badge, css.cell)}>
-      {value}
-    </Badge>
-  ) : (
-    <Cell type={'sublabel'} className={css.cell}>
-      {value}
-    </Cell>
-  )
+const sizeClass = {
+  xs: css.sizeXS,
+  s: css.sizeS,
+  m: css.sizeM,
+  l: css.sizeL,
+}
+
+const getNumberSign = (value: number, isShow?: boolean) => {
+  return value > 0 && isShow ? '+' : ''
+}
+
+const formatValue = (value: number) => {
+  return String(value).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ')
 }
 
 export const Stats: React.FC<Props> = ({
-  number,
-  size = 'xs',
-  top,
-  right,
-  bottom,
-  topSublabel,
-  rightBadge,
-  bottomBadge,
-  statusBadge,
-  className,
+  value,
+  title,
+  badge,
+  unit,
+  size,
+  layout = 'full',
+  withSign,
 }) => {
   return (
-    <div
-      className={classnames(
-        {
-          xs: css.sizeXS,
-          s: css.sizeS,
-          m: css.sizeM,
-          l: css.sizeL,
-        }[size],
-        className,
-        css.stats
+    <div className={classnames(css.container, sizeClass[size], css[layout])}>
+      <div className={css.title}>{title}</div>
+      <div className={css.number}>
+        {getNumberSign(value, withSign)}
+        {formatValue(value)}
+      </div>
+      {badge && (
+        <Badge className={css.badge} status={badge.status}>
+          {getNumberSign(badge.percentage, withSign)}
+          {badge.percentage}%
+        </Badge>
       )}
-    >
-      <div className={css.row}>
-        <Cell type={topSublabel ? 'sublabel' : 'label'}>{top}</Cell>
-      </div>
-      <div>
-        <span className={css.number}>{number}</span>
-        {renderBadgeOrCell(statusBadge, rightBadge, right)}
-      </div>
-      <div className={css.row}>{renderBadgeOrCell(statusBadge, bottomBadge, bottom)}</div>
+      <div className={css.unit}>{unit}</div>
     </div>
   )
 }
