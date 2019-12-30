@@ -49,31 +49,25 @@ const figures: readonly Figure[] = [
 ]
 
 const getFormatterValueForLabel = () => {
-  const unit = text('format label unit', '')
-  const useFormatPercents = boolean('format label as percents', false)
+  const useFormatPercents = boolean('Форматировать подписи кругов как проценты', false)
 
   if (useFormatPercents) {
     return (v: number) => `${Math.round(v)}%`
-  }
-
-  if (unit) {
-    return (v: number) => `${v}${unit}`
   }
 
   return undefined
 }
 
 const getFormatterValueForTooltip = () => {
-  const unit = text('format tooltip label unit', ' тыс м3')
-  const isActive = boolean('format tooltip label active', false)
+  const unit = text('Юнит для значения в тултипе', ' тыс м3')
 
-  return isActive ? (v: number) => `${v}${unit}` : undefined
+  return (v: number) => `${v}${unit}`
 }
 
 storiesOf('components/RadarChart', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '50vw', height: '60vh' }))
-  .add('with tooltips', () => (
+  .addDecorator(withSmartKnobs({ ignoreProps: ['backgroundColor'] }))
+  .addDecorator(blockCenteringDecorator({ width: '80vw', height: '80vh' }))
+  .add('2 фигуры', () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -87,7 +81,7 @@ storiesOf('components/RadarChart', module)
       labelSize="s"
     />
   ))
-  .add('with hints', () => (
+  .add('1 фигура сплошная', () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -97,6 +91,18 @@ storiesOf('components/RadarChart', module)
       backgroundColor="var(--bg-color)"
       formatValueForLabel={getFormatterValueForLabel()}
       withConcentricColor={false}
+      labelSize="s"
+    />
+  ))
+  .add('1 фигура радугой', () => (
+    <RadarChart
+      colorGroups={getColorGroups()}
+      axesLabels={axesLabels}
+      maxValue={10}
+      figures={figures.slice(0, 1)}
+      ticks={5}
+      backgroundColor="var(--bg-color)"
+      withConcentricColor
       labelSize="s"
     />
   ))

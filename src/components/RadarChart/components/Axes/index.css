@@ -52,7 +52,5 @@
   stroke-width: 10;
   stroke-linecap: butt;
 
-  &.isHoverable {
-    cursor: pointer;
-  }
+  cursor: pointer;
 }

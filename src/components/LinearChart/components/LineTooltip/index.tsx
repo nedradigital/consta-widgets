@@ -29,10 +29,12 @@ export const LineTooltip: React.FC<Props> = ({
 }) => (
   <Tooltip isVisible={isVisible} x={position.x} y={position.y} direction={direction}>
     <TooltipContentForMultipleValues
-      colors={linesOnTheActiveHoverLine.map(obj => obj.color)}
-      nameLines={linesOnTheActiveHoverLine.map(obj => obj.name)}
       title={title}
-      values={linesOnTheActiveHoverLine.map(obj => obj.formattedValue)}
+      items={linesOnTheActiveHoverLine.map(line => ({
+        color: line.color,
+        name: line.name,
+        value: line.formattedValue,
+      }))}
     />
   </Tooltip>
 )

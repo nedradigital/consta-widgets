@@ -1,25 +1,19 @@
-import classnames from 'classnames'
-
-import { Hint } from '@/ui/Hint'
-
 import { Point } from '../../'
-
-import css from './index.css'
 
 type Props = {
   points: readonly Point[]
   lineColor: string
   activeAxis: string
   backgroundColor: string
-  isHoverable: boolean
 }
+
+const STROKE_WIDTH = 2
 
 export const RadarChartPoints: React.FC<Props> = ({
   points,
   lineColor,
   activeAxis,
   backgroundColor,
-  isHoverable,
 }) => {
   return (
     <>
@@ -27,24 +21,18 @@ export const RadarChartPoints: React.FC<Props> = ({
         const isActive = activeAxis === point.axisName
 
         return (
-          <div
+          <circle
             key={idx}
-            className={classnames(
-              css.point,
-              isActive && css.isActive,
-              isHoverable && css.isHoverable
-            )}
+            cx={`${point.xPercent}%`}
+            cy={`${point.yPercent}%`}
+            r={2 + (isActive ? STROKE_WIDTH / 2 : 0)}
+            fill={lineColor}
+            stroke={backgroundColor}
+            strokeWidth={isActive ? STROKE_WIDTH : 0}
             style={{
-              color: lineColor,
-              top: `${point.yPercent}%`,
-              left: `${point.xPercent}%`,
-              borderColor: backgroundColor,
+              pointerEvents: 'none',
             }}
-          >
-            <Hint className={classnames(css.hint, isHoverable && css.isHoverable)} direction="top">
-              {point.label}
-            </Hint>
-          </div>
+          />
         )
       })}
     </>
