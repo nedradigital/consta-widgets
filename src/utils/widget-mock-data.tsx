@@ -322,10 +322,13 @@ const mockData: DataMap = {
     status: 'danger',
   },
   [DataType.Stats]: {
-    number: '+217',
-    percent: '+2.3%',
-    bottomUnit: 'суток',
-    rightUnit: '',
+    value: 217,
+    title: 'Сроки',
+    badge: {
+      percentage: 2.3,
+      status: 'normal',
+    },
+    unit: 'суток',
   },
   [DataType.Donut]: {
     colorGroups: {
