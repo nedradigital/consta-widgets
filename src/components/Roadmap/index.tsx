@@ -37,6 +37,11 @@ type Props = {
 type ActiveLineState = {
   groupName?: string
   index?: number
+  /**
+   * Тут есть и top и bottom, потому что тултип можешь располгаться и сверху и снизу
+   * Но внутри тултипа есть кнопки для раскрытия и если использовать только top
+   * То тултипу придется перерасчитывать позицию
+   */
   top: number
   bottom: number
   left: number
@@ -220,15 +225,18 @@ export const Roadmap: React.FC<Props> = props => {
   }, [])
 
   const handleClick = useCallback((event, index, groupName) => {
-    const { top, left } = event.target.getBoundingClientRect()
+    if (ref.current) {
+      const elementRect = event.target.getBoundingClientRect()
+      const tableRect = ref.current.getBoundingClientRect()
 
-    changeActiveLine({
-      index,
-      groupName,
-      left,
-      top: top + getFactBlockSize(),
-      bottom: window.innerHeight - top,
-    })
+      changeActiveLine({
+        index,
+        groupName,
+        left: Math.max(tableRect.left, elementRect.left),
+        top: elementRect.top + getFactBlockSize() + window.scrollY,
+        bottom: window.innerHeight - elementRect.top - window.scrollY,
+      })
+    }
   }, [])
 
   useLayoutEffect(() => {
