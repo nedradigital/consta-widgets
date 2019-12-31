@@ -3,6 +3,8 @@ import {
   formatDate,
   getDayMonthYearFromTimestamp,
   getDaysInMonth,
+  getEndOfDay,
+  getStartOfDay,
   monthsDiff,
 } from '../time'
 
@@ -60,6 +62,18 @@ describe('time', () => {
 
     it('возвращает количество дней в феврале для высокосного года', () => {
       expect(getDaysInMonth(1, 2020)).toBe(29)
+    })
+  })
+
+  describe('getEndOfDay', () => {
+    it('возвращает отформатированную дату со временем 23:59:59', () => {
+      expect(getEndOfDay(date)).toBe(1546376399000)
+    })
+  })
+
+  describe('getStartOfDay', () => {
+    it('возвращает отформатированную дату со временем 00:00:00', () => {
+      expect(getStartOfDay(date)).toBe(1546290000000)
     })
   })
 })

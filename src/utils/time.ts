@@ -50,4 +50,7 @@ export const monthsDiff = (start: number, end: number) => {
   )
 }
 
+export const getStartOfDay = (date: number) => new Date(date).setHours(0, 0, 0)
+export const getEndOfDay = (date: number) => new Date(date).setHours(23, 59, 59)
+
 export const daysDiff = (start: number, end: number) => Math.round(Math.abs(end - start) / ONE_DAY)
