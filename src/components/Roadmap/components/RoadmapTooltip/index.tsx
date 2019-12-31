@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import { reverse } from 'lodash'
 
 import { ColorGroups } from '@/dashboard/types'
-import { daysDiff, formatDate } from '@/utils/time'
+import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
 
 import { Item } from '../..'
 
@@ -27,7 +27,8 @@ const CLEAN_COMMENT = 'Комментария нет'
 
 const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation()
 
-const getDayText = (start: number, end: number) => getDayPlural(daysDiff(start, end))
+const getDayText = (start: number, end: number) =>
+  getDayPlural(daysDiff(getStartOfDay(start), getEndOfDay(end)))
 
 const renderDates = (color: string, fact: Item, plan: Item) => (
   <>
