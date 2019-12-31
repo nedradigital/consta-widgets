@@ -25,7 +25,8 @@ type Props = {
 const MAX_LENGTH_COMMENT = 280
 const CLEAN_COMMENT = 'Комментария нет'
 
-const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => event.stopPropagation()
+const stopEventHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+  event.stopPropagation()
 
 const getDayText = (start: number, end: number) =>
   getDayPlural(daysDiff(getStartOfDay(start), getEndOfDay(end)))
@@ -75,18 +76,28 @@ export const RoadmapTooltip: React.FC<Props> = ({
   const { comment = CLEAN_COMMENT, groupName } = fact
   const content = [
     isOpened ? (
-      <div key="content" className={classnames(css.content, isActiveDates && css.dates)}>
+      <div
+        onClick={stopEventHandler}
+        key="content"
+        className={classnames(css.content, isActiveDates && css.dates)}
+      >
         {isActiveComment ? renderComment(comment) : renderDates(colorGroups[groupName], fact, plan)}
       </div>
     ) : null,
     <div key="buttons" className={css.buttons}>
       <div
         className={classnames(css.button, css.dates, isActiveDates && css.active)}
-        onClick={() => changeActiveSection('dates')}
+        onClick={event => {
+          stopEventHandler(event)
+          changeActiveSection('dates')
+        }}
       />
       <div
         className={classnames(css.button, css.comment, isActiveComment && css.active)}
-        onClick={() => changeActiveSection('comment')}
+        onClick={event => {
+          stopEventHandler(event)
+          changeActiveSection('comment')
+        }}
       />
     </div>,
   ] as const
@@ -94,7 +105,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
   return ReactDOM.createPortal(
     <div
       className={classnames(css.main, isOpened && css.opened, css[direction])}
-      onClick={onClick}
       style={{ left, top, bottom }}
     >
       {direction === 'top' ? content : reverse(content)}
