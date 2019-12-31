@@ -1,11 +1,13 @@
+.main {
+  pointer-events: none;
+}
+
 .line {
   stroke-width: 2px;
 }
 
 .circle {
   fill: currentColor;
-
-  cursor: pointer;
 
   &.isActive {
     stroke: var(--bg-color);

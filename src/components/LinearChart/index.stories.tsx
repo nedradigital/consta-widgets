@@ -25,7 +25,7 @@ const getCommonProps = () => {
     lines: [
       {
         colorGroupName: 'first',
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map((y, x) => ({
           x: Date.now() + x,
           y,
         })),
@@ -34,7 +34,7 @@ const getCommonProps = () => {
       },
       {
         colorGroupName: 'second',
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map((y, x) => ({
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
           x: Date.now() + x,
           y,
         })),
