@@ -730,6 +730,7 @@ const mockData: DataMap = {
   ],
   [DataType.Button]: {
     content: 'Кнопка',
+    disabled: false,
     onClick: () => alert('Клик!'),
   },
   [DataType.ChoiceGroup]: {
