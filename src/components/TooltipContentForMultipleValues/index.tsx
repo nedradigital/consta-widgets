@@ -2,6 +2,8 @@ import React from 'react'
 
 import classnames from 'classnames'
 
+import { LegendItem } from '@/components/LegendItem'
+
 import css from './index.css'
 
 type Props = {
@@ -24,8 +26,7 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
         <div className={css.labels}>
           {items.map(({ name, color }, idx) => (
             <div key={idx} className={css.row}>
-              <span className={css.color} style={{ backgroundColor: color }} />
-              <span className={css.label}>{name}</span>
+              <LegendItem className={css.label} text={name} color={color} fontSize="xs" />
             </div>
           ))}
         </div>
