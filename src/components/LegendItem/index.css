@@ -1,82 +1,72 @@
-@custom-selector :--main .main;
-@custom-selector :--left :--main.left;
-@custom-selector :--top :--main.top;
-@custom-selector :--small :--main.sizeS;
-@custom-selector :--medium :--main.sizeM;
+@custom-selector :--extra-small .sizeXS;
+@custom-selector :--small .sizeS;
+@custom-selector :--medium .sizeM;
+@custom-selector :--top .top;
+@custom-selector :--left .left;
 
-:--main {
-  --line-height-s: calc-size(20);
-  --line-height-m: calc-size(22);
+.main {
   --dot-size: calc-size(12);
 
   display: inline-flex;
 
-  &.left {
-    align-items: top;
+  &:--top {
+    flex-direction: column;
   }
 
-  &.top {
-    align-items: left;
-    flex-direction: column;
+  &:--left {
+    align-items: center;
+  }
+
+  &:--extra-small {
+    font-size: calc-size(12);
+    line-height: calc-size(17);
+  }
+
+  &:--small {
+    font-size: calc-size(14);
+    line-height: calc-size(20);
+  }
+
+  &:--medium {
+    font-size: calc-size(16);
+    line-height: calc-size(22);
+  }
+}
+
+.sign {
+  display: inline-block;
+
+  @nest :--left & {
+    margin-right: calc-size(8);
+  }
+
+  @nest :--top & {
+    margin-bottom: calc-size(4);
   }
 }
 
 .dot {
-  min-width: var(--dot-size);
+  width: var(--dot-size);
   height: var(--dot-size);
 
-  border-radius: 100px;
+  border-radius: 100%;
 
-  @nest :--left & {
-    margin-top: calc((var(--line-height-s) - var(--dot-size)) / 2);
-    margin-right: 8px;
-  }
-
-  @nest :--left:--medium & {
-    margin-top: calc((var(--line-height-m) - var(--dot-size)) / 2);
+  @nest :--extra-small & {
+    margin-top: calc-size(-2);
   }
 }
 
 .line {
   width: calc-size(20);
-  height: 2px;
+  height: calc-size(2);
 
-  &.bold {
-    height: 4px;
-  }
-
-  @nest :--left & {
-    margin-top: calc((var(--line-height-s) - 2px) / 2);
-    margin-right: 8px;
-  }
-
-  @nest :--left:--medium & {
-    margin-top: calc((var(--line-height-m) - 2px) / 2);
-  }
-
-  @nest :--left &.bold {
-    margin-top: calc((var(--line-height-s) - 4px) / 2);
-  }
-
-  @nest :--left:--medium &.bold {
-    margin-top: calc((var(--line-height-m) - 4px) / 2);
-  }
-
-  @nest :--top & {
-    margin-bottom: 4px;
+  &.isBold {
+    height: calc-size(4);
   }
 }
 
 .text {
-  @nest :--small & {
-    font-size: calc-size(14);
-    line-height: var(--line-height-s);
-  }
-
-  @nest :--medium & {
-    font-size: calc-size(16);
-    line-height: var(--line-height-m);
-  }
+  display: inline-block;
 
   &.isSeparating {
     display: -webkit-box;

@@ -32,16 +32,9 @@
 }
 
 .labels {
+  display: flex;
   flex: 1;
-}
-
-.color {
-  display: inline-block;
-
-  width: calc-size(12);
-  height: calc-size(12);
-
-  border-radius: 50%;
+  flex-direction: column;
 }
 
 .label {

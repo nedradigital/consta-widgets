@@ -9,7 +9,7 @@ import { LegendItem } from '.'
 
 storiesOf('components/LegentItem', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator())
+  .addDecorator(blockCenteringDecorator({ maxWidth: 200 }))
   .add('interactive', () => (
     <LegendItem position="left" fontSize="s" type="dot" color="red" text="Тестовый текст" />
   ))
