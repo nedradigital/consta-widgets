@@ -1,6 +1,14 @@
 .tooltip {
-  font-size: calc-size(11);
-  line-height: calc-size(15);
+  --hint-vertical-padding: 2px;
+  --hint-horizontal-padding: 5px;
+}
 
-  padding: calc-size(2) calc-size(5);
+.tooltipHorizontal {
+  display: inline-block;
+
+  margin-right: calc-size(5);
+
+  &:last-child {
+    margin-right: 0;
+  }
 }
