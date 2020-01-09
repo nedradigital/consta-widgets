@@ -122,17 +122,17 @@ storiesOf('components/TableLegend', module)
           {
             title: 'Локация',
             accessor: 'field',
-            className: 'textLeftPosition',
+            align: 'left',
           },
           {
             title: 'Сумма скважин без МГРП',
             accessor: 'sum',
-            className: 'textRightPosition',
+            align: 'right',
           },
           {
             title: 'Статус',
             accessor: 'status',
-            className: 'textCenterPosition',
+            align: 'center',
           },
         ]),
       }}

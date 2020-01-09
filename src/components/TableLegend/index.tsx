@@ -26,13 +26,6 @@ import css from './index.css'
 export const sizes = ['l', 'm', 's'] as const
 export type Size = typeof sizes[number]
 
-const locationClasses = ['textRightPosition', 'textCenterPosition', 'textLeftPosition'] as const
-type LocationClasses = typeof locationClasses[number]
-
-export type StyleProps = {
-  size: Size
-}
-
 export type Row = {
   [key: string]: React.ReactNode
 }
@@ -63,7 +56,13 @@ export type Data = {
 type ColumnNames = {
   title: string
   accessor: string
-  className: LocationClasses
+  align: 'left' | 'center' | 'right'
+}
+
+const alignClasses = {
+  left: css.alignLeft,
+  center: css.alignCenter,
+  right: css.alignRight,
 }
 
 type FieldSelectedValues = readonly string[]
@@ -73,7 +72,8 @@ export type SelectedFilters = { [field: string]: FieldSelectedValues }
 type Props = {
   isShowLegend?: boolean
   data: Data
-} & StyleProps
+  size: Size
+}
 
 export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
   const { columnNames, legendFields, list, colorGroups, filters } = data
@@ -132,20 +132,23 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
       : filterTableDatum(datum, filters, selectedFilters)
 
   const thRender = columnNames.map((obj, idx) => {
-    const sort = accessor === obj.accessor
+    const isSortingActive = accessor === obj.accessor
+    const IconSort =
+      (isSortingActive && (isOrderByDesc ? IconSortDescSvg : IconSortAscSvg)) || IconSortSvg
 
     return (
       <th
         key={idx}
         className={classnames(
-          css[obj.className],
-          visibleFilter === obj.accessor && css.isFilterOpened,
-          (sort && (isOrderByDesc ? css.sortDesc : css.sortAsc)) || undefined
+          css.cell,
+          css.isHeader,
+          alignClasses[obj.align],
+          visibleFilter === obj.accessor && css.isFilterOpened
         )}
         data-accessor={obj.accessor}
         style={{ position: 'relative' }}
       >
-        <div className={css.divHelper}>
+        <div className={css.titleWrapper}>
           {filters && fieldFiltersPresent(filters, obj.accessor) && (
             <FilterTooltip
               field={obj.accessor}
@@ -158,24 +161,13 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               className={classnames(css.icon, css.iconFilter)}
             />
           )}
-          <span onClick={() => sortBy(obj.accessor)}>{obj.title}</span>
-          <span>
-            <IconSortSvg
-              onClick={() => sortBy(obj.accessor)}
-              className={classnames(css.icon, css.iconSort, css.iconNeutrally)}
-              viewBox="0 0 500 500"
-            />
-            <IconSortDescSvg
-              onClick={() => sortBy(obj.accessor)}
-              className={classnames(css.icon, css.iconSort, css.iconDesc)}
-              viewBox="0 0 500 500"
-            />
-            <IconSortAscSvg
-              onClick={() => sortBy(obj.accessor)}
-              className={classnames(css.icon, css.iconSort, css.iconAsc)}
-              viewBox="0 0 500 500"
-            />
+          <span className={css.title} onClick={() => sortBy(obj.accessor)}>
+            {obj.title}
           </span>
+          <IconSort
+            onClick={() => sortBy(obj.accessor)}
+            className={classnames(css.icon, css.iconSort)}
+          />
         </div>
         <DivResizable height={height} />
       </th>
@@ -184,35 +176,32 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
 
   const renderTableRowWithData = (row: Row) =>
     columnNames.map((column, index) => {
-      const text = isNil(row[column.accessor]) ? '–' : row[column.accessor]
-      if (index === 0) {
-        const legend = legendFields.find(obj => obj.field === row[column.accessor])
+      const cellValue = row[column.accessor]
+      const cellContent = isNil(cellValue) ? '–' : cellValue
+      const legend = legendFields.find(obj => obj.field === row[column.accessor])
 
-        return (
-          <td key={column.accessor + index} className={classnames(css[column.className])}>
-            {isShowLegend ? (
-              <LegendItem
-                text={String(text)}
-                color={(legend && colorGroups[legend.colorGroupName]) || ''}
-                fontSize="s"
-                type={(legend && legend.typeLegend) || defaultTypeLegend[0]}
-              />
-            ) : (
-              text
-            )}
-          </td>
-        )
-      } else {
-        return (
-          <td key={column.accessor + index} className={classnames(css[column.className])}>
-            {text}
-          </td>
-        )
-      }
+      return (
+        <td
+          key={column.accessor + index}
+          className={classnames(css.cell, alignClasses[column.align])}
+        >
+          {isShowLegend && index === 0 ? (
+            <LegendItem
+              color={(legend && colorGroups[legend.colorGroupName]) || ''}
+              fontSize="s"
+              type={(legend && legend.typeLegend) || defaultTypeLegend[0]}
+            >
+              {cellContent}
+            </LegendItem>
+          ) : (
+            cellContent
+          )}
+        </td>
+      )
     })
 
   return (
-    <div className={css.container}>
+    <div className={css.main}>
       <table className={classnames(css.table, css.striped)} ref={ref}>
         <thead>
           <tr>{thRender}</tr>

@@ -26,7 +26,9 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
         <div className={css.labels}>
           {items.map(({ name, color }, idx) => (
             <div key={idx} className={css.row}>
-              <LegendItem className={css.label} text={name} color={color} fontSize="xs" />
+              <LegendItem className={css.label} color={color} fontSize="xs">
+                {name}
+              </LegendItem>
             </div>
           ))}
         </div>

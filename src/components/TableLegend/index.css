@@ -1,4 +1,4 @@
-.container {
+.main {
   overflow: auto;
 }
 
@@ -14,10 +14,6 @@
   height: 30px;
 }
 
-.iconFilter {
-  opacity: 0;
-}
-
 .table {
   width: 100%;
 
@@ -29,129 +25,93 @@
     font-size: calc-size(15);
     line-height: calc-size(20);
   }
+}
 
-  & th {
-    --icon-offset: calc-size(4);
+.cell {
+  --column-padding: calc-size(18);
 
+  padding-top: 0;
+  padding-right: var(--column-padding);
+  padding-bottom: 0;
+  padding-left: var(--column-padding);
+
+  &.isHeader {
     font-size: calc-size(10);
     line-height: calc-size(15);
 
     text-transform: uppercase;
 
     color: var(--text-color-70);
-
-    .divHelper {
-      position: relative;
-
-      display: inline-block;
-    }
-
-    .icon {
-      position: absolute;
-      top: calc-size(2);
-
-      &:not(.iconFilter) {
-        display: none;
-      }
-    }
-
-    .iconFilter {
-      left: calc-size(-12);
-
-      transition: opacity var(--show-transition);
-      transform: translateX(calc(var(--icon-offset) * -1));
-    }
   }
 
-  & th,
-  & td {
-    --column-padding: calc-size(18);
-
-    padding-top: 0;
-    padding-right: var(--column-padding);
-    padding-bottom: 0;
-    padding-left: var(--column-padding);
-
-    &.textLeftPosition {
-      text-align: left;
-    }
-
-    &.textRightPosition {
-      text-align: right;
-    }
-
-    &.textCenterPosition {
-      text-align: center;
-    }
+  &.alignLeft {
+    text-align: left;
   }
 
-  .isFilterOpened .iconFilter {
-    opacity: 1;
-    fill: white;
+  &.alignRight {
+    text-align: right;
   }
 
-  & th:hover {
-    cursor: pointer;
-
-    .icon {
-      &:hover {
-        fill: white;
-      }
-    }
-
-    .iconFilter {
-      opacity: 1;
-    }
-
-    .iconSort {
-      right: calc-size(-12);
-
-      overflow: visible;
-
-      width: calc-size(12);
-      height: calc-size(8);
-
-      transform: translateX(calc(var(--icon-offset)));
-    }
-
-    .iconNeutrally {
-      display: inline-block;
-    }
-
-    &.sortDesc {
-      .iconNeutrally {
-        display: none;
-      }
-
-      .iconAsc {
-        display: none;
-      }
-
-      .iconDesc {
-        display: inline-block;
-      }
-    }
-
-    &.sortAsc {
-      .iconNeutrally {
-        display: none;
-      }
-
-      .iconDesc {
-        display: none;
-      }
-
-      .iconAsc {
-        display: inline-block;
-      }
-    }
+  &.alignCenter {
+    text-align: center;
   }
 }
 
-.title {
-  margin-bottom: 0;
+.titleWrapper {
+  position: relative;
 
-  text-align: left;
+  display: inline-block;
+}
+
+.title {
+  cursor: pointer;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  box-sizing: content-box;
+  margin: auto 0;
+  padding: 4px;
+
+  cursor: pointer;
+
+  opacity: 0.2;
+  fill: white;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  @nest .cell:not(:hover) & {
+    display: none;
+  }
+}
+
+.iconFilter {
+  left: 0;
+
+  transition: opacity var(--show-transition);
+  transform: translateX(-100%);
+
+  @nest .isFilterOpened & {
+    display: inline-block;
+
+    opacity: 1;
+  }
+}
+
+.iconSort {
+  right: 0;
+
+  overflow: visible;
+
+  width: calc-size(12);
+  height: calc-size(8);
+
+  transform: translateX(100%) translateY(calc-size(1));
 }
 
 .circle {
