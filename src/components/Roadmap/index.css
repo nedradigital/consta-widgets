@@ -21,7 +21,6 @@
 
 .calendar {
   overflow-x: auto;
-  overflow-y: hidden;
 
   border-right: 1px solid var(--separate-line-color);
   border-left: 1px solid var(--separate-line-color);
@@ -144,10 +143,12 @@
 }
 
 .currentDay {
+  --current-day-width: 1px;
+
   position: absolute;
   top: -10px;
 
-  width: 1px;
+  width: var(--current-day-width);
   height: 100%;
 
   background: #0096eb;
@@ -165,7 +166,7 @@
     border-radius: 10px;
     background: inherit;
 
-    transform: translate(-50%, -50%);
+    transform: translateX(calc(var(--current-day-width) / 2)) translate(-50%, -50%);
   }
 }
 

@@ -27,13 +27,27 @@ button {
 }
 
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  width: var(--scrollbar-size);
+  height: var(--scrollbar-size);
 }
 
 ::-webkit-scrollbar-thumb {
+  border: var(--scrollbar-padding) solid var(--opaque-color);
   border-radius: 2px;
   background-color: var(--opaque-color);
+  background-clip: padding-box;
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  &:horizontal {
+    border-right: none;
+    border-left: none;
+  }
+
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+  &:vertical {
+    border-top: none;
+    border-bottom: none;
+  }
 }
 
 *:hover::-webkit-scrollbar-thumb {
