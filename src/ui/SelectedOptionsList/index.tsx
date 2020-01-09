@@ -1,3 +1,5 @@
+import classnames from 'classnames'
+
 import { SelectedOption } from '@/ui/SelectedOption'
 
 import css from './index.css'
@@ -6,11 +8,12 @@ type Props = {
   values: ReadonlyArray<{ id: string; name: string }>
   onRemove: (id: string) => void
   onReset: () => void
+  className?: string
 }
 
-export const SelectedOptionsList: React.FC<Props> = ({ values, onRemove, onReset }) => {
+export const SelectedOptionsList: React.FC<Props> = ({ values, onRemove, onReset, className }) => {
   return (
-    <div className={css.selectedFilters}>
+    <div className={classnames(css.selectedFilters, className)}>
       {values.map(option => (
         <div className={css.selectedOptionWrapper} key={option.id}>
           <SelectedOption name={option.name} onRemove={() => onRemove(option.id)} />

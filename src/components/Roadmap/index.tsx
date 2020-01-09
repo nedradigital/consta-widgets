@@ -1,10 +1,23 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
+import { FilterTooltip } from '@/ui/FilterTooltip'
+import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
+import {
+  fieldFiltersPresent,
+  FieldSelectedValues,
+  Filters,
+  filterTableData,
+  getOptionsForFilters,
+  getSelectedFiltersList,
+  isSelectedFiltersPresent,
+  TableColumn,
+  useSelectedFilters,
+} from '@/utils/table'
 import { getDayMonthYearFromTimestamp, getDaysInMonth, monthsDiff } from '@/utils/time'
 
 import { RoadmapTooltip } from './components/RoadmapTooltip'
@@ -27,11 +40,12 @@ export type Data = {
 
 type Props = {
   data: readonly Data[]
-  titles: readonly [string, string]
+  titles: readonly [TableColumn, TableColumn]
   currentDay: number
   colorGroups: ColorGroups
   startDate: number
   endDate: number
+  filters?: Filters
 }
 
 type ActiveLineState = {
@@ -180,26 +194,28 @@ const renderItem = ({
   )
 }
 
-type TableProps<T extends string | MonthItem = string | MonthItem> = {
+type TableProps<T = TableColumn | MonthItem> = {
   titles: readonly T[]
   className?: string
   renderTitle: (item: T, index: number) => React.ReactNode
+  subTitle?: React.ReactNode
 }
 
-const Table: React.FC<TableProps> = ({ children, titles, className, renderTitle }) => (
+const Table: React.FC<TableProps> = ({ children, titles, className, renderTitle, subTitle }) => (
   <table className={classnames(css.table, className)}>
     <thead>
       <tr>{titles.map(renderTitle)}</tr>
+      {subTitle && <tr>{subTitle}</tr>}
     </thead>
     {children}
   </table>
 )
 
-const TableWithStringTitles = Table as React.FC<TableProps<string>>
+const TableWithStringTitles = Table as React.FC<TableProps<TableColumn>>
 const TableWithMonthTitles = Table as React.FC<TableProps<MonthItem>>
 
 export const Roadmap: React.FC<Props> = props => {
-  const { currentDay, data, colorGroups, titles, startDate, endDate } = props
+  const { currentDay, data, colorGroups, titles, startDate, endDate, filters } = props
 
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
@@ -207,6 +223,8 @@ export const Roadmap: React.FC<Props> = props => {
   const { width } = useComponentSize(ref)
   const calendarTbodyRef = useRef<HTMLTableSectionElement>(null)
   const { height: calendarTbodyHeight } = useComponentSize(calendarTbodyRef)
+  const stringSubTitleRef = useRef<HTMLTableHeaderCellElement>(null)
+  const { height: stringSubTitleHeight } = useComponentSize(stringSubTitleRef)
   const [activeLine, changeActiveLine] = useState<ActiveLineState>({
     index: undefined,
     groupName: undefined,
@@ -214,6 +232,13 @@ export const Roadmap: React.FC<Props> = props => {
     left: 0,
     bottom: 0,
   })
+  const [visibleFilter, setVisibleFilter] = useState<string | null>(null)
+  const {
+    selectedFilters,
+    updateSelectedFilters,
+    removeOneSelectedFilter,
+    removeAllSelectedFilters,
+  } = useSelectedFilters(filters)
 
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
@@ -241,6 +266,30 @@ export const Roadmap: React.FC<Props> = props => {
     }
   }, [])
 
+  const handleFilterTogglerClick = (id: string) => () => {
+    setVisibleFilter(visibleFilter === id ? null : id)
+  }
+
+  const closeTooltip = () => {
+    setVisibleFilter(null)
+  }
+  const handleTooltipCancel = () => {
+    closeTooltip()
+  }
+  const handleTooltipSave = (field: string, tooltipSelectedFilters: FieldSelectedValues) => {
+    updateSelectedFilters(field, tooltipSelectedFilters)
+    closeTooltip()
+  }
+
+  const removeSelectedFilter = (tableFilters: Filters) => (filter: string) => {
+    removeOneSelectedFilter(tableFilters, filter)
+  }
+  const resetSelectedFilters = () => {
+    if (filters && filters.length) {
+      removeAllSelectedFilters(filters)
+    }
+  }
+
   useLayoutEffect(() => {
     if (ref.current) {
       const element = ref.current
@@ -262,16 +311,55 @@ export const Roadmap: React.FC<Props> = props => {
 
   const months = getMonths(startDate, endDate)
 
+  const filteredData: readonly Data[] =
+    !filters || !isSelectedFiltersPresent(selectedFilters)
+      ? data
+      : filterTableData({ data, filters, selectedFilters })
+
   return (
     <div className={css.main}>
       <div className={classnames(css.left, shadow && css.shadow)}>
         <TableWithStringTitles
           className={css.labelsTable}
           titles={titles}
-          renderTitle={title => <th key={title}>{title}</th>}
+          renderTitle={({ title, accessor }) => (
+            <th
+              key={accessor}
+              className={classnames(css.cell, visibleFilter === accessor && css.isFilterOpened)}
+            >
+              <div className={css.titleWrapper}>
+                {filters && fieldFiltersPresent(filters, accessor) && (
+                  <FilterTooltip
+                    field={accessor}
+                    isOpened={visibleFilter === accessor}
+                    options={getOptionsForFilters(filters, accessor)}
+                    values={selectedFilters[accessor]}
+                    onSave={handleTooltipSave}
+                    onCancel={handleTooltipCancel}
+                    handleFilterTogglerClick={handleFilterTogglerClick(accessor)}
+                    className={css.iconFilter}
+                  />
+                )}
+                {title}
+              </div>
+            </th>
+          )}
+          subTitle={
+            filters &&
+            isSelectedFiltersPresent(selectedFilters) && (
+              <th colSpan={2} className={css.isSubTitle} ref={stringSubTitleRef}>
+                <SelectedOptionsList
+                  values={getSelectedFiltersList({ filters, selectedFilters, columns: titles })}
+                  onRemove={removeSelectedFilter(filters)}
+                  onReset={resetSelectedFilters}
+                  className={css.selectedOptions}
+                />
+              </th>
+            )
+          }
         >
           <tbody>
-            {data.map(item => (
+            {filteredData.map(item => (
               <tr key={item.firstColumn}>
                 <td>{item.firstColumn}</td>
                 <td>{item.secondColumn}</td>
@@ -287,7 +375,7 @@ export const Roadmap: React.FC<Props> = props => {
           renderTitle={(item, index) => {
             return (
               <th key={index}>
-                <div className={css.titleWrapper}>
+                <div className={classnames(css.titleWrapper, css.monthTitleWrapper)}>
                   {item.period ? (
                     <div className={css.periodWrapper}>
                       <div className={css.periodText}>
@@ -300,9 +388,18 @@ export const Roadmap: React.FC<Props> = props => {
               </th>
             )
           }}
+          subTitle={
+            stringSubTitleRef.current && (
+              <th
+                colSpan={months.length}
+                className={css.subTitleHeightStub}
+                style={{ height: stringSubTitleHeight }}
+              />
+            )
+          }
         >
           <tbody style={{ backgroundSize: `${monthWidth}px 20px` }} ref={calendarTbodyRef}>
-            {data.map(({ plan, fact, forecast, firstColumn, secondColumn }, index) => (
+            {filteredData.map(({ plan, fact, forecast, firstColumn, secondColumn }, index) => (
               <tr key={index}>
                 <td colSpan={months.length}>
                   <div

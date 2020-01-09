@@ -1,6 +1,28 @@
-import { compact } from 'lodash'
+import React, { useState } from 'react'
 
-import { Data, Filters, Row, SelectedFilters } from '@/components/TableLegend'
+import { compact, xor } from 'lodash'
+
+export type TableRow = {
+  [key: string]: React.ReactNode
+}
+
+export type TableColumn = {
+  title: string
+  accessor: string
+}
+
+type Filter = {
+  id: string
+  name: string
+  filterer: (value: any) => boolean
+  field: string
+}
+
+export type Filters = readonly Filter[]
+
+export type FieldSelectedValues = readonly string[]
+
+export type SelectedFilters = { [field: string]: FieldSelectedValues }
 
 type SelectedFiltersList = ReadonlyArray<{
   id: string
@@ -16,8 +38,10 @@ export const getSelectedFiltersInitialState = (filters?: Filters) => {
     return {}
   }
 
-  return Object.keys(filters).reduce<SelectedFilters>((fieldAcc, fieldCur) => {
-    fieldAcc[fieldCur] = []
+  return filters.reduce<SelectedFilters>((fieldAcc, fieldCur) => {
+    if (!fieldAcc[fieldCur.field]) {
+      fieldAcc[fieldCur.field] = []
+    }
 
     return fieldAcc
   }, {})
@@ -29,12 +53,16 @@ export const fieldFiltersPresent = (tableFilters: Filters, field: string) => {
 export const isSelectedFiltersPresent = (selectedFilters: SelectedFilters) =>
   Object.values(selectedFilters).some(filterGroup => filterGroup.length > 0)
 
-export const getSelectedFiltersList = (
-  filters: Filters,
-  selectedFilters: SelectedFilters,
-  columnNames: Data['columnNames']
-) => {
-  return columnNames.reduce<SelectedFiltersList>((acc, cur) => {
+export const getSelectedFiltersList = ({
+  filters,
+  selectedFilters,
+  columns,
+}: {
+  filters: Filters
+  selectedFilters: SelectedFilters
+  columns: readonly TableColumn[]
+}): SelectedFiltersList => {
+  return columns.reduce<SelectedFiltersList>((acc, cur) => {
     const currentFieldFilters = selectedFilters[cur.accessor] || []
     let orderedFilters: SelectedFiltersList = []
 
@@ -57,14 +85,18 @@ export const getSelectedFiltersList = (
   }, [])
 }
 
-export const filterTableDatum = (
-  datum: readonly Row[],
-  filters: Filters,
+export const filterTableData = <T extends TableRow>({
+  data,
+  filters,
+  selectedFilters,
+}: {
+  data: readonly T[]
+  filters: Filters
   selectedFilters: SelectedFilters
-) => {
-  const mutableFilteredDatum = []
+}) => {
+  const mutableFilteredData = []
 
-  for (const row of datum) {
+  for (const row of data) {
     const columnNames = Object.keys(row)
     let rowIsValid = true
 
@@ -96,9 +128,44 @@ export const filterTableDatum = (
     }
 
     if (rowIsValid) {
-      mutableFilteredDatum.push(row)
+      mutableFilteredData.push(row)
     }
   }
 
-  return mutableFilteredDatum
+  return mutableFilteredData
+}
+
+export const useSelectedFilters = (filters?: Filters) => {
+  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
+    getSelectedFiltersInitialState(filters)
+  )
+
+  const updateSelectedFilters = (field: string, tooltipSelectedFilters: FieldSelectedValues) => {
+    setSelectedFilters({
+      ...selectedFilters,
+      [field]: [...tooltipSelectedFilters],
+    })
+  }
+
+  const removeOneSelectedFilter = (availableFilters: Filters, filter: string) => {
+    const filterToDelete = availableFilters.find(({ id }) => id === filter)
+
+    if (filterToDelete) {
+      updateSelectedFilters(
+        filterToDelete.field,
+        xor(selectedFilters[filterToDelete.field], [filter])
+      )
+    }
+  }
+
+  const removeAllSelectedFilters = (availableFilters: Filters) => {
+    setSelectedFilters(getSelectedFiltersInitialState(availableFilters))
+  }
+
+  return {
+    selectedFilters,
+    updateSelectedFilters,
+    removeOneSelectedFilter,
+    removeAllSelectedFilters,
+  }
 }

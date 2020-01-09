@@ -65,6 +65,7 @@ const RoadmapBlock: React.FC<{
           <Roadmap
             data={item.data.values}
             titles={item.data.titles}
+            filters={item.data.filters}
             currentDay={item.data.currentDay}
             colorGroups={item.colorGroups}
             startDate={item.data.startDate}

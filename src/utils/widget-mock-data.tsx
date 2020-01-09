@@ -5,6 +5,34 @@ import {
   list as tableLegendList,
 } from '@/components/TableLegend/mockData'
 import { DataMap, DataType } from '@/dashboard/types'
+import { Filters, TableColumn } from '@/utils/table'
+
+const roadmapFilters = [
+  {
+    id: 'yamburghNGKM',
+    name: 'Ямбургское НГКМ',
+    filterer: (value: string) => value === '1. Ямбургское НГКМ',
+    field: 'firstColumn',
+  },
+  {
+    id: 'mountingPlaceNumber2',
+    name: 'Место установки 2',
+    filterer: (value: string) => value === '2. Место установки 2',
+    field: 'firstColumn',
+  },
+  {
+    id: 'mupn1500',
+    name: 'МУПН 1500',
+    filterer: (value: string) => value === 'МУПН 1500',
+    field: 'secondColumn',
+  },
+  {
+    id: 'zhq-342-23',
+    name: 'ZHQ-342-23',
+    filterer: (value: string) => value === 'ZHQ-342-23',
+    field: 'secondColumn',
+  },
+] as Filters
 
 const roadmapData = {
   startDate: Date.UTC(2019, 0, 1),
@@ -303,9 +331,19 @@ const roadmapData = {
       ],
     },
   ],
-  titles: ['МЕСТА УСТАНОВКИ', 'КОМПЛЕКС'],
+  titles: [
+    {
+      title: 'МЕСТА УСТАНОВКИ',
+      accessor: 'firstColumn',
+    },
+    {
+      title: 'КОМПЛЕКС',
+      accessor: 'secondColumn',
+    },
+  ] as readonly [TableColumn, TableColumn],
+  filters: roadmapFilters,
   currentDay: Date.UTC(2019, 6, 10),
-} as const
+}
 
 const mockData: DataMap = {
   [DataType.Chart2D]: {
@@ -477,7 +515,7 @@ const mockData: DataMap = {
         typeLegend: 'dot',
       },
     ],
-    columnNames: [
+    columns: [
       {
         title: 'Месторождение',
         accessor: 'field',

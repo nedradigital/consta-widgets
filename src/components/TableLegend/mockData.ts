@@ -1,4 +1,4 @@
-import { Filters, Row } from '.'
+import { Filters, TableRow } from '@/utils/table'
 
 export const filters = [
   {
@@ -79,4 +79,4 @@ export const list = [
     production: 292,
     total: 417,
   },
-] as readonly Row[]
+] as readonly TableRow[]

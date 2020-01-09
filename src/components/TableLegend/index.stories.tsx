@@ -118,7 +118,7 @@ storiesOf('components/TableLegend', module)
             typeLegend: types[0],
           },
         ]),
-        columnNames: object('columnNames', [
+        columns: object('columns', [
           {
             title: 'Локация',
             accessor: 'field',

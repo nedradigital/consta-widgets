@@ -87,7 +87,30 @@ const roadmapData = {
       forecast: [],
     },
   ],
-  titles: ['МЕСТА УСТАНОВКИ', 'КОМПЛЕКС'],
+  titles: [
+    {
+      title: 'МЕСТА УСТАНОВКИ',
+      accessor: 'firstColumn',
+    },
+    {
+      title: 'КОМПЛЕКС',
+      accessor: 'secondColumn',
+    },
+  ],
+  filters: [
+    {
+      id: 'yamburghNGKM',
+      name: 'Ямбургское НГКМ',
+      filterer: (value: string) => value === '1. Ямбургское НГКМ',
+      field: 'firstColumn',
+    },
+    {
+      id: 'mupn1500',
+      name: 'МУПН 1500',
+      filterer: (value: string) => value === 'МУПН 1500',
+      field: 'secondColumn',
+    },
+  ],
   currentDay: Date.UTC(2019, 6, 10),
 } as const
 
@@ -96,7 +119,7 @@ storiesOf('components/Roadmap', module)
   .addDecorator(blockCenteringDecorator({ width: '80vw' }))
   .add('interactive', () => {
     const {
-      data: { titles, values, currentDay, startDate, endDate },
+      data: { titles, values, currentDay, startDate, endDate, filters },
       colorGroups,
     } = getWidgetMockData(DataType.Roadmap)[0]
 
@@ -104,8 +127,12 @@ storiesOf('components/Roadmap', module)
       <Roadmap
         data={object('data', values)}
         currentDay={number('currentDay', currentDay)}
-        titles={[text('firstColumn', titles[0]), text('secondColumn', titles[1])]}
+        titles={[
+          { title: text('firstColumn', titles[0].title), accessor: titles[0].accessor },
+          { title: text('secondColumn', titles[1].title), accessor: titles[1].accessor },
+        ]}
         colorGroups={object('colorGroups', colorGroups)}
+        filters={object('filters', filters)}
         startDate={startDate}
         endDate={endDate}
       />
@@ -113,14 +140,18 @@ storiesOf('components/Roadmap', module)
   })
   .add('few values', () => {
     const { colorGroups } = getWidgetMockData(DataType.Roadmap)[0]
-    const { titles, currentDay, values, startDate, endDate } = roadmapData
+    const { titles, currentDay, values, startDate, endDate, filters } = roadmapData
 
     return (
       <Roadmap
         data={object('data', values)}
         currentDay={number('currentDay', currentDay)}
-        titles={[text('firstColumn', titles[0]), text('secondColumn', titles[1])]}
+        titles={[
+          { title: text('firstColumn', titles[0].title), accessor: titles[0].accessor },
+          { title: text('secondColumn', titles[1].title), accessor: titles[1].accessor },
+        ]}
         colorGroups={object('colorGroups', colorGroups)}
+        filters={object('filters', filters)}
         startDate={startDate}
         endDate={endDate}
       />

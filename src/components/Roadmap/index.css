@@ -9,6 +9,17 @@
   grid-template-areas: 'left calendar';
 }
 
+.subTitleHeightStub {
+  border-bottom: 1px solid var(--separate-line-color);
+}
+
+.selectedOptions {
+  padding-left: 0;
+
+  border-top: 0;
+  border-bottom: 0;
+}
+
 .left {
   grid-area: left;
 
@@ -66,41 +77,53 @@
 
     color: #f6fbfd;
     border-bottom: 1px solid var(--separate-line-color);
+
+    &.isSubTitle {
+      padding-top: 0;
+      padding-right: 0;
+      padding-bottom: 0;
+    }
   }
 
   & tr:nth-child(even) td {
     background: var(--table-even-row-background);
   }
-}
 
-.calendarTable {
-  width: 100%;
-  min-width: calc-size(600);
+  &.calendarTable {
+    width: 100%;
+    min-width: calc-size(600);
 
-  table-layout: fixed;
+    table-layout: fixed;
 
-  & tbody {
-    background-image: url('./background.svg');
-    background-repeat: repeat;
+    & tbody {
+      background-image: url('./background.svg');
+      background-repeat: repeat;
+    }
+
+    & th {
+      padding: 0;
+
+      text-align: center;
+    }
   }
 
-  & th {
-    padding: 0;
+  &.labelsTable {
+    width: 100%;
 
-    text-align: center;
+    table-layout: fixed;
+
+    & tbody td:first-child,
+    & thead th:first-child {
+      padding-left: calc-size(16);
+
+      text-align: left;
+    }
   }
 }
 
-.labelsTable {
-  width: 100%;
-
-  table-layout: fixed;
-
-  & tbody td:first-child,
-  & thead th:first-child {
-    padding-left: calc-size(16);
-
-    text-align: left;
+.iconFilter {
+  @nest .cell:hover:not(.isFilterOpened) & {
+    opacity: 0.2;
   }
 }
 
@@ -173,6 +196,10 @@
 .titleWrapper {
   position: relative;
 
+  display: inline-block;
+}
+
+.monthTitleWrapper {
   padding: calc-size(12) calc-size(16);
 }
 
