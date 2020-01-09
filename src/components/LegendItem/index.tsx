@@ -1,3 +1,4 @@
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
 import css from './index.css'
@@ -29,6 +30,15 @@ const sizeClass = {
   m: css.sizeM,
 }
 
+const getDotStyle = (): React.CSSProperties => {
+  const size = getCalculatedSize(12)
+
+  return {
+    width: size,
+    height: size,
+  }
+}
+
 export const LegendItem: React.FC<Props> = ({
   text,
   color,
@@ -40,12 +50,13 @@ export const LegendItem: React.FC<Props> = ({
   shouldCropText,
 }) => {
   const positionClass = type === 'dot' ? css.left : css[position]
+  const dotStyle = type === 'dot' ? getDotStyle() : {}
 
   return (
     <div className={classnames(css.main, sizeClass[fontSize], positionClass, className)}>
       <div
         className={classnames(css.sign, css[type], lineBold && css.isBold)}
-        style={{ background: color }}
+        style={{ background: color, ...dotStyle }}
       />
       <span className={classnames(css.text, shouldCropText && css.isSeparating)}>{text}</span>
     </div>

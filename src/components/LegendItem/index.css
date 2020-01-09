@@ -35,6 +35,7 @@
 
 .sign {
   display: inline-block;
+  flex-shrink: 0;
 
   @nest :--left & {
     margin-right: calc-size(8);
