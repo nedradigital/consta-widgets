@@ -13,7 +13,7 @@ export const sizes = ['xs', 's', 'm'] as const
 export type Size = typeof sizes[number]
 
 type Props = {
-  text: string
+  children: React.ReactNode
   color: string
   type?: Type
   fontSize?: Size
@@ -40,7 +40,7 @@ const getDotStyle = (): React.CSSProperties => {
 }
 
 export const LegendItem: React.FC<Props> = ({
-  text,
+  children,
   color,
   type = 'dot',
   fontSize = 's',
@@ -58,7 +58,7 @@ export const LegendItem: React.FC<Props> = ({
         className={classnames(css.sign, css[type], lineBold && css.isBold)}
         style={{ background: color, ...dotStyle }}
       />
-      <span className={classnames(css.text, shouldCropText && css.isSeparating)}>{text}</span>
+      <span className={classnames(css.text, shouldCropText && css.isSeparating)}>{children}</span>
     </div>
   )
 }

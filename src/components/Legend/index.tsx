@@ -38,7 +38,6 @@ export const Legend: React.FC<Props> = ({
     <div className={classnames(css.main, css[direction])}>
       {data.map(item => (
         <LegendItem
-          {...item}
           color={colorGroups[item.colorGroupName]}
           key={item.text}
           className={css.item}
@@ -47,7 +46,9 @@ export const Legend: React.FC<Props> = ({
           position={labelPosition}
           lineBold={lineBold}
           shouldCropText
-        />
+        >
+          {item.text}
+        </LegendItem>
       ))}
     </div>
   )
