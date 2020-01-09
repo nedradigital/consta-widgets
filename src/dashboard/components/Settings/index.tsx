@@ -1,12 +1,15 @@
 import React from 'react'
 
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
+import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { getWidget } from '@/dashboard/components/Box'
-import { BoxItem, BoxItemParams, Dataset } from '@/dashboard/types'
+import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
+import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset } from '@/dashboard/types'
 import { isWidget } from '@/utils/type-guards'
 import { OnChangeParam } from '@/utils/WidgetFactory'
 
-import { MarginSettings } from './components/MarginSettings'
 import css from './index.css'
 
 type Props = {
@@ -14,6 +17,8 @@ type Props = {
   datasets: readonly Dataset[]
   onChangeParams: (newParams: BoxItemParams) => void
 }
+
+const marginSizes = Object.keys(sizeValues) as readonly BoxItemMarginSize[]
 
 const stopDrag = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()
 
@@ -34,47 +39,45 @@ const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
     })
   const commonSettings = (
     <>
-      <WidgetSettingsItem name="Коэффициент растяжения">
-        <input
-          type="number"
-          value={params.growRatio}
-          onChange={e => onChangeParam('growRatio', Number(e.target.value) || undefined)}
-        />
-      </WidgetSettingsItem>
-      <MarginSettings params={params} onChangeParam={onChangeParam} />
-      <WidgetSettingsItem name="Замещающий текст">
-        <input
-          type="text"
-          value={params.fallbackPlaceholderText}
-          onChange={e => onChangeParam('fallbackPlaceholderText', e.target.value || undefined)}
-        />
-      </WidgetSettingsItem>
+      <WidgetSettingsNumber
+        name="Коэффициент растяжения"
+        value={params.growRatio}
+        onChange={value => onChangeParam('growRatio', value)}
+      />
+      <WidgetSettingsSelect
+        name="Отступ сверху"
+        value={params.marginTop}
+        values={marginSizes.map(size => ({ value: size, name: size }))}
+        withEmptyValue
+        onChange={value => onChangeParam('marginTop', value)}
+      />
     </>
   )
 
   if (isWidget(item)) {
     const { dataType, getSettings } = getWidget(item.widgetType)
-    const allowedDatasets = datasets.filter(d => d.type === dataType)
+    const allowedDatasets = datasets
+      .filter(d => d.type === dataType)
+      .map(d => ({ value: d.id, name: d.name }))
 
     return (
       <>
         <WidgetSettingsItem name="id">{item.id}</WidgetSettingsItem>
         {dataType && (
-          <WidgetSettingsItem name="Датасет">
-            <select
-              value={item.params.datasetId}
-              onChange={e => onChangeParams({ ...params, datasetId: e.target.value || undefined })}
-            >
-              <option value={''}>--</option>
-              {allowedDatasets.map(dataset => (
-                <option key={dataset.id} value={dataset.id}>
-                  {dataset.name}
-                </option>
-              ))}
-            </select>
-          </WidgetSettingsItem>
+          <WidgetSettingsSelect
+            name="Датасет"
+            value={item.params.datasetId}
+            values={allowedDatasets}
+            withEmptyValue
+            onChange={value => onChangeParams({ ...params, datasetId: value })}
+          />
         )}
         {commonSettings}
+        <WidgetSettingsText
+          name="Замещающий текст"
+          value={params.fallbackPlaceholderText}
+          onChange={value => onChangeParam('fallbackPlaceholderText', value)}
+        />
         {getSettings && getSettings(params, onChangeParam)}
       </>
     )

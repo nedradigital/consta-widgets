@@ -134,6 +134,7 @@ export type DataMap = {
   [DataType.Button]: {
     content: React.ReactNode
     disabled?: boolean
+    iconOnly?: boolean
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
   [DataType.ChoiceGroup]: {

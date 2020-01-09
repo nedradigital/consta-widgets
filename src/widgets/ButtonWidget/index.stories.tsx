@@ -8,7 +8,13 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { ButtonWidget, ButtonWidgetContent, defaultParams } from './'
 
 storiesOf('widgets/ButtonWidget', module)
-  .addDecorator(blockCenteringDecorator({ width: 200, height: 200 }))
+  .addDecorator(
+    blockCenteringDecorator({
+      display: 'flex',
+      width: '100%',
+      justifyContent: 'center',
+    })
+  )
   .add('interactive', () => (
     <ButtonWidgetContent
       data={object('data', ButtonWidget.mockData)}
