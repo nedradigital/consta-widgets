@@ -1,29 +1,30 @@
 import React from 'react'
 
 import classnames from 'classnames'
+import * as _ from 'lodash'
 
-import { Line, ScaleLinear } from '../..'
+import { HoveredMainValue, Line, ScaleLinear } from '../..'
 
 import css from './index.css'
 
-export type Function = (line?: number) => void
+export type Function = (newValue: HoveredMainValue) => void
 
 type Props = {
-  line: Line
+  lines: readonly Line[]
   width: number
   height: number
   isVertical: boolean
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  setActiveHoverLine: Function
-  activeHoverLine?: number
+  onChangeHoveredMainValue: Function
+  hoveredMainValue: HoveredMainValue
 }
 
 type LineProps = {
   position: Position
   lineClassName: string | boolean
   value?: number
-  onMouseHandler: Function
+  onHover: Function
 }
 
 type Position = {
@@ -33,7 +34,7 @@ type Position = {
   y2: number
 }
 
-const LineComponent: React.FC<LineProps> = ({ position, lineClassName, value, onMouseHandler }) => {
+const LineComponent: React.FC<LineProps> = ({ position, lineClassName, value, onHover }) => {
   const { x1, y1, x2, y2 } = position
 
   return (
@@ -43,8 +44,8 @@ const LineComponent: React.FC<LineProps> = ({ position, lineClassName, value, on
       x2={x2}
       y2={y2}
       className={classnames(css.hoverLine, lineClassName)}
-      onMouseLeave={() => onMouseHandler()}
-      onMouseEnter={() => onMouseHandler(value)}
+      onMouseLeave={() => onHover(undefined)}
+      onMouseEnter={() => onHover(value)}
     />
   )
 }
@@ -52,43 +53,44 @@ const LineComponent: React.FC<LineProps> = ({ position, lineClassName, value, on
 export const HoverLines: React.FC<Props> = ({
   scaleX,
   scaleY,
-  line,
+  lines,
   height,
   width,
   isVertical,
-  setActiveHoverLine,
-  activeHoverLine,
+  hoveredMainValue,
+  onChangeHoveredMainValue,
 }) => {
-  const { values } = line
-  const lineWidth = isVertical ? width : height
-  const lineType = isVertical ? 'y' : 'x'
+  const mainValueKey = isVertical ? 'y' : 'x'
+  const lineValues = _.uniqBy(_.flatten(lines.map(l => l.values)), v => v[mainValueKey])
 
   return (
     <g>
-      {values.map((value, index) => {
-        const valueByLineType = value[lineType]
-        const position = {
-          x1: isVertical ? 0 : scaleX(valueByLineType),
-          y1: isVertical ? scaleY(valueByLineType) : 0,
-          x2: isVertical ? lineWidth : scaleX(valueByLineType),
-          y2: isVertical ? scaleY(valueByLineType) : lineWidth,
+      {lineValues.map((lineValue, index) => {
+        const mainValue = lineValue[mainValueKey]
+        const position = isVertical
+          ? {
+              x1: 0,
+              y1: scaleY(mainValue),
+              x2: width,
+              y2: scaleY(mainValue),
+            }
+          : {
+              x1: scaleX(mainValue),
+              y1: 0,
+              x2: scaleX(mainValue),
+              y2: height,
+            }
+        const isActive = mainValue === hoveredMainValue
+        const commonProps = {
+          position,
+          value: mainValue,
+          onHover: onChangeHoveredMainValue,
         }
-        const isActive = valueByLineType === activeHoverLine
 
         return (
           <React.Fragment key={index}>
-            <LineComponent
-              position={position}
-              lineClassName={css.isSubstrate}
-              value={valueByLineType}
-              onMouseHandler={setActiveHoverLine}
-            />
-            <LineComponent
-              position={position}
-              lineClassName={isActive && css.isActive}
-              value={valueByLineType}
-              onMouseHandler={setActiveHoverLine}
-            />
+            <LineComponent {...commonProps} lineClassName={css.isHoverable} />
+            <LineComponent {...commonProps} lineClassName={isActive && css.isActive} />
           </React.Fragment>
         )
       })}

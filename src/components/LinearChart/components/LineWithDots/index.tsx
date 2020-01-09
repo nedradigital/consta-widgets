@@ -2,8 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Item, ScaleLinear } from '../../'
-import { Function } from '../HoverLines'
+import { HoveredMainValue, Item, ScaleLinear } from '../../'
 import { Line } from '../Line'
 
 import css from './index.css'
@@ -17,13 +16,12 @@ type Props = {
   dotsClipPath: string
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  activeHoverLine?: number
+  hoveredMainValue: HoveredMainValue
   isVertical: boolean
-  setActiveHoverLine: Function
 }
 
-const isActiveCircle = (position: Item, isVertical: boolean, activeAxis?: number) => {
-  return (isVertical ? position.y : position.x) === activeAxis
+const isActiveCircle = (position: Item, isVertical: boolean, activeValue?: number) => {
+  return (isVertical ? position.y : position.x) === activeValue
 }
 
 export const LineWithDots: React.FC<Props> = ({
@@ -35,12 +33,11 @@ export const LineWithDots: React.FC<Props> = ({
   scaleY,
   lineClipPath,
   dotsClipPath,
-  activeHoverLine,
+  hoveredMainValue,
   isVertical,
-  setActiveHoverLine,
 }) => {
   return (
-    <g style={{ color }}>
+    <g style={{ color }} className={css.main}>
       <Line
         className={css.line}
         points={values}
@@ -50,10 +47,9 @@ export const LineWithDots: React.FC<Props> = ({
       />
       <g clipPath={dotsClipPath}>
         {values.map((item, idx) => {
-          const isActive = isActiveCircle(item, isVertical, activeHoverLine)
+          const isActive = isActiveCircle(item, isVertical, hoveredMainValue)
           const radius = hasDotRadius || isActive ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
-          const hoverLinePosition = isVertical ? item.y : item.x
 
           return (
             <circle
@@ -65,8 +61,6 @@ export const LineWithDots: React.FC<Props> = ({
               style={{
                 strokeWidth: radiusCircle,
               }}
-              onMouseLeave={() => setActiveHoverLine()}
-              onMouseEnter={() => setActiveHoverLine(hoverLinePosition)}
             />
           )
         })}

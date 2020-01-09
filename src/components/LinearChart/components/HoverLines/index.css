@@ -9,7 +9,7 @@
     stroke: #fff;
   }
 
-  &.isSubstrate {
+  &.isHoverable {
     stroke-width: 10;
   }
 }
