@@ -5,7 +5,7 @@ import useComponentSize from '@rehooks/component-size'
 import { isEqual, max } from 'lodash'
 
 import { getGroupScale, getValuesScale } from '@/components/BarChart'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { Axis } from './components/Axis'
 import { Control } from './components/Control'
@@ -37,6 +37,7 @@ type Props = {
   valuesTick?: number
   hasRatio?: boolean
   colorGroups: ColorGroups
+  formatValueForLabel?: FormatValue
 }
 
 const getColumnDetails = (
@@ -88,6 +89,7 @@ export const MultiBarChart: React.FC<Props> = ({
   valuesTick = 4,
   hasRatio,
   colorGroups,
+  formatValueForLabel,
 }) => {
   const [paddingX, setPaddingX] = useState(0)
   const [paddingY, setPaddingY] = useState(0)
@@ -189,6 +191,7 @@ export const MultiBarChart: React.FC<Props> = ({
           valuesTick={valuesTick}
           orientation={orientation}
           onAxisSizeChange={onAxisSizeChange}
+          formatValue={formatValueForLabel}
         />
         {dataColumns.map((barColumns, idx) => {
           return (
@@ -205,6 +208,7 @@ export const MultiBarChart: React.FC<Props> = ({
               onMouseLeave={() => setActiveBar(undefined)}
               onMouseEnter={setActiveBar}
               parentRef={svgRef}
+              formatValue={formatValueForLabel}
             />
           )
         })}
@@ -218,6 +222,7 @@ export const MultiBarChart: React.FC<Props> = ({
           isVisible={true}
           svgParentRef={svgRef}
           color={colorGroups}
+          formatValue={formatValueForLabel}
         />
       )}
     </div>

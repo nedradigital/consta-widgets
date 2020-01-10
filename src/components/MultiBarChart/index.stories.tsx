@@ -32,28 +32,63 @@ export const DataWithTwoColumnsOnDate = {
   keyGroup: 'month',
 }
 
+const defaultProps = {
+  orientation: 'vertical',
+  valuesTick: 4,
+  hasRatio: false,
+} as const
+
 storiesOf('components/MultiBarChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
   .add('с одним столбцом', () => {
     return (
       <MultiBarChart
-        orientation="vertical"
-        valuesTick={4}
-        hasRatio={false}
         data={object('data', getWidgetMockData(DataType.MultiBarChart).data)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
+        {...defaultProps}
       />
     )
   })
   .add('с двумя столбцами', () => {
     return (
       <MultiBarChart
-        orientation="vertical"
-        valuesTick={4}
-        hasRatio={false}
         data={object('data', DataWithTwoColumnsOnDate)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
+        {...defaultProps}
+      />
+    )
+  })
+  .add('с форматированием значений', () => {
+    return (
+      <MultiBarChart
+        data={object('data', {
+          categories: ['apples'],
+          values: [
+            {
+              month: 'Q1-2016',
+              column1: { apples: 24000000 },
+            },
+            {
+              month: 'Q2-2016',
+              column1: { apples: 30000000 },
+            },
+            {
+              month: 'Q3-2016',
+              column1: { apples: 36000000 },
+            },
+          ],
+          keyGroup: 'month',
+        })}
+        colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
+        {...defaultProps}
+        formatValueForLabel={value => {
+          const date = new Date(value)
+
+          return [date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds()]
+            .map(part => String(part).padStart(2, '0'))
+            .join(':')
+        }}
       />
     )
   })

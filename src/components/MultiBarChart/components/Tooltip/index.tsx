@@ -3,7 +3,7 @@ import * as React from 'react'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { UniqueInnerColumns } from '../..'
 import { ColumnWithGeometry, GeometryParams, getColumnSize, MouseActionParams } from '../MultiBar'
@@ -17,6 +17,7 @@ type Props = {
   isVisible: boolean
   svgParentRef: React.RefObject<SVGGElement>
   color: ColorGroups
+  formatValue?: FormatValue
 }
 
 const defaultPosition = {
@@ -64,18 +65,24 @@ const getDirection = (
   return isVertical ? tooltipDirectionVertical : tooltipDirectionHorizontal
 }
 
-const getLayout = (
-  values: readonly ColumnWithGeometry[],
-  isVertical: boolean,
+const getLayout = ({
+  values,
+  isVertical,
+  color,
+  formatValue,
+}: {
+  values: readonly ColumnWithGeometry[]
+  isVertical: boolean
   color: ColorGroups
-) => {
+  formatValue: FormatValue
+}) => {
   return values.map((obj, idx) => (
     <div
       key={idx}
       style={{ color: color[obj.category] }}
       className={classnames(isVertical ? undefined : css.tooltipHorizontal)}
     >
-      {obj.value}
+      {formatValue(obj.value)}
     </div>
   ))
 }
@@ -87,12 +94,13 @@ export const TooltipComponent: React.FC<Props> = ({
   isVisible,
   svgParentRef,
   color,
+  formatValue = String,
 }) => {
   const { columnName, params, values, innerTranslate } = barColumn
 
   const direction = getDirection(uniqueInnerColumns, columnName, isVertical)
   const position = getOffsetPosition({ innerTranslate, svgRef: svgParentRef, isVertical, params })
-  const layout = getLayout(values, isVertical, color)
+  const layout = getLayout({ values, isVertical, color, formatValue })
 
   return (
     <Tooltip

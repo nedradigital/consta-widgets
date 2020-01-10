@@ -3,7 +3,7 @@ import React from 'react'
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { TooltipComponent } from '../Tooltip'
 
@@ -52,6 +52,7 @@ type Props = {
   onMouseLeave: () => void
   onMouseEnter: MouseAction
   parentRef: React.RefObject<SVGGElement>
+  formatValue?: FormatValue
 }
 
 export const getColumnSize = () => getCalculatedSize(12)
@@ -141,6 +142,7 @@ export const MultiBar: React.FC<Props> = ({
   onMouseLeave,
   onMouseEnter,
   parentRef,
+  formatValue,
 }) => {
   const columnDefaultSize = getColumnSize()
   const columnPadding = getColumnPadding()
@@ -214,6 +216,7 @@ export const MultiBar: React.FC<Props> = ({
           isVisible={Boolean(showValues)}
           svgParentRef={parentRef}
           color={color}
+          formatValue={formatValue}
         />
       </React.Fragment>
     )
