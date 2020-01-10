@@ -36,7 +36,7 @@ type Props = {
   gridConfig: GridConfig
   threshold?: Threshold
   withZoom?: boolean
-  isVertical?: boolean
+  isHorizontal?: boolean
   formatValueForLabel: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
@@ -149,11 +149,11 @@ export const getUniqValues = (
   items: readonly Item[],
   domain: NumberRange,
   type: 'x' | 'y',
-  isVertical?: boolean
+  isHorizontal?: boolean
 ) =>
   _.sortBy(
     _.uniq(items.map(v => v[type])).filter(i =>
-      isVertical ? i >= domain[1] && i <= domain[0] : i >= domain[0] && i <= domain[1]
+      isHorizontal ? i >= domain[0] && i <= domain[1] : i >= domain[1] && i <= domain[0]
     )
   )
 
@@ -163,21 +163,21 @@ export const getMainTickValues = ({
   gridConfig,
   tickType,
   guideValue,
-  isVertical,
+  isHorizontal,
 }: {
   items: readonly Item[]
   domain: NumberRange
   gridConfig: GridConfig
   tickType: 'labelTicks' | 'gridTicks'
   guideValue: number
-  isVertical?: boolean
+  isHorizontal?: boolean
 }): TickValues => {
   if (domain === INITIAL_DOMAIN) {
     return []
   }
 
-  const config = gridConfig[isVertical ? 'y' : 'x']
-  const uniqValues = getUniqValues(items, domain, isVertical ? 'y' : 'x', isVertical)
+  const config = gridConfig[isHorizontal ? 'x' : 'y']
+  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y', isHorizontal)
   const ticks = config[tickType] || 0
   const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
   const result =
@@ -196,21 +196,21 @@ export const getSecondaryTickValues = ({
   gridConfig,
   tickType,
   guideValue,
-  isVertical,
+  isHorizontal,
 }: {
   items: readonly Item[]
   domain: NumberRange
   gridConfig: GridConfig
   tickType: 'labelTicks' | 'gridTicks'
   guideValue: number
-  isVertical?: boolean
+  isHorizontal?: boolean
 }) => {
   if (domain === INITIAL_DOMAIN) {
     return []
   }
 
-  const config = gridConfig[isVertical ? 'x' : 'y']
-  const uniqValues = getUniqValues(items, domain, isVertical ? 'x' : 'y', false)
+  const config = gridConfig[isHorizontal ? 'y' : 'x']
+  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'y' : 'x', true)
   const ticks = config[tickType] || 0
   const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
   const result = ticks === 0 ? [] : d3.ticks(domain[0], domain[1], ticks)
@@ -224,11 +224,11 @@ export const getSecondaryTickValues = ({
 
 const flipPointsOnAxes = (items: readonly Item[], shouldFlip?: boolean) => {
   return shouldFlip
-    ? items.map(item => ({
+    ? items
+    : items.map(item => ({
         x: item.y,
         y: item.x,
       }))
-    : items
 }
 
 export class LinearChart extends React.Component<Props, State> {
@@ -273,12 +273,12 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines, threshold, isVertical },
+      props: { lines, threshold, isHorizontal },
     } = this
 
     if (
       lines !== prevProps.lines ||
-      isVertical !== prevProps.isVertical ||
+      isHorizontal !== prevProps.isHorizontal ||
       threshold !== prevProps.threshold
     ) {
       this.updateDomains()
@@ -298,7 +298,7 @@ export class LinearChart extends React.Component<Props, State> {
           y: { labels: yLabelsPos },
         },
         withZoom,
-        isVertical,
+        isHorizontal,
         lines,
         formatValueForLabel,
         formatValueForTooltip,
@@ -330,7 +330,7 @@ export class LinearChart extends React.Component<Props, State> {
       <div ref={this.ref} className={css.main}>
         <LineTooltip
           lines={this.getLines()}
-          isVertical={!!isVertical}
+          isHorizontal={!!isHorizontal}
           scaleX={scaleX}
           scaleY={scaleY}
           colorGroups={colorGroups}
@@ -378,7 +378,7 @@ export class LinearChart extends React.Component<Props, State> {
             mainGridTickValues={mainGridTickValues}
             secondaryLabelTickValues={secondaryLabelTickValues}
             secondaryGridTickValues={secondaryGridTickValues}
-            isVertical={isVertical}
+            isHorizontal={isHorizontal}
             formatValueForLabel={formatValueForLabel}
             secondaryScaleUnit={unit}
             xGuideValue={xGuideValue}
@@ -391,7 +391,7 @@ export class LinearChart extends React.Component<Props, State> {
             scaleY={scaleY}
             width={svgWidth}
             height={svgHeight}
-            isVertical={Boolean(isVertical)}
+            isHorizontal={Boolean(isHorizontal)}
             hoveredMainValue={hoveredMainValue}
             onChangeHoveredMainValue={this.setHoveredMainValue}
           />
@@ -400,8 +400,8 @@ export class LinearChart extends React.Component<Props, State> {
             <Threshold
               scaleX={scaleX}
               scaleY={scaleY}
-              maxPoints={flipPointsOnAxes(threshold.max, isVertical)}
-              minPoints={threshold.min ? flipPointsOnAxes(threshold.min, isVertical) : undefined}
+              maxPoints={flipPointsOnAxes(threshold.max, isHorizontal)}
+              minPoints={threshold.min ? flipPointsOnAxes(threshold.min, isHorizontal) : undefined}
               clipPath={lineClipPath}
             />
           )}
@@ -418,14 +418,14 @@ export class LinearChart extends React.Component<Props, State> {
               lineClipPath={lineClipPath}
               dotsClipPath={dotsClipPath}
               hoveredMainValue={hoveredMainValue}
-              isVertical={Boolean(isVertical)}
+              isHorizontal={Boolean(isHorizontal)}
             />
           ))}
         </svg>
 
         {withZoom && (
           <Zoom
-            isVertical={Boolean(isVertical)}
+            isHorizontal={Boolean(isHorizontal)}
             xRange={getXRange(svgWidth)}
             yRange={getYRange(svgHeight)}
             paddingX={paddingX}
@@ -443,22 +443,23 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   getXDomain = (items: readonly Item[]): NumberRange => {
-    const { isVertical } = this.props
+    const { isHorizontal } = this.props
     const { zoom } = this.state
-    const { left, right } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
     const domain = d3.extent(items, v => v.x) as NumberRange
     return padDomain(domain, left, right, zoom)
   }
 
   getYDomain = (items: readonly Item[]): NumberRange => {
-    const { isVertical } = this.props
+    const { isHorizontal } = this.props
     const { zoom } = this.state
-    const { top, bottom } = domainPaddings[isVertical ? 'vertical' : 'horizontal']
+    const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
     const domain = d3.extent(items, v => v.y)
     return padDomain(
-      (isVertical
-        ? [...domain].reverse() // Чтобы 0 был сверху
-        : domain) as NumberRange,
+      (isHorizontal
+        ? domain
+        : // Чтобы 0 был сверху
+          [...domain].reverse()) as NumberRange,
       bottom,
       top,
       zoom
@@ -466,7 +467,7 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   getThresholdLines = () => {
-    const { threshold, isVertical } = this.props
+    const { threshold, isHorizontal } = this.props
 
     if (!threshold) {
       return []
@@ -474,20 +475,20 @@ export class LinearChart extends React.Component<Props, State> {
 
     const { max, min = [] } = threshold
 
-    return [flipPointsOnAxes(max, isVertical), flipPointsOnAxes(min, isVertical)]
+    return [flipPointsOnAxes(max, isHorizontal), flipPointsOnAxes(min, isHorizontal)]
   }
 
   getAllThresholdValues = (): readonly Item[] => _.flatten(this.getThresholdLines())
 
   getLines = (): readonly Line[] => {
-    const { lines, isVertical } = this.props
+    const { lines, isHorizontal } = this.props
 
-    return isVertical
-      ? lines.map(line => ({
+    return isHorizontal
+      ? lines
+      : lines.map(line => ({
           ...line,
-          values: _.sortBy(flipPointsOnAxes(line.values, isVertical), 'y'),
+          values: _.sortBy(flipPointsOnAxes(line.values, isHorizontal), 'y'),
         }))
-      : lines
   }
 
   getAllValues = (): readonly Item[] => _.flatten(this.getLines().map(l => l.values))
@@ -504,41 +505,41 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   getTicks = () => {
-    const { isVertical, gridConfig } = this.props
+    const { isHorizontal, gridConfig } = this.props
     const { xGuideValue, yGuideValue, xDomain, yDomain } = this.state
 
     return {
       mainLabelTickValues: getMainTickValues({
         items: this.getAllValues(),
-        domain: isVertical ? yDomain : xDomain,
+        domain: isHorizontal ? xDomain : yDomain,
         gridConfig,
         tickType: 'labelTicks',
-        guideValue: isVertical ? yGuideValue : xGuideValue,
-        isVertical,
+        guideValue: isHorizontal ? xGuideValue : yGuideValue,
+        isHorizontal,
       }),
       mainGridTickValues: getMainTickValues({
         items: this.getAllValues(),
-        domain: isVertical ? yDomain : xDomain,
+        domain: isHorizontal ? xDomain : yDomain,
         gridConfig,
         tickType: 'gridTicks',
-        guideValue: isVertical ? yGuideValue : xGuideValue,
-        isVertical,
+        guideValue: isHorizontal ? xGuideValue : yGuideValue,
+        isHorizontal,
       }),
       secondaryLabelTickValues: getSecondaryTickValues({
         items: this.getAllValues(),
-        domain: isVertical ? xDomain : yDomain,
+        domain: isHorizontal ? yDomain : xDomain,
         gridConfig,
         tickType: 'labelTicks',
-        guideValue: isVertical ? xGuideValue : yGuideValue,
-        isVertical,
+        guideValue: isHorizontal ? yGuideValue : xGuideValue,
+        isHorizontal,
       }),
       secondaryGridTickValues: getSecondaryTickValues({
         items: this.getAllValues(),
-        domain: isVertical ? xDomain : yDomain,
+        domain: isHorizontal ? yDomain : xDomain,
         gridConfig,
         tickType: 'gridTicks',
-        guideValue: isVertical ? xGuideValue : yGuideValue,
-        isVertical,
+        guideValue: isHorizontal ? yGuideValue : xGuideValue,
+        isHorizontal,
       }),
     }
   }
@@ -607,30 +608,14 @@ export class LinearChart extends React.Component<Props, State> {
   getAxis = () => {
     const {
       state: { xDomain, yDomain },
-      props: { isVertical },
+      props: { isHorizontal },
     } = this
     const { svgWidth, svgHeight } = this.getSvgSize()
     const setXDomain = (domain: NumberRange) => this.setState({ xDomain: domain })
     const setYDomain = (domain: NumberRange) => this.setState({ yDomain: domain })
 
-    return isVertical
+    return isHorizontal
       ? {
-          main: {
-            currentDomain: yDomain,
-            getDomain: this.getYDomain,
-            setDomain: setYDomain,
-            getScale: getYScale,
-            rescale: 'rescaleY',
-            getValue: (v: Item) => v.y,
-            size: svgHeight,
-          },
-          secondary: {
-            currentDomain: xDomain,
-            getDomain: this.getXDomain,
-            setDomain: setXDomain,
-          },
-        }
-      : {
           main: {
             currentDomain: xDomain,
             getDomain: this.getXDomain,
@@ -644,6 +629,22 @@ export class LinearChart extends React.Component<Props, State> {
             currentDomain: yDomain,
             getDomain: this.getYDomain,
             setDomain: setYDomain,
+          },
+        }
+      : {
+          main: {
+            currentDomain: yDomain,
+            getDomain: this.getYDomain,
+            setDomain: setYDomain,
+            getScale: getYScale,
+            rescale: 'rescaleY',
+            getValue: (v: Item) => v.y,
+            size: svgHeight,
+          },
+          secondary: {
+            currentDomain: xDomain,
+            getDomain: this.getXDomain,
+            setDomain: setXDomain,
           },
         }
   }

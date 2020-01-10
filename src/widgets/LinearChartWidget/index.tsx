@@ -14,7 +14,7 @@ const widgetId = 'e63c468b-75bd-4c5c-95c7-696e598db6e3'
 
 type Params = {
   withZoom?: boolean
-  isVertical?: boolean
+  isHorizontal?: boolean
   xLabels?: XLabelsPosition
   xLabelTicks?: number
   xGridTicks?: number
@@ -27,7 +27,7 @@ type Params = {
 }
 
 export const defaultParams: Params = {
-  isVertical: false,
+  isHorizontal: true,
   withZoom: false,
   xLabels: 'bottom',
   xLabelTicks: 0,
@@ -42,7 +42,7 @@ export const defaultParams: Params = {
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params: {
-    isVertical,
+    isHorizontal,
     withZoom,
     xLabels,
     xLabelTicks,
@@ -81,7 +81,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     lines={data}
     colorGroups={colorGroups}
     withZoom={withZoom}
-    isVertical={isVertical}
+    isHorizontal={isHorizontal}
     formatValueForLabel={formatValueForLabel ? formatValueForLabel : v => String(v)}
     formatValueForTooltip={formatValueForTooltip}
     formatValueForTooltipTitle={formatValueForTooltipTitle}
@@ -103,9 +103,9 @@ export const LinearChartWidget = createWidget<Data, Params>({
     return (
       <>
         <WidgetSettingsCheckbox
-          name="Вертикальное отображение"
-          value={params.isVertical}
-          onChange={value => onChangeParam('isVertical', value)}
+          name="Горизонтальное отображение"
+          value={params.isHorizontal}
+          onChange={value => onChangeParam('isHorizontal', value)}
         />
         <WidgetSettingsCheckbox
           name="Зум"

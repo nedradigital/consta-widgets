@@ -17,7 +17,7 @@ export type HoverLine = {
 
 type Props = {
   lines: readonly Line[]
-  isVertical: boolean
+  isHorizontal: boolean
   anchorEl: Element | null
   scaleX: ScaleLinear
   scaleY: ScaleLinear
@@ -31,7 +31,7 @@ type Props = {
 export const LineTooltip: React.FC<Props> = ({
   lines,
   anchorEl,
-  isVertical,
+  isHorizontal,
   scaleX,
   scaleY,
   hoveredMainValue,
@@ -44,8 +44,8 @@ export const LineTooltip: React.FC<Props> = ({
     return null
   }
 
-  const mainValueKey = isVertical ? 'y' : 'x'
-  const secondaryValueKey = isVertical ? 'x' : 'y'
+  const mainValueKey = isHorizontal ? 'x' : 'y'
+  const secondaryValueKey = isHorizontal ? 'y' : 'x'
 
   const tooltipItems = lines.map(line => {
     const item = line.values.find(v => v[mainValueKey] === hoveredMainValue)
@@ -68,14 +68,14 @@ export const LineTooltip: React.FC<Props> = ({
     }
   }
 
-  const position = isVertical
-    ? getTooltipPosition({ xValue: maxSecondaryValue, yValue: hoveredMainValue })
-    : getTooltipPosition({ xValue: hoveredMainValue, yValue: maxSecondaryValue })
+  const position = isHorizontal
+    ? getTooltipPosition({ xValue: hoveredMainValue, yValue: maxSecondaryValue })
+    : getTooltipPosition({ xValue: maxSecondaryValue, yValue: hoveredMainValue })
 
   const title = (formatValueForTooltipTitle || formatValueForLabel)(hoveredMainValue)
 
   return (
-    <Tooltip isVisible x={position.x} y={position.y} direction={isVertical ? 'right' : 'top'}>
+    <Tooltip isVisible x={position.x} y={position.y} direction={isHorizontal ? 'top' : 'right'}>
       <TooltipContentForMultipleValues
         title={title}
         items={tooltipItems.map(item => ({
