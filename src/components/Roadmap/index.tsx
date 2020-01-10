@@ -204,7 +204,9 @@ export const Roadmap: React.FC<Props> = props => {
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
-  const { height, width } = useComponentSize(ref)
+  const { width } = useComponentSize(ref)
+  const calendarTbodyRef = useRef<HTMLTableSectionElement>(null)
+  const { height: calendarTbodyHeight } = useComponentSize(calendarTbodyRef)
   const [activeLine, changeActiveLine] = useState<ActiveLineState>({
     index: undefined,
     groupName: undefined,
@@ -299,7 +301,7 @@ export const Roadmap: React.FC<Props> = props => {
             )
           }}
         >
-          <tbody style={{ backgroundSize: `${monthWidth}px 20px` }}>
+          <tbody style={{ backgroundSize: `${monthWidth}px 20px` }} ref={calendarTbodyRef}>
             {data.map(({ plan, fact, forecast, firstColumn, secondColumn }, index) => (
               <tr key={index}>
                 <td colSpan={months.length}>
@@ -345,7 +347,10 @@ export const Roadmap: React.FC<Props> = props => {
                     {index === 0 && (
                       <div
                         className={css.currentDay}
-                        style={{ left: getCoordsByDate(currentDay, monthWidth, startDate), height }}
+                        style={{
+                          left: getCoordsByDate(currentDay, monthWidth, startDate),
+                          height: calendarTbodyHeight,
+                        }}
                       />
                     )}
                   </div>

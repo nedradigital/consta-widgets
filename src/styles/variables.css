@@ -57,6 +57,9 @@
   --scroll-bar-color: rgba(255, 255, 255, 0.7);
   --z-filter--tooltip: 1;
   --z-multi-select: calc(var(--z-filter--tooltip) + 1);
+  --scrollbar-handle-size: 2px;
+  --scrollbar-padding: 4px;
+  --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;
