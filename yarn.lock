@@ -1274,15 +1274,15 @@
   resolved "https://nexus.csssr.space/repository/csssr/@gaz/utils/-/utils-0.2.4.tgz#031129704f44e6b5971c51a3dd53a3f85a941f02"
   integrity sha512-FpyzSGJtsA/8CP+hGS+21JcqWeS0Tec2cUo4QU1tRYJuOSRv7N9feP7apWMeSLwplkuU9uIEB+WhrsT1UrLzcA==
 
-"@gpn-design/uikit@0.0.9":
-  version "0.0.9"
-  resolved "https://registry.yarnpkg.com/@gpn-design/uikit/-/uikit-0.0.9.tgz#e4921c01a69fb9d391cd059f7cdfbbe19875eea6"
-  integrity sha512-q6WR0KgGREfR2+1gAJlYXFJNPQTFMFvcXGbmUwyAF/xz1Kxqvn5kAo2iXQ8//U+rAOtxhWwflYJu/7WvCw4/XQ==
+"@gpn-design/uikit@0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@gpn-design/uikit/-/uikit-0.1.0.tgz#01282a18a29cc0a49fcd415ce4940b0233c9cc58"
+  integrity sha512-hHtR69W3uIOb+ocbxgPQQNQZ6Rkmq3QYZouKwOsYxWULFGKFrqRRV26Bk+lOI8neWyjDij89oJIzFJ+6AlNkuA==
   dependencies:
-    "@types/rc-slider" "^8.6.5"
-    "@yankovsky/whitepaper-bem" "^2.1.0"
     bem-cn "^3.0.1"
+    lodash "^4.17.15"
     react "^16.8.6"
+    react-collapse "^5.0.0"
     react-dom "^16.8.6"
 
 "@hot-loader/react-dom@16.8.6":
@@ -2348,21 +2348,6 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.2.tgz#690a1475b84f2a884fd07cd797c00f5f31356ea8"
   integrity sha512-ce5d3q03Ex0sy4R14722Rmt6MT07Ua+k4FwDfdcToYJcMKNtRVQvJ6JCAPdAmAnbRb6CsX6aYb9m96NGod9uTw==
 
-"@types/rc-slider@^8.6.5":
-  version "8.6.5"
-  resolved "https://registry.yarnpkg.com/@types/rc-slider/-/rc-slider-8.6.5.tgz#5032e5a4e4074588068d4b149f9e80a5ae80d8e3"
-  integrity sha512-cz5xqjsN4OtqoX0gMG5KheFUV/4DwmzpSXJdLyHQXp2xwfPyPggh7nLy9nwKXQhXLnimOH3EXz9AAlsA8UGkLg==
-  dependencies:
-    "@types/rc-tooltip" "*"
-    "@types/react" "*"
-
-"@types/rc-tooltip@*":
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/@types/rc-tooltip/-/rc-tooltip-3.7.1.tgz#20bde0f9c872f824c1dea86d0fc741dfd9aca3d7"
-  integrity sha512-H+pW9+H42rlb3PBjcxuXhQre1ldr0gdDVbVfCj0Pf4Mdjd1plti9ekt1yJ+gGig3bRFLpCknWDmfOkAjKY+S+Q==
-  dependencies:
-    "@types/react" "*"
-
 "@types/reach__router@^1.2.3":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@types/reach__router/-/reach__router-1.2.6.tgz#b14cf1adbd1a365d204bbf6605cd9dd7b8816c87"
@@ -2730,11 +2715,6 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@xtuc/long/-/long-4.2.2.tgz#d291c6a4e97989b5c61d9acf396ae4fe133a718d"
   integrity sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==
-
-"@yankovsky/whitepaper-bem@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@yankovsky/whitepaper-bem/-/whitepaper-bem-2.1.0.tgz#7fb5fc46f3816a292ad9483f838bf6750b55f484"
-  integrity sha512-045Gt8unsuzhlLUepyn8lpqdxHzfHeARE8+pjjCpm6Vg0D/qb/KDwoBjX5ytvVMAaH2kA+9sKzVyPfN/aFT+lg==
 
 abab@^2.0.0:
   version "2.0.2"
@@ -11709,6 +11689,11 @@ react-clientside-effect@^1.2.0:
   integrity "sha1-YhL7DgeyBOcUWB3VGZJgPRrMyDc= sha512-nRmoyxeok5PBO6ytPvSjKp9xwXg9xagoTK1mMjwnQxqM9Hd7MNPl+LS1bOSOe+CV2+4fnEquc7H/S8QD3q697A=="
   dependencies:
     "@babel/runtime" "^7.0.0"
+
+react-collapse@^5.0.0:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.0.1.tgz#f763b7207aee73baa1ff778b2d0b4ffb49d900a0"
+  integrity sha512-cN2tkxBWizhPQ2JHfe0aUSJtmMthKA17NZkTElpiQ2snQAAi1hssXZ2fv88rAPNNvG5ss4t0PbOZT0TIl9Lk3Q==
 
 react-color@^2.17.0:
   version "2.17.3"
