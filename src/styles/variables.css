@@ -60,6 +60,8 @@
   --scrollbar-handle-size: 2px;
   --scrollbar-padding: 4px;
   --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
+  --resizer-width: 5px;
+  --resizer-z: 1;
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;

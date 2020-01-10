@@ -44,7 +44,7 @@ export const list = [
     total: 313,
   },
   {
-    field: 'Уренгойское газонефтеконденсатное',
+    field: 'Уренгойское газонефтеконденсат­ное',
     year: 2001,
     type: 'Конденсатное',
     estimatedReserves: 7540,
