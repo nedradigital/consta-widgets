@@ -4,6 +4,7 @@ import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import { zip } from 'lodash'
 
+import { LegendItem } from '@/components/LegendItem'
 import { Tooltip } from '@/components/Tooltip'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
@@ -86,11 +87,10 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
     <div ref={ref} className={css.main}>
       <Tooltip isVisible={isTooltipVisible} direction="top" x={mousePosition.x} y={mousePosition.y}>
         {tooltipData ? (
-          <>
-            <span className={css.tooltipColor} style={{ background: tooltipData.color }} />
+          <LegendItem color={tooltipData.color} fontSize="xs">
             {tooltipData.name}
             <span className={css.tooltipValue}>{tooltipData.value}</span>
-          </>
+          </LegendItem>
         ) : null}
       </Tooltip>
       <svg viewBox={viewBox} onMouseMove={handleMouseMove}>
