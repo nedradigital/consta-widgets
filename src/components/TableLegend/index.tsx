@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react'
 
+import { updateAt } from '@gaz/utils/lib/array'
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy, xor } from 'lodash'
@@ -17,7 +19,7 @@ import {
   isSelectedFiltersPresent,
 } from '@/utils/table'
 
-import { DivResizable } from './components/DivResizable'
+import { Resizer } from './components/Resizer'
 import { ReactComponent as IconSortAscSvg } from './images/sort-asc.svg'
 import { ReactComponent as IconSortDescSvg } from './images/sort-desc.svg'
 import { ReactComponent as IconSortSvg } from './images/sort-icon.svg'
@@ -78,14 +80,33 @@ type Props = {
 export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
   const { columnNames, legendFields, list, colorGroups, filters } = data
 
-  const ref = useRef(null)
-  const { height } = useComponentSize(ref)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const tableRef = useRef<HTMLTableElement>(null)
+  const { height: tableHeight } = useComponentSize(tableRef)
   const [accessor, setAccessor] = useState('')
   const [isOrderByDesc, setOrderByDesc] = useState(false)
   const [visibleFilter, setVisibleFilter] = useState<string | null>(null)
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
     getSelectedFiltersInitialState(filters)
   )
+  const [columnWidths, setColumnWidths] = useState<readonly number[]>([])
+  const [initialColumnWidths, setInitialColumnWidths] = useState<readonly number[]>([])
+
+  const updateColumnWidth = (idx: number, newWidth: number) =>
+    setColumnWidths(updateAt(columnWidths, idx, newWidth))
+
+  React.useLayoutEffect(() => {
+    const refEl = tableRef.current
+
+    if (!refEl) {
+      return
+    }
+
+    const columnEls = Array.from(refEl.querySelectorAll('th'))
+    const newColumnWidths = columnEls.map(el => el.offsetWidth)
+    setColumnWidths(newColumnWidths)
+    setInitialColumnWidths(newColumnWidths)
+  }, [])
 
   const datum = accessor ? orderBy(list, accessor, isOrderByDesc ? 'desc' : 'asc') : list
 
@@ -135,6 +156,18 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     const isSortingActive = accessor === obj.accessor
     const IconSort =
       (isSortingActive && (isOrderByDesc ? IconSortDescSvg : IconSortAscSvg)) || IconSortSvg
+    const handleColumnResize = (delta: number) => {
+      const columnMinWidth = Math.min(getCalculatedSize(150), initialColumnWidths[idx])
+      const newColumnWidth = Math.max(columnMinWidth, columnWidths[idx] + delta)
+
+      updateColumnWidth(idx, newColumnWidth)
+
+      // При расширении последней колонки скроллим таблицу вправо
+      const containerEl = containerRef.current
+      if (idx === columnWidths.length - 1 && delta > 0 && containerEl) {
+        containerEl.scrollBy(delta, 0)
+      }
+    }
 
     return (
       <th
@@ -145,8 +178,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           alignClasses[obj.align],
           visibleFilter === obj.accessor && css.isFilterOpened
         )}
-        data-accessor={obj.accessor}
-        style={{ position: 'relative' }}
+        style={{ width: columnWidths[idx] }}
       >
         <div className={css.titleWrapper}>
           {filters && fieldFiltersPresent(filters, obj.accessor) && (
@@ -169,7 +201,11 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
             className={classnames(css.icon, css.iconSort)}
           />
         </div>
-        <DivResizable height={height} />
+        <Resizer
+          height={tableHeight}
+          onResize={handleColumnResize}
+          onDoubleClick={() => updateColumnWidth(idx, initialColumnWidths[idx])}
+        />
       </th>
     )
   })
@@ -201,8 +237,8 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     })
 
   return (
-    <div className={css.main}>
-      <table className={classnames(css.table, css.striped)} ref={ref}>
+    <div className={css.main} ref={containerRef}>
+      <table className={classnames(css.table, columnWidths.length && css.isFixed)} ref={tableRef}>
         <thead>
           <tr>{thRender}</tr>
           {filters && isSelectedFiltersPresent(selectedFilters) && (

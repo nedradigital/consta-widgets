@@ -82,7 +82,7 @@ const getList = () => {
 
 storiesOf('components/TableLegend', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator())
+  .addDecorator(blockCenteringDecorator({ width: '90vw' }))
   .add('обычная', () => (
     <TableLegend
       isShowLegend={false}

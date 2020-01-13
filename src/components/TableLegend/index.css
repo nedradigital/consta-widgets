@@ -1,5 +1,32 @@
 .main {
   overflow: auto;
+
+  width: 100%;
+  height: 100%;
+}
+
+.table {
+  overflow: hidden;
+
+  width: 100%;
+
+  border-spacing: 0;
+  border-collapse: collapse;
+
+  &.isFixed {
+    width: 0; /* Чтобы и тянулась, и сужалась */
+
+    table-layout: fixed;
+  }
+
+  & tbody {
+    font-size: calc-size(15);
+    line-height: calc-size(20);
+  }
+
+  & tr:nth-child(even) {
+    background: var(--table-even-row-background);
+  }
 }
 
 .rowL {
@@ -14,24 +41,11 @@
   height: 30px;
 }
 
-.table {
-  width: 100%;
-
-  &.striped tr:nth-child(even) {
-    background: var(--table-even-row-background);
-  }
-
-  & tbody {
-    font-size: calc-size(15);
-    line-height: calc-size(20);
-  }
-}
-
 .cell {
-  --column-padding: calc-size(18);
+  --column-padding: calc-size(16);
 
   padding-top: 0;
-  padding-right: var(--column-padding);
+  padding-right: calc(var(--column-padding) + var(--resizer-width));
   padding-bottom: 0;
   padding-left: var(--column-padding);
 
@@ -39,9 +53,15 @@
     font-size: calc-size(10);
     line-height: calc-size(15);
 
+    position: relative;
+
     text-transform: uppercase;
 
     color: var(--text-color-70);
+  }
+
+  &:not(.isHeader) {
+    hyphens: auto;
   }
 
   &.alignLeft {
@@ -73,6 +93,7 @@
 
 .icon {
   position: absolute;
+  z-index: calc(var(--resizer-z) + 1);
   top: 0;
   bottom: 0;
 
@@ -90,7 +111,7 @@
   }
 
   @nest .cell:not(:hover) & {
-    display: none;
+    visibility: hidden;
   }
 }
 
