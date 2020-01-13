@@ -42,12 +42,15 @@
 }
 
 .cell {
-  --column-padding: calc-size(16);
+  --column-padding-horizontal: calc-size(16);
+  --column-padding-vertical: calc-size(10);
 
-  padding-top: 0;
-  padding-right: calc(var(--column-padding) + var(--resizer-width));
-  padding-bottom: 0;
-  padding-left: var(--column-padding);
+  padding-top: var(--column-padding-vertical);
+  padding-right: calc(var(--column-padding-horizontal) + var(--resizer-width));
+  padding-bottom: var(--column-padding-vertical);
+  padding-left: var(--column-padding-horizontal);
+
+  vertical-align: top;
 
   &.isHeader {
     font-size: calc-size(10);
@@ -55,6 +58,10 @@
 
     position: relative;
 
+    padding-top: 0;
+    padding-bottom: 0;
+
+    vertical-align: middle;
     text-transform: uppercase;
 
     color: var(--text-color-70);
