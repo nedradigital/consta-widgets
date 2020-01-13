@@ -3,6 +3,8 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
+import { FormatValue } from '@/dashboard/types'
+
 import { Orientation } from '../../'
 
 import css from './index.css'
@@ -25,7 +27,7 @@ type Props = {
   valuesScale: d3.ScaleLinear<number, number>
   groupScale: d3.ScaleBand<string>
   orientation: Orientation
-  valuesSpecifier?: string
+  formatValue?: FormatValue
 }
 
 export const Axis: React.FC<Props> = ({
@@ -36,7 +38,7 @@ export const Axis: React.FC<Props> = ({
   groupScale,
   valuesScale,
   orientation = 'vertical',
-  valuesSpecifier,
+  formatValue = String,
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
@@ -98,11 +100,11 @@ export const Axis: React.FC<Props> = ({
             .tickSize(4)
             .tickPadding(TICK_PADDING)
             .tickFormat(d => {
-              if (valuesSpecifier) {
-                return d3.format(valuesSpecifier)(d)
+              if (typeof d === 'number') {
+                return formatValue(d)
               }
 
-              return String(d)
+              return formatValue(d.valueOf())
             })
         : d3[labels.direction](labels.scale as d3.ScaleBand<string>)
 
