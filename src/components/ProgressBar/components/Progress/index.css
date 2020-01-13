@@ -2,6 +2,7 @@
   display: block;
 
   width: 100%;
+  height: var(--chart-line-size);
   -webkit-appearance: progress-bar;
 
   &[value] {
@@ -25,38 +26,9 @@
 }
 
 .chart {
-  position: relative;
-  top: calc-size(12);
-
-  transform: translateY(-50%);
+  padding-top: calc((var(--summary-size) - var(--chart-line-size)) / 2);
 }
 
 .progress {
   width: 100%;
-
-  &.sizeS {
-    & .chart {
-      top: calc-size(10);
-    }
-
-    & .chartLine {
-      height: calc-size(4);
-    }
-  }
-
-  &.sizeM {
-    & .chartLine {
-      height: calc-size(12);
-    }
-  }
-
-  &.sizeL {
-    & .chart {
-      top: calc-size(12);
-    }
-
-    & .chartLine {
-      height: calc-size(20);
-    }
-  }
 }

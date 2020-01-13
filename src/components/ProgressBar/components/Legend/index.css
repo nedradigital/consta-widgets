@@ -1,6 +1,5 @@
 .legend {
-  position: absolute;
-  bottom: 0;
+  position: relative;
 
   display: flex;
   justify-content: space-between;
@@ -9,10 +8,7 @@
   min-height: calc-size(4);
   padding-top: calc-size(5);
 
-  opacity: 0.7;
-  color: #f6fbfd;
-
-  transform: translateY(100%);
+  color: var(--text-color);
 }
 
 .marking {
@@ -36,6 +32,13 @@
 
     transform: translateX(-100%);
   }
+
+  &.isHidden {
+    position: relative;
+    top: 0;
+
+    visibility: hidden;
+  }
 }
 
 .markingIcon {
@@ -52,5 +55,5 @@
 
   white-space: nowrap;
 
-  opacity: 0.7;
+  opacity: var(--text-opacity);
 }

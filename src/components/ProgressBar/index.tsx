@@ -35,52 +35,28 @@ export const getValueRatio = (val: number, valMin: number, valMax: number) => {
 
 export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
   const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
-  const getLegendClass = (legendData: Data['ticks']) =>
-    legendData && legendData.length ? css.withLegend : ''
 
   return (
-    <div className={css.progressBar}>
-      <div className={css.progress}>
-        {data.map((dataItem, i) => (
-          <div
-            className={classnames(
-              css.progressLine,
-              sizeClass,
-              getLegendClass(dataItem.ticks),
-              dataItem.caption && css.hasCaption
-            )}
-            key={i}
-          >
+    <div className={classnames(css.progressBar, sizeClass)}>
+      {data.map((dataItem, i) => (
+        <React.Fragment key={i}>
+          <div className={css.cell}>
             {dataItem.caption && (
-              <span className={classnames(css.caption, isCaptionBold && css.isCaptionBold)}>
+              <div className={classnames(css.caption, isCaptionBold && css.isCaptionBold)}>
                 {dataItem.caption}
-              </span>
+              </div>
             )}
-            <Progress size={size} data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
+            <Progress data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
           </div>
-        ))}
-      </div>
-
-      <div>
-        {data.map((dataItem, i) => (
-          <div
-            className={classnames(
-              css.progressLine,
-              sizeClass,
-              getLegendClass(dataItem.ticks),
-              dataItem.caption && css.hasCaption
-            )}
-            key={i}
-          >
+          <div className={classnames(css.cell, css.textCell)}>
             <Summary
               summary={dataItem.summary}
               color={colorGroups[dataItem.colorGroupName]}
-              size={size}
               hasCaption={!!dataItem.caption}
             />
           </div>
-        ))}
-      </div>
+        </React.Fragment>
+      ))}
     </div>
   )
 }

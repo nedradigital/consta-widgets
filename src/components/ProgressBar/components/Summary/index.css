@@ -1,23 +1,12 @@
 .summary {
-  font-size: calc-size(24);
-  line-height: calc-size(24);
+  font-size: var(--summary-size);
+  line-height: var(--summary-size);
 
   padding-left: calc-size(12);
 
   white-space: nowrap;
 
   color: inherit;
-
-  &.sizeS {
-    font-size: calc-size(20);
-    line-height: calc-size(20);
-  }
-
-  &.sizeM,
-  &.sizeL {
-    font-size: calc-size(24);
-    line-height: calc-size(24);
-  }
 
   &.hasCaption {
     padding-top: calc-size(14);
