@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { object } from '@storybook/addon-knobs'
+import { object, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { unitPositions } from '@/components/BarChartAxis'
 import { DataType } from '@/dashboard/types'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -14,11 +15,11 @@ const defaultBarChartProps = {
   orientation: 'vertical',
   showValues: false,
   gridTicks: 4,
-  valuesTicks: 4,
-  showUnitLeft: false,
-  showUnitBottom: false,
+  valuesTicks: 1,
   unit: 'тыс м3',
 } as const
+
+const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
 
 storiesOf('components/BarChart', module)
   .addDecorator(withSmartKnobs())
@@ -28,6 +29,7 @@ storiesOf('components/BarChart', module)
       <BarChart
         data={object('data', getWidgetMockData(DataType.BarChart).data)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
+        unitPosition={getUnitPosition()}
         {...defaultBarChartProps}
       />
     )
@@ -62,6 +64,7 @@ storiesOf('components/BarChart', module)
             ],
           },
         ]}
+        unitPosition={getUnitPosition()}
         {...defaultBarChartProps}
       />
     )
@@ -95,6 +98,7 @@ storiesOf('components/BarChart', module)
           ],
         },
       ]}
+      unitPosition={getUnitPosition()}
       {...defaultBarChartProps}
     />
   ))

@@ -1,4 +1,5 @@
 import { BarChart, Orientation, Size, sizes } from '@/components/BarChart'
+import { UnitPosition, unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
@@ -14,8 +15,7 @@ type Params = {
   showValues: boolean
   gridTicks: number
   valuesTicks: number
-  showUnitLeft: boolean
-  showUnitBottom: boolean
+  unitPosition: UnitPosition
 }
 
 const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
@@ -24,14 +24,13 @@ export const defaultParams: Params = {
   orientation: 'vertical',
   size: 'm',
   gridTicks: 4,
-  valuesTicks: 4,
+  valuesTicks: 1,
   showValues: false,
-  showUnitLeft: false,
-  showUnitBottom: false,
+  unitPosition: 'none',
 }
 
 export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { orientation, showValues, valuesTicks, gridTicks, showUnitLeft, showUnitBottom, size },
+  params: { orientation, showValues, valuesTicks, gridTicks, unitPosition, size },
   data,
 }) => (
   <BarChart
@@ -39,9 +38,8 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
     showValues={showValues}
     gridTicks={gridTicks}
     valuesTicks={valuesTicks}
-    showUnitLeft={showUnitLeft}
-    showUnitBottom={showUnitBottom}
     orientation={orientation}
+    unitPosition={unitPosition}
     size={size}
   />
 )
@@ -64,7 +62,7 @@ export const BarChartWidget = createWidget<Data, Params>({
           onChange={value => onChangeParam('gridTicks', value)}
         />
         <WidgetSettingsNumber
-          name="Количество подписей"
+          name="Частота обновления подписей"
           value={params.valuesTicks}
           onChange={value => onChangeParam('valuesTicks', value)}
         />
@@ -96,16 +94,11 @@ export const BarChartWidget = createWidget<Data, Params>({
             onChange={value => onChangeParam('showValues', value)}
           />
         ) : null}
-        <b>Единицы измерения</b>
-        <WidgetSettingsCheckbox
-          name="Показывать слева"
-          value={params.showUnitLeft}
-          onChange={value => onChangeParam('showUnitLeft', value)}
-        />
-        <WidgetSettingsCheckbox
-          name="Показывать снизу"
-          value={params.showUnitBottom}
-          onChange={value => onChangeParam('showUnitBottom', value)}
+        <WidgetSettingsSelect
+          name="Позиция единиц измерения"
+          value={params.unitPosition}
+          values={unitPositions.map(position => ({ value: position, name: position }))}
+          onChange={value => onChangeParam('unitPosition', value)}
         />
       </>
     )

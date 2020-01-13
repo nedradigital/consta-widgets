@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { object } from '@storybook/addon-knobs'
+import { object, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { unitPositions } from '@/components/BarChartAxis'
 import { DataType } from '@/dashboard/types'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -32,10 +33,14 @@ export const DataWithTwoColumnsOnDate = {
   keyGroup: 'month',
 }
 
+const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+
 const defaultProps = {
   orientation: 'vertical',
-  valuesTick: 4,
+  gridTicks: 4,
+  valuesTicks: 1,
   hasRatio: false,
+  unit: 'тыс м3',
 } as const
 
 storiesOf('components/MultiBarChart', module)
@@ -47,6 +52,7 @@ storiesOf('components/MultiBarChart', module)
         data={object('data', getWidgetMockData(DataType.MultiBarChart).data)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
         {...defaultProps}
+        unitPosition={getUnitPosition()}
       />
     )
   })
@@ -56,6 +62,7 @@ storiesOf('components/MultiBarChart', module)
         data={object('data', DataWithTwoColumnsOnDate)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
         {...defaultProps}
+        unitPosition={getUnitPosition()}
       />
     )
   })
@@ -82,6 +89,7 @@ storiesOf('components/MultiBarChart', module)
         })}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
         {...defaultProps}
+        unitPosition={getUnitPosition()}
         formatValueForLabel={value => {
           const date = new Date(value)
 

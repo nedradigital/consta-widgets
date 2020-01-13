@@ -1,13 +1,7 @@
-import { Scaler } from '@/components/Ticks'
+import { ticks } from 'd3-array'
 
-type GetTicksOptions = {
-  items: readonly number[]
-  count: number
-  scaler: Scaler<number>
-}
-
-export const getTicks = ({ items, count, scaler }: GetTicksOptions) => {
-  if (!scaler.ticks || count === 0) {
+export const getTicks = (items: readonly number[], count: number) => {
+  if (count === 0) {
     return []
   }
 
@@ -28,5 +22,5 @@ export const getTicks = ({ items, count, scaler }: GetTicksOptions) => {
       : [0, meanMaxValue, maxValue]
   }
 
-  return scaler.ticks(count)
+  return ticks(minValue, maxValue, count)
 }

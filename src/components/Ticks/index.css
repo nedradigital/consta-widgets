@@ -2,64 +2,90 @@
 @custom-selector :--isRight .isRight;
 @custom-selector :--isBottom .isBottom;
 @custom-selector :--isLeft .isLeft;
+@custom-selector :--isHorizontal :--isTop, :--isBottom;
+@custom-selector :--isVertical :--isRight, :--isLeft;
 
 .group {
-  --tick-margin: calc-size(9);
   --tick-line-color: rgba(213, 221, 226, 0.5);
   --tick-line-size: calc-size(4);
+  --tick-line-margin: calc-size(3);
 
   display: flex;
 
-  &:--isTop,
-  &:--isBottom {
+  &:--isHorizontal {
     width: 100%;
   }
 
-  &:--isRight,
-  &:--isLeft {
+  &:--isVertical {
     flex-direction: column;
 
     height: 100%;
   }
 }
 
+.groupLabels {
+  --vertical-margin: calc-size(12);
+  --horizontal-margin: calc-size(17);
+
+  &:--isTop {
+    margin-bottom: var(--vertical-margin);
+  }
+
+  &:--isRight {
+    margin-left: var(--horizontal-margin);
+  }
+
+  &:--isBottom {
+    margin-top: var(--vertical-margin);
+  }
+
+  &:--isLeft {
+    margin-right: var(--horizontal-margin);
+  }
+}
+
+.groupValues {
+  --vertical-margin: calc-size(9);
+  --horizontal-margin: calc-size(11);
+
+  &:--isTop {
+    margin-bottom: var(--vertical-margin);
+  }
+
+  &:--isRight {
+    margin-left: var(--horizontal-margin);
+  }
+
+  &:--isBottom {
+    margin-top: var(--vertical-margin);
+  }
+
+  &:--isLeft {
+    margin-right: var(--horizontal-margin);
+  }
+}
+
 .tick {
   display: flex;
 
-  &:--isTop,
-  &:--isBottom {
+  @nest :--isHorizontal & {
     flex-direction: column;
 
     width: 0;
   }
 
-  &:--isRight,
-  &:--isLeft {
+  @nest :--isVertical & {
     height: 0;
-
-    word-break: break-word;
   }
 
-  &:--isTop {
-    margin-bottom: var(--tick-margin);
-  }
-
-  &:--isRight {
+  @nest :--isRight & {
     justify-content: flex-start;
-
-    margin-left: var(--tick-margin);
 
     text-align: left;
   }
 
-  &:--isBottom {
-    margin-top: var(--tick-margin);
-  }
-
-  &:--isLeft {
+  @nest :--isLeft & {
     justify-content: flex-end;
-
-    margin-right: var(--tick-margin);
 
     text-align: right;
   }
@@ -68,30 +94,65 @@
 .line {
   background-color: var(--tick-line-color);
 
-  &:--isTop,
-  &:--isBottom {
+  @nest :--isHorizontal & {
     width: 1px;
     height: var(--tick-line-size);
   }
 
-  &:--isRight,
-  &:--isLeft {
+  @nest :--isVertical & {
     width: var(--tick-line-size);
     height: 1px;
   }
 
-  &:--isRight {
-    margin-right: var(--tick-line-size);
+  @nest :--isTop &, :--isLeft & {
+    order: 1;
   }
 
-  &:--isLeft {
-    margin-left: var(--tick-line-size);
+  @nest :--isBottom &, :--isRight & {
+    order: -1;
+  }
+
+  @nest :--isTop & {
+    margin-top: var(--tick-line-margin);
+  }
+
+  @nest :--isBottom & {
+    margin-bottom: var(--tick-line-margin);
+  }
+
+  @nest :--isRight & {
+    margin-right: var(--tick-line-margin);
+  }
+
+  @nest :--isLeft & {
+    margin-left: var(--tick-line-margin);
   }
 }
 
 .text {
-  font-size: calc-size(12);
-  line-height: calc-size(17);
-
   color: var(--text-color-70);
+
+  @nest .groupLabels & {
+    font-size: calc-size(11);
+    line-height: calc-size(15);
+  }
+
+  @nest .groupValues & {
+    font-size: calc-size(12);
+    line-height: calc-size(17);
+  }
+
+  @nest .groupLabels:--isHorizontal & {
+    padding: calc-size(3) 0;
+
+    text-align: center;
+  }
+
+  @nest .groupLabels:--isVertical & {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+  }
 }

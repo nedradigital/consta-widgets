@@ -7,6 +7,7 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { Direction, Hint } from '@/ui/Hint'
+import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'
 
@@ -86,7 +87,7 @@ export const Tooltip: React.FC<Props> = ({
   return ReactDOM.createPortal(
     <Hint
       ref={ref}
-      className={classnames(css.tooltip, isVisible && css.open, className)}
+      className={classnames(themeColorLight, css.tooltip, isVisible && css.open, className)}
       direction={direction}
       style={{
         ...convertCoordinatesToStyles({ width, height, x, y, direction }),

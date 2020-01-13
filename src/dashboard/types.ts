@@ -109,6 +109,8 @@ export type DataMap = {
   } & WithColorGroups
   [DataType.MultiBarChart]: {
     data: MultiBarChartData
+    unit?: string
+    formatValueForLabel?: FormatValue
   } & WithColorGroups
   [DataType.Legend]: {
     data: LegendData

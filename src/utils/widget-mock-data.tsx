@@ -579,6 +579,7 @@ const mockData: DataMap = {
       ],
       keyGroup: 'month',
     },
+    unit: 'тыс м3',
   },
   [DataType.Legend]: {
     colorGroups: {
