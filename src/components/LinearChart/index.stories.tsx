@@ -83,18 +83,18 @@ storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '60vw', height: '50vh' }))
   .add('horizontal', () => {
-    return <LinearChart {...getCommonProps()} colorGroups={object('colorGroups', colorGroups)} />
+    return (
+      <LinearChart
+        {...getCommonProps()}
+        colorGroups={object('colorGroups', colorGroups)}
+        isHorizontal
+      />
+    )
   })
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: '80vh' }))
   .add('vertical', () => {
-    return (
-      <LinearChart
-        {...getCommonProps()}
-        colorGroups={object('colorGroups', colorGroups)}
-        isVertical
-      />
-    )
+    return <LinearChart {...getCommonProps()} colorGroups={object('colorGroups', colorGroups)} />
   })

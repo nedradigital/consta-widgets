@@ -13,7 +13,7 @@ type Props = {
   lines: readonly Line[]
   width: number
   height: number
-  isVertical: boolean
+  isHorizontal: boolean
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   onChangeHoveredMainValue: Function
@@ -56,29 +56,29 @@ export const HoverLines: React.FC<Props> = ({
   lines,
   height,
   width,
-  isVertical,
+  isHorizontal,
   hoveredMainValue,
   onChangeHoveredMainValue,
 }) => {
-  const mainValueKey = isVertical ? 'y' : 'x'
+  const mainValueKey = isHorizontal ? 'x' : 'y'
   const lineValues = _.uniqBy(_.flatten(lines.map(l => l.values)), v => v[mainValueKey])
 
   return (
     <g>
       {lineValues.map((lineValue, index) => {
         const mainValue = lineValue[mainValueKey]
-        const position = isVertical
+        const position = isHorizontal
           ? {
-              x1: 0,
-              y1: scaleY(mainValue),
-              x2: width,
-              y2: scaleY(mainValue),
-            }
-          : {
               x1: scaleX(mainValue),
               y1: 0,
               x2: scaleX(mainValue),
               y2: height,
+            }
+          : {
+              x1: 0,
+              y1: scaleY(mainValue),
+              x2: width,
+              y2: scaleY(mainValue),
             }
         const isActive = mainValue === hoveredMainValue
         const commonProps = {

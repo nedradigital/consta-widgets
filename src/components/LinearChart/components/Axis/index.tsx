@@ -48,7 +48,7 @@ type Props = {
   mainGridTickValues: TickValues
   secondaryLabelTickValues: TickValues
   secondaryGridTickValues: TickValues
-  isVertical?: boolean
+  isHorizontal?: boolean
   formatValueForLabel: FormatValue
   secondaryScaleUnit?: string
   xGuideValue: number
@@ -69,7 +69,7 @@ export const Axis: React.FC<Props> = ({
   onAxisSizeChange,
   mainLabelTickValues,
   mainGridTickValues,
-  isVertical,
+  isHorizontal,
   formatValueForLabel,
   secondaryScaleUnit,
   xGuideValue,
@@ -108,8 +108,8 @@ export const Axis: React.FC<Props> = ({
           }[xLabelsPos]
       ),
       transform: xOnBottom ? `translateY(${height}px)` : '',
-      values: isVertical ? secondaryLabelTickValues : mainLabelTickValues,
-      formatLabel: isVertical ? defaultFormatLabel : formatValueForLabel,
+      values: isHorizontal ? mainLabelTickValues : secondaryLabelTickValues,
+      formatLabel: isHorizontal ? formatValueForLabel : defaultFormatLabel,
     },
     {
       getEl: () => yLabelsRef.current,
@@ -127,8 +127,8 @@ export const Axis: React.FC<Props> = ({
           }[yLabelsPos]
       ),
       transform: yOnLeft ? '' : `translateX(${width}px)`,
-      values: isVertical ? mainLabelTickValues : secondaryLabelTickValues,
-      formatLabel: isVertical ? formatValueForLabel : defaultFormatLabel,
+      values: isHorizontal ? secondaryLabelTickValues : mainLabelTickValues,
+      formatLabel: isHorizontal ? defaultFormatLabel : formatValueForLabel,
     },
   ] as const
   const showXLabels = Boolean(labelsAxis[0].values.length)
@@ -207,13 +207,13 @@ export const Axis: React.FC<Props> = ({
     const grids = [
       {
         el: xGridRef.current,
-        axis: isVertical ? xAxis : xGridBase.tickValues(xTicks),
+        axis: isHorizontal ? xGridBase.tickValues(xTicks) : xAxis,
         withGuide: xGuide,
         guideValue: xGuideValue,
       },
       {
         el: yGridRef.current,
-        axis: isVertical ? yGridBase.tickValues(yTicks) : yAxis,
+        axis: isHorizontal ? yAxis : yGridBase.tickValues(yTicks),
         withGuide: yGuide,
         guideValue: yGuideValue,
       },
@@ -256,7 +256,7 @@ export const Axis: React.FC<Props> = ({
       {showXLabels && (
         <g>
           <g ref={xLabelsRef} />
-          {isVertical && (
+          {!isHorizontal && (
             <text
               className={classnames(css.labels, css.unit)}
               x="100%"
@@ -272,7 +272,7 @@ export const Axis: React.FC<Props> = ({
       {showYLabels && (
         <g ref={yLabelsAndUnitRef}>
           <g ref={yLabelsRef} />
-          {!isVertical && (
+          {isHorizontal && (
             <text
               className={classnames(css.labels, css.unit, css.unit_y)}
               x={yOnLeft ? -UNIT_X_OFFSET : width + UNIT_X_OFFSET}

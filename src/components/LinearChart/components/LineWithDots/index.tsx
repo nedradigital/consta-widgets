@@ -17,11 +17,11 @@ type Props = {
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   hoveredMainValue: HoveredMainValue
-  isVertical: boolean
+  isHorizontal: boolean
 }
 
-const isActiveCircle = (position: Item, isVertical: boolean, activeValue?: number) => {
-  return (isVertical ? position.y : position.x) === activeValue
+const isActiveCircle = (position: Item, isHorizontal: boolean, activeValue?: number) => {
+  return (isHorizontal ? position.x : position.y) === activeValue
 }
 
 export const LineWithDots: React.FC<Props> = ({
@@ -34,7 +34,7 @@ export const LineWithDots: React.FC<Props> = ({
   lineClipPath,
   dotsClipPath,
   hoveredMainValue,
-  isVertical,
+  isHorizontal,
 }) => {
   return (
     <g style={{ color }} className={css.main}>
@@ -47,7 +47,7 @@ export const LineWithDots: React.FC<Props> = ({
       />
       <g clipPath={dotsClipPath}>
         {values.map((item, idx) => {
-          const isActive = isActiveCircle(item, isVertical, hoveredMainValue)
+          const isActive = isActiveCircle(item, isHorizontal, hoveredMainValue)
           const radius = hasDotRadius || isActive ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
 

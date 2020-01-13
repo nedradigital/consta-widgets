@@ -10,7 +10,7 @@ import { XLabelsPosition, YLabelsPosition } from '../Axis'
 import css from './index.css'
 
 type Props = {
-  isVertical: boolean
+  isHorizontal: boolean
   xRange: NumberRange
   yRange: NumberRange
   xLabelsPos?: XLabelsPosition
@@ -28,7 +28,7 @@ const MIN_ZOOM = 1
 const MAX_ZOOM = ZOOM_STEP ** 3
 
 export const Zoom: React.FC<Props> = ({
-  isVertical,
+  isHorizontal,
   xRange,
   yRange,
   xLabelsPos,
@@ -92,11 +92,11 @@ export const Zoom: React.FC<Props> = ({
 
   useLayoutEffect(() => {
     setZoom(1)
-  }, [isVertical])
+  }, [isHorizontal])
 
   // Drag
   useLayoutEffect(() => {
-    const getDragPosition = () => d3.event[isVertical ? 'y' : 'x']
+    const getDragPosition = () => d3.event[isHorizontal ? 'x' : 'y']
     const drag = d3
       .drag()
       .on('start', () => {
@@ -106,41 +106,41 @@ export const Zoom: React.FC<Props> = ({
         const currentDragPosition = getDragPosition()
         const dragDelta = previousDragPositionRef.current - currentDragPosition
         previousDragPositionRef.current = currentDragPosition
-        const deltaCoords = isVertical ? [0, dragDelta] : [dragDelta, 0]
+        const deltaCoords = isHorizontal ? [dragDelta, 0] : [0, dragDelta]
         d3.select(zoomRef.current).call(zoomBehaviorRef.current!.translateBy, ...deltaCoords)
       })
     d3.select(dragHandleRef.current as Element).call(drag)
-  }, [dragHandleRef, isVertical])
+  }, [dragHandleRef, isHorizontal])
 
   // Zoom bar position
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
-  const style = isVertical
+  const style = isHorizontal
     ? {
-        ...(xOnBottom ? { top: 0, bottom: paddingY } : { top: paddingY, bottom: 0 }),
-        ...(yOnLeft ? { left: 0 } : { right: 0 }),
-        width: paddingX,
-      }
-    : {
         ...(xOnBottom ? { bottom: 0 } : { top: 0 }),
         ...(yOnLeft ? { left: paddingX, right: 0 } : { left: 0, right: paddingX }),
         height: paddingY,
       }
-  const handleStyle = isVertical
-    ? {
-        top: `${dragHandlePos}%`,
-        [yOnLeft ? 'right' : 'left']: 'var(--axis-tick-offset)',
-        height: `${dragHandleSize}%`,
-      }
     : {
+        ...(xOnBottom ? { top: 0, bottom: paddingY } : { top: paddingY, bottom: 0 }),
+        ...(yOnLeft ? { left: 0 } : { right: 0 }),
+        width: paddingX,
+      }
+  const handleStyle = isHorizontal
+    ? {
         left: `${dragHandlePos}%`,
         [xOnBottom ? 'top' : 'bottom']: 'var(--axis-tick-offset)',
         width: `${dragHandleSize}%`,
       }
+    : {
+        top: `${dragHandlePos}%`,
+        [yOnLeft ? 'right' : 'left']: 'var(--axis-tick-offset)',
+        height: `${dragHandleSize}%`,
+      }
 
   return (
     <div
-      className={classnames(css.zoom, isVertical ? css.isVertical : css.isHorizontal)}
+      className={classnames(css.zoom, isHorizontal ? css.isHorizontal : css.isVertical)}
       style={style}
     >
       <div

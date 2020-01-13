@@ -83,7 +83,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({}),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([])
     })
@@ -95,7 +95,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ guide: true }),
         tickType: 'gridTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0])
     })
@@ -107,7 +107,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ guide: true }),
         tickType: 'gridTicks',
         guideValue: -2,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([])
     })
@@ -119,7 +119,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ guide: true }),
         tickType: 'labelTicks',
         guideValue: 1,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([])
     })
@@ -131,7 +131,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 1, 2, 3])
     })
@@ -143,7 +143,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 1])
     })
@@ -155,7 +155,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 1, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 1])
     })
@@ -167,7 +167,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 2, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 1])
     })
@@ -179,7 +179,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
 
       expect(result).toEqual([0, 1])
@@ -205,7 +205,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({}),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([])
     })
@@ -217,7 +217,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ guide: true }),
         tickType: 'gridTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0])
     })
@@ -229,7 +229,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ guide: true }),
         tickType: 'gridTicks',
         guideValue: -2,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([])
     })
@@ -241,7 +241,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 2, 4, 6, 8, 10])
     })
@@ -253,7 +253,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 1, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 3])
     })
@@ -265,7 +265,7 @@ describe('<LinearChart />', () => {
         gridConfig: getGridConfig({ labelTicks: 2, guide: true }),
         tickType: 'labelTicks',
         guideValue: 0,
-        isVertical: false,
+        isHorizontal: true,
       })
       expect(result).toEqual([0, 3])
     })
