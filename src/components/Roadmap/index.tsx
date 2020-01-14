@@ -258,7 +258,7 @@ export const Roadmap: React.FC<Props> = props => {
     if (ref.current) {
       changeMonthWidth(ref.current.querySelector('th')!.offsetWidth)
     }
-  }, [width])
+  }, [width, startDate, endDate, data])
 
   const months = getMonths(startDate, endDate)
 
