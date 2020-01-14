@@ -62,6 +62,9 @@
   --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
   --resizer-width: 5px;
   --resizer-z: 1;
+  --z-datepicker-date: 0;
+  --z-datepicker-date-bg: calc(var(--z-datepicker-date) - 1);
+  --z-datepicker-date-sub-bg: calc(var(--z-datepicker-date-bg) - 1);
 
   /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
   --bg-widget: #0d2337;

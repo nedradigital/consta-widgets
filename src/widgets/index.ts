@@ -12,7 +12,6 @@ export { ProgressBarWidgetContent as ProgressBarWidget } from './ProgressBarWidg
 export { DatePickerWidgetContent as DatePickerWidget } from './DatePickerWidget'
 export { MultiBarChartWidgetContent as MultiBarChartWidget } from './MultiBarChartWidget'
 export { RadarChartWidgetContent as RadarChartWidget } from './RadarChartWidget'
-export { RangePickerWidgetContent as RangePickerWidget } from './RangePickerWidget'
 export { TrafficLightWidgetContent as TrafficLightWidget } from './TrafficLightWidget'
 export { ImagesWidgetContent as ImagesWidget } from './ImagesWidget'
 export { ButtonWidgetContent as ButtonWidget } from './ButtonWidget'

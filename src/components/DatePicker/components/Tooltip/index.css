@@ -1,0 +1,15 @@
+.main {
+  position: absolute;
+
+  max-width: 298px;
+  padding: 20px 20px 16px;
+
+  border-radius: 4px;
+  background-color: #fff;
+
+  transform: translateY(4px);
+
+  &.isWide {
+    max-width: 592px;
+  }
+}

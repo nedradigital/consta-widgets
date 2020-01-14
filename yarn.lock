@@ -1191,10 +1191,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.4.tgz#622a72bebd1e3f48d921563b4b60a762295a81fc"
   integrity "sha1-Yipyvr0eP0jZIVY7S2CnYilagfw= sha512-6PYY5DVdAY1ifaQW6XYTnOMihmBVT27elqSjEoodchsGjzYlEsTQMcEhSud99kVawatyTZRTiVkJ/c6lwbQ7nA=="
 
-"@gaz/configs@0.2.14":
-  version "0.2.14"
-  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.14.tgz#8d5fa01987f11354e6951cc7fabb9f89e41aae47"
-  integrity sha512-t5lPEdUDYwu0LS8y+5If0gqgg0oxX4GZV/qu8Y/rM7nGdZg1D/9SUTNJEPFyXjmv6N+YMwYuFwxsh6m0fTRyTg==
+"@gaz/configs@0.2.16":
+  version "0.2.16"
+  resolved "https://nexus.csssr.space/repository/csssr/@gaz/configs/-/configs-0.2.16.tgz#8645ae2756b6c9d11461ed3c8d43c81d63f1a5f5"
+  integrity sha512-SL57RWLEE5AvtUSBD1L8rRj2g+38oMwNz6rd3Ca0CRyyjX8T9UcdQG2V+CygwU4YQ9d1rwssfUj+bfQa2+/b0Q==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -5224,6 +5224,11 @@ data-urls@^1.0.0, data-urls@^1.1.0:
     abab "^2.0.0"
     whatwg-mimetype "^2.2.0"
     whatwg-url "^7.0.0"
+
+date-fns@2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.9.0.tgz#d0b175a5c37ed5f17b97e2272bbc1fa5aec677d2"
+  integrity sha512-khbFLu/MlzLjEzy9Gh8oY1hNt/Dvxw3J6Rbc28cVoYWQaC1S3YI4xwkF9ZWcjDLscbZlY9hISMr66RFzZagLsA==
 
 date-fns@^1.27.2:
   version "1.30.1"

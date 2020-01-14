@@ -1,0 +1,48 @@
+.input {
+  --color-control-bg-default: transparent;
+  --color-control-bg-border-focus: rgba(0, 145, 230, 0.99);
+
+  max-width: calc-size(155);
+
+  cursor: pointer;
+
+  background-image: url('./icons/calendar.svg');
+  background-repeat: no-repeat;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button,
+  &::-webkit-clear-button,
+  &::-webkit-calendar-picker-indicator {
+    -webkit-appearance: none;
+
+    display: none;
+  }
+
+  &::-webkit-datetime-edit-day-field,
+  &::-webkit-datetime-edit-month-field,
+  &::-webkit-datetime-edit-year-field {
+    color: inherit;
+  }
+
+  &.sizeXS,
+  &.sizeS {
+    min-width: calc-size(119);
+
+    background-position: right calc-size(10) center;
+    background-size: calc-size(16) calc-size(16);
+  }
+
+  &.sizeM {
+    min-width: calc-size(129);
+
+    background-position: right calc-size(10) center;
+    background-size: calc-size(16) calc-size(16);
+  }
+
+  &.sizeL {
+    min-width: calc-size(155);
+
+    background-position: right calc-size(12) center;
+    background-size: calc-size(24) calc-size(24);
+  }
+}
