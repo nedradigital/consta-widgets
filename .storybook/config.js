@@ -4,7 +4,6 @@ import { withInfo } from '@storybook/addon-info'
 import { withPropsTable } from 'storybook-addon-react-docgen'
 import { updateBaseSize } from '@gaz/utils/lib/css'
 import '@gpn-design/uikit/dist/style.css'
-import '@yankovsky/whitepaper-bem'
 
 import '@/index.css'
 
@@ -26,7 +25,7 @@ addDecorator(storyFn => {
     'theme_font_small',
     'theme_gap_small',
     'theme_size_gpn-default',
-    'theme_space_default',
+    'theme_space_gpn-default',
     'gpnThemeColor',
   )
 
