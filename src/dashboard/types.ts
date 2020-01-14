@@ -18,6 +18,7 @@ import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { Dashboard5 } from '@/dashboard/migration/migrations/dashboard5'
 import { Status } from '@/ui/Badge'
+import { Filters, TableColumn } from '@/utils/table'
 
 import Dashboard = Dashboard5
 
@@ -122,10 +123,11 @@ export type DataMap = {
       }
       data: {
         values: readonly RoadmapData[]
-        titles: readonly [string, string]
+        titles: readonly [TableColumn, TableColumn]
         currentDay: number
         startDate: number
         endDate: number
+        filters?: Filters
       }
       legend?: LegendData
     } & WithColorGroups

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { Button } from '@gpn-design/uikit'
@@ -11,7 +11,7 @@ import { Props as MultiSelectProps } from '../MultiSelect'
 import { ReactComponent as IconFilterSvg } from './images/filter-icon.svg'
 import css from './index.css'
 
-type Props = Omit<MultiSelectProps, 'onChange'> & {
+export type Props = Omit<MultiSelectProps, 'onChange'> & {
   field: string
   isOpened: boolean
   onCancel: () => void
@@ -42,11 +42,15 @@ export const FilterTooltip: React.FC<Props> = ({
     }
   }, [iconRef, isOpened])
 
+  useEffect(() => {
+    setSelectedValues(values)
+  }, [values])
+
   return (
     <>
       <IconFilterSvg
         ref={iconRef}
-        className={classnames(css.iconFilter, className)}
+        className={classnames(css.iconFilter, isOpened && css.isOpened, className)}
         onClick={() => handleFilterTogglerClick()}
       />
       {isOpened &&

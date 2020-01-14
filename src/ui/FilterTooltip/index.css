@@ -1,8 +1,30 @@
 .iconFilter {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+
+  box-sizing: content-box;
   width: calc-size(12);
   height: calc-size(12);
+  margin: auto 0;
+  padding: 4px;
 
   cursor: pointer;
+
+  opacity: 0;
+  fill: white;
+
+  transition: opacity var(--show-transition);
+  transform: translateX(-100%);
+
+  &:hover {
+    opacity: 1 !important;
+  }
+
+  &.isOpened {
+    opacity: 1;
+  }
 }
 
 .tooltip {

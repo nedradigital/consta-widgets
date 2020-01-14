@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { updateAt } from '@gaz/utils/lib/array'
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
-import { isNil, orderBy, xor } from 'lodash'
+import { isNil, orderBy } from 'lodash'
 
 import { LegendItem, Type as TypeLegend, types as defaultTypeLegend } from '@/components/LegendItem'
 import { ColorGroups } from '@/dashboard/types'
@@ -12,11 +12,15 @@ import { FilterTooltip } from '@/ui/FilterTooltip'
 import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
 import {
   fieldFiltersPresent,
-  filterTableDatum,
+  FieldSelectedValues,
+  Filters,
+  filterTableData,
   getOptionsForFilters,
-  getSelectedFiltersInitialState,
   getSelectedFiltersList,
   isSelectedFiltersPresent,
+  TableColumn as CommonTableColumn,
+  TableRow,
+  useSelectedFilters,
 } from '@/utils/table'
 
 import { Resizer } from './components/Resizer'
@@ -28,37 +32,22 @@ import css from './index.css'
 export const sizes = ['l', 'm', 's'] as const
 export type Size = typeof sizes[number]
 
-export type Row = {
-  [key: string]: React.ReactNode
-}
-
 type LegendFields = {
   field: string
   colorGroupName: string
   typeLegend: TypeLegend
 }
 
-type Filter = {
-  id: string
-  name: string
-  filterer: (value: any) => boolean
-  field: string
+type Column = CommonTableColumn & {
+  align: 'left' | 'center' | 'right'
 }
-
-export type Filters = readonly Filter[]
 
 export type Data = {
   colorGroups: ColorGroups
-  columnNames: readonly ColumnNames[]
+  columns: readonly Column[]
   legendFields: readonly LegendFields[]
-  list: readonly Row[]
+  list: readonly TableRow[]
   filters?: Filters
-}
-
-type ColumnNames = {
-  title: string
-  accessor: string
-  align: 'left' | 'center' | 'right'
 }
 
 const alignClasses = {
@@ -67,10 +56,6 @@ const alignClasses = {
   right: css.alignRight,
 }
 
-type FieldSelectedValues = readonly string[]
-
-export type SelectedFilters = { [field: string]: FieldSelectedValues }
-
 type Props = {
   isShowLegend?: boolean
   data: Data
@@ -78,17 +63,22 @@ type Props = {
 }
 
 export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
-  const { columnNames, legendFields, list, colorGroups, filters } = data
+  const { columns, legendFields, list, colorGroups, filters } = data
 
   const containerRef = useRef<HTMLDivElement>(null)
   const tableRef = useRef<HTMLTableElement>(null)
   const { height: tableHeight } = useComponentSize(tableRef)
   const [accessor, setAccessor] = useState('')
   const [isOrderByDesc, setOrderByDesc] = useState(false)
+
   const [visibleFilter, setVisibleFilter] = useState<string | null>(null)
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
-    getSelectedFiltersInitialState(filters)
-  )
+  const {
+    selectedFilters,
+    updateSelectedFilters,
+    removeOneSelectedFilter,
+    removeAllSelectedFilters,
+  } = useSelectedFilters(filters)
+
   const [columnWidths, setColumnWidths] = useState<readonly number[]>([])
   const [initialColumnWidths, setInitialColumnWidths] = useState<readonly number[]>([])
 
@@ -108,7 +98,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     setInitialColumnWidths(newColumnWidths)
   }, [])
 
-  const datum = accessor ? orderBy(list, accessor, isOrderByDesc ? 'desc' : 'asc') : list
+  const tableData = accessor ? orderBy(list, accessor, isOrderByDesc ? 'desc' : 'asc') : list
 
   const sortBy = (field: string) => {
     setAccessor(field)
@@ -126,33 +116,25 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     closeTooltip()
   }
   const handleTooltipSave = (field: string, tooltipSelectedFilters: FieldSelectedValues) => {
-    setSelectedFilters({
-      ...selectedFilters,
-      [field]: [...tooltipSelectedFilters],
-    })
+    updateSelectedFilters(field, tooltipSelectedFilters)
     closeTooltip()
   }
 
   const removeSelectedFilter = (tableFilters: Filters) => (filter: string) => {
-    const filterToDelete = tableFilters.find(({ id }) => id === filter)
-
-    if (filterToDelete) {
-      setSelectedFilters({
-        ...selectedFilters,
-        [filterToDelete.field]: xor(selectedFilters[filterToDelete.field], [filter]),
-      })
-    }
+    removeOneSelectedFilter(tableFilters, filter)
   }
   const resetSelectedFilters = () => {
-    setSelectedFilters(getSelectedFiltersInitialState(filters))
+    if (filters && filters.length) {
+      removeAllSelectedFilters(filters)
+    }
   }
 
-  const filteredDatum =
+  const filteredData =
     !filters || !isSelectedFiltersPresent(selectedFilters)
-      ? datum
-      : filterTableDatum(datum, filters, selectedFilters)
+      ? tableData
+      : filterTableData({ data: tableData, filters, selectedFilters })
 
-  const thRender = columnNames.map((obj, idx) => {
+  const thRender = columns.map((obj, idx) => {
     const isSortingActive = accessor === obj.accessor
     const IconSort =
       (isSortingActive && (isOrderByDesc ? IconSortDescSvg : IconSortAscSvg)) || IconSortSvg
@@ -190,7 +172,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               onSave={handleTooltipSave}
               onCancel={handleTooltipCancel}
               handleFilterTogglerClick={handleFilterTogglerClick(obj.accessor)}
-              className={classnames(css.icon, css.iconFilter)}
+              className={css.iconFilter}
             />
           )}
           <span className={css.title} onClick={() => sortBy(obj.accessor)}>
@@ -210,8 +192,8 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     )
   })
 
-  const renderTableRowWithData = (row: Row) =>
-    columnNames.map((column, index) => {
+  const renderTableRowWithData = (row: TableRow) =>
+    columns.map((column, index) => {
       const cellValue = row[column.accessor]
       const cellContent = isNil(cellValue) ? '–' : cellValue
       const legend = legendFields.find(obj => obj.field === row[column.accessor])
@@ -243,9 +225,9 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           <tr>{thRender}</tr>
           {filters && isSelectedFiltersPresent(selectedFilters) && (
             <tr className={css.selectedFiltersRow}>
-              <th colSpan={columnNames.length}>
+              <th colSpan={columns.length}>
                 <SelectedOptionsList
-                  values={getSelectedFiltersList(filters, selectedFilters, columnNames)}
+                  values={getSelectedFiltersList({ filters, selectedFilters, columns })}
                   onRemove={removeSelectedFilter(filters)}
                   onReset={resetSelectedFilters}
                 />
@@ -254,7 +236,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           )}
         </thead>
         <tbody>
-          {filteredDatum.map((row, idx) => (
+          {filteredData.map((row, idx) => (
             <tr
               key={idx}
               className={classnames(

@@ -123,15 +123,8 @@
 }
 
 .iconFilter {
-  left: 0;
-
-  transition: opacity var(--show-transition);
-  transform: translateX(-100%);
-
-  @nest .isFilterOpened & {
-    display: inline-block;
-
-    opacity: 1;
+  @nest .cell:hover:not(.isFilterOpened) & {
+    opacity: 0.2;
   }
 }
 
