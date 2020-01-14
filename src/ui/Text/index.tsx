@@ -12,6 +12,7 @@ export type StyleProps = {
   bold?: boolean
   uppercase?: boolean
   secondary?: boolean
+  croppedLineCount?: number
 }
 
 type Props = {
@@ -26,21 +27,26 @@ export const Text: React.FC<Props> = ({
   secondary,
   uppercase,
   bold,
+  croppedLineCount,
 }) => (
   <div
     className={classnames(
-      css.title,
+      css.main,
       {
         '3xl': css.size3XL,
         xl: css.sizeXL,
         s: css.sizeS,
         xs: css.sizeXS,
       }[size],
-      secondary && css.secondary,
-      uppercase && css.uppercase,
-      bold && css.bold,
+      secondary && css.isSecondary,
+      uppercase && css.isUppercase,
+      bold && css.isBold,
+      Boolean(croppedLineCount) && css.isCropped,
       className
     )}
+    style={{
+      ['--line-clamp' as string]: croppedLineCount,
+    }}
   >
     {children}
   </div>

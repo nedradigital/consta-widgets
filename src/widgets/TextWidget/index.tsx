@@ -1,4 +1,5 @@
 import { Tooltip } from '@/components/Tooltip'
+import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
@@ -18,6 +19,7 @@ export type TypeNames = typeof typeNames[number]
 type Params = {
   text: string
   type: TypeNames
+  croppedLineCount?: number
 }
 
 type TextType = {
@@ -69,7 +71,7 @@ export const defaultParams: Params = { text: 'Заголовок', type: 'text1'
 
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { text, type },
+  params: { text, type, croppedLineCount },
 }) => {
   const ref = React.useRef<HTMLButtonElement>(null)
 
@@ -105,7 +107,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
 
   return (
     <div className={css.text}>
-      <Text {...textType[type].props} className={css.content}>
+      <Text {...textType[type].props} croppedLineCount={croppedLineCount} className={css.content}>
         {data && data.text ? data.text : text}
       </Text>
       {data && data.tooltip && (
@@ -149,6 +151,11 @@ export const TextWidget = createWidget<Data, Params>({
           value={params.type}
           onChange={value => onChangeParam('type', value)}
           values={typeNames.map(i => ({ value: i, name: i }))}
+        />
+        <WidgetSettingsNumber
+          name="После какой строки обрезать текст"
+          value={params.croppedLineCount}
+          onChange={value => onChangeParam('croppedLineCount', value)}
         />
       </>
     )

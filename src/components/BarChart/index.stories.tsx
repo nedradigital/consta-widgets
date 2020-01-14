@@ -31,7 +31,7 @@ storiesOf('components/BarChart', module)
       />
     )
   })
-  .add('С пропуском значений', () => {
+  .add('с пропуском значений', () => {
     return (
       <BarChart
         colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
@@ -65,7 +65,7 @@ storiesOf('components/BarChart', module)
       />
     )
   })
-  .add('С отрицательными значениями', () => (
+  .add('с отрицательными значениями', () => (
     <BarChart
       colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
       data={[

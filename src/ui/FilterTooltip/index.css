@@ -33,7 +33,7 @@
   padding: 13px;
 
   border-radius: 6px;
-  background-color: #00273d;
+  background-color: var(--bg-box);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.217056), 0 1px 4px rgba(0, 0, 0, 0.230769);
 
   transform: translateY(4px);

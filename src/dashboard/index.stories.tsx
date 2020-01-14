@@ -60,23 +60,7 @@ const setStateToStorage = (value: DashboardState) => {
 
 storiesOf('dashboard/Constructor', module)
   .addDecorator(withSmartKnobs())
-  .add('default constructor', () => {
-    return (
-      <Constructor
-        viewMode={false}
-        datasets={exampleDatasets}
-        cols={cols}
-        dashboard={EMPTY_DASHBOARD}
-        data={{}}
-        onChange={() => {
-          /**/
-        }}
-        baseFontSize={16}
-        rowsCount={getRowsCount()}
-      />
-    )
-  })
-  .add('with state', () => {
+  .add('с сохранением состояния', () => {
     function Wrapper() {
       const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
 

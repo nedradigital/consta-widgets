@@ -15,7 +15,7 @@ storiesOf('widgets/LinearChartWidget', module)
       params={object('params', defaultParams)}
     />
   ))
-  .add('С полной датой в тултипе', () => (
+  .add('с полной датой в тултипе', () => (
     <LinearChartWidgetContent
       data={{
         ...object('data', LinearChartWidget.mockData),
