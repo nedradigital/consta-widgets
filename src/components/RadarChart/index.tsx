@@ -137,12 +137,15 @@ export const RadarChart: React.FC<Props> = ({
 
   const [activeAxis, setActiveAxis] = React.useState<Axis>()
 
-  const axisNameWidth = getCalculatedSize(130)
-  const axisNameLineHeight = getCalculatedSize(20)
-  const axisNameOffset = getCalculatedSize(15)
   const ref = React.useRef<HTMLDivElement>(null)
   const svgWrapperRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
+  const isBigWidth = width > 200
+  const axisNameWidth = getCalculatedSize(130)
+  const axisNameLineHeight = getCalculatedSize(isBigWidth ? 20 : 13)
+  const axisNameFontSize = getCalculatedSize(isBigWidth ? 16 : 11)
+  const axisNameOffset = getCalculatedSize(15)
+
   // Вписываем радар в квадрат, оставляя по бокам место под надписи
   const size = Math.min(
     width - 2 * (axisNameWidth + axisNameOffset),
@@ -259,6 +262,7 @@ export const RadarChart: React.FC<Props> = ({
                 label={axis.label}
                 width={axisNameWidth}
                 lineHeight={axisNameLineHeight}
+                fontSize={axisNameFontSize}
                 offset={axisNameOffset}
               />
             )

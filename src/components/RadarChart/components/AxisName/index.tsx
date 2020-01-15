@@ -9,6 +9,7 @@ type Props = {
   width: number
   lineHeight: number
   offset: number
+  fontSize: number
 }
 
 export const getTransform = (xPercent: number, yPercent: number, offset: number): string =>
@@ -26,6 +27,7 @@ export const RadarChartAxisName: React.FC<Props> = ({
   offset,
   width,
   lineHeight,
+  fontSize,
 }) => {
   return (
     <div
@@ -37,6 +39,7 @@ export const RadarChartAxisName: React.FC<Props> = ({
         textAlign: xPercent <= 50 ? 'right' : 'left',
         width,
         lineHeight: `${lineHeight}px`,
+        fontSize: `${fontSize}px`,
       }}
     >
       {label}
