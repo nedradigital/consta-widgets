@@ -1,8 +1,12 @@
 .main {
+  --min-size: 0;
+
   position: relative;
 
   width: 100%;
+  min-width: var(--min-size);
   height: 100%;
+  min-height: var(--min-size);
 
   & svg {
     position: absolute;

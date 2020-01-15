@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
+import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import { zip } from 'lodash'
 
@@ -31,11 +31,28 @@ type TooltipDataState = {
   name: string
 }
 
-const getSizeDonut = () => getCalculatedSize(16)
-const getPadding = () => getCalculatedSize(8)
+// Максимально кол-во кругов, которые можно отрисовать = 3
+const MAX_CIRCLES = 3
+const minChartSize: { [key in number]: number } = {
+  1: 0,
+  2: 100,
+  3: 150,
+}
+const donutSize: { [key in number]: number } = {
+  1: 18,
+  2: 14,
+  3: 10,
+}
+const paddingBetweenDonuts: { [key in number]: number } = {
+  1: 18,
+  2: 14,
+  3: 10,
+}
+const getSizeDonut = (countLines: number) => donutSize[countLines]
+const getPadding = (countLines: number) => paddingBetweenDonuts[countLines]
 
-const getDonutRadius = (mainRadius: number, index: number) =>
-  mainRadius - (getSizeDonut() + getPadding()) * index
+const getDonutRadius = (mainRadius: number, index: number, countLines: number) =>
+  mainRadius - (getSizeDonut(countLines) + getPadding(countLines)) * index
 
 export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValueForTooltip }) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState | null>(null)
@@ -43,12 +60,12 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
 
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
+  const circlesCount = Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES)
   const size = width && height ? Math.min(width, height) : 0
   const mainRadius = size / 2
-  const sizeDonut = getSizeDonut()
+  const sizeDonut = getSizeDonut(circlesCount)
   const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
   const isTooltipVisible = Boolean(tooltipData)
-  const maxCirclesCount = Math.min(...data.map(i => i.sections.length), 3)
 
   const handleMouseOver = (d: DataItem) => {
     const value = d.showValue ? d.showValue : d.value
@@ -73,7 +90,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
 
   const values = zip(
     ...data.map(item =>
-      item.sections.slice(0, maxCirclesCount).map(section => ({
+      item.sections.slice(0, circlesCount).map(section => ({
         colorGroupName: item.colorGroupName,
         name: item.name,
         value: section.value || 0,
@@ -83,7 +100,13 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
   ) as readonly DonutData[]
 
   return (
-    <div ref={ref} className={css.main}>
+    <div
+      ref={ref}
+      className={css.main}
+      style={{
+        ['--min-size' as string]: `${minChartSize[circlesCount]}px`,
+      }}
+    >
       <Tooltip isVisible={isTooltipVisible} direction="top" x={mousePosition.x} y={mousePosition.y}>
         {tooltipData ? (
           <>
@@ -95,14 +118,14 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
       </Tooltip>
       <svg viewBox={viewBox} onMouseMove={handleMouseMove}>
         {values.map((d, index) => {
-          const outerRadius = getDonutRadius(mainRadius, index)
+          const outerRadius = getDonutRadius(mainRadius, index, circlesCount)
           const innerRadius = outerRadius - sizeDonut
 
           return (
             <Donut
               key={index}
               colorGroups={colorGroups}
-              data={d}
+              data={d.filter(isDefined)}
               innerRadius={innerRadius}
               outerRadius={outerRadius}
               handleMouseOver={handleMouseOver}

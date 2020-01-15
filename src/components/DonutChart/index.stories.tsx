@@ -12,7 +12,7 @@ import { DonutChart } from '.'
 
 storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: 200, height: 200 }))
+  .addDecorator(blockCenteringDecorator({ width: 150, height: 200 }))
   .add('interactive', () => {
     return (
       <DonutChart
