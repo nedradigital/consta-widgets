@@ -60,7 +60,7 @@
 
   &:checked + label {
     color: #0082cc;
-    background-color: #00273d;
+    background-color: var(--bg-box);
 
     &::after {
       font-size: 14px;
