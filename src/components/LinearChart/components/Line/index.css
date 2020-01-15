@@ -2,3 +2,7 @@
   stroke: currentColor;
   fill: none;
 }
+
+.isDashed {
+  stroke-dasharray: 6, 6;
+}

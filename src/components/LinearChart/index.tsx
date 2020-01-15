@@ -1,6 +1,7 @@
 import React from 'react'
 import { uid } from 'react-uid'
 
+import { isNotNil } from '@gaz/utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
@@ -14,11 +15,14 @@ import { Threshold } from './components/Threshold'
 import { Zoom } from './components/Zoom'
 import css from './index.css'
 
-export type Item = { x: number; y: number }
+export type Item = { x: number | null; y: number | null }
+export type NotEmptyItem = { x: number; y: number }
+export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
+  isNotNil(item.x) && isNotNil(item.y)
 
 export type Threshold = {
-  max: readonly Item[]
-  min?: readonly Item[]
+  max: readonly NotEmptyItem[]
+  min?: readonly NotEmptyItem[]
 }
 
 export type Line = {
@@ -122,21 +126,26 @@ export const calculateSecondaryDomain = (
   mainDomainMin: number,
   mainDomainMax: number,
   linesValues: ReadonlyArray<readonly Item[]>,
-  getValue: (v: Item) => number,
-  getDomain: (items: readonly Item[]) => NumberRange
+  getValue: (v: NotEmptyItem) => number,
+  getDomain: (items: readonly NotEmptyItem[]) => NumberRange
 ) => {
   const lineDomains = linesValues.map(values => {
     const zoomRangeIndexes = _.sortBy([
-      getIndexWithFallbackToDefault(_.findLastIndex(values, v => getValue(v) <= mainDomainMin), 0),
       getIndexWithFallbackToDefault(
-        _.findIndex(values, v => getValue(v) >= mainDomainMax),
+        _.findLastIndex(values, v => itemIsNotEmpty(v) && getValue(v) <= mainDomainMin),
+        0
+      ),
+      getIndexWithFallbackToDefault(
+        _.findIndex(values, v => itemIsNotEmpty(v) && getValue(v) >= mainDomainMax),
         values.length - 1
       ),
     ])
 
-    const valuesInZoomRange = values.slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
+    const valuesInZoomRange = values
+      .slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
+      .filter(itemIsNotEmpty)
 
-    return getDomain(valuesInZoomRange)
+    return valuesInZoomRange.length ? getDomain(valuesInZoomRange) : [0, 0]
   })
 
   return [
@@ -150,11 +159,13 @@ export const getUniqValues = (
   domain: NumberRange,
   type: 'x' | 'y',
   isHorizontal?: boolean
-) =>
+): readonly number[] =>
   _.sortBy(
-    _.uniq(items.map(v => v[type])).filter(i =>
-      isHorizontal ? i >= domain[0] && i <= domain[1] : i >= domain[1] && i <= domain[0]
-    )
+    _.uniq(items.map(v => v[type]))
+      .filter(isNotNil)
+      .filter(i =>
+        isHorizontal ? i >= domain[0] && i <= domain[1] : i >= domain[1] && i <= domain[0]
+      )
   )
 
 export const getMainTickValues = ({
@@ -222,13 +233,19 @@ export const getSecondaryTickValues = ({
   return _.uniq(result.concat(isGuide ? [guideValue] : []))
 }
 
-const flipPointsOnAxes = (items: readonly Item[], shouldFlip?: boolean) => {
-  return shouldFlip
+function flipPointsOnAxes<T extends Item | NotEmptyItem>(
+  items: readonly T[],
+  isHorizontal?: boolean
+): readonly T[] {
+  return isHorizontal
     ? items
-    : items.map(item => ({
-        x: item.y,
-        y: item.x,
-      }))
+    : items.map(
+        item =>
+          ({
+            x: item.y,
+            y: item.x,
+          } as T)
+      )
 }
 
 export class LinearChart extends React.Component<Props, State> {
@@ -622,7 +639,7 @@ export class LinearChart extends React.Component<Props, State> {
             setDomain: setXDomain,
             getScale: getXScale,
             rescale: 'rescaleX',
-            getValue: (v: Item) => v.x,
+            getValue: (v: NotEmptyItem) => v.x,
             size: svgWidth,
           },
           secondary: {
@@ -638,7 +655,7 @@ export class LinearChart extends React.Component<Props, State> {
             setDomain: setYDomain,
             getScale: getYScale,
             rescale: 'rescaleY',
-            getValue: (v: Item) => v.y,
+            getValue: (v: NotEmptyItem) => v.y,
             size: svgHeight,
           },
           secondary: {
