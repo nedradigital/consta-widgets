@@ -1,4 +1,5 @@
-import { GeoObject, getVisibleObjects } from '../'
+import { GeoObject } from '../'
+import { getVisibleObjects } from '../helpers'
 
 const EMPTY_GEO_DATA = { type: 'Polygon', geometry: null, properties: null } as const
 

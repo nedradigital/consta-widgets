@@ -1,0 +1,20 @@
+.main {
+  & foreignObject {
+    overflow: visible;
+
+    width: 1px;
+    height: 1px;
+  }
+}
+
+.foreignObjectWrapper {
+  display: inline-block;
+
+  pointer-events: none;
+
+  transform: translate(-50%, -50%);
+
+  & > * {
+    pointer-events: auto;
+  }
+}
