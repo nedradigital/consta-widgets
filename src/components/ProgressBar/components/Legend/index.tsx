@@ -46,6 +46,10 @@ export const Legend: React.FC<Props> = ({ ticks, valueMin, valueMax }) => {
           <div className={css.markingLabel}>{tick.label}</div>
         </div>
       ))}
+      <div className={classnames(css.marking, css.isHidden)}>
+        <div className={css.markingIcon} />
+        <div className={css.markingLabel}>{ticksWithRatio[0].label}</div>
+      </div>
     </div>
   )
 }

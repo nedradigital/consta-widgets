@@ -2,7 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { getValueRatio, Size } from '../../'
+import { getValueRatio } from '../../'
 import { Legend, Tick } from '../Legend'
 
 import css from './index.css'
@@ -15,23 +15,20 @@ type Data = {
 }
 
 export type Props = {
-  size?: Size
   data: Data
   color: string
 }
 
 export const Progress: React.FC<Props> = ({
-  size = 'm',
   data: { value, valueMin, valueMax, ticks = [] },
   color = '#FFBA3B',
 }) => {
   const hasLegend = ticks.length
-  const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
   const valueNowRatio = getValueRatio(value, valueMin, valueMax)
   const progressIsNotFull = valueNowRatio < 100
 
   return (
-    <div className={classnames(css.progress, sizeClass)} style={{ color }}>
+    <div className={css.progress} style={{ color }}>
       <div className={css.chart}>
         <progress
           max={100}
