@@ -81,7 +81,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     lines={data}
     colorGroups={colorGroups}
     withZoom={withZoom}
-    isHorizontal={isHorizontal}
+    isHorizontal={Boolean(isHorizontal)}
     formatValueForLabel={formatValueForLabel ? formatValueForLabel : v => String(v)}
     formatValueForTooltip={formatValueForTooltip}
     formatValueForTooltipTitle={formatValueForTooltipTitle}

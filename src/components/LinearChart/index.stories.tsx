@@ -35,37 +35,34 @@ const getGridConfig = () =>
   } as const)
 
 const getCommonProps = () => {
+  const now = Date.now()
   const unit = text('unit', 'тыс м3')
+  const valueMapper = (y: number, x: number) => ({
+    x: now + x * 1000 * 60 * 60 * 24,
+    y,
+  })
 
   return {
     lines: [
       {
         colorGroupName: 'first',
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map((y, x) => ({
-          x: Date.now() + x,
-          y,
-        })),
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map(valueMapper),
         dots: true,
         lineName: 'Северный бур',
       },
       {
         colorGroupName: 'second',
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((y, x) => ({
-          x: Date.now() + x,
-          y,
-        })),
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map(valueMapper),
         lineName: 'Южное месторождение',
       },
     ],
     threshold: object('threshold', {
-      max: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => ({
-        x: Date.now() + x,
-        y: 6,
-      })),
-      min: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => ({
-        x: Date.now() + x,
-        y: 1,
-      })),
+      max: {
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => valueMapper(6, x)),
+      },
+      min: {
+        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => valueMapper(1, x)),
+      },
     }),
     gridConfig: getGridConfig(),
     withZoom: true,
@@ -129,5 +126,11 @@ storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 300, height: '80vh' }))
   .add('vertical', () => {
-    return <LinearChart {...getCommonProps()} colorGroups={object('colorGroups', colorGroups)} />
+    return (
+      <LinearChart
+        {...getCommonProps()}
+        colorGroups={object('colorGroups', colorGroups)}
+        isHorizontal={false}
+      />
+    )
   })

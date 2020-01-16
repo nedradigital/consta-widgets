@@ -1,13 +1,12 @@
 import * as d3 from 'd3'
 
+import { Item, NumberRange } from '../'
 import {
   calculateSecondaryDomain,
   getMainTickValues,
   getSecondaryTickValues,
-  Item,
-  NumberRange,
   padDomain,
-} from '../'
+} from '../helpers'
 
 const horizontalLine: ReadonlyArray<readonly Item[]> = [
   [{ x: 1, y: 9 }, { x: 3, y: 6 }, { x: 5, y: 3 }, { x: 7, y: 0 }],
