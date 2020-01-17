@@ -445,8 +445,12 @@ const mockData: DataMap = {
       },
     ],
     threshold: {
-      max: [{ x: 0, y: 4 }, { x: 3, y: 4 }],
-      min: [{ x: 0, y: 0 }, { x: 3, y: 0 }],
+      max: {
+        values: [{ x: 0, y: 4 }, { x: 3, y: 4 }],
+      },
+      min: {
+        values: [{ x: 0, y: 0 }, { x: 3, y: 0 }],
+      },
     },
   },
   [DataType.Pyramid]: [

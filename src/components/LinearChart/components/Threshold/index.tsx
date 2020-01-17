@@ -12,7 +12,10 @@ type Props = {
   maxPoints: readonly NotEmptyItem[]
   minPoints?: readonly NotEmptyItem[]
   clipPath?: string
+  isHorizontal: boolean
 }
+
+export const THRESHOLD_COLOR = '#f2c94c'
 
 export const getFillPoints = (
   maxPoints: readonly NotEmptyItem[],
@@ -33,7 +36,19 @@ export const getFillPoints = (
   ]
 }
 
-export const Threshold: React.FC<Props> = ({ scaleX, scaleY, maxPoints, minPoints, clipPath }) => {
+export const isStraightLine = (items: readonly NotEmptyItem[], isHorizontal: boolean): boolean => {
+  const getSecondaryValue = (item: NotEmptyItem) => item[isHorizontal ? 'y' : 'x']
+  return items.every(item => getSecondaryValue(item) === getSecondaryValue(items[0]))
+}
+
+export const Threshold: React.FC<Props> = ({
+  scaleX,
+  scaleY,
+  maxPoints,
+  minPoints,
+  clipPath,
+  isHorizontal,
+}) => {
   const getRectPath = d3
     .line<NotEmptyItem>()
     .x(({ x }) => scaleX(x))
@@ -42,13 +57,24 @@ export const Threshold: React.FC<Props> = ({ scaleX, scaleY, maxPoints, minPoint
   const fillPoints = getFillPoints(maxPoints, minPoints)
   const fillPath = getRectPath(fillPoints) || undefined
 
+  const renderLine = (points: readonly NotEmptyItem[]) => (
+    <Line
+      className={css.line}
+      points={points}
+      scaleX={scaleX}
+      scaleY={scaleY}
+      shapeRendering={isStraightLine(points, isHorizontal) ? 'crispEdges' : undefined}
+      transform={`translate(${isHorizontal ? '0, 0.5' : '0.5, 0'})`}
+    />
+  )
+
   return (
-    <g className={css.wrapper} clipPath={clipPath}>
-      <Line className={css.line} points={maxPoints} scaleX={scaleX} scaleY={scaleY} />
+    <g className={css.wrapper} clipPath={clipPath} style={{ color: THRESHOLD_COLOR }}>
+      {renderLine(maxPoints)}
       {minPoints && (
         <>
           <path className={css.fill} d={fillPath} />
-          <Line className={css.line} points={minPoints} scaleX={scaleX} scaleY={scaleY} />
+          {renderLine(minPoints)}
         </>
       )}
     </g>

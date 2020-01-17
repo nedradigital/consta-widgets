@@ -6,13 +6,8 @@ import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { HoveredMainValue, Line, ScaleLinear } from '../..'
-
-export type HoverLine = {
-  color: string
-  formattedValue: string
-  name: string
-}
+import { HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
+import { THRESHOLD_COLOR } from '../Threshold'
 
 type Props = {
   lines: readonly Line[]
@@ -22,9 +17,16 @@ type Props = {
   scaleY: ScaleLinear
   colorGroups: ColorGroups
   hoveredMainValue: HoveredMainValue
+  threshold?: Threshold
   formatValueForLabel: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
+}
+
+type TooltipItem = {
+  color: string
+  name: string
+  value: number | null | undefined
 }
 
 export const LineTooltip: React.FC<Props> = ({
@@ -35,6 +37,7 @@ export const LineTooltip: React.FC<Props> = ({
   scaleY,
   hoveredMainValue,
   colorGroups,
+  threshold,
   formatValueForLabel,
   formatValueForTooltipTitle,
   formatValueForTooltip = String,
@@ -45,16 +48,33 @@ export const LineTooltip: React.FC<Props> = ({
 
   const mainValueKey = isHorizontal ? 'x' : 'y'
   const secondaryValueKey = isHorizontal ? 'y' : 'x'
+  const isItemHovered = (item: Item) => item[mainValueKey] === hoveredMainValue
+  const getSecondaryValue = (item?: Item) => (item ? item[secondaryValueKey] : undefined)
 
-  const tooltipItems = lines.map(line => {
-    const item = line.values.find(v => v[mainValueKey] === hoveredMainValue)
+  const tooltipItems: readonly TooltipItem[] = lines.map(line => {
+    const item = line.values.find(isItemHovered)
 
     return {
       color: colorGroups[line.colorGroupName],
       name: line.lineName,
-      value: item ? item[secondaryValueKey] : undefined,
+      value: getSecondaryValue(item),
     }
   })
+
+  const thresholdItems: readonly TooltipItem[] = threshold
+    ? [threshold.max, threshold.min].filter(isDefined).map((thresholdLine, idx) => {
+        const item = thresholdLine.values.find(isItemHovered)
+        const defaultName = threshold.min
+          ? `${idx === 0 ? 'Верхнее' : 'Нижнее'} пороговое значение`
+          : 'Пороговое значение'
+
+        return {
+          color: THRESHOLD_COLOR,
+          name: thresholdLine.name || defaultName,
+          value: getSecondaryValue(item),
+        }
+      })
+    : []
 
   const lineValues = tooltipItems.map(line => line.value).filter(isNotNil)
   const maxSecondaryValue = lineValues.length ? Math.max(...lineValues) : undefined
@@ -85,7 +105,7 @@ export const LineTooltip: React.FC<Props> = ({
     <Tooltip isVisible x={position.x} y={position.y} direction={isHorizontal ? 'top' : 'right'}>
       <TooltipContentForMultipleValues
         title={title}
-        items={tooltipItems.map(item => ({
+        items={[...tooltipItems, ...thresholdItems].map(item => ({
           color: item.color,
           name: item.name,
           value: isNotNil(item.value) ? formatValueForTooltip(item.value) : '—',

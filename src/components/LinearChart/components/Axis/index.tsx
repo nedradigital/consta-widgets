@@ -48,7 +48,7 @@ type Props = {
   mainGridTickValues: TickValues
   secondaryLabelTickValues: TickValues
   secondaryGridTickValues: TickValues
-  isHorizontal?: boolean
+  isHorizontal: boolean
   formatValueForLabel: FormatValue
   secondaryScaleUnit?: string
   xGuideValue: number

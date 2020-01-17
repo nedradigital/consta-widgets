@@ -13,6 +13,17 @@ import { LineTooltip } from './components/LineTooltip'
 import { LineWithDots as LineComponent } from './components/LineWithDots'
 import { Threshold } from './components/Threshold'
 import { Zoom } from './components/Zoom'
+import {
+  calculateSecondaryDomain,
+  flipPointsOnAxes,
+  getMainTickValues,
+  getSecondaryTickValues,
+  getXRange,
+  getXScale,
+  getYRange,
+  getYScale,
+  padDomain,
+} from './helpers'
 import css from './index.css'
 
 export type Item = { x: number | null; y: number | null }
@@ -20,9 +31,13 @@ export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
 
+type ThresholdLine = {
+  name?: string
+  values: readonly NotEmptyItem[]
+}
 export type Threshold = {
-  max: readonly NotEmptyItem[]
-  min?: readonly NotEmptyItem[]
+  max: ThresholdLine
+  min?: ThresholdLine
 }
 
 export type Line = {
@@ -40,7 +55,7 @@ type Props = {
   gridConfig: GridConfig
   threshold?: Threshold
   withZoom?: boolean
-  isHorizontal?: boolean
+  isHorizontal: boolean
   formatValueForLabel: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
@@ -63,7 +78,7 @@ type State = {
   hoveredMainValue: HoveredMainValue
 }
 
-const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
+export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
 export const TRANSITION_DURATIONS = {
   ZOOM: 750,
@@ -85,167 +100,6 @@ export const domainPaddings = {
     right: 0.06,
     left: 0.06,
   },
-}
-
-const getIndexWithFallbackToDefault = (index: number, def: number): number =>
-  index < 0 ? def : index
-
-export const padDomain = (
-  domain: NumberRange,
-  paddingStart: number,
-  paddingEnd: number,
-  zoom: number
-): NumberRange => {
-  const [start, end] = domain
-  const diff = domain[1] - domain[0]
-  const delta = diff === 0 ? domain[0] : diff
-
-  return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
-}
-
-const getXRange = (width: number) => [0, width] as NumberRange
-const getYRange = (height: number) =>
-  [
-    // Чтобы нарисовался гридлайн на нижней оси
-    height - 1,
-    0,
-  ] as NumberRange
-
-const getXScale = (domain: NumberRange, width: number) =>
-  d3
-    .scaleLinear()
-    .domain([...domain])
-    .range(getXRange(width))
-const getYScale = (domain: NumberRange, height: number) =>
-  d3
-    .scaleLinear()
-    .domain([...domain])
-    .range(getYRange(height))
-
-export const calculateSecondaryDomain = (
-  mainDomainMin: number,
-  mainDomainMax: number,
-  linesValues: ReadonlyArray<readonly Item[]>,
-  getValue: (v: NotEmptyItem) => number,
-  getDomain: (items: readonly NotEmptyItem[]) => NumberRange
-) => {
-  const lineDomains = linesValues.map(values => {
-    const zoomRangeIndexes = _.sortBy([
-      getIndexWithFallbackToDefault(
-        _.findLastIndex(values, v => itemIsNotEmpty(v) && getValue(v) <= mainDomainMin),
-        0
-      ),
-      getIndexWithFallbackToDefault(
-        _.findIndex(values, v => itemIsNotEmpty(v) && getValue(v) >= mainDomainMax),
-        values.length - 1
-      ),
-    ])
-
-    const valuesInZoomRange = values
-      .slice(zoomRangeIndexes[0], zoomRangeIndexes[1] + 1)
-      .filter(itemIsNotEmpty)
-
-    return valuesInZoomRange.length ? getDomain(valuesInZoomRange) : [0, 0]
-  })
-
-  return [
-    Math.min(...lineDomains.map(d => d[0])),
-    Math.max(...lineDomains.map(d => d[1])),
-  ] as NumberRange
-}
-
-export const getUniqValues = (
-  items: readonly Item[],
-  domain: NumberRange,
-  type: 'x' | 'y',
-  isHorizontal?: boolean
-): readonly number[] =>
-  _.sortBy(
-    _.uniq(items.map(v => v[type]))
-      .filter(isNotNil)
-      .filter(i =>
-        isHorizontal ? i >= domain[0] && i <= domain[1] : i >= domain[1] && i <= domain[0]
-      )
-  )
-
-export const getMainTickValues = ({
-  items,
-  domain,
-  gridConfig,
-  tickType,
-  guideValue,
-  isHorizontal,
-}: {
-  items: readonly Item[]
-  domain: NumberRange
-  gridConfig: GridConfig
-  tickType: 'labelTicks' | 'gridTicks'
-  guideValue: number
-  isHorizontal?: boolean
-}): TickValues => {
-  if (domain === INITIAL_DOMAIN) {
-    return []
-  }
-
-  const config = gridConfig[isHorizontal ? 'x' : 'y']
-  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y', isHorizontal)
-  const ticks = config[tickType] || 0
-  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
-  const result =
-    ticks === 0 ? [] : _.chunk(uniqValues, Math.ceil(uniqValues.length / ticks)).map(arr => arr[0])
-
-  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
-    return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
-  }
-
-  return _.uniq(result.concat(isGuide ? [guideValue] : []))
-}
-
-export const getSecondaryTickValues = ({
-  items,
-  domain,
-  gridConfig,
-  tickType,
-  guideValue,
-  isHorizontal,
-}: {
-  items: readonly Item[]
-  domain: NumberRange
-  gridConfig: GridConfig
-  tickType: 'labelTicks' | 'gridTicks'
-  guideValue: number
-  isHorizontal?: boolean
-}) => {
-  if (domain === INITIAL_DOMAIN) {
-    return []
-  }
-
-  const config = gridConfig[isHorizontal ? 'y' : 'x']
-  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'y' : 'x', true)
-  const ticks = config[tickType] || 0
-  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
-  const result = ticks === 0 ? [] : d3.ticks(domain[0], domain[1], ticks)
-
-  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
-    return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
-  }
-
-  return _.uniq(result.concat(isGuide ? [guideValue] : []))
-}
-
-function flipPointsOnAxes<T extends Item | NotEmptyItem>(
-  items: readonly T[],
-  isHorizontal?: boolean
-): readonly T[] {
-  return isHorizontal
-    ? items
-    : items.map(
-        item =>
-          ({
-            x: item.y,
-            y: item.x,
-          } as T)
-      )
 }
 
 export class LinearChart extends React.Component<Props, State> {
@@ -347,12 +201,13 @@ export class LinearChart extends React.Component<Props, State> {
       <div ref={this.ref} className={css.main}>
         <LineTooltip
           lines={this.getLines()}
-          isHorizontal={!!isHorizontal}
+          isHorizontal={isHorizontal}
           scaleX={scaleX}
           scaleY={scaleY}
           colorGroups={colorGroups}
           hoveredMainValue={hoveredMainValue}
           anchorEl={this.svgWrapperRef.current}
+          threshold={threshold}
           formatValueForLabel={formatValueForLabel}
           formatValueForTooltip={formatValueForTooltip}
           formatValueForTooltipTitle={formatValueForTooltipTitle}
@@ -408,7 +263,7 @@ export class LinearChart extends React.Component<Props, State> {
             scaleY={scaleY}
             width={svgWidth}
             height={svgHeight}
-            isHorizontal={Boolean(isHorizontal)}
+            isHorizontal={isHorizontal}
             hoveredMainValue={hoveredMainValue}
             onChangeHoveredMainValue={this.setHoveredMainValue}
           />
@@ -417,9 +272,12 @@ export class LinearChart extends React.Component<Props, State> {
             <Threshold
               scaleX={scaleX}
               scaleY={scaleY}
-              maxPoints={flipPointsOnAxes(threshold.max, isHorizontal)}
-              minPoints={threshold.min ? flipPointsOnAxes(threshold.min, isHorizontal) : undefined}
+              maxPoints={flipPointsOnAxes(threshold.max.values, isHorizontal)}
+              minPoints={
+                threshold.min ? flipPointsOnAxes(threshold.min.values, isHorizontal) : undefined
+              }
               clipPath={lineClipPath}
+              isHorizontal={isHorizontal}
             />
           )}
 
@@ -435,14 +293,14 @@ export class LinearChart extends React.Component<Props, State> {
               lineClipPath={lineClipPath}
               dotsClipPath={dotsClipPath}
               hoveredMainValue={hoveredMainValue}
-              isHorizontal={Boolean(isHorizontal)}
+              isHorizontal={isHorizontal}
             />
           ))}
         </svg>
 
         {withZoom && (
           <Zoom
-            isHorizontal={Boolean(isHorizontal)}
+            isHorizontal={isHorizontal}
             xRange={getXRange(svgWidth)}
             yRange={getYRange(svgHeight)}
             paddingX={paddingX}
@@ -490,9 +348,9 @@ export class LinearChart extends React.Component<Props, State> {
       return []
     }
 
-    const { max, min = [] } = threshold
+    const { max, min = { values: [] } } = threshold
 
-    return [flipPointsOnAxes(max, isHorizontal), flipPointsOnAxes(min, isHorizontal)]
+    return [flipPointsOnAxes(max.values, isHorizontal), flipPointsOnAxes(min.values, isHorizontal)]
   }
 
   getAllThresholdValues = (): readonly Item[] => _.flatten(this.getThresholdLines())
