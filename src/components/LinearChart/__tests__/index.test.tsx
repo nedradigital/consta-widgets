@@ -33,34 +33,80 @@ const getYDomain = (items: readonly Item[]) => d3.extent(items, v => v.y) as Num
 
 describe('<LinearChart />', () => {
   describe('calculateSecondaryDomain', () => {
-    it('рассчитать второстепенный домен для горизонтального режима и одной линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, horizontalLine, v => v.x, getYDomain)
-      expect(domain).toEqual([0, 9])
+    describe('горизонтальный график', () => {
+      it('рассчитывает второстепенный домен для одной линии', () => {
+        const domain = calculateSecondaryDomain(2, 6, horizontalLine, v => v.x, getYDomain)
+        expect(domain).toEqual([0, 9])
+      })
+
+      it('рассчитывает второстепенный домен для нескольких линии', () => {
+        const domain = calculateSecondaryDomain(2, 6, horizontalLines, v => v.x, getYDomain)
+        expect(domain).toEqual([-4, 10])
+      })
+
+      it('рассчитывает второстепенный домен в максимальном левом положении', () => {
+        const domain = calculateSecondaryDomain(1, 2, horizontalLine, v => v.x, getYDomain)
+        expect(domain).toEqual([6, 9])
+      })
+
+      it('рассчитывает второстепенный домен в максимальном правом положении', () => {
+        const domain = calculateSecondaryDomain(6, 7, horizontalLine, v => v.x, getYDomain)
+        expect(domain).toEqual([0, 3])
+      })
+
+      it('рассчитывает второстепенный домен, когда есть пропуски в середине', () => {
+        const domain = calculateSecondaryDomain(
+          1,
+          2,
+          [
+            [
+              { x: -1, y: -1 },
+              { x: 0, y: 0 },
+              { x: 1, y: null },
+              { x: 2, y: null },
+              { x: 3, y: 3 },
+              { x: 4, y: 4 },
+            ],
+          ],
+          v => v.x,
+          getYDomain
+        )
+        expect(domain).toEqual([0, 3])
+      })
+
+      it('рассчитывает второстепенный домен, когда есть пропуски в начале', () => {
+        const domain = calculateSecondaryDomain(
+          0,
+          3,
+          [[{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: 2 }, { x: 3, y: 3 }]],
+          v => v.x,
+          getYDomain
+        )
+        expect(domain).toEqual([2, 3])
+      })
+
+      it('возвращает нулевой домен, если все значения — пропуски', () => {
+        const domain = calculateSecondaryDomain(
+          1,
+          2,
+          [[{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: null }]],
+          v => v.x,
+          getYDomain
+        )
+        expect(domain).toEqual([0, 0])
+      })
     })
 
-    it('рассчитать второстепенный домен для горизонтального режима и нескольких линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, horizontalLines, v => v.x, getYDomain)
-      expect(domain).toEqual([-4, 10])
-    })
+    describe('вертикальный график', () => {
+      it('рассчитывает второстепенный домен для одной линии', () => {
+        const domain = calculateSecondaryDomain(1.5, 7.5, verticalLine, v => v.y, getXDomain)
+        expect(domain).toEqual([0, 9])
+      })
 
-    it('рассчитать второстепенный домен для горизонтального режима и максимальном левом положении', () => {
-      const domain = calculateSecondaryDomain(1, 2, horizontalLine, v => v.x, getYDomain)
-      expect(domain).toEqual([6, 9])
-    })
-
-    it('рассчитать второстепенный домен для горизонтального режима и максимальном правом положении', () => {
-      const domain = calculateSecondaryDomain(6, 7, horizontalLine, v => v.x, getYDomain)
-      expect(domain).toEqual([0, 3])
-    })
-
-    it('рассчитать второстепенный домен для вертикального режима и одной линии', () => {
-      const domain = calculateSecondaryDomain(1.5, 7.5, verticalLine, v => v.y, getXDomain)
-      expect(domain).toEqual([0, 9])
-    })
-
-    it('рассчитать второстепенный домен для вертикального режима и нескольких линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, verticalLines, v => v.y, getXDomain)
-      expect(domain).toEqual([-4, 10])
+      it('рассчитывает второстепенный домен для нескольких линии', () => {
+        const domain = calculateSecondaryDomain(2, 6, verticalLines, v => v.y, getXDomain)
+        expect(domain).toEqual([-4, 10])
+      })
     })
   })
 
@@ -100,7 +146,7 @@ describe('<LinearChart />', () => {
       expect(result).toEqual([0])
     })
 
-    it('вернет пустой массив для сетки, если значение нулевой оси мне входит в диапазон домена', () => {
+    it('вернет пустой массив для сетки, если значение нулевой оси не входит в диапазон домена', () => {
       const result = getMainTickValues({
         items: values,
         domain,
@@ -127,6 +173,18 @@ describe('<LinearChart />', () => {
     it('вернет массив с уникальными значениями', () => {
       const result = getMainTickValues({
         items: values,
+        domain,
+        gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
+        tickType: 'labelTicks',
+        guideValue: 0,
+        isHorizontal: true,
+      })
+      expect(result).toEqual([0, 1, 2, 3])
+    })
+
+    it('вернёт засечки для пропусков', () => {
+      const result = getMainTickValues({
+        items: [{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: null }, { x: 3, y: 0 }],
         domain,
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',

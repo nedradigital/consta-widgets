@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { isDefined, isNotNil } from '@gaz/utils/lib/type-guards'
-import * as _ from 'lodash'
 
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
@@ -57,14 +56,22 @@ export const LineTooltip: React.FC<Props> = ({
     }
   })
 
-  const maxSecondaryValue = Math.max(...tooltipItems.map(line => line.value).filter(isDefined))
+  const lineValues = tooltipItems.map(line => line.value).filter(isNotNil)
+  const maxSecondaryValue = lineValues.length ? Math.max(...lineValues) : undefined
 
-  const getTooltipPosition = ({ xValue, yValue }: { xValue: number; yValue: number }) => {
-    const { left, top } = anchorEl.getBoundingClientRect()
+  const getTooltipPosition = ({
+    xValue,
+    yValue,
+  }: {
+    xValue: number | undefined
+    yValue: number | undefined
+  }) => {
+    const { left, top, width, height } = anchorEl.getBoundingClientRect()
 
     return {
-      x: scaleX(xValue) + left,
-      y: scaleY(yValue) + top,
+      // Для пропусков располагаем тултип по центру
+      x: left + (isDefined(xValue) ? scaleX(xValue) : width / 2),
+      y: top + (isDefined(yValue) ? scaleY(yValue) : height / 2),
     }
   }
 

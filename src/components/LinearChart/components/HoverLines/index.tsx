@@ -1,9 +1,10 @@
 import React from 'react'
 
+import { isDefined, isNotNil } from '@gaz/utils/lib/type-guards'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { HoveredMainValue, Line, ScaleLinear } from '../..'
+import { HoveredMainValue, Line, ScaleLinear } from '../../'
 
 import css from './index.css'
 
@@ -34,7 +35,7 @@ type Position = {
   y2: number
 }
 
-const LineComponent: React.FC<LineProps> = ({ position, lineClassName, value, onHover }) => {
+const HoverLine: React.FC<LineProps> = ({ position, lineClassName, value, onHover }) => {
   const { x1, y1, x2, y2 } = position
 
   return (
@@ -65,35 +66,42 @@ export const HoverLines: React.FC<Props> = ({
 
   return (
     <g>
-      {lineValues.map((lineValue, index) => {
-        const mainValue = lineValue[mainValueKey]
-        const position = isHorizontal
-          ? {
-              x1: scaleX(mainValue),
-              y1: 0,
-              x2: scaleX(mainValue),
-              y2: height,
-            }
-          : {
-              x1: 0,
-              y1: scaleY(mainValue),
-              x2: width,
-              y2: scaleY(mainValue),
-            }
-        const isActive = mainValue === hoveredMainValue
-        const commonProps = {
-          position,
-          value: mainValue,
-          onHover: onChangeHoveredMainValue,
-        }
+      {lineValues
+        .map((lineValue, index) => {
+          const mainValue = lineValue[mainValueKey]
 
-        return (
-          <React.Fragment key={index}>
-            <LineComponent {...commonProps} lineClassName={css.isHoverable} />
-            <LineComponent {...commonProps} lineClassName={isActive && css.isActive} />
-          </React.Fragment>
-        )
-      })}
+          if (!isNotNil(mainValue)) {
+            return
+          }
+
+          const position = isHorizontal
+            ? {
+                x1: scaleX(mainValue),
+                y1: 0,
+                x2: scaleX(mainValue),
+                y2: height,
+              }
+            : {
+                x1: 0,
+                y1: scaleY(mainValue),
+                x2: width,
+                y2: scaleY(mainValue),
+              }
+          const isActive = mainValue === hoveredMainValue
+          const commonProps = {
+            position,
+            value: mainValue,
+            onHover: onChangeHoveredMainValue,
+          }
+
+          return (
+            <React.Fragment key={index}>
+              <HoverLine {...commonProps} lineClassName={css.isHoverable} />
+              <HoverLine {...commonProps} lineClassName={isActive && css.isActive} />
+            </React.Fragment>
+          )
+        })
+        .filter(isDefined)}
     </g>
   )
 }

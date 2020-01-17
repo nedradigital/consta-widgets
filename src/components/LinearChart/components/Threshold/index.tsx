@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { reverse } from 'lodash'
 
-import { Item, ScaleLinear } from '../..'
+import { NotEmptyItem, ScaleLinear } from '../..'
 import { Line } from '../Line'
 
 import css from './index.css'
@@ -9,12 +9,15 @@ import css from './index.css'
 type Props = {
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  maxPoints: readonly Item[]
-  minPoints?: readonly Item[]
+  maxPoints: readonly NotEmptyItem[]
+  minPoints?: readonly NotEmptyItem[]
   clipPath?: string
 }
 
-export const getFillPoints = (maxPoints: readonly Item[], minPoints?: readonly Item[]) => {
+export const getFillPoints = (
+  maxPoints: readonly NotEmptyItem[],
+  minPoints?: readonly NotEmptyItem[]
+) => {
   if (!minPoints) {
     return []
   }
@@ -32,7 +35,7 @@ export const getFillPoints = (maxPoints: readonly Item[], minPoints?: readonly I
 
 export const Threshold: React.FC<Props> = ({ scaleX, scaleY, maxPoints, minPoints, clipPath }) => {
   const getRectPath = d3
-    .line<Item>()
+    .line<NotEmptyItem>()
     .x(({ x }) => scaleX(x))
     .y(({ y }) => scaleY(y))
 

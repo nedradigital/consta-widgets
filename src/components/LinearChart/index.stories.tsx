@@ -18,6 +18,22 @@ const colorGroups = {
   second: '#56B9F2',
 }
 
+const getGridConfig = () =>
+  object('gridConfig', {
+    x: {
+      labels: 'bottom',
+      labelTicks: 5,
+      gridTicks: 10,
+      guide: true,
+    },
+    y: {
+      labels: 'left',
+      labelTicks: 4,
+      gridTicks: 4,
+      guide: true,
+    },
+  } as const)
+
 const getCommonProps = () => {
   const unit = text('unit', 'тыс м3')
 
@@ -51,20 +67,7 @@ const getCommonProps = () => {
         y: 1,
       })),
     }),
-    gridConfig: object('gridConfig', {
-      x: {
-        labels: 'bottom',
-        labelTicks: 5,
-        gridTicks: 10,
-        guide: true,
-      },
-      y: {
-        labels: 'left',
-        labelTicks: 4,
-        gridTicks: 4,
-        guide: true,
-      },
-    } as const),
+    gridConfig: getGridConfig(),
     withZoom: true,
     formatValueForLabel: (v: number) => new Date(v).toLocaleDateString(),
     foematValueForTooltip: (v: number) => `${v} ${unit}`,
@@ -88,6 +91,36 @@ storiesOf('components/LinearChart', module)
         {...getCommonProps()}
         colorGroups={object('colorGroups', colorGroups)}
         isHorizontal
+      />
+    )
+  })
+  .add('с пропусками', () => {
+    return (
+      <LinearChart
+        colorGroups={colorGroups}
+        lines={[
+          {
+            colorGroupName: 'first',
+            values: [
+              { x: 0, y: null },
+              { x: 1, y: 1 },
+              { x: 2, y: 0 },
+              { x: 3, y: null },
+              { x: 4, y: null },
+              { x: 5, y: 3 },
+              { x: 6, y: null },
+              { x: 7, y: 1 },
+              { x: 8, y: 2 },
+              { x: 9, y: null },
+            ],
+            dots: true,
+            lineName: 'Северный бур',
+          },
+        ]}
+        gridConfig={getGridConfig()}
+        formatValueForLabel={String}
+        isHorizontal
+        withZoom
       />
     )
   })

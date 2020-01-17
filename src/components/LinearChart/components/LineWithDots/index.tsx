@@ -2,7 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { HoveredMainValue, Item, ScaleLinear } from '../../'
+import { HoveredMainValue, Item, itemIsNotEmpty, ScaleLinear } from '../../'
 import { Line } from '../Line'
 
 import css from './index.css'
@@ -46,7 +46,7 @@ export const LineWithDots: React.FC<Props> = ({
         clipPath={lineClipPath}
       />
       <g clipPath={dotsClipPath}>
-        {values.map((item, idx) => {
+        {values.filter(itemIsNotEmpty).map((item, idx) => {
           const isActive = isActiveCircle(item, isHorizontal, hoveredMainValue)
           const radius = hasDotRadius || isActive ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
