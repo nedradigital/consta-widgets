@@ -13,7 +13,8 @@ import { BarChart } from '.'
 const defaultBarChartProps = {
   orientation: 'vertical',
   showValues: false,
-  valuesTick: 4,
+  gridTicks: 4,
+  valuesTicks: 4,
   showUnitLeft: false,
   showUnitBottom: false,
   unit: 'тыс м3',
