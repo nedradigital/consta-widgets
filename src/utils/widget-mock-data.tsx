@@ -446,10 +446,10 @@ const mockData: DataMap = {
     ],
     threshold: {
       max: {
-        values: [{ x: 0, y: 4 }, { x: 3, y: 4 }],
+        values: [{ x: 0, y: 4 }, { x: 1, y: 4 }, { x: 2, y: 4 }, { x: 3, y: 4 }],
       },
       min: {
-        values: [{ x: 0, y: 0 }, { x: 3, y: 0 }],
+        values: [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 2, y: 0 }, { x: 3, y: 0 }],
       },
     },
   },
