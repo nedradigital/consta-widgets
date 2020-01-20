@@ -6,6 +6,7 @@ import { DataMap, DataType } from '@/dashboard/types'
 import { StyleProps, Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
+import { ReactComponent as IconSettings } from './icons/settings.svg'
 import css from './index.css'
 
 const dataType = DataType.Text
@@ -113,7 +114,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       {data && data.tooltip && (
         <div className={css.toggleable}>
           <button ref={ref} className={css.button} onClick={onToggleClick}>
-            Скрыть/отобразить настройки
+            <IconSettings />
           </button>
           <Tooltip
             className={css.tooltip}
