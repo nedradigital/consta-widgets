@@ -16,16 +16,18 @@ import { Data as RoadmapData } from '@/components/Roadmap'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
-import { Dashboard5 } from '@/dashboard/migration/migrations/dashboard5'
+import { Dashboard7 } from '@/dashboard/migration/migrations/dashboard7'
 import { Status } from '@/ui/Badge'
 import { Filters, TableColumn } from '@/utils/table'
 
-import Dashboard = Dashboard5
+import Dashboard = Dashboard7
 
 export type MarginSize = Dashboard.MarginSize
 export type Settings = Dashboard.Settings
 export type WidgetItem = Dashboard.WidgetItem
 export type ColumnsItem = Dashboard.ColumnsItem
+export type ColumnParams = Dashboard.ColumnParams
+export type ColumnContent = Dashboard.ColumnContent
 export type ColumnsContent = Dashboard.ColumnsContent
 export type BoxItem = Dashboard.BoxItem
 export type BoxItemParams = BoxItem['params']

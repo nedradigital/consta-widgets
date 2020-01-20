@@ -1,13 +1,15 @@
 import React from 'react'
 
+import { updateAt } from '@gaz/utils/lib/array'
+
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { getWidget } from '@/dashboard/components/Box'
 import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
-import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset } from '@/dashboard/types'
-import { isWidget } from '@/utils/type-guards'
+import { BoxItem, BoxItemMarginSize, BoxItemParams, ColumnParams, Dataset } from '@/dashboard/types'
+import { isColumns, isWidget } from '@/utils/type-guards'
 import { OnChangeParam } from '@/utils/WidgetFactory'
 
 import css from './index.css'
@@ -15,8 +17,14 @@ import css from './index.css'
 type Props = {
   item: BoxItem
   datasets: readonly Dataset[]
-  onChangeParams: (newParams: BoxItemParams) => void
+  onChange: (newParams: BoxItem) => void
 }
+
+type OnChangeColumnParam<Params> = <K extends keyof Params, V extends Params[K]>(
+  index: number,
+  key: K,
+  value: V
+) => void
 
 const marginSizes = Object.keys(sizeValues) as readonly BoxItemMarginSize[]
 
@@ -30,18 +38,43 @@ export const Settings: React.FC<Props> = props => {
   )
 }
 
-const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
+const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
   const { params } = item
+
   const onChangeParam: OnChangeParam<BoxItemParams> = (paramName, newValue) =>
-    onChangeParams({
-      ...params,
-      [paramName]: newValue,
+    onChange({
+      ...item,
+      params: {
+        ...params,
+        [paramName]: newValue,
+      },
     })
+
+  const onChangeColumnParam: OnChangeColumnParam<ColumnParams> = (index, key, value) => {
+    if (!isColumns(item)) {
+      return
+    }
+
+    const column = item.columns[index]
+
+    onChange({
+      ...item,
+      columns: updateAt(item.columns, index, {
+        ...column,
+        params: {
+          ...column.params,
+          [key]: value,
+        },
+      }),
+    })
+  }
+
   const commonSettings = (
     <>
       <WidgetSettingsNumber
         name="Коэффициент растяжения"
         value={params.growRatio}
+        minValue={0}
         onChange={value => onChangeParam('growRatio', value)}
       />
       <WidgetSettingsSelect
@@ -69,7 +102,7 @@ const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
             value={item.params.datasetId}
             values={allowedDatasets}
             withEmptyValue
-            onChange={value => onChangeParams({ ...params, datasetId: value })}
+            onChange={value => onChange({ ...item, params: { ...params, datasetId: value } })}
           />
         )}
         {commonSettings}
@@ -83,5 +116,20 @@ const SettingsList: React.FC<Props> = ({ item, onChangeParams, datasets }) => {
     )
   }
 
-  return commonSettings
+  return (
+    <>
+      {commonSettings}
+      {item.columns.map((column, idx) => (
+        <React.Fragment key={idx}>
+          <b>Колонка {idx + 1}</b>
+          <WidgetSettingsNumber
+            name="Коэффициент растяжения"
+            value={column.params.growRatio}
+            minValue={0}
+            onChange={value => onChangeColumnParam(idx, 'growRatio', value)}
+          />
+        </React.Fragment>
+      ))}
+    </>
+  )
 }

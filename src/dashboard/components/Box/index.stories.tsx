@@ -42,33 +42,42 @@ const initialItems: readonly BoxItem[] = [
     type: 'columns',
     params: {},
     columns: [
-      [
-        {
-          type: 'widget',
-          debugName: 'CardWithBadge',
-          id: getUniqueName('CardWithBadge'),
-          widgetType: cardWidgetId,
-          params: cardWithBadgeDefaultParams,
-        },
-      ],
-      [
-        {
-          type: 'widget',
-          debugName: 'CardWithBadge',
-          id: getUniqueName('CardWithBadge'),
-          widgetType: cardWidgetId,
-          params: cardWithBadgeDefaultParams,
-        },
-      ],
-      [
-        {
-          type: 'widget',
-          debugName: 'CardWithBadge',
-          id: getUniqueName('CardWithBadge'),
-          widgetType: cardWidgetId,
-          params: cardWithBadgeDefaultParams,
-        },
-      ],
+      {
+        params: {},
+        items: [
+          {
+            type: 'widget',
+            debugName: 'CardWithBadge',
+            id: getUniqueName('CardWithBadge'),
+            widgetType: cardWidgetId,
+            params: cardWithBadgeDefaultParams,
+          },
+        ],
+      },
+      {
+        params: {},
+        items: [
+          {
+            type: 'widget',
+            debugName: 'CardWithBadge',
+            id: getUniqueName('CardWithBadge'),
+            widgetType: cardWidgetId,
+            params: cardWithBadgeDefaultParams,
+          },
+        ],
+      },
+      {
+        params: {},
+        items: [
+          {
+            type: 'widget',
+            debugName: 'CardWithBadge',
+            id: getUniqueName('CardWithBadge'),
+            widgetType: cardWidgetId,
+            params: cardWithBadgeDefaultParams,
+          },
+        ],
+      },
     ],
   },
 ]

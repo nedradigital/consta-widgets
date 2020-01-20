@@ -20,31 +20,37 @@ const columnsItem: ColumnsItem = {
   type: 'columns',
   params: {},
   columns: [
-    [
-      {
-        type: 'widget',
-        debugName: 'CardWithBadge',
-        id: getUniqueName('CardWithBadge'),
-        widgetType: cardWidgetId,
-        params: cardWithBadgeDefaultParams,
-      },
-      {
-        type: 'widget',
-        debugName: 'TitleWidget',
-        id: getUniqueName('TitleWidget'),
-        widgetType: textWidgetId,
-        params: textDefaultParams,
-      },
-    ],
-    [
-      {
-        type: 'widget',
-        debugName: 'CardWithBadge',
-        id: getUniqueName('CardWithBadge'),
-        widgetType: cardWidgetId,
-        params: cardWithBadgeDefaultParams,
-      },
-    ],
+    {
+      params: {},
+      items: [
+        {
+          type: 'widget',
+          debugName: 'CardWithBadge',
+          id: getUniqueName('CardWithBadge'),
+          widgetType: cardWidgetId,
+          params: cardWithBadgeDefaultParams,
+        },
+        {
+          type: 'widget',
+          debugName: 'TitleWidget',
+          id: getUniqueName('TitleWidget'),
+          widgetType: textWidgetId,
+          params: textDefaultParams,
+        },
+      ],
+    },
+    {
+      params: {},
+      items: [
+        {
+          type: 'widget',
+          debugName: 'CardWithBadge',
+          id: getUniqueName('CardWithBadge'),
+          widgetType: cardWidgetId,
+          params: cardWithBadgeDefaultParams,
+        },
+      ],
+    },
   ],
 }
 
