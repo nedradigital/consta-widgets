@@ -8,6 +8,7 @@ import * as d3 from 'd3'
 
 import { Grid } from '@/components/Grid'
 import { ColorGroups } from '@/dashboard/types'
+import { getTicks } from '@/utils/ticks'
 
 import { Axis } from './components/Axis'
 import { Bar } from './components/Bar'
@@ -29,9 +30,10 @@ type Props = {
   data: readonly Data[]
   colorGroups: ColorGroups
   orientation: Orientation
+  gridTicks: number
+  valuesTicks: number
   /** Показывать значение рядом с линиями. Работает только при orientation: horizontal */
   showValues?: boolean
-  valuesTick?: number
   showUnitLeft?: boolean
   showUnitBottom?: boolean
   unit?: string
@@ -83,7 +85,8 @@ export const BarChart: React.FC<Props> = ({
   orientation,
   colorGroups,
   showValues,
-  valuesTick = 4,
+  gridTicks,
+  valuesTicks,
   showUnitLeft,
   showUnitBottom,
   unit,
@@ -110,9 +113,19 @@ export const BarChart: React.FC<Props> = ({
     orientation
   )
 
-  const gridTickValues = valuesScale.ticks(valuesTick)
-  const gridXTickValues = isHorizontal ? gridTickValues : []
-  const gridYTickValues = isHorizontal ? [] : gridTickValues
+  const gridItems = getTicks({
+    items: valuesDomains,
+    count: gridTicks,
+    scaler: valuesScale,
+  })
+  const values = getTicks({
+    items: valuesDomains,
+    count: Math.min(gridTicks, valuesTicks),
+    scaler: valuesScale,
+  })
+
+  const gridXTickValues = isHorizontal ? gridItems : []
+  const gridYTickValues = isHorizontal ? [] : gridItems
 
   const axisShowPositions = {
     top: !isHorizontal && isNegative,
@@ -128,7 +141,7 @@ export const BarChart: React.FC<Props> = ({
 
   return (
     <Axis
-      ticks={valuesScale.ticks(valuesTick)}
+      ticks={values}
       labels={groupScale.domain()}
       ticksScaler={valuesScale}
       labelsScaler={groupScale}
