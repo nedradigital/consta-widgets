@@ -16,6 +16,9 @@ import css from './index.css'
 
 type NumberRange = readonly [number, number]
 
+export const sizes = ['s', 'm'] as const
+export type Size = typeof sizes[number]
+
 export type Orientation = 'horizontal' | 'vertical'
 
 export type Data = {
@@ -37,6 +40,7 @@ type Props = {
   showUnitLeft?: boolean
   showUnitBottom?: boolean
   unit?: string
+  size?: Size
 }
 
 const getXRange = (width: number): NumberRange => [0, width]
@@ -90,6 +94,7 @@ export const BarChart: React.FC<Props> = ({
   showUnitLeft,
   showUnitBottom,
   unit,
+  size = 'm',
 }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
@@ -177,6 +182,7 @@ export const BarChart: React.FC<Props> = ({
               colorGroups={colorGroups}
               clipId={clipId}
               showValues={showValues}
+              size={size}
             />
           ))}
         </svg>
