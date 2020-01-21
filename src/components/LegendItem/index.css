@@ -14,7 +14,7 @@
   }
 
   &:--left {
-    align-items: center;
+    align-items: baseline;
   }
 
   &:--extra-small {
@@ -33,9 +33,12 @@
   }
 }
 
+.signWrapper {
+  line-height: 0;
+}
+
 .sign {
   display: inline-block;
-  flex-shrink: 0;
 
   @nest :--left & {
     margin-right: calc-size(8);
@@ -50,16 +53,22 @@
   width: var(--dot-size);
   height: var(--dot-size);
 
+  vertical-align: baseline;
+
   border-radius: 100%;
 
-  @nest :--extra-small & {
-    margin-top: calc-size(-2);
+  @nest :--extra-small &, :--small & {
+    margin-bottom: calc-size(-1);
   }
 }
 
 .line {
   width: calc-size(20);
   height: calc-size(2);
+
+  @nest :--left & {
+    vertical-align: middle;
+  }
 
   &.isBold {
     height: calc-size(4);

@@ -26,18 +26,6 @@
   }
 }
 
-.tooltipColor {
-  display: inline-flex;
-
-  width: calc-size(12);
-  height: calc-size(12);
-  margin-right: calc-size(8);
-
-  vertical-align: middle;
-
-  border-radius: 50%;
-}
-
 .tooltipValue {
   font-weight: 700;
 
