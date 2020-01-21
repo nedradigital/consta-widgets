@@ -5,6 +5,7 @@ import { move, removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
 import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
+import { Columns, emptyColumn } from '@/dashboard/components/Columns'
 import { Settings } from '@/dashboard/components/Settings'
 import { isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
@@ -12,7 +13,6 @@ import { WidgetType } from '@/utils/WidgetFactory'
 
 import { ItemTypes } from '../../dnd-constants'
 import { BoxItem, ColumnsContent, Data, Dataset } from '../../types'
-import { Columns } from '../Columns'
 
 import css from './index.css'
 
@@ -65,7 +65,7 @@ export const Box: React.FC<Props> = ({
   const addItem = () => {
     switch (selectedItem) {
       case 'columns': {
-        onChange([...items, { type: 'columns', columns: [[], []], params: {} }])
+        onChange([...items, { type: 'columns', columns: [emptyColumn, emptyColumn], params: {} }])
         return
       }
       default: {
@@ -107,10 +107,8 @@ export const Box: React.FC<Props> = ({
     }
   }
 
-  const updateParams = (index: number, params: any) => {
-    const item = items[index]
-
-    onChange(updateAt(items, index, { ...item, params }))
+  const updateParams = (index: number, item: BoxItem) => {
+    onChange(updateAt(items, index, item))
   }
 
   const openSettings = (index?: number) => {
@@ -194,8 +192,8 @@ export const Box: React.FC<Props> = ({
           <Settings
             item={item}
             datasets={datasets}
-            onChangeParams={newParams => {
-              updateParams(index, newParams)
+            onChange={newItem => {
+              updateParams(index, newItem)
             }}
           />
         )

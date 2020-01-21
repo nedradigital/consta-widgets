@@ -3,43 +3,44 @@ import React from 'react'
 import { removeAt, updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 
-import { BoxItem, ColumnsContent, Data, Dataset } from '@/dashboard/types'
+import { BoxItem, ColumnContent, ColumnsContent, Data, Dataset } from '@/dashboard/types'
 
 import { Box } from '../Box'
 
 import css from './index.css'
 
 type Props = {
-  columns?: ColumnsContent
+  columns: ColumnsContent
   data: Data
   datasets: readonly Dataset[]
   viewMode: boolean
   onChange: (columns: ColumnsContent) => void
 }
 
-const defaultColumns: ColumnsContent = [[], []]
+export const emptyColumn: ColumnContent = { params: {}, items: [] }
 
-export const Columns: React.FC<Props> = ({
-  datasets,
-  viewMode,
-  onChange,
-  data,
-  columns = defaultColumns,
-}) => {
+export const Columns: React.FC<Props> = ({ datasets, viewMode, onChange, data, columns }) => {
   const addColumn = (type: 'start' | 'end') => {
     switch (type) {
       case 'start': {
-        onChange([[], ...columns])
+        onChange([emptyColumn, ...columns])
         break
       }
       case 'end': {
-        onChange([...columns, []])
+        onChange([...columns, emptyColumn])
         break
       }
     }
   }
 
-  const changeColumn = (index: number, items: readonly BoxItem[]) => {
+  const getColumnStyle = ({ growRatio = 1 }: ColumnContent['params']): React.CSSProperties => {
+    return {
+      flexGrow: growRatio,
+      flexBasis: growRatio ? 0 : undefined,
+    }
+  }
+
+  const changeColumn = (index: number, items: ColumnContent) => {
     onChange(updateAt(columns, index, items))
   }
 
@@ -64,15 +65,15 @@ export const Columns: React.FC<Props> = ({
         </>
       ) : null}
       {columns.map((column, index) => (
-        <div key={index} className={css.column}>
+        <div key={index} className={css.column} style={getColumnStyle(column.params)}>
           <Box
             datasets={datasets}
             viewMode={viewMode}
             onChange={(items: readonly BoxItem[]) => {
-              changeColumn(index, items)
+              changeColumn(index, { ...column, items })
             }}
             data={data}
-            items={column}
+            items={column.items}
             isNestedBox
           />
           {columns.length > 2 && !viewMode ? (
