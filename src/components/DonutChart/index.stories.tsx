@@ -12,7 +12,13 @@ import { DonutChart } from '.'
 
 storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: 150, height: 200 }))
+  .addDecorator(
+    blockCenteringDecorator({
+      backgroundColor: 'var(--bg-box)',
+      width: 200,
+      height: 200,
+    })
+  )
   .add('interactive', () => {
     return (
       <DonutChart
@@ -42,6 +48,36 @@ storiesOf('components/DonutChart', module)
           plan: 'rgba(86, 185, 242, 0.19)',
         }}
         formatValueForTooltip={v => `${v}${text('unit', '')}`}
+      />
+    )
+  })
+  .add('Как полукруг с текстом', () => {
+    return (
+      <DonutChart
+        data={[
+          {
+            name: 'Факт',
+            colorGroupName: 'fact',
+            sections: [{ value: 1, showValue: 15 }],
+          },
+          {
+            name: 'План',
+            colorGroupName: 'plan',
+            sections: [{ value: 3, showValue: 60 }],
+          },
+        ]}
+        colorGroups={{
+          fact: '#F38B00',
+          plan: 'rgba(86, 185, 242, 1)',
+        }}
+        formatValueForTooltip={v => `${v}${text('unit', '')}`}
+        halfDonut="right"
+        textData={object('textData', {
+          title: 'всего',
+          value: '90',
+          subTitle: 'МГРП',
+          subValue: '20',
+        })}
       />
     )
   })
