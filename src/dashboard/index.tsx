@@ -23,6 +23,7 @@ import {
 // https://github.com/TypeStrong/ts-loader/issues/751
 export { DataType } from './types'
 export type DashboardState = DashboardState
+export type AnyDashboardStateVersion = AnyDashboardStateVersion
 export type Data = Data
 export type DataMap = DataMap
 export type Dataset = Dataset
@@ -34,17 +35,22 @@ type ConstructorProps = DashboardProps &
   MenuProps & {
     dashboard: AnyDashboardStateVersion
     onChange: (state: DashboardState) => void
+    onChangeVersion: (state: DashboardState) => void
   }
 
 export const EMPTY_DASHBOARD: DashboardState = { version: 7, boxes: [], config: {}, settings: {} }
 
 const SUPPORTED_DASHBOARD_VERSION: DashboardVersion = 7
+export const isDashboardSupported = (
+  dashboard: AnyDashboardStateVersion
+): dashboard is DashboardState => dashboard.version === SUPPORTED_DASHBOARD_VERSION
 
 export const Constructor: React.FC<ConstructorProps> = props => {
   const {
     cols = 12,
     onChange,
-    dashboard: originalDashboard,
+    onChangeVersion,
+    dashboard,
     onClear,
     viewMode,
     datasets,
@@ -56,7 +62,14 @@ export const Constructor: React.FC<ConstructorProps> = props => {
     basePadding,
     rowsCount,
   } = props
-  const dashboardVersion = originalDashboard.version || 0
+  const dashboardVersion = dashboard.version || 0
+
+  // В режиме просмотра обновляем версию тихо: без алертов и сообщений
+  React.useEffect(() => {
+    if (viewMode && dashboardVersion < SUPPORTED_DASHBOARD_VERSION) {
+      onChangeVersion(migrate(dashboard, SUPPORTED_DASHBOARD_VERSION) as DashboardState)
+    }
+  }, [dashboard, dashboardVersion, viewMode, onChangeVersion])
 
   if (dashboardVersion > SUPPORTED_DASHBOARD_VERSION) {
     return (
@@ -68,11 +81,11 @@ export const Constructor: React.FC<ConstructorProps> = props => {
   }
 
   const changeVersion = (newVersion: number) => {
-    const newDashboard = migrate(originalDashboard, newVersion) as DashboardState
+    const newDashboard = migrate(dashboard, newVersion) as DashboardState
 
     /* eslint-disable no-console */
     console.group('Превью миграции')
-    console.log(`v${dashboardVersion}:`, originalDashboard)
+    console.log(`v${dashboardVersion}:`, dashboard)
     console.log(`v${newVersion}:`, newDashboard)
     console.groupEnd()
     /* eslint-enable no-console */
@@ -92,7 +105,7 @@ export const Constructor: React.FC<ConstructorProps> = props => {
     ].join('\n')
 
     if (confirm(confirmText)) {
-      onChange(newDashboard)
+      onChangeVersion(newDashboard)
     }
   }
 
@@ -113,8 +126,10 @@ export const Constructor: React.FC<ConstructorProps> = props => {
     )
   }
 
-  // В режиме просмотра обновляем дашборд до последней версии, чтобы показать
-  const dashboard = migrate(originalDashboard, SUPPORTED_DASHBOARD_VERSION) as DashboardState
+  if (!isDashboardSupported(dashboard)) {
+    return null
+  }
+
   const { margin = 'l' } = dashboard.settings
   const margins = baseMargin || [marginSizes[margin], marginSizes[margin]]
 

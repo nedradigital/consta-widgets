@@ -80,6 +80,7 @@ storiesOf('dashboard/Constructor', module)
             cols={object('cols', cols)}
             dashboard={dashboard}
             onChange={handler}
+            onChangeVersion={handler}
             onClear={() => {
               localStorage.removeItem(storageName)
               location.reload()
