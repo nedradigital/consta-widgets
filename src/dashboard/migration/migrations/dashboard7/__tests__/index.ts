@@ -43,7 +43,9 @@ describe('migration7', () => {
                 },
               ],
             ],
-            params: {},
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },
@@ -91,7 +93,9 @@ describe('migration7', () => {
                 ],
               },
             ],
-            params: {},
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },
