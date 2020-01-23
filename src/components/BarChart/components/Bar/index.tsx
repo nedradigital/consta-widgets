@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 
 import { ColorGroups } from '@/dashboard/types'
 
-import { Data, getGroupScale, Orientation } from '../../'
+import { Data, getGroupScale, Orientation, Size } from '../../'
 
 import css from './index.css'
 
@@ -20,54 +20,65 @@ type Props = {
   colorGroups: ColorGroups
   clipId: string
   orientation: Orientation
+  size: Size
   showValues?: boolean
 }
 
-const getBarClassName = (isHorizontal: boolean, isNegativeValue: boolean) => {
+const getBarClassName = ({
+  isHorizontal,
+  isNegative,
+  size,
+}: {
+  isHorizontal: boolean
+  isNegative: boolean
+  size: Size
+}) => {
   return classnames(
     css.bar,
-    isHorizontal && isNegativeValue && css.borderLeft,
-    isHorizontal && !isNegativeValue && css.borderRight,
-    !isHorizontal && isNegativeValue && css.borderBottom,
-    !isHorizontal && !isNegativeValue && css.borderTop
+    isHorizontal && isNegative && css.borderLeft,
+    isHorizontal && !isNegative && css.borderRight,
+    !isHorizontal && isNegative && css.borderBottom,
+    !isHorizontal && !isNegative && css.borderTop,
+    size === 'm' && css.sizeM
   )
 }
 
 const getTransformTranslate = (x: number, y: number) => `translate(${x},${y})`
 
-const getColumnSize = () => getCalculatedSize(12)
+const getColumnWidth = (size: Size) => {
+  if (size === 's') {
+    return getCalculatedSize(4)
+  }
+
+  return getCalculatedSize(12)
+}
 const getColumnPadding = () => getCalculatedSize(4)
 
 export const Bar: React.FC<Props> = ({
   data,
   groupScale,
   valuesScale,
-  orientation,
   colorGroups,
   clipId,
+  orientation,
+  size,
   showValues,
 }) => {
   const { label, values } = data
   const valuesFiltered = values.filter((v): v is ValueFiltered => v.value !== undefined)
-  const columnSize = getColumnSize()
+  const columnWidth = getColumnWidth(size)
   const columnPadding = getColumnPadding()
   const halfColumnPadding = columnPadding / 2
   const isHorizontal = orientation === 'horizontal'
 
   const barDomains = valuesFiltered.length ? valuesFiltered.map(item => item.colorGroupName) : []
-  const groupSize = (columnSize + columnPadding) * valuesFiltered.length
+  const groupSize = (columnWidth + columnPadding) * valuesFiltered.length
   const barScale = getGroupScale(barDomains, groupSize, orientation)
   const textShiftY = barScale.bandwidth() / 2
   const zeroPoint = Math.ceil(valuesScale(0))
 
-  const getBarSize = (d: ValueFiltered) => {
-    const size = zeroPoint - Math.floor(valuesScale(d.value))
-
-    if (size < 0) {
-      return size * -1
-    }
-
-    return size
+  const getBarHeight = (d: ValueFiltered) => {
+    return Math.abs(zeroPoint - Math.floor(valuesScale(d.value)))
   }
 
   const getRectPositionByAxis = (item: ValueFiltered, axis: 'x' | 'y') => {
@@ -98,8 +109,8 @@ export const Bar: React.FC<Props> = ({
   const items = valuesFiltered.map(d => ({
     value: d.value,
     color: colorGroups[d.colorGroupName],
-    width: isHorizontal ? getBarSize(d) : columnSize,
-    height: isHorizontal ? columnSize : getBarSize(d),
+    width: isHorizontal ? getBarHeight(d) : columnWidth,
+    height: isHorizontal ? columnWidth : getBarHeight(d),
     x: getRectPositionByAxis(d, 'x'),
     y: getRectPositionByAxis(d, 'y'),
     isNegative: d.value < 0,
@@ -111,7 +122,7 @@ export const Bar: React.FC<Props> = ({
         {items.map(({ x, y, width, height, isNegative, color }) => (
           <foreignObject key={color} x={x} y={y} width={width} height={height}>
             <div
-              className={getBarClassName(isHorizontal, isNegative)}
+              className={getBarClassName({ isHorizontal, isNegative, size })}
               style={{ backgroundColor: color }}
             />
           </foreignObject>

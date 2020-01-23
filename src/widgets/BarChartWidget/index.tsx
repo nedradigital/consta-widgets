@@ -1,4 +1,4 @@
-import { BarChart, Orientation } from '@/components/BarChart'
+import { BarChart, Orientation, Size, sizes } from '@/components/BarChart'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
@@ -10,6 +10,7 @@ type Data = DataMap[typeof dataType]
 
 type Params = {
   orientation: Orientation
+  size: Size
   showValues: boolean
   gridTicks: number
   valuesTicks: number
@@ -21,6 +22,7 @@ const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
 
 export const defaultParams: Params = {
   orientation: 'vertical',
+  size: 'm',
   gridTicks: 4,
   valuesTicks: 4,
   showValues: false,
@@ -29,7 +31,7 @@ export const defaultParams: Params = {
 }
 
 export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  params: { orientation, showValues, valuesTicks, gridTicks, showUnitLeft, showUnitBottom },
+  params: { orientation, showValues, valuesTicks, gridTicks, showUnitLeft, showUnitBottom, size },
   data,
 }) => (
   <BarChart
@@ -40,6 +42,7 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
     showUnitLeft={showUnitLeft}
     showUnitBottom={showUnitBottom}
     orientation={orientation}
+    size={size}
   />
 )
 
@@ -64,6 +67,12 @@ export const BarChartWidget = createWidget<Data, Params>({
           name="Количество подписей"
           value={params.valuesTicks}
           onChange={value => onChangeParam('valuesTicks', value)}
+        />
+        <WidgetSettingsSelect
+          name="Размер"
+          value={params.size}
+          onChange={value => onChangeParam('size', value)}
+          values={sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsSelect
           name="Ориентация"
