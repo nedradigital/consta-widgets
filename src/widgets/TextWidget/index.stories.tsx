@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { action } from '@storybook/addon-actions'
 import { number, select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
@@ -16,6 +17,19 @@ storiesOf('widgets/TextWidget', module)
       data={{
         text: text('data', ''),
         tooltip: <p>Контент тултипа</p>,
+      }}
+      params={{
+        text: text('title', defaultParams.text),
+        type: select('type', typeNames, defaultParams.type),
+        croppedLineCount: number('croppedLineCount', 0),
+      }}
+    />
+  ))
+  .add('с обработчиком для кнопки', () => (
+    <TextWidgetContent
+      data={{
+        text: text('data', ''),
+        onClick: action('Клик по кнопке'),
       }}
       params={{
         text: text('title', defaultParams.text),

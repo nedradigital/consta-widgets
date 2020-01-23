@@ -101,7 +101,7 @@ export type DataMap = {
     threshold?: Threshold
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
-  [DataType.Text]: { text: string; tooltip?: React.ReactNode }
+  [DataType.Text]: { text: string; tooltip?: React.ReactNode; onClick?: Function }
   [DataType.TableLegend]: TableLegendData
   [DataType.TrafficLight]: TrafficLightData
   [DataType.ProgressBar]: {
