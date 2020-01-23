@@ -1,4 +1,5 @@
 import { ChoiceGroup } from '@gpn-design/uikit'
+import { noop } from 'lodash'
 
 import { GeoPoint, Map } from '../'
 
@@ -115,7 +116,7 @@ export const GinfPrototype = () => {
         points={points}
         padding={[50, 160]}
         selectedObjectId={undefined}
-        onSelectedObjectIdChange={() => {}}
+        onSelectedObjectIdChange={noop}
         renderPoint={point => {
           const pointData = dataByPoints[point.id as keyof typeof dataByPoints] || {
             projects: [],
