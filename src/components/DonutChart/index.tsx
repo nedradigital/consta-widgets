@@ -35,7 +35,7 @@ type TooltipDataState = {
 // Максимально кол-во кругов, которые можно отрисовать = 3
 const MAX_CIRCLES = 3
 const minChartSize: { [key in number]: number } = {
-  1: 0,
+  1: 42,
   2: 100,
   3: 150,
 }
@@ -45,9 +45,9 @@ const donutSize: { [key in number]: number } = {
   3: 10,
 }
 const paddingBetweenDonuts: { [key in number]: number } = {
-  1: 18,
-  2: 14,
-  3: 10,
+  1: 0,
+  2: 12,
+  3: 16,
 }
 const getSizeDonut = (countLines: number) => donutSize[countLines]
 const getPadding = (countLines: number) => paddingBetweenDonuts[countLines]
