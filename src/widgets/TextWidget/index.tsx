@@ -79,7 +79,13 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
   const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 })
 
-  const onToggleClick = () => setTooltipVisibility(!tooltipVisible)
+  const onToggleClick = () => {
+    if (data && data.onClick) {
+      return data.onClick()
+    }
+
+    setTooltipVisibility(!tooltipVisible)
+  }
 
   React.useEffect(() => {
     if (!ref.current) {
@@ -111,7 +117,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       <Text {...textType[type].props} croppedLineCount={croppedLineCount} className={css.content}>
         {data && data.text ? data.text : text}
       </Text>
-      {data && data.tooltip && (
+      {data && (data.tooltip || data.onClick) && (
         <div className={css.toggleable}>
           <button ref={ref} className={css.button} onClick={onToggleClick}>
             <IconSettings />
