@@ -35,8 +35,8 @@ export namespace Dashboard7 {
     debugName: string
     widgetType: string
     params: CommonBoxItemParams & {
-      datasetId?: string
       [key: string]: any
+      datasetId?: string
     }
   }
 

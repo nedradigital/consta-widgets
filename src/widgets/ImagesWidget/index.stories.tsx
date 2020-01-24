@@ -4,6 +4,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
+import { noop } from 'lodash'
 
 import { Box } from '@/dashboard/components/Box'
 import { BoxItem } from '@/dashboard/types'
@@ -40,7 +41,7 @@ storiesOf('widgets/ImagesWidget', module)
         <Box
           viewMode
           items={items}
-          onChange={() => {}}
+          onChange={noop}
           data={{
             [id]: object('data', ImagesWidget.mockData),
           }}

@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { noop } from 'lodash'
+
 import {
   filters as tableLegendFilters,
   list as tableLegendList,
@@ -802,7 +804,7 @@ const mockData: DataMap = {
     renderConnectionPoint: () => null,
     renderObjectPoint: () => null,
     renderPoint: () => null,
-    onSelectedObjectIdChange: () => {},
+    onSelectedObjectIdChange: noop,
   },
 }
 
