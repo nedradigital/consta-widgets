@@ -20,13 +20,11 @@ addDecorator(storyFn => {
   document.body.classList.add(
     'theme',
     'theme_breakpoint_default',
-    'theme_color_gpn-default',
     'theme_control_gpn-default',
     'theme_font_small',
     'theme_gap_small',
     'theme_size_gpn-default',
     'theme_space_gpn-default',
-    'gpnThemeColor',
   )
 
   return storyFn()

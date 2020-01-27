@@ -1,6 +1,0 @@
-.choiceGroup {
-  /* stylelint-disable selector-class-pattern */
-  :global(.choice-group__button) {
-    color: white;
-  }
-}

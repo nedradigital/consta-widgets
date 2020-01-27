@@ -26,6 +26,7 @@ storiesOf('widgets/MultiBarChartWidget', module)
           year: 'aquamarine',
         },
         data: DataWithTwoColumnsOnDate,
+        unit: 'тыс м3',
       })}
       params={object('params', defaultParams)}
     />

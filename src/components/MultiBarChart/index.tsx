@@ -1,14 +1,19 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useUID } from 'react-uid'
 
+import { Checkbox } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
-import { isEqual, max } from 'lodash'
+import classnames from 'classnames'
+import { max } from 'lodash'
 
 import { getGroupScale, getValuesScale } from '@/components/BarChart'
+import { Axis, UnitPosition } from '@/components/BarChartAxis'
+import { Grid } from '@/components/Grid'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { getEveryN } from '@/utils/array'
+import { themeColorDark } from '@/utils/theme'
+import { getTicks } from '@/utils/ticks'
 
-import { Axis } from './components/Axis'
-import { Control } from './components/Control'
 import { ColumnDetail, MultiBar } from './components/MultiBar'
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import css from './index.css'
@@ -34,10 +39,13 @@ export type Data = {
 type Props = {
   data: Data
   orientation: Orientation
-  valuesTick?: number
-  hasRatio?: boolean
   colorGroups: ColorGroups
+  gridTicks: number
+  valuesTicks: number
+  hasRatio?: boolean
   formatValueForLabel?: FormatValue
+  unit?: string
+  unitPosition?: UnitPosition
 }
 
 const getColumnDetails = (
@@ -86,55 +94,26 @@ const normalizeDetails = (
 export const MultiBarChart: React.FC<Props> = ({
   data,
   orientation,
-  valuesTick = 4,
+  gridTicks,
+  valuesTicks,
   hasRatio,
   colorGroups,
   formatValueForLabel,
+  unit,
+  unitPosition = 'none',
 }) => {
-  const [paddingX, setPaddingX] = useState(0)
-  const [paddingY, setPaddingY] = useState(0)
   const [showValues, setShowValues] = useState(false)
   const [activeBar, setActiveBar] = useState()
 
   const ref = useRef(null)
   const svgRef = useRef(null)
   const { width, height } = useComponentSize(ref)
-  const [{ svgWidth, svgHeight }, setSizeSvg] = useState({ svgWidth: 0, svgHeight: 0 })
 
   const uid = useUID()
   const clipId = `multibarchart_clipPath_${uid}`
 
   const { categories, values, keyGroup } = data
   const isVertical = orientation !== 'horizontal'
-
-  useLayoutEffect(() => {
-    const w = Math.round(width - paddingX) || 0
-    const h = Math.round(height - paddingY) || 0
-
-    setSizeSvg({ svgWidth: w, svgHeight: h })
-  }, [width, height, paddingX, paddingY])
-
-  const changeShowValues = () => {
-    setShowValues(!showValues)
-  }
-
-  const onAxisSizeChange = ({
-    xAxisHeight,
-    yAxisWidth,
-  }: {
-    xAxisHeight: number
-    yAxisWidth: number
-  }) => {
-    const newPaddings = {
-      paddingX: yAxisWidth,
-      paddingY: xAxisHeight,
-    }
-
-    if (!isEqual(newPaddings, { paddingX, paddingY })) {
-      setPaddingX(yAxisWidth)
-      setPaddingY(xAxisHeight)
-    }
-  }
 
   const groupsDomain = values.map(d => String(d[keyGroup]))
   const innerColumns = values.map(obj => Object.keys(obj).filter(key => key !== keyGroup)).flat()
@@ -153,8 +132,8 @@ export const MultiBarChart: React.FC<Props> = ({
     max(dataColumns.map(obj => max(obj.columnDetails.map(column => getTotalByColumn(column))))) || 0
 
   const valuesDomain: readonly [number, number] = [0, yMaxValue]
-  const ySize = isVertical ? svgHeight : svgWidth
-  const xSize = isVertical ? svgWidth : svgHeight
+  const ySize = isVertical ? height : width
+  const xSize = isVertical ? width : height
 
   const groupScale = getGroupScale(groupsDomain, xSize, orientation)
   const valuesScale = getValuesScale(valuesDomain, ySize, orientation)
@@ -168,63 +147,85 @@ export const MultiBarChart: React.FC<Props> = ({
     })
   }
 
-  return (
-    <div
-      ref={ref}
-      className={css.main}
-      style={{
-        paddingLeft: paddingX,
-      }}
-    >
-      <svg className={css.icon} width={svgWidth} height={svgHeight} ref={svgRef}>
-        <defs>
-          <clipPath id={clipId}>
-            {/* 100 - сделано для того, чтобы не обрезались tooltip/complex tooltip */}
-            <rect width={svgWidth + 200} height={svgHeight + 200} y={-100} x={-100} />
-          </clipPath>
-        </defs>
-        <Axis
-          width={svgWidth}
-          height={svgHeight}
-          groupScale={groupScale}
-          valuesScale={valuesScale}
-          valuesTick={valuesTick}
-          orientation={orientation}
-          onAxisSizeChange={onAxisSizeChange}
-          formatValue={formatValueForLabel}
-        />
-        {dataColumns.map((barColumns, idx) => {
-          return (
-            <MultiBar
-              key={idx}
-              data={barColumns}
-              clipId={clipId}
-              showValues={showValues}
-              isVertical={isVertical}
-              groupScale={groupScale}
-              valuesScale={valuesScale}
-              color={colorGroups}
-              uniqueInnerColumns={uniqueInnerColumns}
-              onMouseLeave={() => setActiveBar(undefined)}
-              onMouseEnter={setActiveBar}
-              parentRef={svgRef}
-              formatValue={formatValueForLabel}
-            />
-          )
-        })}
-      </svg>
-      <Control paddingX={paddingX} changeDisplayValues={changeShowValues} />
-      {activeBar && (
-        <Tooltip
-          barColumn={activeBar}
-          isVertical={isVertical}
-          uniqueInnerColumns={uniqueInnerColumns}
-          isVisible={true}
-          svgParentRef={svgRef}
-          color={colorGroups}
-          formatValue={formatValueForLabel}
-        />
-      )}
+  const gridItems = getTicks(valuesDomain, gridTicks)
+  const axisValues = getEveryN(gridItems, valuesTicks)
+
+  const gridXTickValues = isVertical ? [] : gridItems
+  const gridYTickValues = isVertical ? gridItems : []
+
+  const bottomControls = (
+    <div className={classnames(themeColorDark, css.controls)}>
+      <Checkbox
+        className={css.control}
+        wpSize="m"
+        checked={showValues}
+        onChange={e => setShowValues(e.target.checked)}
+      >
+        Показать значения секций
+      </Checkbox>
     </div>
+  )
+
+  return (
+    <Axis
+      values={axisValues}
+      labels={groupScale.domain()}
+      valuesScaler={valuesScale}
+      labelsScaler={groupScale}
+      isHorizontal={!isVertical}
+      unit={unit}
+      unitPosition={unitPosition}
+      bottomControls={bottomControls}
+      formatValue={formatValueForLabel}
+    >
+      <div ref={ref} className={css.main}>
+        <svg className={css.svg} width={width} height={height} ref={svgRef}>
+          <defs>
+            <clipPath id={clipId}>
+              {/* 100 - сделано для того, чтобы не обрезались tooltip/complex tooltip */}
+              <rect width={width + 200} height={height + 200} y={-100} x={-100} />
+            </clipPath>
+          </defs>
+          <Grid
+            scalerX={valuesScale}
+            scalerY={valuesScale}
+            xTickValues={gridXTickValues}
+            yTickValues={gridYTickValues}
+            width={width}
+            height={height}
+          />
+          {dataColumns.map((barColumns, idx) => {
+            return (
+              <MultiBar
+                key={idx}
+                data={barColumns}
+                clipId={clipId}
+                showValues={showValues}
+                isVertical={isVertical}
+                groupScale={groupScale}
+                valuesScale={valuesScale}
+                color={colorGroups}
+                uniqueInnerColumns={uniqueInnerColumns}
+                onMouseLeave={() => setActiveBar(undefined)}
+                onMouseEnter={setActiveBar}
+                parentRef={svgRef}
+                formatValue={formatValueForLabel}
+              />
+            )
+          })}
+        </svg>
+        {activeBar && (
+          <Tooltip
+            barColumn={activeBar}
+            isVertical={isVertical}
+            uniqueInnerColumns={uniqueInnerColumns}
+            isVisible
+            svgParentRef={svgRef}
+            color={colorGroups}
+            formatValue={formatValueForLabel}
+          />
+        )}
+      </div>
+    </Axis>
   )
 }

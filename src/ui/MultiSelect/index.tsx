@@ -5,6 +5,8 @@ import { Checkbox } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
+import { themeColorDark } from '@/utils/theme'
+
 import { SelectedOption } from '../SelectedOption'
 
 import css from './index.css'
@@ -43,7 +45,7 @@ export const MultiSelect: React.FC<Props> = ({
   }
 
   return (
-    <div className={css.multiSelect} ref={wrapperRef}>
+    <div className={classnames(themeColorDark, css.multiSelect)} ref={wrapperRef}>
       <div
         className={classnames(css.selectedList, isSelectOpened && css.isActive)}
         onClick={handleOnSelectClick}

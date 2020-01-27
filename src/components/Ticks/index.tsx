@@ -22,6 +22,13 @@ type Props<T> = {
   formatValueForLabel?: (value: T) => string
 }
 
+const positionClasses = {
+  top: css.isTop,
+  right: css.isRight,
+  bottom: css.isBottom,
+  left: css.isLeft,
+}
+
 const getTransformTranslate = (x: number, y: number) => `translate(${x}px,${y}px)`
 
 export function Ticks<T>(props: Props<T>) {
@@ -33,28 +40,21 @@ export function Ticks<T>(props: Props<T>) {
     showLine = true,
     isTicksSnuggleOnEdge = false,
     style,
-    formatValueForLabel,
+    formatValueForLabel = String,
   } = props
 
   const isTop = position === 'top'
-  const isRight = position === 'right'
   const isBottom = position === 'bottom'
-  const isLeft = position === 'left'
   const isHorizontal = isTop || isBottom
 
-  const scalerOffset = scaler.bandwidth ? scaler.bandwidth() / 2 : 0
-  const format = formatValueForLabel ? formatValueForLabel : String
+  const textWidth = scaler.bandwidth ? scaler.bandwidth() : undefined
+  const scalerOffset = textWidth ? textWidth / 2 : 0
 
   const tickTransform = isHorizontal
     ? (v: T) => getTransformTranslate((scaler(v) || 0) + scalerOffset, 0)
     : (v: T) => getTransformTranslate(0, (scaler(v) || 0) + scalerOffset)
 
-  const positionsClassNames = [
-    isTop && css.isTop,
-    isRight && css.isRight,
-    isBottom && css.isBottom,
-    isLeft && css.isLeft,
-  ] as const
+  const positionClassName = positionClasses[position]
 
   const getAlignItems = (index: number, length: number) => {
     const isFirst = index === 0
@@ -77,29 +77,26 @@ export function Ticks<T>(props: Props<T>) {
     return 'center'
   }
 
-  const renderLine = (condition: boolean) => {
-    if (showLine && condition) {
-      return <span className={classnames(css.line, positionsClassNames)} />
-    }
-
-    return null
-  }
-
   return (
-    <div className={classnames(css.group, positionsClassNames, className)} style={style}>
+    <div
+      className={classnames(
+        css.group,
+        textWidth ? css.groupLabels : css.groupValues,
+        positionClassName,
+        className
+      )}
+      style={style}
+    >
       {values.map((value, idx) => {
         const transform = tickTransform(value)
         const alignItems = getAlignItems(idx, values.length)
 
         return (
-          <div
-            key={idx}
-            className={classnames(css.tick, positionsClassNames)}
-            style={{ transform, alignItems }}
-          >
-            {renderLine(isBottom || isRight)}
-            <span className={classnames(css.text)}>{format(value)}</span>
-            {renderLine(isTop || isLeft)}
+          <div key={idx} className={css.tick} style={{ transform, alignItems }}>
+            <span className={css.text} style={{ width: isHorizontal ? textWidth : undefined }}>
+              {formatValueForLabel(value)}
+            </span>
+            {showLine && <span className={css.line} />}
           </div>
         )
       })}

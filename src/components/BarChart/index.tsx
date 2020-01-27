@@ -6,11 +6,12 @@ import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 
+import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { ColorGroups } from '@/dashboard/types'
+import { getEveryN } from '@/utils/array'
 import { getTicks } from '@/utils/ticks'
 
-import { Axis } from './components/Axis'
 import { Bar } from './components/Bar'
 import css from './index.css'
 
@@ -37,9 +38,8 @@ type Props = {
   valuesTicks: number
   /** Показывать значение рядом с линиями. Работает только при orientation: horizontal */
   showValues?: boolean
-  showUnitLeft?: boolean
-  showUnitBottom?: boolean
   unit?: string
+  unitPosition?: UnitPosition
   size?: Size
 }
 
@@ -91,9 +91,8 @@ export const BarChart: React.FC<Props> = ({
   showValues,
   gridTicks,
   valuesTicks,
-  showUnitLeft,
-  showUnitBottom,
   unit,
+  unitPosition = 'none',
   size = 'm',
 }) => {
   const ref = useRef(null)
@@ -118,16 +117,8 @@ export const BarChart: React.FC<Props> = ({
     orientation
   )
 
-  const gridItems = getTicks({
-    items: valuesDomains,
-    count: gridTicks,
-    scaler: valuesScale,
-  })
-  const values = getTicks({
-    items: valuesDomains,
-    count: Math.min(gridTicks, valuesTicks),
-    scaler: valuesScale,
-  })
+  const gridItems = getTicks(valuesDomains, gridTicks)
+  const axisValues = getEveryN(gridItems, valuesTicks)
 
   const gridXTickValues = isHorizontal ? gridItems : []
   const gridYTickValues = isHorizontal ? [] : gridItems
@@ -146,15 +137,14 @@ export const BarChart: React.FC<Props> = ({
 
   return (
     <Axis
-      ticks={values}
+      values={axisValues}
       labels={groupScale.domain()}
-      ticksScaler={valuesScale}
+      valuesScaler={valuesScale}
       labelsScaler={groupScale}
       isHorizontal={isHorizontal}
       showPositions={axisShowPositions}
       unit={unit}
-      showUnitLeft={showUnitLeft}
-      showUnitBottom={showUnitBottom}
+      unitPosition={unitPosition}
       horizontalStyles={style}
     >
       <div ref={ref} className={css.main} style={style}>
