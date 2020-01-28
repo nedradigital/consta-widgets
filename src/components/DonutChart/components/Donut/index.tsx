@@ -13,6 +13,8 @@ export type DataItem = {
 
 export type Data = readonly DataItem[]
 
+export type HalfDonut = 'top' | 'left' | 'right' | 'bottom'
+
 type Props = {
   data: Data
   colorGroups: ColorGroups
@@ -21,6 +23,7 @@ type Props = {
   handleMouseOver: (data: DataItem) => void
   handleMouseOut: () => void
   isTooltipVisible: boolean
+  halfDonut?: HalfDonut
 }
 
 /**
@@ -28,6 +31,41 @@ type Props = {
  */
 const ARC_PAD = 1
 const ARC_RADIUS = 100
+
+const getAnglesByHalfDonut = (halfDonut?: HalfDonut) => {
+  switch (halfDonut) {
+    case 'top': {
+      return {
+        startAngle: Math.PI * 1.5,
+        endAngle: Math.PI * 0.5,
+      }
+    }
+    case 'right': {
+      return {
+        startAngle: 2 * Math.PI,
+        endAngle: Math.PI,
+      }
+    }
+    case 'bottom': {
+      return {
+        startAngle: Math.PI * -0.5,
+        endAngle: Math.PI * 0.5,
+      }
+    }
+    case 'left': {
+      return {
+        startAngle: 0,
+        endAngle: Math.PI,
+      }
+    }
+    default: {
+      return {
+        startAngle: 0,
+        endAngle: 2 * Math.PI,
+      }
+    }
+  }
+}
 
 export const Donut: React.FC<Props> = ({
   colorGroups,
@@ -37,10 +75,15 @@ export const Donut: React.FC<Props> = ({
   handleMouseOver,
   handleMouseOut,
   isTooltipVisible,
+  halfDonut,
 }) => {
+  const { startAngle, endAngle } = getAnglesByHalfDonut(halfDonut)
+
   const pieData = d3
     .pie<DataItem>()
     .sort(null)
+    .startAngle(startAngle)
+    .endAngle(endAngle)
     .value(d => d.value)([...data])
 
   const arc = d3

@@ -2,13 +2,15 @@ import React, { useRef, useState } from 'react'
 
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
+import classnames from 'classnames'
 import { zip } from 'lodash'
 
 import { LegendItem } from '@/components/LegendItem'
 import { Tooltip } from '@/components/Tooltip'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { Data as DonutData, DataItem, Donut } from './components/Donut'
+import { Data as DonutData, DataItem, Donut, HalfDonut } from './components/Donut'
+import { Data as TextData, Text } from './components/Text'
 import css from './index.css'
 
 export type Data = ReadonlyArray<{
@@ -24,6 +26,8 @@ type Props = {
   data: Data
   colorGroups: ColorGroups
   formatValueForTooltip?: FormatValue
+  halfDonut?: HalfDonut
+  textData?: TextData
 }
 
 type TooltipDataState = {
@@ -49,22 +53,41 @@ const paddingBetweenDonuts: { [key in number]: number } = {
   2: 12,
   3: 16,
 }
-const getSizeDonut = (countLines: number) => donutSize[countLines]
+const getSizeDonut = (countLines: number, halfDonut?: HalfDonut) =>
+  halfDonut ? 16 : donutSize[countLines]
 const getPadding = (countLines: number) => paddingBetweenDonuts[countLines]
 
 const getDonutRadius = (mainRadius: number, index: number, countLines: number) =>
   mainRadius - (getSizeDonut(countLines) + getPadding(countLines)) * index
 
-export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValueForTooltip }) => {
+const getSize = (width: number, height: number, halfDonut?: HalfDonut) => {
+  if (!halfDonut) {
+    return Math.min(width, height)
+  }
+
+  if (['left', 'right'].includes(halfDonut)) {
+    return Math.min(width * 2, height)
+  }
+
+  return Math.min(width, height * 2)
+}
+
+export const DonutChart: React.FC<Props> = ({
+  data = [],
+  colorGroups,
+  formatValueForTooltip,
+  halfDonut,
+  textData,
+}) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState | null>(null)
   const [mousePosition, changeMousePosition] = useState({ x: 0, y: 0 })
 
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
   const circlesCount = Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES)
-  const size = width && height ? Math.min(width, height) : 0
+  const size = width && height ? getSize(width, height, halfDonut) : 0
   const mainRadius = size / 2
-  const sizeDonut = getSizeDonut(circlesCount)
+  const sizeDonut = getSizeDonut(circlesCount, halfDonut)
   const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
   const isTooltipVisible = Boolean(tooltipData)
 
@@ -108,6 +131,9 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
         ['--min-size' as string]: `${minChartSize[circlesCount]}px`,
       }}
     >
+      {halfDonut && values.length === 1 && textData && (
+        <Text data={textData} maxSize={mainRadius} position={halfDonut} />
+      )}
       <Tooltip isVisible={isTooltipVisible} direction="top" x={mousePosition.x} y={mousePosition.y}>
         {tooltipData ? (
           <LegendItem color={tooltipData.color} fontSize="xs">
@@ -116,7 +142,20 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
           </LegendItem>
         ) : null}
       </Tooltip>
-      <svg viewBox={viewBox} onMouseMove={handleMouseMove}>
+      <svg
+        className={classnames(
+          css.svg,
+          halfDonut &&
+            {
+              left: css.halfLeft,
+              right: css.halfRight,
+              top: css.halfTop,
+              bottom: css.halfBottom,
+            }[halfDonut]
+        )}
+        viewBox={viewBox}
+        onMouseMove={handleMouseMove}
+      >
         {values.map((d, index) => {
           const outerRadius = getDonutRadius(mainRadius, index, circlesCount)
           const innerRadius = outerRadius - sizeDonut
@@ -131,6 +170,7 @@ export const DonutChart: React.FC<Props> = ({ data = [], colorGroups, formatValu
               handleMouseOver={handleMouseOver}
               handleMouseOut={handleMouseOut}
               isTooltipVisible={isTooltipVisible}
+              halfDonut={halfDonut}
             />
           )
         })}
