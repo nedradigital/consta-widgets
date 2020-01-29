@@ -33,7 +33,7 @@ button {
 ::-webkit-scrollbar-thumb {
   border: var(--scrollbar-padding) solid var(--opaque-color);
   border-radius: 2px;
-  background-color: var(--opaque-color);
+  background-color: var(--scroll-bar-color);
   background-clip: padding-box;
 
   /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
@@ -47,8 +47,4 @@ button {
     border-top: none;
     border-bottom: none;
   }
-}
-
-*:hover::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-bar-color);
 }
