@@ -59,9 +59,8 @@ export const migration6: Migration<Dashboard5.State, Dashboard6.State> = {
     const updateItem = (item: Dashboard6.BoxItem): Dashboard5.BoxItem => {
       if (item.type === 'columns') {
         return {
-          type: 'columns',
+          ...item,
           columns: item.columns.map(column => column.map(updateItem)),
-          params: {},
         }
       } else {
         if (item.widgetType === LinearChartWidget.id) {
@@ -97,9 +96,8 @@ export const migration6: Migration<Dashboard5.State, Dashboard6.State> = {
     const updateItem = (item: Dashboard6.BoxItem): Dashboard5.BoxItem => {
       if (item.type === 'columns') {
         return {
-          type: 'columns',
+          ...item,
           columns: item.columns.map(column => column.map(updateItem)),
-          params: {},
         }
       } else {
         if (item.widgetType === LinearChartWidget.id) {

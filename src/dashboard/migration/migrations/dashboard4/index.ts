@@ -60,21 +60,28 @@ export const migration4: Migration<Dashboard3.State, Dashboard4.State> = {
   },
 
   down: data => {
+    const updateParams = (
+      params: Dashboard4.CommonBoxItemParams
+    ): Dashboard3.CommonBoxItemParams => {
+      const { marginTop, ...restParams } = params
+
+      return {
+        ...restParams,
+        marginTop: marginTop === '2xs' ? 'xs' : marginTop,
+      }
+    }
+
     const updateItem = (item: Dashboard4.BoxItem): Dashboard3.BoxItem => {
       if (item.type === 'columns') {
         return {
-          type: 'columns',
+          ...item,
           columns: item.columns.map(column => column.map(updateItem)),
-          params: {},
+          params: updateParams(item.params),
         }
       } else {
-        const { marginTop, ...restParams } = item.params
         return {
           ...item,
-          params: {
-            ...restParams,
-            marginTop: marginTop === '2xs' ? 'xs' : marginTop,
-          },
+          params: updateParams(item.params),
         }
       }
     }

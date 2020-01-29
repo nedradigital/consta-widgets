@@ -39,7 +39,9 @@ describe('migration4', () => {
                 },
               ],
             ],
-            params: {},
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },
@@ -82,7 +84,9 @@ describe('migration4', () => {
                 },
               ],
             ],
-            params: {},
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },
@@ -118,7 +122,9 @@ describe('migration4', () => {
         Box2: [
           {
             type: 'columns',
-            params: {},
+            params: {
+              growRatio: 1,
+            },
             columns: [
               [
                 {
@@ -176,7 +182,9 @@ describe('migration4', () => {
                 },
               ],
             ],
-            params: {},
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },
