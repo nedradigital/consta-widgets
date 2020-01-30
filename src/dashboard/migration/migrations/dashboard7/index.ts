@@ -95,9 +95,8 @@ export const migration7: Migration<Dashboard6.State, Dashboard7.State> = {
     const updateItem = (item: Dashboard7.BoxItem): Dashboard6.BoxItem => {
       if (item.type === 'columns') {
         return {
-          type: 'columns',
+          ...item,
           columns: item.columns.map(column => column.items.map(updateItem)),
-          params: {},
         }
       } else {
         return item

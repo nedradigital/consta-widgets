@@ -60,7 +60,7 @@ export const migration3: Migration<Dashboard2.State, Dashboard3.State> = {
     const updateItem = (item: Dashboard2.BoxItem): Dashboard3.BoxItem => {
       if (item.type === 'columns') {
         return {
-          type: 'columns',
+          ...item,
           columns: item.columns.map(column => column.map(updateItem)),
           params: {},
         }
