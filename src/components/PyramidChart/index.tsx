@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import { isNotNil } from '@gaz/utils/lib/type-guards'
 import classnames from 'classnames'
+
+import { useBaseSize } from '@/contexts/baseSize'
 
 import css from './index.css'
 
@@ -21,9 +22,9 @@ type Props = {
   fontSize?: Size
 }
 
-const getPyramidWidth = () => getCalculatedSize(312)
-const getSectionHeight = () => getCalculatedSize(45)
-const getSectionTextWidth = () => getCalculatedSize(300)
+const PYRAMID_WIDTH = 312
+const SECTION_HEIGHT = 45
+const SECTION_TEXT_WIDTH = 300
 
 const getLineCoords = (
   countLines: number,
@@ -72,9 +73,12 @@ export const PyramidChart: React.FC<Props> = ({
   constraint = true,
   fontSize = 's',
 }) => {
-  const pyramidWidth = getPyramidWidth()
-  const sectionHeight = getSectionHeight()
-  const sectionTextWidth = getSectionTextWidth()
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
+
+  const pyramidWidth = getCalculatedSizeWithBaseSize(PYRAMID_WIDTH)
+  const sectionHeight = getCalculatedSizeWithBaseSize(SECTION_HEIGHT)
+  const sectionTextWidth = getCalculatedSizeWithBaseSize(SECTION_TEXT_WIDTH)
+
   const containerHeightResponsive = data.length * sectionHeight
   const pyramidWidthHalf = pyramidWidth / 2
   const tableWidthResponsive = constraint ? pyramidWidth : '100%'

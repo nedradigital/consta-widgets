@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import * as d3 from 'd3'
 
+import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { TooltipComponent } from '../Tooltip'
@@ -55,9 +55,9 @@ type Props = {
   formatValue?: FormatValue
 }
 
-export const getColumnSize = () => getCalculatedSize(12)
-export const getColumnPadding = () => getCalculatedSize(4)
-export const getComplexTooltipMaxSize = () => getCalculatedSize(24)
+export const COLUMN_SIZE = 12
+const COLUMN_PADDING = 4
+const COMPLEX_TOOLTIP_MAX_SIZE = 24
 
 export const getItemsForTooltip = (
   items: readonly ColumnWithGeometry[],
@@ -144,9 +144,11 @@ export const MultiBar: React.FC<Props> = ({
   parentRef,
   formatValue,
 }) => {
-  const columnDefaultSize = getColumnSize()
-  const columnPadding = getColumnPadding()
-  const complexTooltipMaxSize = getComplexTooltipMaxSize()
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
+
+  const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_SIZE)
+  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
+  const complexTooltipMaxSize = getCalculatedSizeWithBaseSize(COMPLEX_TOOLTIP_MAX_SIZE)
   const barSize = (columnDefaultSize + columnPadding) * uniqueInnerColumns.length
 
   const groupSecondaryScale = d3

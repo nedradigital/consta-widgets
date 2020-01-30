@@ -1,5 +1,6 @@
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
+
+import { useBaseSize } from '@/contexts'
 
 import css from './index.css'
 
@@ -24,19 +25,12 @@ type Props = {
   shouldCropText?: boolean
 }
 
+const DOT_SIZE = 12
+
 const sizeClass = {
   xs: css.sizeXS,
   s: css.sizeS,
   m: css.sizeM,
-}
-
-const getDotStyle = (): React.CSSProperties => {
-  const size = getCalculatedSize(12)
-
-  return {
-    width: size,
-    height: size,
-  }
 }
 
 export const LegendItem: React.FC<Props> = ({
@@ -49,8 +43,11 @@ export const LegendItem: React.FC<Props> = ({
   className,
   shouldCropText,
 }) => {
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
+
   const positionClass = type === 'dot' ? css.left : css[position]
-  const dotStyle = type === 'dot' ? getDotStyle() : {}
+  const dotSize = getCalculatedSizeWithBaseSize(DOT_SIZE)
+  const dotStyle = type === 'dot' ? { width: dotSize, height: dotSize } : {}
 
   return (
     <div className={classnames(css.main, sizeClass[fontSize], positionClass, className)}>
