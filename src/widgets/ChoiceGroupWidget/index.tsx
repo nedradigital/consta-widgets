@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { ChoiceGroup } from '@gpn-design/uikit'
 
+import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
 import { themeColorDark } from '@/utils/theme'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -10,44 +11,63 @@ const dataType = DataType.ChoiceGroup
 type Data = DataMap[typeof dataType]
 
 const widgetId = '430768bb-be37-42b0-a1e7-57c6c1bebcea'
+const sizes = ['xs', 's', 'm', 'l'] as const
+type Size = typeof sizes[number]
 
 const forms = ['default', 'round', 'brick'] as const
 type Form = typeof forms[number]
 
 type Params = {
-  size: any
+  size: Size
   form?: Form
-  isMultiple: boolean
 }
 
 export const defaultParams: Params = {
   size: 's',
   form: 'default',
-  isMultiple: false,
 }
 
-type Choice = string | number
+export type Choice = string | number
+export type ChoiceItems = ReadonlyArray<{ label: string; value: Choice }>
+export type ChoiceGroupData = {
+  disabled: boolean
+  items: ChoiceItems
+} & (SingleChoice | MultipleChoice)
+
+type SingleChoice = {
+  isMultiple: false
+  value: Choice | null
+  onChange: (newValue: Choice | null) => void
+}
+type MultipleChoice = {
+  isMultiple: true
+  value: readonly Choice[]
+  onChange: (newValue: readonly Choice[]) => void
+}
 
 export const ChoiceGroupWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { size, isMultiple, form },
+  params: { size, form },
 }) => {
-  const [singleValue, setSingleValue] = useState<Choice | null>()
-  const [multipleValue, setMultipleValue] = useState<readonly Choice[]>([])
-
-  const valueProps = isMultiple
-    ? // tslint:disable-next-line readonly-array
-      ({ isMultiple: true, value: multipleValue as Choice[], onChange: setMultipleValue } as const)
-    : ({ isMultiple: false, value: singleValue, onChange: setSingleValue } as const)
-
+  const restProps = data.isMultiple
+    ? {
+        isMultiple: true as const,
+        value: [...data.value],
+        onChange: data.onChange,
+      }
+    : {
+        isMultiple: false as const,
+        value: data.value,
+        onChange: data.onChange,
+      }
   return (
     <ChoiceGroup
       className={themeColorDark}
-      {...valueProps}
       wpSize={size}
       items={[...data.items]}
       disabled={data && data.disabled}
       form={form}
+      {...restProps}
     />
   )
 }
@@ -58,4 +78,22 @@ export const ChoiceGroupWidget = createWidget<Data, Params>({
   defaultParams,
   dataType: DataType.ChoiceGroup,
   Content: ChoiceGroupWidgetContent,
+  renderSettings(params, onChangeParam) {
+    return (
+      <>
+        <WidgetSettingsSelect
+          name="Размер"
+          value={params.size}
+          values={sizes.map(i => ({ value: i, name: i }))}
+          onChange={value => onChangeParam('size', value)}
+        />
+        <WidgetSettingsSelect
+          name="Форма"
+          value={params.form}
+          values={forms.map(i => ({ value: i, name: i }))}
+          onChange={value => onChangeParam('form', value)}
+        />
+      </>
+    )
+  },
 })

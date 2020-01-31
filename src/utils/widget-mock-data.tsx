@@ -824,6 +824,9 @@ const mockData: DataMap = {
         value: 'day',
       },
     ],
+    onChange: () => null,
+    isMultiple: false,
+    value: 'month',
     disabled: false,
   },
   [DataType.Checkbox]: {

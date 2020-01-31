@@ -19,6 +19,7 @@ import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { Dashboard7 } from '@/dashboard/migration/migrations/dashboard7'
 import { Status } from '@/ui/Badge'
 import { Filters, TableColumn } from '@/utils/table'
+import { ChoiceGroupData } from '@/widgets/ChoiceGroupWidget'
 
 import Dashboard = Dashboard7
 
@@ -144,10 +145,7 @@ export type DataMap = {
     iconOnly?: boolean
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   }
-  [DataType.ChoiceGroup]: {
-    disabled: boolean
-    items: any
-  }
+  [DataType.ChoiceGroup]: ChoiceGroupData
   [DataType.Checkbox]: {
     content: React.ReactNode
     value?: boolean
