@@ -1,13 +1,13 @@
 import React, { useRef } from 'react'
 import { useUID } from 'react-uid'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 
 import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
+import { useBaseSize } from '@/contexts'
 import { ColorGroups } from '@/dashboard/types'
 import { getEveryN } from '@/utils/array'
 import { getTicks } from '@/utils/ticks'
@@ -81,9 +81,6 @@ const getDomain = (items: readonly Data[]): NumberRange => {
   return [0, maxNumber] as NumberRange
 }
 
-const getPadding = (orientation: Orientation, showValues?: boolean) =>
-  orientation === 'horizontal' && showValues ? getCalculatedSize(50) : 0
-
 export const BarChart: React.FC<Props> = ({
   data = [],
   orientation,
@@ -97,6 +94,7 @@ export const BarChart: React.FC<Props> = ({
 }) => {
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const clipId = `barchart_clipPath_${useUID()}`
   const isHorizontal = orientation === 'horizontal'
@@ -106,7 +104,7 @@ export const BarChart: React.FC<Props> = ({
   const isNegative = Math.min(...valuesDomains) < 0
 
   const paddingCount = isNegative ? 2 : 1
-  const padding = getPadding(orientation, showValues)
+  const padding = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
   const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
   const svgHeight = height ? Math.round(height) : 0
 

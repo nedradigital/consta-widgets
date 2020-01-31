@@ -1,9 +1,9 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
+import { useBaseSize } from '@/contexts'
 import { ColorGroups } from '@/dashboard/types'
 import { FilterTooltip } from '@/ui/FilterTooltip'
 import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
@@ -137,7 +137,7 @@ const getCoordsByDate = (ms: number, monthWidth: number, startDate: number) => {
   return startPrecent + (monthWidth / countDaysInMonth) * (day - 1)
 }
 
-const getFactBlockSize = () => getCalculatedSize(6)
+const FACT_BLOCK_SIZE = 6
 
 const renderItem = ({
   key,
@@ -217,6 +217,7 @@ const TableWithMonthTitles = Table as React.FC<TableProps<MonthItem>>
 export const Roadmap: React.FC<Props> = props => {
   const { currentDay, data, colorGroups, titles, startDate, endDate, filters } = props
 
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const [shadow, changeShadowMode] = useState(false)
   const [monthWidth, changeMonthWidth] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
@@ -239,6 +240,7 @@ export const Roadmap: React.FC<Props> = props => {
     removeOneSelectedFilter,
     removeAllSelectedFilters,
   } = useSelectedFilters(filters)
+  const factBlockSize = getCalculatedSizeWithBaseSize(FACT_BLOCK_SIZE)
 
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
@@ -251,20 +253,23 @@ export const Roadmap: React.FC<Props> = props => {
     }
   }, [])
 
-  const handleClick = useCallback((event, index, groupName) => {
-    if (ref.current) {
-      const elementRect = event.target.getBoundingClientRect()
-      const tableRect = ref.current.getBoundingClientRect()
+  const handleClick = useCallback(
+    (event, index, groupName) => {
+      if (ref.current) {
+        const elementRect = event.target.getBoundingClientRect()
+        const tableRect = ref.current.getBoundingClientRect()
 
-      changeActiveLine({
-        index,
-        groupName,
-        left: Math.max(tableRect.left, elementRect.left),
-        top: elementRect.top + getFactBlockSize() + window.scrollY,
-        bottom: window.innerHeight - elementRect.top - window.scrollY,
-      })
-    }
-  }, [])
+        changeActiveLine({
+          index,
+          groupName,
+          left: Math.max(tableRect.left, elementRect.left),
+          top: elementRect.top + factBlockSize + window.scrollY,
+          bottom: window.innerHeight - elementRect.top - window.scrollY,
+        })
+      }
+    },
+    [factBlockSize]
+  )
 
   const handleFilterTogglerClick = (id: string) => () => {
     setVisibleFilter(visibleFilter === id ? null : id)

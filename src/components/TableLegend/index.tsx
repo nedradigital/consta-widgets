@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react'
 
 import { updateAt } from '@gaz/utils/lib/array'
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
 
 import { LegendItem, Type as TypeLegend, types as defaultTypeLegend } from '@/components/LegendItem'
+import { useBaseSize } from '@/contexts'
 import { ColorGroups } from '@/dashboard/types'
 import { FilterTooltip } from '@/ui/FilterTooltip'
 import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
@@ -70,6 +70,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
   const { height: tableHeight } = useComponentSize(tableRef)
   const [accessor, setAccessor] = useState('')
   const [isOrderByDesc, setOrderByDesc] = useState(false)
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const [visibleFilter, setVisibleFilter] = useState<string | null>(null)
   const {
@@ -139,7 +140,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     const IconSort =
       (isSortingActive && (isOrderByDesc ? IconSortDescSvg : IconSortAscSvg)) || IconSortSvg
     const handleColumnResize = (delta: number) => {
-      const columnMinWidth = Math.min(getCalculatedSize(150), initialColumnWidths[idx])
+      const columnMinWidth = Math.min(getCalculatedSizeWithBaseSize(150), initialColumnWidths[idx])
       const newColumnWidth = Math.max(columnMinWidth, columnWidths[idx] + delta)
 
       updateColumnWidth(idx, newColumnWidth)

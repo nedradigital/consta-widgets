@@ -1,14 +1,16 @@
 import * as React from 'react'
 
+import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
+import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { UniqueInnerColumns } from '../..'
-import { ColumnWithGeometry, GeometryParams, getColumnSize, MouseActionParams } from '../MultiBar'
+import { COLUMN_SIZE, ColumnWithGeometry, GeometryParams, MouseActionParams } from '../MultiBar'
 
-import * as css from './index.css'
+import css from './index.css'
 
 type Props = {
   barColumn: MouseActionParams
@@ -29,9 +31,10 @@ const getOffsetPosition = (parameters: {
   innerTranslate: number
   svgRef: React.RefObject<SVGGElement>
   isVertical: boolean
+  baseSize: number
   params?: GeometryParams
 }) => {
-  const { innerTranslate, svgRef, isVertical, params } = parameters
+  const { innerTranslate, svgRef, isVertical, baseSize, params } = parameters
 
   if (!svgRef.current || !params) {
     return defaultPosition
@@ -39,7 +42,7 @@ const getOffsetPosition = (parameters: {
 
   const { x, y, columnSize } = params
   const { left, top } = svgRef.current.getBoundingClientRect()
-  const columnDefaultSizeHalf = getColumnSize() / 2
+  const columnDefaultSizeHalf = getCalculatedSize(COLUMN_SIZE, baseSize) / 2
   const columnSizeHalf = columnSize / 2
 
   const xPosition = isVertical ? x + innerTranslate + columnDefaultSizeHalf : x + columnSizeHalf
@@ -96,10 +99,17 @@ export const TooltipComponent: React.FC<Props> = ({
   color,
   formatValue = String,
 }) => {
+  const { baseSize } = useBaseSize()
   const { columnName, params, values, innerTranslate } = barColumn
 
   const direction = getDirection(uniqueInnerColumns, columnName, isVertical)
-  const position = getOffsetPosition({ innerTranslate, svgRef: svgParentRef, isVertical, params })
+  const position = getOffsetPosition({
+    innerTranslate,
+    svgRef: svgParentRef,
+    isVertical,
+    baseSize,
+    params,
+  })
   const layout = getLayout({ values, isVertical, color, formatValue })
 
   return (

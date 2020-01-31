@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useUID } from 'react-uid'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
+import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
@@ -137,12 +137,13 @@ export const RadarChart: React.FC<Props> = ({
 
   const [activeAxis, setActiveAxis] = React.useState<Axis>()
 
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const ref = React.useRef<HTMLDivElement>(null)
   const svgWrapperRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
-  const axisNameWidth = getCalculatedSize(130)
-  const lineHeightForCalculate = getCalculatedSize(20)
-  const axisNameOffset = getCalculatedSize(15)
+  const axisNameWidth = getCalculatedSizeWithBaseSize(130)
+  const lineHeightForCalculate = getCalculatedSizeWithBaseSize(20)
+  const axisNameOffset = getCalculatedSizeWithBaseSize(15)
 
   // Вписываем радар в квадрат, оставляя по бокам место под надписи
   const size = Math.min(
@@ -151,8 +152,8 @@ export const RadarChart: React.FC<Props> = ({
   )
 
   const isBigSize = size > 200
-  const axisNameLineHeight = getCalculatedSize(isBigSize ? 20 : 13)
-  const axisNameFontSize = getCalculatedSize(isBigSize ? 16 : 11)
+  const axisNameLineHeight = getCalculatedSizeWithBaseSize(isBigSize ? 20 : 13)
+  const axisNameFontSize = getCalculatedSizeWithBaseSize(isBigSize ? 16 : 11)
   const gradientId = `radarchart_gradient_${useUID()}`
 
   const axesNames = Object.keys(axesLabels)

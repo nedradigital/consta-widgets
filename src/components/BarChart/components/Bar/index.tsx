@@ -1,7 +1,7 @@
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
+import { useBaseSize } from '@/contexts'
 import { ColorGroups } from '@/dashboard/types'
 
 import { Data, getGroupScale, Orientation, Size } from '../../'
@@ -45,14 +45,11 @@ const getBarClassName = ({
 
 const getTransformTranslate = (x: number, y: number) => `translate(${x},${y})`
 
-const getColumnWidth = (size: Size) => {
-  if (size === 's') {
-    return getCalculatedSize(4)
-  }
-
-  return getCalculatedSize(12)
+const COLUMN_WIDTHS: Record<Size, number> = {
+  s: 4,
+  m: 12,
 }
-const getColumnPadding = () => getCalculatedSize(4)
+const COLUMN_PADDING = 4
 
 export const Bar: React.FC<Props> = ({
   data,
@@ -64,10 +61,11 @@ export const Bar: React.FC<Props> = ({
   size,
   showValues,
 }) => {
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const { label, values } = data
   const valuesFiltered = values.filter((v): v is ValueFiltered => v.value !== undefined)
-  const columnWidth = getColumnWidth(size)
-  const columnPadding = getColumnPadding()
+  const columnWidth = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
+  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
   const halfColumnPadding = columnPadding / 2
   const isHorizontal = orientation === 'horizontal'
 

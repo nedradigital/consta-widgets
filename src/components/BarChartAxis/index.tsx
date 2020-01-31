@@ -1,9 +1,9 @@
 import { useRef } from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
 import { Position, Scaler, Ticks } from '@/components/Ticks'
+import { useBaseSize } from '@/contexts'
 import { FormatValue } from '@/dashboard/types'
 
 import css from './index.css'
@@ -39,7 +39,7 @@ const defaultShow: ShowPositions = {
   left: true,
 }
 
-const getPadding = () => getCalculatedSize(6)
+const PADDING = 6
 
 const renderUnit = (className: string, unit: string) => (
   <div className={classnames(css.unit, className)}>{unit}</div>
@@ -63,6 +63,7 @@ export const Axis: React.FC<Props> = ({
   formatValue,
 }) => {
   const mainRef = useRef<HTMLDivElement>(null)
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const getStyles = (position: Position) => {
     return position === 'top' || position === 'bottom' ? horizontalStyles : verticalStyles
@@ -105,7 +106,7 @@ export const Axis: React.FC<Props> = ({
   const showUnitBottom =
     unitPosition !== 'none' && (unitPosition === 'bottom' || unitPosition === 'left-and-bottom')
 
-  const padding = getPadding()
+  const padding = getCalculatedSizeWithBaseSize(PADDING)
 
   return (
     <div

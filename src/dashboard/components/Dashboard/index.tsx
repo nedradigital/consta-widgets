@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useRef } from 'react'
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout'
 
@@ -6,6 +6,7 @@ import { updateAt } from '@gaz/utils/lib/array'
 import { updateBaseSize } from '@gaz/utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 
+import { BaseSizeContext } from '@/contexts/baseSize'
 import { Box } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
 import { BoxItem, DashboardState, Data, Dataset } from '@/dashboard/types'
@@ -55,6 +56,7 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
   const { getUniqueName, removeName } = useUniqueNameGenerator(boxes.map(box => box.i!))
 
   const [dropPromise, setDropPromise] = React.useState(Promise.resolve({ x: 0, y: 0 }))
+  const [fontSize, setFontSize] = useState(baseFontSize)
 
   const [, dropRef] = useDrop({
     accept: ItemTypes.BOX,
@@ -125,59 +127,64 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
 
   useLayoutEffect(() => {
     if (dimensionRef.current) {
-      updateBaseSize(baseFontSize * scale, dimensionRef.current)
+      const size = baseFontSize * scale
+
+      updateBaseSize(size, dimensionRef.current)
+      setFontSize(size)
     }
   }, [width, height, scale, dimensionRef, baseFontSize])
 
   const rowHeight = (height - padding[1] * 2 - margin[1] * (rowsCount - 1)) / rowsCount
 
   return (
-    <div
-      ref={el => {
-        if (el) {
-          dimensionRef.current = el
-          dropRef(el)
-        }
-      }}
-      className={css.dashboard}
-    >
-      <GridLayout
-        autoSize={false}
-        margin={margin as /* tslint:disable-line:readonly-array */ [number, number]}
-        containerPadding={padding as /* tslint:disable-line:readonly-array */ [number, number]}
-        cols={cols}
-        rowHeight={rowHeight}
-        className="layout"
-        measureBeforeMount
-        compactType={null}
-        preventCollision
-        isDroppable={!viewMode}
-        isDraggable={!viewMode}
-        isResizable={!viewMode}
-        onDrop={onDrop}
-        onResizeStop={onResizeStop}
-        onDragStop={updateBox}
+    <BaseSizeContext.Provider value={fontSize}>
+      <div
+        ref={el => {
+          if (el) {
+            dimensionRef.current = el
+            dropRef(el)
+          }
+        }}
+        className={css.dashboard}
       >
-        {boxes.map(box => (
-          <div key={box.i} data-grid={{ x: box.x, y: box.y, w: box.w, h: box.h }}>
-            <Box
-              data={data}
-              viewMode={viewMode}
-              onChange={items => changeBox(box.i!, items)}
-              items={config[box.i!]}
-              datasets={datasets}
-            />
-            {!viewMode ? (
-              <button
-                className={css.removeBox}
-                type="button"
-                onClick={() => removeBox(box.i!)}
-                children="⚔"
+        <GridLayout
+          autoSize={false}
+          margin={margin as /* tslint:disable-line:readonly-array */ [number, number]}
+          containerPadding={padding as /* tslint:disable-line:readonly-array */ [number, number]}
+          cols={cols}
+          rowHeight={rowHeight}
+          className="layout"
+          measureBeforeMount
+          compactType={null}
+          preventCollision
+          isDroppable={!viewMode}
+          isDraggable={!viewMode}
+          isResizable={!viewMode}
+          onDrop={onDrop}
+          onResizeStop={onResizeStop}
+          onDragStop={updateBox}
+        >
+          {boxes.map(box => (
+            <div key={box.i} data-grid={{ x: box.x, y: box.y, w: box.w, h: box.h }}>
+              <Box
+                data={data}
+                viewMode={viewMode}
+                onChange={items => changeBox(box.i!, items)}
+                items={config[box.i!]}
+                datasets={datasets}
               />
-            ) : null}
-          </div>
-        ))}
-      </GridLayout>
-    </div>
+              {!viewMode ? (
+                <button
+                  className={css.removeBox}
+                  type="button"
+                  onClick={() => removeBox(box.i!)}
+                  children="⚔"
+                />
+              ) : null}
+            </div>
+          ))}
+        </GridLayout>
+      </div>
+    </BaseSizeContext.Provider>
   )
 }
