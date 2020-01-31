@@ -99,6 +99,7 @@ export type DataMap = {
     formatValueForTooltipTitle?: FormatValue
     unit?: string
     threshold?: Threshold
+    onClickHoverLine?: (value: number) => void
   } & WithColorGroups
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: { text: string; tooltip?: React.ReactNode; onClick?: Function }

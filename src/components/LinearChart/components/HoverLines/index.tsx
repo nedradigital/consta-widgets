@@ -17,8 +17,9 @@ type Props = {
   isHorizontal: boolean
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  onChangeHoveredMainValue: Function
   hoveredMainValue: HoveredMainValue
+  onChangeHoveredMainValue: Function
+  onClickLine?: (value: number) => void
 }
 
 type LineProps = {
@@ -26,6 +27,7 @@ type LineProps = {
   lineClassName: string | boolean
   value?: number
   onHover: Function
+  onClick?: () => void
 }
 
 type Position = {
@@ -35,7 +37,7 @@ type Position = {
   y2: number
 }
 
-const HoverLine: React.FC<LineProps> = ({ position, lineClassName, value, onHover }) => {
+const HoverLine: React.FC<LineProps> = ({ position, lineClassName, value, onHover, onClick }) => {
   const { x1, y1, x2, y2 } = position
 
   return (
@@ -47,6 +49,7 @@ const HoverLine: React.FC<LineProps> = ({ position, lineClassName, value, onHove
       className={classnames(css.hoverLine, lineClassName)}
       onMouseLeave={() => onHover(undefined)}
       onMouseEnter={() => onHover(value)}
+      onClick={onClick}
     />
   )
 }
@@ -60,6 +63,7 @@ export const HoverLines: React.FC<Props> = ({
   isHorizontal,
   hoveredMainValue,
   onChangeHoveredMainValue,
+  onClickLine,
 }) => {
   const mainValueKey = isHorizontal ? 'x' : 'y'
   const lineValues = _.uniqBy(_.flatten(lines.map(l => l.values)), v => v[mainValueKey])
@@ -92,6 +96,7 @@ export const HoverLines: React.FC<Props> = ({
             position,
             value: mainValue,
             onHover: onChangeHoveredMainValue,
+            onClick: onClickLine ? () => onClickLine(mainValue) : undefined,
           }
 
           return (
