@@ -52,13 +52,19 @@ export const Columns: React.FC<Props> = ({ datasets, viewMode, onChange, data, c
     <div className={classnames(css.main, viewMode && css.viewMode)}>
       {!viewMode ? (
         <>
-          <button type="button" onClick={() => addColumn('start')} className={css.plus}>
+          <button
+            type="button"
+            onClick={() => addColumn('start')}
+            className={classnames(css.button, css.plus)}
+            title="Добавить колонку в начале"
+          >
             ➕
           </button>
           <button
             type="button"
             onClick={() => addColumn('end')}
-            className={classnames(css.plus, css.right)}
+            className={classnames(css.button, css.plus, css.right)}
+            title="Добавить колонку в конце"
           >
             ➕
           </button>
@@ -81,7 +87,8 @@ export const Columns: React.FC<Props> = ({ datasets, viewMode, onChange, data, c
               type="button"
               onClick={() => removeColumn(index)}
               children="☠"
-              className={css.remove}
+              className={classnames(css.button, css.remove)}
+              title="Удалить колонку"
             />
           ) : null}
         </div>

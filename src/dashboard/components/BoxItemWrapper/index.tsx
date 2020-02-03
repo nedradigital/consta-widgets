@@ -20,6 +20,7 @@ export const sizeValues: { [key in BoxItemMarginSize]: number } = {
 }
 
 type Props = {
+  debugName: string
   viewMode: boolean
   lastElement: boolean
   isEditingSettings: boolean
@@ -44,6 +45,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
   isEditingSettings,
   isCustomItem,
   params,
+  debugName,
 }) => {
   const ref = React.createRef<HTMLDivElement>()
   const [{ left, top }, setPosition] = useState({ left: 0, top: 0 })
@@ -87,6 +89,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
               type="button"
               onClick={() => onChangePosition(index, -1)}
               children="⬆️"
+              title="Переместить виджет выше"
             />
           ) : null}
           {!lastElement ? (
@@ -95,6 +98,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
               type="button"
               onClick={() => onChangePosition(index, 1)}
               children="⬇️"
+              title="Переместить виджет ниже"
             />
           ) : null}
           <div className={css.editButtons}>
@@ -103,12 +107,14 @@ export const BoxItemWrapper: React.FC<Props> = ({
               type="button"
               children="💀"
               onClick={() => onRemoveItem(index)}
+              title={`Удалить виджет "${debugName}"`}
             />
             <button
               className={css.button}
               type="button"
               children="✏️"
               onClick={() => onOpenSettings(index)}
+              title={`Настройки виджета "${debugName}"`}
             />
           </div>
         </>

@@ -211,6 +211,7 @@ export const Box: React.FC<Props> = ({
             onChangePosition={changePosition}
             onRemoveItem={removeItem}
             onOpenSettings={openSettings}
+            debugName={isWidget(item) ? item.debugName : 'Колонки'}
           >
             {component}
           </BoxItemWrapper>
