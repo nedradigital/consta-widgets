@@ -121,6 +121,16 @@ storiesOf('components/LinearChart', module)
       />
     )
   })
+  .add('с обработкой клика', () => {
+    return (
+      <LinearChart
+        {...getCommonProps()}
+        colorGroups={object('colorGroups', colorGroups)}
+        isHorizontal
+        onClickHoverLine={value => alert(new Date(value))}
+      />
+    )
+  })
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())

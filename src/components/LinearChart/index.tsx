@@ -61,6 +61,7 @@ type Props = {
   formatValueForTooltipTitle?: FormatValue
   colorGroups: ColorGroups
   unit?: string
+  onClickHoverLine?: (value: number) => void
 }
 
 export type HoveredMainValue = number | undefined
@@ -177,6 +178,7 @@ export class LinearChart extends React.Component<Props, State> {
         colorGroups,
         unit,
         threshold,
+        onClickHoverLine,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
     } = this
@@ -266,6 +268,7 @@ export class LinearChart extends React.Component<Props, State> {
             isHorizontal={isHorizontal}
             hoveredMainValue={hoveredMainValue}
             onChangeHoveredMainValue={this.setHoveredMainValue}
+            onClickLine={onClickHoverLine}
           />
 
           {threshold && (
