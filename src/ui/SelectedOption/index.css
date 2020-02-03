@@ -16,9 +16,13 @@
   font-size: 12px;
   line-height: 12px;
 
+  overflow: hidden;
+
   margin-top: 0;
   margin-bottom: 0;
   padding-right: 9px;
+
+  text-overflow: ellipsis;
 
   opacity: 0.7;
   color: rgba(246, 251, 253, 0.7);

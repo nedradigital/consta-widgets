@@ -23,6 +23,24 @@ const roadmapFilters = [
     field: 'firstColumn',
   },
   {
+    id: 'mountingPlaceNumber3',
+    name: 'Место установки 3',
+    filterer: (value: string) => value === '3. Место установки 3',
+    field: 'firstColumn',
+  },
+  {
+    id: 'mountingPlaceMounting',
+    name: 'Место установки установок',
+    filterer: (value: string) => value === '4. Место установки установок',
+    field: 'firstColumn',
+  },
+  {
+    id: 'oceanDrillingStation',
+    name: 'Станция бурения в океане',
+    filterer: (value: string) => value === '5. Станция бурения в океане',
+    field: 'firstColumn',
+  },
+  {
     id: 'mupn1500',
     name: 'МУПН 1500',
     filterer: (value: string) => value === 'МУПН 1500',
@@ -32,6 +50,24 @@ const roadmapFilters = [
     id: 'zhq-342-23',
     name: 'ZHQ-342-23',
     filterer: (value: string) => value === 'ZHQ-342-23',
+    field: 'secondColumn',
+  },
+  {
+    id: 'mupn1300',
+    name: 'МУПН 1300',
+    filterer: (value: string) => value === 'МУПН 1300',
+    field: 'secondColumn',
+  },
+  {
+    id: 'mupn1600',
+    name: 'МУПН 1600',
+    filterer: (value: string) => value === 'МУПН 1600',
+    field: 'secondColumn',
+  },
+  {
+    id: 'mupn1700',
+    name: 'МУПН 1700',
+    filterer: (value: string) => value === 'МУПН 1700',
     field: 'secondColumn',
   },
 ] as Filters
