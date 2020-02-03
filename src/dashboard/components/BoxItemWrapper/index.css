@@ -3,6 +3,10 @@
 :--main {
   position: relative;
 
+  &.isViewMode {
+    min-height: 30px;
+  }
+
   &:not(.isViewMode) {
     &:hover,
     &.isEditingSettings {
@@ -21,7 +25,9 @@
 
   @nest :--main.isCustomItem > & {
     top: 0;
+    right: auto;
     bottom: auto;
+    left: 0;
   }
 }
 
@@ -32,20 +38,22 @@
 
   margin-left: 16px;
 
+  cursor: pointer;
+
   @nest :--main:not(:hover) & {
     display: none;
   }
 
   &::before {
     position: absolute;
-    top: -8px;
-    right: -8px;
-    bottom: -8px;
-    left: -8px;
+    top: -5px;
+    right: -5px;
+    bottom: -5px;
+    left: -5px;
 
     content: '';
 
-    border-radius: 3px;
+    border-radius: 2px;
   }
 
   &:hover::before {

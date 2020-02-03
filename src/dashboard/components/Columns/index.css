@@ -1,5 +1,27 @@
+.button {
+  font-size: 12px;
+
+  cursor: pointer;
+
+  &::before {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+
+    content: '';
+
+    border-radius: 2px;
+  }
+
+  &:hover::before {
+    background: var(--bg-color-white);
+  }
+}
+
 .plus {
-  font-size: 20px;
+  font-size: 16px;
 
   position: absolute;
   z-index: 2;
@@ -59,11 +81,9 @@
 }
 
 .remove {
-  font-size: 20px;
-
   position: absolute;
   top: 0;
-  right: 0;
+  right: 50%;
 
-  transform: translateY(-50%) translateX(-100%);
+  transform: translateY(-50%) translateX(100%);
 }
