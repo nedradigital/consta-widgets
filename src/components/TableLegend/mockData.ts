@@ -14,6 +14,18 @@ export const filters = [
     field: 'year',
   },
   {
+    id: 'inRangeOf90s',
+    name: 'Датируемые 90-ми годами',
+    filterer: (value: number | string) => Number(value) >= 1990 && Number(value) <= 1999,
+    field: 'year',
+  },
+  {
+    id: 'equalOrOlder80s',
+    name: 'Датируемые 80-ми годами и старше',
+    filterer: (value: number | string) => Number(value) <= 1989,
+    field: 'year',
+  },
+  {
     id: 'oil',
     name: 'Нефтяное',
     filterer: (value: string) => value === 'Нефтяное',
@@ -30,6 +42,36 @@ export const filters = [
     name: 'Комбинированное',
     filterer: (value: string) => value === 'Комбинированное',
     field: 'type',
+  },
+  {
+    id: 'priobskoye',
+    name: 'Приобское',
+    filterer: (value: string) => value === 'Приобское',
+    field: 'field',
+  },
+  {
+    id: 'urengoyskoye',
+    name: 'Уренгойское газонефтеконденсат­ное',
+    filterer: (value: string) => value === 'Уренгойское газонефтеконденсат­ное',
+    field: 'field',
+  },
+  {
+    id: 'krasnoleninskaya',
+    name: 'Красноленинская группа',
+    filterer: (value: string) => value === 'Красноленинская группа',
+    field: 'field',
+  },
+  {
+    id: 'velikoye',
+    name: 'Великое',
+    filterer: (value: string) => value === 'Великое',
+    field: 'field',
+  },
+  {
+    id: 'rusGasoil',
+    name: 'Русское газонефтяное',
+    filterer: (value: string) => value === 'Русское газонефтяное',
+    field: 'field',
   },
 ] as Filters
 

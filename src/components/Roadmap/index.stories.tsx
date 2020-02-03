@@ -105,9 +105,21 @@ const roadmapData = {
       field: 'firstColumn',
     },
     {
+      id: 'mountingPlaceNumber2',
+      name: 'Место установки 2',
+      filterer: (value: string) => value === '2. Место установки 2',
+      field: 'firstColumn',
+    },
+    {
       id: 'mupn1500',
       name: 'МУПН 1500',
       filterer: (value: string) => value === 'МУПН 1500',
+      field: 'secondColumn',
+    },
+    {
+      id: 'zhq-342-23',
+      name: 'ZHQ-342-23',
+      filterer: (value: string) => value === 'ZHQ-342-23',
       field: 'secondColumn',
     },
   ],

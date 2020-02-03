@@ -54,6 +54,7 @@
 }
 
 .selectedOptionWrapper {
+  max-width: 100%;
   padding-top: 2px;
   padding-bottom: 2px;
 
@@ -100,7 +101,6 @@
 
 .option {
   width: 100%;
-  max-height: var(--option-height);
   padding: 7px 13px 5px;
 
   &.isSelected {
