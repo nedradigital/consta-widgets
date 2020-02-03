@@ -73,6 +73,102 @@ export const filters = [
     filterer: (value: string) => value === 'Русское газонефтяное',
     field: 'field',
   },
+  {
+    id: 'estimatedReservesLessThan1000',
+    name: 'Меньше 1000',
+    filterer: (value: number | string) => Number(value) < 1000,
+    field: 'estimatedReserves',
+  },
+  {
+    id: 'estimatedReservesFrom1000To5000',
+    name: 'От 1000 (вкл.) до 5000 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 1000 && Number(value) < 5000,
+    field: 'estimatedReserves',
+  },
+  {
+    id: 'estimatedReservesFrom5000To8000',
+    name: 'От 5000 (вкл.) до 8000 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 5000 && Number(value) < 8000,
+    field: 'estimatedReserves',
+  },
+  {
+    id: 'estimatedReserves8000AndMore',
+    name: '8000 и более',
+    filterer: (value: number | string) => Number(value) >= 8000,
+    field: 'estimatedReserves',
+  },
+  {
+    id: 'remainingReservesLessThan1000',
+    name: 'Меньше 1000',
+    filterer: (value: number | string) => Number(value) < 1000,
+    field: 'remainingReserves',
+  },
+  {
+    id: 'remainingReservesFrom1000To5000',
+    name: 'От 1000 (вкл.) до 5000 (не вкл)',
+    filterer: (value: number | string) => Number(value) >= 1000 && Number(value) < 5000,
+    field: 'remainingReserves',
+  },
+  {
+    id: 'remainingReservesFrom5000To8000',
+    name: 'От 5000 (вкл.) до 8000 (не вкл)',
+    filterer: (value: number | string) => Number(value) >= 5000 && Number(value) < 8000,
+    field: 'remainingReserves',
+  },
+  {
+    id: 'remainingReserves8000AndMore',
+    name: '8000 и более',
+    filterer: (value: number | string) => Number(value) >= 8000,
+    field: 'remainingReserves',
+  },
+  {
+    id: 'productionLessThan100',
+    name: 'Меньше 100',
+    filterer: (value: number | string) => Number(value) < 100,
+    field: 'production',
+  },
+  {
+    id: 'productionFrom100To200',
+    name: 'От 100 (вкл.) до 200 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 100 && Number(value) < 200,
+    field: 'production',
+  },
+  {
+    id: 'productionFrom200To300',
+    name: 'От 200 (вкл.) до 300 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 200 && Number(value) < 300,
+    field: 'production',
+  },
+  {
+    id: 'productionMoreThan300',
+    name: '300 и более',
+    filterer: (value: number | string) => Number(value) >= 300,
+    field: 'production',
+  },
+  {
+    id: 'totalLessThan100',
+    name: 'Меньше 100',
+    filterer: (value: number | string) => Number(value) < 100,
+    field: 'total',
+  },
+  {
+    id: 'totalFrom100To200',
+    name: 'От 100 (вкл.) до 200 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 100 && Number(value) < 200,
+    field: 'total',
+  },
+  {
+    id: 'totalFrom200To300',
+    name: 'От 200 (вкл.) до 300 (не вкл.)',
+    filterer: (value: number | string) => Number(value) >= 200 && Number(value) < 300,
+    field: 'total',
+  },
+  {
+    id: 'totalMoreThan300',
+    name: '300 и более',
+    filterer: (value: number | string) => Number(value) >= 300,
+    field: 'total',
+  },
 ] as Filters
 
 export const list = [

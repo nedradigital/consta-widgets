@@ -135,6 +135,45 @@ storiesOf('components/TableLegend', module)
             align: 'center',
           },
         ]),
+        filters: [
+          {
+            id: 'fieldNorthDrill',
+            name: 'Северный бур',
+            filterer: (value: string) => value === 'Северный бур',
+            field: 'field',
+          },
+          {
+            id: 'fieldSouthWell',
+            name: 'Южное месторождение',
+            filterer: (value: string) => value === 'Южное месторождение',
+            field: 'field',
+          },
+          {
+            id: 'fieldWestCrack',
+            name: 'Западный разлом',
+            filterer: (value: string) => value === 'Западный разлом',
+            field: 'field',
+          },
+
+          {
+            id: 'sumLess10',
+            name: 'Менее 10',
+            filterer: (value: number | string) => Number(value) < 10,
+            field: 'sum',
+          },
+          {
+            id: 'sumFrom10To20',
+            name: 'От 10 (вкл.) до 20 (не вкл.)',
+            filterer: (value: number | string) => Number(value) >= 10 && Number(value) < 20,
+            field: 'sum',
+          },
+          {
+            id: 'sum20AndMore',
+            name: '20 и более',
+            filterer: (value: number | string) => Number(value) >= 20,
+            field: 'sum',
+          },
+        ],
       }}
     />
   ))
