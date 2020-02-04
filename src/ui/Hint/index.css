@@ -5,7 +5,7 @@
 
 .hint {
   --arrow-size: calc-size(var(--hint-arrow-size));
-  --hint-bg-color: #fff;
+  --hint-bg-color: rgba(255, 255, 255, 0.9);
 
   font-size: calc-size(12);
   line-height: calc-size(17);
