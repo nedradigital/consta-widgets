@@ -3,6 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
+import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 
 import { Tick } from './components/Legend'
 import { Progress } from './components/Progress'
@@ -20,6 +21,7 @@ export type Data = {
   summary: string | number
   colorGroupName: string
   caption?: string
+  tooltip?: React.ReactNode
 }
 
 type Props = {
@@ -42,9 +44,14 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
         <React.Fragment key={i}>
           <div className={css.cell}>
             {dataItem.caption && (
-              <div className={classnames(css.caption, isCaptionBold && css.isCaptionBold)}>
-                {dataItem.caption}
-              </div>
+              <TextWidget
+                data={{ text: dataItem.caption, tooltip: dataItem.tooltip }}
+                params={{
+                  text: dataItem.caption,
+                  croppedLineCount: 1,
+                  type: isCaptionBold ? 'text3' : 'text2',
+                }}
+              />
             )}
             <Progress data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
           </div>

@@ -664,6 +664,7 @@ const mockData: DataMap = {
         summary: 70,
         colorGroupName: 'first',
         caption: 'Стратегия Ступени + УИД',
+        tooltip: <p>Контент тултипа</p>,
       },
       {
         value: 7000,

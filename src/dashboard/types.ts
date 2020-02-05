@@ -16,12 +16,12 @@ import { Data as RoadmapData } from '@/components/Roadmap'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
-import { Dashboard7 } from '@/dashboard/migration/migrations/dashboard7'
+import { Dashboard8 } from '@/dashboard/migration/migrations/dashboard8'
 import { Status } from '@/ui/Badge'
 import { Filters, TableColumn } from '@/utils/table'
 import { ChoiceGroupData } from '@/widgets/ChoiceGroupWidget'
 
-import Dashboard = Dashboard7
+import Dashboard = Dashboard8
 
 export type MarginSize = Dashboard.MarginSize
 export type Settings = Dashboard.Settings

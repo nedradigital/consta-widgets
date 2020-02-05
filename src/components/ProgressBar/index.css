@@ -36,22 +36,3 @@
 .textCell {
   white-space: nowrap;
 }
-
-.caption {
-  font-size: calc-size(12);
-  line-height: calc-size(12);
-
-  overflow: hidden;
-
-  max-width: 100%;
-
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  opacity: var(--text-opacity);
-  color: var(--text-color);
-
-  &.isCaptionBold {
-    font-weight: bold;
-  }
-}
