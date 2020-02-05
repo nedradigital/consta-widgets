@@ -9,8 +9,6 @@ import { useBaseSize } from '@/contexts'
 import { Direction, Hint } from '@/ui/Hint'
 import { themeColorLight } from '@/utils/theme'
 
-import css from './index.css'
-
 type Props = {
   isVisible: boolean
   direction: Direction
@@ -85,10 +83,14 @@ export const Tooltip: React.FC<Props> = ({
     onClickOutside && onClickOutside(event)
   })
 
+  if (!isVisible) {
+    return null
+  }
+
   return ReactDOM.createPortal(
     <Hint
       ref={ref}
-      className={classnames(themeColorLight, css.tooltip, isVisible && css.open, className)}
+      className={classnames(themeColorLight, className)}
       direction={direction}
       style={{
         ...convertCoordinatesToStyles({ width, height, x, y, direction, triangleSize }),

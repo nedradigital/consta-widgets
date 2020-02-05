@@ -4,7 +4,7 @@ import classnames from 'classnames'
 
 import css from './index.css'
 
-export const sizes = ['3xl', 'xl', 's', 'xs'] as const
+export const sizes = ['3xl', 'xl', 'l', 's', 'xs'] as const
 export type Size = typeof sizes[number]
 
 export type StyleProps = {
@@ -35,6 +35,7 @@ export const Text: React.FC<Props> = ({
       {
         '3xl': css.size3XL,
         xl: css.sizeXL,
+        l: css.sizeL,
         s: css.sizeS,
         xs: css.sizeXS,
       }[size],

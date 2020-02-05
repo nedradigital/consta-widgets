@@ -14,7 +14,7 @@ type Data = DataMap[typeof dataType] | typeof undefined
 
 export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
 
-export const typeNames = ['heading1', 'heading2', 'heading3', 'text1', 'text2'] as const
+export const typeNames = ['heading1', 'heading2', 'heading3', 'heading4', 'text1', 'text2'] as const
 export type TypeNames = typeof typeNames[number]
 
 type Params = {
@@ -47,6 +47,13 @@ const textType: TextType = {
   },
   heading3: {
     text: 'Заголовок 3',
+    props: {
+      size: 'l',
+      bold: true,
+    },
+  },
+  heading4: {
+    text: 'Заголовок 4',
     props: {
       size: 's',
       bold: true,

@@ -4,9 +4,14 @@
   width: 100%;
   height: 100%;
 
-  &.sizeS {
+  &.sizeXS {
     font-size: calc-size(12);
     line-height: calc-size(17);
+  }
+
+  &.sizeS {
+    font-size: calc-size(14);
+    line-height: calc-size(20);
   }
 
   &.sizeM {
