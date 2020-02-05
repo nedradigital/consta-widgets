@@ -12,7 +12,7 @@ export type Data = {
   value: string | number | null | undefined
 }
 
-export const sizes = ['s', 'm'] as const
+export const sizes = ['xs', 's', 'm'] as const
 export type Size = typeof sizes[number]
 
 type Props = {
@@ -96,7 +96,7 @@ export const PyramidChart: React.FC<Props> = ({
     <div
       className={classnames(
         css.main,
-        { s: css.sizeS, m: css.sizeM }[fontSize],
+        { xs: css.sizeXS, s: css.sizeS, m: css.sizeM }[fontSize],
         constraint && css.isConstraint
       )}
     >

@@ -110,13 +110,9 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
       boxes: updateAt(boxes, index, { i: box.i, x: box.x, y: box.y, w: box.w, h: box.h }),
     })
   }
-
-  const scale = useMemo(() => {
-    const widthScale = baseWidthForScaling ? width / baseWidthForScaling : 1
-    const heightScale = baseHeightForScaling ? height / baseHeightForScaling : 1
-
-    return Math.min(widthScale, heightScale)
-  }, [baseHeightForScaling, baseWidthForScaling, width, height])
+  const widthScale = baseWidthForScaling ? width / baseWidthForScaling : 1
+  const heightScale = baseHeightForScaling ? height / baseHeightForScaling : 1
+  const scale = Math.min(widthScale, heightScale)
 
   const margin = useMemo(() => [scale * baseMargin[0], scale * baseMargin[1]], [scale, baseMargin])
 

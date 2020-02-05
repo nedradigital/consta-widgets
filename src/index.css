@@ -30,6 +30,10 @@ button {
   height: var(--scrollbar-size);
 }
 
+::-webkit-scrollbar-corner {
+  display: none;
+}
+
 ::-webkit-scrollbar-thumb {
   border: var(--scrollbar-padding) solid var(--opaque-color);
   border-radius: 2px;
