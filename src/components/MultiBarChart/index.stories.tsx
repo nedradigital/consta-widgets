@@ -100,3 +100,12 @@ storiesOf('components/MultiBarChart', module)
       />
     )
   })
+  .add('минималистичный вид', () => (
+    <MultiBarChart
+      data={object('data', getWidgetMockData(DataType.MultiBarChart).data)}
+      colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
+      orientation="horizontal"
+      gridTicks={0}
+      valuesTicks={0}
+    />
+  ))
