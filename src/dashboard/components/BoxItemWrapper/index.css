@@ -3,11 +3,9 @@
 :--main {
   position: relative;
 
-  &.isViewMode {
-    min-height: 30px;
-  }
-
   &:not(.isViewMode) {
+    min-height: 30px;
+
     &:hover,
     &.isEditingSettings {
       box-shadow: 0 0 5px aquamarine inset;
