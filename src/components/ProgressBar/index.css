@@ -38,8 +38,8 @@
 }
 
 .caption {
-  font-size: calc-size(10);
-  line-height: calc-size(14);
+  font-size: calc-size(12);
+  line-height: calc-size(12);
 
   overflow: hidden;
 
