@@ -1,6 +1,6 @@
 import { TextWidget } from '@/widgets/TextWidget'
 
-import { Dashboard8, migration8 } from '../'
+import { CurrentDashboard, currentMigration } from '../'
 import { Dashboard7 } from '../../dashboard7'
 
 describe('migration8', () => {
@@ -53,7 +53,7 @@ describe('migration8', () => {
       settings: {},
     }
 
-    const result: Dashboard8.State = {
+    const result: CurrentDashboard.State = {
       version: 8,
       boxes: [],
       config: {
@@ -104,11 +104,11 @@ describe('migration8', () => {
       settings: {},
     }
 
-    expect(migration8.up(source)).toEqual(result)
+    expect(currentMigration.up(source)).toEqual(result)
   })
 
   it('понижает версию', () => {
-    const source: Dashboard8.State = {
+    const source: CurrentDashboard.State = {
       version: 8,
       boxes: [],
       config: {
@@ -211,6 +211,6 @@ describe('migration8', () => {
       settings: {},
     }
 
-    expect(migration8.down(source)).toEqual(result)
+    expect(currentMigration.down(source)).toEqual(result)
   })
 })
