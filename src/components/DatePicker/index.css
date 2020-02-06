@@ -1,14 +1,8 @@
-.container {
+.controls {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
 }
 
-.button {
-  font-size: calc-size(14);
-
-  margin-left: calc-size(10);
-
-  &:hover {
-    cursor: pointer;
-  }
+.delimiter {
+  padding: 0 calc-size(8);
 }

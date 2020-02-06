@@ -1,25 +1,59 @@
-import React from 'react'
-
-import { object } from '@storybook/addon-knobs'
+import { date as knobsDate, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
+import { DateRange, Size } from '@/components/DatePicker'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { DatePickerWidgetContent } from '.'
 
+type Params = {
+  size: Size
+}
+
+const defaultParams: Params = {
+  size: 'm',
+}
+
+const getDateLimitProps = () =>
+  ({
+    minDate: new Date(knobsDate('minDate', new Date(2019, 0, 1))),
+    maxDate: new Date(knobsDate('maxDate', new Date(2020, 3, 2))),
+  } as const)
+
 storiesOf('widgets/DatePickerWidget', module)
   .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => {
+  .add('выбор даты', () => {
     const Wrapper = () => {
-      const [date, setDate] = React.useState<Date | undefined>(new Date())
+      const [date, setDate] = React.useState<Date | undefined>()
 
       return (
         <DatePickerWidgetContent
           data={{
+            type: 'date',
             value: date,
             onChange: setDate,
+            ...getDateLimitProps(),
           }}
-          params={object('params', {})}
+          params={object('params', defaultParams)}
+        />
+      )
+    }
+
+    return <Wrapper />
+  })
+  .add('выбор диапазона дат', () => {
+    const Wrapper = () => {
+      const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
+
+      return (
+        <DatePickerWidgetContent
+          data={{
+            type: 'date-range',
+            value: range,
+            onChange: setRange,
+            ...getDateLimitProps(),
+          }}
+          params={object('params', defaultParams)}
         />
       )
     }

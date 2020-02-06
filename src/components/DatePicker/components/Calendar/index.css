@@ -1,0 +1,269 @@
+@custom-selector :--isToday .isToday;
+@custom-selector :--isDisabled .isDisabled;
+@custom-selector :--isSingleDate .isSingleDate;
+@custom-selector :--isRange .isRange;
+@custom-selector :--isFirstDate .isFirstDate;
+@custom-selector :--isLastDate .isLastDate;
+@custom-selector :--isSelected .isSelected;
+@custom-selector :--isHighlighted .isHighlighted;
+@custom-selector :--isSelectedBackwards .isSelectedBackwards;
+@custom-selector :--isOnlyOneValue .isOnlyOneValue;
+
+.main {
+  --text-color: #000;
+  --cell-size: 28px;
+  --cell-padding-left: 8px;
+  --cell-bg-side-offset: calc(var(--cell-padding-left) / 2);
+  --color-primary: #56b9f2;
+  --color-secondary: #abdbf7;
+  --day-bg: transparent;
+
+  display: flex;
+
+  padding-top: 24px;
+  padding-bottom: 18px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 28px;
+
+  margin-bottom: 18px;
+
+  letter-spacing: 1px;
+  text-transform: uppercase;
+
+  color: var(--text-color);
+}
+
+.month {
+  display: flex;
+  flex-direction: column;
+
+  & + & {
+    margin-left: 36px;
+  }
+}
+
+.row {
+  display: flex;
+
+  & + & {
+    margin-top: 7px;
+  }
+
+  &.isWithDaynames + & {
+    margin-top: 11px;
+  }
+}
+
+.cell {
+  font-size: 14px;
+  line-height: var(--cell-size);
+
+  box-sizing: content-box;
+  width: var(--cell-size);
+  height: var(--cell-size);
+
+  text-align: center;
+
+  color: var(--text-color);
+
+  &.isWeekDay {
+    height: 20px;
+
+    text-transform: uppercase;
+
+    opacity: 0.6;
+  }
+
+  &:--isDisabled {
+    cursor: not-allowed;
+
+    opacity: 0.6;
+  }
+
+  &.isSelectable {
+    cursor: pointer;
+  }
+
+  & + & {
+    padding-left: var(--cell-padding-left);
+  }
+}
+
+.cellContent {
+  position: relative;
+
+  @nest .cell:--isToday &::after {
+    --color-today: var(--color-primary);
+
+    position: absolute;
+    z-index: var(--z-datepicker-date-bg);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    border: 1px solid var(--color-today);
+    border-radius: 50%;
+  }
+
+  @nest .cell:--isToday &:hover::after {
+    --color-today: var(--color-secondary);
+  }
+
+  @nest :--isSingleDate &::before {
+    position: absolute;
+    z-index: var(--z-datepicker-date-sub-bg);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    border-radius: 50%;
+    background-color: var(--day-bg);
+  }
+
+  @nest :--isSingleDate:not(:--isDisabled) &:hover::before {
+    --day-bg: var(--color-secondary);
+  }
+
+  @nest :--isSingleDate:--isSelected &::before {
+    --day-bg: var(--color-primary);
+  }
+
+  @nest :--isSingleDate:--isSelected &:hover::before {
+    --day-bg: var(--color-primary);
+  }
+
+  @nest :--isRange &::before {
+    position: absolute;
+    z-index: var(--z-datepicker-date-sub-bg);
+    top: 0;
+    right: calc(var(--cell-bg-side-offset) * -1);
+    bottom: 0;
+    left: calc(var(--cell-bg-side-offset) * -1);
+
+    content: '';
+
+    background-color: var(--day-bg);
+  }
+
+  @nest :--isRange:first-child &::before {
+    left: 0;
+  }
+
+  @nest :--isRange:last-child &::before {
+    right: 0;
+  }
+
+  @nest :--isRange &::after {
+    position: absolute;
+    z-index: var(--z-datepicker-date-bg);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    content: '';
+
+    background-color: var(--day-bg);
+  }
+
+  @nest :--isRange:not(:--isDisabled) &:hover::after {
+    --day-bg: var(--color-secondary);
+
+    border-radius: 50%;
+  }
+
+  @nest :--isRange:--isSelected:--isFirstDate:not(:--isOnlyOneValue) &::before,
+    :--isRange:--isSelected:--isLastDate:not(:--isOnlyOneValue) &::before {
+    --day-bg: var(--color-secondary);
+  }
+
+  @nest :--isRange:--isSelected:--isFirstDate:not(:--isSelectedBackwards) &::before {
+    left: 0;
+
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+
+  @nest :--isRange:--isSelected:--isFirstDate:--isSelectedBackwards &::before,
+    :--isRange:--isSelected:--isLastDate &::before {
+    right: 0;
+
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+
+  @nest :--isRange:--isSelected:--isFirstDate &::after,
+    :--isRange:--isSelected:--isLastDate &::after {
+    --day-bg: var(--color-primary);
+
+    border-radius: 50%;
+  }
+
+  @nest :--isRange:--isSelected:not(:--isFirstDate):not(:--isLastDate) &::before {
+    --day-bg: var(--color-secondary);
+  }
+
+  @nest :--isRange:--isSelected:--isOnlyOneValue &::before {
+    right: 0;
+
+    border-radius: 50%;
+  }
+
+  @nest :--isRange:--isSelected &:hover::after {
+    --day-bg: var(--color-primary);
+  }
+
+  @nest :--isRange:--isHighlighted &::before {
+    --day-bg: var(--color-secondary);
+  }
+
+  @nest :--isRange:--isHighlighted:--isFirstDate:not(:--isSelectedBackwards) &::before {
+    right: calc(var(--cell-bg-side-offset) * -1);
+
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  @nest :--isRange:--isHighlighted:--isFirstDate:--isSelectedBackwards &::before {
+    right: 0;
+
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  @nest :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):not(:--isSelectedBackwards):hover
+      &::after {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+
+  @nest :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):--isSelectedBackwards:hover
+      &::after {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+
+  @nest :--isRange:--isHighlighted:not(:--isSelectedBackwards):hover &::before {
+    right: 0;
+
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+
+  @nest :--isRange:--isHighlighted:--isSelectedBackwards:hover &::before {
+    left: 0;
+
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+}

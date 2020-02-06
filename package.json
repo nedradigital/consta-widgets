@@ -24,7 +24,7 @@
     "generate-css-types": "node node_modules/@gaz/configs/scripts/generate-css-types.js",
     "checktypes": "yarn generate-css-types && tsc --noEmit --extendedDiagnostics",
     "unit": "NODE_PATH=./node_modules TZ=Europe/Moscow jest",
-    "unit:watch": "TZ=Europe/Moscow jest --watchAll",
+    "unit:watch": "NODE_PATH=./node_modules TZ=Europe/Moscow jest --watchAll",
     "test": "npm-run-all --parallel lint checktypes unit",
     "prepublishOnly": "yarn && yarn build && node node_modules/@gaz/configs/scripts/typescript-validations.js"
   },
@@ -69,6 +69,7 @@
     "@types/resize-observer-browser": "0.1.2",
     "classnames": "2.2.6",
     "d3": "5.12.0",
+    "date-fns": "2.9.0",
     "lodash": "4.17.11",
     "react-animate-height": "2.0.17",
     "react-dnd": "9.3.2",

@@ -712,11 +712,10 @@ const mockData: DataMap = {
     ],
   },
   [DataType.DatePicker]: {
+    type: 'date',
     value: new Date(),
-    onChange: () => null,
-  },
-  [DataType.RangePicker]: {
-    value: [new Date(), new Date()],
+    minDate: new Date(2019, 0),
+    maxDate: new Date(),
     onChange: () => null,
   },
   [DataType.RadarChart]: {
