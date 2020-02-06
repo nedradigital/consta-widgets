@@ -38,9 +38,9 @@ type ConstructorProps = DashboardProps &
     onChangeVersion: (state: DashboardState) => void
   }
 
-export const EMPTY_DASHBOARD: DashboardState = { version: 7, boxes: [], config: {}, settings: {} }
+export const EMPTY_DASHBOARD: DashboardState = { version: 8, boxes: [], config: {}, settings: {} }
 
-const SUPPORTED_DASHBOARD_VERSION: DashboardVersion = 7
+const SUPPORTED_DASHBOARD_VERSION: DashboardVersion = 8
 export const isDashboardSupported = (
   dashboard: AnyDashboardStateVersion
 ): dashboard is DashboardState => dashboard.version === SUPPORTED_DASHBOARD_VERSION

@@ -13,6 +13,7 @@ export type StyleProps = {
   uppercase?: boolean
   secondary?: boolean
   croppedLineCount?: number
+  croppedWithGradient?: boolean
 }
 
 type Props = {
@@ -28,6 +29,7 @@ export const Text: React.FC<Props> = ({
   uppercase,
   bold,
   croppedLineCount,
+  croppedWithGradient,
 }) => (
   <div
     className={classnames(
@@ -43,6 +45,7 @@ export const Text: React.FC<Props> = ({
       uppercase && css.isUppercase,
       bold && css.isBold,
       Boolean(croppedLineCount) && css.isCropped,
+      croppedWithGradient && css.isWithGradient,
       className
     )}
     style={{

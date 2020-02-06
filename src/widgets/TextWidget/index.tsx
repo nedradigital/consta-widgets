@@ -1,4 +1,5 @@
 import { Tooltip } from '@/components/Tooltip'
+import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
@@ -14,13 +15,22 @@ type Data = DataMap[typeof dataType] | typeof undefined
 
 export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
 
-export const typeNames = ['heading1', 'heading2', 'heading3', 'heading4', 'text1', 'text2'] as const
+export const typeNames = [
+  'heading1',
+  'heading2',
+  'heading3',
+  'heading4',
+  'text1',
+  'text2',
+  'text3',
+] as const
 export type TypeNames = typeof typeNames[number]
 
 type Params = {
   text: string
   type: TypeNames
   croppedLineCount?: number
+  croppedWithGradient?: boolean
 }
 
 type TextType = {
@@ -73,18 +83,28 @@ const textType: TextType = {
       secondary: true,
     },
   },
+  text3: {
+    text: 'Текст 3',
+    props: {
+      size: 'xs',
+      secondary: true,
+      bold: true,
+    },
+  },
 }
 
 export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
 
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { text, type, croppedLineCount },
+  params: { text, type, croppedLineCount, croppedWithGradient },
 }) => {
   const ref = React.useRef<HTMLButtonElement>(null)
 
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
-  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 })
+  const [tooltipPosition, setTooltipPosition] = React.useState<
+    { x: number; y: number } | undefined
+  >()
 
   const onToggleClick = () => {
     if (data && data.onClick) {
@@ -104,7 +124,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
     const x = left + width / 2
     const y = top + height
 
-    if (tooltipPosition.x === x && tooltipPosition.y === y) {
+    if (tooltipPosition && tooltipPosition.x === x && tooltipPosition.y === y) {
       return
     }
 
@@ -121,7 +141,12 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
 
   return (
     <div className={css.text}>
-      <Text {...textType[type].props} croppedLineCount={croppedLineCount} className={css.content}>
+      <Text
+        {...textType[type].props}
+        croppedLineCount={croppedLineCount}
+        croppedWithGradient={croppedWithGradient}
+        className={css.content}
+      >
         {data && data.text ? data.text : text}
       </Text>
       {data && (data.tooltip || data.onClick) && (
@@ -129,16 +154,18 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
           <button ref={ref} className={css.button} onClick={onToggleClick}>
             <IconSettings />
           </button>
-          <Tooltip
-            className={css.tooltip}
-            isVisible={tooltipVisible}
-            direction="bottom"
-            x={tooltipPosition.x}
-            y={tooltipPosition.y}
-            onClickOutside={handleClickOutside}
-          >
-            {data.tooltip}
-          </Tooltip>
+          {tooltipPosition && (
+            <Tooltip
+              className={css.tooltip}
+              isVisible={tooltipVisible}
+              direction="bottom"
+              x={tooltipPosition.x}
+              y={tooltipPosition.y}
+              onClickOutside={handleClickOutside}
+            >
+              {data.tooltip}
+            </Tooltip>
+          )}
         </div>
       )}
     </div>
@@ -170,6 +197,11 @@ export const TextWidget = createWidget<Data, Params>({
           name="После какой строки обрезать текст"
           value={params.croppedLineCount}
           onChange={value => onChangeParam('croppedLineCount', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Закрашивать градиентом обрезаемую строку"
+          value={params.croppedWithGradient}
+          onChange={value => onChangeParam('croppedWithGradient', value)}
         />
       </>
     )
