@@ -102,3 +102,13 @@ storiesOf('components/BarChart', module)
       {...defaultBarChartProps}
     />
   ))
+  .add('минималистичный вид', () => (
+    <BarChart
+      orientation={'horizontal'}
+      colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
+      data={object('data', getWidgetMockData(DataType.BarChart).data)}
+      gridTicks={0}
+      valuesTicks={0}
+      showValues
+    />
+  ))

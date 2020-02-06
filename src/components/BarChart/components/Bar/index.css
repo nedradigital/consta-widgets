@@ -25,7 +25,7 @@
 
 .label {
   font-size: calc-size(12);
-  font-weight: bold;
 
-  fill: #edf3f5;
+  fill: #f6fbfd;
+  fill-opacity: 0.6;
 }

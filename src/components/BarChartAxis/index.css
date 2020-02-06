@@ -75,8 +75,8 @@
 }
 
 .unit {
-  font-size: calc-size(11);
-  line-height: calc-size(15);
+  font-size: calc-size(12);
+  line-height: calc-size(17);
 
   color: rgba(246, 251, 253, 0.7);
 }
