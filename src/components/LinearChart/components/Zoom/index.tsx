@@ -68,8 +68,14 @@ export const Zoom: React.FC<Props> = ({
     zoomBehaviorRef.current = d3
       .zoom()
       .scaleExtent([MIN_ZOOM, MAX_ZOOM])
-      .extent([[zoomExtent[0][0], zoomExtent[0][1]], [zoomExtent[1][0], zoomExtent[1][1]]])
-      .translateExtent([[zoomExtent[0][0], zoomExtent[0][1]], [zoomExtent[1][0], zoomExtent[1][1]]])
+      .extent([
+        [zoomExtent[0][0], zoomExtent[0][1]],
+        [zoomExtent[1][0], zoomExtent[1][1]],
+      ])
+      .translateExtent([
+        [zoomExtent[0][0], zoomExtent[0][1]],
+        [zoomExtent[1][0], zoomExtent[1][1]],
+      ])
       .on('zoom', onZoom)
   })
 

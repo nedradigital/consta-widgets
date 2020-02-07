@@ -22,14 +22,16 @@ import {
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
 export { DataType } from './types'
-export type DashboardState = DashboardState
-export type AnyDashboardStateVersion = AnyDashboardStateVersion
-export type Data = Data
-export type DataMap = DataMap
-export type Dataset = Dataset
-export type WidgetItem = WidgetItem
-export type BoxItem = BoxItem
-export type ColumnsItem = ColumnsItem
+export {
+  AnyDashboardStateVersion,
+  Data,
+  DataMap,
+  Dataset,
+  WidgetItem,
+  BoxItem,
+  ColumnsItem,
+  DashboardState,
+}
 
 type ConstructorProps = DashboardProps &
   MenuProps & {

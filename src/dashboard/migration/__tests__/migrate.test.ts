@@ -31,12 +31,7 @@ describe('migration', () => {
     expect(migration2Spy).toHaveBeenCalled()
     expect(migration2Spy).toHaveBeenCalledAfter(migration1Spy as jest.Mock)
 
-    expect(result).toEqual(
-      _.flow(
-        migration1.up,
-        migration2.up
-      )(dashboard0Data)
-    )
+    expect(result).toEqual(_.flow(migration1.up, migration2.up)(dashboard0Data))
   })
 
   it('мигрирует вниз', () => {
@@ -49,12 +44,7 @@ describe('migration', () => {
     expect(migration1Spy).toHaveBeenCalled()
     expect(migration1Spy).toHaveBeenCalledAfter(migration2Spy as jest.Mock)
 
-    expect(result).toEqual(
-      _.flow(
-        migration2.down,
-        migration1.down
-      )(dashboard2Data)
-    )
+    expect(result).toEqual(_.flow(migration2.down, migration1.down)(dashboard2Data))
   })
 
   it('ничего не делает, если версия та же самая', () => {
