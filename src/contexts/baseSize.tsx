@@ -1,11 +1,11 @@
-import { createContext, useContext } from 'react'
+import React from 'react'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 
-export const BaseSizeContext = createContext(16)
+export const BaseSizeContext = React.createContext(16)
 
 export const useBaseSize = () => {
-  const baseSize = useContext(BaseSizeContext)
+  const baseSize = React.useContext(BaseSizeContext)
   const getCalculatedSizeWithBaseSize = (size: number) => getCalculatedSize(size, baseSize)
 
   return {
