@@ -8,7 +8,7 @@ import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { UniqueInnerColumns } from '../..'
-import { COLUMN_SIZE, ColumnWithGeometry, GeometryParams, MouseActionParams } from '../MultiBar'
+import { ColumnWithGeometry, COLUMN_SIZE, GeometryParams, MouseActionParams } from '../MultiBar'
 
 import css from './index.css'
 

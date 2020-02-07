@@ -9,21 +9,41 @@ import {
 } from '../helpers'
 
 const horizontalLine: ReadonlyArray<readonly Item[]> = [
-  [{ x: 1, y: 9 }, { x: 3, y: 6 }, { x: 5, y: 3 }, { x: 7, y: 0 }],
+  [
+    { x: 1, y: 9 },
+    { x: 3, y: 6 },
+    { x: 5, y: 3 },
+    { x: 7, y: 0 },
+  ],
 ]
 
 const verticalLine: ReadonlyArray<readonly Item[]> = [
-  [{ x: 9, y: 1 }, { x: 6, y: 3 }, { x: 3, y: 5 }, { x: 0, y: 7 }],
+  [
+    { x: 9, y: 1 },
+    { x: 6, y: 3 },
+    { x: 3, y: 5 },
+    { x: 0, y: 7 },
+  ],
 ]
 
 const horizontalLines: ReadonlyArray<readonly Item[]> = [
   ...horizontalLine,
-  [{ x: 1, y: -4 }, { x: 3, y: 2 }, { x: 5, y: 6 }, { x: 7, y: 10 }],
+  [
+    { x: 1, y: -4 },
+    { x: 3, y: 2 },
+    { x: 5, y: 6 },
+    { x: 7, y: 10 },
+  ],
 ]
 
 const verticalLines: ReadonlyArray<readonly Item[]> = [
   ...verticalLine,
-  [{ x: -4, y: 1 }, { x: 2, y: 3 }, { x: 6, y: 5 }, { x: 10, y: 7 }],
+  [
+    { x: -4, y: 1 },
+    { x: 2, y: 3 },
+    { x: 6, y: 5 },
+    { x: 10, y: 7 },
+  ],
 ]
 
 // Заменяем методы из LinearChart на более простую реализацию чтобы в расчетах не использовались константные отступы.
@@ -77,7 +97,14 @@ describe('<LinearChart />', () => {
         const domain = calculateSecondaryDomain(
           0,
           3,
-          [[{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: 2 }, { x: 3, y: 3 }]],
+          [
+            [
+              { x: 0, y: null },
+              { x: 1, y: null },
+              { x: 2, y: 2 },
+              { x: 3, y: 3 },
+            ],
+          ],
           v => v.x,
           getYDomain
         )
@@ -88,7 +115,13 @@ describe('<LinearChart />', () => {
         const domain = calculateSecondaryDomain(
           1,
           2,
-          [[{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: null }]],
+          [
+            [
+              { x: 0, y: null },
+              { x: 1, y: null },
+              { x: 2, y: null },
+            ],
+          ],
           v => v.x,
           getYDomain
         )
@@ -110,7 +143,12 @@ describe('<LinearChart />', () => {
   })
 
   describe('getMainTickValues', () => {
-    const values = [{ x: 0, y: 9 }, { x: 1, y: 6 }, { x: 2, y: 3 }, { x: 3, y: 0 }] as const
+    const values = [
+      { x: 0, y: 9 },
+      { x: 1, y: 6 },
+      { x: 2, y: 3 },
+      { x: 3, y: 0 },
+    ] as const
     const getGridConfig = ({ labelTicks = 0, gridTicks = 0, guide = false }) => ({
       x: {
         labelTicks,
@@ -183,7 +221,12 @@ describe('<LinearChart />', () => {
 
     it('вернёт засечки для пропусков', () => {
       const result = getMainTickValues({
-        items: [{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: null }, { x: 3, y: 0 }],
+        items: [
+          { x: 0, y: null },
+          { x: 1, y: null },
+          { x: 2, y: null },
+          { x: 3, y: 0 },
+        ],
         domain,
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
@@ -231,7 +274,10 @@ describe('<LinearChart />', () => {
 
     it('вернет массив без дробей', () => {
       const result = getMainTickValues({
-        items: [{ x: 0, y: 0 }, { x: 1, y: 0 }],
+        items: [
+          { x: 0, y: 0 },
+          { x: 1, y: 0 },
+        ],
         domain: [0, 1],
         gridConfig: getGridConfig({ labelTicks: 4, guide: true }),
         tickType: 'labelTicks',
@@ -244,7 +290,12 @@ describe('<LinearChart />', () => {
   })
 
   describe('getSecondaryTickValues', () => {
-    const values = [{ x: 0, y: 9 }, { x: 1, y: 6 }, { x: 2, y: 3 }, { x: 3, y: 0 }] as const
+    const values = [
+      { x: 0, y: 9 },
+      { x: 1, y: 6 },
+      { x: 2, y: 3 },
+      { x: 3, y: 0 },
+    ] as const
     const getGridConfig = ({ labelTicks = 0, gridTicks = 0, guide = false }) => ({
       x: {},
       y: {

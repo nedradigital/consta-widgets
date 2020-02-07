@@ -2,7 +2,11 @@ import { divideBySegments } from '@/components/LinearChart/components/Line'
 
 describe('divideBySegments', () => {
   it('если пропусков нет, возвращает 1 цельный сегмент', () => {
-    const points = [{ x: 0, y: 0 }, { x: 1, y: 1 }, { x: 2, y: 2 }] as const
+    const points = [
+      { x: 0, y: 0 },
+      { x: 1, y: 1 },
+      { x: 2, y: 2 },
+    ] as const
 
     expect(divideBySegments(points)).toEqual([
       {
@@ -22,17 +26,45 @@ describe('divideBySegments', () => {
     ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'solid', points: [{ x: 0, y: 0 }, { x: 1, y: 1 }] },
-      { type: 'dashed', points: [{ x: 1, y: 1 }, { x: 3, y: 3 }] },
-      { type: 'solid', points: [{ x: 3, y: 3 }, { x: 4, y: 4 }] },
+      {
+        type: 'solid',
+        points: [
+          { x: 0, y: 0 },
+          { x: 1, y: 1 },
+        ],
+      },
+      {
+        type: 'dashed',
+        points: [
+          { x: 1, y: 1 },
+          { x: 3, y: 3 },
+        ],
+      },
+      {
+        type: 'solid',
+        points: [
+          { x: 3, y: 3 },
+          { x: 4, y: 4 },
+        ],
+      },
     ])
   })
 
   it('если пропуск между одиночными значениями, возвращает 1 пунктирный сегмент', () => {
-    const points = [{ x: 0, y: 0 }, { x: 1, y: null }, { x: 2, y: 2 }] as const
+    const points = [
+      { x: 0, y: 0 },
+      { x: 1, y: null },
+      { x: 2, y: 2 },
+    ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'dashed', points: [{ x: 0, y: 0 }, { x: 2, y: 2 }] },
+      {
+        type: 'dashed',
+        points: [
+          { x: 0, y: 0 },
+          { x: 2, y: 2 },
+        ],
+      },
     ])
   })
 
@@ -47,9 +79,27 @@ describe('divideBySegments', () => {
     ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'solid', points: [{ x: 0, y: 0 }, { x: 1, y: 1 }] },
-      { type: 'dashed', points: [{ x: 1, y: 1 }, { x: 4, y: 4 }] },
-      { type: 'solid', points: [{ x: 4, y: 4 }, { x: 5, y: 5 }] },
+      {
+        type: 'solid',
+        points: [
+          { x: 0, y: 0 },
+          { x: 1, y: 1 },
+        ],
+      },
+      {
+        type: 'dashed',
+        points: [
+          { x: 1, y: 1 },
+          { x: 4, y: 4 },
+        ],
+      },
+      {
+        type: 'solid',
+        points: [
+          { x: 4, y: 4 },
+          { x: 5, y: 5 },
+        ],
+      },
     ])
   })
 
@@ -64,8 +114,20 @@ describe('divideBySegments', () => {
     ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'dashed', points: [{ x: 0, y: 0 }, { x: 4, y: 4 }] },
-      { type: 'solid', points: [{ x: 4, y: 4 }, { x: 5, y: 5 }] },
+      {
+        type: 'dashed',
+        points: [
+          { x: 0, y: 0 },
+          { x: 4, y: 4 },
+        ],
+      },
+      {
+        type: 'solid',
+        points: [
+          { x: 4, y: 4 },
+          { x: 5, y: 5 },
+        ],
+      },
     ])
   })
 
@@ -81,7 +143,14 @@ describe('divideBySegments', () => {
     ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'solid', points: [{ x: 2, y: 2 }, { x: 3, y: 3 }, { x: 4, y: 4 }] },
+      {
+        type: 'solid',
+        points: [
+          { x: 2, y: 2 },
+          { x: 3, y: 3 },
+          { x: 4, y: 4 },
+        ],
+      },
     ])
   })
 
@@ -95,13 +164,29 @@ describe('divideBySegments', () => {
     ] as const
 
     expect(divideBySegments(points)).toEqual([
-      { type: 'dashed', points: [{ x: 0, y: 0 }, { x: 2, y: 2 }] },
-      { type: 'dashed', points: [{ x: 2, y: 2 }, { x: 4, y: 4 }] },
+      {
+        type: 'dashed',
+        points: [
+          { x: 0, y: 0 },
+          { x: 2, y: 2 },
+        ],
+      },
+      {
+        type: 'dashed',
+        points: [
+          { x: 2, y: 2 },
+          { x: 4, y: 4 },
+        ],
+      },
     ])
   })
 
   it('возвращает пустой массив, если всё пропуски', () => {
-    const points = [{ x: 0, y: null }, { x: 1, y: null }, { x: 2, y: null }] as const
+    const points = [
+      { x: 0, y: null },
+      { x: 1, y: null },
+      { x: 2, y: null },
+    ] as const
 
     expect(divideBySegments(points)).toEqual([])
   })

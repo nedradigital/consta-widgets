@@ -120,7 +120,10 @@ const yaMapsToGeoPoint = (
 
 export const EXAMPLE_POINTS: readonly GeoPoint[] = locationsData
   .map(([id, data]) =>
-    yaMapsToGeoPoint(data, EXAMPLE_LOCATIONS.filter(location => location.parentId === id))
+    yaMapsToGeoPoint(
+      data,
+      EXAMPLE_LOCATIONS.filter(location => location.parentId === id)
+    )
   )
   .flat()
 

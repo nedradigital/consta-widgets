@@ -101,7 +101,10 @@ const getMaps = (
 const getProjection = (width: number, height: number): d3.GeoProjection => {
   return d3
     .geoMercator()
-    .clipExtent([[0, 0], [width, height]])
+    .clipExtent([
+      [0, 0],
+      [width, height],
+    ])
     .rotate([-60, 0])
 }
 
@@ -195,7 +198,10 @@ export const Map: React.FC<Props> = ({
       : geoPointsToExtendedFeature(points, true)
     const [paddingY, paddingX] = padding
     const newProjection = getProjection(width, height).fitExtent(
-      [[paddingX, paddingY], [width - paddingX, height - paddingY]],
+      [
+        [paddingX, paddingY],
+        [width - paddingX, height - paddingY],
+      ],
       featureToZoomOn as ExtendedFeature
     )
 

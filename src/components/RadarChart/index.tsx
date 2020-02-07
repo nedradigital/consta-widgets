@@ -104,7 +104,12 @@ const concentricColorsByTicksAmount: { [key: number]: ConcentricColorInfo } = {
   },
   4: {
     circles: ['#FF0606', '#BD3600', '#F2C94C', '#20B55F'],
-    gradient: [['#FF2955', 0], ['#BD3600', 23.28], ['#F2C94C', 48.4], ['#20B55F', 73.99]],
+    gradient: [
+      ['#FF2955', 0],
+      ['#BD3600', 23.28],
+      ['#F2C94C', 48.4],
+      ['#20B55F', 73.99],
+    ],
   },
   5: {
     circles: ['#FF0606', '#BD3600', '#FF8A00', '#F2C94C', '#20B55F'],
