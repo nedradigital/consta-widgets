@@ -8,16 +8,8 @@ import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
 import { Dashboard, DashboardProps } from './components/Dashboard'
 import { marginSizes, Menu, MenuProps } from './components/Menu'
 import css from './index.css'
-import {
-  BoxItem,
-  ColumnsItem,
-  DashboardState,
-  DashboardVersion,
-  Data,
-  DataMap,
-  Dataset,
-  WidgetItem,
-} from './types'
+import { currentMigration } from './migration/migrations/current'
+import { BoxItem, ColumnsItem, DashboardState, Data, DataMap, Dataset, WidgetItem } from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -40,9 +32,15 @@ type ConstructorProps = DashboardProps &
     onChangeVersion: (state: DashboardState) => void
   }
 
-export const EMPTY_DASHBOARD: DashboardState = { version: 8, boxes: [], config: {}, settings: {} }
+const SUPPORTED_DASHBOARD_VERSION = currentMigration.versionTo
 
-const SUPPORTED_DASHBOARD_VERSION: DashboardVersion = 8
+export const EMPTY_DASHBOARD: DashboardState = {
+  version: SUPPORTED_DASHBOARD_VERSION,
+  boxes: [],
+  config: {},
+  settings: {},
+}
+
 export const isDashboardSupported = (
   dashboard: AnyDashboardStateVersion
 ): dashboard is DashboardState => dashboard.version === SUPPORTED_DASHBOARD_VERSION

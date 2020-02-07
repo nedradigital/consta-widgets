@@ -5,7 +5,7 @@ import { TextWidget } from '@/widgets/TextWidget'
 import { Migration } from '../..'
 import { Dashboard7 } from '../dashboard7'
 
-export namespace Dashboard8 {
+export namespace CurrentDashboard {
   export type ColumnParams = {
     growRatio?: number
   }
@@ -61,11 +61,11 @@ export namespace Dashboard8 {
   }
 }
 
-export const migration8: Migration<Dashboard7.State, Dashboard8.State> = {
+export const currentMigration: Migration<Dashboard7.State, CurrentDashboard.State> = {
   versionTo: 8,
   changes: ['В TextWidget появился пропс наличия градиента croppedWithGradient'],
   up: data => {
-    const updateItem = (item: Dashboard7.BoxItem): Dashboard8.BoxItem => {
+    const updateItem = (item: Dashboard7.BoxItem): CurrentDashboard.BoxItem => {
       if (item.type === 'columns') {
         return {
           ...item,
@@ -107,7 +107,7 @@ export const migration8: Migration<Dashboard7.State, Dashboard8.State> = {
   },
 
   down: data => {
-    const updateItem = (item: Dashboard8.BoxItem): Dashboard7.BoxItem => {
+    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard7.BoxItem => {
       if (item.type === 'columns') {
         return {
           ...item,
