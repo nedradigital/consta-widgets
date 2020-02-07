@@ -475,6 +475,7 @@ const mockData: DataMap = {
         values: [{ x: 0, y: -1 }, { x: 1, y: 3 }, { x: 2, y: 1 }, { x: 3, y: 4 }],
         dots: true,
         lineName: 'Северный бур',
+        withGradient: true,
       },
       {
         colorGroupName: 'second',
