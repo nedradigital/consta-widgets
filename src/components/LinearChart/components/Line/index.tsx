@@ -1,7 +1,8 @@
-import { updateAt } from '@gaz/utils/lib/array'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
+
+import { getSolidSegments } from '@/utils/line'
 
 import { Item, itemIsNotEmpty, NotEmptyItem, ScaleLinear } from '../../'
 
@@ -21,32 +22,7 @@ type Segment = {
 }
 
 export const divideBySegments = (points: readonly Item[]): readonly Segment[] => {
-  let currentSegmentIdx = 0
-  // Делим линию на сегменты, где значения идут без пропусков (они будут сплошными на графике)
-  const solidSegments = points.reduce((acc: readonly Segment[], point) => {
-    const currentSegment = acc[currentSegmentIdx]
-
-    if (itemIsNotEmpty(point)) {
-      return currentSegment
-        ? // Добавляем в текущий сегмент
-          updateAt(acc, currentSegmentIdx, {
-            ...currentSegment,
-            points: [...currentSegment.points, point],
-          })
-        : // Добавляем новый сегмент вместе с первой точкой
-          acc.concat({
-            type: 'solid',
-            points: [point],
-          } as const)
-    }
-
-    // Если наткнулись на пропуск или серию пропусков, следующие точки будем добавлять в новый сегмент
-    if (currentSegment) {
-      currentSegmentIdx++
-    }
-
-    return acc
-  }, [])
+  const solidSegments = getSolidSegments<Item, NotEmptyItem>(points, itemIsNotEmpty)
 
   return _.flatMap(solidSegments, (segment, idx) => {
     // Между сплошными сегментами вставляем пунктирные для обозначения пропусков

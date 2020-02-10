@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useUID } from 'react-uid'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined, isNotNil } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'
@@ -17,7 +17,17 @@ import css from './index.css'
 export const radarChartLabelSizes = ['s', 'm'] as const
 export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
 
+export type FormatValue = (value: number | null) => string
+
 export type Point = {
+  xPercent: number
+  yPercent: number
+  label: string | null
+  axisName: string
+  originalValue: number | null
+}
+
+export type NotEmptyPoint = {
   xPercent: number
   yPercent: number
   label: string
@@ -27,7 +37,7 @@ export type Point = {
 
 export type FigureValue = {
   axisName: string
-  value: number
+  value: number | null
 }
 
 export type Figure = {
@@ -66,6 +76,9 @@ export type ExtendedFigure = Figure & {
     withFill: boolean
   }
 }
+
+export const pointIsNotEmpty = (point: Point): point is NotEmptyPoint =>
+  isNotNil(point.originalValue)
 
 export const deg2rad = (deg: number) => deg * (Math.PI / 180)
 
@@ -167,6 +180,8 @@ const getCurrentSizes = (width: number, height: number) => {
   )
 }
 
+const defaultFormatValueForLabel = (v: number | null) => (isNotNil(v) ? String(v) : 'Нет данных')
+
 export const RadarChart: React.FC<Props> = ({
   ticks: originalTicks,
   maxValue,
@@ -175,7 +190,7 @@ export const RadarChart: React.FC<Props> = ({
   figures: originalFigures,
   backgroundColor,
   labelSize,
-  formatValueForLabel = String,
+  formatValueForLabel = defaultFormatValueForLabel,
   formatValueForTooltip,
   withConcentricColor,
 }) => {
@@ -218,8 +233,8 @@ export const RadarChart: React.FC<Props> = ({
 
         return theAxis
           ? {
-              ...angleToCoord(theAxis.angle, value.value / maxValue),
-              label: formatValueForLabel(value.value),
+              ...angleToCoord(theAxis.angle, isNotNil(value.value) ? value.value / maxValue : 0),
+              label: isNotNil(value.value) ? formatValueForLabel(value.value) : '',
               axisName: value.axisName,
               originalValue: value.value,
             }
