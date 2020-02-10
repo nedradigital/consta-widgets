@@ -22,13 +22,16 @@ export type Data = ReadonlyArray<{
   }>
 }>
 
+export type HalfDonutData = {
+  halfDonut?: HalfDonut
+  textData?: TextData
+}
+
 type Props = {
   data: Data
   colorGroups: ColorGroups
   formatValueForTooltip?: FormatValue
-  halfDonut?: HalfDonut
-  textData?: TextData
-}
+} & HalfDonutData
 
 type TooltipDataState = {
   value: string
