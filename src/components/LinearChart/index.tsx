@@ -177,7 +177,6 @@ export class LinearChart extends React.Component<Props, State> {
         formatValueForTooltipTitle,
         colorGroups,
         unit,
-        threshold,
         onClickHoverLine,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
@@ -190,6 +189,7 @@ export class LinearChart extends React.Component<Props, State> {
       secondaryLabelTickValues,
       secondaryGridTickValues,
     } = this.getTicks()
+    const threshold = this.getThreshold()
 
     const lineClipPath = `url(#${this.lineClipId})`
     const dotsClipPath = `url(#${this.dotsClipId})`
@@ -275,10 +275,8 @@ export class LinearChart extends React.Component<Props, State> {
             <Threshold
               scaleX={scaleX}
               scaleY={scaleY}
-              maxPoints={flipPointsOnAxes(threshold.max.values, isHorizontal)}
-              minPoints={
-                threshold.min ? flipPointsOnAxes(threshold.min.values, isHorizontal) : undefined
-              }
+              maxPoints={threshold.max.values}
+              minPoints={threshold.min?.values}
               clipPath={lineClipPath}
               isHorizontal={isHorizontal}
             />
@@ -367,6 +365,25 @@ export class LinearChart extends React.Component<Props, State> {
           ...line,
           values: _.sortBy(flipPointsOnAxes(line.values, isHorizontal), 'y'),
         }))
+  }
+
+  getThreshold = (): Threshold | undefined => {
+    const { threshold, isHorizontal } = this.props
+
+    if (!threshold) {
+      return undefined
+    }
+
+    return {
+      max: {
+        ...threshold.max,
+        values: flipPointsOnAxes(threshold.max.values, isHorizontal),
+      },
+      min: threshold.min && {
+        ...threshold.min,
+        values: flipPointsOnAxes(threshold.min.values, isHorizontal),
+      },
+    }
   }
 
   getAllValues = (): readonly Item[] => _.flatten(this.getLines().map(l => l.values))
