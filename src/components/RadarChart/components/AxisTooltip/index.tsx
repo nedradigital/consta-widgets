@@ -32,7 +32,7 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
   const y = (height / 100) * itemWithMaxValue.yPercent + top
 
   return (
-    <Tooltip isVisible x={x} y={y} direction="top">
+    <Tooltip isVisible x={x} y={y}>
       {extendedFigures.length === 1 ? (
         values[0]
       ) : (

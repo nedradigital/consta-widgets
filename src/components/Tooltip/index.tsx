@@ -1,104 +1,190 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
-import { useBaseSize } from '@/contexts'
-import { Direction, Hint } from '@/ui/Hint'
-import { themeColorLight } from '@/utils/theme'
+import css from './index.css'
+
+export const horizontalDirections = ['left', 'center', 'right'] as const
+export const verticalDirections = ['top', 'center', 'bottom'] as const
+
+type Size = {
+  width: number
+  height: number
+}
+
+type Position = {
+  x: number
+  y: number
+}
+
+export type HorizontalDirection = typeof horizontalDirections[number]
+export type VerticalDirection = typeof verticalDirections[number]
 
 type Props = {
+  children: React.ReactNode
   isVisible: boolean
-  direction: Direction
+  horizontalDirection?: HorizontalDirection
+  verticalDirection?: VerticalDirection
   x?: number
   y?: number
   className?: string
-  onClickOutside?: (event: MouseEvent) => void
 }
 
-type CoordinatesOptions = {
-  direction: Direction
-  triangleSize: number
-  width?: number
-  height?: number
-  x?: number
-  y?: number
+const PARENT_ELEMENT = window.document.body
+
+const directionClasses: Record<HorizontalDirection | VerticalDirection, string> = {
+  top: css.top,
+  right: css.right,
+  bottom: css.bottom,
+  left: css.left,
+  center: css.center,
 }
 
-const TRIANGLE_SIZE = 10
+export const getAutoDirection = ({
+  elementSize,
+  parentSize,
+  position,
+  selectedHorizontalDirection = 'center',
+  selectedVerticalDirection = 'top',
+}: {
+  elementSize: Size
+  parentSize: Size
+  position: Position
+  selectedHorizontalDirection?: HorizontalDirection
+  selectedVerticalDirection?: VerticalDirection
+}): { horizontal: HorizontalDirection; vertical: VerticalDirection } | undefined => {
+  const elementWidth =
+    selectedHorizontalDirection === 'center' ? elementSize.width / 2 : elementSize.width
+  const elementHeight =
+    selectedVerticalDirection === 'center' ? elementSize.height / 2 : elementSize.height
+  const inTopBorder = position.y <= elementHeight
+  const inRightBorder = position.x >= parentSize.width - elementWidth
+  const inBottomBorder = position.y >= parentSize.height - elementHeight
+  const inLeftBorder = position.x <= elementWidth
+  const inBothHorizontalsBorders = inLeftBorder && inRightBorder
+  const inBothVerticalsBorder = inTopBorder && inBottomBorder
 
-const convertCoordinatesToStyles = ({
-  direction,
-  triangleSize,
-  width = 0,
-  height = 0,
-  x = 0,
-  y = 0,
-}: CoordinatesOptions) => {
-  switch (direction) {
-    case 'top': {
-      return {
-        top: y - height - triangleSize,
-        left: x - width / 2,
-      }
+  /**
+   * Если позиция тултипа по горизонтали или вертикали, или сразу по всем
+   * направлениям входит в границы, тогда мы не можем определить в какую
+   * сторону перевернуть тултип.
+   */
+  if (inBothHorizontalsBorders || inBothVerticalsBorder) {
+    return
+  }
+
+  if (inTopBorder && inRightBorder) {
+    return {
+      horizontal: 'left',
+      vertical: 'bottom',
     }
-    case 'right': {
-      return {
-        top: y - height / 2,
-        left: x + triangleSize,
-      }
+  }
+
+  if (inTopBorder && inLeftBorder) {
+    return {
+      horizontal: 'right',
+      vertical: 'bottom',
     }
-    case 'bottom': {
-      return {
-        top: y + triangleSize,
-        left: x - width / 2,
-      }
+  }
+
+  if (inBottomBorder && inRightBorder) {
+    return {
+      horizontal: 'left',
+      vertical: 'top',
     }
-    case 'left': {
-      return {
-        top: y - height / 2,
-        left: x - width - triangleSize,
-      }
+  }
+
+  if (inBottomBorder && inLeftBorder) {
+    return {
+      horizontal: 'right',
+      vertical: 'top',
+    }
+  }
+
+  if (inTopBorder) {
+    return {
+      horizontal: selectedHorizontalDirection,
+      vertical: 'bottom',
+    }
+  }
+
+  if (inRightBorder) {
+    return {
+      horizontal: 'left',
+      vertical: selectedVerticalDirection,
+    }
+  }
+
+  if (inBottomBorder) {
+    return {
+      horizontal: selectedHorizontalDirection,
+      vertical: 'top',
+    }
+  }
+
+  if (inLeftBorder) {
+    return {
+      horizontal: 'right',
+      vertical: selectedVerticalDirection,
     }
   }
 }
 
-export const Tooltip: React.FC<Props> = ({
-  children,
-  isVisible,
-  direction,
-  x,
-  y,
-  className,
-  onClickOutside,
-}) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
-  const { width, height } = useComponentSize(ref)
-  const triangleSize = getCalculatedSizeWithBaseSize(TRIANGLE_SIZE)
+export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const {
+    children,
+    isVisible,
+    horizontalDirection = 'center',
+    verticalDirection = 'top',
+    x,
+    y,
+    className,
+  } = props
 
-  useClickOutside([ref], event => {
-    onClickOutside && onClickOutside(event)
-  })
+  const mainRef = React.useRef<HTMLDivElement>(null)
+
+  const computeDirection = () => {
+    const defaultDirection = {
+      horizontal: horizontalDirection,
+      vertical: verticalDirection,
+    }
+
+    if (!mainRef.current || x === undefined || y === undefined) {
+      return defaultDirection
+    }
+
+    return (
+      getAutoDirection({
+        elementSize: mainRef.current.getBoundingClientRect(),
+        parentSize: PARENT_ELEMENT.getBoundingClientRect(),
+        position: { x, y },
+        selectedHorizontalDirection: horizontalDirection,
+        selectedVerticalDirection: verticalDirection,
+      }) || defaultDirection
+    )
+  }
 
   if (!isVisible) {
     return null
   }
 
+  const computedDirection = computeDirection()
+
   return ReactDOM.createPortal(
-    <Hint
-      ref={ref}
-      className={classnames(themeColorLight, className)}
-      direction={direction}
-      style={{
-        ...convertCoordinatesToStyles({ width, height, x, y, direction, triangleSize }),
-        transform: 'initial',
-      }}
+    <div
+      ref={mainRef}
+      className={classnames(
+        css.main,
+        directionClasses[computedDirection.horizontal],
+        directionClasses[computedDirection.vertical]
+      )}
+      style={{ top: y, left: x }}
     >
-      {children}
-    </Hint>,
-    window.document.body
+      <div ref={ref} className={classnames(css.tooltip, className)}>
+        {children}
+      </div>
+    </div>,
+    PARENT_ELEMENT
   )
-}
+})

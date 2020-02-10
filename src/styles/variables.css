@@ -50,9 +50,9 @@
   --progress-transition: left 0.5s ease;
   --fast-transition: 0.15s ease-out;
   --bg-box: #002d47;
-  --hint-arrow-size: 6px;
-  --hint-vertical-padding: 10px;
-  --hint-horizontal-padding: 12px;
+  --tooltip-arrow-size: 6px;
+  --tooltip-vertical-padding: 10px;
+  --tooltip-horizontal-padding: 12px;
   --table-even-row-background: rgba(0, 0, 0, 0.05);
   --scroll-bar-color: rgba(255, 255, 255, 0.7);
   --z-filter--tooltip: 1;

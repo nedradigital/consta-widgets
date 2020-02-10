@@ -60,7 +60,6 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
           isVisible={tooltipVisible && !!comment}
           x={tooltipPosition.x}
           y={tooltipPosition.y}
-          direction="top"
         >
           <div className={css.tooltipTitle}>Комментарий:</div>
           <div className={css.tooltipContent}>{comment}</div>

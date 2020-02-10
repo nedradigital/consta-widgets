@@ -3,7 +3,7 @@ import * as React from 'react'
 import { getCalculatedSize } from '@gaz/utils/lib/css'
 import classnames from 'classnames'
 
-import { Tooltip } from '@/components/Tooltip'
+import { HorizontalDirection, Tooltip, VerticalDirection } from '@/components/Tooltip'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
@@ -59,13 +59,18 @@ const getDirection = (
   uniqueInnerColumns: UniqueInnerColumns,
   columnName: string,
   isVertical: boolean
-) => {
+): { horizontal: HorizontalDirection; vertical: VerticalDirection } => {
   const columnCategoryIndex = uniqueInnerColumns.indexOf(columnName)
-  const tooltipDirectionVertical =
-    columnCategoryIndex === uniqueInnerColumns.length - 1 ? 'right' : 'left'
-  const tooltipDirectionHorizontal = columnCategoryIndex === 0 ? 'top' : 'bottom'
 
-  return isVertical ? tooltipDirectionVertical : tooltipDirectionHorizontal
+  return isVertical
+    ? {
+        horizontal: uniqueInnerColumns.length - 1 ? 'left' : 'right',
+        vertical: 'center',
+      }
+    : {
+        horizontal: 'center',
+        vertical: columnCategoryIndex === 0 ? 'top' : 'bottom',
+      }
 }
 
 const getLayout = ({
@@ -114,9 +119,10 @@ export const TooltipComponent: React.FC<Props> = ({
 
   return (
     <Tooltip
-      direction={direction}
       isVisible={isVisible}
       {...position}
+      horizontalDirection={direction.horizontal}
+      verticalDirection={direction.vertical}
       children={layout}
       className={css.tooltip}
     />
