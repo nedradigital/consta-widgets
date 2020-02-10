@@ -5,7 +5,6 @@ import { isDefined } from '@gaz/utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { RadarChartAxes } from './components/Axes'
@@ -124,6 +123,50 @@ const concentricColorsByTicksAmount: { [key: number]: ConcentricColorInfo } = {
   },
 }
 
+const BREAKPOINTS = [
+  {
+    fontSize: 12,
+    minRadarSize: 0,
+  },
+  {
+    fontSize: 14,
+    minRadarSize: 151,
+  },
+  {
+    fontSize: 16,
+    minRadarSize: 191,
+  },
+] as const
+const LINE_HEIGHT_EM = 1.25
+const AXIS_NAME_WIDTH_EM = 8.125
+const AXIS_NAME_OFFSET_EM = 1
+
+const getCurrentSizes = (width: number, height: number) => {
+  const breakpointsWithSizes = BREAKPOINTS.map(({ fontSize, minRadarSize }) => {
+    const lineHeight = fontSize * LINE_HEIGHT_EM
+    const axisNameWidth = fontSize * AXIS_NAME_WIDTH_EM
+    const axisNameOffset = fontSize * AXIS_NAME_OFFSET_EM
+    const radarSize = Math.min(
+      width - 2 * (axisNameWidth + axisNameOffset),
+      height - 2 * (2 * lineHeight + axisNameOffset)
+    )
+
+    return {
+      fontSize,
+      lineHeight,
+      axisNameWidth,
+      axisNameOffset,
+      radarSize,
+      minRadarSize,
+    }
+  })
+
+  return (
+    _.findLast(breakpointsWithSizes, bp => bp.radarSize >= bp.minRadarSize) ||
+    breakpointsWithSizes[0]
+  )
+}
+
 export const RadarChart: React.FC<Props> = ({
   ticks: originalTicks,
   maxValue,
@@ -142,23 +185,15 @@ export const RadarChart: React.FC<Props> = ({
 
   const [activeAxis, setActiveAxis] = React.useState<Axis>()
 
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const ref = React.useRef<HTMLDivElement>(null)
   const svgWrapperRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
-  const axisNameWidth = getCalculatedSizeWithBaseSize(130)
-  const lineHeightForCalculate = getCalculatedSizeWithBaseSize(20)
-  const axisNameOffset = getCalculatedSizeWithBaseSize(15)
 
-  // Вписываем радар в квадрат, оставляя по бокам место под надписи
-  const size = Math.min(
-    width - 2 * (axisNameWidth + axisNameOffset),
-    height - 2 * (2 * lineHeightForCalculate + axisNameOffset)
+  const { radarSize, fontSize, lineHeight, axisNameWidth, axisNameOffset } = getCurrentSizes(
+    width,
+    height
   )
 
-  const isBigSize = size > 200
-  const axisNameLineHeight = getCalculatedSizeWithBaseSize(isBigSize ? 20 : 13)
-  const axisNameFontSize = getCalculatedSizeWithBaseSize(isBigSize ? 16 : 11)
   const gradientId = `radarchart_gradient_${useUID()}`
 
   const axesNames = Object.keys(axesLabels)
@@ -211,16 +246,16 @@ export const RadarChart: React.FC<Props> = ({
 
   return (
     <div ref={ref} className={css.main}>
-      {size > 0 && (
+      {radarSize > 0 && (
         <div
           ref={svgWrapperRef}
           className={css.svgWrapper}
           style={{
-            width: size,
-            height: size,
+            width: radarSize,
+            height: radarSize,
           }}
         >
-          <svg viewBox={`0 0 ${size} ${size}`} className={css.svg}>
+          <svg viewBox={`0 0 ${radarSize} ${radarSize}`} className={css.svg}>
             {concentricColors && (
               <defs>
                 <radialGradient id={gradientId} gradientUnits="userSpaceOnUse">
@@ -244,7 +279,7 @@ export const RadarChart: React.FC<Props> = ({
             />
 
             {extendedFigures.map((f, idx) => (
-              <RadarChartFigure key={idx} size={size} points={f.points} {...f.color} />
+              <RadarChartFigure key={idx} size={radarSize} points={f.points} {...f.color} />
             ))}
 
             {extendedFigures.map((f, idx) => (
@@ -267,9 +302,9 @@ export const RadarChart: React.FC<Props> = ({
                 xPercent={xPercent}
                 yPercent={yPercent}
                 label={axis.label}
+                fontSize={fontSize}
+                lineHeight={lineHeight}
                 width={axisNameWidth}
-                lineHeight={axisNameLineHeight}
-                fontSize={axisNameFontSize}
                 offset={axisNameOffset}
               />
             )

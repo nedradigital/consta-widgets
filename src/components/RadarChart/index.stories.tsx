@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { boolean, object, text } from '@storybook/addon-knobs'
+import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -106,3 +106,40 @@ storiesOf('components/RadarChart', module)
       labelSize="s"
     />
   ))
+
+storiesOf('components/RadarChart', module)
+  .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
+  .add('уменьшение размера шрифта', () => {
+    const commonProps = {
+      colorGroups: {},
+      axesLabels,
+      maxValue: 10,
+      figures,
+      ticks: 4,
+      backgroundColor: 'var(--bg-color)',
+      withConcentricColor: true,
+      labelSize: 's',
+    } as const
+
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-around',
+          width: 'max-content',
+          minWidth: '100%',
+          height: '100%',
+        }}
+      >
+        <div style={{ width: number('Ширина левого контейнера', 483) }}>
+          <RadarChart {...commonProps} />
+        </div>
+        <div style={{ width: number('Ширина среднего контейнера', 407) }}>
+          <RadarChart {...commonProps} />
+        </div>
+        <div style={{ width: number('Ширина правого контейнера', 320) }}>
+          <RadarChart {...commonProps} />
+        </div>
+      </div>
+    )
+  })
