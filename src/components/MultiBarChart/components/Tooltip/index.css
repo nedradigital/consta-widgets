@@ -1,6 +1,6 @@
 .tooltip {
-  --hint-vertical-padding: 2px;
-  --hint-horizontal-padding: 5px;
+  --tooltip-vertical-padding: 2px;
+  --tooltip-horizontal-padding: 5px;
 }
 
 .tooltipHorizontal {

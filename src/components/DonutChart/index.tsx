@@ -137,7 +137,7 @@ export const DonutChart: React.FC<Props> = ({
       {halfDonut && values.length === 1 && textData && (
         <Text data={textData} maxSize={mainRadius} position={halfDonut} />
       )}
-      <Tooltip isVisible={isTooltipVisible} direction="top" x={mousePosition.x} y={mousePosition.y}>
+      <Tooltip isVisible={isTooltipVisible} x={mousePosition.x} y={mousePosition.y}>
         {tooltipData ? (
           <LegendItem color={tooltipData.color} fontSize="xs">
             {tooltipData.name}

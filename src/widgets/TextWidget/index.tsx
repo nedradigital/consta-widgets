@@ -1,3 +1,5 @@
+import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
+
 import { Tooltip } from '@/components/Tooltip'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
@@ -100,6 +102,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params: { text, type, croppedLineCount, croppedWithGradient },
 }) => {
   const ref = React.useRef<HTMLButtonElement>(null)
+  const tooltipRef = React.useRef<HTMLDivElement>(null)
 
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
   const [tooltipPosition, setTooltipPosition] = React.useState<
@@ -131,13 +134,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
     setTooltipPosition({ x, y })
   }, [ref, tooltipVisible, tooltipPosition, setTooltipPosition])
 
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as Node
-
-    if (target !== ref.current) {
-      setTooltipVisibility(false)
-    }
-  }
+  useClickOutside([ref, tooltipRef], () => setTooltipVisibility(false))
 
   return (
     <div className={css.text}>
@@ -156,12 +153,12 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
           </button>
           {tooltipPosition && (
             <Tooltip
+              ref={tooltipRef}
               className={css.tooltip}
               isVisible={tooltipVisible}
-              direction="bottom"
+              verticalDirection="bottom"
               x={tooltipPosition.x}
               y={tooltipPosition.y}
-              onClickOutside={handleClickOutside}
             >
               {data.tooltip}
             </Tooltip>
