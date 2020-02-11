@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Data as BarChartData } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
-import { Data as DonutChartData } from '@/components/DonutChart'
+import { Data as DonutChartData, HalfDonutData } from '@/components/DonutChart'
 import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
 import { Line, Threshold } from '@/components/LinearChart'
@@ -86,7 +86,8 @@ export type DataMap = {
   [DataType.Donut]: {
     data: DonutChartData
     formatValueForTooltip?: FormatValue
-  } & WithColorGroups
+  } & WithColorGroups &
+    HalfDonutData
   [DataType.BarChart]: {
     data: readonly BarChartData[]
     unit?: string
