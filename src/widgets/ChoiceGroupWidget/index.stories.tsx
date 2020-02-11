@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { action } from '@storybook/addon-actions'
+import { boolean } from '@storybook/addon-knobs'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
@@ -10,12 +11,16 @@ import { Choice, ChoiceGroupWidgetContent, ChoiceItems, defaultParams } from '.'
 
 const items: ChoiceItems = [
   {
+    label: 'Сутки',
+    value: 'day',
+  },
+  {
     label: 'Месяц',
     value: 'month',
   },
   {
-    label: 'Сутки',
-    value: 'day',
+    label: 'Год',
+    value: 'year',
   },
 ]
 
@@ -28,14 +33,14 @@ storiesOf('widgets/ChoiceGroupWidget', module)
       return (
         <ChoiceGroupWidgetContent
           data={{
-            items,
             onChange: value => {
               action('onChange')(value)
               setSingleValue(value)
             },
             isMultiple: false,
             value: singleValue,
-            disabled: false,
+            items: object('items', items),
+            disabled: boolean('disabled', false),
           }}
           params={object('params', defaultParams)}
         />
@@ -51,14 +56,14 @@ storiesOf('widgets/ChoiceGroupWidget', module)
       return (
         <ChoiceGroupWidgetContent
           data={{
-            items,
+            items: object('items', items),
             onChange: value => {
               action('onChange')(value)
               setMultipleValue(value)
             },
             isMultiple: true,
             value: multipleValue,
-            disabled: false,
+            disabled: boolean('disabled', false),
           }}
           params={object('params', defaultParams)}
         />
