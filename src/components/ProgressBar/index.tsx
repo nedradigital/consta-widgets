@@ -44,14 +44,16 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
         <React.Fragment key={i}>
           <div className={css.cell}>
             {dataItem.caption && (
-              <TextWidget
-                data={{ text: dataItem.caption, tooltip: dataItem.tooltip }}
-                params={{
-                  text: dataItem.caption,
-                  croppedLineCount: 1,
-                  type: isCaptionBold ? 'text3' : 'text2',
-                }}
-              />
+              <div className={css.caption}>
+                <TextWidget
+                  data={{ text: dataItem.caption, tooltip: dataItem.tooltip }}
+                  params={{
+                    text: dataItem.caption,
+                    croppedLineCount: 1,
+                    type: isCaptionBold ? 'text3' : 'text2',
+                  }}
+                />
+              </div>
             )}
             <Progress data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
           </div>
