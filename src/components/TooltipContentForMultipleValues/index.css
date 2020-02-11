@@ -19,22 +19,12 @@
 }
 
 .content {
-  display: flex;
-}
+  display: grid;
 
-.row {
-  display: flex;
-  align-items: center;
+  grid-row-gap: calc-size(9);
 
-  & + & {
-    margin-top: calc-size(9);
-  }
-}
-
-.labels {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
+  width: 100%;
+  grid-template-columns: 1fr auto;
 }
 
 .label {
