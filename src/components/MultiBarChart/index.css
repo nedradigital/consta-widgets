@@ -10,14 +10,3 @@
 
   overflow: visible;
 }
-
-.controls {
-  display: flex;
-  justify-content: flex-end;
-
-  padding-top: calc-size(15);
-}
-
-.control {
-  --checkbox-font-size: calc-size(11);
-}

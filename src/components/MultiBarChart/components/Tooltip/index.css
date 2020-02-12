@@ -2,13 +2,3 @@
   --hint-vertical-padding: 2px;
   --hint-horizontal-padding: 5px;
 }
-
-.tooltipHorizontal {
-  display: inline-block;
-
-  margin-right: calc-size(5);
-
-  &:last-child {
-    margin-right: 0;
-  }
-}

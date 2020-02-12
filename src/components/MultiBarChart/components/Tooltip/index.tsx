@@ -1,7 +1,6 @@
 import * as React from 'react'
 
 import { getCalculatedSize } from '@gaz/utils/lib/css'
-import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
 import { useBaseSize } from '@/contexts'
@@ -70,21 +69,15 @@ const getDirection = (
 
 const getLayout = ({
   values,
-  isVertical,
   color,
   formatValue,
 }: {
   values: readonly ColumnWithGeometry[]
-  isVertical: boolean
   color: ColorGroups
   formatValue: FormatValue
 }) => {
   return values.map((obj, idx) => (
-    <div
-      key={idx}
-      style={{ color: color[obj.category] }}
-      className={classnames(isVertical ? undefined : css.tooltipHorizontal)}
-    >
+    <div key={idx} style={{ color: color[obj.category] }}>
       {formatValue(obj.value)}
     </div>
   ))
@@ -110,7 +103,7 @@ export const TooltipComponent: React.FC<Props> = ({
     baseSize,
     params,
   })
-  const layout = getLayout({ values, isVertical, color, formatValue })
+  const layout = getLayout({ values, color, formatValue })
 
   return (
     <Tooltip

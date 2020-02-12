@@ -1,17 +1,13 @@
 import React, { useRef, useState } from 'react'
-import { useUID } from 'react-uid'
 
-import { Checkbox } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
-import classnames from 'classnames'
-import { max } from 'lodash'
+import { max, uniq } from 'lodash'
 
 import { getGroupScale, getValuesScale } from '@/components/BarChart'
 import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 import { getEveryN } from '@/utils/array'
-import { themeColorDark } from '@/utils/theme'
 import { getTicks } from '@/utils/ticks'
 
 import { ColumnDetail, MultiBar } from './components/MultiBar'
@@ -102,22 +98,18 @@ export const MultiBarChart: React.FC<Props> = ({
   unit,
   unitPosition = 'none',
 }) => {
-  const [showValues, setShowValues] = useState(false)
   const [activeBar, setActiveBar] = useState()
 
   const ref = useRef(null)
   const svgRef = useRef(null)
   const { width, height } = useComponentSize(ref)
 
-  const uid = useUID()
-  const clipId = `multibarchart_clipPath_${uid}`
-
   const { categories, values, keyGroup } = data
   const isVertical = orientation !== 'horizontal'
 
   const groupsDomain = values.map(d => String(d[keyGroup]))
   const innerColumns = values.map(obj => Object.keys(obj).filter(key => key !== keyGroup)).flat()
-  const uniqueInnerColumns: UniqueInnerColumns = [...new Set(innerColumns)]
+  const uniqueInnerColumns: UniqueInnerColumns = uniq(innerColumns)
 
   let dataColumns = data.values.map(obj => {
     return {
@@ -153,19 +145,6 @@ export const MultiBarChart: React.FC<Props> = ({
   const gridXTickValues = isVertical ? [] : gridItems
   const gridYTickValues = isVertical ? gridItems : []
 
-  const bottomControls = (
-    <div className={classnames(themeColorDark, css.controls)}>
-      <Checkbox
-        className={css.control}
-        wpSize="m"
-        checked={showValues}
-        onChange={e => setShowValues(e.target.checked)}
-      >
-        Показать значения секций
-      </Checkbox>
-    </div>
-  )
-
   return (
     <Axis
       values={axisValues}
@@ -175,17 +154,10 @@ export const MultiBarChart: React.FC<Props> = ({
       isHorizontal={!isVertical}
       unit={unit}
       unitPosition={unitPosition}
-      bottomControls={bottomControls}
       formatValue={formatValueForLabel}
     >
       <div ref={ref} className={css.main}>
         <svg className={css.svg} width={width} height={height} ref={svgRef}>
-          <defs>
-            <clipPath id={clipId}>
-              {/* 100 - сделано для того, чтобы не обрезались tooltip/complex tooltip */}
-              <rect width={width + 200} height={height + 200} y={-100} x={-100} />
-            </clipPath>
-          </defs>
           <Grid
             scalerX={valuesScale}
             scalerY={valuesScale}
@@ -199,8 +171,6 @@ export const MultiBarChart: React.FC<Props> = ({
               <MultiBar
                 key={idx}
                 data={barColumns}
-                clipId={clipId}
-                showValues={showValues}
                 isVertical={isVertical}
                 groupScale={groupScale}
                 valuesScale={valuesScale}
