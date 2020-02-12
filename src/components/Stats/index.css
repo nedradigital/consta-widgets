@@ -137,8 +137,23 @@
    */
 
   @nest :--extra-small & {
+    padding: calc-size(2);
+  }
+
+  @nest :--small & {
+    padding: calc-size(4) calc-size(5);
+  }
+
+  @nest :--medium & {
+    padding: calc-size(6) calc-size(7);
+  }
+
+  @nest :--large & {
+    padding: calc-size(7);
+  }
+
+  @nest :--extra-small:not(:--full-reversed) & {
     margin-bottom: 0.79em;
-    padding: calc-size(1) calc-size(4);
   }
 
   @nest :--small:not(:--full-reversed) &, :--medium:not(:--full-reversed) & {
