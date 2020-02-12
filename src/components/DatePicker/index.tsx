@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import classnames from 'classnames'
+import { endOfDay, startOfDay } from 'date-fns'
 
 import { themeColorDark } from '@/utils/theme'
 
@@ -77,7 +78,9 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
 }
 
 export const DatePicker: React.FC<Props> = props => {
-  const { minDate, maxDate, size } = props
+  const { minDate: sourceMinDate, maxDate: sourceMaxDate, size } = props
+  const minDate = startOfDay(sourceMinDate)
+  const maxDate = endOfDay(sourceMaxDate)
 
   const controlsRef = useRef<HTMLDivElement>(null)
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
