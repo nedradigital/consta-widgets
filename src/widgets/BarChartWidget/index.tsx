@@ -18,7 +18,7 @@ type Params = {
   unitPosition: UnitPosition
 }
 
-const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
+export const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
 
 export const defaultParams: Params = {
   orientation: 'vertical',

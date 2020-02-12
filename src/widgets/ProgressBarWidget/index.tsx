@@ -9,7 +9,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.ProgressBar
 type Data = DataMap[typeof dataType]
 
-const widgetId = '944a8e67-5604-444f-afe0-f4a3263b734a'
+export const widgetId = '944a8e67-5604-444f-afe0-f4a3263b734a'
 
 type Params = {
   size: Size

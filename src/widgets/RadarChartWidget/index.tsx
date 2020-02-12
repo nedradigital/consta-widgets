@@ -13,6 +13,8 @@ type Params = {
   labelSize: RadarChartLabelSize
 }
 
+export const widgetId = '94456b61-fba4-4121-a29c-a313cac4f4c0'
+
 export const defaultParams: Params = {
   ticks: 4,
   withConcentricColor: false,
@@ -28,7 +30,7 @@ export const RadarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>>
 }) => <RadarChart {...data} {...params} backgroundColor="var(--bg-box)" />
 
 export const RadarChartWidget = createWidget<Data, Params>({
-  id: '94456b61-fba4-4121-a29c-a313cac4f4c0',
+  id: widgetId,
   name: 'Радар',
   dataType,
   defaultParams: {

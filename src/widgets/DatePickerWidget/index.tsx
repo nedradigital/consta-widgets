@@ -7,7 +7,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.DatePicker
 type Data = DataMap[typeof dataType]
 
-const widgetId = 'f62a900b-99a2-4194-a277-eb58c49d68ff'
+export const widgetId = 'f62a900b-99a2-4194-a277-eb58c49d68ff'
 
 const defaultParams = {}
 

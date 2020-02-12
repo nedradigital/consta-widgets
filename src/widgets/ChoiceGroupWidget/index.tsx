@@ -10,7 +10,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.ChoiceGroup
 type Data = DataMap[typeof dataType]
 
-const widgetId = '430768bb-be37-42b0-a1e7-57c6c1bebcea'
+export const widgetId = '430768bb-be37-42b0-a1e7-57c6c1bebcea'
 const sizes = ['xs', 's', 'm', 'l'] as const
 type Size = typeof sizes[number]
 

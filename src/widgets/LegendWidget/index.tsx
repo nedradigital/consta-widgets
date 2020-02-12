@@ -8,7 +8,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Legend
 type Data = DataMap[typeof dataType]
 
-const widgetId = '2538ed91-7c6d-403e-9c3e-d68d3ecd8d00'
+export const widgetId = '2538ed91-7c6d-403e-9c3e-d68d3ecd8d00'
 
 type Params = {
   direction: Direction

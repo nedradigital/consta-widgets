@@ -10,7 +10,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Button
 type Data = DataMap[typeof dataType]
 
-const widgetId = '950e2e88-06e7-4429-86be-0a26dc93944e'
+export const widgetId = '950e2e88-06e7-4429-86be-0a26dc93944e'
 
 const widths = ['full', 'auto'] as const
 type Width = typeof widths[number]
