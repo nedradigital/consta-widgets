@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
@@ -17,6 +18,7 @@ import {
   RenderConnectionPoint,
   RenderObjectPoint,
   RenderPoint,
+  RenderZoomOutButton,
 } from '../'
 
 import css from './index.css'
@@ -216,3 +218,9 @@ export const renderExampleConnectionLine: RenderConnectionLine = ({
     </g>
   ) : null
 }
+
+export const renderExampleZoomOutButton: RenderZoomOutButton = ({ onClick }) => (
+  <Button wpSize="s" view="ghost" onClick={onClick} className={css.zoomOut}>
+    Уменьшить масштаб
+  </Button>
+)

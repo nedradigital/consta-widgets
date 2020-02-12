@@ -2,7 +2,15 @@ import * as d3 from 'd3'
 import { ExtendedFeature } from 'd3'
 import { MultiPoint } from 'geojson'
 
-import { Coords, GeoObject, GeoPoint, SelectedObjectId } from './'
+import {
+  Coords,
+  ExtendedFeatureOrCollection,
+  GeoObject,
+  GeoObjectLocation,
+  GeoPoint,
+  MapPadding,
+  SelectedObjectId,
+} from './'
 
 export const featureToObject = (type: 'country' | 'region') => (
   feature: ExtendedFeature
@@ -87,4 +95,47 @@ export const getVisibleObjects = (
         )
     }
   })
+}
+
+export const SINGLE_LOCATION_ZOOM_PADDING = 1 / 3
+
+export const getFeatureToZoomOn = ({
+  selectedObject,
+  points,
+  visibleObjects,
+  defaultPadding,
+  width,
+  height,
+}: {
+  selectedObject: GeoObject | undefined
+  points: readonly GeoPoint[]
+  visibleObjects: readonly GeoObject[]
+  defaultPadding: MapPadding
+  width: number
+  height: number
+}): { feature: ExtendedFeatureOrCollection; padding: MapPadding } => {
+  if (!selectedObject) {
+    return { feature: geoPointsToExtendedFeature(points, true), padding: defaultPadding }
+  }
+
+  if (['region', 'country'].includes(selectedObject.type)) {
+    const includedLocations = visibleObjects.filter(
+      (obj): obj is GeoObjectLocation => obj.type === 'location'
+    )
+
+    const padding =
+      includedLocations.length > 1
+        ? defaultPadding
+        : ([height * SINGLE_LOCATION_ZOOM_PADDING, width * SINGLE_LOCATION_ZOOM_PADDING] as const)
+
+    return {
+      feature: {
+        type: 'FeatureCollection',
+        features: includedLocations.map(loc => loc.geoData),
+      },
+      padding,
+    }
+  }
+
+  return { feature: selectedObject.geoData, padding: defaultPadding }
 }

@@ -11,11 +11,11 @@ import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 
 import { MapObjects } from './components/MapObjects'
 import { MapPoints } from './components/MapPoints'
-import { featureToObject, geoPointsToExtendedFeature, getVisibleObjects } from './helpers'
+import { featureToObject, getFeatureToZoomOn, getVisibleObjects } from './helpers'
 import css from './index.css'
 import { useZoom } from './use-zoom'
 
-type ExtendedFeatureOrCollection = ExtendedFeature | ExtendedFeatureCollection
+export type ExtendedFeatureOrCollection = ExtendedFeature | ExtendedFeatureCollection
 
 export type GeoObjectLocation = {
   id: string
@@ -71,14 +71,17 @@ export type RenderObjectPoint = (
 ) => React.ReactNode
 export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactNode
 export type RenderConnectionLine = (connectionLine: ConnectionLine) => React.ReactNode
+export type RenderZoomOutButton = (o: { onClick: () => void }) => React.ReactNode
 export type SelectedObjectId = string | undefined
+
+export type MapPadding = readonly [number, number]
 
 export type Data = {
   points: readonly GeoPoint[]
   locations?: readonly GeoObjectLocation[]
   connectionPoints?: readonly ConnectionPoint[]
   /** Отступы от краёв карты до объекта центрирования: [вертикальный, горизонтальный] */
-  padding: readonly [number, number]
+  padding: MapPadding
   /** id выбранной страны, региона или локации */
   selectedObjectId: SelectedObjectId
   allowClickOnSelectedObject?: boolean
@@ -87,6 +90,7 @@ export type Data = {
   renderObjectPoint?: RenderObjectPoint
   renderConnectionPoint?: RenderConnectionPoint
   renderConnectionLine?: RenderConnectionLine
+  renderZoomOutButton?: RenderZoomOutButton
 }
 
 type Props = Data
@@ -130,6 +134,7 @@ export const Map: React.FC<Props> = ({
   renderObjectPoint = () => null,
   renderConnectionPoint = () => null,
   renderConnectionLine = () => null,
+  renderZoomOutButton,
 }) => {
   const ref = useRef(null)
   const svgRef = useRef(null)
@@ -197,17 +202,28 @@ export const Map: React.FC<Props> = ({
   const handleObjectHover = (object?: GeoObject) =>
     setHoveredObjectId(object ? object.id : undefined)
 
+  const handleZoomOut = () => {
+    const selectedObject = allObjects.find(isSelected)
+    setSelectedObjectId(
+      selectedObject && (selectedObject.type === 'location' ? selectedObject.parentId : undefined)
+    )
+  }
+
   // Анимация зума
   useLayoutEffect(() => {
     if (!width || !height) {
       return
     }
 
-    const selectedObject = allObjects.find(isSelected)
-    const featureToZoomOn = selectedObject
-      ? selectedObject.geoData
-      : geoPointsToExtendedFeature(points, true)
-    const [paddingY, paddingX] = padding
+    const { feature: featureToZoomOn, padding: zoomPadding } = getFeatureToZoomOn({
+      selectedObject: allObjects.find(isSelected),
+      points,
+      visibleObjects,
+      defaultPadding: padding,
+      width,
+      height,
+    })
+    const [paddingY, paddingX] = zoomPadding
     const newProjection = getProjection(width, height).fitExtent(
       [
         [paddingX, paddingY],
@@ -264,6 +280,7 @@ export const Map: React.FC<Props> = ({
           />
         </svg>
       )}
+      {renderZoomOutButton && selectedObjectId && renderZoomOutButton({ onClick: handleZoomOut })}
     </div>
   )
 }

@@ -14,6 +14,7 @@ import {
   renderExampleConnectionPoint,
   renderExampleObjectPoint,
   renderExamplePoint,
+  renderExampleZoomOutButton,
 } from './example-data'
 import { GinfPrototype as MapGinfPrototypeStory } from './example-data/ginf-prototype'
 
@@ -33,6 +34,7 @@ const MapTsubPrototypeStory = () => {
       renderObjectPoint={renderExampleObjectPoint}
       renderConnectionPoint={renderExampleConnectionPoint}
       renderConnectionLine={renderExampleConnectionLine}
+      renderZoomOutButton={renderExampleZoomOutButton}
     />
   )
 }
