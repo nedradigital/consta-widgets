@@ -14,7 +14,7 @@ type Params = {
   isShowLegend?: boolean
 }
 
-const widgetId = '2f8f8f8e-21eb-4751-ab81-56ea11ac6342'
+export const widgetId = '2f8f8f8e-21eb-4751-ab81-56ea11ac6342'
 
 export const defaultParams: Params = { size: 'l' }
 

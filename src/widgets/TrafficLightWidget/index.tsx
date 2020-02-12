@@ -8,7 +8,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.TrafficLight
 type Data = DataMap[typeof dataType]
 
-const widgetId = 'fbeb7619-ae6b-4742-ae62-deea18e1382d'
+export const widgetId = 'fbeb7619-ae6b-4742-ae62-deea18e1382d'
 
 export type Params = {
   type: ValueType

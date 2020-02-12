@@ -9,7 +9,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Checkbox
 type Data = DataMap[typeof dataType]
 
-const widgetId = '07645756-85d1-43da-b66c-10f96e5aff0b'
+export const widgetId = '07645756-85d1-43da-b66c-10f96e5aff0b'
 
 type Params = {
   size: 'm' | 'l'

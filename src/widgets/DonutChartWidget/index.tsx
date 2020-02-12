@@ -5,7 +5,7 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.Donut
 type Data = DataMap[typeof dataType]
 
-const widgetId = 'c7709106-fe0d-4e7c-bfce-2e5b88aa6d50'
+export const widgetId = 'c7709106-fe0d-4e7c-bfce-2e5b88aa6d50'
 
 type Params = {}
 

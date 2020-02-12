@@ -9,6 +9,8 @@ type Data = DataMap[typeof dataType]
 
 type Params = {}
 
+export const widgetId = '6d34ccb1-bfc6-4898-a520-7e3c8194a378'
+
 export const defaultParams: Params = {}
 
 export const MapWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ data }) => {
@@ -16,7 +18,7 @@ export const MapWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ d
 }
 
 export const MapWidget = createWidget<Data, Params>({
-  id: '6d34ccb1-bfc6-4898-a520-7e3c8194a378',
+  id: widgetId,
   name: 'Карта',
   dataType,
   defaultParams: {
