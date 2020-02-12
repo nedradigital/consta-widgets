@@ -10,7 +10,7 @@ import { ColorGroups, FormatValue } from '@/dashboard/types'
 
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
-import { LineWithDots as LineComponent } from './components/LineWithDots'
+import { LineWithDots } from './components/LineWithDots'
 import { Threshold } from './components/Threshold'
 import { Zoom } from './components/Zoom'
 import {
@@ -44,6 +44,7 @@ export type Line = {
   colorGroupName: string
   values: readonly Item[]
   dots?: boolean
+  withGradient?: boolean
   lineName: string
 }
 export type NumberRange = readonly [number, number]
@@ -282,21 +283,33 @@ export class LinearChart extends React.Component<Props, State> {
             />
           )}
 
-          {this.getLines().map(line => (
-            <LineComponent
-              key={line.colorGroupName}
-              values={[...line.values]}
-              color={colorGroups[line.colorGroupName]}
-              hasDotRadius={line.dots}
-              defaultDotRadius={dotRadius}
-              scaleX={scaleX}
-              scaleY={scaleY}
-              lineClipPath={lineClipPath}
-              dotsClipPath={dotsClipPath}
-              hoveredMainValue={hoveredMainValue}
-              isHorizontal={isHorizontal}
-            />
-          ))}
+          {this.getLines().map(line => {
+            const gradientProps = line.withGradient
+              ? ({
+                  withGradient: true,
+                  areaBottom: isHorizontal ? yDomain[0] : xDomain[0],
+                } as const)
+              : ({
+                  withGradient: false,
+                } as const)
+
+            return (
+              <LineWithDots
+                key={line.colorGroupName}
+                values={[...line.values]}
+                color={colorGroups[line.colorGroupName]}
+                hasDotRadius={line.dots}
+                defaultDotRadius={dotRadius}
+                scaleX={scaleX}
+                scaleY={scaleY}
+                lineClipPath={lineClipPath}
+                dotsClipPath={dotsClipPath}
+                hoveredMainValue={hoveredMainValue}
+                isHorizontal={isHorizontal}
+                {...gradientProps}
+              />
+            )
+          })}
         </svg>
 
         {withZoom && (

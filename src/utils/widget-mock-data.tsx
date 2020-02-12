@@ -480,6 +480,7 @@ const mockData: DataMap = {
         ],
         dots: true,
         lineName: 'Северный бур',
+        withGradient: true,
       },
       {
         colorGroupName: 'second',

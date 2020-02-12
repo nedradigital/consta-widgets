@@ -49,6 +49,7 @@ const getCommonProps = () => {
         values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map(valueMapper),
         dots: true,
         lineName: 'Северный бур',
+        withGradient: true,
       },
       {
         colorGroupName: 'second',
@@ -112,6 +113,7 @@ storiesOf('components/LinearChart', module)
             ],
             dots: true,
             lineName: 'Северный бур',
+            withGradient: true,
           },
         ]}
         gridConfig={getGridConfig()}
