@@ -143,41 +143,41 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   } = props
 
   const mainRef = React.useRef<HTMLDivElement>(null)
+  const [direction, setDirection] = React.useState({
+    horizontal: horizontalDirection,
+    vertical: verticalDirection,
+  })
 
-  const computeDirection = () => {
-    const defaultDirection = {
+  React.useLayoutEffect(() => {
+    if (!mainRef.current || x === undefined || y === undefined) {
+      return
+    }
+
+    const computedDirection = getAutoDirection({
+      elementSize: mainRef.current.getBoundingClientRect(),
+      parentSize: PARENT_ELEMENT.getBoundingClientRect(),
+      position: { x, y },
+      selectedHorizontalDirection: horizontalDirection,
+      selectedVerticalDirection: verticalDirection,
+    }) || {
       horizontal: horizontalDirection,
       vertical: verticalDirection,
     }
 
-    if (!mainRef.current || x === undefined || y === undefined) {
-      return defaultDirection
-    }
-
-    return (
-      getAutoDirection({
-        elementSize: mainRef.current.getBoundingClientRect(),
-        parentSize: PARENT_ELEMENT.getBoundingClientRect(),
-        position: { x, y },
-        selectedHorizontalDirection: horizontalDirection,
-        selectedVerticalDirection: verticalDirection,
-      }) || defaultDirection
-    )
-  }
+    setDirection(computedDirection)
+  }, [isVisible, mainRef, x, y, horizontalDirection, verticalDirection])
 
   if (!isVisible) {
     return null
   }
-
-  const computedDirection = computeDirection()
 
   return ReactDOM.createPortal(
     <div
       ref={mainRef}
       className={classnames(
         css.main,
-        directionClasses[computedDirection.horizontal],
-        directionClasses[computedDirection.vertical]
+        directionClasses[direction.horizontal],
+        directionClasses[direction.vertical]
       )}
       style={{ top: y, left: x }}
     >
