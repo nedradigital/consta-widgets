@@ -1,6 +1,14 @@
 import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
-import { addQuarters, differenceInQuarters, endOfQuarter, endOfYear, startOfYear } from 'date-fns'
+import {
+  addQuarters,
+  differenceInQuarters,
+  endOfDay,
+  endOfQuarter,
+  endOfYear,
+  startOfDay,
+  startOfYear,
+} from 'date-fns'
 import { times } from 'lodash'
 
 import { DateRange } from '@/components/DatePicker'
@@ -23,8 +31,8 @@ const getQuarters = (date: Date, minDate: Date, maxDate: Date): readonly DateRan
   const quarterAmount = differenceInQuarters(endDate, startDate) + 1
 
   return times(quarterAmount, index => {
-    const start = addQuarters(startDate, index)
-    const end = endOfQuarter(start)
+    const start = startOfDay(addQuarters(startDate, index))
+    const end = endOfDay(endOfQuarter(start))
 
     if (start < minDate || end > maxDate) {
       return []
