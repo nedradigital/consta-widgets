@@ -34,3 +34,7 @@
 .textCell {
   white-space: nowrap;
 }
+
+.caption > * {
+  height: calc-size(12);
+}
