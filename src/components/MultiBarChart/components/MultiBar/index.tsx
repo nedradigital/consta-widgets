@@ -5,8 +5,6 @@ import * as d3 from 'd3'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { TooltipComponent } from '../Tooltip'
-
 type GroupScale = d3.ScaleBand<string>
 type ValuesScale = d3.ScaleLinear<number, number>
 
@@ -41,8 +39,6 @@ export type MouseActionParams = {
 type MouseAction = (column?: MouseActionParams) => void
 
 type Props = {
-  clipId: string
-  showValues?: boolean
   data: MultiBarType
   isVertical: boolean
   groupScale: GroupScale
@@ -57,83 +53,9 @@ type Props = {
 
 export const COLUMN_SIZE = 12
 const COLUMN_PADDING = 4
-const COMPLEX_TOOLTIP_MAX_SIZE = 24
-
-export const getItemsForTooltip = (
-  items: readonly ColumnWithGeometry[],
-  index: number,
-  complexTooltipMaxSize: number
-) => {
-  let resultValue = items[index].columnSize
-
-  if (resultValue > complexTooltipMaxSize) {
-    return [items[index]]
-  }
-
-  let cursorShift = 1
-  let toggleCursorDirection = false
-
-  const boundaries: {
-    begin?: number
-    end?: number
-  } = {}
-
-  // Начиная с искомого элемента (в данном случае элемент с индексом 2) расходимся в стороны
-  // [ 0 ] [ 1 ] [ 2 ] [ 3 ] [ 4 ]
-  //               ^
-  // На каждой итерации мы проверяем попеременно соседние элементы от указанного
-  // [ 0 ] [ 1 ] [ 2 ] [ 3 ] [ 4 ]
-  //         ^           ^
-  // после чего смещаем курсор на единицу и проверяем более далеких соседей
-  // [ 0 ] [ 1 ] [ 2 ] [ 3 ] [ 4 ]
-  //   ^                       ^
-  // заканчиваем, когда одна обе границы найдутся по условию или когда мы упремся в границы массива
-  while (boundaries.begin == null || boundaries.end == null) {
-    const currentIndex = index + (toggleCursorDirection ? cursorShift * -1 : cursorShift)
-    const hasBoundary = boundaries.begin != null || boundaries.end != null
-    const isBeyoundLeftBoundary = currentIndex < 0
-    const isBeyoundRightBoundary = currentIndex > items.length - 1
-
-    // двигаем курсор на поцию вперед только если были проверены оба направления
-    // или если по одному из направлений уже найдена граница
-    const shouldMoveCursor = toggleCursorDirection || hasBoundary
-
-    if (shouldMoveCursor) {
-      cursorShift++
-    }
-
-    if (isBeyoundLeftBoundary) {
-      boundaries.begin = 0
-      toggleCursorDirection = !toggleCursorDirection
-      continue
-    }
-
-    if (isBeyoundRightBoundary) {
-      boundaries.end = items.length
-      toggleCursorDirection = !toggleCursorDirection
-      continue
-    }
-
-    const currentValue = items[currentIndex].columnSize
-
-    if (resultValue + currentValue >= complexTooltipMaxSize) {
-      boundaries[toggleCursorDirection ? 'begin' : 'end'] = toggleCursorDirection
-        ? currentIndex + 1
-        : currentIndex
-    } else {
-      resultValue += currentValue
-    }
-
-    toggleCursorDirection = hasBoundary ? toggleCursorDirection : !toggleCursorDirection
-  }
-
-  return items.slice(boundaries.begin, boundaries.end)
-}
 
 export const MultiBar: React.FC<Props> = ({
   data,
-  clipId,
-  showValues,
   isVertical,
   groupScale,
   valuesScale,
@@ -141,14 +63,11 @@ export const MultiBar: React.FC<Props> = ({
   uniqueInnerColumns,
   onMouseLeave,
   onMouseEnter,
-  parentRef,
-  formatValue,
 }) => {
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_SIZE)
   const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
-  const complexTooltipMaxSize = getCalculatedSizeWithBaseSize(COMPLEX_TOOLTIP_MAX_SIZE)
   const barSize = (columnDefaultSize + columnPadding) * uniqueInnerColumns.length
 
   const groupSecondaryScale = d3
@@ -160,81 +79,56 @@ export const MultiBar: React.FC<Props> = ({
 
   const { columnDetails, keyGroup } = data
 
-  const columnDetailsData = columnDetails.map(columns =>
-    columns.map(column => {
-      const { columnName, positionBegin, positionEnd } = column
+  const columnDetailsData: ReadonlyArray<readonly ColumnWithGeometry[]> = columnDetails.map(
+    columns =>
+      columns.map(column => {
+        const { columnName, positionBegin, positionEnd } = column
 
-      const groupSecondaryValue = groupSecondaryScale(columnName)
+        const groupSecondaryValue = groupSecondaryScale(columnName)
 
-      return {
-        ...column,
-        columnSize: Math.abs(valuesScale(positionBegin) - valuesScale(positionEnd)),
-        x: (isVertical ? groupSecondaryValue : valuesScale(positionBegin)) || 0,
-        y: (isVertical ? valuesScale(positionEnd) : groupSecondaryValue) || 0,
-      }
-    })
+        return {
+          ...column,
+          columnSize: Math.abs(valuesScale(positionBegin) - valuesScale(positionEnd)),
+          x: (isVertical ? groupSecondaryValue : valuesScale(positionBegin)) || 0,
+          y: (isVertical ? valuesScale(positionEnd) : groupSecondaryValue) || 0,
+        }
+      })
   )
 
   const translate = (groupScale(String(keyGroup)) || 0) + groupScale.bandwidth() / 2 - barSize / 2
   const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
 
-  const renderContent = (params: {
-    column: ColumnWithGeometry
-    index: number
+  const renderContent = (
+    column: ColumnWithGeometry,
+    index: number,
     items: readonly ColumnWithGeometry[]
-  }) => {
-    const { column, index, items } = params
-
+  ) => {
     const { x, y, columnSize, columnName } = column
-
-    const mutableItemsForTooltip = getItemsForTooltip(items, index, complexTooltipMaxSize)
 
     const details = {
       columnName,
       innerTranslate: translate,
       params: {
-        columnSize: mutableItemsForTooltip.reduce((a, b) => a + b.columnSize, 0),
-        x: mutableItemsForTooltip[0].x,
-        y: mutableItemsForTooltip[mutableItemsForTooltip.length - 1].y,
+        columnSize: items.reduce((a, b) => a + b.columnSize, 0),
+        x: items[0].x,
+        y: items[items.length - 1].y,
       },
-      values: isVertical ? mutableItemsForTooltip.reverse() : mutableItemsForTooltip,
+      values: isVertical ? [...items].reverse() : items,
     }
 
     return (
-      <React.Fragment key={keyGroup + index}>
-        <rect
-          x={x}
-          y={y}
-          width={isVertical ? columnDefaultSize : columnSize}
-          height={isVertical ? columnSize : columnDefaultSize}
-          fill={color[column.category]}
-          onMouseLeave={onMouseLeave}
-          onMouseEnter={() => onMouseEnter(details)}
-        />
-        <TooltipComponent
-          barColumn={details}
-          isVertical={isVertical}
-          uniqueInnerColumns={uniqueInnerColumns}
-          isVisible={Boolean(showValues)}
-          svgParentRef={parentRef}
-          color={color}
-          formatValue={formatValue}
-        />
-      </React.Fragment>
+      <rect
+        key={keyGroup + index}
+        x={x}
+        y={y}
+        width={isVertical ? columnDefaultSize : columnSize}
+        height={isVertical ? columnSize : columnDefaultSize}
+        fill={color[column.category]}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={() => onMouseEnter(details)}
+      />
     )
   }
 
-  return (
-    <g transform={transform} clipPath={`url(#${clipId})`}>
-      {columnDetailsData.map(columns =>
-        columns.map((column, index, items) =>
-          renderContent({
-            column,
-            index,
-            items,
-          })
-        )
-      )}
-    </g>
-  )
+  return <g transform={transform}>{columnDetailsData.map(columns => columns.map(renderContent))}</g>
 }
