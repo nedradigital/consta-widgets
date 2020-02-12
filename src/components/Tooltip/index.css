@@ -2,7 +2,7 @@
   --arrow-size: calc-size(var(--tooltip-arrow-size));
   --tooltip-positive-arrow-offset: calc(2 * var(--arrow-size));
   --tooltip-negative-arrow-offset: calc(-2 * var(--arrow-size));
-  --tooltip-bg-color: rgba(255, 255, 255, 0.9);
+  --tooltip-bg-color: #fff;
   --tooltip-text-color: #002033;
 
   position: absolute;
@@ -50,9 +50,11 @@
 
   position: relative;
 
+  max-width: 400px;
   padding: calc-size(var(--tooltip-vertical-padding)) calc-size(var(--tooltip-horizontal-padding));
 
   color: var(--tooltip-text-color);
+  border: 1px solid rgba(0, 32, 51, 0.12);
   border-radius: 4px;
   background-color: var(--tooltip-bg-color);
 

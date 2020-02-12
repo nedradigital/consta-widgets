@@ -52,7 +52,7 @@
   --bg-box: #002d47;
   --tooltip-arrow-size: 6px;
   --tooltip-vertical-padding: 10px;
-  --tooltip-horizontal-padding: 12px;
+  --tooltip-horizontal-padding: 10px;
   --table-even-row-background: rgba(0, 0, 0, 0.05);
   --scroll-bar-color: rgba(255, 255, 255, 0.7);
   --z-filter--tooltip: 1;
