@@ -6,7 +6,7 @@ import { storiesOf } from '@storybook/react'
 import { horizontalDirections, Tooltip, verticalDirections } from '.'
 
 const Wrapper = () => {
-  const [position, setPosition] = useState({ x: 100, y: 100 })
+  const [position, setPosition] = useState({ x: 10, y: 10 })
 
   const handleMouseMove = (event: React.MouseEvent) => {
     setPosition({ x: event.pageX, y: event.pageY })
