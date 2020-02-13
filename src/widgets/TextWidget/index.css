@@ -26,14 +26,31 @@
 
   color: rgba(246, 251, 253, var(--color-opacity));
 
-  & svg {
-    width: calc-size(16);
-    height: calc-size(16);
-  }
-
   &:hover {
     --color-opacity: 0.9;
   }
+}
+
+.sizeXS,
+.sizeS,
+.sizeL {
+  width: calc-size(16);
+  height: calc-size(16);
+  margin-top: calc-size(4);
+}
+
+.sizeXL,
+.size3XL {
+  width: calc-size(20);
+  height: calc-size(20);
+}
+
+.sizeXL {
+  margin-top: calc-size(8);
+}
+
+.size3XL {
+  margin-top: calc-size(13);
 }
 
 .tooltip {

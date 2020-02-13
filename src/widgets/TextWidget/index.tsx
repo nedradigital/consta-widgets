@@ -1,4 +1,5 @@
 import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
+import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
@@ -6,7 +7,7 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
-import { StyleProps, Text } from '@/ui/Text'
+import { sizes, StyleProps, Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import { ReactComponent as IconSettings } from './icons/settings.svg'
@@ -95,6 +96,14 @@ const textType: TextType = {
   },
 }
 
+const iconSize = {
+  xs: css.sizeXS,
+  s: css.sizeS,
+  l: css.sizeL,
+  xl: css.sizeXL,
+  '3xl': css.size3XL,
+}
+
 export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
 
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -136,10 +145,13 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
 
   useClickOutside([ref, tooltipRef], () => setTooltipVisibility(false))
 
+  const textProps = textType[type].props
+  const size = textProps.size || sizes[0]
+
   return (
     <div className={css.text}>
       <Text
-        {...textType[type].props}
+        {...textProps}
         croppedLineCount={croppedLineCount}
         croppedWithGradient={croppedWithGradient}
         className={css.content}
@@ -149,7 +161,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       {data && (data.tooltip || data.onClick) && (
         <div className={css.toggleable}>
           <button ref={ref} className={css.button} onClick={onToggleClick}>
-            <IconSettings />
+            <IconSettings className={classnames(iconSize[size])} />
           </button>
           {tooltipPosition && (
             <Tooltip
