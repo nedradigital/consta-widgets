@@ -436,30 +436,19 @@ const mockData: DataMap = {
       second: '#EB5757',
       third: '#FCA355',
     },
-    data: [
+    categories: ['first', 'second', 'third'],
+    groups: [
       {
-        label: 'март',
-        values: [
-          { value: 410, colorGroupName: 'first' },
-          { value: 600, colorGroupName: 'second' },
-          { value: 270, colorGroupName: 'third' },
-        ],
+        groupName: 'март',
+        values: [{ first: 410 }, { second: 600 }, { third: 270 }],
       },
       {
-        label: 'апрель',
-        values: [
-          { value: 670, colorGroupName: 'first' },
-          { value: 1000, colorGroupName: 'second' },
-          { value: 1100, colorGroupName: 'third' },
-        ],
+        groupName: 'апрель',
+        values: [{ first: 670 }, { second: 1000 }, { third: 1100 }],
       },
       {
-        label: 'май',
-        values: [
-          { value: 1200, colorGroupName: 'first' },
-          { value: 630, colorGroupName: 'second' },
-          { value: 100, colorGroupName: 'third' },
-        ],
+        groupName: 'май',
+        values: [{ first: 1200 }, { second: 630 }, { third: 100 }],
       },
     ],
     unit: 'тыс м3',
@@ -629,15 +618,12 @@ const mockData: DataMap = {
       cherries: '#FCA355',
       year: 'aquamarine',
     },
-    data: {
-      categories: ['apples', 'bananas', 'cherries'],
-      values: [
-        { month: 'Q1-2016', column1: { apples: 30, bananas: 20, cherries: 23 } },
-        { month: 'Q2-2016', column1: { apples: 1600, bananas: 40, cherries: 45 } },
-        { month: 'Q3-2016', column1: { apples: 640, bananas: 960, cherries: 73 } },
-      ],
-      keyGroup: 'month',
-    },
+    categories: ['apples', 'bananas', 'cherries'],
+    groups: [
+      { groupName: 'Q1-2016', values: [{ apples: 30, bananas: 20, cherries: 23 }] },
+      { groupName: 'Q2-2016', values: [{ apples: 1600, bananas: 40, cherries: 45 }] },
+      { groupName: 'Q3-2016', values: [{ apples: 640, bananas: 960, cherries: 73 }] },
+    ],
     unit: 'тыс м3',
   },
   [DataType.Legend]: {

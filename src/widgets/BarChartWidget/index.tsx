@@ -41,6 +41,7 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
     orientation={orientation}
     unitPosition={unitPosition}
     size={size}
+    isMultiBar={false}
   />
 )
 

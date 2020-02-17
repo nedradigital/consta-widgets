@@ -7,7 +7,6 @@ import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
 import { Line, Threshold } from '@/components/LinearChart'
 import { Data as MapData } from '@/components/Map'
-import { Data as MultiBarChartData } from '@/components/MultiBarChart'
 import { Data as ProgressBarData } from '@/components/ProgressBar'
 import { Data as PyramidData } from '@/components/PyramidChart'
 import { Data as RadarChartData } from '@/components/RadarChart'
@@ -88,10 +87,7 @@ export type DataMap = {
     formatValueForTooltip?: FormatValue
   } & WithColorGroups &
     HalfDonutData
-  [DataType.BarChart]: {
-    data: readonly BarChartData[]
-    unit?: string
-  } & WithColorGroups
+  [DataType.BarChart]: BarChartData & WithColorGroups
   [DataType.LinearChart]: {
     data: readonly Line[]
     formatValueForLabel?: FormatValue
@@ -108,11 +104,7 @@ export type DataMap = {
   [DataType.ProgressBar]: {
     data: readonly ProgressBarData[]
   } & WithColorGroups
-  [DataType.MultiBarChart]: {
-    data: MultiBarChartData
-    unit?: string
-    formatValueForLabel?: FormatValue
-  } & WithColorGroups
+  [DataType.MultiBarChart]: BarChartData & WithColorGroups
   [DataType.Legend]: {
     data: LegendData
   } & WithColorGroups

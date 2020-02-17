@@ -12,20 +12,16 @@ export const dataColorsValidator = (
 ): readonly string[] => {
   switch (dataType) {
     case DataType.BarChart: {
-      const { data, colorGroups } = widgetData as DataMap[DataType.BarChart]
+      const { categories, colorGroups } = widgetData as DataMap[DataType.BarChart]
       const colors = Object.keys(colorGroups)
 
-      return data
+      return categories
         .map(item => {
-          return item.values
-            .map(({ colorGroupName }) => {
-              if (!colors.includes(colorGroupName)) {
-                return colorGroupName
-              }
-            })
-            .filter(isDefined)
+          if (!colors.includes(item)) {
+            return item
+          }
         })
-        .flat()
+        .filter(isDefined)
     }
 
     case DataType.Donut: {
@@ -68,10 +64,10 @@ export const dataColorsValidator = (
     }
 
     case DataType.MultiBarChart: {
-      const { data, colorGroups } = widgetData as DataMap[DataType.MultiBarChart]
+      const { categories, colorGroups } = widgetData as DataMap[DataType.MultiBarChart]
       const colors = Object.keys(colorGroups)
 
-      return data.categories
+      return categories
         .map(item => {
           if (!colors.includes(item)) {
             return item
@@ -127,7 +123,7 @@ export const widgetDataIsEmpty = (
   switch (type) {
     case DataType.BarChart: {
       const widgetData = data as DataMap[DataType.BarChart] | undefined
-      return !widgetData || widgetData.data.length === 0
+      return !widgetData || widgetData.groups.length === 0
     }
     case DataType.Donut: {
       const widgetData = data as DataMap[DataType.Donut] | undefined
@@ -150,7 +146,7 @@ export const widgetDataIsEmpty = (
     }
     case DataType.MultiBarChart: {
       const widgetData = data as DataMap[DataType.MultiBarChart] | undefined
-      return !widgetData || widgetData.data.values.length === 0
+      return !widgetData || widgetData.groups.length === 0
     }
     case DataType.ProgressBar: {
       const widgetData = data as DataMap[DataType.ProgressBar] | undefined
