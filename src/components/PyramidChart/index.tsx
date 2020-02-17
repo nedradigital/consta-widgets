@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isNotNil } from '@gaz/utils/lib/type-guards'
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/contexts/baseSize'

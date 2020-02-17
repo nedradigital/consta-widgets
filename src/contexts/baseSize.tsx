@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getCalculatedSize } from '@gaz/utils/lib/css'
+import { getCalculatedSize } from '@csssr/gpn-utils/lib/css'
 
 export const BaseSizeContext = React.createContext(16)
 

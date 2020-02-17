@@ -13,8 +13,7 @@ jobs:
       uses: actions/checkout@v1
     - name: Install github-release-notes and generate changelog
       run: |
-        npm install github-release-notes
-        ./node_modules/.bin/gren changelog --generate --override --token=${{ secrets.GITHUB_TOKEN }} --changelog-filename=TEMP_CHANGELOG.md
+        npx github-release-notes changelog --generate --override --token=${{ secrets.GITHUB_TOKEN }} --changelog-filename=TEMP_CHANGELOG.md
       env:
         CI: true
     - name: Create and publish realese
@@ -22,4 +21,18 @@ jobs:
       with:
         bodyFile: 'TEMP_CHANGELOG.md'
         token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Use Node.js 10
+      uses: actions/setup-node@v1
+      with:
+        node-version: 10
+        registry-url: 'https://npm.pkg.github.com'
+    - name: Publish to gh registry
+      run: |
+        yarn policies set-version 1.19.1
+        yarn
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_REGISTRY_TOKEN }}
+    - run: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

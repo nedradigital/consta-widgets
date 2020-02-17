@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useUID } from 'react-uid'
 
-import { isDefined, isNotNil } from '@gaz/utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 

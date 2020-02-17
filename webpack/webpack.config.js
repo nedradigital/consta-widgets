@@ -4,7 +4,7 @@ const path = require('path')
 const webpackMerge = require('webpack-merge')
 const TerserPlugin = require('terser-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const getCommonConfig = require('@gaz/configs/config/webpack/common.webpack')
+const getCommonConfig = require('@csssr/gpn-configs/config/webpack/common.webpack')
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 

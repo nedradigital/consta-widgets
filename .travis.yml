@@ -1,9 +1,0 @@
-language: node_js
-node_js: '10'
-
-cache: yarn
-
-before_install:
-  - npm install -g yarn npm-cli-login
-  - npm-cli-login -u ${LOGIN} -p ${PASSWORD} -e evgeniy.grachev@csssr.com -r https://nexus.csssr.space/repository/csssr -s @gaz
-  - yarn --frozen-lockfile

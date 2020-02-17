@@ -1,4 +1,4 @@
-const { calcSize } = require('@gaz/utils/lib/css')
+const { calcSize } = require('@csssr/gpn-utils/lib/css')
 
 module.exports = {
   withCustomRules(config) {

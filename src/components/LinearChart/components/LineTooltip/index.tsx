@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isDefined, isNotNil } from '@gaz/utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'

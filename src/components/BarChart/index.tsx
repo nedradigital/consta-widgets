@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import { useUID } from 'react-uid'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 

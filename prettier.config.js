@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@gaz/configs/prettier.config.js'),
+  ...require('@csssr/gpn-configs/prettier.config.js'),
 }

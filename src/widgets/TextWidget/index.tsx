@@ -1,4 +1,4 @@
-import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'

@@ -1,4 +1,4 @@
-const getCommonConfig = require('@gaz/configs/config/webpack/common.webpack')
+const getCommonConfig = require('@csssr/gpn-configs/config/webpack/common.webpack')
 const webpackMerge = require('webpack-merge')
 const omit = require('lodash/omit')
 

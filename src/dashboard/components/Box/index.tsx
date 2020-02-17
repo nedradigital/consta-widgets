@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 
-import { move, removeAt, updateAt } from '@gaz/utils/lib/array'
+import { move, removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
 import classnames from 'classnames'
 
 import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'

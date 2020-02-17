@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/components/RadarChart'

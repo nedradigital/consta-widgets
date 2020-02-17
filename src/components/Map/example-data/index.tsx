@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'

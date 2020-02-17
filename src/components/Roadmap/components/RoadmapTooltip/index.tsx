@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import { getDayPlural } from '@gaz/utils/lib/pluralization'
+import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 

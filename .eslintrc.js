@@ -1,5 +1,5 @@
 module.exports = {
   extends: [
-    require.resolve('@gaz/configs/eslintrc'),
+    require.resolve('@csssr/gpn-configs/eslintrc'),
   ]
 }

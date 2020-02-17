@@ -2,8 +2,8 @@ import React, { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useDrop } from 'react-dnd'
 import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout'
 
-import { updateAt } from '@gaz/utils/lib/array'
-import { updateBaseSize } from '@gaz/utils/lib/css'
+import { updateAt } from '@csssr/gpn-utils/lib/array'
+import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
 
 import { BaseSizeContext } from '@/contexts/baseSize'

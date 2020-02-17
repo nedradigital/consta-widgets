@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Checkbox } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'

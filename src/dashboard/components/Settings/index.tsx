@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { updateAt } from '@gaz/utils/lib/array'
+import { updateAt } from '@csssr/gpn-utils/lib/array'
 
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'

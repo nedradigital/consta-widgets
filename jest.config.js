@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@gaz/configs/jest.config.js'),
+  ...require('@csssr/gpn-configs/jest.config.js'),
 };

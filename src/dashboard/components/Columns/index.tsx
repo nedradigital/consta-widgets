@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { removeAt, updateAt } from '@gaz/utils/lib/array'
+import { removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
 import classnames from 'classnames'
 
 import { BoxItem, ColumnContent, ColumnsContent, Data, Dataset } from '@/dashboard/types'

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { zip } from 'lodash'

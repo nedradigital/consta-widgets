@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { getArrayWithRandomInt } from '@gaz/utils/lib/array'
+import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
 import { object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
