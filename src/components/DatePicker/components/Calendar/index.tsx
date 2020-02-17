@@ -194,10 +194,10 @@ export const Calendar: React.FC<Props> = ({
           isFirstDate && css.isFirstDate,
           isLastDate && css.isLastDate,
           isSelectedBackwards && css.isSelectedBackwards,
-          value && !isDateRange(value) && css.isSingleDate,
-          value && isDateRange(value) && css.isRange,
-          value && isDateRange(value) && isHighlighted && css.isHighlighted,
-          value && isDateRange(value) && value[0] && !value[1] && css.isOnlyOneValue
+          !isDateRange(value) && css.isSingleDate,
+          isDateRange(value) && css.isRange,
+          isDateRange(value) && isHighlighted && css.isHighlighted,
+          isDateRange(value) && value[0] && !value[1] && css.isOnlyOneValue
         )}
         onMouseEnter={() => handleHoverDate(date)}
         onMouseLeave={() => setHoveredDate(undefined)}
