@@ -1,0 +1,121 @@
+@custom-selector :--main .main;
+
+:--main {
+  position: relative;
+
+  display: grid;
+
+  width: 100%;
+  height: 100%;
+  grid-gap: 8px;
+}
+
+.cell {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+  min-height: 0;
+
+  @nest :--main:not(.viewMode) & {
+    min-height: 50px;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      content: '';
+      pointer-events: none;
+
+      border: 1px dashed gray;
+    }
+  }
+}
+
+.buttons {
+  position: absolute;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+
+  width: max-content;
+  padding: 6px;
+
+  user-select: none;
+
+  border-radius: 4px;
+  background: var(--bg-constructor-butttons);
+
+  @nest :--main:not(:hover) & {
+    opacity: 0;
+  }
+
+  &:hover {
+    background: var(--bg-constructor-butttons-hover);
+
+    & > *:first-child {
+      display: none;
+    }
+
+    & > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+
+  &:not(:hover) > *:not(:first-child) {
+    display: none;
+  }
+
+  &.forRow {
+    top: 50%;
+    left: 0;
+
+    transform: translate(-1.2em, -50%);
+  }
+
+  &.forColumn {
+    top: 0;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+  }
+}
+
+.button {
+  font-size: 16px;
+  line-height: 1.1;
+
+  position: relative;
+
+  cursor: pointer;
+
+  &:not(button) {
+    pointer-events: none;
+  }
+
+  &::before {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+
+    content: '';
+
+    border-radius: 2px;
+  }
+
+  &:hover::before {
+    background: var(--bg-color-white);
+  }
+}
+
+.input {
+  width: 3.5em;
+}

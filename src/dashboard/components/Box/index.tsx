@@ -2,17 +2,19 @@ import React, { useState } from 'react'
 import { useDrag } from 'react-dnd'
 
 import { move, removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
+import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
-import { Columns, emptyColumn } from '@/dashboard/components/Columns'
+import { EMPTY_GRID_CONTENT, Grid } from '@/dashboard/components/Grid'
 import { Settings } from '@/dashboard/components/Settings'
+import { themeColorDark } from '@/utils/theme'
 import { isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
-import { WidgetType } from '@/utils/WidgetFactory'
+import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
 
 import { ItemTypes } from '../../dnd-constants'
-import { BoxItem, ColumnsContent, Data, Dataset } from '../../types'
+import { BoxItem, Data, Dataset, GridContent, GridItem } from '../../types'
 
 import css from './index.css'
 
@@ -28,22 +30,10 @@ type Props = {
   isNestedBox?: boolean
 }
 
-const widgetsList: { [key: string]: any } = {}
-const req = require.context('../../../widgets', true, /index.tsx$/)
-req.keys().forEach(key => {
-  const widgetName = key.replace(/\.\/(.*)\/.*$/, '$1')
-  const widgetId = req(key)[widgetName].id
-
-  widgetsList[widgetId] = {
-    widgetName,
-    ...req(key),
-  }
-})
-
-export const getWidget = (id: string): WidgetType<any, any> => {
-  const name = widgetsList[id].widgetName
-
-  return widgetsList[id][name]
+const emptyGrid: GridItem = {
+  type: 'grid',
+  grid: EMPTY_GRID_CONTENT,
+  params: {},
 }
 
 export const Box: React.FC<Props> = ({
@@ -56,7 +46,7 @@ export const Box: React.FC<Props> = ({
   datasets,
   isNestedBox,
 }) => {
-  const [selectedItem, changeSelected] = useState(Object.keys(widgetsList)[0])
+  const [selectedItem, changeSelected] = useState(widgetIds[0])
   const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
   const { getUniqueName, removeName } = useUniqueNameGenerator(
     items.filter(isWidget).map(item => item.id)
@@ -64,8 +54,8 @@ export const Box: React.FC<Props> = ({
 
   const addItem = () => {
     switch (selectedItem) {
-      case 'columns': {
-        onChange([...items, { type: 'columns', columns: [emptyColumn, emptyColumn], params: {} }])
+      case 'grid': {
+        onChange([...items, emptyGrid])
         return
       }
       default: {
@@ -99,11 +89,11 @@ export const Box: React.FC<Props> = ({
     onChange(move(items, index, index + direction))
   }
 
-  const changeColumnsConfig = (index: number, columns: ColumnsContent) => {
+  const updateGrid = (index: number, grid: GridContent) => {
     const item = items[index]
 
-    if (item.type === 'columns') {
-      onChange(updateAt(items, index, { ...item, columns }))
+    if (item.type === 'grid') {
+      onChange(updateAt(items, index, { ...item, grid }))
     }
   }
 
@@ -134,28 +124,31 @@ export const Box: React.FC<Props> = ({
       style={{ opacity }}
     >
       {!viewMode && (
-        <div className={css.panel}>
-          <select value={selectedItem} onChange={e => changeSelected(e.target.value)}>
-            <optgroup label="Виджеты">
-              {Object.keys(widgetsList).map(key => (
-                <option key={key} value={key}>
-                  {widgetsList[key].widgetName} ({getWidget(key).showName})
-                </option>
-              ))}
-            </optgroup>
-            {isNestedBox ? null : (
-              <optgroup label="Кастомные элементы">
-                {['columns'].map(key => (
-                  <option key={key} value={key}>
-                    {key}
+        <div className={classnames(css.panel, themeColorDark)}>
+          + виджет
+          <div className={css.panelHoveredContent}>
+            <select
+              value={selectedItem}
+              onChange={e => changeSelected(e.target.value)}
+              className={css.select}
+            >
+              <optgroup label="Виджеты">
+                {widgetIds.map(id => (
+                  <option key={id} value={id}>
+                    {getWidgetComponentName(id)} ({getWidget(id).showName})
                   </option>
                 ))}
               </optgroup>
-            )}
-          </select>
-          <button className={css.add} type="button" onClick={addItem}>
-            ➕
-          </button>
+              {isNestedBox ? null : (
+                <optgroup label="Кастомные элементы">
+                  <option value="grid">Сетка</option>
+                </optgroup>
+              )}
+            </select>
+            <Button wpSize="xs" view="secondary" onClick={addItem}>
+              Добавить
+            </Button>
+          </div>
         </div>
       )}
       {items.map((item, index) => {
@@ -174,15 +167,13 @@ export const Box: React.FC<Props> = ({
           )
         }
 
-        if (item.type === 'columns') {
+        if (item.type === 'grid') {
           component = (
-            <Columns
+            <Grid
               datasets={datasets}
-              columns={item.columns}
+              grid={item.grid}
               viewMode={viewMode}
-              onChange={columns => {
-                changeColumnsConfig(index, columns)
-              }}
+              onChange={gridContent => updateGrid(index, gridContent)}
               data={data}
             />
           )
@@ -211,7 +202,7 @@ export const Box: React.FC<Props> = ({
             onChangePosition={changePosition}
             onRemoveItem={removeItem}
             onOpenSettings={openSettings}
-            debugName={isWidget(item) ? item.debugName : 'Колонки'}
+            debugName={isWidget(item) ? item.debugName : 'Сетка'}
           >
             {component}
           </BoxItemWrapper>

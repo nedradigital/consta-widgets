@@ -83,32 +83,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
     >
       {!viewMode && (
         <>
-          {index > 0 ? (
-            <button
-              className={classnames(css.button, css.arrow)}
-              type="button"
-              onClick={() => onChangePosition(index, -1)}
-              children="⬆️"
-              title="Переместить виджет выше"
-            />
-          ) : null}
-          {!lastElement ? (
-            <button
-              className={classnames(css.button, css.arrow, css.down)}
-              type="button"
-              onClick={() => onChangePosition(index, 1)}
-              children="⬇️"
-              title="Переместить виджет ниже"
-            />
-          ) : null}
           <div className={css.editButtons}>
-            <button
-              className={css.button}
-              type="button"
-              children="💀"
-              onClick={() => onRemoveItem(index)}
-              title={`Удалить виджет "${debugName}"`}
-            />
             <button
               className={css.button}
               type="button"
@@ -116,6 +91,31 @@ export const BoxItemWrapper: React.FC<Props> = ({
               onClick={() => onOpenSettings(index)}
               title={`Настройки виджета "${debugName}"`}
             />
+            <button
+              className={css.button}
+              type="button"
+              children="💀"
+              onClick={() => onRemoveItem(index)}
+              title={`Удалить виджет "${debugName}"`}
+            />
+            {index > 0 ? (
+              <button
+                className={css.button}
+                type="button"
+                onClick={() => onChangePosition(index, -1)}
+                children="⬆️"
+                title="Переместить виджет выше"
+              />
+            ) : null}
+            {!lastElement ? (
+              <button
+                className={css.button}
+                type="button"
+                onClick={() => onChangePosition(index, 1)}
+                children="⬇️"
+                title="Переместить виджет ниже"
+              />
+            ) : null}
           </div>
         </>
       )}

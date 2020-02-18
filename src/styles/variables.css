@@ -40,6 +40,8 @@
   --color-important-opacity-10: rgba(85, 146, 255, 0.1);
   --color-success: rgb(134, 255, 160);
   --color-success-semi: rgb(134, 255, 160, 0.5);
+  --bg-constructor-butttons: rgba(0, 0, 0, 0.5);
+  --bg-constructor-butttons-hover: rgba(0, 0, 0, 0.8);
   --main-font-family: 'Segoe UI', Arial, sans-serif;
   --main-font-size: 11px;
   --font-size-medium: 16px;

@@ -1674,10 +1674,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@csssr/gpn-configs@0.2.18":
-  version "0.2.18"
-  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.18/c5642c513beb71573e69be925e138c75b32816c690e526f79a2381bee5c61747#f8045595adbbb921e80dffceef75b672e81ebbed"
-  integrity sha512-6ZvVfokGTGGRDcCv4T+FzdoxT9PtLhMfhGOPHiV25mlGvdAjqBjKqxokVHqlPOv+VvQ0TFhwmRd9nPqGVy6ilw==
+"@csssr/gpn-configs@0.2.19":
+  version "0.2.19"
+  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.19/d7f823b503941f28e1f8098b60584affcc8d9cc4a02e6e776fc35ecfa21797f6#6fbe0ec0dfbc1307f7a769c2faae8216577459cc"
+  integrity sha512-9Xdrd4YSnjZYF0GWkO09eZ9afvGC7C2fQN75dyFd6cgoXzqEJOLU8ttNhgbhPgfgdm5gsBn6ULfWYLi9Fi6Jyw==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1703,6 +1703,7 @@
     chalk "2.4.2"
     clean-webpack-plugin "3.0.0"
     copy-webpack-plugin "5.0.4"
+    core-js "3.6.4"
     css-loader "3.0.0"
     css-modules-typescript-loader "2.0.4"
     cssnano "4.1.10"
@@ -5190,6 +5191,11 @@ core-js-pure@^3.0.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/core-js-pure/-/core-js-pure-3.2.1.tgz#879a23699cff46175bfd2d09158b5c50645a3c45"
   integrity "sha1-h5ojaZz/Rhdb/S0JFYtcUGRaPEU= sha512-+qpvnYrsi/JDeQTArB7NnNc2VoMYLE1YSkziCDHgjexC2KH7OFiGhLUd3urxfyWmNjSwSW7NYXPWHMhuIJx9Ow=="
+
+core-js@3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/core-js/-/core-js-3.6.4.tgz#440a83536b458114b9cb2ac1580ba377dc470647"
+  integrity sha512-4paDGScNgZP2IXXilaffL9X7968RuvwlkK3xWtZRVqgd8SYNiVKRJvkFd1aqqEuPfN7E68ZHEp9hDj6lHj4Hyw==
 
 core-js@^1.0.0:
   version "1.2.7"

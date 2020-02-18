@@ -7,6 +7,7 @@ import { Dashboard4, migration4 } from './dashboard4'
 import { Dashboard5, migration5 } from './dashboard5'
 import { Dashboard6, migration6 } from './dashboard6'
 import { Dashboard7, migration7 } from './dashboard7'
+import { Dashboard8, migration8 } from './dashboard8'
 
 export type AnyDashboardStateVersion =
   | Dashboard0.State
@@ -17,6 +18,7 @@ export type AnyDashboardStateVersion =
   | Dashboard5.State
   | Dashboard6.State
   | Dashboard7.State
+  | Dashboard8.State
   | CurrentDashboard.State
 
 export const migrations = [
@@ -27,5 +29,6 @@ export const migrations = [
   migration5,
   migration6,
   migration7,
+  migration8,
   currentMigration,
 ] as const

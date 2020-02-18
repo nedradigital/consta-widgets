@@ -2,14 +2,17 @@ import * as React from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
+import * as _ from 'lodash'
+
 import { getApplicableMigrations, migrate } from '@/dashboard/migration'
 import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
+import { isWidget } from '@/utils/type-guards'
 
 import { Dashboard, DashboardProps } from './components/Dashboard'
 import { marginSizes, Menu, MenuProps } from './components/Menu'
 import css from './index.css'
 import { currentMigration } from './migration/migrations/current'
-import { BoxItem, ColumnsItem, DashboardState, Data, DataMap, Dataset, WidgetItem } from './types'
+import { BoxItem, DashboardState, Data, DataMap, Dataset, GridItem, WidgetItem } from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -21,7 +24,7 @@ export {
   Dataset,
   WidgetItem,
   BoxItem,
-  ColumnsItem,
+  GridItem,
   DashboardState,
 }
 
@@ -44,6 +47,14 @@ export const EMPTY_DASHBOARD: DashboardState = {
 export const isDashboardSupported = (
   dashboard: AnyDashboardStateVersion
 ): dashboard is DashboardState => dashboard.version === SUPPORTED_DASHBOARD_VERSION
+
+export const getAllWidgets = (dashboardConfig: DashboardState['config']): readonly WidgetItem[] => {
+  const boxItems = _.flatten(Object.values(dashboardConfig))
+
+  return _.flatMap(boxItems, boxItem =>
+    isWidget(boxItem) ? boxItem : boxItem.grid.items.map(row => row.flat()).flat()
+  )
+}
 
 export const Constructor: React.FC<ConstructorProps> = props => {
   const {

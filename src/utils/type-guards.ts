@@ -1,6 +1,6 @@
-import { BoxItem, ColumnsItem, WidgetItem } from '@/dashboard/types'
+import { BoxItem, GridItem, WidgetItem } from '@/dashboard/types'
 
 export const isWidget = (item: BoxItem): item is WidgetItem => item.type === 'widget'
-export const isColumns = (item: BoxItem): item is ColumnsItem => item.type === 'columns'
+export const isGrid = (item: BoxItem): item is GridItem => item.type === 'grid'
 export const isValidDate = (date: unknown): date is Date =>
   date instanceof Date && !isNaN(date.valueOf())
