@@ -5,11 +5,11 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { zip } from 'lodash'
 
-import { LegendItem } from '@/components/LegendItem'
 import { Tooltip } from '@/components/Tooltip'
+import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { Data as DonutData, DataItem, Donut, HalfDonut } from './components/Donut'
+import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, Text } from './components/Text'
 import css from './index.css'
 
@@ -33,11 +33,11 @@ type Props = {
   formatValueForTooltip?: FormatValue
 } & HalfDonutData
 
-type TooltipDataState = {
+type TooltipDataState = ReadonlyArray<{
   value: string
   color: string
   name: string
-}
+}>
 
 // Максимально кол-во кругов, которые можно отрисовать = 3
 const MAX_CIRCLES = 3
@@ -82,7 +82,7 @@ export const DonutChart: React.FC<Props> = ({
   halfDonut,
   textData,
 }) => {
-  const [tooltipData, changeTooltipData] = useState<TooltipDataState | null>(null)
+  const [tooltipData, changeTooltipData] = useState<TooltipDataState>([])
   const [mousePosition, changeMousePosition] = useState({ x: 0, y: 0 })
 
   const ref = useRef(null)
@@ -92,20 +92,24 @@ export const DonutChart: React.FC<Props> = ({
   const mainRadius = size / 2
   const sizeDonut = getSizeDonut(circlesCount, halfDonut)
   const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
-  const isTooltipVisible = Boolean(tooltipData)
+  const isTooltipVisible = Boolean(tooltipData.length)
 
-  const handleMouseOver = (d: DataItem) => {
-    const value = d.showValue ? d.showValue : d.value
+  const handleMouseOver = (d: DonutData) => {
+    changeTooltipData(
+      d.map(item => {
+        const value = item.showValue ? item.showValue : item.value
 
-    changeTooltipData({
-      value: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
-      color: colorGroups[d.colorGroupName],
-      name: d.name,
-    })
+        return {
+          value: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
+          color: colorGroups[item.colorGroupName],
+          name: item.name,
+        }
+      })
+    )
   }
 
   const handleMouseOut = () => {
-    changeTooltipData(null)
+    changeTooltipData([])
   }
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -138,12 +142,7 @@ export const DonutChart: React.FC<Props> = ({
         <Text data={textData} maxSize={mainRadius} position={halfDonut} />
       )}
       <Tooltip isVisible={isTooltipVisible} x={mousePosition.x} y={mousePosition.y}>
-        {tooltipData ? (
-          <LegendItem color={tooltipData.color} fontSize="xs">
-            {tooltipData.name}
-            <span className={css.tooltipValue}>{tooltipData.value}</span>
-          </LegendItem>
-        ) : null}
+        <TooltipContentForMultipleValues items={tooltipData} />
       </Tooltip>
       <svg
         className={classnames(

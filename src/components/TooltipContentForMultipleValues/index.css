@@ -29,7 +29,10 @@
 
 .label {
   padding-right: calc-size(12);
-  padding-left: calc-size(8);
+
+  &.withTitle {
+    padding-left: calc-size(8);
+  }
 }
 
 .value {
