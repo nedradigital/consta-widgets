@@ -6,19 +6,22 @@ import { HorizontalDirection, Tooltip, VerticalDirection } from '@/components/To
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { UniqueInnerColumns } from '../..'
-import { ColumnWithGeometry, COLUMN_SIZE, GeometryParams, MouseActionParams } from '../MultiBar'
+import { Size } from '../..'
+import { ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams, MouseActionParams } from '../Bar'
 
 import css from './index.css'
+
+type UniqueColumnsName = readonly string[]
 
 type Props = {
   barColumn: MouseActionParams
   isVertical: boolean
-  uniqueInnerColumns: UniqueInnerColumns
+  uniqueColumnNames: UniqueColumnsName
   isVisible: boolean
   svgParentRef: React.RefObject<SVGGElement>
   color: ColorGroups
   formatValue?: FormatValue
+  size: Size
 }
 
 const defaultPosition = {
@@ -32,8 +35,9 @@ const getOffsetPosition = (parameters: {
   isVertical: boolean
   baseSize: number
   params?: GeometryParams
+  size: Size
 }) => {
-  const { innerTranslate, svgRef, isVertical, baseSize, params } = parameters
+  const { innerTranslate, svgRef, isVertical, baseSize, params, size } = parameters
 
   if (!svgRef.current || !params) {
     return defaultPosition
@@ -41,7 +45,7 @@ const getOffsetPosition = (parameters: {
 
   const { x, y, columnSize } = params
   const { left, top } = svgRef.current.getBoundingClientRect()
-  const columnDefaultSizeHalf = getCalculatedSize(COLUMN_SIZE, baseSize) / 2
+  const columnDefaultSizeHalf = getCalculatedSize(COLUMN_WIDTHS[size], baseSize) / 2
   const columnSizeHalf = columnSize / 2
 
   const xPosition = isVertical ? x + innerTranslate + columnDefaultSizeHalf : x + columnSizeHalf
@@ -55,7 +59,7 @@ const getOffsetPosition = (parameters: {
 }
 
 const getDirection = (
-  uniqueInnerColumns: UniqueInnerColumns,
+  uniqueInnerColumns: UniqueColumnsName,
   columnName: string,
   isVertical: boolean
 ): { horizontal: HorizontalDirection; vertical: VerticalDirection } => {
@@ -91,22 +95,24 @@ const getLayout = ({
 export const TooltipComponent: React.FC<Props> = ({
   barColumn,
   isVertical,
-  uniqueInnerColumns,
+  uniqueColumnNames,
   isVisible,
   svgParentRef,
   color,
   formatValue = String,
+  size,
 }) => {
   const { baseSize } = useBaseSize()
   const { columnName, params, values, innerTranslate } = barColumn
 
-  const direction = getDirection(uniqueInnerColumns, columnName, isVertical)
+  const direction = getDirection(uniqueColumnNames, columnName, isVertical)
   const position = getOffsetPosition({
     innerTranslate,
     svgRef: svgParentRef,
     isVertical,
     baseSize,
     params,
+    size,
   })
   const layout = getLayout({ values, color, formatValue })
 

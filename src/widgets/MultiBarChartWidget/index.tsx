@@ -1,7 +1,7 @@
 import * as React from 'react'
 
+import { BarChart, Orientation } from '@/components/BarChart'
 import { UnitPosition, unitPositions } from '@/components/BarChartAxis'
-import { MultiBarChart, Orientation } from '@/components/MultiBarChart'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
@@ -33,13 +33,14 @@ export const MultiBarChartWidgetContent: React.FC<WidgetContentProps<Data, Param
   data,
   params: { orientation, hasRatio, gridTicks, valuesTicks, unitPosition },
 }) => (
-  <MultiBarChart
+  <BarChart
     {...data}
     hasRatio={hasRatio}
     orientation={orientation}
     gridTicks={gridTicks}
     valuesTicks={valuesTicks}
     unitPosition={unitPosition}
+    isMultiBar
   />
 )
 

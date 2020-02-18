@@ -1,152 +1,215 @@
+import React from 'react'
+
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
 import { useBaseSize } from '@/contexts'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
 
-import { Data, getGroupScale, Orientation, Size } from '../../'
+import { Size } from '../..'
 
 import css from './index.css'
 
-type ValueFiltered = {
-  colorGroupName: string
-  value: number
+export type GeometryParams = {
+  x: number
+  y: number
+  columnSize: number
 }
 
+export type ColumnDetail = {
+  category: string
+  columnName: string
+  value: number
+  positionBegin: number
+  positionEnd: number
+}
+
+export type ColumnWithGeometry = GeometryParams & ColumnDetail
+
+export type MouseActionParams = {
+  innerTranslate: number
+  columnName: string
+  values: readonly ColumnWithGeometry[]
+  params?: GeometryParams
+}
+
+type MouseAction = (column?: MouseActionParams) => void
+
 type Props = {
-  data: Data
+  columnDetails: ReadonlyArray<readonly ColumnDetail[]>
+  groupName: string
+  isVertical: boolean
   groupScale: d3.ScaleBand<string>
   valuesScale: d3.ScaleLinear<number, number>
-  colorGroups: ColorGroups
-  clipId: string
-  orientation: Orientation
+  color: ColorGroups
+  uniqueColumnNames: readonly string[]
+  onMouseLeave: () => void
+  onMouseEnter: MouseAction
+  parentRef: React.RefObject<SVGGElement>
+  formatValue?: FormatValue
   size: Size
   showValues?: boolean
 }
 
-const getBarClassName = ({
-  isHorizontal,
-  isNegative,
-  size,
-}: {
-  isHorizontal: boolean
-  isNegative: boolean
-  size: Size
-}) => {
-  return classnames(
-    css.bar,
-    isHorizontal && isNegative && css.borderLeft,
-    isHorizontal && !isNegative && css.borderRight,
-    !isHorizontal && isNegative && css.borderBottom,
-    !isHorizontal && !isNegative && css.borderTop,
-    size === 'm' && css.sizeM
-  )
-}
-
-const getTransformTranslate = (x: number, y: number) => `translate(${x},${y})`
-
-const COLUMN_WIDTHS: Record<Size, number> = {
+export const COLUMN_WIDTHS: Record<Size, number> = {
   s: 4,
   m: 12,
 }
 const COLUMN_PADDING = 4
 
-export const Bar: React.FC<Props> = ({
-  data,
-  groupScale,
-  valuesScale,
-  colorGroups,
-  clipId,
-  orientation,
+const getBarClassName = ({
+  isVertical,
+  isRounded,
+  isNegative,
   size,
-  showValues,
+}: {
+  isRounded: boolean
+  isVertical: boolean
+  isNegative: boolean
+  size: Size
 }) => {
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
-  const { label, values } = data
-  const valuesFiltered = values.filter((v): v is ValueFiltered => v.value !== undefined)
-  const columnWidth = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
-  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
-  const halfColumnPadding = columnPadding / 2
-  const isHorizontal = orientation === 'horizontal'
+  return classnames(
+    css.bar,
+    isRounded && !isVertical && isNegative && css.borderLeft,
+    isRounded && !isVertical && !isNegative && css.borderRight,
+    isRounded && isVertical && isNegative && css.borderBottom,
+    isRounded && isVertical && !isNegative && css.borderTop,
+    size === 'm' && css.sizeM
+  )
+}
 
-  const barDomains = valuesFiltered.length ? valuesFiltered.map(item => item.colorGroupName) : []
-  const groupSize = (columnWidth + columnPadding) * valuesFiltered.length
-  const barScale = getGroupScale(barDomains, groupSize, orientation)
-  const textShiftY = barScale.bandwidth() / 2
+export const Bar: React.FC<Props> = props => {
+  const {
+    isVertical,
+    groupScale,
+    valuesScale,
+    color,
+    uniqueColumnNames,
+    onMouseLeave,
+    onMouseEnter,
+    columnDetails,
+    groupName,
+    size,
+    showValues,
+  } = props
+  const { getCalculatedSizeWithBaseSize } = useBaseSize()
+
+  const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
+  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
+  const barSize = (columnDefaultSize + columnPadding) * uniqueColumnNames.length
   const zeroPoint = Math.ceil(valuesScale(0))
 
-  const getBarHeight = (d: ValueFiltered) => {
-    return Math.abs(zeroPoint - Math.floor(valuesScale(d.value)))
-  }
+  const groupSecondaryScale = d3
+    .scaleBand()
+    .domain([...uniqueColumnNames])
+    .rangeRound([0, barSize])
+    .padding(0.05)
 
-  const getRectPositionByAxis = (item: ValueFiltered, axis: 'x' | 'y') => {
+  const getRectPositionByAxis = (item: ColumnDetail, axis: 'x' | 'y') => {
     const isAxisX = axis === 'x'
     const isAxisY = axis === 'y'
 
-    if ((!isHorizontal && isAxisX) || (isHorizontal && isAxisY)) {
-      return barScale(item.colorGroupName) || 0
+    if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
+      return groupSecondaryScale(item.columnName) || 0
     }
 
     if ((item.value > 0 && isAxisX) || (item.value < 0 && isAxisY)) {
-      return zeroPoint
+      return Math.ceil(valuesScale(item.positionBegin)) || 0
     }
 
-    return Math.floor(valuesScale(item.value))
+    return Math.ceil(valuesScale(item.positionEnd)) || 0
   }
+
+  const columnDetailsData: ReadonlyArray<readonly ColumnWithGeometry[]> = columnDetails.map(
+    columns =>
+      columns.map(column => {
+        const { positionBegin, positionEnd } = column
+
+        return {
+          ...column,
+          columnSize: Math.abs(
+            Math.ceil(valuesScale(positionBegin)) - Math.ceil(valuesScale(positionEnd))
+          ),
+          x: getRectPositionByAxis(column, 'x'),
+          y: getRectPositionByAxis(column, 'y'),
+        }
+      })
+  )
 
   const getTextPositionOnX = (value: number, width: number) => {
     return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
   }
 
-  const translateOffset = groupScale.bandwidth() / 2 - (groupSize - columnPadding) / 2
-  const translateLength = (groupScale(label) || 0) + translateOffset
-  const transform = isHorizontal
-    ? getTransformTranslate(0, translateLength)
-    : getTransformTranslate(translateLength, 0)
+  const translate = (groupScale(groupName) || 0) + groupScale.bandwidth() / 2 - barSize / 2
+  const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
 
-  const items = valuesFiltered.map(d => ({
-    value: d.value,
-    color: colorGroups[d.colorGroupName],
-    width: isHorizontal ? getBarHeight(d) : columnWidth,
-    height: isHorizontal ? columnWidth : getBarHeight(d),
-    x: getRectPositionByAxis(d, 'x'),
-    y: getRectPositionByAxis(d, 'y'),
-    isNegative: d.value < 0,
-  }))
+  const renderContent = (
+    column: ColumnWithGeometry,
+    index: number,
+    items: readonly ColumnWithGeometry[]
+  ) => {
+    const { x, y, columnSize, columnName, value } = column
+
+    const details = {
+      columnName,
+      innerTranslate: translate,
+      params: {
+        columnSize: items.reduce((a, b) => a + b.columnSize, 0),
+        x: items[0].x,
+        y: items[items.length - 1].y,
+      },
+      values: isVertical ? [...items].reverse() : items,
+    }
+
+    return (
+      <foreignObject
+        key={groupName + index}
+        x={x}
+        y={y}
+        width={isVertical ? columnDefaultSize : columnSize}
+        height={isVertical ? columnSize : columnDefaultSize}
+        onMouseLeave={onMouseLeave}
+        onMouseEnter={() => onMouseEnter(details)}
+      >
+        <div
+          className={getBarClassName({
+            isVertical,
+            isRounded: index === items.length - 1,
+            isNegative: value < 0,
+            size: 'm',
+          })}
+          style={{ backgroundColor: color[column.category] }}
+        />
+      </foreignObject>
+    )
+  }
+
+  const renderValues = (column: ColumnWithGeometry, index: number) => {
+    const { y, columnSize, value } = column
+
+    const isNegative = value < 0
+    const textPositionX = getTextPositionOnX(value, columnSize)
+    const textPositionY = y + columnPadding + columnDefaultSize / 2
+    const textAnchor = isNegative ? 'end' : 'start'
+
+    return (
+      <text
+        key={groupName + index}
+        className={css.label}
+        x={textPositionX}
+        y={textPositionY}
+        textAnchor={textAnchor}
+      >
+        {value}
+      </text>
+    )
+  }
 
   return (
     <g>
-      <g clipPath={`url(#${clipId})`} transform={transform}>
-        {items.map(({ x, y, width, height, isNegative, color }) => (
-          <foreignObject key={color} x={x} y={y} width={width} height={height}>
-            <div
-              className={getBarClassName({ isHorizontal, isNegative, size })}
-              style={{ backgroundColor: color }}
-            />
-          </foreignObject>
-        ))}
-      </g>
-      {isHorizontal && showValues && (
-        <g transform={transform}>
-          {items.map(d => {
-            const x = getTextPositionOnX(d.value, d.width)
-            const y = d.y + halfColumnPadding
-            const textAnchor = d.isNegative ? 'end' : 'start'
-
-            return (
-              <text
-                key={d.color}
-                className={css.label}
-                x={x}
-                y={y}
-                dy={textShiftY}
-                textAnchor={textAnchor}
-              >
-                {d.value}
-              </text>
-            )
-          })}
-        </g>
+      <g transform={transform}>{columnDetailsData.map(columns => columns.map(renderContent))}</g>
+      {!isVertical && showValues && (
+        <g transform={transform}>{columnDetailsData.map(columns => columns.map(renderValues))}</g>
       )}
     </g>
   )

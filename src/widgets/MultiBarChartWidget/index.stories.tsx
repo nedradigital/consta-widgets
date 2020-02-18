@@ -3,7 +3,7 @@ import React from 'react'
 import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { DataWithTwoColumnsOnDate } from '@/components/MultiBarChart/index.stories'
+import { DataWithTwoColumnsOnDate } from '@/components/BarChart/index.stories'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { defaultParams, MultiBarChartWidget, MultiBarChartWidgetContent } from '.'
@@ -25,7 +25,7 @@ storiesOf('widgets/MultiBarChartWidget', module)
           cherries: '#FCA355',
           year: 'aquamarine',
         },
-        data: DataWithTwoColumnsOnDate,
+        ...DataWithTwoColumnsOnDate,
         unit: 'тыс м3',
       })}
       params={object('params', defaultParams)}
