@@ -1,0 +1,24 @@
+name: CI
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+jobs:
+  build:
+    name: Install node modules and run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install modules and test
+        run: |
+          yarn policies set-version 1.19.1
+          yarn --frozen-lockfile
+          yarn test
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_REGISTRY_TOKEN }}

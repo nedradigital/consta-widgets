@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-import { updateAt } from '@gaz/utils/lib/array'
+import { updateAt } from '@csssr/gpn-utils/lib/array'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'

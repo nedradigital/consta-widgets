@@ -1,4 +1,4 @@
-import { isNotNil } from '@gaz/utils/lib/type-guards'
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 

@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import { useClickOutside } from '@gaz/utils/lib/use-click-outside'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import classnames from 'classnames'
 
 import css from './index.css'

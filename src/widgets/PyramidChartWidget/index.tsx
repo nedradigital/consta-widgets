@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { removeAt } from '@gaz/utils/lib/array'
+import { removeAt } from '@csssr/gpn-utils/lib/array'
 
 import { PyramidChart, Size, sizes } from '@/components/PyramidChart'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'

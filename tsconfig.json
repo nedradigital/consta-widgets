@@ -1,5 +1,5 @@
 {
-  "extends": "@gaz/configs/tsconfig",
+  "extends": "@csssr/gpn-configs/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {

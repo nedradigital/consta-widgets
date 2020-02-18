@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { isNotNil } from '@gaz/utils/lib/type-guards'
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'

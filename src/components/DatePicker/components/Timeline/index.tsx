@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import {

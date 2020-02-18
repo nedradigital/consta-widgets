@@ -1,4 +1,4 @@
-import { updateAt } from '@gaz/utils/lib/array'
+import { updateAt } from '@csssr/gpn-utils/lib/array'
 
 type Points<T> = readonly T[]
 

@@ -2,7 +2,7 @@ import { addDecorator, configure } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
 import { withInfo } from '@storybook/addon-info'
 import { withPropsTable } from 'storybook-addon-react-docgen'
-import { updateBaseSize } from '@gaz/utils/lib/css'
+import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
 import '@gpn-design/uikit/dist/style.css'
 
 import '@/index.css'

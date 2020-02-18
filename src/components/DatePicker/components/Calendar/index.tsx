@@ -1,4 +1,4 @@
-import { isDefined } from '@gaz/utils/lib/type-guards'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import {
   addDays,
