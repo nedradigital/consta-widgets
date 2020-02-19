@@ -8,6 +8,7 @@ import { zip } from 'lodash'
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { PositionState } from '@/utils/tooltips'
 
 import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, Text } from './components/Text'
@@ -83,7 +84,7 @@ export const DonutChart: React.FC<Props> = ({
   textData,
 }) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState>([])
-  const [mousePosition, changeMousePosition] = useState({ x: 0, y: 0 })
+  const [mousePosition, changeMousePosition] = useState<PositionState>()
 
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
@@ -141,7 +142,7 @@ export const DonutChart: React.FC<Props> = ({
       {halfDonut && values.length === 1 && textData && (
         <Text data={textData} maxSize={mainRadius} position={halfDonut} />
       )}
-      <Tooltip isVisible={isTooltipVisible} x={mousePosition.x} y={mousePosition.y}>
+      <Tooltip isVisible={isTooltipVisible} position={mousePosition}>
         <TooltipContentForMultipleValues items={tooltipData} />
       </Tooltip>
       <svg

@@ -5,6 +5,8 @@ import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { MultiSelect } from '@/ui/MultiSelect'
+import { PositionState } from '@/utils/tooltips'
+import { isDefinedPosition } from '@/utils/type-guards'
 
 import { Props as MultiSelectProps } from '../MultiSelect'
 
@@ -31,7 +33,7 @@ export const FilterTooltip: React.FC<Props> = ({
   handleFilterTogglerClick,
 }) => {
   const iconRef = useRef<SVGSVGElement>(null)
-  const [tooltipPosition, setTooltipPosition] = useState({ x: 0, y: 0 })
+  const [tooltipPosition, setTooltipPosition] = useState<PositionState>()
   const [selectedValues, setSelectedValues] = useState(values)
 
   useLayoutEffect(() => {
@@ -54,6 +56,7 @@ export const FilterTooltip: React.FC<Props> = ({
         onClick={() => handleFilterTogglerClick()}
       />
       {isOpened &&
+        isDefinedPosition(tooltipPosition) &&
         ReactDOM.createPortal(
           <div
             className={classnames(css.tooltip)}

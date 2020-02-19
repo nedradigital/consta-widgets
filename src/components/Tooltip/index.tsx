@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom'
 
 import classnames from 'classnames'
 
+import { Position } from '@/utils/tooltips'
+import { isDefinedPosition } from '@/utils/type-guards'
+
 import css from './index.css'
 
 export const horizontalDirections = ['left', 'center', 'right'] as const
@@ -13,11 +16,6 @@ type Size = {
   height: number
 }
 
-type Position = {
-  x: number
-  y: number
-}
-
 export type HorizontalDirection = typeof horizontalDirections[number]
 export type VerticalDirection = typeof verticalDirections[number]
 
@@ -26,8 +24,7 @@ type Props = {
   isVisible: boolean
   horizontalDirection?: HorizontalDirection
   verticalDirection?: VerticalDirection
-  x?: number
-  y?: number
+  position: Partial<Position> | undefined
   className?: string
 }
 
@@ -137,8 +134,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     isVisible,
     horizontalDirection = 'center',
     verticalDirection = 'top',
-    x,
-    y,
+    position,
     className,
   } = props
 
@@ -149,14 +145,14 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   })
 
   React.useLayoutEffect(() => {
-    if (!mainRef.current || x === undefined || y === undefined) {
+    if (!mainRef.current || !isDefinedPosition(position)) {
       return
     }
 
     const computedDirection = getAutoDirection({
       elementSize: mainRef.current.getBoundingClientRect(),
       parentSize: PARENT_ELEMENT.getBoundingClientRect(),
-      position: { x, y },
+      position,
       selectedHorizontalDirection: horizontalDirection,
       selectedVerticalDirection: verticalDirection,
     }) || {
@@ -165,9 +161,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     }
 
     setDirection(computedDirection)
-  }, [isVisible, mainRef, x, y, horizontalDirection, verticalDirection])
+  }, [isVisible, mainRef, position, horizontalDirection, verticalDirection])
 
-  if (!isVisible) {
+  if (!isVisible || !isDefinedPosition(position)) {
     return null
   }
 
@@ -179,7 +175,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         directionClasses[direction.horizontal],
         directionClasses[direction.vertical]
       )}
-      style={{ top: y, left: x }}
+      style={{ top: position.y, left: position.x }}
     >
       <div ref={ref} className={classnames(css.tooltip, className)}>
         {children}

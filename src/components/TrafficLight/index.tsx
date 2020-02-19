@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
 import { Badge, Status } from '@/ui/Badge'
+import { PositionState } from '@/utils/tooltips'
 
 import css from './index.css'
 
@@ -30,7 +31,7 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
   const sizeClass = { s: css.sizeS, m: css.sizeM }[size]
 
   const [tooltipVisible, setTooltipVisible] = React.useState(false)
-  const [tooltipPosition, setTooltipPosition] = React.useState({ x: 0, y: 0 })
+  const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
 
   if (type === 'default') {
     const statusClass = {
@@ -56,11 +57,7 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
 
     return (
       <>
-        <Tooltip
-          isVisible={tooltipVisible && !!comment}
-          x={tooltipPosition.x}
-          y={tooltipPosition.y}
-        >
+        <Tooltip isVisible={tooltipVisible && !!comment} position={tooltipPosition}>
           <div className={css.tooltipTitle}>Комментарий:</div>
           <div className={css.tooltipContent}>{comment}</div>
         </Tooltip>

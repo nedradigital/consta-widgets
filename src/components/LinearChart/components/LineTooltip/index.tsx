@@ -5,6 +5,7 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { PositionState } from '@/utils/tooltips'
 
 import { HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
 import { THRESHOLD_COLOR } from '../Threshold'
@@ -85,7 +86,7 @@ export const LineTooltip: React.FC<Props> = ({
   }: {
     xValue: number | undefined
     yValue: number | undefined
-  }) => {
+  }): PositionState => {
     const { left, top, width, height } = anchorEl.getBoundingClientRect()
 
     return {
@@ -104,8 +105,7 @@ export const LineTooltip: React.FC<Props> = ({
   return (
     <Tooltip
       isVisible
-      x={position.x}
-      y={position.y}
+      position={position}
       horizontalDirection={isHorizontal ? 'center' : 'right'}
       verticalDirection={isHorizontal ? 'top' : 'center'}
     >

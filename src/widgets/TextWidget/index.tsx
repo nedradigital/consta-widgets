@@ -8,6 +8,7 @@ import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { sizes, StyleProps, Text } from '@/ui/Text'
+import { PositionState } from '@/utils/tooltips'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import { ReactComponent as IconSettings } from './icons/settings.svg'
@@ -114,9 +115,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   const tooltipRef = React.useRef<HTMLDivElement>(null)
 
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
-  const [tooltipPosition, setTooltipPosition] = React.useState<
-    { x: number; y: number } | undefined
-  >()
+  const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
 
   const onToggleClick = () => {
     if (data && data.onClick) {
@@ -126,7 +125,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
     setTooltipVisibility(!tooltipVisible)
   }
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!ref.current) {
       return
     }
@@ -163,18 +162,15 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
           <button ref={ref} className={css.button} onClick={onToggleClick}>
             <IconSettings className={classnames(iconSize[size])} />
           </button>
-          {tooltipPosition && (
-            <Tooltip
-              ref={tooltipRef}
-              className={css.tooltip}
-              isVisible={tooltipVisible}
-              verticalDirection="bottom"
-              x={tooltipPosition.x}
-              y={tooltipPosition.y}
-            >
-              {data.tooltip}
-            </Tooltip>
-          )}
+          <Tooltip
+            ref={tooltipRef}
+            className={css.tooltip}
+            isVisible={tooltipVisible}
+            verticalDirection="bottom"
+            position={tooltipPosition}
+          >
+            {data.tooltip}
+          </Tooltip>
         </div>
       )}
     </div>
