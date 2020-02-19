@@ -1,8 +1,11 @@
 import React from 'react'
 
+import classnames from 'classnames'
 import * as d3 from 'd3'
 
 import { ColorGroups } from '@/dashboard/types'
+
+import css from './index.css'
 
 export type DataItem = {
   value: number
@@ -20,7 +23,7 @@ type Props = {
   colorGroups: ColorGroups
   innerRadius: number
   outerRadius: number
-  handleMouseOver: (data: DataItem) => void
+  handleMouseOver: (data: Data) => void
   handleMouseOut: () => void
   isTooltipVisible: boolean
   halfDonut?: HalfDonut
@@ -114,17 +117,16 @@ export const Donut: React.FC<Props> = ({
     .padRadius(ARC_RADIUS)
 
   return (
-    <g>
+    <g
+      onMouseOver={() => handleMouseOver(data)}
+      onMouseOut={handleMouseOut}
+      className={classnames(css.donut, isTooltipVisible && css.isTransparent)}
+    >
       {pieData.map((pieDatum, idx) => (
         <path
           key={idx}
           d={arc(pieDatum) || undefined}
           fill={colorGroups[pieDatum.data.colorGroupName]}
-          onMouseOver={() => handleMouseOver(pieDatum.data)}
-          onMouseOut={handleMouseOut}
-          style={{
-            opacity: isTooltipVisible ? 0.4 : 1,
-          }}
         />
       ))}
     </g>
