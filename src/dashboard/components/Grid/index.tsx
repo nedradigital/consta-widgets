@@ -3,7 +3,14 @@ import React from 'react'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { ColumnParams, Data, Dataset, GridContent, RowParams } from '@/dashboard/types'
+import {
+  ColumnParams,
+  Data,
+  Dataset,
+  GridContent,
+  RowParams,
+  VerticalAlignment,
+} from '@/dashboard/types'
 import { isWidget } from '@/utils/type-guards'
 
 import { Box } from '../Box'
@@ -39,6 +46,13 @@ export const EMPTY_GRID_CONTENT: GridContent = _.flow(
   rowParams: [],
 })
 
+const verticalAlignmentNames: Record<VerticalAlignment, string> = {
+  top: '↑ Наверху',
+  middle: '↕ Посередине',
+  bottom: '↓ Внизу',
+}
+const verticalAlignments = Object.keys(verticalAlignmentNames) as readonly VerticalAlignment[]
+
 const GridButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
   children,
   title,
@@ -49,14 +63,16 @@ const GridButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = ({
   </button>
 )
 
-const GrowRatioInput: React.FC<{ value: number; onChange: (value: number) => void }> = ({
-  value,
-  onChange,
-}) => (
+const GrowRatioInput: React.FC<{
+  type: 'column' | 'row'
+  value: number
+  onChange: (value: number) => void
+}> = ({ type, value, onChange }) => (
   <input
     type="number"
     min={0}
     placeholder="Коэф. растяжения"
+    title={`Коэффициент растяжения ${type === 'column' ? 'столбца' : 'строки'}`}
     className={css.input}
     value={value}
     onChange={e => onChange(e.target.valueAsNumber)}
@@ -77,7 +93,7 @@ const ColumnButtons: React.FC<{
   }
 
   const columnsCount = grid.columnParams.length
-  const { growRatio = DEFAULT_GROW_RATIO } = grid.columnParams[columnIdx]
+  const { growRatio = DEFAULT_GROW_RATIO, verticalAlignment } = grid.columnParams[columnIdx]
 
   return (
     <div className={classnames(css.buttons, css.forColumn)}>
@@ -116,11 +132,31 @@ const ColumnButtons: React.FC<{
         />
       )}
       <GrowRatioInput
+        type="column"
         value={growRatio}
         onChange={newRatio =>
           onChange(updateColumnParams(grid, columnIdx, { growRatio: newRatio }))
         }
       />
+      <select
+        className={css.alignSelect}
+        value={verticalAlignment}
+        onChange={e =>
+          onChange(
+            updateColumnParams(grid, columnIdx, {
+              verticalAlignment: e.target.value as VerticalAlignment,
+            })
+          )
+        }
+      >
+        <optgroup label="Выравнивание содержимого по вертикали">
+          {verticalAlignments.map(value => (
+            <option key={value} value={value}>
+              {verticalAlignmentNames[value]}
+            </option>
+          ))}
+        </optgroup>
+      </select>
     </div>
   )
 }
@@ -175,6 +211,7 @@ const RowButtons: React.FC<{
         />
       )}
       <GrowRatioInput
+        type="row"
         value={growRatio}
         onChange={newRatio => onChange(updateRowParams(grid, rowIdx, { growRatio: newRatio }))}
       />
@@ -216,6 +253,7 @@ export const Grid: React.FC<Props> = ({ datasets, viewMode, onChange, data, grid
                 data={data}
                 items={column}
                 isNestedBox
+                verticalAlign={grid.columnParams[columnIdx].verticalAlignment}
               />
               {!viewMode && (
                 <>

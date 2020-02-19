@@ -14,7 +14,7 @@ import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
 
 import { ItemTypes } from '../../dnd-constants'
-import { BoxItem, Data, Dataset, GridContent, GridItem } from '../../types'
+import { BoxItem, Data, Dataset, GridContent, GridItem, VerticalAlignment } from '../../types'
 
 import css from './index.css'
 
@@ -28,12 +28,19 @@ type Props = {
   items?: readonly BoxItem[]
   onChange: (items: readonly BoxItem[]) => void
   isNestedBox?: boolean
+  verticalAlign?: VerticalAlignment
 }
 
 const emptyGrid: GridItem = {
   type: 'grid',
   grid: EMPTY_GRID_CONTENT,
   params: {},
+}
+
+const verticalAlignmentClasses = {
+  bottom: css.verticalAlignBottom,
+  middle: css.verticalAlignMiddle,
+  top: undefined,
 }
 
 export const Box: React.FC<Props> = ({
@@ -45,6 +52,7 @@ export const Box: React.FC<Props> = ({
   className,
   datasets,
   isNestedBox,
+  verticalAlign = 'top',
 }) => {
   const [selectedItem, changeSelected] = useState(widgetIds[0])
   const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
@@ -118,7 +126,8 @@ export const Box: React.FC<Props> = ({
         className,
         css.box,
         isNestedBox && css.isNested,
-        viewMode && css.isViewMode
+        viewMode && css.isViewMode,
+        verticalAlignmentClasses[verticalAlign]
       )}
       ref={isPreview ? dragRef : null}
       style={{ opacity }}
