@@ -1,15 +1,13 @@
 import React from 'react'
 
-import { updateAt } from '@csssr/gpn-utils/lib/array'
-
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
-import { getWidget } from '@/dashboard/components/Box'
 import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
-import { BoxItem, BoxItemMarginSize, BoxItemParams, ColumnParams, Dataset } from '@/dashboard/types'
-import { isColumns, isWidget } from '@/utils/type-guards'
+import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset } from '@/dashboard/types'
+import { isWidget } from '@/utils/type-guards'
+import { getWidget } from '@/utils/widgets-list'
 import { OnChangeParam } from '@/utils/WidgetFactory'
 
 import css from './index.css'
@@ -19,12 +17,6 @@ type Props = {
   datasets: readonly Dataset[]
   onChange: (newParams: BoxItem) => void
 }
-
-type OnChangeColumnParam<Params> = <K extends keyof Params, V extends Params[K]>(
-  index: number,
-  key: K,
-  value: V
-) => void
 
 const marginSizes = Object.keys(sizeValues) as readonly BoxItemMarginSize[]
 
@@ -49,25 +41,6 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
         [paramName]: newValue,
       },
     })
-
-  const onChangeColumnParam: OnChangeColumnParam<ColumnParams> = (index, key, value) => {
-    if (!isColumns(item)) {
-      return
-    }
-
-    const column = item.columns[index]
-
-    onChange({
-      ...item,
-      columns: updateAt(item.columns, index, {
-        ...column,
-        params: {
-          ...column.params,
-          [key]: value,
-        },
-      }),
-    })
-  }
 
   const commonSettings = (
     <>
@@ -116,20 +89,5 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
     )
   }
 
-  return (
-    <>
-      {commonSettings}
-      {item.columns.map((column, idx) => (
-        <React.Fragment key={idx}>
-          <b>Колонка {idx + 1}</b>
-          <WidgetSettingsNumber
-            name="Коэффициент растяжения"
-            value={column.params.growRatio}
-            minValue={0}
-            onChange={value => onChangeColumnParam(idx, 'growRatio', value)}
-          />
-        </React.Fragment>
-      ))}
-    </>
-  )
+  return commonSettings
 }

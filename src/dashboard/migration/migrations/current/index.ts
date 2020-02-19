@@ -1,21 +1,24 @@
 import { Layout } from 'react-grid-layout'
 
-import { TextWidget } from '@/widgets/TextWidget'
+import { WidgetItem } from '@/dashboard'
 
 import { Migration } from '../..'
-import { Dashboard7 } from '../dashboard7'
+import { Dashboard8 } from '../dashboard8'
 
 export namespace CurrentDashboard {
   export type ColumnParams = {
     growRatio?: number
   }
 
-  export type ColumnContent = {
-    params: ColumnParams
-    items: readonly BoxItem[]
+  export type RowParams = {
+    growRatio?: number
   }
 
-  export type ColumnsContent = readonly ColumnContent[]
+  export type GridContent = {
+    items: ReadonlyArray<ReadonlyArray<readonly WidgetItem[]>>
+    columnParams: readonly ColumnParams[]
+    rowParams: readonly RowParams[]
+  }
 
   export type BoxItemMarginSize = '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl'
 
@@ -25,9 +28,9 @@ export namespace CurrentDashboard {
     fallbackPlaceholderText?: string
   }
 
-  export type ColumnsItem = {
-    columns: ColumnsContent
-    type: 'columns'
+  export type GridItem = {
+    type: 'grid'
+    grid: GridContent
     params: CommonBoxItemParams
   }
 
@@ -42,7 +45,7 @@ export namespace CurrentDashboard {
     }
   }
 
-  export type BoxItem = WidgetItem | ColumnsItem
+  export type BoxItem = WidgetItem | GridItem
 
   export type Config = { [key: string]: readonly BoxItem[] }
 
@@ -54,47 +57,42 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 8
+    version: 9
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-export const currentMigration: Migration<Dashboard7.State, CurrentDashboard.State> = {
-  versionTo: 8,
-  changes: ['В TextWidget появился пропс наличия градиента croppedWithGradient'],
+export const currentMigration: Migration<Dashboard8.State, CurrentDashboard.State> = {
+  versionTo: 9,
+  changes: ['Виджет колонок стал виджетом сетки'],
   up: data => {
-    const updateItem = (item: Dashboard7.BoxItem): CurrentDashboard.BoxItem => {
+    const updateItem = (item: Dashboard8.BoxItem): CurrentDashboard.BoxItem => {
       if (item.type === 'columns') {
         return {
-          ...item,
-          columns: item.columns.map(column => ({
-            params: { ...column.params },
-            items: column.items.map(updateItem),
-          })),
+          type: 'grid',
+          grid: {
+            columnParams: item.columns.map(column => column.params),
+            rowParams: [{}],
+            items: [
+              item.columns.map(column =>
+                column.items.filter(
+                  (columnItem): columnItem is WidgetItem => columnItem.type === 'widget'
+                )
+              ),
+            ],
+          },
+          params: item.params,
         }
       } else {
-        if (item.widgetType === TextWidget.id) {
-          const { croppedLineCount, ...restParams } = item.params
-
-          return {
-            ...item,
-            params: {
-              ...restParams,
-              croppedLineCount,
-              croppedWithGradient: Boolean(croppedLineCount),
-            },
-          }
-        }
-
         return item
       }
     }
 
     return {
       ...data,
-      version: 8,
+      version: 9,
       config: Object.keys(data.config).reduce((newConfig, key) => {
         const items = data.config[key]
 
@@ -107,34 +105,24 @@ export const currentMigration: Migration<Dashboard7.State, CurrentDashboard.Stat
   },
 
   down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard7.BoxItem => {
-      if (item.type === 'columns') {
+    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard8.BoxItem => {
+      if (item.type === 'grid') {
         return {
-          ...item,
-          columns: item.columns.map(column => ({
-            params: { ...column.params },
-            items: column.items.map(updateItem),
+          type: 'columns',
+          columns: item.grid.columnParams.map((params, columnIdx) => ({
+            params,
+            items: item.grid.items[0][columnIdx],
           })),
+          params: item.params,
         }
       } else {
-        if (item.widgetType === TextWidget.id) {
-          const { croppedWithGradient, ...restParams } = item.params
-
-          return {
-            ...item,
-            params: {
-              ...restParams,
-            },
-          }
-        }
-
         return item
       }
     }
 
     return {
       ...data,
-      version: 7,
+      version: 8,
       config: Object.keys(data.config).reduce((newConfig, key) => {
         const items = data.config[key]
 

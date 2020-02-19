@@ -1,47 +1,39 @@
-import { TextWidget } from '@/widgets/TextWidget'
+import { widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard7 } from '../../dashboard7'
+import { Dashboard8 } from '../../dashboard8'
 
-describe('migration8', () => {
+const createTextWidget = (name: string, params = {}) =>
+  ({
+    type: 'widget',
+    debugName: name,
+    id: name,
+    widgetType: textWidgetId,
+    params,
+  } as const)
+
+describe('migration9', () => {
   it('повышает версию', () => {
-    const source: Dashboard7.State = {
-      version: 7,
+    const source: Dashboard8.State = {
+      version: 8,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'widget',
-            debugName: '1',
-            id: '1',
-            widgetType: TextWidget.id,
-            params: {
-              croppedLineCount: 1,
-            },
-          },
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: '2',
-            params: {},
-          },
+          createTextWidget('1', {
+            croppedLineCount: 1,
+          }),
         ],
         Box2: [
           {
             type: 'columns',
             columns: [
               {
-                params: { growRatio: 2 },
-                items: [
-                  {
-                    type: 'widget',
-                    debugName: '3',
-                    id: '3',
-                    widgetType: TextWidget.id,
-                    params: {},
-                  },
-                ],
+                params: { growRatio: 11 },
+                items: [createTextWidget('col1-1'), createTextWidget('col1-2')],
+              },
+              {
+                params: { growRatio: 22 },
+                items: [createTextWidget('col2-1')],
               },
             ],
             params: {
@@ -54,47 +46,30 @@ describe('migration8', () => {
     }
 
     const result: CurrentDashboard.State = {
-      version: 8,
+      version: 9,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'widget',
-            debugName: '1',
-            id: '1',
-            widgetType: TextWidget.id,
-            params: {
-              croppedLineCount: 1,
-              croppedWithGradient: true,
-            },
-          },
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: '2',
-            params: {},
-          },
+          createTextWidget('1', {
+            croppedLineCount: 1,
+          }),
         ],
         Box2: [
           {
-            type: 'columns',
-            columns: [
-              {
-                params: { growRatio: 2 },
-                items: [
-                  {
-                    type: 'widget',
-                    debugName: '3',
-                    id: '3',
-                    widgetType: TextWidget.id,
-                    params: {
-                      croppedWithGradient: false,
-                    },
-                  },
+            type: 'grid',
+            grid: {
+              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
+              rowParams: [{}],
+              items: [
+                // Строка 1
+                [
+                  // Колонка 1
+                  [createTextWidget('col1-1'), createTextWidget('col1-2')],
+                  // Колонка 2
+                  [createTextWidget('col2-1')],
                 ],
-              },
-            ],
+              ],
+            },
             params: {
               growRatio: 1,
             },
@@ -109,102 +84,67 @@ describe('migration8', () => {
 
   it('понижает версию', () => {
     const source: CurrentDashboard.State = {
-      version: 8,
+      version: 9,
       boxes: [],
       config: {
-        Box0: [
-          {
-            type: 'widget',
-            debugName: '1',
-            id: '1',
-            widgetType: TextWidget.id,
-            params: {
-              croppedLineCount: 1,
-              croppedWithGradient: true,
-            },
-          },
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: '2',
-            params: {},
-          },
-        ],
+        Box0: [createTextWidget('1')],
         Box2: [
           {
-            type: 'columns',
+            type: 'grid',
+            grid: {
+              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
+              rowParams: [{}],
+              items: [
+                // Строка 1
+                [
+                  // Колонка 1
+                  [createTextWidget('1.1a'), createTextWidget('1.1b')],
+                  // Колонка 2
+                  [createTextWidget('1.2')],
+                ],
+                // Строка 2
+                [
+                  // Колонка 1
+                  [createTextWidget('2.1')],
+                  // Колонка 2
+                  [],
+                ],
+              ],
+            },
             params: {
               growRatio: 1,
             },
-            columns: [
-              {
-                params: {
-                  growRatio: 2,
-                },
-                items: [
-                  {
-                    type: 'widget',
-                    debugName: '3',
-                    id: '3',
-                    widgetType: TextWidget.id,
-                    params: {
-                      croppedWithGradient: false,
-                    },
-                  },
-                ],
-              },
-            ],
           },
         ],
       },
       settings: {},
     }
 
-    const result: Dashboard7.State = {
-      version: 7,
+    const result: Dashboard8.State = {
+      version: 8,
       boxes: [],
       config: {
-        Box0: [
-          {
-            type: 'widget',
-            debugName: '1',
-            id: '1',
-            widgetType: TextWidget.id,
-            params: {
-              croppedLineCount: 1,
-            },
-          },
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: '2',
-            params: {},
-          },
-        ],
+        Box0: [createTextWidget('1')],
         Box2: [
           {
             type: 'columns',
-            params: {
-              growRatio: 1,
-            },
             columns: [
               {
                 params: {
-                  growRatio: 2,
+                  growRatio: 11,
                 },
-                items: [
-                  {
-                    type: 'widget',
-                    debugName: '3',
-                    id: '3',
-                    widgetType: TextWidget.id,
-                    params: {},
-                  },
-                ],
+                items: [createTextWidget('1.1a'), createTextWidget('1.1b')],
+              },
+              {
+                params: {
+                  growRatio: 22,
+                },
+                items: [createTextWidget('1.2')],
               },
             ],
+            params: {
+              growRatio: 1,
+            },
           },
         ],
       },

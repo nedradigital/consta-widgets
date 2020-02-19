@@ -11,18 +11,14 @@ import { BoxItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 import {
-  defaultParams as cardValueWithBadgeDefaultParams,
-  widgetId as cardValueWidgetId,
-} from '@/widgets/CardValueWithBadge'
-import {
-  defaultParams as cardWithBadgeDefaultParams,
-  widgetId as cardWidgetId,
-} from '@/widgets/CardWithBadge'
+  defaultParams as statsWidgetDefaultParams,
+  widgetId as statsWidgetId,
+} from '@/widgets/StatsWidget'
 import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { Box } from '.'
 
-const cardValueWithBadgeKey = getUniqueName('CardValueWithBadge')
+const statsWidgetKey = getUniqueName('StatsWidget')
 const initialItems: readonly BoxItem[] = [
   {
     type: 'widget',
@@ -33,52 +29,10 @@ const initialItems: readonly BoxItem[] = [
   },
   {
     type: 'widget',
-    debugName: 'CardValueWithBadge',
-    id: cardValueWithBadgeKey,
-    widgetType: cardValueWidgetId,
-    params: cardValueWithBadgeDefaultParams,
-  },
-  {
-    type: 'columns',
-    params: {},
-    columns: [
-      {
-        params: {},
-        items: [
-          {
-            type: 'widget',
-            debugName: 'CardWithBadge',
-            id: getUniqueName('CardWithBadge'),
-            widgetType: cardWidgetId,
-            params: cardWithBadgeDefaultParams,
-          },
-        ],
-      },
-      {
-        params: {},
-        items: [
-          {
-            type: 'widget',
-            debugName: 'CardWithBadge',
-            id: getUniqueName('CardWithBadge'),
-            widgetType: cardWidgetId,
-            params: cardWithBadgeDefaultParams,
-          },
-        ],
-      },
-      {
-        params: {},
-        items: [
-          {
-            type: 'widget',
-            debugName: 'CardWithBadge',
-            id: getUniqueName('CardWithBadge'),
-            widgetType: cardWidgetId,
-            params: cardWithBadgeDefaultParams,
-          },
-        ],
-      },
-    ],
+    debugName: 'StatsWidget',
+    id: statsWidgetKey,
+    widgetType: statsWidgetId,
+    params: statsWidgetDefaultParams,
   },
 ]
 
@@ -100,10 +54,14 @@ storiesOf('dashboard/Box', module)
             items={items}
             onChange={handler}
             data={{
-              [cardValueWithBadgeKey]: {
+              [statsWidgetKey]: {
                 value: 999,
-                percentage: -99,
-                status: 'warning',
+                title: 'Сроки',
+                badge: {
+                  percentage: -99,
+                  status: 'warning',
+                },
+                unit: 'суток',
               },
             }}
             datasets={exampleDatasets}
