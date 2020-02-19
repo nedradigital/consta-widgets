@@ -6,8 +6,11 @@ import { Migration } from '../..'
 import { Dashboard8 } from '../dashboard8'
 
 export namespace CurrentDashboard {
+  export type VerticalAlignment = 'top' | 'middle' | 'bottom'
+
   export type ColumnParams = {
     growRatio?: number
+    verticalAlignment?: VerticalAlignment
   }
 
   export type RowParams = {

@@ -27,6 +27,7 @@ export type Settings = Dashboard.Settings
 export type WidgetItem = Dashboard.WidgetItem
 export type GridItem = Dashboard.GridItem
 export type GridContent = Dashboard.GridContent
+export type VerticalAlignment = Dashboard.VerticalAlignment
 export type ColumnParams = Dashboard.ColumnParams
 export type RowParams = Dashboard.RowParams
 export type BoxItem = Dashboard.BoxItem

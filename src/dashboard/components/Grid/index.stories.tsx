@@ -23,7 +23,7 @@ import { Grid } from '.'
 const gridItem: GridItem = {
   type: 'grid',
   grid: {
-    columnParams: [{ growRatio: 1 }, { growRatio: 2 }],
+    columnParams: [{ growRatio: 1 }, { growRatio: 2, verticalAlignment: 'middle' }],
     rowParams: [{}, {}],
     items: [
       // Строка 1
