@@ -10,6 +10,7 @@ import {
   EXAMPLE_CONNECTION_POINTS,
   EXAMPLE_LOCATIONS,
   EXAMPLE_POINTS,
+  renderExampleConnectionLine,
   renderExampleConnectionPoint,
   renderExampleObjectPoint,
   renderExamplePoint,
@@ -34,6 +35,7 @@ storiesOf('components/Map', module)
           renderPoint={renderExamplePoint}
           renderObjectPoint={renderExampleObjectPoint}
           renderConnectionPoint={renderExampleConnectionPoint}
+          renderConnectionLine={renderExampleConnectionLine}
         />
       )
     }

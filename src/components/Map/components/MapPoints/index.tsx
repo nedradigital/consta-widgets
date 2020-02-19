@@ -2,6 +2,7 @@ import React from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
+import { LineString } from 'geojson'
 
 import {
   ConnectionPoint,
@@ -9,13 +10,13 @@ import {
   GeoObject,
   GeoObjectLocation,
   GeoPoint,
+  RenderConnectionLine,
   RenderConnectionPoint,
   RenderObjectPoint,
   RenderPoint,
   SelectedObjectId,
 } from '../../'
 import { geoCoordsToPixels, geoPointsToExtendedFeature } from '../../helpers'
-import { MapPointLine } from '../MapPointLine'
 
 import css from './index.css'
 
@@ -47,6 +48,7 @@ type Props = {
   renderPoint: RenderPoint
   renderObjectPoint: RenderObjectPoint
   renderConnectionPoint: RenderConnectionPoint
+  renderConnectionLine: RenderConnectionLine
   onObjectSelect: (object: GeoObject) => void
   onObjectHover: (object?: GeoObject) => void
 }
@@ -84,6 +86,20 @@ const ForeignObjectWrapper: React.FC<{ x: number; y: number }> = ({ x, y, childr
   )
 }
 
+const getLineStringFeatureFromCoordinates = (
+  from: Coords,
+  to: Coords
+): d3.ExtendedFeature<LineString> => {
+  return {
+    type: 'Feature',
+    geometry: {
+      type: 'LineString',
+      coordinates: [[...to], [...from]],
+    },
+    properties: {},
+  }
+}
+
 export const MapPoints: React.FC<Props> = ({
   objects,
   points,
@@ -96,6 +112,7 @@ export const MapPoints: React.FC<Props> = ({
   renderPoint,
   renderObjectPoint,
   renderConnectionPoint,
+  renderConnectionLine,
   onObjectSelect,
   onObjectHover,
 }) => {
@@ -158,17 +175,25 @@ export const MapPoints: React.FC<Props> = ({
         {allCircles.map((circle, circleIdx) => {
           return (
             <React.Fragment key={circleIdx}>
-              {circle.connectedPoints.map((connectedPoint, lineIdx) => (
-                <MapPointLine
-                  key={lineIdx}
-                  from={circle.coords}
-                  to={connectedPoint.coords}
-                  geoPath={geoPath}
-                  isAnimating={!isZooming}
-                  delay={circleIdx * 1000}
-                  duration={allCircles.length * 1000}
-                />
-              ))}
+              {circle.connectedPoints.map((connectedPoint, lineIdx) => {
+                const fromObjectId = 'object' in circle ? circle.object.id : circle.point.id
+                const feature = getLineStringFeatureFromCoordinates(
+                  circle.coords,
+                  connectedPoint.coords
+                )
+
+                return (
+                  <React.Fragment key={lineIdx}>
+                    {renderConnectionLine({
+                      fromObjectId,
+                      toObjectId: connectedPoint.id,
+                      d: geoPath(feature),
+                      lineLength: geoPath.measure(feature),
+                      preventAnimation: isZooming,
+                    })}
+                  </React.Fragment>
+                )
+              })}
             </React.Fragment>
           )
         })}

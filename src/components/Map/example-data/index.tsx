@@ -1,9 +1,11 @@
 import React from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import classnames from 'classnames'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'
+import { uniq } from 'lodash'
 
 import { getGeoObjectName } from '@/utils/geo-names'
 
@@ -11,6 +13,7 @@ import {
   ConnectionPoint,
   GeoObjectLocation,
   GeoPoint,
+  RenderConnectionLine,
   RenderConnectionPoint,
   RenderObjectPoint,
   RenderPoint,
@@ -161,4 +164,55 @@ export const renderExampleObjectPoint: RenderObjectPoint = (object, info, mouseH
       <span className={css.pointText}>{name}</span>
     </button>
   )
+}
+
+const countrysIds = uniq(EXAMPLE_LOCATIONS.map(location => location.parentId))
+const locationsIds = uniq(EXAMPLE_LOCATIONS.map(location => location.id))
+const pointsIds = uniq(EXAMPLE_POINTS.map(point => point.id))
+
+const calculateDelay = (index: number) => (index + 1) * 1000
+
+const getConnectionLineDelay = (fromObjectId: string) => {
+  const countryIndex = countrysIds.findIndex(id => id === fromObjectId)
+  if (countryIndex !== -1) {
+    return calculateDelay(countryIndex)
+  }
+
+  const locationIndex = locationsIds.findIndex(id => id === fromObjectId)
+  if (locationIndex !== -1) {
+    return calculateDelay(locationIndex)
+  }
+
+  const pointIndex = pointsIds.findIndex(id => id === fromObjectId)
+  if (pointIndex !== -1) {
+    return calculateDelay(pointIndex)
+  }
+
+  return calculateDelay(0)
+}
+
+export const renderExampleConnectionLine: RenderConnectionLine = ({
+  fromObjectId,
+  d,
+  lineLength,
+  preventAnimation,
+}) => {
+  const isDashed = fromObjectId.includes('RU-TOM')
+  const delay = getConnectionLineDelay(fromObjectId)
+
+  return d ? (
+    <g>
+      <path d={d} className={classnames(css.connectionLine, isDashed && css.isDashed)} />
+      {!preventAnimation && !isDashed && (
+        <path
+          d={d}
+          className={classnames(css.connectionLine, css.isAnimated)}
+          style={{
+            ['--line-length' as string]: lineLength,
+            animationDelay: `${delay}ms`,
+          }}
+        />
+      )}
+    </g>
+  ) : null
 }
