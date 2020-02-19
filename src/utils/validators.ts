@@ -1,4 +1,4 @@
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { isEmpty } from 'lodash'
 
 import { DataMap, DataType } from '@/dashboard/types'
@@ -134,7 +134,11 @@ export const widgetDataIsEmpty = (
 
       const sections = widgetData.data.map(item => item.sections).flat()
 
-      return sections.length === 0
+      if (!sections.length) {
+        return true
+      }
+
+      return !sections.some(({ value }) => isNotNil(value))
     }
     case DataType.Legend: {
       const widgetData = data as DataMap[DataType.Legend] | undefined

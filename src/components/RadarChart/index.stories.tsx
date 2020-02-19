@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { getFormattedValue } from '@/utils/chart'
+import { percentFormatValue } from '@/utils/Storybook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { Figure, RadarChart } from './'
@@ -94,20 +95,21 @@ const emptyFigures: readonly Figure[] = [
   },
 ]
 
-const getFormatterValueForLabel = () => {
+const getFormattedValueForLabel = () => {
   const useFormatPercents = boolean('Форматировать подписи кругов как проценты', false)
 
   if (useFormatPercents) {
-    return (v: number | null) => (isNotNil(v) ? `${Math.round(v)}%` : 'Нет данных')
+    return (value: number | null) =>
+      getFormattedValue(value, v => percentFormatValue(Math.round(v)))
   }
 
   return undefined
 }
 
-const getFormatterValueForTooltip = () => {
+const getFormattedValueForTooltip = () => {
   const unit = text('Юнит для значения в тултипе', ' тыс м3')
 
-  return (v: number | null) => (isNotNil(v) ? `${v}${unit}` : 'Нет данных')
+  return (value: number | null) => getFormattedValue(value, v => `${v}${unit}`)
 }
 
 storiesOf('components/RadarChart', module)
@@ -121,8 +123,8 @@ storiesOf('components/RadarChart', module)
       figures={figures}
       ticks={4}
       backgroundColor="var(--bg-color)"
-      formatValueForLabel={getFormatterValueForLabel()}
-      formatValueForTooltip={getFormatterValueForTooltip()}
+      formatValueForLabel={getFormattedValueForLabel()}
+      formatValueForTooltip={getFormattedValueForTooltip()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -135,8 +137,8 @@ storiesOf('components/RadarChart', module)
       figures={emptyFigures}
       ticks={4}
       backgroundColor="var(--bg-color)"
-      formatValueForLabel={getFormatterValueForLabel()}
-      formatValueForTooltip={getFormatterValueForTooltip()}
+      formatValueForLabel={getFormattedValueForLabel()}
+      formatValueForTooltip={getFormattedValueForTooltip()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -149,7 +151,7 @@ storiesOf('components/RadarChart', module)
       figures={figures.slice(0, 1)}
       ticks={4}
       backgroundColor="var(--bg-color)"
-      formatValueForLabel={getFormatterValueForLabel()}
+      formatValueForLabel={getFormattedValueForLabel()}
       withConcentricColor={false}
       labelSize="s"
     />

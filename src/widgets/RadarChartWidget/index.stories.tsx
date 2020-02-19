@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { object, text } from '@storybook/addon-knobs'
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, cubeMeterFormatValue } from '@/utils/Storybook'
 
 import { defaultParams, RadarChartWidget, RadarChartWidgetContent } from '.'
 
@@ -13,7 +13,7 @@ storiesOf('widgets/RadarChartWidget', module)
     <RadarChartWidgetContent
       data={{
         ...object('data', RadarChartWidget.mockData),
-        formatValueForTooltip: v => `${v} ${text('unit', 'тыс м3')}`,
+        formatValueForTooltip: cubeMeterFormatValue,
       }}
       params={object('params', defaultParams)}
     />

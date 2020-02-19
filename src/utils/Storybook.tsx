@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 
 export const blockCenteringDecorator = (
@@ -19,3 +20,15 @@ export const blockCenteringDecorator = (
     <div style={styles}>{storyFn()}</div>
   </div>
 )
+
+export const cubeMeterFormatValue = (v: number) => {
+  return `${v}${text('unit', ' тыс м3')}`
+}
+
+export const percentFormatValue = (v: number) => {
+  return `${v}${text('unit', '%')}`
+}
+
+export const emptyFormatValue = (v: number) => {
+  return `${v}${text('unit', '')}`
+}

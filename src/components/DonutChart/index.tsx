@@ -8,6 +8,7 @@ import { zip } from 'lodash'
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { getFormattedValue } from '@/utils/chart'
 import { PositionState } from '@/utils/tooltips'
 
 import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
@@ -18,7 +19,7 @@ export type Data = ReadonlyArray<{
   name: string
   colorGroupName: string
   sections: ReadonlyArray<{
-    value: number
+    value: number | null
     showValue?: number
   }>
 }>
@@ -98,10 +99,11 @@ export const DonutChart: React.FC<Props> = ({
   const handleMouseOver = (d: DonutData) => {
     changeTooltipData(
       d.map(item => {
-        const value = item.showValue ? item.showValue : item.value
+        const itemValue = isDefined(item.showValue) ? item.showValue : item.value
+        const formattedValue = getFormattedValue(itemValue, formatValueForTooltip)
 
         return {
-          value: formatValueForTooltip ? formatValueForTooltip(value) : String(value),
+          value: formattedValue,
           color: colorGroups[item.colorGroupName],
           name: item.name,
         }
@@ -125,7 +127,7 @@ export const DonutChart: React.FC<Props> = ({
       item.sections.slice(0, circlesCount).map(section => ({
         colorGroupName: item.colorGroupName,
         name: item.name,
-        value: section.value || 0,
+        value: section.value,
         showValue: section.showValue,
       }))
     )

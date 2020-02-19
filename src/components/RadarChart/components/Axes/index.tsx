@@ -4,6 +4,7 @@ import classnames from 'classnames'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/dashboard/types'
+import { getFormattedValue } from '@/utils/chart'
 
 import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 
@@ -15,7 +16,7 @@ type Props = {
   backgroundColor: string
   axesAngles: readonly Axis[]
   labelSize: RadarChartLabelSize
-  formatValueForLabel: FormatValue
+  formatValueForLabel?: FormatValue
   colors?: readonly string[]
   activeAxis?: Axis
   onChangeActiveAxis: (axis?: Axis) => void
@@ -36,7 +37,7 @@ export const RadarChartAxes: React.FC<Props> = ({
     const fraction = (v + 1) / ticks
     return {
       r: fraction / 2,
-      label: formatValueForLabel(_.round(fraction * maxValue, 2)),
+      label: getFormattedValue(_.round(fraction * maxValue, 2), formatValueForLabel),
     }
   })
 
