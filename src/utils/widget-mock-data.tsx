@@ -853,6 +853,7 @@ const mockData: DataMap = {
     renderPoint: () => null,
     onSelectedObjectIdChange: noop,
   },
+  [DataType.Switch]: 1,
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {

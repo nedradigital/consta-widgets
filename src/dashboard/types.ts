@@ -33,6 +33,8 @@ export type BoxItem = Dashboard.BoxItem
 export type BoxItemParams = BoxItem['params']
 export type BoxItemMarginSize = Dashboard.BoxItemMarginSize
 export type CommonBoxItemParams = Dashboard.CommonBoxItemParams
+export type SwitchItem = Dashboard.SwitchItem
+export type SwitchContent = Dashboard.SwitchContent
 export type Config = Dashboard.Config
 export type DashboardState = Dashboard.State
 export type DashboardVersion = DashboardState['version']
@@ -61,6 +63,7 @@ export enum DataType {
   ChoiceGroup,
   Checkbox,
   Map,
+  Switch,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -145,6 +148,7 @@ export type DataMap = {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   }
   [DataType.Map]: MapData
+  [DataType.Switch]: number
 }
 
 export type Dataset = {

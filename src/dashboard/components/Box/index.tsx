@@ -8,13 +8,22 @@ import classnames from 'classnames'
 import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
 import { EMPTY_GRID_CONTENT, Grid } from '@/dashboard/components/Grid'
 import { Settings } from '@/dashboard/components/Settings'
+import { Switch } from '@/dashboard/components/Switch'
 import { themeColorDark } from '@/utils/theme'
 import { isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
 
 import { ItemTypes } from '../../dnd-constants'
-import { BoxItem, Data, Dataset, GridContent, GridItem, VerticalAlignment } from '../../types'
+import {
+  BoxItem,
+  Data,
+  Dataset,
+  GridContent,
+  GridItem,
+  SwitchContent,
+  VerticalAlignment,
+} from '../../types'
 
 import css from './index.css'
 
@@ -27,8 +36,8 @@ type Props = {
   isPreview?: boolean
   items?: readonly BoxItem[]
   onChange: (items: readonly BoxItem[]) => void
-  isNestedBox?: boolean
   verticalAlign?: VerticalAlignment
+  parentName?: 'grid' | 'switch'
 }
 
 const emptyGrid: GridItem = {
@@ -43,6 +52,39 @@ const verticalAlignmentClasses = {
   top: undefined,
 }
 
+const getDebugName = (item: BoxItem): string => {
+  if (item.type === 'grid') {
+    return 'Сетка'
+  }
+
+  if (item.type === 'switch') {
+    return 'Переключатель'
+  }
+
+  return item.debugName
+}
+
+const getCustomOptions = (parentName: Props['parentName']) => {
+  if (parentName === 'switch') {
+    return null
+  }
+
+  if (parentName === 'grid') {
+    return (
+      <optgroup label="Кастомные элементы">
+        <option value="switch">Переключатель</option>
+      </optgroup>
+    )
+  }
+
+  return (
+    <optgroup label="Кастомные элементы">
+      <option value="grid">Сетка</option>
+      <option value="switch">Переключатель</option>
+    </optgroup>
+  )
+}
+
 export const Box: React.FC<Props> = ({
   viewMode,
   items = [],
@@ -51,8 +93,8 @@ export const Box: React.FC<Props> = ({
   isPreview,
   className,
   datasets,
-  isNestedBox,
   verticalAlign = 'top',
+  parentName,
 }) => {
   const [selectedItem, changeSelected] = useState(widgetIds[0])
   const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
@@ -64,6 +106,13 @@ export const Box: React.FC<Props> = ({
     switch (selectedItem) {
       case 'grid': {
         onChange([...items, emptyGrid])
+        return
+      }
+      case 'switch': {
+        onChange([
+          ...items,
+          { id: getUniqueName(selectedItem), type: 'switch', displays: [[]], params: {} },
+        ])
         return
       }
       default: {
@@ -105,6 +154,14 @@ export const Box: React.FC<Props> = ({
     }
   }
 
+  const updateSwitch = (index: number, displays: SwitchContent) => {
+    const item = items[index]
+
+    if (item.type === 'switch') {
+      onChange(updateAt(items, index, { ...item, displays }))
+    }
+  }
+
   const updateParams = (index: number, item: BoxItem) => {
     onChange(updateAt(items, index, item))
   }
@@ -125,41 +182,13 @@ export const Box: React.FC<Props> = ({
       className={classnames(
         className,
         css.box,
-        isNestedBox && css.isNested,
+        parentName && css.isNested,
         viewMode && css.isViewMode,
         verticalAlignmentClasses[verticalAlign]
       )}
       ref={isPreview ? dragRef : null}
       style={{ opacity }}
     >
-      {!viewMode && (
-        <div className={classnames(css.panel, themeColorDark)}>
-          + виджет
-          <div className={css.panelHoveredContent}>
-            <select
-              value={selectedItem}
-              onChange={e => changeSelected(e.target.value)}
-              className={css.select}
-            >
-              <optgroup label="Виджеты">
-                {widgetIds.map(id => (
-                  <option key={id} value={id}>
-                    {getWidgetComponentName(id)} ({getWidget(id).showName})
-                  </option>
-                ))}
-              </optgroup>
-              {isNestedBox ? null : (
-                <optgroup label="Кастомные элементы">
-                  <option value="grid">Сетка</option>
-                </optgroup>
-              )}
-            </select>
-            <Button wpSize="xs" view="secondary" onClick={addItem}>
-              Добавить
-            </Button>
-          </div>
-        </div>
-      )}
       {items.map((item, index) => {
         let component
 
@@ -188,6 +217,19 @@ export const Box: React.FC<Props> = ({
           )
         }
 
+        if (item.type === 'switch') {
+          component = (
+            <Switch
+              dataKey={item.id}
+              datasets={datasets}
+              displays={item.displays}
+              viewMode={viewMode}
+              data={data}
+              onChange={switchContent => updateSwitch(index, switchContent)}
+            />
+          )
+        }
+
         const settings = (
           <Settings
             item={item}
@@ -205,18 +247,42 @@ export const Box: React.FC<Props> = ({
             viewMode={viewMode}
             lastElement={Boolean(index === items.length - 1)}
             isEditingSettings={index === settingsOpenedFor}
-            isCustomItem={!isWidget(item)}
+            customItemName={!isWidget(item) ? item.type : undefined}
             params={item.params}
             settings={settings}
             onChangePosition={changePosition}
             onRemoveItem={removeItem}
             onOpenSettings={openSettings}
-            debugName={isWidget(item) ? item.debugName : 'Сетка'}
+            debugName={getDebugName(item)}
           >
             {component}
           </BoxItemWrapper>
         )
       })}
+      {!viewMode && (
+        <div className={classnames(css.panel, themeColorDark)}>
+          + виджет
+          <div className={css.panelHoveredContent}>
+            <select
+              value={selectedItem}
+              onChange={e => changeSelected(e.target.value)}
+              className={css.select}
+            >
+              <optgroup label="Виджеты">
+                {widgetIds.map(id => (
+                  <option key={id} value={id}>
+                    {getWidgetComponentName(id)} ({getWidget(id).showName})
+                  </option>
+                ))}
+              </optgroup>
+              {getCustomOptions(parentName)}
+            </select>
+            <Button wpSize="xs" view="secondary" onClick={addItem}>
+              Добавить
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

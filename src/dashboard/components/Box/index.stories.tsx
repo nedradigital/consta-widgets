@@ -2,7 +2,7 @@ import React from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { boolean } from '@storybook/addon-knobs'
+import { boolean, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -65,7 +65,7 @@ storiesOf('dashboard/Box', module)
               },
             }}
             datasets={exampleDatasets}
-            isNestedBox={boolean('isNestedBox', false)}
+            parentName={select('parentName', ['switch', 'grid'], undefined)}
           />
         </div>
       )

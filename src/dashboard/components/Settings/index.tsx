@@ -5,8 +5,8 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
-import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset } from '@/dashboard/types'
-import { isWidget } from '@/utils/type-guards'
+import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset, DataType } from '@/dashboard/types'
+import { isGrid, isSwitch, isWidget } from '@/utils/type-guards'
 import { getWidget } from '@/utils/widgets-list'
 import { OnChangeParam } from '@/utils/WidgetFactory'
 
@@ -27,6 +27,31 @@ export const Settings: React.FC<Props> = props => {
     <div className={css.main} onMouseDown={stopDrag} onMouseUp={stopDrag} onMouseMove={stopDrag}>
       <SettingsList {...props} />
     </div>
+  )
+}
+
+const DatasetSelect: React.FC<Props & { dataType?: DataType }> = ({
+  datasets,
+  dataType,
+  onChange,
+  item,
+}) => {
+  if (isGrid(item)) {
+    return null
+  }
+
+  const allowedDatasets = datasets
+    .filter(d => d.type === dataType)
+    .map(d => ({ value: d.id, name: d.name }))
+
+  return (
+    <WidgetSettingsSelect
+      name="Датасет"
+      value={item.params.datasetId}
+      values={allowedDatasets}
+      withEmptyValue
+      onChange={value => onChange({ ...item, params: { ...item.params, datasetId: value } })}
+    />
   )
 }
 
@@ -62,21 +87,12 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
 
   if (isWidget(item)) {
     const { dataType, getSettings } = getWidget(item.widgetType)
-    const allowedDatasets = datasets
-      .filter(d => d.type === dataType)
-      .map(d => ({ value: d.id, name: d.name }))
 
     return (
       <>
         <WidgetSettingsItem name="id">{item.id}</WidgetSettingsItem>
         {dataType && (
-          <WidgetSettingsSelect
-            name="Датасет"
-            value={item.params.datasetId}
-            values={allowedDatasets}
-            withEmptyValue
-            onChange={value => onChange({ ...item, params: { ...params, datasetId: value } })}
-          />
+          <DatasetSelect item={item} dataType={dataType} datasets={datasets} onChange={onChange} />
         )}
         {commonSettings}
         <WidgetSettingsText
@@ -85,6 +101,20 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
           onChange={value => onChangeParam('fallbackPlaceholderText', value)}
         />
         {getSettings && getSettings(params, onChangeParam)}
+      </>
+    )
+  }
+
+  if (isSwitch(item)) {
+    return (
+      <>
+        <DatasetSelect
+          item={item}
+          dataType={DataType.Switch}
+          datasets={datasets}
+          onChange={onChange}
+        />
+        {commonSettings}
       </>
     )
   }

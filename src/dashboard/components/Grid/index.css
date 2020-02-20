@@ -39,7 +39,7 @@
 
 .buttons {
   position: absolute;
-  z-index: 2;
+  z-index: calc(var(--z-box-wrapper) + 1);
 
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@
   background: var(--bg-constructor-butttons);
 
   @nest :--main:not(:hover) & {
-    opacity: 0;
+    display: none;
   }
 
   &:hover {

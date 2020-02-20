@@ -1,9 +1,11 @@
 import { Layout } from 'react-grid-layout'
 
-import { WidgetItem } from '@/dashboard'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+
+import { isWidget } from '@/utils/type-guards'
 
 import { Migration } from '../..'
-import { Dashboard8 } from '../dashboard8'
+import { Dashboard9 } from '../dashboard9'
 
 export namespace CurrentDashboard {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
@@ -18,7 +20,7 @@ export namespace CurrentDashboard {
   }
 
   export type GridContent = {
-    items: ReadonlyArray<ReadonlyArray<readonly WidgetItem[]>>
+    items: ReadonlyArray<ReadonlyArray<ReadonlyArray<WidgetItem | SwitchItem>>>
     columnParams: readonly ColumnParams[]
     rowParams: readonly RowParams[]
   }
@@ -37,6 +39,17 @@ export namespace CurrentDashboard {
     params: CommonBoxItemParams
   }
 
+  export type SwitchContent = ReadonlyArray<readonly WidgetItem[]>
+
+  export type SwitchItem = {
+    type: 'switch'
+    id: string
+    displays: SwitchContent
+    params: CommonBoxItemParams & {
+      datasetId?: string
+    }
+  }
+
   export type WidgetItem = {
     type: 'widget'
     id: string
@@ -48,7 +61,7 @@ export namespace CurrentDashboard {
     }
   }
 
-  export type BoxItem = WidgetItem | GridItem
+  export type BoxItem = WidgetItem | GridItem | SwitchItem
 
   export type Config = { [key: string]: readonly BoxItem[] }
 
@@ -60,37 +73,42 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 9
+    version: 10
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-export const currentMigration: Migration<Dashboard8.State, CurrentDashboard.State> = {
-  versionTo: 9,
-  changes: ['Виджет колонок стал виджетом сетки'],
+export const currentMigration: Migration<Dashboard9.State, CurrentDashboard.State> = {
+  versionTo: 10,
+  changes: ['Добавился виджет "Переключатель"'],
   up: data => {
-    const updateItem = (item: Dashboard8.BoxItem): CurrentDashboard.BoxItem => {
-      if (item.type === 'columns') {
-        return {
-          type: 'grid',
-          grid: {
-            columnParams: item.columns.map(column => column.params),
-            rowParams: [{}],
-            items: [
-              item.columns.map(column =>
-                column.items.filter(
-                  (columnItem): columnItem is WidgetItem => columnItem.type === 'widget'
-                )
-              ),
-            ],
-          },
-          params: item.params,
-        }
-      } else {
-        return item
+    return {
+      ...data,
+      version: 10,
+    }
+  },
+
+  down: data => {
+    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard9.BoxItem => {
+      if (item.type === 'switch') {
+        return item.displays[0][0]
       }
+
+      if (item.type === 'grid') {
+        return {
+          ...item,
+          grid: {
+            ...item.grid,
+            items: item.grid.items.map(row =>
+              row.map(column => column.map(updateItem).filter(isWidget))
+            ),
+          },
+        }
+      }
+
+      return item
     }
 
     return {
@@ -101,37 +119,7 @@ export const currentMigration: Migration<Dashboard8.State, CurrentDashboard.Stat
 
         return {
           ...newConfig,
-          [key]: items.map(updateItem),
-        }
-      }, {}),
-    }
-  },
-
-  down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard8.BoxItem => {
-      if (item.type === 'grid') {
-        return {
-          type: 'columns',
-          columns: item.grid.columnParams.map((params, columnIdx) => ({
-            params,
-            items: item.grid.items[0][columnIdx],
-          })),
-          params: item.params,
-        }
-      } else {
-        return item
-      }
-    }
-
-    return {
-      ...data,
-      version: 8,
-      config: Object.keys(data.config).reduce((newConfig, key) => {
-        const items = data.config[key]
-
-        return {
-          ...newConfig,
-          [key]: items.map(updateItem),
+          [key]: items.map(updateItem).filter(isDefined),
         }
       }, {}),
     }

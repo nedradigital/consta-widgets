@@ -24,7 +24,7 @@ type Props = {
   viewMode: boolean
   lastElement: boolean
   isEditingSettings: boolean
-  isCustomItem: boolean
+  customItemName?: 'grid' | 'switch'
   index: number
   params: BoxItem['params']
   settings: React.ReactNode
@@ -43,7 +43,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
   onRemoveItem,
   onOpenSettings,
   isEditingSettings,
-  isCustomItem,
+  customItemName,
   params,
   debugName,
 }) => {
@@ -72,7 +72,12 @@ export const BoxItemWrapper: React.FC<Props> = ({
         css.main,
         viewMode && css.isViewMode,
         isEditingSettings && css.isEditingSettings,
-        isCustomItem && css.isCustomItem
+        customItemName && css.isCustomItem,
+        customItemName &&
+          {
+            switch: css.isSwitch,
+            grid: css.isGrid,
+          }[customItemName]
       )}
       style={{
         flexGrow: params.growRatio,

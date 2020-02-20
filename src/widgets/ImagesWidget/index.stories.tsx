@@ -46,7 +46,6 @@ storiesOf('widgets/ImagesWidget', module)
             [id]: object('data', ImagesWidget.mockData),
           }}
           datasets={[]}
-          isNestedBox={false}
         />
       </DndProvider>
     )
