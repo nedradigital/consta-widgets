@@ -1,11 +1,11 @@
 import React from 'react'
 
 import classnames from 'classnames'
-import * as d3 from 'd3'
 import { flattenDeep, uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { scaleBand, Scaler } from '@/utils/scale'
 
 import { Size } from '../..'
 
@@ -39,11 +39,12 @@ type Props = {
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
   groupName: string
   isVertical: boolean
-  groupScale: d3.ScaleBand<string>
-  valuesScale: d3.ScaleLinear<number, number>
+  groupScale: Scaler<string>
+  valuesScale: Scaler<number>
   color: ColorGroups
   onMouseLeave: () => void
   onMouseEnter: MouseAction
+  onChangeSize: (size: number) => void
   parentRef: React.RefObject<SVGGElement>
   formatValue?: FormatValue
   size: Size
@@ -54,7 +55,10 @@ export const COLUMN_WIDTHS: Record<Size, number> = {
   s: 4,
   m: 12,
 }
-const COLUMN_PADDING = 4
+export const COLUMN_PADDING: Record<Size, number> = {
+  s: 2,
+  m: 4,
+}
 
 const getBarClassName = ({
   isVertical,
@@ -85,6 +89,7 @@ export const Bar: React.FC<Props> = props => {
     color,
     onMouseLeave,
     onMouseEnter,
+    onChangeSize,
     columnDetails,
     groupName,
     size,
@@ -96,29 +101,32 @@ export const Bar: React.FC<Props> = props => {
     flattenDeep(columnDetails.map(group => group.map(column => column.columnName)))
   )
   const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
-  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
+  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING[size])
   const barSize = (columnDefaultSize + columnPadding) * uniqueColumnNames.length
-  const zeroPoint = Math.ceil(valuesScale(0))
+  const zeroPoint = Math.ceil(valuesScale.scale(0))
 
-  const groupSecondaryScale = d3
-    .scaleBand()
-    .domain([...uniqueColumnNames])
-    .rangeRound([0, barSize])
-    .padding(0.05)
+  const groupSecondaryScale = scaleBand({
+    domain: uniqueColumnNames,
+    range: [0, barSize],
+  })
+
+  React.useLayoutEffect(() => {
+    onChangeSize(barSize)
+  }, [groupName, barSize, onChangeSize])
 
   const getRectPositionByAxis = (item: ColumnDetail, axis: 'x' | 'y') => {
     const isAxisX = axis === 'x'
     const isAxisY = axis === 'y'
 
     if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
-      return groupSecondaryScale(item.columnName) || 0
+      return groupSecondaryScale.scale(item.columnName) || 0
     }
 
     if ((item.value > 0 && isAxisX) || (item.value < 0 && isAxisY)) {
-      return Math.ceil(valuesScale(item.positionBegin)) || 0
+      return Math.ceil(valuesScale.scale(item.positionBegin)) || 0
     }
 
-    return Math.ceil(valuesScale(item.positionEnd)) || 0
+    return Math.ceil(valuesScale.scale(item.positionEnd)) || 0
   }
 
   const columnDetailsData: ReadonlyArray<readonly ColumnWithGeometry[]> = columnDetails.map(
@@ -129,7 +137,7 @@ export const Bar: React.FC<Props> = props => {
         return {
           ...column,
           columnSize: Math.abs(
-            Math.ceil(valuesScale(positionBegin)) - Math.ceil(valuesScale(positionEnd))
+            Math.ceil(valuesScale.scale(positionBegin)) - Math.ceil(valuesScale.scale(positionEnd))
           ),
           x: getRectPositionByAxis(column, 'x'),
           y: getRectPositionByAxis(column, 'y'),
@@ -141,7 +149,8 @@ export const Bar: React.FC<Props> = props => {
     return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
   }
 
-  const translate = (groupScale(groupName) || 0) + groupScale.bandwidth() / 2 - barSize / 2
+  const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth() : 0
+  const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
   const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
 
   const renderContent = (

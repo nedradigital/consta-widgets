@@ -1,12 +1,11 @@
 import classnames from 'classnames'
 
+import { Scaler } from '@/utils/scale'
+
 import css from './index.css'
 
-export type Scaler<T> = {
-  bandwidth?: () => number
-  ticks?: (count?: number) => readonly number[]
-  (x: T): number | undefined
-}
+export const sizes = ['s', 'm'] as const
+export type Size = typeof sizes[number]
 
 export const positions = ['top', 'right', 'bottom', 'left'] as const
 export type Position = typeof positions[number]
@@ -15,6 +14,7 @@ type Props<T> = {
   values: readonly T[]
   scaler: Scaler<T>
   position: Position
+  size?: Size
   showLine?: boolean
   isTicksSnuggleOnEdge?: boolean
   className?: string
@@ -22,7 +22,12 @@ type Props<T> = {
   formatValueForLabel?: (value: T) => string
 }
 
-const positionClasses = {
+const sizeClasses: Record<Size, string> = {
+  s: css.sizeS,
+  m: css.sizeM,
+}
+
+const positionClasses: Record<Position, string> = {
   top: css.isTop,
   right: css.isRight,
   bottom: css.isBottom,
@@ -37,6 +42,7 @@ export function Ticks<T>(props: Props<T>) {
     values,
     scaler,
     position,
+    size = 'm',
     showLine = true,
     isTicksSnuggleOnEdge = false,
     style,
@@ -51,10 +57,11 @@ export function Ticks<T>(props: Props<T>) {
   const scalerOffset = textWidth ? textWidth / 2 : 0
 
   const tickTransform = isHorizontal
-    ? (v: T) => getTransformTranslate((scaler(v) || 0) + scalerOffset, 0)
-    : (v: T) => getTransformTranslate(0, (scaler(v) || 0) + scalerOffset)
+    ? (v: T) => getTransformTranslate((scaler.scale(v) || 0) + scalerOffset, 0)
+    : (v: T) => getTransformTranslate(0, (scaler.scale(v) || 0) + scalerOffset)
 
   const positionClassName = positionClasses[position]
+  const sizeClassName = sizeClasses[size]
 
   const getAlignItems = (index: number, length: number) => {
     const isFirst = index === 0
@@ -83,6 +90,7 @@ export function Ticks<T>(props: Props<T>) {
         css.group,
         textWidth ? css.groupLabels : css.groupValues,
         positionClassName,
+        sizeClassName,
         className
       )}
       style={style}
