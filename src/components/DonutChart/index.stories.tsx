@@ -1,14 +1,44 @@
 import React from 'react'
 
-import { object, text } from '@storybook/addon-knobs'
+import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { DataType } from '@/dashboard/types'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, cubeMeterFormatValue, emptyFormatValue } from '@/utils/Storybook'
 
 import { DonutChart } from '.'
+
+const dataItemWithoutData = {
+  data: {
+    name: 'Неизвестный бур',
+    colorGroupName: 'forth',
+    sections: [{ value: null }, { value: null }, { value: null }],
+  },
+  colorGroup: {
+    forth: 'pink',
+  },
+}
+
+export const progressDonutData = {
+  data: [
+    {
+      name: 'План',
+      colorGroupName: 'plan',
+      sections: [{ value: 3, showValue: 60 }],
+    },
+    {
+      name: 'Факт',
+      colorGroupName: 'fact',
+      sections: [{ value: 1, showValue: 15 }],
+    },
+  ],
+  colorGroups: {
+    plan: 'rgba(86, 185, 242, 0.19)',
+    fact: '#F38B00',
+  },
+}
 
 storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
@@ -22,55 +52,88 @@ storiesOf('components/DonutChart', module)
   .add('interactive', () => {
     return (
       <DonutChart
-        data={getWidgetMockData(DataType.Donut).data}
+        data={object('data', getWidgetMockData(DataType.Donut).data)}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
-        formatValueForTooltip={v => `${v}${text('unit', ' тыс м3')}`}
+        formatValueForTooltip={cubeMeterFormatValue}
+      />
+    )
+  })
+  .add('без данных по одной группе в одном круге', () => {
+    return (
+      <DonutChart
+        data={object('data', [
+          ...getWidgetMockData(DataType.Donut).data,
+          { ...dataItemWithoutData.data, sections: [{ value: null }, { value: 3 }, { value: 8 }] },
+        ])}
+        colorGroups={object('colorGroups', {
+          ...getWidgetMockData(DataType.Donut).colorGroups,
+          ...dataItemWithoutData.colorGroup,
+        })}
+        formatValueForTooltip={cubeMeterFormatValue}
+      />
+    )
+  })
+  .add('без данных по одной группе целиком', () => {
+    return (
+      <DonutChart
+        data={object('data', [
+          ...getWidgetMockData(DataType.Donut).data,
+          { ...dataItemWithoutData.data },
+        ])}
+        colorGroups={object('colorGroups', {
+          ...getWidgetMockData(DataType.Donut).colorGroups,
+          ...dataItemWithoutData.colorGroup,
+        })}
+        formatValueForTooltip={cubeMeterFormatValue}
       />
     )
   })
   .add('Как прогресс бар', () => {
     return (
       <DonutChart
-        data={[
-          {
-            name: 'Факт',
-            colorGroupName: 'fact',
-            sections: [{ value: 1, showValue: 15 }],
-          },
-          {
-            name: 'План',
-            colorGroupName: 'plan',
-            sections: [{ value: 3, showValue: 60 }],
-          },
-        ]}
-        colorGroups={{
-          fact: '#F38B00',
-          plan: 'rgba(86, 185, 242, 0.19)',
-        }}
-        formatValueForTooltip={v => `${v}${text('unit', '')}`}
+        data={object('data', progressDonutData.data)}
+        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        formatValueForTooltip={emptyFormatValue}
+      />
+    )
+  })
+  .add('Как прогресс бар без данных по факту', () => {
+    return (
+      <DonutChart
+        data={object('data', [
+          progressDonutData.data[0],
+          { ...progressDonutData.data[1], sections: [{ value: null }] },
+        ])}
+        colorGroups={progressDonutData.colorGroups}
+        formatValueForTooltip={emptyFormatValue}
       />
     )
   })
   .add('Как полукруг с текстом', () => {
     return (
       <DonutChart
-        data={[
-          {
-            name: 'Факт',
-            colorGroupName: 'fact',
-            sections: [{ value: 1, showValue: 15 }],
-          },
-          {
-            name: 'План',
-            colorGroupName: 'plan',
-            sections: [{ value: 3, showValue: 60 }],
-          },
-        ]}
-        colorGroups={{
-          fact: '#F38B00',
-          plan: 'rgba(86, 185, 242, 1)',
-        }}
-        formatValueForTooltip={v => `${v}${text('unit', '')}`}
+        data={object('data', progressDonutData.data)}
+        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        formatValueForTooltip={emptyFormatValue}
+        halfDonut="right"
+        textData={object('textData', {
+          title: 'всего',
+          value: '90',
+          subTitle: 'МГРП',
+          subValue: '20',
+        })}
+      />
+    )
+  })
+  .add('Как полукруг с текстом без данных по факту', () => {
+    return (
+      <DonutChart
+        data={object('data', [
+          progressDonutData.data[0],
+          { ...progressDonutData.data[1], sections: [{ value: null }] },
+        ])}
+        colorGroups={progressDonutData.colorGroups}
+        formatValueForTooltip={emptyFormatValue}
         halfDonut="right"
         textData={object('textData', {
           title: 'всего',

@@ -5,7 +5,8 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { getFormattedValue } from '@/utils/chart'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'
@@ -16,8 +17,6 @@ import css from './index.css'
 
 export const radarChartLabelSizes = ['s', 'm'] as const
 export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
-
-export type FormatValue = (value: number | null) => string
 
 export type Point = {
   xPercent: number
@@ -180,8 +179,6 @@ const getCurrentSizes = (width: number, height: number) => {
   )
 }
 
-const defaultFormatValueForLabel = (v: number | null) => (isNotNil(v) ? String(v) : 'Нет данных')
-
 export const RadarChart: React.FC<Props> = ({
   ticks: originalTicks,
   maxValue,
@@ -190,7 +187,7 @@ export const RadarChart: React.FC<Props> = ({
   figures: originalFigures,
   backgroundColor,
   labelSize,
-  formatValueForLabel = defaultFormatValueForLabel,
+  formatValueForLabel,
   formatValueForTooltip,
   withConcentricColor,
 }) => {
@@ -234,7 +231,9 @@ export const RadarChart: React.FC<Props> = ({
         return theAxis
           ? {
               ...angleToCoord(theAxis.angle, isNotNil(value.value) ? value.value / maxValue : 0),
-              label: isNotNil(value.value) ? formatValueForLabel(value.value) : '',
+              label: isNotNil(value.value)
+                ? getFormattedValue(value.value, formatValueForLabel)
+                : '',
               axisName: value.axisName,
               originalValue: value.value,
             }

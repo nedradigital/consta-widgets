@@ -3,16 +3,17 @@ import React from 'react'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/components/RadarChart'
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
+import { FormatValue } from '@/dashboard/types'
+import { getFormattedValue } from '@/utils/chart'
 
 import { Axis, ExtendedFigure } from '../..'
 
 type Props = {
   extendedFigures: readonly ExtendedFigure[]
   axis: Axis
-  formatValue: FormatValue
+  formatValue?: FormatValue
   anchorEl: Element
 }
 
@@ -20,7 +21,7 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
   const pointsOnAxis = extendedFigures
     .map(f => f.points.find(p => p.axisName === axis.name))
     .filter(isDefined)
-  const values = pointsOnAxis.map(point => formatValue(point.originalValue))
+  const values = pointsOnAxis.map(point => getFormattedValue(point.originalValue, formatValue))
   const itemWithMaxValue = _.maxBy(pointsOnAxis, item => item.originalValue || 0)
 
   if (!itemWithMaxValue) {
