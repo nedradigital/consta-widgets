@@ -1,4 +1,5 @@
 import { BarChart, Orientation, Size, sizes } from '@/components/BarChart'
+import { transformBarChartGroupsToCommonGroups } from '@/components/BarChart/helpers'
 import { UnitPosition, unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
@@ -35,6 +36,7 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
 }) => (
   <BarChart
     {...data}
+    groups={transformBarChartGroupsToCommonGroups(data.groups)}
     showValues={showValues}
     gridTicks={gridTicks}
     valuesTicks={valuesTicks}

@@ -2,6 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 import * as d3 from 'd3'
+import { flattenDeep, uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
@@ -28,7 +29,6 @@ export type ColumnWithGeometry = GeometryParams & ColumnDetail
 
 export type MouseActionParams = {
   innerTranslate: number
-  columnName: string
   values: readonly ColumnWithGeometry[]
   params?: GeometryParams
 }
@@ -42,7 +42,6 @@ type Props = {
   groupScale: d3.ScaleBand<string>
   valuesScale: d3.ScaleLinear<number, number>
   color: ColorGroups
-  uniqueColumnNames: readonly string[]
   onMouseLeave: () => void
   onMouseEnter: MouseAction
   parentRef: React.RefObject<SVGGElement>
@@ -84,7 +83,6 @@ export const Bar: React.FC<Props> = props => {
     groupScale,
     valuesScale,
     color,
-    uniqueColumnNames,
     onMouseLeave,
     onMouseEnter,
     columnDetails,
@@ -94,6 +92,9 @@ export const Bar: React.FC<Props> = props => {
   } = props
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
+  const uniqueColumnNames = uniq(
+    flattenDeep(columnDetails.map(group => group.map(column => column.columnName)))
+  )
   const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
   const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING)
   const barSize = (columnDefaultSize + columnPadding) * uniqueColumnNames.length
@@ -148,10 +149,9 @@ export const Bar: React.FC<Props> = props => {
     index: number,
     items: readonly ColumnWithGeometry[]
   ) => {
-    const { x, y, columnSize, columnName, value } = column
+    const { x, y, columnSize, value } = column
 
     const details = {
-      columnName,
       innerTranslate: translate,
       params: {
         columnSize: items.reduce((a, b) => a + b.columnSize, 0),

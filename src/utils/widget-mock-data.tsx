@@ -436,19 +436,30 @@ const mockData: DataMap = {
       second: '#EB5757',
       third: '#FCA355',
     },
-    categories: ['first', 'second', 'third'],
     groups: [
       {
         groupName: 'март',
-        values: [{ first: 410 }, { second: 600 }, { third: 270 }],
+        values: [
+          { colorGroupName: 'first', value: 410 },
+          { colorGroupName: 'second', value: 600 },
+          { colorGroupName: 'third', value: 270 },
+        ],
       },
       {
         groupName: 'апрель',
-        values: [{ first: 670 }, { second: 1000 }, { third: 1100 }],
+        values: [
+          { colorGroupName: 'first', value: 670 },
+          { colorGroupName: 'second', value: 1000 },
+          { colorGroupName: 'third', value: 1100 },
+        ],
       },
       {
         groupName: 'май',
-        values: [{ first: 1200 }, { second: 630 }, { third: 100 }],
+        values: [
+          { colorGroupName: 'first', value: 1200 },
+          { colorGroupName: 'second', value: 630 },
+          { colorGroupName: 'third', value: 100 },
+        ],
       },
     ],
     unit: 'тыс м3',
@@ -616,9 +627,8 @@ const mockData: DataMap = {
       apples: '#56B9F2',
       bananas: '#EB5757',
       cherries: '#FCA355',
-      year: 'aquamarine',
+      melon: 'aquamarine',
     },
-    categories: ['apples', 'bananas', 'cherries'],
     groups: [
       { groupName: 'Q1-2016', values: [{ apples: 30, bananas: 20, cherries: 23 }] },
       { groupName: 'Q2-2016', values: [{ apples: 1600, bananas: 40, cherries: 45 }] },

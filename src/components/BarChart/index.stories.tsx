@@ -10,29 +10,29 @@ import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { BarChart } from '.'
+import { transformBarChartGroupsToCommonGroups } from './helpers'
 
 export const DataWithTwoColumnsOnDate = {
-  categories: ['apples', 'bananas', 'cherries'],
   groups: [
     {
       groupName: 'Q1-2016',
       values: [
-        { apples: 3840, bananas: 1920, cherries: 23 },
-        { apples: 1840, bananas: 920, cherries: 230 },
+        { apples: 3840, bananas: 1920 },
+        { cherries: 230, melon: 500 },
       ],
     },
     {
       groupName: 'Q2-2016',
       values: [
-        { apples: 1600, bananas: 14, cherries: 45 },
-        { apples: 600, bananas: 440, cherries: 450 },
+        { apples: 1600, bananas: 150 },
+        { cherries: 450, melon: 350 },
       ],
     },
     {
       groupName: 'Q3-2016',
       values: [
-        { apples: 640, bananas: 960, cherries: 73 },
-        { apples: 1640, bananas: 1960, cherries: 730 },
+        { apples: 640, bananas: 960 },
+        { cherries: 730, melon: 120 },
       ],
     },
   ],
@@ -77,18 +77,21 @@ storiesOf('components/BarChart', module)
   .add('с тремя столбцами и одним значением', () => {
     return (
       <BarChart
-        {...getWidgetMockData(DataType.BarChart)}
+        groups={object(
+          'data',
+          transformBarChartGroupsToCommonGroups(getWidgetMockData(DataType.BarChart).groups)
+        )}
         colorGroups={object('colorGroups', getWidgetMockData(DataType.BarChart).colorGroups)}
         {...defaultProps}
         unitPosition={getUnitPosition()}
         isMultiBar={false}
+        showValues
       />
     )
   })
   .add('с форматированием значений', () => {
     return (
       <BarChart
-        categories={object('categories', ['apples'])}
         groups={object('groups', [
           {
             groupName: 'Q1-2016',
@@ -130,7 +133,6 @@ storiesOf('components/BarChart', module)
   .add('с отрицательными значениями', () => {
     return (
       <BarChart
-        categories={object('categories', ['apples', 'bananas', 'cherries'])}
         groups={object('groups', [
           {
             groupName: 'Q1-2016',

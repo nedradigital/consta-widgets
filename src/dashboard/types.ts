@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { Data as BarChartData } from '@/components/BarChart'
+import {
+  Data as BarChartData,
+  Groups as MultiBarChartGroup,
+  SingleBarChartGroups,
+} from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
 import { Data as DonutChartData, HalfDonutData } from '@/components/DonutChart'
 import { ImageItem } from '@/components/ImagesList'
@@ -91,7 +95,10 @@ export type DataMap = {
     formatValueForTooltip?: FormatValue
   } & WithColorGroups &
     HalfDonutData
-  [DataType.BarChart]: BarChartData & WithColorGroups
+  [DataType.BarChart]: BarChartData &
+    WithColorGroups & {
+      groups: SingleBarChartGroups
+    }
   [DataType.LinearChart]: {
     data: readonly Line[]
     formatValueForLabel?: FormatValue
@@ -108,7 +115,10 @@ export type DataMap = {
   [DataType.ProgressBar]: {
     data: readonly ProgressBarData[]
   } & WithColorGroups
-  [DataType.MultiBarChart]: BarChartData & WithColorGroups
+  [DataType.MultiBarChart]: BarChartData &
+    WithColorGroups & {
+      groups: MultiBarChartGroup
+    }
   [DataType.Legend]: {
     data: LegendData
   } & WithColorGroups
