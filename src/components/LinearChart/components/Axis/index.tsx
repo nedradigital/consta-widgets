@@ -21,6 +21,7 @@ type GridConfigItem<Position> = {
   labelTicks?: number
   gridTicks?: number
   guide?: boolean
+  withPaddings?: boolean
 }
 
 export type GridConfig = {

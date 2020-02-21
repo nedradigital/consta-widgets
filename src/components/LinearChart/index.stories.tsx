@@ -25,12 +25,14 @@ const getGridConfig = () =>
       labelTicks: 5,
       gridTicks: 10,
       guide: true,
+      withPaddings: false,
     },
     y: {
       labels: 'left',
       labelTicks: 4,
       gridTicks: 4,
       guide: true,
+      withPaddings: false,
     },
   } as const)
 

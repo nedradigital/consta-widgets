@@ -383,22 +383,42 @@ describe('<LinearChart />', () => {
     const padding = 0.1
 
     it('вернет домен с отступами когда зум = 1', () => {
-      const paddedDomain = padDomain([0, 10], padding, padding, 1)
+      const paddedDomain = padDomain({
+        domain: [0, 10],
+        paddingStart: padding,
+        paddingEnd: padding,
+        zoom: 1,
+      })
       expect(paddedDomain).toEqual([-1, 11])
     })
 
     it('вернет домен с отступами когда зум = 2', () => {
-      const paddedDomain = padDomain([-10, 10], padding, padding, 2)
+      const paddedDomain = padDomain({
+        domain: [-10, 10],
+        paddingStart: padding,
+        paddingEnd: padding,
+        zoom: 2,
+      })
       expect(paddedDomain).toEqual([-11, 11])
     })
 
     it('вернет домен с отступами когда зум = 4', () => {
-      const paddedDomain = padDomain([40, 100], padding, padding, 4)
+      const paddedDomain = padDomain({
+        domain: [40, 100],
+        paddingStart: padding,
+        paddingEnd: padding,
+        zoom: 4,
+      })
       expect(paddedDomain).toEqual([38.5, 101.5])
     })
 
     it('вернет домен с отступами когда зум = 8', () => {
-      const paddedDomain = padDomain([-50, 50], padding, padding, 8)
+      const paddedDomain = padDomain({
+        domain: [-50, 50],
+        paddingStart: padding,
+        paddingEnd: padding,
+        zoom: 8,
+      })
       expect(paddedDomain).toEqual([-51.25, 51.25])
     })
   })

@@ -19,11 +19,13 @@ type Params = {
   xLabelTicks?: number
   xGridTicks?: number
   xGuide?: boolean
+  xWithPaddings?: boolean
   yLabels?: YLabelsPosition
   yLabelTicks?: number
   yGridTicks?: number
   yGuide?: boolean
   unit?: string
+  yWithPaddings?: boolean
 }
 
 export const defaultParams: Params = {
@@ -33,11 +35,13 @@ export const defaultParams: Params = {
   xLabelTicks: 0,
   xGridTicks: 0,
   xGuide: false,
+  xWithPaddings: true,
   yLabels: 'left',
   yLabelTicks: 0,
   yGridTicks: 0,
   yGuide: false,
   unit: '',
+  yWithPaddings: true,
 }
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -48,10 +52,12 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     xLabelTicks,
     xGridTicks,
     xGuide,
+    xWithPaddings,
     yLabels,
     yLabelTicks,
     yGridTicks,
     yGuide,
+    yWithPaddings,
   },
   data: {
     data,
@@ -71,12 +77,14 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
         labelTicks: xLabelTicks,
         gridTicks: xGridTicks,
         guide: xGuide,
+        withPaddings: xWithPaddings,
       },
       y: {
         labels: yLabels,
         labelTicks: yLabelTicks,
         gridTicks: yGridTicks,
         guide: yGuide,
+        withPaddings: yWithPaddings,
       },
     }}
     lines={data}
@@ -142,6 +150,11 @@ export const LinearChartWidget = createWidget<Data, Params>({
           onChange={value => onChangeParam('xGridTicks', value)}
         />
         <WidgetSettingsCheckbox
+          name="Отображать отступы на оси"
+          value={params.xWithPaddings}
+          onChange={value => onChangeParam('xWithPaddings', value)}
+        />
+        <WidgetSettingsCheckbox
           name="Отображать нулевую ось"
           value={params.xGuide}
           onChange={value => onChangeParam('xGuide', value)}
@@ -172,6 +185,11 @@ export const LinearChartWidget = createWidget<Data, Params>({
           name="Частота обновления линий"
           value={params.yGridTicks}
           onChange={value => onChangeParam('yGridTicks', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Отображать отступы на оси"
+          value={params.yWithPaddings}
+          onChange={value => onChangeParam('yWithPaddings', value)}
         />
         <WidgetSettingsCheckbox
           name="Отображать нулевую ось"

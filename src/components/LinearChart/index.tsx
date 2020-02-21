@@ -332,27 +332,45 @@ export class LinearChart extends React.Component<Props, State> {
   }
 
   getXDomain = (items: readonly Item[]): NumberRange => {
-    const { isHorizontal } = this.props
+    const {
+      gridConfig: {
+        x: { withPaddings },
+      },
+      isHorizontal,
+    } = this.props
     const { zoom } = this.state
     const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
     const domain = d3.extent(items, v => v.x) as NumberRange
-    return padDomain(domain, left, right, zoom)
+
+    return padDomain({
+      domain,
+      paddingStart: withPaddings ? left : 0,
+      paddingEnd: withPaddings ? right : 0,
+      zoom,
+    })
   }
 
   getYDomain = (items: readonly Item[]): NumberRange => {
-    const { isHorizontal } = this.props
+    const {
+      gridConfig: {
+        y: { withPaddings },
+      },
+      isHorizontal,
+    } = this.props
     const { zoom } = this.state
     const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const domain = d3.extent(items, v => v.y)
-    return padDomain(
-      (isHorizontal
-        ? domain
-        : // Чтобы 0 был сверху
-          [...domain].reverse()) as NumberRange,
-      bottom,
-      top,
-      zoom
-    )
+    const initialDomain = d3.extent(items, v => v.y)
+    const domain = (isHorizontal
+      ? initialDomain
+      : // Чтобы 0 был сверху
+        [...initialDomain].reverse()) as NumberRange
+
+    return padDomain({
+      domain,
+      paddingStart: withPaddings ? bottom : 0,
+      paddingEnd: withPaddings ? top : 0,
+      zoom,
+    })
   }
 
   getThresholdLines = () => {
