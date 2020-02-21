@@ -49,6 +49,14 @@ export type ConnectionPoint = {
   name: string
 }
 
+export type ConnectionLine = {
+  fromObjectId: string
+  toObjectId: string
+  d: string | null
+  lineLength: number
+  preventAnimation: boolean
+}
+
 export type RenderPoint = (point: GeoPoint) => React.ReactNode
 export type RenderObjectPoint = (
   location: GeoObject,
@@ -62,6 +70,7 @@ export type RenderObjectPoint = (
   }
 ) => React.ReactNode
 export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactNode
+export type RenderConnectionLine = (connectionLine: ConnectionLine) => React.ReactNode
 export type SelectedObjectId = string | undefined
 
 export type Data = {
@@ -77,6 +86,7 @@ export type Data = {
   renderPoint: RenderPoint
   renderObjectPoint?: RenderObjectPoint
   renderConnectionPoint?: RenderConnectionPoint
+  renderConnectionLine?: RenderConnectionLine
 }
 
 type Props = Data
@@ -119,6 +129,7 @@ export const Map: React.FC<Props> = ({
   renderPoint,
   renderObjectPoint = () => null,
   renderConnectionPoint = () => null,
+  renderConnectionLine = () => null,
 }) => {
   const ref = useRef(null)
   const svgRef = useRef(null)
@@ -247,6 +258,7 @@ export const Map: React.FC<Props> = ({
             renderPoint={renderPoint}
             renderObjectPoint={renderObjectPoint}
             renderConnectionPoint={renderConnectionPoint}
+            renderConnectionLine={renderConnectionLine}
             onObjectSelect={handleObjectSelect}
             onObjectHover={handleObjectHover}
           />

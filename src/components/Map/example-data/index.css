@@ -102,3 +102,36 @@
 
   background: var(--bg-color);
 }
+
+.connectionLine {
+  fill: none;
+  stroke: #0aa5ff;
+  stroke-width: 2;
+
+  pointer-events: none;
+
+  opacity: 0.4;
+
+  &.isDashed {
+    stroke-dasharray: 5;
+  }
+
+  &.isAnimated {
+    --line-length: 1000; /* переопределяется в js */
+    --animated-segment: 30;
+
+    opacity: 1;
+
+    animation: dash ease-in infinite;
+    animation-duration: 5s;
+    stroke-dasharray: var(--animated-segment) var(--line-length);
+    stroke-dashoffset: calc(-1 * var(--line-length));
+
+    @keyframes dash {
+      20%,
+      100% {
+        stroke-dashoffset: var(--animated-segment);
+      }
+    }
+  }
+}
