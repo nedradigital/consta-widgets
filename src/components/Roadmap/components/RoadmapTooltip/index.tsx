@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
@@ -101,6 +102,10 @@ export const RoadmapTooltip: React.FC<Props> = ({
       />
     </div>,
   ] as const
+
+  if (!isDefined(top) && !isDefined(bottom)) {
+    return null
+  }
 
   return ReactDOM.createPortal(
     <div

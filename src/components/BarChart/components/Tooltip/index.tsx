@@ -5,6 +5,7 @@ import { getCalculatedSize } from '@csssr/gpn-utils/lib/css'
 import { HorizontalDirection, Tooltip, VerticalDirection } from '@/components/Tooltip'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { PositionState } from '@/utils/tooltips'
 
 import { Size } from '../..'
 import { ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams, MouseActionParams } from '../Bar'
@@ -24,11 +25,6 @@ type Props = {
   size: Size
 }
 
-const defaultPosition = {
-  x: 0,
-  y: 0,
-}
-
 const getOffsetPosition = (parameters: {
   innerTranslate: number
   svgRef: React.RefObject<SVGGElement>
@@ -36,11 +32,11 @@ const getOffsetPosition = (parameters: {
   baseSize: number
   params?: GeometryParams
   size: Size
-}) => {
+}): PositionState => {
   const { innerTranslate, svgRef, isVertical, baseSize, params, size } = parameters
 
   if (!svgRef.current || !params) {
-    return defaultPosition
+    return undefined
   }
 
   const { x, y, columnSize } = params
@@ -119,7 +115,7 @@ export const TooltipComponent: React.FC<Props> = ({
   return (
     <Tooltip
       isVisible={isVisible}
-      {...position}
+      position={position}
       horizontalDirection={direction.horizontal}
       verticalDirection={direction.vertical}
       children={layout}

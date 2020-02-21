@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom'
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import classnames from 'classnames'
 
+import { PositionState } from '@/utils/tooltips'
+import { isDefinedPosition } from '@/utils/type-guards'
+
 import css from './index.css'
 
 type Props = {
@@ -13,10 +16,7 @@ type Props = {
 }
 
 export const Tooltip: React.FC<Props> = ({ children, anchorRef, isWide, onClickOutside }) => {
-  const [position, setPosition] = useState<{ x?: number; y?: number }>({
-    x: undefined,
-    y: undefined,
-  })
+  const [position, setPosition] = useState<PositionState>()
   const ref = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -32,6 +32,10 @@ export const Tooltip: React.FC<Props> = ({ children, anchorRef, isWide, onClickO
   useClickOutside([ref], event => {
     onClickOutside && onClickOutside(event)
   })
+
+  if (!isDefinedPosition(position)) {
+    return null
+  }
 
   return ReactDOM.createPortal(
     <div
