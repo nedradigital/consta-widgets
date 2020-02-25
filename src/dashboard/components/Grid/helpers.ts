@@ -1,7 +1,7 @@
 import { move, removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
 import * as _ from 'lodash'
 
-import { ColumnParams, GridContent, RowParams, WidgetItem } from '@/dashboard/types'
+import { ColumnParams, GridContent, RowParams, SwitchItem, WidgetItem } from '@/dashboard/types'
 
 export const updateCellItems = ({
   grid,
@@ -12,7 +12,7 @@ export const updateCellItems = ({
   grid: GridContent
   cellRow: number
   cellColumn: number
-  items: readonly WidgetItem[]
+  items: ReadonlyArray<SwitchItem | WidgetItem>
 }): GridContent => {
   const newGridItems = grid.items.map((row, rowIdx) =>
     rowIdx === cellRow ? updateAt(row, cellColumn, items) : row

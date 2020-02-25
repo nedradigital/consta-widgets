@@ -6,13 +6,22 @@ import * as _ from 'lodash'
 
 import { getApplicableMigrations, migrate } from '@/dashboard/migration'
 import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
-import { isWidget } from '@/utils/type-guards'
+import { isGrid, isSwitch } from '@/utils/type-guards'
 
 import { Dashboard, DashboardProps } from './components/Dashboard'
 import { marginSizes, Menu, MenuProps } from './components/Menu'
 import css from './index.css'
 import { currentMigration } from './migration/migrations/current'
-import { BoxItem, DashboardState, Data, DataMap, Dataset, GridItem, WidgetItem } from './types'
+import {
+  BoxItem,
+  DashboardState,
+  Data,
+  DataMap,
+  Dataset,
+  GridItem,
+  SwitchItem,
+  WidgetItem,
+} from './types'
 
 // с webpack сейчас нормально не работает re-export, поэтому приходится делать так
 // https://github.com/TypeStrong/ts-loader/issues/751
@@ -51,9 +60,22 @@ export const isDashboardSupported = (
 export const getAllWidgets = (dashboardConfig: DashboardState['config']): readonly WidgetItem[] => {
   const boxItems = _.flatten(Object.values(dashboardConfig))
 
-  return _.flatMap(boxItems, boxItem =>
-    isWidget(boxItem) ? boxItem : boxItem.grid.items.map(row => row.flat()).flat()
-  )
+  const flatGrid = (item: GridItem) => item.grid.items.map(row => row.flat()).flat()
+  const flatSwitch = (item: SwitchItem) => item.displays.flat()
+
+  return _.flatMap(boxItems, boxItem => {
+    if (isGrid(boxItem)) {
+      const result = flatGrid(boxItem).map(item => (isSwitch(item) ? flatSwitch(item) : item))
+
+      return result.flat()
+    }
+
+    if (isSwitch(boxItem)) {
+      return flatSwitch(boxItem)
+    }
+
+    return boxItem
+  })
 }
 
 export const Constructor: React.FC<ConstructorProps> = props => {

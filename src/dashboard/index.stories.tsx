@@ -37,6 +37,11 @@ export const exampleDatasets: readonly Dataset[] = [
     type: DataType.TableLegend,
     id: 'field',
   },
+  {
+    name: 'Пример переключателя',
+    type: DataType.Switch,
+    id: 'switchExample',
+  },
 ]
 const cols = 12
 

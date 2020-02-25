@@ -46,6 +46,39 @@ describe('getAllWidgets', () => {
           },
         },
       ],
+      Box4: [
+        {
+          type: 'grid',
+          grid: {
+            columnParams: [{}],
+            rowParams: [{}],
+            items: [
+              // Строка 1
+              [
+                // Колонка 1
+                [createTextWidget('4.1a'), createTextWidget('4.1b')],
+                // Колонка 2
+                [createTextWidget('4.2')],
+              ],
+              // Строка 2
+              [
+                // Колонка 1
+                [
+                  {
+                    type: 'switch',
+                    id: 'switchId',
+                    displays: [[createTextWidget('4.3')], [createTextWidget('4.4')]],
+                    params: {},
+                  },
+                ],
+                // Колонка 2
+                [],
+              ],
+            ],
+          },
+          params: {},
+        },
+      ],
     }
 
     expect(getAllWidgets(config)).toEqual([
@@ -54,6 +87,11 @@ describe('getAllWidgets', () => {
       createTextWidget('1.1b'),
       createTextWidget('1.2'),
       createTextWidget('2.1'),
+      createTextWidget('4.1a'),
+      createTextWidget('4.1b'),
+      createTextWidget('4.2'),
+      createTextWidget('4.3'),
+      createTextWidget('4.4'),
     ])
   })
 })

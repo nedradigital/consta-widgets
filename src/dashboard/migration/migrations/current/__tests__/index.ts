@@ -1,7 +1,7 @@
 import { widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard8 } from '../../dashboard8'
+import { Dashboard9 } from '../../dashboard9'
 
 const createTextWidget = (name: string, params = {}) =>
   ({
@@ -14,8 +14,8 @@ const createTextWidget = (name: string, params = {}) =>
 
 describe('migration9', () => {
   it('повышает версию', () => {
-    const source: Dashboard8.State = {
-      version: 8,
+    const source: Dashboard9.State = {
+      version: 9,
       boxes: [],
       config: {
         Box0: [
@@ -25,17 +25,20 @@ describe('migration9', () => {
         ],
         Box2: [
           {
-            type: 'columns',
-            columns: [
-              {
-                params: { growRatio: 11 },
-                items: [createTextWidget('col1-1'), createTextWidget('col1-2')],
-              },
-              {
-                params: { growRatio: 22 },
-                items: [createTextWidget('col2-1')],
-              },
-            ],
+            type: 'grid',
+            grid: {
+              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
+              rowParams: [{}],
+              items: [
+                // Строка 1
+                [
+                  // Колонка 1
+                  [createTextWidget('col1-1'), createTextWidget('col1-2')],
+                  // Колонка 2
+                  [createTextWidget('col2-1')],
+                ],
+              ],
+            },
             params: {
               growRatio: 1,
             },
@@ -46,7 +49,7 @@ describe('migration9', () => {
     }
 
     const result: CurrentDashboard.State = {
-      version: 9,
+      version: 10,
       boxes: [],
       config: {
         Box0: [
@@ -84,10 +87,18 @@ describe('migration9', () => {
 
   it('понижает версию', () => {
     const source: CurrentDashboard.State = {
-      version: 9,
+      version: 10,
       boxes: [],
       config: {
         Box0: [createTextWidget('1')],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1')], [createTextWidget('1.2')]],
+            params: {},
+          },
+        ],
         Box2: [
           {
             type: 'grid',
@@ -98,16 +109,9 @@ describe('migration9', () => {
                 // Строка 1
                 [
                   // Колонка 1
-                  [createTextWidget('1.1a'), createTextWidget('1.1b')],
+                  [createTextWidget('2.1a'), createTextWidget('2.1b')],
                   // Колонка 2
-                  [createTextWidget('1.2')],
-                ],
-                // Строка 2
-                [
-                  // Колонка 1
-                  [createTextWidget('2.1')],
-                  // Колонка 2
-                  [],
+                  [createTextWidget('2.2')],
                 ],
               ],
             },
@@ -116,35 +120,76 @@ describe('migration9', () => {
             },
           },
         ],
+        Box3: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [{}],
+              rowParams: [{}],
+              items: [
+                // строка
+                [
+                  // колонка
+                  [
+                    {
+                      id: 'switchId',
+                      type: 'switch',
+                      displays: [[createTextWidget('3.1')], [createTextWidget('3.2')]],
+                      params: {},
+                    },
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
       },
       settings: {},
     }
 
-    const result: Dashboard8.State = {
-      version: 8,
+    const result: Dashboard9.State = {
+      version: 9,
       boxes: [],
       config: {
         Box0: [createTextWidget('1')],
+        Box1: [createTextWidget('1.1')],
         Box2: [
           {
-            type: 'columns',
-            columns: [
-              {
-                params: {
-                  growRatio: 11,
-                },
-                items: [createTextWidget('1.1a'), createTextWidget('1.1b')],
-              },
-              {
-                params: {
-                  growRatio: 22,
-                },
-                items: [createTextWidget('1.2')],
-              },
-            ],
+            type: 'grid',
+            grid: {
+              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
+              rowParams: [{}],
+              items: [
+                // Строка 1
+                [
+                  // Колонка 1
+                  [createTextWidget('2.1a'), createTextWidget('2.1b')],
+                  // Колонка 2
+                  [createTextWidget('2.2')],
+                ],
+              ],
+            },
             params: {
               growRatio: 1,
             },
+          },
+        ],
+        Box3: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [{}],
+              rowParams: [{}],
+              items: [
+                // строка
+                [
+                  // колонка
+                  [createTextWidget('3.1')],
+                ],
+              ],
+            },
+            params: {},
           },
         ],
       },

@@ -9,9 +9,11 @@ import {
   Dataset,
   GridContent,
   RowParams,
+  SwitchItem,
   VerticalAlignment,
+  WidgetItem,
 } from '@/dashboard/types'
-import { isWidget } from '@/utils/type-guards'
+import { isSwitch, isWidget } from '@/utils/type-guards'
 
 import { Box } from '../Box'
 
@@ -246,14 +248,16 @@ export const Grid: React.FC<Props> = ({ datasets, viewMode, onChange, data, grid
                       grid,
                       cellRow: rowIdx,
                       cellColumn: columnIdx,
-                      items: items.filter(isWidget),
+                      items: items.filter(
+                        (item): item is WidgetItem | SwitchItem => isWidget(item) || isSwitch(item)
+                      ),
                     })
                   )
                 }
                 data={data}
                 items={column}
-                isNestedBox
                 verticalAlign={grid.columnParams[columnIdx].verticalAlignment}
+                parentName="grid"
               />
               {!viewMode && (
                 <>
