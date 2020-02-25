@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { getValueRatio } from '../../'
@@ -7,8 +8,8 @@ import { Legend, Tick } from '../Legend'
 
 import css from './index.css'
 
-type Data = {
-  value: number
+export type Data = {
+  value: number | null
   valueMin: number
   valueMax: number
   ticks?: readonly Tick[]
@@ -24,7 +25,8 @@ export const Progress: React.FC<Props> = ({
   color = '#FFBA3B',
 }) => {
   const hasLegend = ticks.length
-  const valueNowRatio = getValueRatio(value, valueMin, valueMax)
+  const isWithData = isNotNil(value)
+  const valueNowRatio = getValueRatio({ value: value || 0, valueMin, valueMax })
   const progressIsNotFull = valueNowRatio < 100
 
   return (
@@ -33,9 +35,13 @@ export const Progress: React.FC<Props> = ({
         <progress
           max={100}
           value={valueNowRatio}
-          className={classnames(css.chartLine, progressIsNotFull ? css.isNotFull : '')}
+          className={classnames(
+            css.chartLine,
+            isWithData && css.isWithData,
+            isWithData && progressIsNotFull && css.isNotFull
+          )}
           aria-valuemin={valueMin}
-          aria-valuenow={value}
+          aria-valuenow={value || 0}
           aria-valuemax={valueMax}
         />
         {!!hasLegend && <Legend ticks={ticks} valueMin={valueMin} valueMax={valueMax} />}

@@ -1,23 +1,19 @@
 import React from 'react'
 
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/dashboard/types'
 import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 
-import { Tick } from './components/Legend'
-import { Progress } from './components/Progress'
+import { Data as ProgressData, Progress } from './components/Progress'
 import { Summary } from './components/Summary'
 import css from './index.css'
 
 export const sizes = ['s', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
-export type Data = {
-  value: number
-  valueMin: number
-  valueMax: number
-  ticks?: readonly Tick[]
+export type Data = ProgressData & {
   summary: string | number
   colorGroupName: string
   caption?: string
@@ -31,8 +27,16 @@ type Props = {
   isCaptionBold?: boolean
 }
 
-export const getValueRatio = (val: number, valMin: number, valMax: number) => {
-  return ((val - valMin) / (valMax - valMin)) * 100
+export const getValueRatio = ({
+  value,
+  valueMin,
+  valueMax,
+}: {
+  value: number
+  valueMin: number
+  valueMax: number
+}) => {
+  return ((value - valueMin) / (valueMax - valueMin)) * 100
 }
 
 export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
@@ -40,32 +44,36 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
 
   return (
     <div className={classnames(css.progressBar, sizeClass)}>
-      {data.map((dataItem, i) => (
-        <React.Fragment key={i}>
-          <div className={css.cell}>
-            {dataItem.caption && (
-              <div className={css.caption}>
-                <TextWidget
-                  data={{ text: dataItem.caption, tooltip: dataItem.tooltip }}
-                  params={{
-                    text: dataItem.caption,
-                    croppedLineCount: 1,
-                    type: isCaptionBold ? 'text3' : 'text2',
-                  }}
-                />
-              </div>
-            )}
-            <Progress data={dataItem} color={colorGroups[dataItem.colorGroupName]} />
-          </div>
-          <div className={classnames(css.cell, css.textCell)}>
-            <Summary
-              summary={dataItem.summary}
-              color={colorGroups[dataItem.colorGroupName]}
-              hasCaption={!!dataItem.caption}
-            />
-          </div>
-        </React.Fragment>
-      ))}
+      {data.map((dataItem, i) => {
+        const { caption, colorGroupName, tooltip, value, summary } = dataItem
+
+        return (
+          <React.Fragment key={i}>
+            <div className={css.cell}>
+              {caption && (
+                <div className={css.caption}>
+                  <TextWidget
+                    data={{ text: caption, tooltip }}
+                    params={{
+                      text: caption,
+                      croppedLineCount: 1,
+                      type: isCaptionBold ? 'text3' : 'text2',
+                    }}
+                  />
+                </div>
+              )}
+              <Progress data={dataItem} color={colorGroups[colorGroupName]} />
+            </div>
+            <div className={classnames(css.cell, css.textCell)}>
+              <Summary
+                summary={isNotNil(value) ? summary : '–'}
+                color={colorGroups[colorGroupName]}
+                hasCaption={!!caption}
+              />
+            </div>
+          </React.Fragment>
+        )
+      })}
     </div>
   )
 }
