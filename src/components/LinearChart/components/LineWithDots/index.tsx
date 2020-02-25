@@ -50,23 +50,19 @@ export const LineWithDots: React.FC<Props> = props => {
 
   return (
     <g style={{ color }} className={css.main}>
-      <Line
-        className={css.line}
-        points={values}
-        scaleX={scaleX}
-        scaleY={scaleY}
-        clipPath={lineClipPath}
-      />
+      <g clipPath={lineClipPath}>
+        <Line className={css.line} points={values} scaleX={scaleX} scaleY={scaleY} />
 
-      {props.withGradient && (
-        <Area
-          values={values.filter(itemIsNotEmpty)}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          isHorizontal={isHorizontal}
-          areaBottom={props.areaBottom}
-        />
-      )}
+        {props.withGradient && (
+          <Area
+            values={values.filter(itemIsNotEmpty)}
+            scaleX={scaleX}
+            scaleY={scaleY}
+            isHorizontal={isHorizontal}
+            areaBottom={props.areaBottom}
+          />
+        )}
+      </g>
 
       <g clipPath={dotsClipPath}>
         {values.filter(itemIsNotEmpty).map((item, idx) => {

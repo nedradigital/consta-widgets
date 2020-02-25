@@ -500,6 +500,7 @@ export class LinearChart extends React.Component<Props, State> {
         this.setState(newPaddings)
       } else {
         d3.select(this.paddingTransitionEl)
+          .interrupt()
           .transition()
           .duration(TRANSITION_DURATIONS.SIZE)
           .tween('paddings', () => {
