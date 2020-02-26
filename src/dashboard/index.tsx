@@ -57,15 +57,25 @@ export const isDashboardSupported = (
   dashboard: AnyDashboardStateVersion
 ): dashboard is DashboardState => dashboard.version === SUPPORTED_DASHBOARD_VERSION
 
-export const getAllWidgets = (dashboardConfig: DashboardState['config']): readonly WidgetItem[] => {
-  const boxItems = _.flatten(Object.values(dashboardConfig))
+const getWidgetIdAndDatasetId = (item: WidgetItem | SwitchItem) => ({
+  widgetId: item.id,
+  datasetId: item.params.datasetId,
+})
 
-  const flatGrid = (item: GridItem) => item.grid.items.map(row => row.flat()).flat()
-  const flatSwitch = (item: SwitchItem) => item.displays.flat()
+const flatGrid = (item: GridItem) => item.grid.items.map(row => row.flat()).flat()
+const flatSwitch = (item: SwitchItem) =>
+  [item, ...item.displays.flat()].map(getWidgetIdAndDatasetId)
+
+export const getAllWidgetAndDatasetIds = (
+  dashboardConfig: DashboardState['config']
+): ReadonlyArray<{ widgetId: string; datasetId?: string }> => {
+  const boxItems = _.flatten(Object.values(dashboardConfig))
 
   return _.flatMap(boxItems, boxItem => {
     if (isGrid(boxItem)) {
-      const result = flatGrid(boxItem).map(item => (isSwitch(item) ? flatSwitch(item) : item))
+      const result = flatGrid(boxItem).map(item =>
+        isSwitch(item) ? flatSwitch(item) : getWidgetIdAndDatasetId(item)
+      )
 
       return result.flat()
     }
@@ -74,7 +84,7 @@ export const getAllWidgets = (dashboardConfig: DashboardState['config']): readon
       return flatSwitch(boxItem)
     }
 
-    return boxItem
+    return getWidgetIdAndDatasetId(boxItem)
   })
 }
 

@@ -3,7 +3,7 @@ import { widgetId as textWidgetId } from '@/widgets/TextWidget'
 // Чтобы тесты не падали на require.context
 jest.mock('@/utils/widgets-list', () => ({}))
 
-import { DashboardState, getAllWidgets } from '../'
+import { DashboardState, getAllWidgetAndDatasetIds } from '../'
 
 const createTextWidget = (name: string, params = {}) =>
   ({
@@ -11,11 +11,14 @@ const createTextWidget = (name: string, params = {}) =>
     debugName: name,
     id: name,
     widgetType: textWidgetId,
-    params,
+    params: {
+      ...params,
+      datasetId: `datasetId${name}`,
+    },
   } as const)
 
-describe('getAllWidgets', () => {
-  it('возвращает список всех виджетов дашборда', () => {
+describe('getAllWidgetAndDatasetIds', () => {
+  it('возвращает список всех widgetId + datasetId на дашборде', () => {
     const config: DashboardState['config'] = {
       Box0: [createTextWidget('1')],
       Box2: [
@@ -66,9 +69,11 @@ describe('getAllWidgets', () => {
                 [
                   {
                     type: 'switch',
-                    id: 'switchId',
+                    id: 'switchId1',
                     displays: [[createTextWidget('4.3')], [createTextWidget('4.4')]],
-                    params: {},
+                    params: {
+                      datasetId: 'swtichDatasetId1',
+                    },
                   },
                 ],
                 // Колонка 2
@@ -78,20 +83,32 @@ describe('getAllWidgets', () => {
           },
           params: {},
         },
+        {
+          type: 'switch',
+          id: 'switchId2',
+          displays: [[createTextWidget('4.5')], [createTextWidget('4.6')]],
+          params: {
+            datasetId: 'swtichDatasetId2',
+          },
+        },
       ],
     }
 
-    expect(getAllWidgets(config)).toEqual([
-      createTextWidget('1'),
-      createTextWidget('1.1a'),
-      createTextWidget('1.1b'),
-      createTextWidget('1.2'),
-      createTextWidget('2.1'),
-      createTextWidget('4.1a'),
-      createTextWidget('4.1b'),
-      createTextWidget('4.2'),
-      createTextWidget('4.3'),
-      createTextWidget('4.4'),
+    expect(getAllWidgetAndDatasetIds(config)).toEqual([
+      { widgetId: '1', datasetId: 'datasetId1' },
+      { widgetId: '1.1a', datasetId: 'datasetId1.1a' },
+      { widgetId: '1.1b', datasetId: 'datasetId1.1b' },
+      { widgetId: '1.2', datasetId: 'datasetId1.2' },
+      { widgetId: '2.1', datasetId: 'datasetId2.1' },
+      { widgetId: '4.1a', datasetId: 'datasetId4.1a' },
+      { widgetId: '4.1b', datasetId: 'datasetId4.1b' },
+      { widgetId: '4.2', datasetId: 'datasetId4.2' },
+      { widgetId: 'switchId1', datasetId: 'swtichDatasetId1' },
+      { widgetId: '4.3', datasetId: 'datasetId4.3' },
+      { widgetId: '4.4', datasetId: 'datasetId4.4' },
+      { widgetId: 'switchId2', datasetId: 'swtichDatasetId2' },
+      { widgetId: '4.5', datasetId: 'datasetId4.5' },
+      { widgetId: '4.6', datasetId: 'datasetId4.6' },
     ])
   })
 })
