@@ -10,6 +10,8 @@ import { Box } from '../Box'
 
 import css from './index.css'
 
+export const switchId = '3cebeb3d-517a-410c-9434-c15835d30707'
+
 type Props = {
   dataKey: string
   displays: SwitchContent
@@ -72,7 +74,7 @@ export const Switch: React.FC<Props> = ({
         onChange={items => onChange(updateAt(displays, currentDisplay, items.filter(isWidget)))}
         datasets={datasets}
         data={data}
-        items={displays[currentDisplay]}
+        items={displays[currentDisplay] || displays[0]}
         viewMode={viewMode}
         parentName="switch"
       />

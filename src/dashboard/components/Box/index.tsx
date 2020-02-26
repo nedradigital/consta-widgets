@@ -8,9 +8,9 @@ import classnames from 'classnames'
 import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
 import { EMPTY_GRID_CONTENT, Grid } from '@/dashboard/components/Grid'
 import { Settings } from '@/dashboard/components/Settings'
-import { Switch } from '@/dashboard/components/Switch'
+import { Switch, switchId } from '@/dashboard/components/Switch'
 import { themeColorDark } from '@/utils/theme'
-import { isWidget } from '@/utils/type-guards'
+import { isSwitch, isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
 
@@ -22,7 +22,9 @@ import {
   GridContent,
   GridItem,
   SwitchContent,
+  SwitchItem,
   VerticalAlignment,
+  WidgetItem,
 } from '../../types'
 
 import css from './index.css'
@@ -99,7 +101,9 @@ export const Box: React.FC<Props> = ({
   const [selectedItem, changeSelected] = useState(widgetIds[0])
   const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
   const { getUniqueName, removeName } = useUniqueNameGenerator(
-    items.filter(isWidget).map(item => item.id)
+    items
+      .filter((i): i is WidgetItem | SwitchItem => isWidget(i) || isSwitch(i))
+      .map(item => item.id)
   )
 
   const addItem = () => {
@@ -111,7 +115,7 @@ export const Box: React.FC<Props> = ({
       case 'switch': {
         onChange([
           ...items,
-          { id: getUniqueName(selectedItem), type: 'switch', displays: [[]], params: {} },
+          { id: getUniqueName(switchId), type: 'switch', displays: [[]], params: {} },
         ])
         return
       }

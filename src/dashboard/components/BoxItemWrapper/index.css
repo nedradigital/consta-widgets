@@ -52,8 +52,6 @@
   @nest :--main.isSwitch > & {
     bottom: 0;
     left: 0;
-
-    flex-direction: row-reverse;
   }
 
   @nest :--main:not(.isCustomItem) > & {

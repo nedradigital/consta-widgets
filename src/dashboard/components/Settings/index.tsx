@@ -108,6 +108,7 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
   if (isSwitch(item)) {
     return (
       <>
+        <WidgetSettingsItem name="id">{item.id}</WidgetSettingsItem>
         <DatasetSelect
           item={item}
           dataType={DataType.Switch}
