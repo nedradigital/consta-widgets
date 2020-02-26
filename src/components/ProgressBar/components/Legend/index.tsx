@@ -20,7 +20,7 @@ type Props = {
 export const Legend: React.FC<Props> = ({ ticks, valueMin, valueMax }) => {
   const ticksWithRatio = ticks.map(tick => ({
     ...tick,
-    ratio: getValueRatio(tick.value, valueMin, valueMax),
+    ratio: getValueRatio({ value: tick.value, valueMin, valueMax }),
   }))
   const ticksAmount = ticks.length
   const getMarkingAlignClass = (length: number, index: number) => {

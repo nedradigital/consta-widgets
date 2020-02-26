@@ -15,7 +15,7 @@
     background-color: #13384e;
   }
 
-  &[value]::-webkit-progress-value {
+  &.isWithData[value]::-webkit-progress-value {
     border-radius: inherit;
     background-color: currentColor;
   }
