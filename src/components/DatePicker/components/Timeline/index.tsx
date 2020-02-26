@@ -141,6 +141,18 @@ const getSelectedBlockStyles = ({
   }
 }
 
+const TickSelector: React.FC<{ isWide: boolean; offsetLeft: number }> = ({
+  isWide,
+  offsetLeft,
+}) => (
+  <div
+    className={classnames(css.selector, isWide && css.isWide)}
+    style={{
+      left: TICK_WIDTH * offsetLeft,
+    }}
+  />
+)
+
 export const Timeline: React.FC<Props> = ({
   currentVisibleDate,
   minDate,
@@ -156,6 +168,8 @@ export const Timeline: React.FC<Props> = ({
     ? NOT_ALLOWED_MONTHS_AMOUNT
     : NOT_ALLOWED_MONTHS_AMOUNT / 2
   const months = getMonths({ minDate, maxDate, ticksOutsideRange })
+  const currentVisibleDateIdx =
+    differenceInCalendarMonths(currentVisibleDate, minDate) + ticksOutsideRange
 
   const getMaxOffset = () => {
     if (!timelineRef.current) {
@@ -244,18 +258,10 @@ export const Timeline: React.FC<Props> = ({
               </div>
             )
           })}
-          {
-            <div
-              className={classnames(css.selector, isDateRange(value) && css.isWide)}
-              style={{
-                left:
-                  TICK_WIDTH *
-                  (isDefined(activeTick)
-                    ? activeTick
-                    : differenceInCalendarMonths(currentVisibleDate, minDate) + ticksOutsideRange),
-              }}
-            />
-          }
+          {<TickSelector isWide={isDateRange(value)} offsetLeft={currentVisibleDateIdx} />}
+          {isDefined(activeTick) && activeTick !== currentVisibleDateIdx && (
+            <TickSelector isWide={isDateRange(value)} offsetLeft={activeTick} />
+          )}
         </div>
       </div>
       <Button
