@@ -1,18 +1,10 @@
 import { date as knobsDate, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { DateRange, Size } from '@/components/DatePicker'
+import { DateRange } from '@/components/DatePicker'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { DatePickerWidgetContent } from '.'
-
-type Params = {
-  size: Size
-}
-
-const defaultParams: Params = {
-  size: 'm',
-}
+import { DatePickerWidgetContent, defaultParams } from '.'
 
 const getDateLimitProps = () =>
   ({
