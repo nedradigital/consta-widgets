@@ -2,6 +2,7 @@
   --arrow-size: calc-size(var(--tooltip-arrow-size));
   --tooltip-positive-arrow-offset: calc(2 * var(--arrow-size));
   --tooltip-negative-arrow-offset: calc(-2 * var(--arrow-size));
+  --arrow-side-size: calc(var(--arrow-size) / 2);
   --tooltip-bg-color: #fff;
   --tooltip-text-color: #002033;
 
@@ -54,7 +55,6 @@
   padding: calc-size(var(--tooltip-vertical-padding)) calc-size(var(--tooltip-horizontal-padding));
 
   color: var(--tooltip-text-color);
-  border: 1px solid rgba(0, 32, 51, 0.12);
   border-radius: 4px;
   background-color: var(--tooltip-bg-color);
 
@@ -76,11 +76,13 @@
 
   @nest .top.left &::after {
     right: 0;
-    bottom: calc(-1 * var(--arrow-size));
+    bottom: 0;
 
-    border-width: calc(var(--arrow-size) / 2);
+    border-width: var(--arrow-side-size);
     border-top-color: var(--tooltip-bg-color);
     border-right-color: var(--tooltip-bg-color);
+
+    transform: translateY(100%);
   }
 
   @nest .top.center &::after {
@@ -97,12 +99,14 @@
   }
 
   @nest .top.right &::after {
-    bottom: calc(-1 * var(--arrow-size));
+    bottom: 0;
     left: 0;
 
-    border-width: calc(var(--arrow-size) / 2);
+    border-width: var(--arrow-side-size);
     border-top-color: var(--tooltip-bg-color);
     border-left-color: var(--tooltip-bg-color);
+
+    transform: translateY(100%);
   }
 
   @nest .right.center & {
@@ -127,12 +131,14 @@
   }
 
   @nest .bottom.left &::after {
-    top: calc(-1 * var(--arrow-size));
+    top: 0;
     right: 0;
 
-    border-width: calc(var(--arrow-size) / 2);
+    border-width: var(--arrow-side-size);
     border-right-color: var(--tooltip-bg-color);
     border-bottom-color: var(--tooltip-bg-color);
+
+    transform: translateY(-100%);
   }
 
   @nest .bottom.center &::after {
@@ -149,12 +155,14 @@
   }
 
   @nest .bottom.right &::after {
-    top: calc(-1 * var(--arrow-size));
+    top: 0;
     left: 0;
 
-    border-width: calc(var(--arrow-size) / 2);
+    border-width: var(--arrow-side-size);
     border-bottom-color: var(--tooltip-bg-color);
     border-left-color: var(--tooltip-bg-color);
+
+    transform: translateY(-100%);
   }
 
   @nest .left.center & {
