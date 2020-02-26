@@ -1,5 +1,5 @@
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { isEmpty } from 'lodash'
+import { flattenDeep, isEmpty, uniq } from 'lodash'
 
 import { DataMap, DataType } from '@/dashboard/types'
 
@@ -12,16 +12,20 @@ export const dataColorsValidator = (
 ): readonly string[] => {
   switch (dataType) {
     case DataType.BarChart: {
-      const { categories, colorGroups } = widgetData as DataMap[DataType.BarChart]
+      const { groups, colorGroups } = widgetData as DataMap[DataType.BarChart]
       const colors = Object.keys(colorGroups)
 
-      return categories
+      return groups
         .map(item => {
-          if (!colors.includes(item)) {
-            return item
-          }
+          return item.values
+            .map(({ colorGroupName }) => {
+              if (!colors.includes(colorGroupName)) {
+                return colorGroupName
+              }
+            })
+            .filter(isDefined)
         })
-        .filter(isDefined)
+        .flat()
     }
 
     case DataType.Donut: {
@@ -64,13 +68,16 @@ export const dataColorsValidator = (
     }
 
     case DataType.MultiBarChart: {
-      const { categories, colorGroups } = widgetData as DataMap[DataType.MultiBarChart]
+      const { groups, colorGroups } = widgetData as DataMap[DataType.MultiBarChart]
       const colors = Object.keys(colorGroups)
+      const colorGroupNames = uniq(
+        flattenDeep<string>(groups.map(group => group.values.map(value => Object.keys(value))))
+      )
 
-      return categories
-        .map(item => {
-          if (!colors.includes(item)) {
-            return item
+      return colorGroupNames
+        .map(color => {
+          if (!colors.includes(color)) {
+            return color
           }
         })
         .filter(isDefined)

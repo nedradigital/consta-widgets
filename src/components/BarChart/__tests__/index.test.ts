@@ -1,22 +1,25 @@
-import { Data, getDataColumns, getUniqColumnNames, normalizeDetails } from '../'
+import { Groups } from '../'
+import { getDataColumns, normalizeDetails } from '../helpers'
 
-const TEST_DATA: Data = {
-  categories: ['baton', 'buhanka', 'korovay'],
-  groups: [
-    {
-      groupName: 'прошлогодний',
-      values: [
-        { baton: 10, buhanka: 5, korovay: 30 },
-        { baton: 5, buhanka: 0, korovay: 10 },
-        { baton: 100, buhanka: 35, korovay: 50 },
-      ],
-    },
-    {
-      groupName: 'свежий',
-      values: [{ baton: 100 }, { buhanka: undefined }, { korovay: 127 }],
-    },
-  ],
+const COLOR_GROUPS = {
+  baton: 'black',
+  buhanka: 'white',
+  korovay: 'gray',
 }
+const TEST_GROUPS: Groups = [
+  {
+    groupName: 'прошлогодний',
+    values: [
+      { baton: 10, buhanka: 5, korovay: 30 },
+      { baton: 5, buhanka: 0, korovay: 10 },
+      { baton: 100, buhanka: 35, korovay: 50 },
+    ],
+  },
+  {
+    groupName: 'свежий',
+    values: [{ baton: 100 }, { buhanka: undefined }, { korovay: 127 }],
+  },
+]
 
 const COLUMNS_DATA = [
   {
@@ -118,19 +121,12 @@ const COLUMNS_DATA = [
   },
 ] as const
 
-describe('getUniqColumnNames', () => {
-  it('возвращает уникальные имена', () => {
-    expect(getUniqColumnNames(TEST_DATA.groups)).toEqual(['0', '1', '2'])
-  })
-})
-
 describe('getDataColumns', () => {
   it('возвращает массив с координатами для баров', () => {
     expect(
       getDataColumns({
-        groups: TEST_DATA.groups,
-        categories: TEST_DATA.categories,
-        uniqueColumnNames: ['0', '1', '2'],
+        groups: TEST_GROUPS,
+        categories: Object.keys(COLOR_GROUPS),
       })
     ).toEqual(COLUMNS_DATA)
   })
