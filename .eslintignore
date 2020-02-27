@@ -1,4 +1,5 @@
 build
+scripts
 types
 webpack
 jest.config.js

@@ -12,7 +12,7 @@ const createTextWidget = (name: string, params = {}) =>
     params,
   } as const)
 
-describe('migration9', () => {
+describe('currentMigration', () => {
   it('повышает версию', () => {
     const source: Dashboard9.State = {
       version: 9,

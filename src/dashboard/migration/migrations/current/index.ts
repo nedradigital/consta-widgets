@@ -83,13 +83,16 @@ export namespace CurrentDashboard {
 export const currentMigration: Migration<Dashboard9.State, CurrentDashboard.State> = {
   versionTo: 10,
   changes: ['Добавился виджет "Переключатель"'],
+  // MIGRATION_GENERATION:METHOD:START
   up: data => {
     return {
       ...data,
       version: 10,
     }
   },
+  // MIGRATION_GENERATION:METHOD:END
 
+  // MIGRATION_GENERATION:METHOD:START
   down: data => {
     const updateItem = (item: CurrentDashboard.BoxItem): Dashboard9.BoxItem => {
       if (item.type === 'switch') {
@@ -124,4 +127,5 @@ export const currentMigration: Migration<Dashboard9.State, CurrentDashboard.Stat
       }, {}),
     }
   },
+  // MIGRATION_GENERATION:METHOD:END
 }
