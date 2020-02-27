@@ -150,7 +150,7 @@ storiesOf('components/Roadmap', module)
       />
     )
   })
-  .add('few values', () => {
+  .add('с малым количеством данных', () => {
     const { colorGroups } = getWidgetMockData(DataType.Roadmap)[0]
     const { titles, currentDay, values, startDate, endDate, filters } = roadmapData
 

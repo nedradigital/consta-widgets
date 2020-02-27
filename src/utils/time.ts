@@ -36,20 +36,6 @@ export const formatDate = (date: number, options: FormatDateOptions = {}): strin
   return [addZero(day), addZero(month + 1), year].join(separator)
 }
 
-export const getDaysInMonth = (month: number, year: number) => {
-  return new Date(year, month + 1, 0).getDate()
-}
-
-export const monthsDiff = (start: number, end: number) => {
-  const startDate = new Date(start)
-  const endDate = new Date(end)
-
-  return (
-    Math.abs(endDate.getMonth() - startDate.getMonth()) +
-    12 * Math.abs(endDate.getFullYear() - startDate.getFullYear())
-  )
-}
-
 export const getStartOfDay = (date: number) => new Date(date).setHours(0, 0, 0)
 export const getEndOfDay = (date: number) => new Date(date).setHours(23, 59, 59)
 

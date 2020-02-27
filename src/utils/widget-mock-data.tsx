@@ -118,6 +118,7 @@ const roadmapData = {
           startDate: Date.UTC(2019, 4, 12),
           endDate: Date.UTC(2019, 6, 10),
           groupName: 'blue',
+          comment: 'Какой-то комментарий для синего факта',
         },
       ],
       forecast: [
@@ -125,11 +126,13 @@ const roadmapData = {
           startDate: Date.UTC(2019, 6, 10),
           endDate: Date.UTC(2019, 9, 15),
           groupName: 'blue',
+          comment: 'Какой-то комментарий для синего прогноза',
         },
         {
           startDate: Date.UTC(2019, 9, 15),
           endDate: Date.UTC(2019, 11, 31),
           groupName: 'orange',
+          comment: 'Какой-то комментарий для оранжевого прогноза',
         },
       ],
     },

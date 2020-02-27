@@ -17,7 +17,8 @@ type Props = {
   colorGroups: ColorGroups
   direction?: 'top' | 'bottom'
   plan: Item
-  fact: Item
+  fact?: Item
+  forecast?: Item
   left: number
   top?: number
   bottom?: number
@@ -32,20 +33,40 @@ const stopEventHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =
 const getDayText = (start: number, end: number) =>
   getDayPlural(daysDiff(getStartOfDay(start), getEndOfDay(end)))
 
-const renderDates = (color: string, fact: Item, plan: Item) => (
+const renderDates = ({
+  color,
+  plan,
+  fact,
+  forecast,
+}: {
+  color: string
+  plan: Item
+  fact?: Item
+  forecast?: Item
+}) => (
   <>
     <div className={css.dateBlock}>
-      <span className={classnames(css.circle, css.transparent)} style={{ background: color }} />
+      <span className={classnames(css.circle, css.isPlan)} style={{ background: color }} />
       <span className={css.label}>План:</span>
       {formatDate(plan.startDate)} – {formatDate(plan.endDate)}{' '}
       <b>({getDayText(plan.startDate, plan.endDate)})</b>
     </div>
-    <div className={css.dateBlock}>
-      <span className={css.circle} style={{ background: color }} />
-      <span className={css.label}>Факт:</span>
-      {formatDate(fact.startDate)} – {formatDate(fact.endDate)}{' '}
-      <b>({getDayText(fact.startDate, fact.endDate)})</b>
-    </div>
+    {fact && (
+      <div className={css.dateBlock}>
+        <span className={css.circle} style={{ background: color }} />
+        <span className={css.label}>Факт:</span>
+        {formatDate(fact.startDate)} – {formatDate(fact.endDate)}{' '}
+        <b>({getDayText(fact.startDate, fact.endDate)})</b>
+      </div>
+    )}
+    {forecast && (
+      <div className={css.dateBlock}>
+        <span className={classnames(css.circle, css.isForecast)} style={{ background: color }} />
+        <span className={css.label}>Прогноз:</span>
+        {formatDate(forecast.startDate)} – {formatDate(forecast.endDate)}{' '}
+        <b>({getDayText(forecast.startDate, forecast.endDate)})</b>
+      </div>
+    )}
   </>
 )
 
@@ -64,6 +85,7 @@ const renderComment = (comment: string) => {
 export const RoadmapTooltip: React.FC<Props> = ({
   fact,
   plan,
+  forecast,
   colorGroups,
   direction = 'top',
   left,
@@ -74,7 +96,8 @@ export const RoadmapTooltip: React.FC<Props> = ({
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
   const isOpened = isActiveDates || isActiveComment
-  const { comment = CLEAN_COMMENT, groupName } = fact
+  const { groupName } = plan
+  const comment = fact?.comment || forecast?.comment || CLEAN_COMMENT
   const content = [
     isOpened ? (
       <div
@@ -82,7 +105,9 @@ export const RoadmapTooltip: React.FC<Props> = ({
         key="content"
         className={classnames(css.content, isActiveDates && css.dates)}
       >
-        {isActiveComment ? renderComment(comment) : renderDates(colorGroups[groupName], fact, plan)}
+        {isActiveComment
+          ? renderComment(comment)
+          : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
       </div>
     ) : null,
     <div key="buttons" className={css.buttons}>

@@ -25,10 +25,6 @@
     border-right: var(--angle-size) solid transparent;
   }
 
-  &.bottom {
-    margin-top: var(--angle-size);
-  }
-
   &.bottom::after {
     top: 0;
     left: 0;
@@ -132,7 +128,11 @@
   border-radius: 100px;
   background: black;
 
-  &.transparent {
+  &.isPlan {
+    opacity: 0.6;
+  }
+
+  &.isForecast {
     opacity: 0.4;
   }
 }
