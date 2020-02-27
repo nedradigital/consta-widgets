@@ -35,13 +35,13 @@ export const defaultParams: Params = {
   xLabelTicks: 0,
   xGridTicks: 0,
   xGuide: false,
-  xWithPaddings: true,
+  xWithPaddings: false,
   yLabels: 'left',
   yLabelTicks: 0,
   yGridTicks: 0,
   yGuide: false,
   unit: '',
-  yWithPaddings: true,
+  yWithPaddings: false,
 }
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
