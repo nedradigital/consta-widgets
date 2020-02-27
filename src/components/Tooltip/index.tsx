@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { Text } from '@gpn-design/uikit'
@@ -6,177 +6,125 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { themeColorLight } from '@/utils/theme'
-import { Position } from '@/utils/tooltips'
+import { PositionState } from '@/utils/tooltips'
 import { isDefinedPosition } from '@/utils/type-guards'
 
+import { getComputedPositionAndDirection } from './helpers'
 import css from './index.css'
 
-export const horizontalDirections = ['left', 'center', 'right'] as const
-export const verticalDirections = ['top', 'center', 'bottom'] as const
+const TOOLTIP_PARENT_ELEMENT = window.document.body
 
-type Size = {
-  width: number
-  height: number
+export const directions = [
+  'upLeft',
+  'upCenter',
+  'upRight',
+  'left',
+  'right',
+  'downLeft',
+  'downCenter',
+  'downRight',
+] as const
+
+export type Direction = typeof directions[number]
+
+type AttachedToAnchor = {
+  anchorRef: React.RefObject<HTMLElement>
 }
 
-export type HorizontalDirection = typeof horizontalDirections[number]
-export type VerticalDirection = typeof verticalDirections[number]
+export type AttachedToPosition = {
+  position: PositionState
+}
 
 type Props = {
   isVisible: boolean
-  horizontalDirection?: HorizontalDirection
-  verticalDirection?: VerticalDirection
-  position: Partial<Position> | undefined
+  direction?: Direction
   className?: string
   isContentHoverable?: boolean
-} & (
-  | {
-      children: React.ReactNode
-    }
-  | {
-      renderContent: (direction: {
-        horizontal: HorizontalDirection
-        vertical: VerticalDirection
-      }) => React.ReactNode
-    }
-)
+  offset?: number
+  withArrow?: boolean
+} & (AttachedToAnchor | AttachedToPosition) &
+  (
+    | {
+        children: React.ReactNode
+      }
+    | {
+        renderContent: (direction: Direction) => React.ReactNode
+      }
+  )
 
-const PARENT_ELEMENT = window.document.body
-
-const directionClasses: Record<HorizontalDirection | VerticalDirection, string> = {
-  top: css.top,
-  right: css.right,
-  bottom: css.bottom,
+const directionClasses: Record<Direction, string> = {
+  upLeft: css.upLeft,
+  upCenter: css.upCenter,
+  upRight: css.upRight,
   left: css.left,
-  center: css.center,
-}
-
-export const getAutoDirection = ({
-  elementSize,
-  parentSize,
-  position,
-  selectedHorizontalDirection = 'center',
-  selectedVerticalDirection = 'top',
-}: {
-  elementSize: Size
-  parentSize: Size
-  position: Position
-  selectedHorizontalDirection?: HorizontalDirection
-  selectedVerticalDirection?: VerticalDirection
-}): { horizontal: HorizontalDirection; vertical: VerticalDirection } | undefined => {
-  const elementWidth =
-    selectedHorizontalDirection === 'center' ? elementSize.width / 2 : elementSize.width
-  const elementHeight =
-    selectedVerticalDirection === 'center' ? elementSize.height / 2 : elementSize.height
-  const inTopBorder = position.y <= elementHeight
-  const inRightBorder = position.x >= parentSize.width - elementWidth
-  const inBottomBorder = position.y >= parentSize.height - elementHeight
-  const inLeftBorder = position.x <= elementWidth
-  const inBothHorizontalsBorders = inLeftBorder && inRightBorder
-  const inBothVerticalsBorder = inTopBorder && inBottomBorder
-
-  /**
-   * Если позиция тултипа по горизонтали или вертикали, или сразу по всем
-   * направлениям входит в границы, тогда мы не можем определить в какую
-   * сторону перевернуть тултип.
-   */
-  if (inBothHorizontalsBorders || inBothVerticalsBorder) {
-    return
-  }
-
-  if (inTopBorder && inRightBorder) {
-    return {
-      horizontal: 'left',
-      vertical: 'bottom',
-    }
-  }
-
-  if (inTopBorder && inLeftBorder) {
-    return {
-      horizontal: 'right',
-      vertical: 'bottom',
-    }
-  }
-
-  if (inBottomBorder && inRightBorder) {
-    return {
-      horizontal: 'left',
-      vertical: 'top',
-    }
-  }
-
-  if (inBottomBorder && inLeftBorder) {
-    return {
-      horizontal: 'right',
-      vertical: 'top',
-    }
-  }
-
-  if (inTopBorder) {
-    return {
-      horizontal: selectedHorizontalDirection,
-      vertical: 'bottom',
-    }
-  }
-
-  if (inRightBorder) {
-    return {
-      horizontal: 'left',
-      vertical: selectedVerticalDirection,
-    }
-  }
-
-  if (inBottomBorder) {
-    return {
-      horizontal: selectedHorizontalDirection,
-      vertical: 'top',
-    }
-  }
-
-  if (inLeftBorder) {
-    return {
-      horizontal: 'right',
-      vertical: selectedVerticalDirection,
-    }
-  }
+  right: css.right,
+  downLeft: css.downLeft,
+  downCenter: css.downCenter,
+  downRight: css.downRight,
 }
 
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
     children,
     isVisible,
-    horizontalDirection = 'center',
-    verticalDirection = 'top',
-    position,
+    direction: passedDirection = 'upCenter',
     className,
     isContentHoverable,
+    offset = 0,
+    withArrow = true,
   } = props
 
   const mainRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(mainRef)
-  const [direction, setDirection] = React.useState({
-    horizontal: horizontalDirection,
-    vertical: verticalDirection,
-  })
+  const [position, setPosition] = useState<PositionState>()
+  const [direction, setDirection] = React.useState<Direction>(passedDirection)
 
   React.useLayoutEffect(() => {
-    if (!mainRef.current || !isDefinedPosition(position)) {
+    if (isVisible && !mainRef.current && !isDefinedPosition(position)) {
+      if ('anchorRef' in props && props.anchorRef && props.anchorRef.current) {
+        const { left, top } = props.anchorRef.current.getBoundingClientRect()
+
+        return setPosition({ x: left, y: top })
+      }
+
+      if ('position' in props && isDefinedPosition(props.position)) {
+        return setPosition({ x: props.position.x, y: props.position.y })
+      }
+
       return
     }
 
-    const computedDirection = getAutoDirection({
-      elementSize: mainRef.current.getBoundingClientRect(),
-      parentSize: PARENT_ELEMENT.getBoundingClientRect(),
-      position,
-      selectedHorizontalDirection: horizontalDirection,
-      selectedVerticalDirection: verticalDirection,
-    }) || {
-      horizontal: horizontalDirection,
-      vertical: verticalDirection,
-    }
+    if (mainRef.current && isDefinedPosition(position)) {
+      let basePositionData
 
-    setDirection(computedDirection)
-  }, [isVisible, mainRef, position, horizontalDirection, verticalDirection, width, height])
+      if ('anchorRef' in props && props.anchorRef && props.anchorRef.current) {
+        basePositionData = { anchorClientRect: props.anchorRef.current.getBoundingClientRect() }
+      } else if ('position' in props && isDefinedPosition(props.position)) {
+        basePositionData = { position: props.position }
+      } else {
+        return
+      }
+
+      const {
+        position: computedPosition,
+        direction: computedDirection,
+      } = getComputedPositionAndDirection({
+        tooltipSize: mainRef.current.getBoundingClientRect(),
+        parentSize: TOOLTIP_PARENT_ELEMENT.getBoundingClientRect(),
+        offset,
+        direction: passedDirection,
+        ...basePositionData,
+      })
+
+      if (
+        isDefinedPosition(computedPosition) &&
+        (computedPosition.x !== position.x || computedPosition.y !== position.y)
+      ) {
+        setPosition(computedPosition)
+        setDirection(computedDirection)
+      }
+    }
+  }, [props, isVisible, mainRef, position, direction, passedDirection, offset, width, height])
 
   if (!isVisible || !isDefinedPosition(position)) {
     return null
@@ -188,8 +136,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       className={classnames(
         themeColorLight,
         css.main,
-        directionClasses[direction.horizontal],
-        directionClasses[direction.vertical],
+        directionClasses[direction],
+        withArrow && css.withArrow,
         isContentHoverable && css.isHoverable
       )}
       style={{ top: position.y, left: position.x }}
@@ -204,6 +152,6 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         )}
       </div>
     </div>,
-    PARENT_ELEMENT
+    TOOLTIP_PARENT_ELEMENT
   )
 })
