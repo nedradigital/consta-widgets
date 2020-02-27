@@ -26,7 +26,8 @@
     "unit": "NODE_PATH=./node_modules TZ=Europe/Moscow jest",
     "unit:watch": "NODE_PATH=./node_modules TZ=Europe/Moscow jest --watchAll",
     "test": "npm-run-all --parallel lint checktypes unit",
-    "prepublishOnly": "yarn && yarn build && node node_modules/@csssr/gpn-configs/scripts/typescript-validations.js"
+    "prepublishOnly": "yarn && yarn build && node node_modules/@csssr/gpn-configs/scripts/typescript-validations.js",
+    "migration:create": "node scripts/migration/index.js"
   },
   "browserslist": [
     "Chrome >= 75"

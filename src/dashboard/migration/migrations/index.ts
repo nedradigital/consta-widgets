@@ -1,3 +1,4 @@
+// tslint:disable:ordered-imports
 import { CurrentDashboard, currentMigration } from './current'
 import { Dashboard0 } from './dashboard0'
 import { Dashboard1, migration1 } from './dashboard1'
@@ -9,6 +10,7 @@ import { Dashboard6, migration6 } from './dashboard6'
 import { Dashboard7, migration7 } from './dashboard7'
 import { Dashboard8, migration8 } from './dashboard8'
 import { Dashboard9, migration9 } from './dashboard9'
+// MIGRATION_GENERATION:ADD_IMPORT
 
 export type AnyDashboardStateVersion =
   | Dashboard0.State
@@ -21,6 +23,7 @@ export type AnyDashboardStateVersion =
   | Dashboard7.State
   | Dashboard8.State
   | Dashboard9.State
+  // MIGRATION_GENERATION:ADD_STATE
   | CurrentDashboard.State
 
 export const migrations = [
@@ -33,5 +36,6 @@ export const migrations = [
   migration7,
   migration8,
   migration9,
+  // MIGRATION_GENERATION:ADD_MIGRATION
   currentMigration,
 ] as const
