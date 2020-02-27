@@ -8,12 +8,17 @@ import { GridConfig } from './components/Axis'
 export const getIndexWithFallbackToDefault = (index: number, def: number): number =>
   index < 0 ? def : index
 
-export const padDomain = (
-  domain: NumberRange,
-  paddingStart: number,
-  paddingEnd: number,
+export const padDomain = ({
+  domain,
+  paddingStart,
+  paddingEnd,
+  zoom,
+}: {
+  domain: NumberRange
+  paddingStart: number
+  paddingEnd: number
   zoom: number
-): NumberRange => {
+}): NumberRange => {
   const [start, end] = domain
   const diff = domain[1] - domain[0]
   const delta = diff === 0 ? domain[0] : diff
