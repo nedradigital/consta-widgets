@@ -1,19 +1,16 @@
 .main {
+  margin-top: -8px;
+
   &.column {
     display: flex;
     flex-direction: column;
   }
+}
 
-  &.row {
-    margin-bottom: -8px;
-  }
+.item {
+  margin-top: 8px;
 }
 
 .row .item {
   margin-right: calc-size(13);
-  margin-bottom: 8px;
-}
-
-.column .item + .item {
-  margin-top: 8px;
 }
