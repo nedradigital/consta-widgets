@@ -89,11 +89,17 @@ export const DonutChart: React.FC<Props> = ({
 
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
+  const isHalfDonutHorizontal = halfDonut === 'top' || halfDonut === 'bottom'
+  const isHalfDonutVertical = halfDonut === 'right' || halfDonut === 'left'
   const circlesCount = Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES)
   const size = width && height ? getSize(width, height, halfDonut) : 0
   const mainRadius = size / 2
   const sizeDonut = getSizeDonut(circlesCount, halfDonut)
-  const viewBox = `${-mainRadius}, ${-mainRadius}, ${mainRadius * 2}, ${mainRadius * 2}`
+  const svgOffsetX = halfDonut === 'left' ? 0 : -mainRadius
+  const svgOffsetY = halfDonut === 'top' ? 0 : -mainRadius
+  const svgWidth = isHalfDonutVertical ? mainRadius : size
+  const svgHeight = isHalfDonutHorizontal ? mainRadius : size
+  const viewBox = `${svgOffsetX}, ${svgOffsetY}, ${svgWidth}, ${svgHeight}`
   const isTooltipVisible = Boolean(tooltipData.length)
 
   const handleMouseOver = (d: DonutData) => {
