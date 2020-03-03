@@ -86,14 +86,10 @@
 
   cursor: pointer;
 
-  transition: transform 0.1s ease-out;
+  color: var(--color-control-typo-clear);
 
   &:hover {
-    transform: scale(1.1);
-  }
-
-  &:active {
-    transform: scale(0.98);
+    color: var(--color-control-typo-clear-hover);
   }
 
   &.close {

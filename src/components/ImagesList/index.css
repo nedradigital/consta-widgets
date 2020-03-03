@@ -2,6 +2,9 @@
   --active-border-width: 2px;
 
   position: relative;
+
+  display: flex;
+  align-items: center;
 }
 
 .wrapper {
@@ -60,6 +63,14 @@
   }
 }
 
+.toLeft {
+  margin-right: var(--space-s);
+}
+
+.toRight {
+  margin-left: var(--space-s);
+}
+
 .image {
   width: 100%;
   height: 100%;
@@ -72,29 +83,23 @@
 }
 
 .button {
-  position: absolute;
-  top: 50%;
+  flex-shrink: 0;
 
   width: calc-size(32);
   height: calc-size(32);
 
   cursor: pointer;
 
-  border: 1px solid rgba(255, 255, 255, 0.51);
+  color: var(--color-control-typo-ghost);
   border-radius: 4px;
-  background: var(--bg-box);
+  background: var(--color-control-bg-ghost);
 
-  transform: translateY(-50%);
-}
-
-.toLeft {
-  transform-origin: center;
-
-  .icon {
+  &.toLeft {
     transform: scaleX(-1);
   }
-}
 
-.toRight {
-  right: calc-size(-10);
+  &:hover {
+    color: var(--color-control-typo-ghost-hover);
+    background: var(--color-control-bg-ghost-hover);
+  }
 }

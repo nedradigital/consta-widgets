@@ -23,7 +23,7 @@ storiesOf('widgets/ImagesWidget', module)
   ))
 
 storiesOf('widgets/ImagesWidget', module)
-  .addDecorator(blockCenteringDecorator({ width: 200 }))
+  .addDecorator(blockCenteringDecorator({ width: 250 }))
   .add('in a box', () => {
     const id = getUniqueName('ImagesWidget')
     const items: readonly BoxItem[] = [
