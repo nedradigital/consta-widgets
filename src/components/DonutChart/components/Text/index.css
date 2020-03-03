@@ -54,8 +54,8 @@
 }
 
 .title {
-  font-size: 12px;
-  line-height: 17px;
+  font-size: calc-size(12);
+  line-height: calc-size(17);
 
   position: relative;
 
@@ -67,21 +67,21 @@
 }
 
 .value {
-  font-size: 48px;
-  line-height: 62px;
+  font-size: calc-size(48);
+  line-height: calc-size(62);
 
   color: var(--value-color);
 
   &.isSmall {
-    font-size: 32px;
-    line-height: 42px;
+    font-size: calc-size(32);
+    line-height: calc-size(42);
   }
 }
 
 .subValue {
-  font-size: 18px;
+  font-size: calc-size(18);
   font-weight: bold;
-  line-height: 25px;
+  line-height: calc-size(25);
 
   color: var(--value-color);
 }
