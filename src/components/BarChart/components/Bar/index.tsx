@@ -176,7 +176,7 @@ export const Bar: React.FC<Props> = props => {
             isVertical,
             isRounded: index === items.length - 1,
             isNegative: value < 0,
-            size: 'm',
+            size,
           })}
           style={{ backgroundColor: color[column.category] }}
         />
