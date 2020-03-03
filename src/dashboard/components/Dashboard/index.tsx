@@ -5,6 +5,7 @@ import ReactGridLayout, { Layout, WidthProvider } from 'react-grid-layout'
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
 import useComponentSize from '@rehooks/component-size'
+import classnames from 'classnames'
 
 import { BaseSizeContext } from '@/contexts/baseSize'
 import { Box } from '@/dashboard/components/Box'
@@ -141,7 +142,18 @@ export const Dashboard: React.FC<DashboardProps & Props> = props => {
             dropRef(el)
           }
         }}
-        className={css.dashboard}
+        className={classnames([
+          css.dashboard,
+          // Темы для скейлинга шрифтов и размеров
+          'theme_constructor-scaling',
+          'theme_size_constructor-scaling',
+          'theme_space_constructor-scaling',
+          // Стандартные темы, использующие переменные из скейлинг-тем
+          'theme_gap_small',
+          'theme_control_gpn-default',
+          'theme_breakpoint_default',
+          'theme_font_default',
+        ])}
       >
         <GridLayout
           autoSize={false}

@@ -1,6 +1,8 @@
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Scaler } from '@/utils/scale'
+import { TextSize } from '@/utils/ui-kit'
 
 import css from './index.css'
 
@@ -25,6 +27,11 @@ type Props<T> = {
 const sizeClasses: Record<Size, string> = {
   s: css.sizeS,
   m: css.sizeM,
+}
+
+const textSizes: Record<Size, TextSize> = {
+  s: '2xs',
+  m: 'xs',
 }
 
 const positionClasses: Record<Position, string> = {
@@ -102,7 +109,14 @@ export function Ticks<T>(props: Props<T>) {
         return (
           <div key={idx} className={css.tick} style={{ transform, alignItems }}>
             <span className={css.text} style={{ width: isHorizontal ? textWidth : undefined }}>
-              {formatValueForLabel(value)}
+              <Text
+                tag="div"
+                view="secondary"
+                size={textSizes[size]}
+                align={isHorizontal ? 'center' : undefined}
+              >
+                {formatValueForLabel(value)}
+              </Text>
             </span>
             {showLine && <span className={css.line} />}
           </div>

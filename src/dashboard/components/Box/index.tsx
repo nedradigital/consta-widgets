@@ -9,7 +9,6 @@ import { BoxItemWrapper } from '@/dashboard/components/BoxItemWrapper'
 import { EMPTY_GRID_CONTENT, Grid } from '@/dashboard/components/Grid'
 import { Settings } from '@/dashboard/components/Settings'
 import { Switch, switchId } from '@/dashboard/components/Switch'
-import { themeColorDark } from '@/utils/theme'
 import { isSwitch, isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
@@ -264,7 +263,7 @@ export const Box: React.FC<Props> = ({
         )
       })}
       {!viewMode && (
-        <div className={classnames(css.panel, themeColorDark)}>
+        <div className={css.panel}>
           + виджет
           <div className={css.panelHoveredContent}>
             <select

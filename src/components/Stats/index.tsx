@@ -1,6 +1,8 @@
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { Badge, Status } from '@/ui/Badge'
+import { Badge, BadgeSize, Status } from '@/ui/Badge'
+import { TextSize } from '@/utils/ui-kit'
 
 import css from './index.css'
 
@@ -39,6 +41,34 @@ const sizeClass = {
   l: css.sizeL,
 }
 
+const titleSizes: Record<Size, TextSize> = {
+  xs: 's',
+  s: 'l',
+  m: 'xl',
+  l: '2xl',
+}
+
+const numberSizes: Record<Size, TextSize> = {
+  xs: '2xl',
+  s: '4xl',
+  m: '5xl',
+  l: '6xl',
+}
+
+const badgeSizes: Record<Size, BadgeSize> = {
+  xs: 'xs',
+  s: 'l',
+  m: 'xl',
+  l: '2xl',
+}
+
+const unitSizes: Record<Size, TextSize> = {
+  xs: 'xs',
+  s: 'l',
+  m: 'xl',
+  l: '2xl',
+}
+
 const getNumberSign = (value: number, isShow?: boolean) => {
   return value > 0 && isShow ? '+' : ''
 }
@@ -58,18 +88,25 @@ export const Stats: React.FC<Props> = ({
 }) => {
   return (
     <div className={classnames(css.container, sizeClass[size], css[layout])}>
-      <div className={css.title}>{title}</div>
-      <div className={css.number}>
+      <Text tag="div" size={titleSizes[size]} view="secondary" className={css.title}>
+        {title}
+      </Text>
+
+      <Text tag="div" view="primary" size={numberSizes[size]} weight="bold" className={css.number}>
         {getNumberSign(value, withSign)}
         {formatValue(value)}
-      </div>
+      </Text>
+
       {badge && (
-        <Badge className={css.badge} status={badge.status}>
+        <Badge size={badgeSizes[size]} status={badge.status} className={css.badge}>
           {getNumberSign(badge.percentage, withSign)}
           {badge.percentage}%
         </Badge>
       )}
-      <div className={css.unit}>{unit}</div>
+
+      <Text tag="div" size={unitSizes[size]} view="secondary" className={css.unit}>
+        {unit}
+      </Text>
     </div>
   )
 }

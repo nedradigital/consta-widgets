@@ -1,4 +1,6 @@
 .menu {
+  font-size: var(--size-text-s);
+
   width: 160px;
 
   border: 1px solid var(--color-dashboard);

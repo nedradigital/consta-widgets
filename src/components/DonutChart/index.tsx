@@ -12,7 +12,7 @@ import { getFormattedValue } from '@/utils/chart'
 import { PositionState } from '@/utils/tooltips'
 
 import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
-import { Data as TextData, Text } from './components/Text'
+import { Data as TextData, DonutText } from './components/Text'
 import css from './index.css'
 
 export type Data = {
@@ -147,7 +147,7 @@ export const DonutChart: React.FC<Props> = ({
       }}
     >
       {halfDonut && values.length === 1 && textData && (
-        <Text data={textData} maxSize={mainRadius} position={halfDonut} />
+        <DonutText data={textData} maxSize={mainRadius} position={halfDonut} />
       )}
       <Tooltip isVisible={isTooltipVisible} position={mousePosition}>
         <TooltipContentForMultipleValues items={tooltipData} />

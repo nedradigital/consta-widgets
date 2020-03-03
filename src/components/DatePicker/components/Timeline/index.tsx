@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { Button } from '@gpn-design/uikit'
+import { Button, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import {
   addMonths,
@@ -253,7 +253,11 @@ export const Timeline: React.FC<Props> = ({
                 onMouseLeave={!isDisabled ? () => setActiveTick(undefined) : undefined}
                 onClick={!isDisabled ? () => onChange(date) : undefined}
               >
-                {firstInYear && <div className={css.label}>{date.getFullYear()}</div>}
+                {firstInYear && (
+                  <Text tag="div" size="s" weight="bold" view="primary" className={css.label}>
+                    {date.getFullYear()}
+                  </Text>
+                )}
                 <div className={classnames(css.line, firstInYear && css.isBig)} />
               </div>
             )

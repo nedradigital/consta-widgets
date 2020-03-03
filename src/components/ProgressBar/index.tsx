@@ -1,19 +1,22 @@
 import React from 'react'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
+import { Legend, Tick } from '@/components/ProgressBar/components/Legend'
 import { ColorGroups } from '@/dashboard/types'
+import { TextSize } from '@/utils/ui-kit'
 import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 
 import { Data as ProgressData, Progress } from './components/Progress'
-import { Summary } from './components/Summary'
 import css from './index.css'
 
 export const sizes = ['s', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
 export type Data = ProgressData & {
+  ticks?: readonly Tick[]
   summary: string | number
   colorGroupName: string
   caption?: string
@@ -39,39 +42,68 @@ export const getValueRatio = ({
   return ((value - valueMin) / (valueMax - valueMin)) * 100
 }
 
-export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
-  const sizeClass = { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
+const summarySizes: Record<Size, TextSize> = {
+  s: 'l',
+  m: '2xl',
+  l: '2xl',
+}
 
+export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
   return (
-    <div className={classnames(css.progressBar, sizeClass)}>
+    <div className={css.progressBar}>
       {data.map((dataItem, i) => {
-        const { caption, colorGroupName, tooltip, value, summary } = dataItem
+        const {
+          caption,
+          colorGroupName,
+          tooltip,
+          value,
+          summary,
+          ticks = [],
+          valueMin,
+          valueMax,
+        } = dataItem
+        const color = colorGroups[colorGroupName]
 
         return (
-          <React.Fragment key={i}>
-            <div className={css.cell}>
-              {caption && (
-                <div className={css.caption}>
-                  <TextWidget
-                    data={{ text: caption, tooltip }}
-                    params={{
-                      text: caption,
-                      croppedLineCount: 1,
-                      type: isCaptionBold ? 'text3' : 'text2',
-                    }}
-                  />
+          <div className={css.item} key={i}>
+            {caption && (
+              <div className={css.row}>
+                <div className={classnames(css.cell, css.isTitleCell)}>
+                  {caption && (
+                    <TextWidget
+                      data={{ text: caption, tooltip }}
+                      params={{
+                        text: caption,
+                        croppedLineCount: 1,
+                        type: isCaptionBold ? 'text3' : 'text2',
+                      }}
+                    />
+                  )}
                 </div>
-              )}
-              <Progress data={dataItem} color={colorGroups[colorGroupName]} />
+              </div>
+            )}
+
+            <div className={css.row}>
+              <div className={css.cell}>
+                <Progress data={dataItem} color={color} size={size} />
+              </div>
+              <div className={css.cell} style={{ color }}>
+                <Text tag="div" size={summarySizes[size]}>
+                  {isNotNil(value) ? summary : '–'}
+                </Text>
+              </div>
             </div>
-            <div className={classnames(css.cell, css.textCell)}>
-              <Summary
-                summary={isNotNil(value) ? summary : '–'}
-                color={colorGroups[colorGroupName]}
-                hasCaption={!!caption}
-              />
-            </div>
-          </React.Fragment>
+
+            {/* 3 строка */}
+            {ticks.length ? (
+              <div className={css.row}>
+                <div className={css.cell}>
+                  <Legend ticks={ticks} valueMin={valueMin} valueMax={valueMax} />
+                </div>
+                <div className={css.cell} />
+              </div>
+            ) : null}
+          </div>
         )
       })}
     </div>

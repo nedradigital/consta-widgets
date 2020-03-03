@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Button } from '@gpn-design/uikit'
+import { Button, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { MultiSelect } from '@/ui/MultiSelect'
@@ -69,7 +69,9 @@ export const FilterTooltip: React.FC<Props> = ({
             className={classnames(css.tooltip)}
             style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
           >
-            <p className={css.title}>Фильтровать по условию</p>
+            <Text tag="div" size="xs" view="primary" className={css.title}>
+              Фильтровать по условию
+            </Text>
             <MultiSelect options={options} values={selectedValues} onChange={setSelectedValues} />
             <div className={css.actionsRow}>
               <div className={css.action}>

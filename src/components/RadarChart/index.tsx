@@ -149,7 +149,7 @@ const BREAKPOINTS = [
     minRadarSize: 191,
   },
 ] as const
-const LINE_HEIGHT_EM = 1.25
+const LINE_HEIGHT_EM = 1.2
 const AXIS_NAME_WIDTH_EM = 8.125
 const AXIS_NAME_OFFSET_EM = 1
 

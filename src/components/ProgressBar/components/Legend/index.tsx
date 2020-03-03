@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { getValueRatio } from '../../'
@@ -16,6 +17,19 @@ type Props = {
   valueMin: number
   valueMax: number
 }
+
+const Marking: React.FC<{ className?: string; style?: React.CSSProperties }> = ({
+  className,
+  style,
+  children,
+}) => (
+  <div className={classnames(css.marking, className)} style={style}>
+    <div className={css.markingIcon} />
+    <Text tag="div" size="xs" view="secondary">
+      {children}
+    </Text>
+  </div>
+)
 
 export const Legend: React.FC<Props> = ({ ticks, valueMin, valueMax }) => {
   const ticksWithRatio = ticks.map(tick => ({
@@ -37,19 +51,16 @@ export const Legend: React.FC<Props> = ({ ticks, valueMin, valueMax }) => {
   return (
     <div className={css.legend} aria-hidden="true">
       {ticksWithRatio.map((tick, i) => (
-        <div
-          className={classnames(css.marking, getMarkingAlignClass(ticksAmount, i))}
+        <Marking
           key={i}
+          className={getMarkingAlignClass(ticksAmount, i)}
           style={{ left: `${tick.ratio}%` }}
         >
-          <div className={css.markingIcon} />
-          <div className={css.markingLabel}>{tick.label}</div>
-        </div>
+          {tick.label}
+        </Marking>
       ))}
-      <div className={classnames(css.marking, css.isHidden)}>
-        <div className={css.markingIcon} />
-        <div className={css.markingLabel}>{ticksWithRatio[0].label}</div>
-      </div>
+      {/* Чтобы у элемента была фактическая высота */}
+      <Marking className={css.isHidden}>{ticksWithRatio[0].label}</Marking>
     </div>
   )
 }

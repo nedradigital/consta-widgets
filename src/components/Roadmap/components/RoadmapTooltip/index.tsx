@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
 import { ColorGroups } from '@/dashboard/types'
+import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
 
 import { Item } from '../..'
@@ -33,6 +35,22 @@ const stopEventHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =
 const getDayText = (start: number, end: number) =>
   getDayPlural(daysDiff(getStartOfDay(start), getEndOfDay(end)))
 
+const DateText: React.FC<{ label: string; startDate: number; endDate: number }> = ({
+  label,
+  startDate,
+  endDate,
+}) => (
+  <>
+    <Text tag="span" size="xs" view="primary">
+      <span className={css.label}>{label}: </span>
+      {formatDate(startDate)} – {formatDate(endDate)}{' '}
+    </Text>
+    <Text tag="span" size="xs" view="primary" weight="bold">
+      ({getDayText(startDate, endDate)})
+    </Text>
+  </>
+)
+
 const renderDates = ({
   color,
   plan,
@@ -47,24 +65,18 @@ const renderDates = ({
   <>
     <div className={css.dateBlock}>
       <span className={classnames(css.circle, css.isPlan)} style={{ background: color }} />
-      <span className={css.label}>План:</span>
-      {formatDate(plan.startDate)} – {formatDate(plan.endDate)}{' '}
-      <b>({getDayText(plan.startDate, plan.endDate)})</b>
+      <DateText label="План" startDate={plan.startDate} endDate={plan.endDate} />
     </div>
     {fact && (
       <div className={css.dateBlock}>
         <span className={css.circle} style={{ background: color }} />
-        <span className={css.label}>Факт:</span>
-        {formatDate(fact.startDate)} – {formatDate(fact.endDate)}{' '}
-        <b>({getDayText(fact.startDate, fact.endDate)})</b>
+        <DateText label="Факт" startDate={fact.startDate} endDate={fact.endDate} />
       </div>
     )}
     {forecast && (
       <div className={css.dateBlock}>
         <span className={classnames(css.circle, css.isForecast)} style={{ background: color }} />
-        <span className={css.label}>Прогноз:</span>
-        {formatDate(forecast.startDate)} – {formatDate(forecast.endDate)}{' '}
-        <b>({getDayText(forecast.startDate, forecast.endDate)})</b>
+        <DateText label="Прогноз" startDate={forecast.startDate} endDate={forecast.endDate} />
       </div>
     )}
   </>
@@ -75,9 +87,13 @@ const renderComment = (comment: string) => {
 
   return (
     <>
-      <div className={css.title}>Комментарий:</div>
-      {text}
-      {comment.length > MAX_LENGTH_COMMENT ? '...' : ''}
+      <Text tag="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+        Комментарий:
+      </Text>
+      <Text tag="span" size="xs" view="primary">
+        {text}
+        {comment.length > MAX_LENGTH_COMMENT ? '...' : ''}
+      </Text>
     </>
   )
 }
@@ -134,7 +150,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
 
   return ReactDOM.createPortal(
     <div
-      className={classnames(css.main, isOpened && css.opened, css[direction])}
+      className={classnames(themeColorLight, css.main, isOpened && css.opened, css[direction])}
       style={{ left, top, bottom }}
     >
       {direction === 'top' ? content : reverse(content)}

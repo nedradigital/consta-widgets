@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 
 import { updateAt } from '@csssr/gpn-utils/lib/array'
+import { Text } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
@@ -163,7 +164,13 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
         )}
         style={{ width: columnWidths[idx] }}
       >
-        <div className={css.titleWrapper}>
+        <Text
+          tag="div"
+          size="2xs"
+          transform="uppercase"
+          view="secondary"
+          className={css.titleWrapper}
+        >
           {filters && fieldFiltersPresent(filters, obj.accessor) && (
             <FilterTooltip
               field={obj.accessor}
@@ -183,7 +190,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
             onClick={() => sortBy(obj.accessor)}
             className={classnames(css.icon, css.iconSort)}
           />
-        </div>
+        </Text>
         <Resizer
           height={tableHeight}
           onResize={handleColumnResize}
@@ -200,8 +207,11 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
       const legend = legendFields.find(obj => obj.field === row[column.accessor])
 
       return (
-        <td
+        <Text
           key={column.accessor + index}
+          tag="td"
+          size="m"
+          view="primary"
           className={classnames(css.cell, alignClasses[column.align])}
         >
           {isShowLegend && index === 0 ? (
@@ -215,7 +225,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           ) : (
             cellContent
           )}
-        </td>
+        </Text>
       )
     })
 

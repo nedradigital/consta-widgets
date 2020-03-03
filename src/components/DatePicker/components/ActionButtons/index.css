@@ -4,20 +4,13 @@
 
 .quarters {
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
-  padding-left: 32px;
-}
-
-.label {
-  font-size: 12px;
-  line-height: 17px;
-
-  color: #000;
+  padding-left: var(--space-2xl);
 }
 
 .button {
-  margin-left: 8px;
+  margin-left: var(--space-xs);
 
   user-select: none;
 }

@@ -1,12 +1,9 @@
 @custom-selector :--extra-small .sizeXS;
 @custom-selector :--small .sizeS;
-@custom-selector :--medium .sizeM;
 @custom-selector :--top .top;
 @custom-selector :--left .left;
 
 .main {
-  --dot-size: calc-size(12);
-
   display: inline-flex;
 
   &:--top {
@@ -15,21 +12,6 @@
 
   &:--left {
     align-items: baseline;
-  }
-
-  &:--extra-small {
-    font-size: calc-size(12);
-    line-height: calc-size(17);
-  }
-
-  &:--small {
-    font-size: calc-size(14);
-    line-height: calc-size(20);
-  }
-
-  &:--medium {
-    font-size: calc-size(16);
-    line-height: calc-size(22);
   }
 }
 
@@ -41,18 +23,15 @@
   display: inline-block;
 
   @nest :--left & {
-    margin-right: calc-size(8);
+    margin-right: var(--space-xs);
   }
 
   @nest :--top & {
-    margin-bottom: calc-size(4);
+    margin-bottom: var(--space-2xs);
   }
 }
 
 .dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-
   vertical-align: baseline;
 
   border-radius: 100%;

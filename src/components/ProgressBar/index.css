@@ -1,41 +1,31 @@
-.progressBar {
-  --text-color: #f6fbfd;
-  --text-opacity: 0.7;
-  --caption-height: 14px;
+@custom-selector :--item .item;
+@custom-selector :--row .row;
 
+.progressBar {
   display: grid;
+  align-items: center;
 
   grid-template-columns: 1fr auto;
+  grid-column-gap: var(--space-s);
+}
 
-  &.sizeS {
-    --summary-size: calc-size(20);
-    --chart-line-size: calc-size(4);
-  }
+:--item {
+  display: contents;
+}
 
-  &.sizeM {
-    --summary-size: calc-size(24);
-    --chart-line-size: calc-size(12);
-  }
-
-  &.sizeL {
-    --summary-size: calc-size(24);
-    --chart-line-size: calc-size(20);
-  }
+:--row {
+  display: contents;
 }
 
 .cell {
   /* Нужен для того, что бы заголовок прогрессбара не растягивал грид, а обрезался многоточием */
   min-width: 0;
 
-  &:nth-child(n + 3) {
-    padding-top: calc-size(12);
+  &.isTitleCell {
+    grid-column: 1 / span 2;
   }
-}
 
-.textCell {
-  white-space: nowrap;
-}
-
-.caption > * {
-  height: var(--caption-height);
+  @nest :--item:not(:first-child) :--row:first-child & {
+    margin-top: var(--space-s);
+  }
 }

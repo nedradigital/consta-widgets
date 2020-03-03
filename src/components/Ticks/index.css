@@ -6,9 +6,9 @@
 @custom-selector :--isVertical :--isRight, :--isLeft;
 
 .group {
-  --tick-line-color: rgba(213, 221, 226, 0.5);
+  --tick-line-color: var(--color-bg-border);
   --tick-line-size: calc-size(4);
-  --tick-line-margin: calc-size(3);
+  --tick-line-margin: var(--space-2xs);
 
   display: flex;
 
@@ -25,13 +25,13 @@
 
 .groupLabels {
   &.sizeS {
-    --vertical-margin: calc-size(8);
-    --horizontal-margin: calc-size(8);
+    --vertical-margin: var(--space-xs);
+    --horizontal-margin: var(--space-xs);
   }
 
   &.sizeM {
-    --vertical-margin: calc-size(12);
-    --horizontal-margin: calc-size(16);
+    --vertical-margin: var(--space-s);
+    --horizontal-margin: var(--space-m);
   }
 
   &:--isTop {
@@ -53,13 +53,13 @@
 
 .groupValues {
   &.sizeS {
-    --vertical-margin: calc-size(8);
-    --horizontal-margin: calc-size(8);
+    --vertical-margin: var(--space-xs);
+    --horizontal-margin: var(--space-xs);
   }
 
   &.sizeM {
-    --vertical-margin: calc-size(9);
-    --horizontal-margin: calc-size(11);
+    --vertical-margin: var(--space-xs);
+    --horizontal-margin: var(--space-s);
   }
 
   &:--isTop {
@@ -144,22 +144,8 @@
 }
 
 .text {
-  color: var(--text-color-70);
-
-  @nest .sizeS & {
-    font-size: calc-size(10);
-    line-height: calc-size(15);
-  }
-
-  @nest .sizeM & {
-    font-size: calc-size(12);
-    line-height: calc-size(17);
-  }
-
   @nest .groupLabels:--isHorizontal & {
-    padding: calc-size(3) 0;
-
-    text-align: center;
+    padding: var(--space-2xs) 0;
   }
 
   @nest .groupLabels:--isVertical & {

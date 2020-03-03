@@ -1,10 +1,11 @@
 import React, { Fragment } from 'react'
 
-import classnames from 'classnames'
+import { Text } from '@gpn-design/uikit'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/dashboard/types'
 import { getFormattedValue } from '@/utils/chart'
+import { TextSize } from '@/utils/ui-kit'
 
 import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 
@@ -20,6 +21,11 @@ type Props = {
   colors?: readonly string[]
   activeAxis?: Axis
   onChangeActiveAxis: (axis?: Axis) => void
+}
+
+const labelTextSizes: Record<RadarChartLabelSize, TextSize> = {
+  s: '2xs',
+  m: 'xs',
 }
 
 export const RadarChartAxes: React.FC<Props> = ({
@@ -67,18 +73,16 @@ export const RadarChartAxes: React.FC<Props> = ({
               }
             />
             <foreignObject x="50%" y={`${50 - 100 * circle.r}%`}>
-              <div
-                key={idx}
-                className={classnames(
-                  css.label,
-                  {
-                    s: css.sizeS,
-                    m: css.sizeM,
-                  }[labelSize]
-                )}
-                style={{ backgroundColor }}
-              >
-                <span className={css.labelText}>{circle.label}</span>
+              <div key={idx} className={css.label} style={{ backgroundColor }}>
+                <Text
+                  tag="div"
+                  size={labelTextSizes[labelSize]}
+                  weight={labelSize === 'm' ? 'bold' : undefined}
+                  view="secondary"
+                  className={css.labelText}
+                >
+                  {circle.label}
+                </Text>
               </div>
             </foreignObject>
           </Fragment>

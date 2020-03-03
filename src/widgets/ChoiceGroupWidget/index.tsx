@@ -4,7 +4,6 @@ import { ChoiceGroup } from '@gpn-design/uikit'
 
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
-import { themeColorDark } from '@/utils/theme'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.ChoiceGroup
@@ -62,7 +61,6 @@ export const ChoiceGroupWidgetContent: React.FC<WidgetContentProps<Data, Params>
       }
   return (
     <ChoiceGroup
-      className={themeColorDark}
       wpSize={size}
       items={[...data.items]}
       disabled={data && data.disabled}

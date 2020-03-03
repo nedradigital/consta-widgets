@@ -10,8 +10,6 @@ import { PositionState } from '@/utils/tooltips'
 import { Size } from '../..'
 import { ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams, MouseActionParams } from '../Bar'
 
-import css from './index.css'
-
 type Props = {
   barColumn: MouseActionParams
   isVertical: boolean
@@ -108,7 +106,6 @@ export const TooltipComponent: React.FC<Props> = ({
       horizontalDirection={direction.horizontal}
       verticalDirection={direction.vertical}
       children={layout}
-      className={css.tooltip}
     />
   )
 }

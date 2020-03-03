@@ -11,4 +11,4 @@ import { Badge } from '.'
 storiesOf('ui/Badge', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => <Badge>{text('children', '+4.8%')}</Badge>)
+  .add('interactive', () => <Badge size="xs">{text('children', '+4.8%')}</Badge>)

@@ -1,13 +1,11 @@
 .selectedFilters {
-  font-weight: initial;
-
   position: relative;
 
   display: flex;
   flex-wrap: wrap;
 
   min-height: calc-size(28);
-  padding: 4px 30px 4px 12px;
+  padding: var(--space-2xs) var(--space-2xl) var(--space-2xs) var(--space-s);
 
   cursor: default !important;
   text-transform: initial;
@@ -58,8 +56,7 @@
 }
 
 .selectedOptionWrapper {
-  margin-top: 2px;
-  margin-bottom: 2px;
+  margin: var(--space-3xs) 0;
 
   &:not(:last-child) {
     margin-right: 4px;

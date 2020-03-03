@@ -3,7 +3,6 @@ import React from 'react'
 import { Checkbox } from '@gpn-design/uikit'
 
 import { DataMap, DataType } from '@/dashboard/types'
-import { themeColorDark } from '@/utils/theme'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Checkbox
@@ -26,7 +25,6 @@ export const CheckboxWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
   params: { size, content },
 }) => (
   <Checkbox
-    className={themeColorDark}
     wpSize={size}
     value={data && data.value}
     disabled={data && data.disabled}

@@ -1,4 +1,6 @@
 .main {
+  font-size: var(--size-text-xs);
+
   display: grid;
   align-items: baseline;
 

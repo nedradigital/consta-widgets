@@ -1,6 +1,6 @@
 import React from 'react'
 
-import classnames from 'classnames'
+import { Text } from '@gpn-design/uikit'
 
 import { LegendItem } from '@/components/LegendItem'
 
@@ -20,7 +20,9 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
     <div className={css.container}>
       {title && (
         <>
-          <div className={css.title}>{title}</div>
+          <Text tag="div" size="xs" weight="bold" view="primary" className={css.title}>
+            {title}
+          </Text>
           <div className={css.divider} />
         </>
       )}
@@ -28,14 +30,12 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
       <div className={css.content}>
         {items.map(({ name, color, value }, idx) => (
           <React.Fragment key={idx}>
-            <LegendItem
-              className={classnames(css.label, title && css.withTitle)}
-              color={color}
-              fontSize="xs"
-            >
+            <LegendItem color={color} fontSize="xs">
               {name}
             </LegendItem>
-            <div className={css.value}>{value}</div>
+            <Text tag="div" size="xs" weight="bold" view="primary">
+              {value}
+            </Text>
           </React.Fragment>
         ))}
       </div>

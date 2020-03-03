@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import classnames from 'classnames'
 
+import { themeColorLight } from '@/utils/theme'
 import { PositionState } from '@/utils/tooltips'
 import { isDefinedPosition } from '@/utils/type-guards'
 
@@ -40,7 +41,7 @@ export const Tooltip: React.FC<Props> = ({ children, anchorRef, isWide, onClickO
   return ReactDOM.createPortal(
     <div
       ref={ref}
-      className={classnames(css.main, isWide && css.isWide)}
+      className={classnames(themeColorLight, css.main, isWide && css.isWide)}
       style={{ left: position.x, top: position.y }}
     >
       {children}

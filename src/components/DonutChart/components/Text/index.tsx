@@ -1,6 +1,7 @@
 import React from 'react'
 
-import classname from 'classnames'
+import { Text } from '@gpn-design/uikit'
+import classnames from 'classnames'
 
 import { useBaseSize } from '@/contexts'
 
@@ -21,7 +22,7 @@ type Props = {
   data: Data
 }
 
-export const Text: React.FC<Props> = ({ data, position, maxSize }) => {
+export const DonutText: React.FC<Props> = ({ data, position, maxSize }) => {
   const isRightOrLeft = ['left', 'right'].includes(position)
   const isSubBlock = isRightOrLeft && data.subTitle && data.subValue
 
@@ -29,17 +30,17 @@ export const Text: React.FC<Props> = ({ data, position, maxSize }) => {
   const paddingFromBorder = getCalculatedSizeWithBaseSize(8)
 
   const elements = [
-    <div key="title" className={css.title}>
+    <Text key="title" tag="div" size="xs" view="secondary" className={css.title}>
       {data.title}
-    </div>,
-    <div key="value" className={classname(css.value, data.value.length > 2 && css.isSmall)}>
+    </Text>,
+    <Text key="value" tag="div" size={data.value.length > 2 ? '3xl' : '4xl'} view="primary">
       {data.value}
-    </div>,
+    </Text>,
   ] as const
 
   return (
     <div
-      className={classname(css.main, css[position])}
+      className={classnames(css.main, css[position])}
       style={{
         ['--padding-from-border' as string]: `${paddingFromBorder}px`,
       }}
@@ -53,8 +54,12 @@ export const Text: React.FC<Props> = ({ data, position, maxSize }) => {
         {position === 'bottom' ? [...elements].reverse() : elements}
         {isSubBlock ? (
           <>
-            <div className={css.title}>{data.subTitle}</div>
-            <div className={css.subValue}>{data.subValue}</div>
+            <Text tag="div" size="xs" view="secondary" className={css.title}>
+              {data.subTitle}
+            </Text>
+            <Text tag="div" size="l" weight="bold" view="primary">
+              {data.subValue}
+            </Text>
           </>
         ) : (
           undefined

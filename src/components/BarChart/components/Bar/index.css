@@ -24,8 +24,7 @@
 }
 
 .label {
-  font-size: calc-size(12);
+  font-size: var(--size-text-xs);
 
-  fill: #f6fbfd;
-  fill-opacity: 0.6;
+  fill: var(--color-typo-primary);
 }

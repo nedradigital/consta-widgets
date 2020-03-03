@@ -7,13 +7,13 @@ import css from '../index.css'
 
 describe('Badge', () => {
   it('отображает текст', () => {
-    const wrapper = shallow(<Badge children="text" />)
+    const wrapper = shallow(<Badge size="xs">text</Badge>)
 
-    expect(wrapper.text()).toEqual('text')
+    expect(wrapper.dive().text()).toEqual('text')
   })
 
   it('отображается без класса статуса, если статус не задан', () => {
-    const wrapper = shallow(<Badge children="text" />)
+    const wrapper = shallow(<Badge size="xs" children="text" />)
 
     expect(wrapper).toHaveClassName(css.badge)
     expect(wrapper).not.toHaveClassName(css.normal)
@@ -23,7 +23,7 @@ describe('Badge', () => {
 
   it('отображается с классом заданного статуса', () => {
     statuses.forEach(status => {
-      const wrapper = shallow(<Badge status={status} children="text" />)
+      const wrapper = shallow(<Badge size="xs" status={status} children="text" />)
 
       expect(wrapper).toHaveClassName(css.badge)
       expect(wrapper).toHaveClassName(css[status])

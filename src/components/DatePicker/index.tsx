@@ -1,9 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
-import classnames from 'classnames'
 import { endOfDay, startOfDay } from 'date-fns'
-
-import { themeColorDark } from '@/utils/theme'
 
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
@@ -57,11 +54,7 @@ export const isDateRange = (value?: Date | DateRange): value is DateRange =>
 const defaultRenderSingleControl: RenderControls<Date> = props => {
   const { size, value, onChange } = props
 
-  return (
-    <div className={themeColorDark}>
-      <InputDate value={value} onChange={onChange} size={size} />
-    </div>
-  )
+  return <InputDate value={value} onChange={onChange} size={size} />
 }
 
 const defaultRenderRangeControls: RenderControls<DateRange> = props => {
@@ -69,7 +62,7 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
   const [startDate, endDate] = value || [undefined, undefined]
 
   return (
-    <div className={classnames(themeColorDark, css.controls)}>
+    <div className={css.controls}>
       <InputDate value={startDate} onChange={date => onChange([date, endDate])} size={size} />
       <span className={css.delimiter}>–</span>
       <InputDate value={endDate} onChange={date => onChange([startDate, date])} size={size} />

@@ -2,7 +2,7 @@
   position: absolute;
 
   max-width: 298px;
-  padding: 20px 20px 16px;
+  padding: var(--space-l) var(--space-l) var(--space-m);
 
   border-radius: 4px;
   background-color: #fff;

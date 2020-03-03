@@ -1,4 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import {
   addDays,
@@ -123,7 +124,11 @@ const getMonthWeeks = (date: Date) => {
 
 const weekDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((dayName, idx) => (
   <div key={idx} className={classnames(css.cell, css.isWeekDay)}>
-    <div className={css.cellContent}>{dayName}</div>
+    <div className={css.cellContent}>
+      <Text tag="span" size="2xs" transform="uppercase" view="ghost">
+        {dayName}
+      </Text>
+    </div>
   </div>
 ))
 
@@ -203,7 +208,11 @@ export const Calendar: React.FC<Props> = ({
         onMouseLeave={() => setHoveredDate(undefined)}
         onClick={() => handleSelectDate(date)}
       >
-        <div className={css.cellContent}>{date.getDate()}</div>
+        <div className={css.cellContent}>
+          <Text tag="span" size="s" view="primary">
+            {date.getDate()}
+          </Text>
+        </div>
       </div>
     )
   }
@@ -217,7 +226,17 @@ export const Calendar: React.FC<Props> = ({
 
         return (
           <div key={idx} className={css.month}>
-            <div className={css.title}>{title}</div>
+            <Text
+              tag="div"
+              size="s"
+              weight="bold"
+              transform="uppercase"
+              view="primary"
+              spacing="xs"
+              className={css.title}
+            >
+              {title}
+            </Text>
             <div className={classnames(css.row, css.isWithDaynames)}>{weekDays}</div>
             {weeks.map((week, weekIdx) => (
               <div key={weekIdx} className={css.row}>

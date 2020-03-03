@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Legend } from '@/components/Legend'
 import { Roadmap } from '@/components/Roadmap'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { DataMap, DataType } from '@/dashboard/types'
-import { Text } from '@/ui/Text'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import { ReactComponent as IconArrowSvg } from './icons/icon_arrow.svg'
@@ -44,17 +44,24 @@ const RoadmapBlock: React.FC<{
             {!isButtonDisabled ? (
               <IconArrowSvg className={classnames(css.icon, isOpened && css.isOpened)} />
             ) : null}
-            <Text className={css.text} size="xl" bold>
+            <Text tag="span" size="xl" weight="bold" view="primary">
               {item.title}
             </Text>
           </span>
         ) : null}
         {item.subTitle ? (
           <>
-            <Text className={classnames(css.text, css.subTitle)} size="s" bold uppercase secondary>
+            <Text
+              tag="span"
+              size="s"
+              weight="bold"
+              view="secondary"
+              transform="uppercase"
+              className={css.subTitle}
+            >
               {item.subTitle.name}
             </Text>
-            <Text className={css.text} size="xl" bold>
+            <Text tag="span" size="xl" weight="bold">
               {item.subTitle.value}
             </Text>
           </>

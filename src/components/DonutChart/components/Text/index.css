@@ -1,8 +1,6 @@
 @custom-selector :--main .main;
 
 :--main {
-  --value-color: #f6fbfd;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,34 +51,7 @@
 }
 
 .title {
-  font-size: calc-size(12);
-  line-height: calc-size(17);
-
-  position: relative;
-
   overflow: hidden;
 
   white-space: nowrap;
-
-  color: rgba(246, 251, 253, 0.6);
-}
-
-.value {
-  font-size: calc-size(48);
-  line-height: calc-size(62);
-
-  color: var(--value-color);
-
-  &.isSmall {
-    font-size: calc-size(32);
-    line-height: calc-size(42);
-  }
-}
-
-.subValue {
-  font-size: calc-size(18);
-  font-weight: bold;
-  line-height: calc-size(25);
-
-  color: var(--value-color);
 }

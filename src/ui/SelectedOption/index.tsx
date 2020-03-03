@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { Text } from '@gpn-design/uikit'
+
 import css from './index.css'
 
 type Props = {
@@ -9,7 +11,9 @@ type Props = {
 
 export const SelectedOption: React.FC<Props> = ({ name, onRemove }) => (
   <div className={css.option}>
-    <p className={css.label}>{name}</p>
+    <Text tag="p" size="xs" weight="regular" className={css.label}>
+      {name}
+    </Text>
     <button
       title="Удалить"
       onClick={event => {

@@ -1,5 +1,4 @@
-import { Button } from '@gpn-design/uikit'
-import classnames from 'classnames'
+import { Button, Text } from '@gpn-design/uikit'
 import {
   addQuarters,
   differenceInQuarters,
@@ -12,7 +11,6 @@ import {
 import { times } from 'lodash'
 
 import { DateRange } from '@/components/DatePicker'
-import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'
 
@@ -58,13 +56,15 @@ export const ActionButtons: React.FC<Props> = ({
   }
 
   return (
-    <div className={classnames(css.main, themeColorLight)}>
+    <div className={css.main}>
       <Button wpSize="xs" view="secondary" onClick={handleClickOnToday}>
         Сегодня
       </Button>
       {showQuartersSelector && (
         <div className={css.quarters}>
-          <div className={css.label}>Выбрать:</div>
+          <Text tag="div" size="xs" view="primary">
+            Выбрать:
+          </Text>
           {quarters.map((quarter, idx) => (
             <Button
               key={idx}

@@ -1,9 +1,10 @@
 import React from 'react'
 
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
-import { Badge, Status } from '@/ui/Badge'
+import { Badge, BadgeSize, Status } from '@/ui/Badge'
 import { PositionState } from '@/utils/tooltips'
 
 import css from './index.css'
@@ -20,6 +21,13 @@ export type Data = {
 export const sizes = ['s', 'm'] as const
 export type Size = typeof sizes[number]
 
+const badgeSizes: Record<Size, BadgeSize> = {
+  s: 'xs',
+  m: 'l',
+}
+
+const sizeClasses: Record<Size, string> = { s: css.sizeS, m: css.sizeM }
+
 type Props = {
   data: Data
   size?: Size
@@ -28,7 +36,6 @@ type Props = {
 
 export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', data }) => {
   const { status, text, comment } = data
-  const sizeClass = { s: css.sizeS, m: css.sizeM }[size]
 
   const [tooltipVisible, setTooltipVisible] = React.useState(false)
   const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
@@ -58,11 +65,13 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
     return (
       <>
         <Tooltip isVisible={tooltipVisible && !!comment} position={tooltipPosition}>
-          <div className={css.tooltipTitle}>Комментарий:</div>
+          <Text tag="div" weight="bold" transform="uppercase">
+            Комментарий:
+          </Text>
           <div className={css.tooltipContent}>{comment}</div>
         </Tooltip>
         <div
-          className={classnames(css.background, sizeClass)}
+          className={classnames(css.background, sizeClasses[size])}
           onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
           onMouseLeave={() => setTooltipVisible(false)}
@@ -75,8 +84,9 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
 
   return (
     <Badge
-      className={classnames(css.text, sizeClass, status === 'empty' && css.isEmpty)}
+      size={badgeSizes[size]}
       status={status}
+      className={classnames(css.text, status === 'empty' && css.isEmpty)}
     >
       {text}
     </Badge>

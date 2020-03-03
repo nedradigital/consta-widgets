@@ -1,4 +1,7 @@
 @import './styles/normalize.css';
+@import './styles/themes/main.css';
+@import './styles/themes/size.css';
+@import './styles/themes/space.css';
 @import './styles/variables.css';
 
 * {
@@ -10,11 +13,7 @@
 }
 
 body {
-  font-family: var(--main-font-family);
-  font-size: var(--main-font-size);
-
-  color: var(--text-color);
-  background-color: var(--bg-color);
+  color: var(--color-typo-primary);
 }
 
 button {

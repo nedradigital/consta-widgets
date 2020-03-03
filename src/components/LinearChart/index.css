@@ -5,7 +5,7 @@
   height: 100%;
 
   /* Используется в осях и зуме */
-  --axis-tick-offset: 9px;
+  --axis-tick-offset: var(--space-xs);
 }
 
 .svg {

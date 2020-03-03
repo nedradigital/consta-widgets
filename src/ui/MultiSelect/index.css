@@ -64,16 +64,14 @@
 }
 
 .placeholder {
-  font-size: 12px;
-  line-height: 20px;
-
   overflow: hidden;
+  align-self: center;
 
   max-width: 100%;
   margin-top: 0;
   margin-bottom: 0;
 
-  color: rgba(255, 255, 255, 0.2);
+  color: var(--color-control-typo-placeholder);
 }
 
 .optionsList {
@@ -101,7 +99,7 @@
 
 .option {
   width: 100%;
-  padding: 7px 13px 5px;
+  padding: var(--space-xs) var(--space-s) var(--space-2xs);
 
   &.isSelected {
     background-color: #07384b;
@@ -109,10 +107,7 @@
 }
 
 .optionCheckbox {
-  --checkbox-font-size: 12px;
-  --offset: 14px;
-
-  line-height: 14px;
+  --checkbox-font-size: var(--size-text-xs);
 
   width: 100%;
 
