@@ -1,6 +1,8 @@
 .main {
   --label-column-width: calc-size(186);
   --separate-line-color: rgba(255, 255, 255, 0.1);
+  --bar-height: calc-size(8);
+  --bar-top: calc-size(10);
 
   display: grid;
 
@@ -127,31 +129,33 @@
   }
 }
 
-.plan {
+.chartLine {
   position: absolute;
-  top: 0;
+  top: var(--bar-top);
 
-  height: calc-size(24);
+  height: var(--bar-height);
 
-  opacity: 0.4;
-}
+  &.isInteractive {
+    cursor: pointer;
+  }
 
-.fact {
-  position: absolute;
-  top: calc-size(6);
+  &.isFact {
+    opacity: 1;
+  }
 
-  height: calc-size(12);
+  &.isPlan {
+    top: 0;
 
-  cursor: pointer;
-}
+    opacity: 0.6;
+  }
 
-.forecast {
-  position: absolute;
-  top: calc-size(6);
+  &.isForecast {
+    opacity: 0.4;
+  }
 
-  height: calc-size(12);
-
-  opacity: 0.4;
+  &.isActive {
+    opacity: 1;
+  }
 }
 
 .wrapper {
@@ -159,9 +163,10 @@
 
   width: 100%;
 
-  &.hideInactive > .fact:not(.active),
-  &.hideInactive > .plan:not(.active) {
-    opacity: 0.25;
+  &.hideInactive > .isFact:not(.isActive),
+  &.hideInactive > .isForecast:not(.isActive),
+  &.hideInactive > .isPlan:not(.isActive) {
+    opacity: 0.3;
   }
 }
 
@@ -200,7 +205,10 @@
 }
 
 .monthTitleWrapper {
-  padding: calc-size(12) calc-size(16);
+  width: 100%;
+  padding: calc-size(12) 0;
+
+  text-align: center;
 }
 
 .periodWrapper {

@@ -2,6 +2,8 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
+import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
+import { uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
 import { ColorGroups } from '@/dashboard/types'
@@ -18,7 +20,7 @@ import {
   TableColumn,
   useSelectedFilters,
 } from '@/utils/table'
-import { getDayMonthYearFromTimestamp, getDaysInMonth, monthsDiff } from '@/utils/time'
+import { getDayMonthYearFromTimestamp } from '@/utils/time'
 
 import { RoadmapTooltip } from './components/RoadmapTooltip'
 import css from './index.css'
@@ -101,7 +103,7 @@ type MonthItem = {
 
 const getMonths = (startDate: number, endDate: number): readonly MonthItem[] => {
   const [, startMonth, startYear] = getDayMonthYearFromTimestamp(startDate)
-  const countMonths = monthsDiff(startDate, endDate) + 1
+  const countMonths = differenceInCalendarMonths(endDate, startDate) + 1
   let monthCounter = startMonth
   let yearCounter = startYear
   const mutableMonths = []
@@ -128,66 +130,153 @@ const getMonths = (startDate: number, endDate: number): readonly MonthItem[] => 
 }
 
 const getCoordsByDate = (ms: number, monthWidth: number, startDate: number) => {
-  const [day, month, year] = getDayMonthYearFromTimestamp(ms)
-  const countDaysInMonth = getDaysInMonth(month, year)
-  const countMonths = monthsDiff(startDate, ms)
+  const [day] = getDayMonthYearFromTimestamp(ms)
+  const countDaysInMonth = getDaysInMonth(ms)
+  const countMonths = differenceInCalendarMonths(ms, startDate)
 
   const startPrecent = monthWidth * countMonths
 
   return startPrecent + (monthWidth / countDaysInMonth) * (day - 1)
 }
 
-const FACT_BLOCK_SIZE = 6
+const MARGIN_BETWEEN_BARS = 1
 
-const renderItem = ({
-  key,
-  className,
-  index,
-  colorGroups,
+const getStyle = ({
+  start,
+  end,
   monthWidth,
-  activeLine,
-  onClick,
-  plans,
   startDate,
+  withMargin,
 }: {
-  key: string
+  start: number
+  end: number
+  monthWidth: number
+  startDate: number
+  withMargin: boolean
+}) => {
+  const left = getCoordsByDate(start, monthWidth, startDate)
+  const width = getCoordsByDate(end, monthWidth, startDate)
+
+  return {
+    left: withMargin ? left + MARGIN_BETWEEN_BARS : left,
+    width,
+  }
+}
+
+const FACT_BLOCK_SIZE = 8
+
+type RenderChartLine = {
+  key: 'fact' | 'plan' | 'forecast'
   className: string
-  index?: number
+  rowIndex?: number
   colorGroups: ColorGroups
   monthWidth: number
   activeLine?: ActiveLineState
-  onClick?: (event: React.MouseEvent, index: number, groupName: string) => void
-  plans?: readonly Item[]
   startDate: number
-}) => (item: Item) => {
-  const { startDate: start, endDate, groupName } = item
-  const left = getCoordsByDate(start, monthWidth, startDate)
-  const width = getCoordsByDate(endDate, monthWidth, startDate)
-  const active = activeLine && activeLine.index === index && activeLine.groupName === groupName
-  const plan = plans ? plans.find(i => i.groupName === groupName) : false
+}
+
+type RenderInteractiveChartLine = {
+  facts: readonly Item[]
+  forecasts: readonly Item[]
+  plans: readonly Item[]
+  monthWidth: number
+  startDate: number
+  onClick?: ({
+    event,
+    index,
+    groupName,
+  }: {
+    event: React.MouseEvent
+    index: number
+    groupName: string
+  }) => void
+  rowIndex: number
+  activeLine?: ActiveLineState
+  colorGroups: ColorGroups
+}
+
+const renderChartLine = ({
+  key,
+  className,
+  rowIndex,
+  colorGroups,
+  monthWidth,
+  activeLine,
+  startDate,
+}: RenderChartLine) => (item: Item, index: number) => {
+  const withMargin = index !== 0
+  const { startDate: start, endDate: end, groupName } = item
+  const { left, width } = getStyle({ withMargin, start, end, monthWidth, startDate })
+  const active = activeLine && activeLine.index === rowIndex && activeLine.groupName === groupName
 
   return (
     <div
       key={key + groupName}
-      className={classnames(className, active && css.active)}
+      className={classnames(className, css.chartLine, active && css.isActive)}
       style={{
         left,
         width: `calc(${width}px - ${left}px)`,
         background: colorGroups[groupName],
       }}
+    />
+  )
+}
+
+const renderInteractiveChartLine = ({
+  plans,
+  forecasts,
+  facts,
+  monthWidth,
+  startDate,
+  onClick,
+  rowIndex,
+  activeLine,
+  colorGroups,
+}: RenderInteractiveChartLine) => (groupName: string, index: number) => {
+  const withMargin = index !== 0
+  const fact = facts.find(item => item.groupName === groupName)
+  const forecast = forecasts.find(item => item.groupName === groupName)
+  const plan = plans.find(item => item.groupName === groupName)
+
+  const start = fact ? fact.startDate : forecast?.startDate
+  const end = forecast ? forecast.endDate : fact?.endDate
+
+  if (!start || !end) {
+    return null
+  }
+
+  const { left, width } = getStyle({ withMargin, start, end, monthWidth, startDate })
+  const active = activeLine && activeLine.index === rowIndex && activeLine.groupName === groupName
+
+  return (
+    <div
+      key={groupName}
+      className={classnames(css.chartLine, css.isInteractive)}
+      style={{
+        left,
+        width: `calc(${width}px - ${left}px)`,
+      }}
       onClick={
-        onClick && index !== undefined ? event => onClick(event, index, groupName) : undefined
+        onClick && rowIndex !== undefined
+          ? event =>
+              onClick({
+                event,
+                index: rowIndex,
+                groupName,
+              })
+          : undefined
       }
     >
-      {activeLine && active && plan && key === 'fact' ? (
+      {activeLine && active && plan ? (
         <RoadmapTooltip
-          fact={item}
+          fact={fact}
+          forecast={forecast}
           plan={plan}
           colorGroups={colorGroups}
-          direction={index && index > 2 ? 'top' : 'bottom'}
+          direction={rowIndex > 2 ? 'top' : 'bottom'}
           left={activeLine.left}
-          top={index && index > 2 ? undefined : activeLine.top}
-          bottom={index && index > 2 ? activeLine.bottom : undefined}
+          top={rowIndex > 2 ? undefined : activeLine.top}
+          bottom={rowIndex > 2 ? activeLine.bottom : undefined}
         />
       ) : null}
     </div>
@@ -248,13 +337,13 @@ export const Roadmap: React.FC<Props> = props => {
   }, [])
 
   const handleWindowClick = useCallback(event => {
-    if (!event.target.classList.contains(css.fact)) {
+    if (!event.target.classList.contains(css.isInteractive)) {
       changeActiveLine({ index: undefined, groupName: undefined, top: 0, left: 0, bottom: 0 })
     }
   }, [])
 
   const handleClick = useCallback(
-    (event, index, groupName) => {
+    ({ event, index, groupName }) => {
       if (ref.current) {
         const elementRect = event.target.getBoundingClientRect()
         const tableRect = ref.current.getBoundingClientRect()
@@ -414,36 +503,47 @@ export const Roadmap: React.FC<Props> = props => {
                       {firstColumn.length > secondColumn.length ? firstColumn : secondColumn}
                     </div>
                     {plan.map(
-                      renderItem({
+                      renderChartLine({
                         key: 'plan',
-                        className: css.plan,
-                        index,
+                        className: css.isPlan,
                         colorGroups,
                         monthWidth,
-                        activeLine,
                         startDate,
                       })
                     )}
                     {fact.map(
-                      renderItem({
+                      renderChartLine({
                         key: 'fact',
-                        className: css.fact,
-                        index,
+                        className: css.isFact,
+                        rowIndex: index,
                         colorGroups,
                         monthWidth,
-                        activeLine,
-                        onClick: handleClick,
-                        plans: plan,
                         startDate,
+                        activeLine,
                       })
                     )}
                     {forecast.map(
-                      renderItem({
+                      renderChartLine({
                         key: 'forecast',
-                        className: css.forecast,
+                        className: css.isForecast,
                         colorGroups,
                         monthWidth,
+                        activeLine,
                         startDate,
+                        rowIndex: index,
+                      })
+                    )}
+                    {uniq([...fact, ...forecast].map(item => item.groupName)).map(
+                      renderInteractiveChartLine({
+                        plans: plan,
+                        facts: fact,
+                        forecasts: forecast,
+                        monthWidth,
+                        startDate,
+                        onClick: handleClick,
+                        rowIndex: index,
+                        colorGroups,
+                        activeLine,
                       })
                     )}
                     {index === 0 && (
