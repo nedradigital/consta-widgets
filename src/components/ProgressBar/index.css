@@ -27,7 +27,7 @@
   min-width: 0;
 
   &:nth-child(n + 3) {
-    padding-top: calc-size(7);
+    padding-top: calc-size(12);
   }
 }
 
