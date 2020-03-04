@@ -65,9 +65,9 @@ export const LineWithDots: React.FC<Props> = props => {
       </g>
 
       <g clipPath={dotsClipPath}>
-        {values.filter(itemIsNotEmpty).map((item, idx) => {
+        {values.filter(itemIsNotEmpty).map((item, idx, items) => {
           const isActive = isActiveCircle(item, isHorizontal, hoveredMainValue)
-          const radius = hasDotRadius || isActive ? defaultDotRadius : 0
+          const radius = hasDotRadius || isActive || items.length === 1 ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
 
           return (
