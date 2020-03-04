@@ -9,6 +9,6 @@
   color: inherit;
 
   &.hasCaption {
-    padding-top: calc-size(14);
+    padding-top: var(--caption-height);
   }
 }
