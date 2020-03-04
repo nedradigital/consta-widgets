@@ -2,8 +2,7 @@
 
 :--main {
   --value-color: #f6fbfd;
-  --padding-from-border: 8px;
-  --padding-to-crop-text: 20px;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -45,11 +44,11 @@
 
 .content {
   @nest :--main.left & {
-    padding-right: 20px;
+    padding-right: var(--donut-width);
   }
 
   @nest :--main.right & {
-    padding-left: 20px;
+    padding-left: var(--donut-width);
   }
 }
 
