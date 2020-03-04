@@ -145,6 +145,7 @@ export const DonutChart: React.FC<Props> = ({
       className={css.main}
       style={{
         ['--min-size' as string]: `${minChartSize[circlesCount]}px`,
+        ['--donut-width' as string]: `${sizeDonut}px`,
       }}
     >
       {halfDonut && values.length === 1 && textData && (
