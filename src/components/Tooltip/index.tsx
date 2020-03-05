@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Text } from '@gpn-design/uikit'
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { themeColorLight } from '@/utils/theme'
@@ -22,13 +23,23 @@ export type HorizontalDirection = typeof horizontalDirections[number]
 export type VerticalDirection = typeof verticalDirections[number]
 
 type Props = {
-  children: React.ReactNode
   isVisible: boolean
   horizontalDirection?: HorizontalDirection
   verticalDirection?: VerticalDirection
   position: Partial<Position> | undefined
   className?: string
-}
+  isContentHoverable?: boolean
+} & (
+  | {
+      children: React.ReactNode
+    }
+  | {
+      renderContent: (direction: {
+        horizontal: HorizontalDirection
+        vertical: VerticalDirection
+      }) => React.ReactNode
+    }
+)
 
 const PARENT_ELEMENT = window.document.body
 
@@ -138,9 +149,11 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     verticalDirection = 'top',
     position,
     className,
+    isContentHoverable,
   } = props
 
   const mainRef = React.useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(mainRef)
   const [direction, setDirection] = React.useState({
     horizontal: horizontalDirection,
     vertical: verticalDirection,
@@ -163,7 +176,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     }
 
     setDirection(computedDirection)
-  }, [isVisible, mainRef, position, horizontalDirection, verticalDirection])
+  }, [isVisible, mainRef, position, horizontalDirection, verticalDirection, width, height])
 
   if (!isVisible || !isDefinedPosition(position)) {
     return null
@@ -176,14 +189,19 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         themeColorLight,
         css.main,
         directionClasses[direction.horizontal],
-        directionClasses[direction.vertical]
+        directionClasses[direction.vertical],
+        isContentHoverable && css.isHoverable
       )}
       style={{ top: position.y, left: position.x }}
     >
       <div ref={ref} className={classnames(css.tooltip, className)}>
-        <Text tag="div" size="xs" view="primary">
-          {children}
-        </Text>
+        {'renderContent' in props ? (
+          props.renderContent(direction)
+        ) : (
+          <Text tag="div" size="xs" view="primary">
+            {children}
+          </Text>
+        )}
       </div>
     </div>,
     PARENT_ELEMENT
