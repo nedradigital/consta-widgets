@@ -165,6 +165,7 @@ export type Dataset = {
   name: string
   id: string
   type: DataType
+  groupName?: string
 }
 
 export type Data = { [k: string]: DataMap[DataType] }

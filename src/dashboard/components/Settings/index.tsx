@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { WidgetSettingsDatasetSelect } from '@/components/WidgetSettingsDatasetSelect'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
@@ -42,10 +43,10 @@ const DatasetSelect: React.FC<Props & { dataType?: DataType }> = ({
 
   const allowedDatasets = datasets
     .filter(d => d.type === dataType)
-    .map(d => ({ value: d.id, name: d.name }))
+    .map(d => ({ value: d.id, name: d.name, groupName: d.groupName }))
 
   return (
-    <WidgetSettingsSelect
+    <WidgetSettingsDatasetSelect
       name="Датасет"
       value={item.params.datasetId}
       values={allowedDatasets}
