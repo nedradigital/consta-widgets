@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import css from './index.css'
@@ -30,28 +31,43 @@ export const Text: React.FC<Props> = ({
   bold,
   croppedLineCount,
   croppedWithGradient,
-}) => (
-  <div
-    className={classnames(
-      css.main,
-      {
-        '3xl': css.size3XL,
-        xl: css.sizeXL,
-        l: css.sizeL,
-        s: css.sizeS,
-        xs: css.sizeXS,
-      }[size],
-      secondary && css.isSecondary,
-      uppercase && css.isUppercase,
-      bold && css.isBold,
-      Boolean(croppedLineCount) && css.isCropped,
-      croppedWithGradient && css.isWithGradient,
-      className
-    )}
-    style={{
-      ['--line-clamp' as string]: croppedLineCount,
-    }}
-  >
-    {children}
-  </div>
-)
+}) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const { height, width } = useComponentSize(ref)
+  const [isVisibleGradient, changeIsVisibleGradient] = useState(false)
+
+  useLayoutEffect(() => {
+    const element = ref.current
+
+    if (element) {
+      changeIsVisibleGradient(element.offsetHeight < element.scrollHeight)
+    }
+  }, [children, croppedLineCount, croppedWithGradient, height, width])
+
+  return (
+    <div
+      ref={ref}
+      className={classnames(
+        css.main,
+        {
+          '3xl': css.size3XL,
+          xl: css.sizeXL,
+          l: css.sizeL,
+          s: css.sizeS,
+          xs: css.sizeXS,
+        }[size],
+        secondary && css.isSecondary,
+        uppercase && css.isUppercase,
+        bold && css.isBold,
+        Boolean(croppedLineCount) && css.isCropped,
+        croppedWithGradient && isVisibleGradient && css.isWithGradient,
+        className
+      )}
+      style={{
+        ['--line-clamp' as string]: croppedLineCount,
+      }}
+    >
+      {children}
+    </div>
+  )
+}
