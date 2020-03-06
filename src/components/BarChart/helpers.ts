@@ -1,8 +1,7 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import * as d3 from 'd3'
 import { flattenDeep, max, min, sum } from 'lodash'
 
-import { Column, Groups, Orientation, SingleBarChartGroups } from './'
+import { Column, Groups, SingleBarChartGroups, Size } from './'
 import { ColumnDetail } from './components/Bar'
 
 type NumberRange = readonly [number, number]
@@ -12,25 +11,18 @@ type DataColumns = ReadonlyArray<{
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
 }>
 
-export const getXRange = (width: number): NumberRange => [0, width]
-export const getYRange = (height: number, orientation: Orientation): NumberRange =>
-  orientation === 'horizontal' ? [0, height] : [height, 0]
+export const CHART_MIN_HEIGHT = 220
 
-export const getGroupScale = (domain: readonly string[], size: number, orientation: Orientation) =>
-  d3
-    .scaleBand()
-    .domain([...domain])
-    .range(
-      orientation === 'horizontal'
-        ? [getYRange(size, orientation)[0], getYRange(size, orientation)[1]]
-        : [getXRange(size)[0], getXRange(size)[1]]
-    )
+export const GROUP_INNER_PADDING: Record<Size, number> = {
+  s: 8,
+  m: 18,
+}
 
-export const getValuesScale = (domain: NumberRange, size: number, orientation: Orientation) =>
-  d3
-    .scaleLinear()
-    .domain([...domain])
-    .range(orientation === 'horizontal' ? getXRange(size) : getYRange(size, orientation))
+export const OUTER_PADDING = 2
+
+export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
+  return shouldFlip ? [size, 0] : [0, size]
+}
 
 export const getColumnDetails = ({
   column,

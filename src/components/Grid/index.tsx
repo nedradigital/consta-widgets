@@ -1,6 +1,6 @@
 import classnames from 'classnames'
 
-import { Scaler } from '@/components/Ticks'
+import { Scaler } from '@/utils/scale'
 
 import css from './index.css'
 
@@ -27,7 +27,7 @@ export const Grid: React.FC<Props> = ({
 }) => (
   <g className={css.main}>
     {xTickValues.map(tick => {
-      const x = scalerX(tick)
+      const x = scalerX.scale(tick)
       const isGuide = xGridGuide && tick === xGridGuide
 
       return (
@@ -42,7 +42,7 @@ export const Grid: React.FC<Props> = ({
       )
     })}
     {yTickValues.map(tick => {
-      const y = scalerY(tick)
+      const y = scalerY.scale(tick)
       const isGuide = yGridGuide && tick === yGridGuide
 
       return (

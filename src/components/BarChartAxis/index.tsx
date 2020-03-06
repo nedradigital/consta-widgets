@@ -2,9 +2,10 @@ import { useRef } from 'react'
 
 import classnames from 'classnames'
 
-import { Position, Scaler, Ticks } from '@/components/Ticks'
+import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
 import { FormatValue } from '@/dashboard/types'
+import { Scaler } from '@/utils/scale'
 
 import css from './index.css'
 
@@ -26,6 +27,7 @@ type Props = {
   showLabelLine?: boolean
   unit?: string
   unitPosition?: UnitPosition
+  size?: Size
   horizontalStyles?: React.CSSProperties
   verticalStyles?: React.CSSProperties
   bottomControls?: React.ReactNode
@@ -57,6 +59,7 @@ export const Axis: React.FC<Props> = ({
   showLabelLine = false,
   unit,
   unitPosition,
+  size,
   horizontalStyles = {},
   verticalStyles = {},
   bottomControls,
@@ -82,6 +85,7 @@ export const Axis: React.FC<Props> = ({
       values={values}
       scaler={valuesScaler}
       position={position}
+      size={size}
       showLine={showValueLine}
       formatValueForLabel={formatValue}
       style={getStyles(position)}
@@ -93,6 +97,7 @@ export const Axis: React.FC<Props> = ({
       values={labels}
       scaler={labelsScaler}
       position={position}
+      size={size}
       showLine={showLabelLine}
       style={getStyles(position)}
     />
