@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
+import { Image } from '@/components/Image'
 import { ImageItem, ImagesList } from '@/components/ImagesList'
 
 import { ReactComponent as IconArrowSvg } from './images/arrow.svg'
@@ -81,7 +82,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
                 left: `${idx * 100}%`,
               }}
             >
-              <img src={image.large} className={css.image} />
+              <Image src={image.large} />
             </div>
           ))}
         </div>

@@ -822,6 +822,7 @@ const mockData: DataMap = {
       ],
     },
   ],
+  [DataType.Image]: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg',
   [DataType.Images]: [
     { large: 'https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg' },
     { preview: 'https://via.placeholder.com/150', large: 'https://via.placeholder.com/1500' },

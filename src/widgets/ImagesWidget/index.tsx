@@ -33,6 +33,6 @@ export const ImagesWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Картинки',
   dataType,
-  defaultParams: {},
+  defaultParams,
   Content: ImagesWidgetContent,
 })
