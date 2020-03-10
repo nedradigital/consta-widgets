@@ -63,44 +63,42 @@ const setStateToStorage = (value: DashboardState) => {
   localStorage.setItem(storageName, JSON.stringify(value))
 }
 
+const DashboardStory = () => {
+  const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
+
+  React.useEffect(() => {
+    setDashboard(getStateFromStorage())
+  }, [])
+
+  const handler = (data: DashboardState) => {
+    setDashboard(data)
+    setStateToStorage(data)
+  }
+
+  return (
+    <div style={{ height: '100vh' }}>
+      <Constructor
+        datasets={object('datasets', exampleDatasets)}
+        cols={object('cols', cols)}
+        dashboard={dashboard}
+        onChange={handler}
+        onChangeVersion={handler}
+        onClear={() => {
+          localStorage.removeItem(storageName)
+          location.reload()
+        }}
+        viewMode={boolean('viewMode', viewMode)}
+        data={object('data', {})}
+        baseWidthForScaling={number('baseWidthForScaling', 1024)}
+        baseHeightForScaling={number('baseHeightForScaling', 768)}
+        baseFontSize={number('baseFontSize', 16)}
+        basePadding={getPadding()}
+        rowsCount={getRowsCount()}
+      />
+    </div>
+  )
+}
+
 storiesOf('dashboard/Constructor', module)
   .addDecorator(withSmartKnobs())
-  .add('с сохранением состояния', () => {
-    function Wrapper() {
-      const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
-
-      React.useEffect(() => {
-        setDashboard(getStateFromStorage())
-      }, [])
-
-      const handler = (data: DashboardState) => {
-        setDashboard(data)
-        setStateToStorage(data)
-      }
-
-      return (
-        <div style={{ height: '100vh' }}>
-          <Constructor
-            datasets={object('datasets', exampleDatasets)}
-            cols={object('cols', cols)}
-            dashboard={dashboard}
-            onChange={handler}
-            onChangeVersion={handler}
-            onClear={() => {
-              localStorage.removeItem(storageName)
-              location.reload()
-            }}
-            viewMode={boolean('viewMode', viewMode)}
-            data={object('data', {})}
-            baseWidthForScaling={number('baseWidthForScaling', 1024)}
-            baseHeightForScaling={number('baseHeightForScaling', 768)}
-            baseFontSize={number('baseFontSize', 16)}
-            basePadding={getPadding()}
-            rowsCount={getRowsCount()}
-          />
-        </div>
-      )
-    }
-
-    return <Wrapper />
-  })
+  .add('с сохранением состояния', () => <DashboardStory />)

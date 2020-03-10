@@ -36,44 +36,40 @@ const initialItems: readonly BoxItem[] = [
   },
 ]
 
+const BoxStory = () => {
+  const [items, changeItems] = React.useState(initialItems)
+
+  const handler = (newItems: readonly BoxItem[]) => {
+    changeItems(newItems)
+  }
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div style={{ position: 'relative' }}>
+        <Box
+          viewMode={boolean('viewMode', false)}
+          items={items}
+          onChange={handler}
+          data={{
+            [statsWidgetKey]: {
+              value: 999,
+              title: 'Сроки',
+              badge: {
+                percentage: -99,
+                status: 'warning',
+              },
+              unit: 'суток',
+            },
+          }}
+          datasets={exampleDatasets}
+          parentName={select('parentName', ['switch', 'grid'], undefined)}
+        />
+      </div>
+    </DndProvider>
+  )
+}
+
 storiesOf('dashboard/Box', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: 600 }))
-  .add('interactive', () => {
-    const Wrapper = () => {
-      const [items, changeItems] = React.useState(initialItems)
-
-      const handler = (newItems: readonly BoxItem[]) => {
-        changeItems(newItems)
-      }
-
-      return (
-        <div style={{ position: 'relative' }}>
-          <Box
-            viewMode={boolean('viewMode', false)}
-            items={items}
-            onChange={handler}
-            data={{
-              [statsWidgetKey]: {
-                value: 999,
-                title: 'Сроки',
-                badge: {
-                  percentage: -99,
-                  status: 'warning',
-                },
-                unit: 'суток',
-              },
-            }}
-            datasets={exampleDatasets}
-            parentName={select('parentName', ['switch', 'grid'], undefined)}
-          />
-        </div>
-      )
-    }
-
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <Wrapper />
-      </DndProvider>
-    )
-  })
+  .add('interactive', () => <BoxStory />)

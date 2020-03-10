@@ -7,7 +7,7 @@ import { PositionState } from '@/utils/tooltips'
 
 import { horizontalDirections, Tooltip, verticalDirections } from '.'
 
-const Wrapper = () => {
+const TooltipStory = () => {
   const [position, setPosition] = useState<PositionState>({ x: 10, y: 10 })
 
   const handleMouseMove = (event: React.MouseEvent) => {
@@ -29,4 +29,4 @@ const Wrapper = () => {
   )
 }
 
-storiesOf('components/Tooltip', module).add('interactive', () => <Wrapper />)
+storiesOf('components/Tooltip', module).add('interactive', () => <TooltipStory />)

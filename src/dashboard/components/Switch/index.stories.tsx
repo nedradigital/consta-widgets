@@ -56,35 +56,31 @@ const switchItem: SwitchItem = {
   params: {},
 }
 
+const SwitchStory = () => {
+  const [config, changeConfig] = React.useState(switchItem)
+
+  const handler = (displays: SwitchContent) => {
+    changeConfig({ ...config, displays })
+  }
+
+  const viewMode = boolean('viewMode', false)
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Switch
+        viewMode={viewMode}
+        onChange={handler}
+        data={{
+          datasetId: number('currentDisplay', 1, { min: 1, max: config.displays.length }),
+        }}
+        datasets={[]}
+        dataKey={config.id}
+        {...config}
+      />
+    </DndProvider>
+  )
+}
+
 storiesOf('dashboard/Switch', module)
   .addDecorator(blockCenteringDecorator({ height: 300, width: 600 }))
-  .add('interactive', () => {
-    const Wrapper = () => {
-      const [config, changeConfig] = React.useState(switchItem)
-
-      const handler = (displays: SwitchContent) => {
-        changeConfig({ ...config, displays })
-      }
-
-      const viewMode = boolean('viewMode', false)
-
-      return (
-        <Switch
-          viewMode={viewMode}
-          onChange={handler}
-          data={{
-            datasetId: number('currentDisplay', 1, { min: 1, max: config.displays.length }),
-          }}
-          datasets={[]}
-          dataKey={config.id}
-          {...config}
-        />
-      )
-    }
-
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <Wrapper />
-      </DndProvider>
-    )
-  })
+  .add('interactive', () => <SwitchStory />)
