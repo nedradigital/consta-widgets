@@ -102,7 +102,8 @@ export const Bar: React.FC<Props> = props => {
   )
   const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
   const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING[size])
-  const barSize = (columnDefaultSize + columnPadding) * uniqueColumnNames.length
+  const barSize =
+    columnDefaultSize * uniqueColumnNames.length + columnPadding * (uniqueColumnNames.length - 1)
   const zeroPoint = Math.ceil(valuesScale.scale(0))
 
   const groupSecondaryScale = scaleBand({
