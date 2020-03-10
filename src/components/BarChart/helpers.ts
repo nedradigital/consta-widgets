@@ -1,6 +1,7 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { flattenDeep, max, min, sum } from 'lodash'
 
+import { getEveryN } from '@/utils/array'
 import { Scaler } from '@/utils/scale'
 
 import { Column, Groups, SingleBarChartGroups, Size } from './'
@@ -164,3 +165,19 @@ export const transformBarChartGroupsToCommonGroups = (groups: SingleBarChartGrou
     ...group,
     values: group.values.map(item => ({ [item.colorGroupName]: item.value })),
   }))
+
+export const getEveryNTick = (items: readonly number[], n: number) => {
+  const isNegative = Math.min(...items) < 0
+  if (isNegative) {
+    const zeroIndex = items.findIndex(item => item === 0)
+    const positiveTicks = getEveryN(items.slice(zeroIndex), n)
+    const negativeTicks = positiveTicks
+      .slice(1)
+      .reverse()
+      .map(tick => tick * -1)
+
+    return [...negativeTicks, ...positiveTicks]
+  }
+
+  return getEveryN(items, n)
+}

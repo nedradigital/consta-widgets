@@ -1,7 +1,7 @@
 import { scaleLinear } from '@/utils/scale'
 
 import { Groups } from '../'
-import { getDataColumns, getDomain } from '../helpers'
+import { getDataColumns, getDomain, getEveryNTick } from '../helpers'
 
 const COLOR_GROUPS = {
   baton: 'black',
@@ -281,5 +281,23 @@ describe('getDataColumns', () => {
 describe('getDomain', () => {
   it('возвращает значение для домена', () => {
     expect(getDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
+  })
+})
+
+describe('getEveryNTick', () => {
+  it('получение каждой засечки', () => {
+    expect(getEveryNTick([0, 1, 2, 3, 4], 1)).toEqual([0, 1, 2, 3, 4])
+  })
+
+  it('получение каждой второй засечки', () => {
+    expect(getEveryNTick([0, 1, 2, 3, 4], 2)).toEqual([0, 2, 4])
+  })
+
+  it('получение каждой засечки, с учетом отрицательных значений', () => {
+    expect(getEveryNTick([-3, -2, -1, 0, 1, 2, 3], 1)).toEqual([-3, -2, -1, 0, 1, 2, 3])
+  })
+
+  it('получение каждой второй засечки, с учетом отрицательных значений', () => {
+    expect(getEveryNTick([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 2)).toEqual([-4, -2, 0, 2, 4])
   })
 })
