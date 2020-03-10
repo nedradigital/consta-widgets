@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Button } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
@@ -32,33 +33,39 @@ export const FilterTooltip: React.FC<Props> = ({
   onSave,
   handleFilterTogglerClick,
 }) => {
-  const iconRef = useRef<SVGSVGElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
   const [tooltipPosition, setTooltipPosition] = useState<PositionState>()
   const [selectedValues, setSelectedValues] = useState(values)
 
   useLayoutEffect(() => {
-    if (iconRef.current && isOpened) {
-      const { left, bottom } = iconRef.current.getBoundingClientRect()
+    if (buttonRef.current && isOpened) {
+      const { left, bottom } = buttonRef.current.getBoundingClientRect()
 
       setTooltipPosition({ x: left, y: bottom })
     }
-  }, [iconRef, isOpened])
+  }, [buttonRef, isOpened])
 
   useEffect(() => {
     setSelectedValues(values)
   }, [values])
 
+  useClickOutside([tooltipRef, buttonRef], onCancel)
+
   return (
     <>
-      <IconFilterSvg
-        ref={iconRef}
+      <button
+        ref={buttonRef}
         className={classnames(css.iconFilter, isOpened && css.isOpened, className)}
         onClick={() => handleFilterTogglerClick()}
-      />
+      >
+        <IconFilterSvg />
+      </button>
       {isOpened &&
         isDefinedPosition(tooltipPosition) &&
         ReactDOM.createPortal(
           <div
+            ref={tooltipRef}
             className={classnames(css.tooltip)}
             style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
           >
