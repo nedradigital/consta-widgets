@@ -6,7 +6,7 @@ import {
   SingleBarChartGroups,
 } from '@/components/BarChart'
 import { Data as DatePickerData } from '@/components/DatePicker'
-import { Data as DonutChartData, HalfDonutData } from '@/components/DonutChart'
+import { Data as DonutChartData } from '@/components/DonutChart'
 import { ImageItem } from '@/components/ImagesList'
 import { Data as LegendData } from '@/components/Legend'
 import { Line, Threshold } from '@/components/LinearChart'
@@ -90,11 +90,7 @@ export type DataMap = {
     status: Status
   }
   [DataType.Stats]: StatsData
-  [DataType.Donut]: {
-    data: DonutChartData
-    formatValueForTooltip?: FormatValue
-  } & WithColorGroups &
-    HalfDonutData
+  [DataType.Donut]: DonutChartData & WithColorGroups
   [DataType.BarChart]: BarChartData &
     WithColorGroups & {
       groups: SingleBarChartGroups
