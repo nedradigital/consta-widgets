@@ -8,12 +8,12 @@ import { ColorGroups, FormatValue } from '@/dashboard/types'
 import { PositionState } from '@/utils/tooltips'
 
 import { Size } from '../..'
-import { ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams, MouseActionParams } from '../Bar'
+import { ActiveBarParams, ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams } from '../Bar'
 
 import css from './index.css'
 
 type Props = {
-  barColumn: MouseActionParams
+  barColumn: ActiveBarParams
   isVertical: boolean
   isVisible: boolean
   svgParentRef: React.RefObject<SVGGElement>

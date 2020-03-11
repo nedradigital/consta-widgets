@@ -23,17 +23,18 @@ export type ColumnDetail = {
   value: number
   positionBegin: number
   positionEnd: number
+  columnSize: number
 }
 
 export type ColumnWithGeometry = GeometryParams & ColumnDetail
 
-export type MouseActionParams = {
+export type ActiveBarParams = {
   innerTranslate: number
   values: readonly ColumnWithGeometry[]
   params?: GeometryParams
 }
 
-type MouseAction = (column?: MouseActionParams) => void
+type MouseAction = (column?: ActiveBarParams) => void
 
 type Props = {
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
@@ -124,26 +125,19 @@ export const Bar: React.FC<Props> = props => {
     }
 
     if ((item.value > 0 && isAxisX) || (item.value < 0 && isAxisY)) {
-      return Math.ceil(valuesScale.scale(item.positionBegin)) || 0
+      return item.positionBegin || 0
     }
 
-    return Math.ceil(valuesScale.scale(item.positionEnd)) || 0
+    return item.positionEnd || 0
   }
 
   const columnDetailsData: ReadonlyArray<readonly ColumnWithGeometry[]> = columnDetails.map(
     columns =>
-      columns.map(column => {
-        const { positionBegin, positionEnd } = column
-
-        return {
-          ...column,
-          columnSize: Math.abs(
-            Math.ceil(valuesScale.scale(positionBegin)) - Math.ceil(valuesScale.scale(positionEnd))
-          ),
-          x: getRectPositionByAxis(column, 'x'),
-          y: getRectPositionByAxis(column, 'y'),
-        }
-      })
+      columns.map(column => ({
+        ...column,
+        x: getRectPositionByAxis(column, 'x'),
+        y: getRectPositionByAxis(column, 'y'),
+      }))
   )
 
   const getTextPositionOnX = (value: number, width: number) => {
