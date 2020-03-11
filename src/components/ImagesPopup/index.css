@@ -68,7 +68,7 @@
 .preview {
   position: absolute;
   right: 0;
-  bottom: 64px;
+  bottom: var(--space-5xl);
   left: 0;
 
   display: flex;
@@ -97,8 +97,8 @@
   }
 
   &.close {
-    top: 32px;
-    right: 32px;
+    top: var(--space-2xl);
+    right: var(--space-2xl);
   }
 
   &.toLeft,

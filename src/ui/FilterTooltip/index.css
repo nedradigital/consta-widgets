@@ -8,7 +8,7 @@
   width: calc-size(12);
   height: calc-size(12);
   margin: auto 0;
-  padding: 4px;
+  padding: var(--space-2xs);
 
   cursor: pointer;
 
@@ -30,7 +30,7 @@
 .tooltip {
   position: absolute;
 
-  padding: 13px;
+  padding: var(--space-s);
 
   border-radius: 6px;
   background-color: var(--bg-box);
@@ -40,22 +40,19 @@
 }
 
 .title {
-  font-size: 12px;
-  line-height: 17px;
-
-  color: #f6fbfd;
+  margin-bottom: var(--space-s);
 }
 
 .actionsRow {
   display: flex;
   justify-content: flex-end;
 
-  padding-top: 30px;
+  padding-top: var(--space-2xl);
 }
 
 .action {
   &:not(:last-child) {
-    margin-right: 5px;
+    margin-right: var(--space-2xs);
   }
 }
 

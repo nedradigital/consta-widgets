@@ -27,7 +27,7 @@
 
   width: 100%;
   height: 32px;
-  margin: 0 8px;
+  margin: 0 var(--space-xs);
 
   background-color: #ededed;
 }
@@ -69,13 +69,7 @@
 }
 
 .label {
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 20px;
-
   top: 0;
-
-  color: #000;
 
   transform: translateX(-50%);
 }

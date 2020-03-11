@@ -2,10 +2,6 @@
   --active-border-width: 2px;
 
   position: relative;
-
-  &:not(.isAdaptive) {
-    --base-size: 16;
-  }
 }
 
 .wrapper {

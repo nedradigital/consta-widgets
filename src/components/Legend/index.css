@@ -1,5 +1,7 @@
 .main {
-  margin-top: -8px;
+  --vertical-margin: var(--space-xs);
+
+  margin-top: calc(-1 * var(--vertical-margin));
 
   &.column {
     display: flex;
@@ -8,9 +10,9 @@
 }
 
 .item {
-  margin-top: 8px;
+  margin-top: var(--vertical-margin);
 }
 
 .row .item {
-  margin-right: calc-size(13);
+  margin-right: var(--space-s);
 }

@@ -19,11 +19,6 @@
     table-layout: fixed;
   }
 
-  & tbody {
-    font-size: calc-size(15);
-    line-height: calc-size(20);
-  }
-
   & tr:nth-child(even) {
     background: var(--table-even-row-background);
   }
@@ -42,8 +37,8 @@
 }
 
 .cell {
-  --column-padding-horizontal: calc-size(16);
-  --column-padding-vertical: calc-size(10);
+  --column-padding-horizontal: var(--space-m);
+  --column-padding-vertical: var(--space-s);
 
   padding-top: var(--column-padding-vertical);
   padding-right: calc(var(--column-padding-horizontal) + var(--resizer-width));
@@ -53,18 +48,12 @@
   vertical-align: top;
 
   &.isHeader {
-    font-size: calc-size(10);
-    line-height: calc-size(15);
-
     position: relative;
 
     padding-top: 0;
     padding-bottom: 0;
 
     vertical-align: middle;
-    text-transform: uppercase;
-
-    color: var(--text-color-70);
   }
 
   &:not(.isHeader) {
@@ -137,37 +126,6 @@
   height: calc-size(8);
 
   transform: translateX(100%) translateY(calc-size(1));
-}
-
-.circle {
-  display: inline-block;
-
-  width: calc-size(12);
-  height: calc-size(12);
-  margin-right: 8px;
-
-  border-radius: 50%;
-}
-
-.values {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-
-  margin-top: calc-size(16);
-  padding-top: calc-size(8);
-
-  border-top: 1px solid rgba(246, 251, 253, 0.28);
-}
-
-.valueName {
-  font-size: calc-size(11);
-
-  display: inline-block;
-
-  & + & {
-    margin-left: calc-size(20);
-  }
 }
 
 .selectedFiltersRow {

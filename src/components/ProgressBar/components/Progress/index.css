@@ -1,4 +1,4 @@
-.chartLine {
+.progress {
   display: block;
 
   width: 100%;
@@ -23,12 +23,16 @@
   &.isNotFull[value]::-webkit-progress-value {
     border-radius: 3px 0 0 3px;
   }
-}
 
-.chart {
-  padding-top: calc((var(--summary-size) - var(--chart-line-size)) / 2);
-}
+  &.sizeS {
+    --chart-line-size: calc-size(4);
+  }
 
-.progress {
-  width: 100%;
+  &.sizeM {
+    --chart-line-size: calc-size(12);
+  }
+
+  &.sizeL {
+    --chart-line-size: calc-size(20);
+  }
 }

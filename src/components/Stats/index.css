@@ -16,7 +16,10 @@
 
   justify-items: start;
 
-  align-items: end;
+  align-items: baseline;
+  grid-column-gap: var(--column-gap);
+
+  /* Лэйауты */
 
   &:--compact-title {
     grid-template-areas:
@@ -48,28 +51,24 @@
       'title title'
       'number unit'
       'badge badge';
-
-    align-items: baseline;
   }
 
+  /* Размеры */
+
   &:--extra-small {
-    font-size: calc-size(12);
-    line-height: calc-size(17);
+    --column-gap: var(--space-2xs);
   }
 
   &:--small {
-    font-size: calc-size(18);
-    line-height: calc-size(25);
+    --column-gap: var(--space-s);
   }
 
   &:--medium {
-    font-size: calc-size(20);
-    line-height: calc-size(28);
+    --column-gap: var(--space-m);
   }
 
   &:--large {
-    font-size: calc-size(24);
-    line-height: calc-size(34);
+    --column-gap: var(--space-m);
   }
 }
 
@@ -79,96 +78,41 @@
   @nest :--full-without-title &, :--compact-unit & {
     display: none;
   }
-
-  @nest :--extra-small & {
-    font-size: calc-size(14);
-    line-height: calc-size(20);
-  }
 }
 
 .number {
   grid-area: number;
-
-  font-weight: 700;
-
-  letter-spacing: 0.02em;
-
-  @nest :--extra-small & {
-    font-size: calc-size(24);
-    line-height: calc-size(34);
-
-    margin-right: calc-size(4);
-  }
-
-  @nest :--small &, :--medium & {
-    margin-right: calc-size(12);
-  }
-
-  @nest :--small & {
-    font-size: calc-size(48);
-    line-height: calc-size(62);
-  }
-
-  @nest :--medium & {
-    font-size: calc-size(72);
-    line-height: calc-size(82);
-  }
-
-  @nest :--large & {
-    font-size: calc-size(96);
-    line-height: calc-size(115);
-
-    margin-right: calc-size(27);
-  }
 }
 
 .badge {
+  position: relative;
   grid-area: badge;
-
-  font-weight: 700;
 
   @nest :--compact-title &, :--compact-unit & {
     display: none;
   }
 
-  /**
-   * Расчитываем отступ от нижнего края когда `bagde` отображается справа,
-   * чтобы выровнять его относительно визуального края `.number`.
-   */
-
-  @nest :--extra-small & {
-    padding: calc-size(2);
-  }
-
-  @nest :--small & {
-    padding: calc-size(4) calc-size(5);
-  }
-
-  @nest :--medium & {
-    padding: calc-size(6) calc-size(7);
-  }
-
-  @nest :--large & {
-    padding: calc-size(7);
-  }
+  /* Сдвигаем бэдж, чтобы его нижняя граница была по бэйзлайну числа слева */
 
   @nest :--extra-small:not(:--full-reversed) & {
-    margin-bottom: 0.79em;
+    bottom: 0.4em;
   }
 
-  @nest :--small:not(:--full-reversed) &, :--medium:not(:--full-reversed) & {
-    margin-bottom: 0.8em;
+  @nest :--small:not(:--full-reversed) & {
+    bottom: 0.5em;
+  }
+
+  @nest :--medium:not(:--full-reversed) & {
+    bottom: 0.5em;
   }
 
   @nest :--large:not(:--full-reversed) & {
-    margin-bottom: 1em;
+    bottom: 0.45em;
   }
 }
 
 .unit {
   grid-area: unit;
-
-  color: rgba(246, 251, 253, 0.6);
 
   @nest :--compact-title & {
     display: none;

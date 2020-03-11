@@ -1,0 +1,18 @@
+/* Исходная тема: https://github.com/gpn-prototypes/ui-kit/blob/master/src/themes/theme_space_gpn-default.css */
+
+/* stylelint-disable-next-line selector-class-pattern */
+:global(.theme_space_constructor-scaling) {
+  /* Отступы */
+  --space-3xs: calc-size(2);
+  --space-2xs: calc-size(4);
+  --space-xs: calc-size(8);
+  --space-s: calc-size(12);
+  --space-m: calc-size(16);
+  --space-l: calc-size(20);
+  --space-xl: calc-size(24);
+  --space-2xl: calc-size(32);
+  --space-3xl: calc-size(40);
+  --space-4xl: calc-size(48);
+  --space-5xl: calc-size(72);
+  --space-6xl: calc-size(96);
+}

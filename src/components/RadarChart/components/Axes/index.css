@@ -3,29 +3,17 @@
 }
 
 .label {
-  line-height: 1.3;
+  position: absolute;
 
   display: inline-block;
 
-  padding: 0 calc-size(2);
+  padding: 0 var(--space-3xs);
 
   transform: translate(-50%, -50%);
-
-  &.sizeS {
-    font-size: calc-size(10);
-  }
-
-  &.sizeM {
-    font-size: calc-size(12);
-    font-weight: bold;
-  }
 }
 
 .labelText {
   white-space: nowrap;
-
-  opacity: 0.15;
-  color: var(--axis-color);
 }
 
 .innerCircle {

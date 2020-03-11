@@ -1,8 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
+import { themeColorLight } from '@/utils/theme'
 import { Position } from '@/utils/tooltips'
 import { isDefinedPosition } from '@/utils/type-guards'
 
@@ -171,6 +173,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     <div
       ref={mainRef}
       className={classnames(
+        themeColorLight,
         css.main,
         directionClasses[direction.horizontal],
         directionClasses[direction.vertical]
@@ -178,7 +181,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       style={{ top: position.y, left: position.x }}
     >
       <div ref={ref} className={classnames(css.tooltip, className)}>
-        {children}
+        <Text tag="div" size="xs" view="primary">
+          {children}
+        </Text>
       </div>
     </div>,
     PARENT_ELEMENT

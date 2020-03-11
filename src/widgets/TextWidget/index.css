@@ -1,17 +1,30 @@
-.text {
+.main {
   position: relative;
 
   display: flex;
   align-items: center;
 }
 
-.content {
-  margin-right: calc-size(10);
-  margin-bottom: 0;
+.text {
+  white-space: pre-wrap;
+
+  &.isCropped {
+    display: -webkit-box;
+    -webkit-line-clamp: var(--line-clamp);
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+
+    &.isWithGradient {
+      mask-image: linear-gradient(to top, transparent 0, #fff 2em);
+    }
+  }
 }
 
 .toggleable {
   position: relative;
+
+  margin-left: calc-size(10);
 }
 
 .button {

@@ -18,9 +18,9 @@
 }
 
 .labels {
-  font-size: calc-size(11);
+  font-size: var(--size-text-xs);
 
-  color: var(--text-color-70);
+  color: var(--color-typo-secondary);
 
   & > :global(.domain) {
     stroke: none;
@@ -55,6 +55,6 @@
   fill: currentColor;
 
   &_y {
-    transform: translateY(calc-size(-16));
+    transform: translateY(calc(-1 * var(--space-m)));
   }
 }

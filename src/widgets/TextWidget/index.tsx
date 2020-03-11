@@ -1,4 +1,6 @@
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
+import { Text } from '@gpn-design/uikit'
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
@@ -7,7 +9,6 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
-import { sizes, StyleProps, Text } from '@/ui/Text'
 import { PositionState } from '@/utils/tooltips'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -37,6 +38,9 @@ type Params = {
   croppedWithGradient?: boolean
 }
 
+type StyleProps = Omit<React.ComponentProps<typeof Text>, 'children' | 'tag'>
+type Size = NonNullable<StyleProps['size']>
+
 type TextType = {
   [key in TypeNames]: {
     text: string
@@ -49,29 +53,29 @@ const textType: TextType = {
     text: 'Заголовок 1',
     props: {
       size: '3xl',
-      bold: true,
+      weight: 'bold',
     },
   },
   heading2: {
     text: 'Заголовок 2',
     props: {
       size: 'xl',
-      bold: true,
+      weight: 'bold',
     },
   },
   heading3: {
     text: 'Заголовок 3',
     props: {
       size: 'l',
-      bold: true,
+      weight: 'bold',
     },
   },
   heading4: {
     text: 'Заголовок 4',
     props: {
       size: 's',
-      bold: true,
-      uppercase: true,
+      weight: 'bold',
+      transform: 'uppercase',
     },
   },
   text1: {
@@ -84,38 +88,61 @@ const textType: TextType = {
     text: 'Текст 2',
     props: {
       size: 'xs',
-      secondary: true,
+      view: 'secondary',
     },
   },
   text3: {
     text: 'Текст 3',
     props: {
       size: 'xs',
-      secondary: true,
-      bold: true,
+      view: 'secondary',
+      weight: 'bold',
     },
   },
 }
 
-const iconSize = {
+const iconSize: Record<Size, string> = {
+  '2xs': css.sizeXS,
   xs: css.sizeXS,
   s: css.sizeS,
+  m: css.sizeL,
   l: css.sizeL,
   xl: css.sizeXL,
+  '2xl': css.sizeXL,
   '3xl': css.size3XL,
+  '4xl': css.size3XL,
+  '5xl': css.size3XL,
+  '6xl': css.size3XL,
 }
 
 export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
 
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { text, type, croppedLineCount, croppedWithGradient },
+  params: { text: paramsText, type, croppedLineCount, croppedWithGradient },
 }) => {
-  const ref = React.useRef<HTMLButtonElement>(null)
+  const textRef = React.useRef<HTMLDivElement>(null)
+  const buttonRef = React.useRef<HTMLButtonElement>(null)
   const tooltipRef = React.useRef<HTMLDivElement>(null)
 
+  const { height: textHeight, width: textWidth } = useComponentSize(textRef)
+
+  const [isVisibleGradient, changeIsVisibleGradient] = React.useState(false)
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
   const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
+
+  const text = data && data.text ? data.text : paramsText
+  const textProps = textType[type].props
+  const size = textProps.size || 's'
+
+  /* Определение видимости градиента */
+  React.useLayoutEffect(() => {
+    const element = textRef.current
+
+    if (element) {
+      changeIsVisibleGradient(element.offsetHeight < element.scrollHeight)
+    }
+  }, [text, croppedLineCount, croppedWithGradient, textHeight, textWidth])
 
   const onToggleClick = () => {
     if (data && data.onClick) {
@@ -125,41 +152,52 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
     setTooltipVisibility(!tooltipVisible)
   }
 
+  /* Позиционирование тултипа */
   React.useLayoutEffect(() => {
-    if (!ref.current) {
+    if (!buttonRef.current) {
       return
     }
 
-    const { top, left, width, height } = ref.current.getBoundingClientRect()
+    const {
+      top,
+      left,
+      width: buttonWidth,
+      height: buttonHeight,
+    } = buttonRef.current.getBoundingClientRect()
 
-    const x = left + width / 2
-    const y = top + height
+    const x = left + buttonWidth / 2
+    const y = top + buttonHeight
 
     if (tooltipPosition && tooltipPosition.x === x && tooltipPosition.y === y) {
       return
     }
 
     setTooltipPosition({ x, y })
-  }, [ref, tooltipVisible, tooltipPosition, setTooltipPosition])
+  }, [buttonRef, tooltipVisible, tooltipPosition, setTooltipPosition])
 
-  useClickOutside([ref, tooltipRef], () => setTooltipVisibility(false))
-
-  const textProps = textType[type].props
-  const size = textProps.size || sizes[0]
+  useClickOutside([buttonRef, tooltipRef], () => setTooltipVisibility(false))
 
   return (
-    <div className={css.text}>
+    <div
+      className={css.main}
+      style={{
+        ['--line-clamp' as string]: croppedLineCount,
+      }}
+    >
       <Text
+        tag="div"
         {...textProps}
-        croppedLineCount={croppedLineCount}
-        croppedWithGradient={croppedWithGradient}
-        className={css.content}
+        className={classnames(
+          css.text,
+          Boolean(croppedLineCount) && css.isCropped,
+          croppedWithGradient && isVisibleGradient && css.isWithGradient
+        )}
       >
-        {data && data.text ? data.text : text}
+        <div ref={textRef}>{text}</div>
       </Text>
       {data && (data.tooltip || data.onClick) && (
         <div className={css.toggleable}>
-          <button ref={ref} className={css.button} onClick={onToggleClick}>
+          <button ref={buttonRef} className={css.button} onClick={onToggleClick}>
             <IconSettings className={classnames(iconSize[size])} />
           </button>
           <Tooltip

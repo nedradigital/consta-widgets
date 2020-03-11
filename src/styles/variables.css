@@ -1,78 +1,39 @@
-/* Сделан запрет на root, что бы нельзя было его использовать, кроме текущего файла */
+/* Сделан запрет на root, чтобы нельзя было его использовать, кроме текущего файла */
 /* stylelint-disable-next-line */
 :root {
   --base-size: 16;
+
+  /* Цвета */
   --opaque-color: rgba(0, 0, 0, 0);
   --bg-color: rgb(0, 32, 51);
   --bg-color-white: rgba(255, 255, 255, 0.1);
-  --bg-color-white-semi: rgba(255, 255, 255, 0.05);
-  --bg-color-additional: #b1c4e3;
-  --bg-color-additional-opacity-30: rgba(177, 196, 227, 0.3);
-  --text-color: rgb(255, 255, 255);
-  --text-color-semi: rgba(255, 255, 255, 0.5);
-  --text-color-70: rgba(255, 255, 255, 0.7);
-  --text-color-black: #000;
-  --text-color-black-semi: rgba(0, 0, 0, 0.5);
-  --text-color-additional: #b1c4e3;
-  --text-color-additional-semi: rgba(177, 196, 227, 0.5);
-  --bg-element: #121a28;
-  --additional-border-color-opacity-67: rgba(177, 196, 227, 0.67);
-  --white-border-color-opacity-04: rgba(255, 255, 255, 0.04);
-  --white-border-color-opacity-10: rgba(255, 255, 255, 0.1);
-  --white-border-color-opacity-20: rgba(255, 255, 255, 0.2);
-  --white-border-color-opacity-29: rgba(255, 255, 255, 0.29);
-  --white-border-color: #fff;
-  --important-border-color: rgb(85, 146, 255);
-  --important-border-color-opacity-70: rgba(85, 146, 255, 0.7);
-  --normal-border-color: rgb(29, 128, 66);
-  --warning-border-color: rgb(255, 219, 31);
-  --warning-border-color-opacity-40: rgba(255, 219, 31, 0.4);
-  --warning-border-color-opacity-70: rgba(255, 219, 31, 0.7);
-  --danger-border-color: rgb(202, 29, 50);
-  --danger-border-color-opacity-70: rgba(202, 29, 50, 0.7);
-  --success-border-color: rgb(134, 255, 160);
-  --success-border-color-opacity-70: rgba(134, 255, 160, 0.7);
-  --bg-block: #0f1827;
-  --bg-well-passport: #161f2c;
-  --white-color-semi: rgba(255, 255, 255, 0.05);
-  --border-radius: 4px;
-  --color-important: rgb(85, 146, 255);
-  --color-important-opacity-10: rgba(85, 146, 255, 0.1);
-  --color-success: rgb(134, 255, 160);
-  --color-success-semi: rgb(134, 255, 160, 0.5);
   --bg-constructor-butttons: rgba(0, 0, 0, 0.5);
   --bg-constructor-butttons-hover: rgba(0, 0, 0, 0.8);
-  --main-font-family: 'Segoe UI', Arial, sans-serif;
-  --main-font-size: 11px;
-  --font-size-medium: 16px;
-  --progress-gradient: linear-gradient(
-    var(--opaque-color) 10%,
-    var(--color-important-opacity-10) 70%
-  );
-  --progress-transition: left 0.5s ease;
-  --fast-transition: 0.15s ease-out;
   --bg-box: #002d47;
-  --tooltip-arrow-size: 6px;
-  --tooltip-vertical-padding: 8px;
-  --tooltip-horizontal-padding: 8px;
+  --bg-widget: #0d2337;
+  --bg-dashboard: #061e31;
+  --bg-menu: #2d70ae;
+  --color-dashboard: #506573;
   --table-even-row-background: rgba(0, 0, 0, 0.05);
-  --scroll-bar-color: rgba(255, 255, 255, 0.7);
+
+  /* Размеры */
+  --resizer-width: 5px;
+
+  /* z-индексы */
   --z-filter--tooltip: 1;
   --z-multi-select: calc(var(--z-filter--tooltip) + 1);
-  --scrollbar-handle-size: 2px;
-  --scrollbar-padding: 4px;
-  --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
-  --resizer-width: 5px;
   --resizer-z: 1;
   --z-datepicker-date: 0;
   --z-datepicker-date-bg: calc(var(--z-datepicker-date) - 1);
   --z-datepicker-date-sub-bg: calc(var(--z-datepicker-date-bg) - 1);
   --z-box-wrapper: 1;
 
-  /* добавил переменные со скрина, после получения макетов нужно будет их поменять */
-  --bg-widget: #0d2337;
-  --bg-dashboard: #061e31;
-  --bg-menu: #2d70ae;
-  --widget-border: #213849;
-  --color-dashboard: #506573;
+  /* Анимации */
+  --fast-transition: 0.15s ease-out;
+
+  /* Скроллбар */
+  --scroll-bar-color: rgba(255, 255, 255, 0.7);
+  --scrollbar-handle-size: 2px;
+  --scrollbar-padding: 4px;
+  --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
 }

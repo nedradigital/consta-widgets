@@ -1,11 +1,9 @@
 import React from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Checkbox } from '@gpn-design/uikit'
+import { Checkbox, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'
-
-import { themeColorDark } from '@/utils/theme'
 
 import { SelectedOption } from '../SelectedOption'
 
@@ -45,7 +43,7 @@ export const MultiSelect: React.FC<Props> = ({
   }
 
   return (
-    <div className={classnames(themeColorDark, css.multiSelect)} ref={wrapperRef}>
+    <div className={css.multiSelect} ref={wrapperRef}>
       <div
         className={classnames(css.selectedList, isSelectOpened && css.isActive)}
         onClick={handleOnSelectClick}
@@ -60,7 +58,9 @@ export const MultiSelect: React.FC<Props> = ({
               )
           )
         ) : (
-          <p className={css.placeholder}>{placeholder}</p>
+          <Text tag="p" size="xs" className={css.placeholder}>
+            {placeholder}
+          </Text>
         )}
         <div className={css.iconArrow} />
       </div>

@@ -1,10 +1,11 @@
 .main {
-  --arrow-size: calc-size(var(--tooltip-arrow-size));
+  --arrow-size: 6px;
   --tooltip-positive-arrow-offset: calc(2 * var(--arrow-size));
   --tooltip-negative-arrow-offset: calc(-2 * var(--arrow-size));
   --arrow-side-size: calc(var(--arrow-size) / 2);
-  --tooltip-bg-color: #fff;
-  --tooltip-text-color: #002033;
+  --tooltip-vertical-padding: var(--space-xs);
+  --tooltip-horizontal-padding: var(--space-xs);
+  --tooltip-bg-color: var(--color-bg-default);
 
   position: absolute;
 
@@ -46,15 +47,11 @@
 }
 
 .tooltip {
-  font-size: calc-size(12);
-  line-height: calc-size(17);
-
   position: relative;
 
   max-width: 400px;
-  padding: calc-size(var(--tooltip-vertical-padding)) calc-size(var(--tooltip-horizontal-padding));
+  padding: var(--tooltip-vertical-padding) var(--tooltip-horizontal-padding);
 
-  color: var(--tooltip-text-color);
   border-radius: 4px;
   background-color: var(--tooltip-bg-color);
 

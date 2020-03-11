@@ -3,8 +3,6 @@
 }
 
 .title {
-  font-weight: bold;
-
   overflow: hidden;
 
   white-space: nowrap;
@@ -13,7 +11,7 @@
 
 .divider {
   height: 1px;
-  margin: calc-size(8) calc-size(-1 * var(--tooltip-horizontal-padding));
+  margin: var(--space-xs) calc(-1 * var(--tooltip-horizontal-padding));
 
   background-color: rgba(0, 39, 61, 0.15);
 }
@@ -21,20 +19,9 @@
 .content {
   display: grid;
 
-  grid-row-gap: calc-size(9);
+  grid-row-gap: var(--space-s);
+  grid-column-gap: var(--space-s);
 
   width: 100%;
   grid-template-columns: 1fr auto;
-}
-
-.label {
-  padding-right: calc-size(12);
-
-  &.withTitle {
-    padding-left: calc-size(8);
-  }
-}
-
-.value {
-  font-weight: bold;
 }

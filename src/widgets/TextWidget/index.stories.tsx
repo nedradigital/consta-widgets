@@ -40,3 +40,31 @@ storiesOf('widgets/TextWidget', module)
       }}
     />
   ))
+  .add('с переносами', () => (
+    <TextWidgetContent
+      data={{ text: '' }}
+      params={{
+        text: text(
+          'text',
+          'Текст, который мы хотим перенести вот тут\nВот тут вот да и тут\nНу думаю смысл понятен'
+        ),
+        type: select('type', typeNames, defaultParams.type),
+        croppedLineCount: 0,
+        croppedWithGradient: false,
+      }}
+    />
+  ))
+  .add('обрезанный градиентом', () => (
+    <TextWidgetContent
+      data={{ text: '' }}
+      params={{
+        text: text(
+          'text',
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
+        ),
+        type: select('type', typeNames, defaultParams.type),
+        croppedLineCount: number('croppedLineCount', 4),
+        croppedWithGradient: boolean('croppedWithGradient', true),
+      }}
+    />
+  ))

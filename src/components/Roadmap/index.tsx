@@ -1,5 +1,6 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
+import { Text } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
@@ -303,6 +304,18 @@ const Table: React.FC<TableProps> = ({ children, titles, className, renderTitle,
 const TableWithStringTitles = Table as React.FC<TableProps<TableColumn>>
 const TableWithMonthTitles = Table as React.FC<TableProps<MonthItem>>
 
+const ThText: React.FC = ({ children }) => (
+  <Text tag="span" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+    {children}
+  </Text>
+)
+
+const TdText: React.FC = ({ children }) => (
+  <Text tag="span" size="m" view="primary">
+    {children}
+  </Text>
+)
+
 export const Roadmap: React.FC<Props> = props => {
   const { currentDay, data, colorGroups, titles, startDate, endDate, filters } = props
 
@@ -434,7 +447,7 @@ export const Roadmap: React.FC<Props> = props => {
                     className={css.iconFilter}
                   />
                 )}
-                {title}
+                <ThText>{title}</ThText>
               </div>
             </th>
           )}
@@ -455,8 +468,12 @@ export const Roadmap: React.FC<Props> = props => {
           <tbody>
             {filteredData.map(item => (
               <tr key={item.firstColumn}>
-                <td>{item.firstColumn}</td>
-                <td>{item.secondColumn}</td>
+                <td>
+                  <TdText>{item.firstColumn}</TdText>
+                </td>
+                <td>
+                  <TdText>{item.secondColumn}</TdText>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -477,7 +494,7 @@ export const Roadmap: React.FC<Props> = props => {
                       </div>
                     </div>
                   ) : null}
-                  {item.value}
+                  <ThText>{item.value}</ThText>
                 </div>
               </th>
             )

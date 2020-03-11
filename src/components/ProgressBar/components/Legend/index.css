@@ -5,19 +5,17 @@
   justify-content: space-between;
 
   width: 100%;
-  min-height: calc-size(4);
-  padding-top: calc-size(5);
-
-  color: var(--text-color);
+  margin-top: calc(-1 * var(--space-3xs));
 }
 
 .marking {
   position: absolute;
-  top: calc-size(4);
 
   display: flex;
   align-items: center;
   flex-direction: column;
+
+  white-space: nowrap;
 
   transform: translateX(-50%);
 
@@ -35,7 +33,6 @@
 
   &.isHidden {
     position: relative;
-    top: 0;
 
     visibility: hidden;
   }
@@ -46,14 +43,5 @@
   height: calc-size(4);
 
   opacity: 0.5;
-  background-color: currentColor;
-}
-
-.markingLabel {
-  font-size: calc-size(11);
-  line-height: calc-size(15);
-
-  white-space: nowrap;
-
-  opacity: var(--text-opacity);
+  background-color: #d5dde2;
 }

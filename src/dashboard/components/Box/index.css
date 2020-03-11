@@ -40,7 +40,7 @@
 
   white-space: nowrap;
 
-  color: var(--text-color-70);
+  color: var(--color-typo-secondary);
   border-radius: 4px;
   background: var(--bg-constructor-butttons);
 

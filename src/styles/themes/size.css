@@ -1,0 +1,26 @@
+/* Исходная тема: https://github.com/gpn-prototypes/ui-kit/blob/master/src/themes/theme_size_gpn-default.css */
+
+/* stylelint-disable-next-line selector-class-pattern */
+:global(.theme_size_constructor-scaling) {
+  --size-text-base: var(--size-text-xs);
+
+  /* Размер текста */
+  --size-text-2xs: calc-size(10);
+  --size-text-xs: calc-size(12);
+  --size-text-s: calc-size(14);
+  --size-text-m: calc-size(16);
+  --size-text-l: calc-size(18);
+  --size-text-xl: calc-size(20);
+  --size-text-2xl: calc-size(24);
+  --size-text-3xl: calc-size(32);
+  --size-text-4xl: calc-size(48);
+  --size-text-5xl: calc-size(72);
+  --size-text-6xl: calc-size(96);
+
+  /* Межстрочный интервал */
+  --line-height-text-2xs: 1em;
+  --line-height-text-xs: 1.2em;
+  --line-height-text-s: 1.4em;
+  --line-height-text-m: 1.5em;
+  --line-height-text-l: 1.6em;
+}

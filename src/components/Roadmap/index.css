@@ -1,8 +1,6 @@
 .main {
   --label-column-width: calc-size(186);
   --separate-line-color: rgba(255, 255, 255, 0.1);
-  --bar-height: calc-size(8);
-  --bar-top: calc-size(10);
 
   display: grid;
 
@@ -57,27 +55,18 @@
   background: none;
 
   & td {
-    font-size: calc-size(16);
-    line-height: calc-size(22);
-
-    padding: calc-size(10) 0;
+    padding: var(--space-xs) 0;
 
     text-align: center;
     vertical-align: top;
   }
 
   & th {
-    font-size: calc-size(11);
-    font-weight: bold;
-    line-height: calc-size(15);
+    font-weight: normal;
 
     width: 50px;
-    padding: calc-size(12) calc-size(16);
+    padding: var(--space-s) var(--space-m);
 
-    text-align: center;
-    text-transform: uppercase;
-
-    color: #f6fbfd;
     border-bottom: 1px solid var(--separate-line-color);
 
     &.isSubTitle {
@@ -116,7 +105,7 @@
 
     & tbody td:first-child,
     & thead th:first-child {
-      padding-left: calc-size(16);
+      padding-left: var(--space-m);
 
       text-align: left;
     }
@@ -131,9 +120,9 @@
 
 .chartLine {
   position: absolute;
-  top: var(--bar-top);
+  top: calc-size(10);
 
-  height: var(--bar-height);
+  height: calc-size(8);
 
   &.isInteractive {
     cursor: pointer;
@@ -206,7 +195,7 @@
 
 .monthTitleWrapper {
   width: 100%;
-  padding: calc-size(12) 0;
+  padding: var(--space-s) 0;
 
   text-align: center;
 }
@@ -226,18 +215,16 @@
 
 .periodText {
   font-size: calc-size(8);
-  font-weight: normal;
-  line-height: calc-size(11);
+  line-height: calc-size(10);
 
   position: absolute;
   top: 0;
   left: 1px;
 
-  width: calc-size(31);
-  height: calc-size(10);
+  padding: 0 var(--space-2xs);
 
   white-space: nowrap;
 
-  color: #f6fbfd;
-  background: var(--separate-line-color);
+  color: var(--color-typo-primary);
+  background: var(--color-control-bg-ghost);
 }

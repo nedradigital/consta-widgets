@@ -87,12 +87,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
           ))}
         </div>
         <div className={css.preview}>
-          <ImagesList
-            images={images}
-            activeItem={currentImageIdx}
-            isAdaptive={false}
-            onClick={setCurrentImageIdx}
-          />
+          <ImagesList images={images} activeItem={currentImageIdx} onClick={setCurrentImageIdx} />
         </div>
         {currentImageIdx > 0 && (
           <button type="button" className={classnames(css.button, css.toLeft)} onClick={goLeft}>

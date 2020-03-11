@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import classnames from 'classnames'
+import { Text } from '@gpn-design/uikit'
 
 import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
@@ -44,7 +44,9 @@ const defaultShow: ShowPositions = {
 const PADDING = 6
 
 const renderUnit = (className: string, unit: string) => (
-  <div className={classnames(css.unit, className)}>{unit}</div>
+  <Text tag="div" size="xs" view="secondary" className={className}>
+    {unit}
+  </Text>
 )
 
 export const Axis: React.FC<Props> = ({
@@ -122,7 +124,7 @@ export const Axis: React.FC<Props> = ({
         paddingBottom: !showUnitBottom && !showPositions.bottom ? padding : 0,
       }}
     >
-      {unit && showUnitLeft && renderUnit(css.topLeft, unit)}
+      {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit)}
       <div className={css.topTicks}>{showPositions.top && renderHorizontal('top')}</div>
       <div className={css.rightTicks}>{showPositions.right && renderVertical('right')}</div>
       <div className={css.graph}>{children}</div>

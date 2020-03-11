@@ -108,7 +108,7 @@
   box-sizing: content-box;
   width: var(--button-size);
 
-  color: var(--text-color-70);
+  color: var(--color-typo-secondary);
   border: 1px solid currentColor;
 
   transition: color var(--fast-transition);
@@ -148,14 +148,14 @@
   }
 
   &:disabled {
-    color: var(--text-color-semi);
+    color: var(--color-typo-ghost);
   }
 
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover {
-      color: var(--text-color);
+      color: var(--color-typo-primary);
       background: rgba(86, 185, 242, 0.3);
     }
   }

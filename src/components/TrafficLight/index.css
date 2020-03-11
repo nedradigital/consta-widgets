@@ -46,38 +46,12 @@
 }
 
 .text {
-  &:--small {
-    font-size: calc-size(10);
-    line-height: calc-size(14);
-
-    padding: calc-size(4) calc-size(8);
-
-    border-radius: 4px;
-  }
-
-  &:--medium {
-    font-size: calc-size(16);
-    line-height: calc-size(22);
-
-    padding: calc-size(9) calc-size(12);
-
-    border-radius: 5px;
-  }
-
   &.isEmpty {
     border: 1px solid rgba(246, 251, 253, 0.5);
   }
 }
 
-.tooltipTitle {
-  font-weight: bold;
-
-  margin-top: calc-size(2);
-
-  text-transform: uppercase;
-}
-
 .tooltipContent {
   max-width: calc-size(324);
-  margin-top: calc-size(5);
+  margin-top: var(--space-2xs);
 }

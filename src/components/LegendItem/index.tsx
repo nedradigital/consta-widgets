@@ -1,3 +1,4 @@
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/contexts'
@@ -30,7 +31,7 @@ const DOT_SIZE = 12
 const sizeClass = {
   xs: css.sizeXS,
   s: css.sizeS,
-  m: css.sizeM,
+  m: undefined,
 }
 
 export const LegendItem: React.FC<Props> = ({
@@ -68,7 +69,14 @@ export const LegendItem: React.FC<Props> = ({
           style={{ background: color, ...dotStyle }}
         />
       </div>
-      <span className={classnames(css.text, shouldCropText && css.isSeparating)}>{children}</span>
+      <Text
+        tag="span"
+        size={fontSize}
+        view="primary"
+        className={classnames(css.text, shouldCropText && css.isSeparating)}
+      >
+        {children}
+      </Text>
     </div>
   )
 }

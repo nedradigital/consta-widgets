@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import classnames from 'classnames'
+import { Text } from '@gpn-design/uikit'
 
 import { useBaseSize } from '@/contexts/baseSize'
 
@@ -93,13 +93,7 @@ export const PyramidChart: React.FC<Props> = ({
   })
 
   return (
-    <div
-      className={classnames(
-        css.main,
-        { xs: css.sizeXS, s: css.sizeS, m: css.sizeM }[fontSize],
-        constraint && css.isConstraint
-      )}
-    >
+    <div className={css.main}>
       <div
         className={css.svgWrapper}
         style={{ width: pyramidWidth, height: containerHeightResponsive }}
@@ -121,9 +115,21 @@ export const PyramidChart: React.FC<Props> = ({
         <tbody>
           {items.map((item, index) => (
             <tr key={index}>
-              <td style={{ width: pyramidWidthHalf }}>{item.value}</td>
+              <td style={{ width: pyramidWidthHalf }}>
+                <Text tag="div" size="2xl" weight="bold" spacing="xs" view="primary" align="right">
+                  {item.value}
+                </Text>
+              </td>
               <td>
-                <div className={css.textEllipsis}>{item.text}</div>
+                <Text
+                  tag="span"
+                  size={fontSize}
+                  view="primary"
+                  lineHeight={constraint ? 'xs' : undefined}
+                  className={css.textEllipsis}
+                >
+                  {item.text}
+                </Text>
               </td>
             </tr>
           ))}

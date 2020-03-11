@@ -73,7 +73,7 @@
 
   vertical-align: middle;
 
-  background-color: #fff;
+  background-color: var(--color-bg-default);
   background-repeat: no-repeat;
   background-position: center center;
 
@@ -95,15 +95,11 @@
 }
 
 .content {
-  font-size: calc-size(12);
-  line-height: calc-size(17);
-
   width: calc-size(315);
-  padding: calc-size(11) calc-size(8);
+  padding: var(--space-s) var(--space-xs);
 
-  color: #002033;
   border-radius: 4px 4px 4px 0;
-  background: #fff;
+  background: var(--color-bg-default);
 
   &.dates {
     width: auto;
@@ -121,12 +117,10 @@
 
   width: calc-size(12);
   height: calc-size(12);
-  margin-top: calc-size(-2);
 
   vertical-align: middle;
 
-  border-radius: 100px;
-  background: black;
+  border-radius: 100%;
 
   &.isPlan {
     opacity: 0.6;
@@ -138,24 +132,13 @@
 }
 
 .label {
-  display: inline-flex;
+  display: inline-block;
 
-  margin: 0 4px;
-}
-
-.title {
-  font-size: calc-size(11);
-  font-weight: bold;
-  line-height: calc-size(15);
-
-  margin-bottom: 5px;
-
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  margin: 0 var(--space-2xs);
 }
 
 .dateBlock {
   & + & {
-    margin-top: 4px;
+    margin-top: var(--space-2xs);
   }
 }

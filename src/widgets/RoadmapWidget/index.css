@@ -6,10 +6,6 @@
   }
 }
 
-.text {
-  display: inline-flex;
-}
-
 .button {
   cursor: pointer;
 }
@@ -25,8 +21,6 @@
 
   transition: transform 0.3s;
   transform: rotate(180deg);
-
-  fill: var(--text-color);
 
   &.isOpened {
     transform: rotate(0);

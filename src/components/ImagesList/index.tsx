@@ -15,11 +15,10 @@ export type ImageItem = {
 type Props = {
   images: readonly ImageItem[]
   activeItem?: number
-  isAdaptive?: boolean
   onClick: (idx: number) => void
 }
 
-export const ImagesList: React.FC<Props> = ({ images, activeItem, isAdaptive = true, onClick }) => {
+export const ImagesList: React.FC<Props> = ({ images, activeItem, onClick }) => {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const { width: wrapperWidth } = useComponentSize(wrapperRef)
@@ -45,7 +44,7 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, isAdaptive = t
   }
 
   return (
-    <div className={classnames(css.main, isAdaptive && css.isAdaptive)}>
+    <div className={css.main}>
       <div className={css.wrapper} ref={wrapperRef}>
         <div
           ref={listRef}
