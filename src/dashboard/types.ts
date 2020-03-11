@@ -62,6 +62,7 @@ export enum DataType {
   DatePicker,
   RadarChart,
   Roadmap,
+  Image,
   Images,
   Button,
   ChoiceGroup,
@@ -142,6 +143,7 @@ export type DataMap = {
       legend?: LegendData
     } & WithColorGroups
   >
+  [DataType.Image]: string
   [DataType.Images]: readonly ImageItem[]
   [DataType.Button]: {
     content: React.ReactNode
