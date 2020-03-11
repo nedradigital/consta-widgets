@@ -10,7 +10,6 @@ import { defaultParams, DonutChartWidget, DonutChartWidgetContent } from '.'
 
 const halfDonutData = {
   ...progressDonutData,
-  halfDonut: 'right',
   textData: object('textData', {
     title: 'всего',
     value: '90',
@@ -38,6 +37,9 @@ storiesOf('widgets/DonutChartWidget', module)
         ...object('data', halfDonutData),
         formatValueForTooltip,
       }}
-      params={object('params', defaultParams)}
+      params={object('params', {
+        ...defaultParams,
+        halfDonut: 'right',
+      })}
     />
   ))

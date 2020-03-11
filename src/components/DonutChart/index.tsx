@@ -15,25 +15,23 @@ import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, Text } from './components/Text'
 import css from './index.css'
 
-export type Data = ReadonlyArray<{
-  name: string
-  colorGroupName: string
-  sections: ReadonlyArray<{
-    value: number | null
-    showValue?: number
+export type Data = {
+  data: ReadonlyArray<{
+    name: string
+    colorGroupName: string
+    sections: ReadonlyArray<{
+      value: number | null
+      showValue?: number
+    }>
   }>
-}>
-
-export type HalfDonutData = {
-  halfDonut?: HalfDonut
+  colorGroups: ColorGroups
   textData?: TextData
+  formatValueForTooltip?: FormatValue
 }
 
-type Props = {
-  data: Data
-  colorGroups: ColorGroups
-  formatValueForTooltip?: FormatValue
-} & HalfDonutData
+type Props = Data & {
+  halfDonut?: HalfDonut
+}
 
 type TooltipDataState = ReadonlyArray<{
   value: string
