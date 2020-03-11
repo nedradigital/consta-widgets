@@ -87,30 +87,26 @@ const gridItem: GridItem = {
   params: {},
 }
 
+const GridStory = () => {
+  const [config, changeConfig] = React.useState(gridItem)
+
+  const handler = (newGridContent: GridContent) => {
+    changeConfig({ ...config, grid: newGridContent })
+  }
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Grid
+        viewMode={boolean('viewMode', false)}
+        onChange={handler}
+        data={{}}
+        datasets={[]}
+        {...config}
+      />
+    </DndProvider>
+  )
+}
+
 storiesOf('dashboard/Grid', module)
   .addDecorator(blockCenteringDecorator({ width: 600 }))
-  .add('interactive', () => {
-    const Wrapper = () => {
-      const [config, changeConfig] = React.useState(gridItem)
-
-      const handler = (newGridContent: GridContent) => {
-        changeConfig({ ...config, grid: newGridContent })
-      }
-
-      return (
-        <Grid
-          viewMode={boolean('viewMode', false)}
-          onChange={handler}
-          data={{}}
-          datasets={[]}
-          {...config}
-        />
-      )
-    }
-
-    return (
-      <DndProvider backend={HTML5Backend}>
-        <Wrapper />
-      </DndProvider>
-    )
-  })
+  .add('interactive', () => <GridStory />)

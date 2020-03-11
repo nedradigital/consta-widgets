@@ -15,33 +15,29 @@ import {
   renderExampleObjectPoint,
   renderExamplePoint,
 } from './example-data'
-import { GinfPrototype } from './example-data/ginf-prototype'
+import { GinfPrototype as MapGinfPrototypeStory } from './example-data/ginf-prototype'
+
+const MapTsubPrototypeStory = () => {
+  const [selectedObjectId, setSelectedObjectId] = useState()
+
+  return (
+    <Map
+      allowClickOnSelectedObject={boolean('allowClickOnSelectedObject', false)}
+      locations={EXAMPLE_LOCATIONS}
+      points={EXAMPLE_POINTS}
+      connectionPoints={EXAMPLE_CONNECTION_POINTS}
+      padding={object('padding', [50, 160])}
+      selectedObjectId={selectedObjectId}
+      onSelectedObjectIdChange={setSelectedObjectId}
+      renderPoint={renderExamplePoint}
+      renderObjectPoint={renderExampleObjectPoint}
+      renderConnectionPoint={renderExampleConnectionPoint}
+      renderConnectionLine={renderExampleConnectionLine}
+    />
+  )
+}
 
 storiesOf('components/Map', module)
   .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
-  .add('Пример для ЦУБ-а', () => {
-    const Wrapper = () => {
-      const [selectedObjectId, setSelectedObjectId] = useState()
-
-      return (
-        <Map
-          allowClickOnSelectedObject={boolean('allowClickOnSelectedObject', false)}
-          locations={EXAMPLE_LOCATIONS}
-          points={EXAMPLE_POINTS}
-          connectionPoints={EXAMPLE_CONNECTION_POINTS}
-          padding={object('padding', [50, 160])}
-          selectedObjectId={selectedObjectId}
-          onSelectedObjectIdChange={setSelectedObjectId}
-          renderPoint={renderExamplePoint}
-          renderObjectPoint={renderExampleObjectPoint}
-          renderConnectionPoint={renderExampleConnectionPoint}
-          renderConnectionLine={renderExampleConnectionLine}
-        />
-      )
-    }
-
-    return <Wrapper />
-  })
-  .add('Пример для Инфопанелей', () => {
-    return <GinfPrototype />
-  })
+  .add('Пример для ЦУБ-а', () => <MapTsubPrototypeStory />)
+  .add('Пример для Инфопанелей', () => <MapGinfPrototypeStory />)
