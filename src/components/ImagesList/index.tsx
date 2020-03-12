@@ -45,6 +45,11 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, onClick }) => 
 
   return (
     <div className={css.main}>
+      {offset > 0 && (
+        <button className={classnames(css.button, css.toLeft)} onClick={handleMove('left')}>
+          <IconForwardSvg />
+        </button>
+      )}
       <div className={css.wrapper} ref={wrapperRef}>
         <div
           ref={listRef}
@@ -65,14 +70,9 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, onClick }) => 
           ))}
         </div>
       </div>
-      {offset > 0 && (
-        <button className={classnames(css.button, css.toLeft)} onClick={handleMove('left')}>
-          <IconForwardSvg className={css.icon} />
-        </button>
-      )}
       {offset + wrapperWidth < scrollWidth && (
         <button className={classnames(css.button, css.toRight)} onClick={handleMove('right')}>
-          <IconForwardSvg className={css.icon} />
+          <IconForwardSvg />
         </button>
       )}
     </div>
