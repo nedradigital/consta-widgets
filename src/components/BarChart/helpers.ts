@@ -1,6 +1,8 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { flattenDeep, max, min, sum } from 'lodash'
 
+import { Scaler } from '@/utils/scale'
+
 import { Column, Groups, SingleBarChartGroups, Size } from './'
 import { ColumnDetail } from './components/Bar'
 
@@ -12,6 +14,7 @@ type DataColumns = ReadonlyArray<{
 }>
 
 export const CHART_MIN_HEIGHT = 220
+const BAR_MIN_SIZE = 5
 
 export const GROUP_INNER_PADDING: Record<Size, number> = {
   s: 8,
@@ -24,41 +27,8 @@ export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
   return shouldFlip ? [size, 0] : [0, size]
 }
 
-export const getColumnDetails = ({
-  column,
-  columnName,
-  categories,
-}: {
-  column: Column
-  columnName: string
-  categories: readonly string[]
-}): readonly ColumnDetail[] => {
-  return categories
-    .filter(category => isDefined(column[category]))
-    .reduce((previousValue, category, currentIndex) => {
-      const value = column[category]
-      if (value === undefined) {
-        return previousValue
-      }
-
-      const positionBegin =
-        currentIndex === 0 ? 0 : previousValue[currentIndex - 1]?.positionEnd || 0
-      const positionEnd = positionBegin + value
-
-      const result = {
-        category,
-        columnName,
-        positionBegin,
-        positionEnd,
-        value,
-      }
-
-      return previousValue.concat(result)
-    }, [] as readonly ColumnDetail[])
-}
-
-export const getTotalByColumn = (columns: readonly ColumnDetail[]) =>
-  sum(columns.map(column => column.value)) || 0
+export const getTotalByColumn = (column: Column) =>
+  sum(Object.keys(column).map(key => column[key])) || 0
 
 export const getNormalizedValue = ({
   maxValue,
@@ -70,35 +40,78 @@ export const getNormalizedValue = ({
   total: number
 }) => Math.round((maxValue * value) / total)
 
-export const normalizeDetails = ({
-  details,
+export const getColumnDetails = ({
+  column,
+  columnName,
+  categories,
+  valuesScale,
   maxValue,
   hasRatio,
 }: {
-  details: ReadonlyArray<readonly ColumnDetail[]>
+  column: Column
+  columnName: string
+  categories: readonly string[]
+  valuesScale: Scaler<number>
   maxValue: number
   hasRatio?: boolean
-}): ReadonlyArray<readonly ColumnDetail[]> => {
-  if (!hasRatio) {
-    return details
-  }
+}): readonly ColumnDetail[] => {
+  const zeroPoint = Math.ceil(valuesScale.scale(0))
 
-  return details.map(columns => {
-    const total = getTotalByColumn(columns)
+  return categories
+    .filter(category => isDefined(column[category]))
+    .map(category => {
+      const value = column[category]
 
-    return columns.map(column => {
+      if (!hasRatio || !value) {
+        return {
+          value,
+          normalizedValue: value,
+          category,
+        }
+      }
+
+      const total = getTotalByColumn(column)
+
       return {
-        ...column,
-        positionBegin: getNormalizedValue({ maxValue, value: column.positionBegin, total }),
-        positionEnd: getNormalizedValue({ maxValue, value: column.positionEnd, total }),
+        value,
+        normalizedValue: getNormalizedValue({ maxValue, value, total }),
+        category,
       }
     })
-  })
+    .reduce((previousValue, curr, currentIndex) => {
+      const { value, normalizedValue, category } = curr
+
+      if (value === undefined || normalizedValue === undefined) {
+        return previousValue
+      }
+
+      const positionBegin = previousValue[currentIndex - 1]?.positionEnd || zeroPoint
+      const positionEnd = Math.ceil(
+        positionBegin + (zeroPoint - valuesScale.scale(normalizedValue))
+      )
+      const size = Math.abs(positionBegin - positionEnd)
+      const columnSize = size < BAR_MIN_SIZE && value !== 0 ? BAR_MIN_SIZE : size
+
+      const result = {
+        category,
+        columnName,
+        positionBegin,
+        positionEnd: zeroPoint > 0 ? positionBegin - columnSize : positionBegin + columnSize,
+        columnSize,
+        value,
+      }
+
+      return previousValue.concat(result)
+    }, [] as readonly ColumnDetail[])
 }
 
-export const getDomain = (dataColumns: DataColumns): NumberRange => {
-  const numbers = flattenDeep<number>(
-    dataColumns.map(column => column.columnDetails.map(details => getTotalByColumn(details)))
+export const getDomain = (groups: Groups): NumberRange => {
+  const numbers = flattenDeep(
+    groups.map(group =>
+      group.values.map(value =>
+        sum(Object.keys(value).map(key => (isDefined(value[key]) ? value[key] : 0)))
+      )
+    )
   )
 
   const minNumber = min(numbers) || 0
@@ -115,9 +128,15 @@ export const getDomain = (dataColumns: DataColumns): NumberRange => {
 export const getDataColumns = ({
   categories,
   groups,
+  valuesScale,
+  maxValue,
+  hasRatio,
 }: {
   categories: readonly string[]
   groups: Groups
+  maxValue: number
+  hasRatio?: boolean
+  valuesScale: Scaler<number>
 }): DataColumns =>
   groups
     .map(group => ({
@@ -132,6 +151,9 @@ export const getDataColumns = ({
             column: group.values[Number(name)],
             columnName: name,
             categories,
+            valuesScale,
+            maxValue,
+            hasRatio,
           })
         )
         .filter(isDefined),

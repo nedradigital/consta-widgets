@@ -10,7 +10,7 @@ import { getEveryN } from '@/utils/array'
 import { scaleBand, scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
-import { Bar } from './components/Bar'
+import { ActiveBarParams, Bar } from './components/Bar'
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
@@ -18,7 +18,6 @@ import {
   getDomain,
   getRange,
   GROUP_INNER_PADDING,
-  normalizeDetails,
   OUTER_PADDING,
 } from './helpers'
 import css from './index.css'
@@ -83,7 +82,7 @@ export const BarChart: React.FC<Props> = props => {
     unitPosition = 'none',
     size = 'm',
   } = props
-  const [activeBar, setActiveBar] = useState()
+  const [activeBar, setActiveBar] = useState<ActiveBarParams>()
   const [groupsSizes, setGroupsSizes] = useState<Record<string, number>>({})
 
   const ref = useRef(null)
@@ -95,9 +94,7 @@ export const BarChart: React.FC<Props> = props => {
 
   const groupsDomain = groups.map(group => group.groupName)
 
-  const dataColumns = getDataColumns({ groups, categories })
-
-  const valuesDomain = getDomain(dataColumns)
+  const valuesDomain = getDomain(groups)
   const isNegative = Math.min(...valuesDomain) < 0
   const paddingCount = isNegative ? 2 : 1
   const padding =
@@ -115,6 +112,14 @@ export const BarChart: React.FC<Props> = props => {
   const valuesScale = scaleLinear({
     domain: valuesDomain,
     range: getRange(isVertical ? svgHeight : svgWidth, isVertical),
+  })
+
+  const dataColumns = getDataColumns({
+    groups,
+    categories,
+    valuesScale,
+    hasRatio: props.isMultiBar ? props.hasRatio : false,
+    maxValue: valuesDomain[1],
   })
 
   const getMinSize = () => {
@@ -193,11 +198,7 @@ export const BarChart: React.FC<Props> = props => {
               <Bar
                 key={idx}
                 groupName={bar.groupName}
-                columnDetails={normalizeDetails({
-                  details: bar.columnDetails,
-                  maxValue: valuesDomain[1],
-                  hasRatio: props.isMultiBar ? props.hasRatio : false,
-                })}
+                columnDetails={bar.columnDetails}
                 isVertical={isVertical}
                 groupScale={groupScale}
                 valuesScale={valuesScale}
