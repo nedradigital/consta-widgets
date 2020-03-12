@@ -54,14 +54,8 @@ type Props = {
 type ActiveLineState = {
   groupName?: string
   index?: number
-  /**
-   * Тут есть и top и bottom, потому что тултип можешь располгаться и сверху и снизу
-   * Но внутри тултипа есть кнопки для раскрытия и если использовать только top
-   * То тултипу придется перерасчитывать позицию
-   */
-  top: number
-  bottom: number
-  left: number
+  x: number
+  y: number
 }
 
 const monthNames = [
@@ -274,10 +268,10 @@ const renderInteractiveChartLine = ({
           forecast={forecast}
           plan={plan}
           colorGroups={colorGroups}
-          direction={rowIndex > 2 ? 'top' : 'bottom'}
-          left={activeLine.left}
-          top={rowIndex > 2 ? undefined : activeLine.top}
-          bottom={rowIndex > 2 ? activeLine.bottom : undefined}
+          position={{
+            x: activeLine.x,
+            y: activeLine.y,
+          }}
         />
       ) : null}
     </div>
@@ -331,9 +325,8 @@ export const Roadmap: React.FC<Props> = props => {
   const [activeLine, changeActiveLine] = useState<ActiveLineState>({
     index: undefined,
     groupName: undefined,
-    top: 0,
-    left: 0,
-    bottom: 0,
+    x: 0,
+    y: 0,
   })
   const [visibleFilter, setVisibleFilter] = useState<string | null>(null)
   const {
@@ -346,12 +339,12 @@ export const Roadmap: React.FC<Props> = props => {
 
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
-    changeActiveLine({ index: undefined, groupName: undefined, top: 0, left: 0, bottom: 0 })
+    changeActiveLine({ index: undefined, groupName: undefined, y: 0, x: 0 })
   }, [])
 
   const handleWindowClick = useCallback(event => {
     if (!event.target.classList.contains(css.isInteractive)) {
-      changeActiveLine({ index: undefined, groupName: undefined, top: 0, left: 0, bottom: 0 })
+      changeActiveLine({ index: undefined, groupName: undefined, y: 0, x: 0 })
     }
   }, [])
 
@@ -364,9 +357,8 @@ export const Roadmap: React.FC<Props> = props => {
         changeActiveLine({
           index,
           groupName,
-          left: Math.max(tableRect.left, elementRect.left),
-          top: elementRect.top + factBlockSize + window.scrollY,
-          bottom: window.innerHeight - elementRect.top - window.scrollY,
+          x: Math.max(tableRect.left, elementRect.left),
+          y: elementRect.top + factBlockSize / 2 + window.scrollY,
         })
       }
     },

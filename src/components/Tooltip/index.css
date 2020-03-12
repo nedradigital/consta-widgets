@@ -13,6 +13,10 @@
 
   pointer-events: none;
 
+  &.isHoverable {
+    pointer-events: auto;
+  }
+
   &.top.left {
     transform: translate(-100%, -100%);
   }

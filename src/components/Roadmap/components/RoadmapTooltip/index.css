@@ -1,37 +1,29 @@
-@custom-selector :--main .main;
+@custom-selector :--isOpened .isOpened;
+@custom-selector :--isTop .top;
+@custom-selector :--isBottom .bottom;
+@custom-selector :--isTopLeft .top.left;
+@custom-selector :--isTopRight .top.right;
+@custom-selector :--isBottomLeft .bottom.left;
+@custom-selector :--isBottomRight .bottom.right;
 
-:--main {
+.tooltip {
+  padding: 0;
+
+  background: none;
+}
+
+.main {
   --angle-size: 6px;
+  --border-radius-size: 4px;
 
-  position: absolute;
-  z-index: 3;
-  left: 0;
+  position: relative;
 
-  text-align: left;
-
-  &::after {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-
-    display: block;
-
-    width: 0;
-    height: 0;
-
-    content: '';
-
-    border-top: var(--angle-size) solid #fff;
-    border-right: var(--angle-size) solid transparent;
+  &.right {
+    text-align: left;
   }
 
-  &.bottom::after {
-    top: 0;
-    left: 0;
-
-    border-top: none;
-    border-right: var(--angle-size) solid transparent;
-    border-bottom: var(--angle-size) solid #fff;
+  &.left {
+    text-align: right;
   }
 }
 
@@ -39,29 +31,45 @@
   display: inline-block;
   overflow: hidden;
 
+  --border-top-left-radius: 0;
+  --border-top-right-radius: 0;
+  --border-bottom-left-radius: 0;
+  --border-bottom-right-radius: 0;
+
   height: 26px;
 
   vertical-align: bottom;
   white-space: nowrap;
 
-  border-radius: 4px 4px 4px 0;
+  border-radius: var(--border-top-left-radius) var(--border-top-right-radius)
+    var(--border-bottom-right-radius) var(--border-bottom-left-radius);
 
-  :--main.opened & {
-    border-radius: 0 0 4px 0;
+  :--isTop:not(:--isOpened) & {
+    --border-top-left-radius: var(--border-radius-size);
+    --border-top-right-radius: var(--border-radius-size);
+    --border-bottom-right-radius: var(--border-radius-size);
   }
 
-  :--main.top & {
-    margin-bottom: var(--angle-size);
+  :--isBottom:not(:--isOpened) & {
+    --border-bottom-left-radius: var(--border-radius-size);
+    --border-top-right-radius: var(--border-radius-size);
+    --border-bottom-right-radius: var(--border-radius-size);
   }
 
-  :--main.bottom & {
-    margin-top: var(--angle-size);
-
-    border-radius: 0 4px 4px 4px;
+  :--isTopLeft:--isOpened & {
+    --border-bottom-left-radius: var(--border-radius-size);
   }
 
-  :--main.opened.bottom & {
-    border-radius: 0 4px 0 0;
+  :--isTopRight:--isOpened & {
+    --border-bottom-right-radius: var(--border-radius-size);
+  }
+
+  :--isBottomLeft:--isOpened & {
+    --border-top-left-radius: var(--border-radius-size);
+  }
+
+  :--isBottomRight:--isOpened & {
+    --border-top-right-radius: var(--border-radius-size);
   }
 }
 
@@ -95,10 +103,18 @@
 }
 
 .content {
+  --border-top-left-radius: var(--border-radius-size);
+  --border-top-right-radius: var(--border-radius-size);
+  --border-bottom-left-radius: var(--border-radius-size);
+  --border-bottom-right-radius: var(--border-radius-size);
+
   width: calc-size(315);
   padding: var(--space-s) var(--space-xs);
 
-  border-radius: 4px 4px 4px 0;
+  text-align: left;
+
+  border-radius: var(--border-top-left-radius) var(--border-top-right-radius)
+    var(--border-bottom-right-radius) var(--border-bottom-left-radius);
   background: var(--color-bg-default);
 
   &.dates {
@@ -107,8 +123,20 @@
     white-space: nowrap;
   }
 
-  :--main.bottom & {
-    border-radius: 0 4px 4px 4px;
+  :--isTopLeft & {
+    --border-bottom-right-radius: 0;
+  }
+
+  :--isTopRight & {
+    --border-bottom-left-radius: 0;
+  }
+
+  :--isBottomLeft & {
+    --border-top-right-radius: 0;
+  }
+
+  :--isBottomRight & {
+    --border-top-left-radius: 0;
   }
 }
 

@@ -1,29 +1,33 @@
 import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
+import { HorizontalDirection, Tooltip, VerticalDirection } from '@/components/Tooltip'
 import { ColorGroups } from '@/dashboard/types'
 import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
+import { Position } from '@/utils/tooltips'
 
 import { Item } from '../..'
 
 import css from './index.css'
 
+type Direction = {
+  horizontal: HorizontalDirection
+  vertical: VerticalDirection
+}
+
 type Props = {
   colorGroups: ColorGroups
-  direction?: 'top' | 'bottom'
+  horizontalDirection?: Exclude<HorizontalDirection, 'center'>
+  verticalDirection?: Exclude<VerticalDirection, 'center'>
   plan: Item
   fact?: Item
   forecast?: Item
-  left: number
-  top?: number
-  bottom?: number
+  position: Position
 }
 
 const MAX_LENGTH_COMMENT = 280
@@ -103,10 +107,9 @@ export const RoadmapTooltip: React.FC<Props> = ({
   plan,
   forecast,
   colorGroups,
-  direction = 'top',
-  left,
-  top,
-  bottom,
+  horizontalDirection = 'right',
+  verticalDirection = 'top',
+  position,
 }) => {
   const [activeSection, changeActiveSection] = useState('')
   const isActiveDates = activeSection === 'dates'
@@ -144,17 +147,37 @@ export const RoadmapTooltip: React.FC<Props> = ({
     </div>,
   ] as const
 
-  if (!isDefined(top) && !isDefined(bottom)) {
-    return null
-  }
-
-  return ReactDOM.createPortal(
+  const renderContent = (direction: Direction) => (
     <div
-      className={classnames(themeColorLight, css.main, isOpened && css.opened, css[direction])}
-      style={{ left, top, bottom }}
+      className={classnames(
+        themeColorLight,
+        css.main,
+        isOpened && css.isOpened,
+        {
+          top: css.top,
+          bottom: css.bottom,
+          center: '',
+        }[direction.vertical],
+        {
+          left: css.left,
+          right: css.right,
+          center: '',
+        }[direction.horizontal]
+      )}
     >
-      {direction === 'top' ? content : reverse(content)}
-    </div>,
-    window.document.body
+      {direction.vertical === 'top' ? content : reverse([...content])}
+    </div>
+  )
+
+  return (
+    <Tooltip
+      horizontalDirection={horizontalDirection}
+      verticalDirection={verticalDirection}
+      position={position}
+      isVisible
+      isContentHoverable
+      renderContent={renderContent}
+      className={css.tooltip}
+    />
   )
 }
