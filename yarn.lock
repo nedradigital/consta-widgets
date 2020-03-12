@@ -12373,7 +12373,7 @@ react-clientside-effect@^1.2.0:
   dependencies:
     "@babel/runtime" "^7.0.0"
 
-react-collapse@^5.0.0:
+react-collapse@5.0.1, react-collapse@^5.0.0:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-collapse/-/react-collapse-5.0.1.tgz#f763b7207aee73baa1ff778b2d0b4ffb49d900a0"
   integrity sha512-cN2tkxBWizhPQ2JHfe0aUSJtmMthKA17NZkTElpiQ2snQAAi1hssXZ2fv88rAPNNvG5ss4t0PbOZT0TIl9Lk3Q==
