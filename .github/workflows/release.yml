@@ -11,16 +11,6 @@ jobs:
     steps:
     - name: Checkout branch
       uses: actions/checkout@v1
-    - name: Install github-release-notes and generate changelog
-      run: |
-        npx github-release-notes changelog --generate --override --token=${{ secrets.GITHUB_TOKEN }} --changelog-filename=TEMP_CHANGELOG.md
-      env:
-        CI: true
-    - name: Create and publish realese
-      uses: ncipollo/release-action@v1
-      with:
-        bodyFile: 'TEMP_CHANGELOG.md'
-        token: ${{ secrets.GITHUB_TOKEN }}
     - name: Use Node.js 10
       uses: actions/setup-node@v1
       with:
@@ -35,4 +25,14 @@ jobs:
     - run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install github-release-notes and generate changelog
+      run: |
+        npx github-release-notes changelog --generate --override --token=${{ secrets.GITHUB_TOKEN }} --changelog-filename=TEMP_CHANGELOG.md
+      env:
+        CI: true
+    - name: Create and publish realese
+      uses: ncipollo/release-action@v1
+      with:
+        bodyFile: 'TEMP_CHANGELOG.md'
+        token: ${{ secrets.GITHUB_TOKEN }}
 
