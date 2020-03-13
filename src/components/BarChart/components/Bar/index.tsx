@@ -5,7 +5,7 @@ import { flattenDeep, uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
-import { scaleBand, Scaler } from '@/utils/scale'
+import { Scaler } from '@/utils/scale'
 
 import { Size } from '../..'
 
@@ -52,7 +52,6 @@ type Props = {
   color: ColorGroups
   onMouseLeave: () => void
   onMouseEnter: MouseAction
-  onChangeSize: (size: number) => void
   parentRef: React.RefObject<SVGGElement>
   formatValue?: FormatValue
   size: Size
@@ -97,7 +96,6 @@ export const Bar: React.FC<Props> = props => {
     color,
     onMouseLeave,
     onMouseEnter,
-    onChangeSize,
     columnDetails,
     groupName,
     size,
@@ -114,48 +112,47 @@ export const Bar: React.FC<Props> = props => {
     columnDefaultSize * uniqueColumnNames.length + columnPadding * (uniqueColumnNames.length - 1)
   const zeroPoint = Math.ceil(valuesScale.scale(0))
 
-  const groupSecondaryScale = scaleBand({
-    domain: uniqueColumnNames,
-    range: [0, barSize],
-  })
-
-  React.useLayoutEffect(() => {
-    onChangeSize(barSize)
-  }, [groupName, barSize, onChangeSize])
-
   const getTextPositionOnX = (value: number, width: number) => {
     return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
   }
 
-  const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth() : 0
+  const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth(groupName) : 0
   const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
   const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
 
-  const getRectPositionByAxis = (item: ColumnDetail, axis: 'x' | 'y') => {
+  const getRectPositionByAxis = ({
+    part,
+    index,
+    axis,
+  }: {
+    part: ColumnDetail
+    index: number
+    axis: 'x' | 'y'
+  }) => {
     const isAxisX = axis === 'x'
     const isAxisY = axis === 'y'
 
     if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
-      return groupSecondaryScale.scale(item.columnName) || 0
+      return (columnDefaultSize + columnPadding) * index
     }
 
-    if ((item.value > 0 && isAxisX) || (item.value < 0 && isAxisY)) {
-      return item.positionBegin || 0
+    if ((part.value > 0 && isAxisX) || (part.value < 0 && isAxisY)) {
+      return part.positionBegin || 0
     }
 
-    return item.positionEnd || 0
+    return part.positionEnd || 0
   }
 
   const columnDetailsData: ReadonlyArray<{
     parts: Parts
     tooltipParams: TooltipData
-  }> = columnDetails.map(column => {
+  }> = columnDetails.map((column, index) => {
     const parts = column.map(part => ({
       value: part.value,
       columnSize: part.columnSize,
       backgroundColor: color[part.category],
-      x: getRectPositionByAxis(part, 'x'),
-      y: getRectPositionByAxis(part, 'y'),
+      x: getRectPositionByAxis({ part, index, axis: 'x' }),
+      y: getRectPositionByAxis({ part, index, axis: 'y' }),
     }))
 
     const visibleParts = parts.filter(item => item.columnSize > 0)

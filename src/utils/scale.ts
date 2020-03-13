@@ -2,7 +2,7 @@ import { scaleLinear as d3ScaleLinear } from 'd3-scale'
 
 export type Scaler<T> = {
   scale: (value: T) => number
-  bandwidth?: () => number
+  bandwidth?: (value?: T) => number
 }
 
 export type NumberRange = readonly [number, number]
