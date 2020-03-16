@@ -65,7 +65,7 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
     return (
       <>
         <Tooltip isVisible={tooltipVisible && !!comment} position={tooltipPosition}>
-          <Text tag="div" weight="bold" transform="uppercase">
+          <Text tag="div" weight="bold" transform="uppercase" spacing="xs">
             Комментарий:
           </Text>
           <div className={css.tooltipContent}>{comment}</div>

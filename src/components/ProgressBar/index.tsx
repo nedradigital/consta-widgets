@@ -97,7 +97,7 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
             {/* 3 строка */}
             {ticks.length ? (
               <div className={css.row}>
-                <div className={css.cell}>
+                <div className={classnames(css.cell, css.isTicksCell)}>
                   <Legend ticks={ticks} valueMin={valueMin} valueMax={valueMax} />
                 </div>
                 <div className={css.cell} />

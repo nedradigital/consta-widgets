@@ -215,7 +215,6 @@
 
 .periodText {
   font-size: calc-size(8);
-  line-height: calc-size(10);
 
   position: absolute;
   top: 0;
@@ -225,6 +224,5 @@
 
   white-space: nowrap;
 
-  color: var(--color-typo-primary);
   background: var(--color-control-bg-ghost);
 }

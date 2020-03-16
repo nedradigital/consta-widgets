@@ -23,6 +23,12 @@
 
   &.isTitleCell {
     grid-column: 1 / span 2;
+
+    margin-bottom: calc(-1 * var(--space-2xs));
+  }
+
+  &.isTicksCell {
+    margin-top: calc(-1 * var(--space-2xs));
   }
 
   @nest :--item:not(:first-child) :--row:first-child & {

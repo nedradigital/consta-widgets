@@ -166,9 +166,11 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
       >
         <Text
           tag="div"
-          size="2xs"
+          size="xs"
           transform="uppercase"
-          view="secondary"
+          view="primary"
+          spacing="xs"
+          weight="bold"
           className={css.titleWrapper}
         >
           {filters && fieldFiltersPresent(filters, obj.accessor) && (
@@ -210,7 +212,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
         <Text
           key={column.accessor + index}
           tag="td"
-          size="m"
+          size="s"
           view="primary"
           className={classnames(css.cell, alignClasses[column.align])}
         >
