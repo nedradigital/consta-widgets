@@ -5,5 +5,5 @@ type Props = {
 }
 
 export const Image: React.FC<Props> = ({ src }) => {
-  return <img className={css.main} src={src} />
+  return <div style={{ backgroundImage: `url(${src})` }} className={css.main} />
 }
