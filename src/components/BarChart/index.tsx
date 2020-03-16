@@ -6,7 +6,6 @@ import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
-import { getEveryN } from '@/utils/array'
 import { scaleBand, scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
@@ -16,6 +15,7 @@ import {
   CHART_MIN_HEIGHT,
   getDataColumns,
   getDomain,
+  getEveryNTick,
   getRange,
   GROUP_INNER_PADDING,
   OUTER_PADDING,
@@ -145,7 +145,7 @@ export const BarChart: React.FC<Props> = props => {
 
   const minSize = getMinSize()
   const gridItems = getTicks(valuesDomain, gridTicks)
-  const axisValues = getEveryN(gridItems, valuesTicks)
+  const axisValues = getEveryNTick(gridItems, valuesTicks)
 
   const gridXTickValues = isVertical ? [] : gridItems
   const gridYTickValues = isVertical ? gridItems : []
