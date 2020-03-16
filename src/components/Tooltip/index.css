@@ -1,3 +1,7 @@
+@custom-selector :--withArrow .withArrow;
+@custom-selector :--upDirection .upLeft, .upCenter, .upRight;
+@custom-selector :--downDirection .downLeft, .downCenter, .downRight;
+
 .main {
   --arrow-size: 6px;
   --tooltip-positive-arrow-offset: calc(2 * var(--arrow-size));
@@ -17,46 +21,26 @@
     pointer-events: auto;
   }
 
-  &.top.left {
-    transform: translate(-100%, -100%);
-  }
-
-  &.top {
-    transform: translate(-50%, -100%);
-  }
-
-  &.top.right {
-    transform: translate(0, -100%);
-  }
-
-  &.right {
-    transform: translate(0, -50%);
-  }
-
-  &.bottom.left {
-    transform: translate(-100%, 0);
-  }
-
-  &.bottom {
-    transform: translate(-50%, 0);
-  }
-
-  &.bottom.right {
-    transform: translate(0, 0);
-  }
-
+  &.right,
   &.left {
-    transform: translate(-100%, -50%);
+    transform: translate(0, -50%);
   }
 }
 
 .tooltip {
+  --border-radius-default: 4px;
+  --border-top-left-radius: var(--border-radius-default);
+  --border-top-right-radius: var(--border-radius-default);
+  --border-bottom-left-radius: var(--border-radius-default);
+  --border-bottom-right-radius: var(--border-radius-default);
+
   position: relative;
 
   max-width: 400px;
   padding: var(--tooltip-vertical-padding) var(--tooltip-horizontal-padding);
 
-  border-radius: 4px;
+  border-radius: var(--border-top-left-radius) var(--border-top-right-radius)
+    var(--border-bottom-right-radius) var(--border-bottom-left-radius);
   background-color: var(--tooltip-bg-color);
 
   &::after {
@@ -67,26 +51,26 @@
     border: var(--arrow-size) solid transparent;
   }
 
-  @nest .top & {
+  @nest :--upDirection:--withArrow & {
     margin-bottom: var(--tooltip-positive-arrow-offset);
   }
 
-  @nest .top.left & {
-    border-bottom-right-radius: 0;
+  @nest .upLeft:--withArrow & {
+    --border-bottom-right-radius: 0;
+
+    &::after {
+      right: 0;
+      bottom: 0;
+
+      border-width: var(--arrow-side-size);
+      border-top-color: var(--tooltip-bg-color);
+      border-right-color: var(--tooltip-bg-color);
+
+      transform: translateY(100%);
+    }
   }
 
-  @nest .top.left &::after {
-    right: 0;
-    bottom: 0;
-
-    border-width: var(--arrow-side-size);
-    border-top-color: var(--tooltip-bg-color);
-    border-right-color: var(--tooltip-bg-color);
-
-    transform: translateY(100%);
-  }
-
-  @nest .top.center &::after {
+  @nest .upCenter:--withArrow &::after {
     bottom: var(--tooltip-negative-arrow-offset);
     left: 50%;
 
@@ -95,54 +79,54 @@
     transform: translate(-50%, 0);
   }
 
-  @nest .top.right & {
-    border-bottom-left-radius: 0;
+  @nest .upRight:--withArrow & {
+    --border-bottom-left-radius: 0;
+
+    &::after {
+      bottom: 0;
+      left: 0;
+
+      border-width: var(--arrow-side-size);
+      border-top-color: var(--tooltip-bg-color);
+      border-left-color: var(--tooltip-bg-color);
+
+      transform: translateY(100%);
+    }
   }
 
-  @nest .top.right &::after {
-    bottom: 0;
-    left: 0;
-
-    border-width: var(--arrow-side-size);
-    border-top-color: var(--tooltip-bg-color);
-    border-left-color: var(--tooltip-bg-color);
-
-    transform: translateY(100%);
-  }
-
-  @nest .right.center & {
+  @nest .right:--withArrow & {
     margin-left: var(--tooltip-positive-arrow-offset);
+
+    &::after {
+      top: 50%;
+      left: var(--tooltip-negative-arrow-offset);
+
+      border-right-color: var(--tooltip-bg-color);
+
+      transform: translate(0, -50%);
+    }
   }
 
-  @nest .right.center &::after {
-    top: 50%;
-    left: var(--tooltip-negative-arrow-offset);
-
-    border-right-color: var(--tooltip-bg-color);
-
-    transform: translate(0, -50%);
-  }
-
-  @nest .bottom & {
+  @nest :--downDirection:--withArrow & {
     margin-top: var(--tooltip-positive-arrow-offset);
   }
 
-  @nest .bottom.left & {
-    border-top-right-radius: 0;
+  @nest .downLeft:--withArrow & {
+    --border-top-right-radius: 0;
+
+    &::after {
+      top: 0;
+      right: 0;
+
+      border-width: var(--arrow-side-size);
+      border-right-color: var(--tooltip-bg-color);
+      border-bottom-color: var(--tooltip-bg-color);
+
+      transform: translateY(-100%);
+    }
   }
 
-  @nest .bottom.left &::after {
-    top: 0;
-    right: 0;
-
-    border-width: var(--arrow-side-size);
-    border-right-color: var(--tooltip-bg-color);
-    border-bottom-color: var(--tooltip-bg-color);
-
-    transform: translateY(-100%);
-  }
-
-  @nest .bottom.center &::after {
+  @nest .downCenter:--withArrow &::after {
     top: var(--tooltip-negative-arrow-offset);
     left: 50%;
 
@@ -151,31 +135,31 @@
     transform: translate(-50%, 0);
   }
 
-  @nest .bottom.right & {
-    border-top-left-radius: 0;
+  @nest .downRight:--withArrow & {
+    --border-top-left-radius: 0;
+
+    &::after {
+      top: 0;
+      left: 0;
+
+      border-width: var(--arrow-side-size);
+      border-bottom-color: var(--tooltip-bg-color);
+      border-left-color: var(--tooltip-bg-color);
+
+      transform: translateY(-100%);
+    }
   }
 
-  @nest .bottom.right &::after {
-    top: 0;
-    left: 0;
-
-    border-width: var(--arrow-side-size);
-    border-bottom-color: var(--tooltip-bg-color);
-    border-left-color: var(--tooltip-bg-color);
-
-    transform: translateY(-100%);
-  }
-
-  @nest .left.center & {
+  @nest .left:--withArrow & {
     margin-right: var(--tooltip-positive-arrow-offset);
-  }
 
-  @nest .left.center &::after {
-    top: 50%;
-    right: var(--tooltip-negative-arrow-offset);
+    &::after {
+      top: 50%;
+      right: var(--tooltip-negative-arrow-offset);
 
-    border-left-color: var(--tooltip-bg-color);
+      border-left-color: var(--tooltip-bg-color);
 
-    transform: translate(0, -50%);
+      transform: translate(0, -50%);
+    }
   }
 }

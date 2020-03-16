@@ -49,17 +49,6 @@ const getOffsetPosition = (parameters: {
   }
 }
 
-const getDirection = (isVertical: boolean) =>
-  isVertical
-    ? ({
-        horizontal: 'left',
-        vertical: 'center',
-      } as const)
-    : ({
-        horizontal: 'center',
-        vertical: 'top',
-      } as const)
-
 const getLayout = ({
   values,
   color,
@@ -88,7 +77,6 @@ export const TooltipComponent: React.FC<Props> = ({
   const { baseSize } = useBaseSize()
   const { params, values, innerTranslate } = barColumn
 
-  const direction = getDirection(isVertical)
   const position = getOffsetPosition({
     innerTranslate,
     svgRef: svgParentRef,
@@ -103,8 +91,7 @@ export const TooltipComponent: React.FC<Props> = ({
     <Tooltip
       isVisible={isVisible}
       position={position}
-      horizontalDirection={direction.horizontal}
-      verticalDirection={direction.vertical}
+      direction={isVertical ? 'left' : 'upCenter'}
       children={layout}
     />
   )

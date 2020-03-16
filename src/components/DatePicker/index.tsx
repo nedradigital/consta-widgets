@@ -1,12 +1,16 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
+import classnames from 'classnames'
 import { endOfDay, startOfDay } from 'date-fns'
+
+import { Tooltip } from '@/components/Tooltip'
+import { themeColorLight } from '@/utils/theme'
 
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
 import { InputDate } from './components/InputDate'
 import { Timeline } from './components/Timeline'
-import { Tooltip } from './components/Tooltip'
 import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
@@ -48,6 +52,8 @@ export type Data = BaseProps & (SingleProps | RangeProps)
 
 type Props = BaseProps & StyleProps & (SingleProps | RangeProps)
 
+const OFFSET_FROM_CONTROLS = 4
+
 export const isDateRange = (value?: Date | DateRange): value is DateRange =>
   Array.isArray(value) && value.length <= 2
 
@@ -81,13 +87,7 @@ export const DatePicker: React.FC<Props> = props => {
     props.type === 'date' && props.value ? props.value : new Date()
   )
 
-  const handleClickOutside = (event: MouseEvent) => {
-    const target = event.target as Node
-
-    if (controlsRef.current && !controlsRef.current.contains(target)) {
-      setIsTooltipVisible(false)
-    }
-  }
+  useClickOutside([controlsRef], () => setIsTooltipVisible(false))
 
   const handleSelectDate = (value: Date | DateRange) => {
     if (!isDateRange(value) && props.type === 'date') {
@@ -128,36 +128,41 @@ export const DatePicker: React.FC<Props> = props => {
       <div ref={controlsRef} onClick={() => setIsTooltipVisible(!isTooltipVisible)}>
         {renderControls()}
       </div>
-      {isTooltipVisible && (
-        <Tooltip
-          anchorRef={controlsRef}
-          isWide={props.type === 'date-range'}
-          onClickOutside={handleClickOutside}
-        >
-          <Timeline
-            currentVisibleDate={currentVisibleDate}
-            minDate={minDate}
-            maxDate={maxDate}
-            value={props.value}
-            onChange={setCurrentVisibleDate}
-          />
-          <Calendar
-            minDate={minDate}
-            maxDate={maxDate}
-            value={props.value}
-            currentVisibleDate={currentVisibleDate}
-            onSelect={handleSelectDate}
-          />
-          <ActionButtons
-            showQuartersSelector={props.type === 'date-range'}
-            minDate={minDate}
-            maxDate={maxDate}
-            currentVisibleDate={currentVisibleDate}
-            onChangeVisibleDate={setCurrentVisibleDate}
-            onSelect={handleSelectDate}
-          />
-        </Tooltip>
-      )}
+      <Tooltip
+        isVisible={isTooltipVisible}
+        anchorRef={controlsRef}
+        className={classnames(
+          themeColorLight,
+          css.tooltip,
+          props.type === 'date-range' && css.isWide
+        )}
+        withArrow={false}
+        offset={OFFSET_FROM_CONTROLS}
+        direction="downRight"
+      >
+        <Timeline
+          currentVisibleDate={currentVisibleDate}
+          minDate={minDate}
+          maxDate={maxDate}
+          value={props.value}
+          onChange={setCurrentVisibleDate}
+        />
+        <Calendar
+          minDate={minDate}
+          maxDate={maxDate}
+          value={props.value}
+          currentVisibleDate={currentVisibleDate}
+          onSelect={handleSelectDate}
+        />
+        <ActionButtons
+          showQuartersSelector={props.type === 'date-range'}
+          minDate={minDate}
+          maxDate={maxDate}
+          currentVisibleDate={currentVisibleDate}
+          onChangeVisibleDate={setCurrentVisibleDate}
+          onSelect={handleSelectDate}
+        />
+      </Tooltip>
     </div>
   )
 }

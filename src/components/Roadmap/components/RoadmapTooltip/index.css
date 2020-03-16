@@ -1,10 +1,10 @@
 @custom-selector :--isOpened .isOpened;
-@custom-selector :--isTop .top;
-@custom-selector :--isBottom .bottom;
-@custom-selector :--isTopLeft .top.left;
-@custom-selector :--isTopRight .top.right;
-@custom-selector :--isBottomLeft .bottom.left;
-@custom-selector :--isBottomRight .bottom.right;
+@custom-selector :--isTop .upLeft, .upRight;
+@custom-selector :--isBottom .downLeft, .downRight;
+@custom-selector :--isTopLeft .upLeft;
+@custom-selector :--isTopRight .upRight;
+@custom-selector :--isBottomLeft .downLeft;
+@custom-selector :--isBottomRight .downRight;
 
 .tooltip {
   padding: 0;

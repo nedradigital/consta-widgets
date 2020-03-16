@@ -5,7 +5,7 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
-import { HorizontalDirection, Tooltip, VerticalDirection } from '@/components/Tooltip'
+import { Direction, Tooltip } from '@/components/Tooltip'
 import { ColorGroups } from '@/dashboard/types'
 import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
@@ -15,15 +15,9 @@ import { Item } from '../..'
 
 import css from './index.css'
 
-type Direction = {
-  horizontal: HorizontalDirection
-  vertical: VerticalDirection
-}
-
 type Props = {
   colorGroups: ColorGroups
-  horizontalDirection?: Exclude<HorizontalDirection, 'center'>
-  verticalDirection?: Exclude<VerticalDirection, 'center'>
+  direction?: Exclude<Direction, 'upCenter' | 'downCenter' | 'left' | 'right'>
   plan: Item
   fact?: Item
   forecast?: Item
@@ -107,8 +101,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
   plan,
   forecast,
   colorGroups,
-  horizontalDirection = 'right',
-  verticalDirection = 'top',
+  direction = 'upRight',
   position,
 }) => {
   const [activeSection, changeActiveSection] = useState('')
@@ -147,32 +140,31 @@ export const RoadmapTooltip: React.FC<Props> = ({
     </div>,
   ] as const
 
-  const renderContent = (direction: Direction) => (
+  const renderContent = (contentDirection: Direction) => (
     <div
       className={classnames(
         themeColorLight,
         css.main,
         isOpened && css.isOpened,
         {
-          top: css.top,
-          bottom: css.bottom,
-          center: '',
-        }[direction.vertical],
-        {
-          left: css.left,
-          right: css.right,
-          center: '',
-        }[direction.horizontal]
+          left: '',
+          right: '',
+          upLeft: css.upLeft,
+          upCenter: '',
+          upRight: css.upRight,
+          downLeft: css.downLeft,
+          downCenter: '',
+          downRight: css.downRight,
+        }[contentDirection]
       )}
     >
-      {direction.vertical === 'top' ? content : reverse([...content])}
+      {contentDirection.includes('up') ? content : reverse([...content])}
     </div>
   )
 
   return (
     <Tooltip
-      horizontalDirection={horizontalDirection}
-      verticalDirection={verticalDirection}
+      direction={direction}
       position={position}
       isVisible
       isContentHoverable

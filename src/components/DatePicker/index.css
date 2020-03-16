@@ -6,3 +6,14 @@
 .delimiter {
   padding: 0 calc-size(8);
 }
+
+.tooltip {
+  --tooltip-vertical-padding: var(--space-l);
+  --tooltip-horizontal-padding: var(--space-l);
+
+  max-width: 298px;
+
+  &.isWide {
+    max-width: 592px;
+  }
+}

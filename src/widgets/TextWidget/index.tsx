@@ -204,7 +204,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
             ref={tooltipRef}
             className={css.tooltip}
             isVisible={tooltipVisible}
-            verticalDirection="bottom"
+            direction="downCenter"
             position={tooltipPosition}
           >
             {data.tooltip}
