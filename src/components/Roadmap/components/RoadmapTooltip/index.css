@@ -167,6 +167,6 @@
 
 .dateBlock {
   & + & {
-    margin-top: var(--space-2xs);
+    margin-top: var(--space-s);
   }
 }
