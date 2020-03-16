@@ -1,4 +1,7 @@
 .main {
+  --vertical-margin: var(--space-s);
+  --horizontal-margin: var(--space-m);
+
   display: grid;
 
   height: 100%;
@@ -10,6 +13,11 @@
     'bottomLeft bottomUnit bottomRight';
   grid-template-rows: auto 1fr auto;
   grid-template-columns: auto 1fr auto;
+
+  &.sizeS {
+    --vertical-margin: var(--space-xs);
+    --horizontal-margin: var(--space-xs);
+  }
 }
 
 .topTicks,
@@ -21,7 +29,7 @@
 
 .leftTicks,
 .rightTicks {
-  max-width: calc-size(177);
+  max-width: calc-size(160);
 }
 
 .topLeftUnit {
@@ -33,10 +41,16 @@
 
 .topTicks {
   grid-area: topTicks;
+
+  margin-bottom: var(--vertical-margin);
 }
 
 .leftTicks {
   grid-area: leftTicks;
+
+  margin-right: var(--horizontal-margin);
+
+  justify-self: end;
 }
 
 .graph {
@@ -45,10 +59,14 @@
 
 .rightTicks {
   grid-area: rightTicks;
+
+  margin-left: var(--horizontal-margin);
 }
 
 .bottomTicks {
   grid-area: bottomTicks;
+
+  margin-top: var(--vertical-margin);
 }
 
 .bottomControls {

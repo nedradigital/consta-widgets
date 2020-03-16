@@ -24,11 +24,6 @@ type Props<T> = {
   formatValueForLabel?: (value: T) => string
 }
 
-const sizeClasses: Record<Size, string> = {
-  s: css.sizeS,
-  m: css.sizeM,
-}
-
 const textSizes: Record<Size, TextSize> = {
   s: '2xs',
   m: 'xs',
@@ -71,7 +66,6 @@ export function Ticks<T>(props: Props<T>) {
     : (v: T) => getTransformTranslate(0, (scaler.scale(v) || 0) + getTickOffset(v))
 
   const positionClassName = positionClasses[position]
-  const sizeClassName = sizeClasses[size]
 
   const getAlignItems = (index: number, length: number) => {
     const isFirst = index === 0
@@ -95,16 +89,7 @@ export function Ticks<T>(props: Props<T>) {
   }
 
   return (
-    <div
-      className={classnames(
-        css.group,
-        scaler.bandwidth ? css.groupLabels : css.groupValues,
-        positionClassName,
-        sizeClassName,
-        className
-      )}
-      style={style}
-    >
+    <div className={classnames(css.group, positionClassName, className)} style={style}>
       {values.map((value, idx) => {
         const transform = tickTransform(value)
         const alignItems = getAlignItems(idx, values.length)
@@ -112,7 +97,7 @@ export function Ticks<T>(props: Props<T>) {
         return (
           <div key={idx} className={css.tick} style={{ transform, alignItems }}>
             <span
-              className={css.text}
+              className={scaler.bandwidth && css.label}
               style={{
                 minWidth: isHorizontal ? getBandwidth(value) : undefined,
               }}

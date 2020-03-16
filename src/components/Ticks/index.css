@@ -23,62 +23,6 @@
   }
 }
 
-.groupLabels {
-  &.sizeS {
-    --vertical-margin: var(--space-xs);
-    --horizontal-margin: var(--space-xs);
-  }
-
-  &.sizeM {
-    --vertical-margin: var(--space-s);
-    --horizontal-margin: var(--space-m);
-  }
-
-  &:--isTop {
-    margin-bottom: var(--vertical-margin);
-  }
-
-  &:--isRight {
-    margin-left: var(--horizontal-margin);
-  }
-
-  &:--isBottom {
-    margin-top: var(--vertical-margin);
-  }
-
-  &:--isLeft {
-    margin-right: var(--horizontal-margin);
-  }
-}
-
-.groupValues {
-  &.sizeS {
-    --vertical-margin: var(--space-xs);
-    --horizontal-margin: var(--space-xs);
-  }
-
-  &.sizeM {
-    --vertical-margin: var(--space-xs);
-    --horizontal-margin: var(--space-s);
-  }
-
-  &:--isTop {
-    margin-bottom: var(--vertical-margin);
-  }
-
-  &:--isRight {
-    margin-left: var(--horizontal-margin);
-  }
-
-  &:--isBottom {
-    margin-top: var(--vertical-margin);
-  }
-
-  &:--isLeft {
-    margin-right: var(--horizontal-margin);
-  }
-}
-
 .tick {
   display: flex;
 
@@ -143,12 +87,12 @@
   }
 }
 
-.text {
-  @nest .groupLabels:--isHorizontal & {
+.label {
+  @nest :--isHorizontal & {
     padding: var(--space-2xs) 0;
   }
 
-  @nest .groupLabels:--isVertical & {
+  @nest :--isVertical & {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
