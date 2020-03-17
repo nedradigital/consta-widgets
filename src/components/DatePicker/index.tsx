@@ -82,12 +82,13 @@ export const DatePicker: React.FC<Props> = props => {
   const maxDate = endOfDay(sourceMaxDate)
 
   const controlsRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
   const [currentVisibleDate, setCurrentVisibleDate] = useState(
     props.type === 'date' && props.value ? props.value : new Date()
   )
 
-  useClickOutside([controlsRef], () => setIsTooltipVisible(false))
+  useClickOutside([controlsRef, tooltipRef], () => setIsTooltipVisible(false))
 
   const handleSelectDate = (value: Date | DateRange) => {
     if (!isDateRange(value) && props.type === 'date') {
@@ -130,6 +131,7 @@ export const DatePicker: React.FC<Props> = props => {
       </div>
       <Tooltip
         isVisible={isTooltipVisible}
+        ref={tooltipRef}
         anchorRef={controlsRef}
         className={classnames(
           themeColorLight,
@@ -139,6 +141,7 @@ export const DatePicker: React.FC<Props> = props => {
         withArrow={false}
         offset={OFFSET_FROM_CONTROLS}
         direction="downRight"
+        isContentHoverable
       >
         <Timeline
           currentVisibleDate={currentVisibleDate}
