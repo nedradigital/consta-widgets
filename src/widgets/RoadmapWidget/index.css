@@ -13,8 +13,6 @@
 .icon {
   display: inline-flex;
 
-  width: calc-size(24);
-  height: calc-size(24);
   margin-right: calc-size(8);
 
   vertical-align: bottom;

@@ -104,10 +104,6 @@
 
   &.toLeft {
     left: 0;
-
-    .icon {
-      transform: scale(-1);
-    }
   }
 
   &.toRight {

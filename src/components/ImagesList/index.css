@@ -84,22 +84,4 @@
 
 .button {
   flex-shrink: 0;
-
-  width: calc-size(32);
-  height: calc-size(32);
-
-  cursor: pointer;
-
-  color: var(--color-control-typo-ghost);
-  border-radius: 4px;
-  background: var(--color-control-bg-ghost);
-
-  &.toLeft {
-    transform: scaleX(-1);
-  }
-
-  &:hover {
-    color: var(--color-control-typo-ghost-hover);
-    background: var(--color-control-bg-ghost-hover);
-  }
 }

@@ -1,4 +1,4 @@
-import { Input } from '@gpn-design/uikit'
+import { IconCalendar, Input } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { format } from 'date-fns'
 
@@ -36,15 +36,28 @@ export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
     isValidDate(date) && onChange(date)
   }
 
+  const iconSize = ({
+    s: 'xs',
+    m: 's',
+    l: 'm',
+  } as const)[size]
+
   return (
-    <Input
-      className={classnames(css.input, { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size])}
-      type="date"
-      wpSize={size}
-      view="default"
-      form="default"
-      value={getInputValue(value)}
-      onChange={handleChange}
-    />
+    <div className={css.main}>
+      <Input
+        className={classnames(css.input, { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size])}
+        type="date"
+        wpSize={size}
+        view="default"
+        form="default"
+        value={getInputValue(value)}
+        onChange={handleChange}
+      />
+      <IconCalendar
+        size={iconSize}
+        view="secondary"
+        className={classnames(css.icon, iconSize === 'm' && css.sizeM)}
+      />
+    </div>
   )
 }

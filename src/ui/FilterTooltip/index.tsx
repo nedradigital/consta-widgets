@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Button, Text } from '@gpn-design/uikit'
+import { Button, IconFunnel, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { MultiSelect } from '@/ui/MultiSelect'
@@ -11,7 +11,6 @@ import { isDefinedPosition } from '@/utils/type-guards'
 
 import { Props as MultiSelectProps } from '../MultiSelect'
 
-import { ReactComponent as IconFilterSvg } from './images/filter-icon.svg'
 import css from './index.css'
 
 export type Props = Omit<MultiSelectProps, 'onChange'> & {
@@ -59,7 +58,7 @@ export const FilterTooltip: React.FC<Props> = ({
         className={classnames(css.iconFilter, isOpened && css.isOpened, className)}
         onClick={() => handleFilterTogglerClick()}
       >
-        <IconFilterSvg />
+        <IconFunnel size="xs" />
       </button>
       {isOpened &&
         isDefinedPosition(tooltipPosition) &&
