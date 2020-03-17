@@ -6,10 +6,10 @@ import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
-import { scaleBand, scaleLinear } from '@/utils/scale'
+import { scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
-import { Bar, TooltipData } from './components/Bar'
+import { Bar, COLUMN_PADDING, COLUMN_WIDTHS, TooltipData } from './components/Bar'
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
@@ -19,6 +19,7 @@ import {
   getRange,
   GROUP_INNER_PADDING,
   OUTER_PADDING,
+  scaleBand,
 } from './helpers'
 import css from './index.css'
 
@@ -83,7 +84,6 @@ export const BarChart: React.FC<Props> = props => {
     size = 'm',
   } = props
   const [tooltipData, setTooltipData] = useState<TooltipData>()
-  const [groupsSizes, setGroupsSizes] = useState<Record<string, number>>({})
 
   const ref = useRef(null)
   const svgRef = useRef(null)
@@ -97,17 +97,36 @@ export const BarChart: React.FC<Props> = props => {
   const valuesDomain = getDomain(groups)
   const isNegative = Math.min(...valuesDomain) < 0
   const paddingCount = isNegative ? 2 : 1
+  const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
+  const paddingInner = getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[size])
+  const paddingOuter = getCalculatedSizeWithBaseSize(OUTER_PADDING)
   const padding =
     !isVertical && !props.isMultiBar && props.showValues ? getCalculatedSizeWithBaseSize(50) : 0
 
   const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
   const svgHeight = height ? Math.round(height) : 0
 
+  const getGroupsSizes = () => {
+    const columnSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
+    const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING[size])
+
+    return groups.reduce<Record<string, number>>((acc, group) => {
+      const { groupName, values } = group
+
+      const countColumns = values.length
+      const groupSize = countColumns * columnSize + (countColumns - 1) * columnPadding
+
+      acc[groupName] = groupSize < columnSize ? columnSize : groupSize
+
+      return acc
+    }, {})
+  }
+
   const groupScale = scaleBand({
-    domain: groupsDomain,
+    groupsSizes: getGroupsSizes(),
     range: getRange(isVertical ? svgWidth : svgHeight),
-    paddingInner: GROUP_INNER_PADDING[size],
-    paddingOuter: OUTER_PADDING,
+    paddingInner,
+    paddingOuter,
   })
   const valuesScale = scaleLinear({
     domain: valuesDomain,
@@ -123,24 +142,11 @@ export const BarChart: React.FC<Props> = props => {
   })
 
   const getMinSize = () => {
-    const items = Object.values(groupsSizes)
-    const paddingInner = GROUP_INNER_PADDING[size] * (items.length - 1)
-    const paddingOuter = OUTER_PADDING * 2
+    const items = Object.values(getGroupsSizes())
 
-    return items.reduce((acc, i) => acc + i, 0) + paddingOuter + paddingInner
-  }
-
-  const handleChangeBarSize = (index: number, value: number) => {
-    setGroupsSizes(state => {
-      if (state[index] !== value) {
-        return {
-          ...state,
-          [index]: value,
-        }
-      }
-
-      return state
-    })
+    return Math.round(
+      items.reduce((acc, i) => acc + i, 0) + paddingOuter * 2 + paddingInner * (items.length - 1)
+    )
   }
 
   const minSize = getMinSize()
@@ -181,7 +187,7 @@ export const BarChart: React.FC<Props> = props => {
         style={{
           ...commonStyle,
           minWidth: isVertical ? minSize : undefined,
-          minHeight: isVertical ? CHART_MIN_HEIGHT : minSize,
+          minHeight: isVertical ? chartMinHeight : minSize,
         }}
       >
         <svg className={css.svg} width={svgWidth} height={svgHeight} ref={svgRef}>
@@ -205,7 +211,6 @@ export const BarChart: React.FC<Props> = props => {
                 color={colorGroups}
                 onMouseLeave={() => setTooltipData(undefined)}
                 onMouseEnter={setTooltipData}
-                onChangeSize={value => handleChangeBarSize(idx, value)}
                 parentRef={svgRef}
                 formatValue={formatValueForLabel}
                 size={size}

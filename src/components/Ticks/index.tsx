@@ -60,12 +60,15 @@ export function Ticks<T>(props: Props<T>) {
   const isBottom = position === 'bottom'
   const isHorizontal = isTop || isBottom
 
-  const textWidth = scaler.bandwidth ? scaler.bandwidth() : undefined
-  const scalerOffset = textWidth ? textWidth / 2 : 0
+  const getBandwidth = (v: T) => {
+    return scaler.bandwidth ? scaler.bandwidth(v) : 0
+  }
+
+  const getTickOffset = (v: T) => getBandwidth(v) / 2
 
   const tickTransform = isHorizontal
-    ? (v: T) => getTransformTranslate((scaler.scale(v) || 0) + scalerOffset, 0)
-    : (v: T) => getTransformTranslate(0, (scaler.scale(v) || 0) + scalerOffset)
+    ? (v: T) => getTransformTranslate((scaler.scale(v) || 0) + getTickOffset(v), 0)
+    : (v: T) => getTransformTranslate(0, (scaler.scale(v) || 0) + getTickOffset(v))
 
   const positionClassName = positionClasses[position]
   const sizeClassName = sizeClasses[size]
@@ -95,7 +98,7 @@ export function Ticks<T>(props: Props<T>) {
     <div
       className={classnames(
         css.group,
-        textWidth ? css.groupLabels : css.groupValues,
+        scaler.bandwidth ? css.groupLabels : css.groupValues,
         positionClassName,
         sizeClassName,
         className
@@ -108,7 +111,12 @@ export function Ticks<T>(props: Props<T>) {
 
         return (
           <div key={idx} className={css.tick} style={{ transform, alignItems }}>
-            <span className={css.text} style={{ width: isHorizontal ? textWidth : undefined }}>
+            <span
+              className={css.text}
+              style={{
+                minWidth: isHorizontal ? getBandwidth(value) : undefined,
+              }}
+            >
               <Text
                 tag="div"
                 view="secondary"

@@ -182,3 +182,79 @@ export const getEveryNTick = (items: readonly number[], n: number) => {
 
   return getEveryN(items, n)
 }
+
+export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number[]): number => {
+  if (groupsSizes.length === 0) {
+    return graphSize
+  }
+
+  const step = Math.round(graphSize / groupsSizes.length)
+  const sizes = groupsSizes.filter(size => size > step)
+
+  if (sizes.length === 0) {
+    return step
+  }
+
+  const sumSizes = sum(sizes)
+  const groupsCount = groupsSizes.length - sizes.length
+  const nextGraphSize = graphSize - sumSizes
+
+  if (groupsCount === 1) {
+    return nextGraphSize
+  }
+
+  return getGraphStepSize(
+    nextGraphSize,
+    groupsSizes.filter(size => size <= step)
+  )
+}
+
+export const scaleBand = ({
+  groupsSizes,
+  range,
+  paddingInner = 0,
+  paddingOuter = 0,
+  align = 0.5,
+}: {
+  groupsSizes: Record<string, number>
+  range: NumberRange
+  paddingInner?: number
+  paddingOuter?: number
+  align?: number
+}): Scaler<string> => {
+  const groupsNames = Object.keys(groupsSizes)
+  const [start, end] = range
+  const fullPaddingOuter = paddingOuter * 2
+  const fullPaddingInner = paddingInner * (groupsNames.length - 1)
+  const graphSize = end - start - fullPaddingOuter - fullPaddingInner
+  const sizes = groupsNames.map(name => groupsSizes[name])
+  const step = getGraphStepSize(graphSize, sizes)
+  const startWithOffset = start + fullPaddingOuter * align
+
+  const values = groupsNames.reduce<Record<string, number>>((acc, name, i) => {
+    if (i === 0) {
+      acc[name] = startWithOffset
+    } else {
+      const prevColumnSize = acc[groupsNames[i - 1]]
+      const columnSize = groupsSizes[groupsNames[i - 1]]
+
+      acc[name] = Math.round(
+        prevColumnSize + (columnSize > step ? columnSize : step) + paddingInner
+      )
+    }
+    return acc
+  }, {})
+
+  return {
+    scale: (key: string) => values[key],
+    bandwidth: (key?: string) => {
+      if (!key) {
+        return 0
+      }
+
+      const size = groupsSizes[key]
+
+      return size > step ? size : step
+    },
+  }
+}

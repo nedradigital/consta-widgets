@@ -1,7 +1,7 @@
 import { scaleLinear } from '@/utils/scale'
 
 import { Groups } from '../'
-import { getDataColumns, getDomain, getEveryNTick } from '../helpers'
+import { getDataColumns, getDomain, getEveryNTick, getGraphStepSize } from '../helpers'
 
 const COLOR_GROUPS = {
   baton: 'black',
@@ -299,5 +299,19 @@ describe('getEveryNTick', () => {
 
   it('получение каждой второй засечки, с учетом отрицательных значений', () => {
     expect(getEveryNTick([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5], 2)).toEqual([-4, -2, 0, 2, 4])
+  })
+})
+
+describe('getGraphStepSize', () => {
+  it('возвращает размер графика, как размер группы если массив размеров пуст', () => {
+    expect(getGraphStepSize(450, [])).toEqual(450)
+  })
+
+  it('возвращает размер графика, как размер группы если массив размеров содержит 1 элемент', () => {
+    expect(getGraphStepSize(450, [50])).toEqual(450)
+  })
+
+  it('возвращает значение размера шага группы', () => {
+    expect(getGraphStepSize(450, [150, 50, 50, 150])).toEqual(75)
   })
 })
