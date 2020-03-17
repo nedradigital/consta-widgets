@@ -9,7 +9,7 @@ import { ColorGroups, FormatValue } from '@/dashboard/types'
 import { scaleBand, scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
-import { ActiveBarParams, Bar } from './components/Bar'
+import { Bar, TooltipData } from './components/Bar'
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
@@ -82,7 +82,7 @@ export const BarChart: React.FC<Props> = props => {
     unitPosition = 'none',
     size = 'm',
   } = props
-  const [activeBar, setActiveBar] = useState<ActiveBarParams>()
+  const [tooltipData, setTooltipData] = useState<TooltipData>()
   const [groupsSizes, setGroupsSizes] = useState<Record<string, number>>({})
 
   const ref = useRef(null)
@@ -203,8 +203,8 @@ export const BarChart: React.FC<Props> = props => {
                 groupScale={groupScale}
                 valuesScale={valuesScale}
                 color={colorGroups}
-                onMouseLeave={() => setActiveBar(undefined)}
-                onMouseEnter={setActiveBar}
+                onMouseLeave={() => setTooltipData(undefined)}
+                onMouseEnter={setTooltipData}
                 onChangeSize={value => handleChangeBarSize(idx, value)}
                 parentRef={svgRef}
                 formatValue={formatValueForLabel}
@@ -214,9 +214,9 @@ export const BarChart: React.FC<Props> = props => {
             )
           })}
         </svg>
-        {activeBar && (
+        {tooltipData && (
           <Tooltip
-            barColumn={activeBar}
+            data={tooltipData}
             isVertical={isVertical}
             isVisible
             svgParentRef={svgRef}

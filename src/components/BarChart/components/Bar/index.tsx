@@ -11,12 +11,6 @@ import { Size } from '../..'
 
 import css from './index.css'
 
-export type GeometryParams = {
-  x: number
-  y: number
-  columnSize: number
-}
-
 export type ColumnDetail = {
   category: string
   columnName: string
@@ -26,15 +20,28 @@ export type ColumnDetail = {
   columnSize: number
 }
 
-export type ColumnWithGeometry = GeometryParams & ColumnDetail
-
-export type ActiveBarParams = {
-  innerTranslate: number
-  values: readonly ColumnWithGeometry[]
-  params?: GeometryParams
+type Part = {
+  x: number
+  y: number
+  columnSize: number
+  isRounded: boolean
+  value: number
+  backgroundColor: string
 }
 
-type MouseAction = (column?: ActiveBarParams) => void
+type Parts = readonly Part[]
+
+export type TooltipData = {
+  innerTranslate: number
+  values: ReadonlyArray<{ value: number; category: string }>
+  params?: {
+    x: number
+    y: number
+    columnSize: number
+  }
+}
+
+type MouseAction = (column?: TooltipData) => void
 
 type Props = {
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
@@ -116,6 +123,14 @@ export const Bar: React.FC<Props> = props => {
     onChangeSize(barSize)
   }, [groupName, barSize, onChangeSize])
 
+  const getTextPositionOnX = (value: number, width: number) => {
+    return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
+  }
+
+  const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth() : 0
+  const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
+  const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
+
   const getRectPositionByAxis = (item: ColumnDetail, axis: 'x' | 'y') => {
     const isAxisX = axis === 'x'
     const isAxisY = axis === 'y'
@@ -131,39 +146,43 @@ export const Bar: React.FC<Props> = props => {
     return item.positionEnd || 0
   }
 
-  const columnDetailsData: ReadonlyArray<readonly ColumnWithGeometry[]> = columnDetails.map(
-    columns =>
-      columns.map(column => ({
-        ...column,
-        x: getRectPositionByAxis(column, 'x'),
-        y: getRectPositionByAxis(column, 'y'),
-      }))
-  )
+  const columnDetailsData: ReadonlyArray<{
+    parts: Parts
+    tooltipParams: TooltipData
+  }> = columnDetails.map(column => {
+    const parts = column.map(part => ({
+      value: part.value,
+      columnSize: part.columnSize,
+      backgroundColor: color[part.category],
+      x: getRectPositionByAxis(part, 'x'),
+      y: getRectPositionByAxis(part, 'y'),
+    }))
 
-  const getTextPositionOnX = (value: number, width: number) => {
-    return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
-  }
+    const visibleParts = parts.filter(item => item.columnSize > 0)
+    const tooltipValues = column.map(item => ({
+      value: item.value,
+      category: item.category,
+    }))
 
-  const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth() : 0
-  const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
-  const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
-
-  const renderContent = (
-    column: ColumnWithGeometry,
-    index: number,
-    items: readonly ColumnWithGeometry[]
-  ) => {
-    const { x, y, columnSize, value } = column
-
-    const details = {
-      innerTranslate: translate,
-      params: {
-        columnSize: items.reduce((a, b) => a + b.columnSize, 0),
-        x: items[0].x,
-        y: items[items.length - 1].y,
+    return {
+      parts: parts.map(item => ({
+        ...item,
+        isRounded: item === visibleParts[visibleParts.length - 1],
+      })),
+      tooltipParams: {
+        innerTranslate: translate,
+        params: {
+          columnSize: parts.reduce((a, b) => a + b.columnSize, 0),
+          x: parts[0].x,
+          y: parts[parts.length - 1].y,
+        },
+        values: isVertical ? [...tooltipValues].reverse() : tooltipValues,
       },
-      values: isVertical ? [...items].reverse() : items,
     }
+  })
+
+  const renderContent = (tooltipParams: TooltipData) => (column: Part, index: number) => {
+    const { x, y, columnSize, value, backgroundColor, isRounded } = column
 
     return (
       <foreignObject
@@ -173,22 +192,22 @@ export const Bar: React.FC<Props> = props => {
         width={isVertical ? columnDefaultSize : columnSize}
         height={isVertical ? columnSize : columnDefaultSize}
         onMouseLeave={onMouseLeave}
-        onMouseEnter={() => onMouseEnter(details)}
+        onMouseEnter={() => onMouseEnter(tooltipParams)}
       >
         <div
           className={getBarClassName({
             isVertical,
-            isRounded: index === items.length - 1,
+            isRounded,
             isNegative: value < 0,
             size,
           })}
-          style={{ backgroundColor: color[column.category] }}
+          style={{ backgroundColor }}
         />
       </foreignObject>
     )
   }
 
-  const renderValues = (column: ColumnWithGeometry, index: number) => {
+  const renderValues = (column: Part, index: number) => {
     const { y, columnSize, value } = column
 
     const isNegative = value < 0
@@ -211,9 +230,13 @@ export const Bar: React.FC<Props> = props => {
 
   return (
     <g>
-      <g transform={transform}>{columnDetailsData.map(columns => columns.map(renderContent))}</g>
+      <g transform={transform}>
+        {columnDetailsData.map(column => column.parts.map(renderContent(column.tooltipParams)))}
+      </g>
       {!isVertical && showValues && (
-        <g transform={transform}>{columnDetailsData.map(columns => columns.map(renderValues))}</g>
+        <g transform={transform}>
+          {columnDetailsData.map(column => column.parts.map(renderValues))}
+        </g>
       )}
     </g>
   )

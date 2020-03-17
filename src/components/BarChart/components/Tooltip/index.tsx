@@ -8,10 +8,10 @@ import { ColorGroups, FormatValue } from '@/dashboard/types'
 import { PositionState } from '@/utils/tooltips'
 
 import { Size } from '../..'
-import { ActiveBarParams, ColumnWithGeometry, COLUMN_WIDTHS, GeometryParams } from '../Bar'
+import { COLUMN_WIDTHS, TooltipData } from '../Bar'
 
 type Props = {
-  barColumn: ActiveBarParams
+  data: TooltipData
   isVertical: boolean
   isVisible: boolean
   svgParentRef: React.RefObject<SVGGElement>
@@ -25,7 +25,7 @@ const getOffsetPosition = (parameters: {
   svgRef: React.RefObject<SVGGElement>
   isVertical: boolean
   baseSize: number
-  params?: GeometryParams
+  params?: TooltipData['params']
   size: Size
 }): PositionState => {
   const { innerTranslate, svgRef, isVertical, baseSize, params, size } = parameters
@@ -54,7 +54,7 @@ const getLayout = ({
   color,
   formatValue,
 }: {
-  values: readonly ColumnWithGeometry[]
+  values: TooltipData['values']
   color: ColorGroups
   formatValue: FormatValue
 }) => {
@@ -66,7 +66,7 @@ const getLayout = ({
 }
 
 export const TooltipComponent: React.FC<Props> = ({
-  barColumn,
+  data,
   isVertical,
   isVisible,
   svgParentRef,
@@ -75,7 +75,7 @@ export const TooltipComponent: React.FC<Props> = ({
   size,
 }) => {
   const { baseSize } = useBaseSize()
-  const { params, values, innerTranslate } = barColumn
+  const { params, values, innerTranslate } = data
 
   const position = getOffsetPosition({
     innerTranslate,

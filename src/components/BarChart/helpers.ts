@@ -86,7 +86,8 @@ export const getColumnDetails = ({
         return previousValue
       }
 
-      const positionBegin = previousValue[currentIndex - 1]?.positionEnd || zeroPoint
+      const prevElement = previousValue[currentIndex - 1]
+      const positionBegin = prevElement ? prevElement.positionEnd : zeroPoint
       const positionEnd = Math.ceil(
         positionBegin + (zeroPoint - valuesScale.scale(normalizedValue))
       )
