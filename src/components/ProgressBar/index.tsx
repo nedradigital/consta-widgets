@@ -84,10 +84,10 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
             )}
 
             <div className={css.row}>
-              <div className={css.cell}>
+              <div className={classnames(css.cell, css.isProgressCell)}>
                 <Progress data={dataItem} color={color} size={size} />
               </div>
-              <div className={css.cell} style={{ color }}>
+              <div className={classnames(css.cell, css.isValueCell)} style={{ color }}>
                 <Text tag="div" size={summarySizes[size]}>
                   {isNotNil(value) ? summary : '–'}
                 </Text>

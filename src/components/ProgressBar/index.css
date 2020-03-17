@@ -25,6 +25,14 @@
     grid-column: 1 / span 2;
   }
 
+  &.isProgressCell {
+    min-width: calc-size(160);
+  }
+
+  &.isValueCell {
+    white-space: nowrap;
+  }
+
   @nest :--item:not(:first-child) :--row:first-child & {
     margin-top: var(--space-s);
   }
