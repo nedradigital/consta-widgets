@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 
 import { Text } from '@gpn-design/uikit'
+import classnames from 'classnames'
 
 import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
@@ -118,7 +119,14 @@ export const Axis: React.FC<Props> = ({
   return (
     <div
       ref={mainRef}
-      className={css.main}
+      className={classnames(
+        css.main,
+        size &&
+          {
+            s: css.sizeS,
+            m: '',
+          }[size]
+      )}
       style={{
         paddingTop: !showUnitLeft && !showPositions.top ? padding : 0,
         paddingBottom: !showUnitBottom && !showPositions.bottom ? padding : 0,
