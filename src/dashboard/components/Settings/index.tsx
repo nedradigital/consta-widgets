@@ -1,5 +1,7 @@
 import React from 'react'
 
+import classnames from 'classnames'
+
 import { WidgetSettingsDatasetSelect } from '@/components/WidgetSettingsDatasetSelect'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
@@ -7,6 +9,7 @@ import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
 import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset, DataType } from '@/dashboard/types'
+import { themeColorLight } from '@/utils/theme'
 import { isGrid, isSwitch, isWidget } from '@/utils/type-guards'
 import { getWidget } from '@/utils/widgets-list'
 import { OnChangeParam } from '@/utils/WidgetFactory'
@@ -25,7 +28,12 @@ const stopDrag = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagat
 
 export const Settings: React.FC<Props> = props => {
   return (
-    <div className={css.main} onMouseDown={stopDrag} onMouseUp={stopDrag} onMouseMove={stopDrag}>
+    <div
+      className={classnames(themeColorLight, css.main)}
+      onMouseDown={stopDrag}
+      onMouseUp={stopDrag}
+      onMouseMove={stopDrag}
+    >
       <SettingsList {...props} />
     </div>
   )

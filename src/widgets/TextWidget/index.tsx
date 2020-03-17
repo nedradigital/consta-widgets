@@ -1,52 +1,56 @@
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { IconMeatball, Text } from '@gpn-design/uikit'
+import { ChoiceGroup, IconMeatball, Text } from '@gpn-design/uikit'
+import { ChoiceT } from '@gpn-design/uikit/dist/components/ChoiceGroup'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
+import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { PositionState } from '@/utils/tooltips'
-import { IconSize } from '@/utils/ui-kit'
-import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
+import { IconSize, TextSize } from '@/utils/ui-kit'
+import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
-const dataType = DataType.Text
-type Data = DataMap[typeof dataType] | typeof undefined
+type TextProps = Omit<
+  React.ComponentProps<typeof Text>,
+  'children' | 'tag' | 'display' | 'type' | 'className'
+>
 
-export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
-
-export const typeNames = [
-  'heading1',
-  'heading2',
-  'heading3',
-  'heading4',
-  'text1',
-  'text2',
-  'text3',
-] as const
-export type TypeNames = typeof typeNames[number]
-
-type Params = {
+type CommonParams = {
   text: string
-  type: TypeNames
   croppedLineCount?: number
   croppedWithGradient?: boolean
 }
 
-type StyleProps = Omit<React.ComponentProps<typeof Text>, 'children' | 'tag'>
-type Size = NonNullable<StyleProps['size']>
+type BasicEditModeParams = CommonParams & {
+  type: TypeName
+}
+
+type ExtendedEditModeParams = CommonParams & {
+  type: 'advanced'
+} & TextProps
+
+type Params = BasicEditModeParams | ExtendedEditModeParams
 
 type TextType = {
-  [key in TypeNames]: {
+  [key in TypeName]: {
     text: string
-    props: StyleProps
+    props: TextProps
   }
 }
+
+type EditModeParams<T> = {
+  params: T
+  onChangeParam: OnChangeParam<T>
+}
+
+export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
 
 const textType: TextType = {
   heading1: {
@@ -101,7 +105,7 @@ const textType: TextType = {
   },
 }
 
-const iconSize: Record<Size, IconSize> = {
+const iconSize: Record<TextSize, IconSize> = {
   '2xs': 's',
   xs: 's',
   s: 's',
@@ -115,12 +119,92 @@ const iconSize: Record<Size, IconSize> = {
   '6xl': 'm',
 }
 
-export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
+const editMods: ReadonlyArray<ChoiceT<boolean>> = [
+  {
+    label: 'Базовый',
+    value: false,
+  },
+  {
+    label: 'Расширенный',
+    value: true,
+  },
+]
 
-export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
-  data,
-  params: { text: paramsText, type, croppedLineCount, croppedWithGradient },
-}) => {
+export const typeNames = [
+  'heading1',
+  'heading2',
+  'heading3',
+  'heading4',
+  'text1',
+  'text2',
+  'text3',
+] as const
+type TypeName = typeof typeNames[number]
+
+export const fontSizes: readonly TextSize[] = [
+  '2xs',
+  'xs',
+  's',
+  'm',
+  'l',
+  'xl',
+  '2xl',
+  '3xl',
+  '4xl',
+  '5xl',
+  '6xl',
+] as const
+
+export const textAligns: ReadonlyArray<NonNullable<TextProps['align']>> = [
+  'left',
+  'center',
+  'right',
+] as const
+export const textDecorations: ReadonlyArray<NonNullable<TextProps['decoration']>> = [
+  'underline',
+] as const
+export const fontFamilies: ReadonlyArray<NonNullable<TextProps['font']>> = [
+  'mono',
+  'sans',
+  'serif',
+] as const
+export const lineHeights: ReadonlyArray<NonNullable<TextProps['lineHeight']>> = [
+  '2xs',
+  'xs',
+  's',
+  'm',
+  'l',
+] as const
+export const textSpacings: ReadonlyArray<NonNullable<TextProps['spacing']>> = [
+  'xs',
+  's',
+  'm',
+  'l',
+] as const
+export const fontStyles: ReadonlyArray<NonNullable<TextProps['fontStyle']>> = ['italic'] as const
+export const textTransforms: ReadonlyArray<NonNullable<TextProps['transform']>> = [
+  'uppercase',
+] as const
+export const fontWeights: ReadonlyArray<NonNullable<TextProps['weight']>> = [
+  'black',
+  'bold',
+  'light',
+  'regular',
+  'semibold',
+  'thin',
+] as const
+
+const dataType = DataType.Text
+type Data = DataMap[typeof dataType] | typeof undefined
+
+export const defaultParams: BasicEditModeParams = { text: 'Заголовок', type: 'text1' }
+
+const isExtendedEditMode = (params: Params): params is ExtendedEditModeParams =>
+  params.type === 'advanced'
+
+export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ data, params }) => {
+  const { text: paramsText, croppedWithGradient, croppedLineCount } = params
+
   const textRef = React.useRef<HTMLDivElement>(null)
   const buttonRef = React.useRef<HTMLButtonElement>(null)
   const tooltipRef = React.useRef<HTMLDivElement>(null)
@@ -132,7 +216,20 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
 
   const text = data && data.text ? data.text : paramsText
-  const textProps = textType[type].props
+  const textProps = isExtendedEditMode(params)
+    ? {
+        align: params.align,
+        decoration: params.decoration,
+        font: params.font,
+        lineHeight: params.lineHeight,
+        size: params.size,
+        spacing: params.spacing,
+        fontStyle: params.fontStyle,
+        transform: params.transform,
+        weight: params.weight,
+      }
+    : textType[params.type].props
+
   const size = textProps.size || 's'
 
   /* Определение видимости градиента */
@@ -215,6 +312,119 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   )
 }
 
+const BasicEditMode = ({ params, onChangeParam }: EditModeParams<BasicEditModeParams>) => (
+  <WidgetSettingsSelect
+    name="Тип"
+    value={params.type}
+    onChange={value => onChangeParam('type', value)}
+    values={typeNames.map(i => ({ value: i, name: i }))}
+  />
+)
+
+const ExtendedEditMode = ({ params, onChangeParam }: EditModeParams<ExtendedEditModeParams>) => (
+  <>
+    <WidgetSettingsSelect
+      name="Размер шрифта"
+      value={params.size}
+      onChange={value => onChangeParam('size', value)}
+      values={fontSizes.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Выравнивание"
+      value={params.align}
+      onChange={value => onChangeParam('align', value)}
+      values={textAligns.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Оформление"
+      value={params.decoration}
+      onChange={value => onChangeParam('decoration', value)}
+      values={textDecorations.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Тип шрифта"
+      value={params.font}
+      onChange={value => onChangeParam('font', value)}
+      values={fontFamilies.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Межстрочный интервал"
+      value={params.lineHeight}
+      onChange={value => onChangeParam('lineHeight', value)}
+      values={lineHeights.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Межбуквенный интервал"
+      value={params.spacing}
+      onChange={value => onChangeParam('spacing', value)}
+      values={textSpacings.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Начертание"
+      value={params.fontStyle}
+      onChange={value => onChangeParam('fontStyle', value)}
+      values={fontStyles.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Регистр"
+      value={params.transform}
+      onChange={value => onChangeParam('transform', value)}
+      values={textTransforms.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+    <WidgetSettingsSelect
+      name="Насыщенность"
+      value={params.weight}
+      onChange={value => onChangeParam('weight', value)}
+      values={fontWeights.map(i => ({ value: i, name: i }))}
+      withEmptyValue={true}
+    />
+  </>
+)
+
+export const EditMode = (props: EditModeParams<Params>) => (
+  <>
+    <WidgetSettingsText
+      name="Текст"
+      value={props.params.text}
+      onChange={value => props.onChangeParam('text', value)}
+    />
+    <WidgetSettingsNumber
+      name="После какой строки обрезать текст"
+      value={props.params.croppedLineCount}
+      onChange={value => props.onChangeParam('croppedLineCount', value)}
+    />
+    <WidgetSettingsCheckbox
+      name="Закрашивать градиентом обрезаемую строку"
+      value={props.params.croppedWithGradient}
+      onChange={value => props.onChangeParam('croppedWithGradient', value)}
+    />
+    <WidgetSettingsItem name={'Режим редактирования'}>
+      <ChoiceGroup
+        items={[...editMods]}
+        value={isExtendedEditMode(props.params)}
+        isMultiple={false}
+        wpSize="s"
+        onChange={newValue =>
+          props.onChangeParam('type', newValue ? 'advanced' : defaultParams.type)
+        }
+      />
+    </WidgetSettingsItem>
+    {isExtendedEditMode(props.params) ? (
+      <ExtendedEditMode params={props.params} onChangeParam={props.onChangeParam} />
+    ) : (
+      <BasicEditMode params={props.params} onChangeParam={props.onChangeParam} />
+    )}
+  </>
+)
+
 export const TextWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Текст',
@@ -223,30 +433,6 @@ export const TextWidget = createWidget<Data, Params>({
   Content: TextWidgetContent,
   allowEmptyData: true,
   renderSettings(params, onChangeParam) {
-    return (
-      <>
-        <WidgetSettingsText
-          name="Текст"
-          value={params.text}
-          onChange={value => onChangeParam('text', value)}
-        />
-        <WidgetSettingsSelect
-          name="Тип"
-          value={params.type}
-          onChange={value => onChangeParam('type', value)}
-          values={typeNames.map(i => ({ value: i, name: i }))}
-        />
-        <WidgetSettingsNumber
-          name="После какой строки обрезать текст"
-          value={params.croppedLineCount}
-          onChange={value => onChangeParam('croppedLineCount', value)}
-        />
-        <WidgetSettingsCheckbox
-          name="Закрашивать градиентом обрезаемую строку"
-          value={params.croppedWithGradient}
-          onChange={value => onChangeParam('croppedWithGradient', value)}
-        />
-      </>
-    )
+    return <EditMode params={params} onChangeParam={onChangeParam} />
   },
 })
