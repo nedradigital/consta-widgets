@@ -29,6 +29,7 @@ export const Badge: React.FC<Props> = ({ className, size, status, children }) =>
     tag="span"
     size={size}
     weight="bold"
+    view={status === 'empty' ? 'secondary' : 'primary'}
     className={classnames(css.badge, status && css[status], sizeClasses[size], className)}
   >
     {children}

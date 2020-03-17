@@ -12,8 +12,8 @@ import { ProgressBar } from './'
 
 const dataWithNullValue = {
   colorGroups: {
-    first: '#FFBA3B',
-    second: '#39BA21',
+    first: 'var(--color-bg-warning)',
+    second: 'var(--color-bg-success)',
   },
   data: [
     {

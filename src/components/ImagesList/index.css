@@ -58,7 +58,7 @@
       content: '';
 
       border-radius: inherit;
-      background: #29b0ff;
+      background: var(--color-control-bg-border-checked);
     }
   }
 }
@@ -76,7 +76,7 @@
   height: 100%;
 
   border-radius: inherit;
-  background: var(--bg-color-white);
+  background: var(--color-bg-ghost);
 
   object-fit: cover;
   object-position: center;

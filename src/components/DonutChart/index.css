@@ -24,12 +24,12 @@
   }
 
   &.halfLeft {
-    filter: drop-shadow(-10px 0 5px var(--bg-box));
+    filter: drop-shadow(-10px 0 5px var(--color-control-bg-default));
   }
 
   &.halfRight {
     right: 0;
-    filter: drop-shadow(10px 0 5px var(--bg-box));
+    filter: drop-shadow(10px 0 5px var(--color-control-bg-default));
   }
 
   &.halfBottom {

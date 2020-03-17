@@ -16,7 +16,14 @@ storiesOf('components/PyramidChart', module)
   .add('interactive', () => (
     <PyramidChart
       data={getWidgetMockData(DataType.Pyramid)}
-      colors={['#FC4449', '#FF6D32', '#FF9724', '#F7CC1D', '#59D72C', '#00BD59']}
+      colors={[
+        'var(--color-bg-critical)',
+        'var(--color-bg-alert)',
+        'var(--color-bg-warning)',
+        'var(--color-bg-caution)',
+        'var(--color-bg-normal)',
+        'var(--color-bg-success)',
+      ]}
       constraint={boolean('constraint', true)}
       fontSize="m"
     />

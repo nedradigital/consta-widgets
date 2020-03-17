@@ -14,8 +14,8 @@ const MAX = 8
 const COUNT_POINTS = 51
 
 const colorGroups = {
-  first: '#20B55F',
-  second: '#56B9F2',
+  first: 'var(--color-bg-success)',
+  second: 'var(--color-bg-normal)',
 }
 
 const getGridConfig = () =>

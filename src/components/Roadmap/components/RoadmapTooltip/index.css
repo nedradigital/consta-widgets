@@ -14,7 +14,6 @@
 
 .main {
   --angle-size: 6px;
-  --border-radius-size: 4px;
 
   position: relative;
 
@@ -45,31 +44,31 @@
     var(--border-bottom-right-radius) var(--border-bottom-left-radius);
 
   :--isTop:not(:--isOpened) & {
-    --border-top-left-radius: var(--border-radius-size);
-    --border-top-right-radius: var(--border-radius-size);
-    --border-bottom-right-radius: var(--border-radius-size);
+    --border-top-left-radius: var(--control-radius);
+    --border-top-right-radius: var(--control-radius);
+    --border-bottom-right-radius: var(--control-radius);
   }
 
   :--isBottom:not(:--isOpened) & {
-    --border-bottom-left-radius: var(--border-radius-size);
-    --border-top-right-radius: var(--border-radius-size);
-    --border-bottom-right-radius: var(--border-radius-size);
+    --border-bottom-left-radius: var(--control-radius);
+    --border-top-right-radius: var(--control-radius);
+    --border-bottom-right-radius: var(--control-radius);
   }
 
   :--isTopLeft:--isOpened & {
-    --border-bottom-left-radius: var(--border-radius-size);
+    --border-bottom-left-radius: var(--control-radius);
   }
 
   :--isTopRight:--isOpened & {
-    --border-bottom-right-radius: var(--border-radius-size);
+    --border-bottom-right-radius: var(--control-radius);
   }
 
   :--isBottomLeft:--isOpened & {
-    --border-top-left-radius: var(--border-radius-size);
+    --border-top-left-radius: var(--control-radius);
   }
 
   :--isBottomRight:--isOpened & {
-    --border-top-right-radius: var(--border-radius-size);
+    --border-top-right-radius: var(--control-radius);
   }
 }
 
@@ -87,13 +86,13 @@
 
   &:hover,
   &.active {
-    background-color: #e5e9eb;
+    background-color: var(--color-control-bg-default-hover);
   }
 
   &.comment {
     width: 27px;
 
-    border-left: 1px solid #e5e9eb;
+    border-left: 1px solid var(--color-bg-border);
   }
 }
 
@@ -102,10 +101,10 @@
 }
 
 .content {
-  --border-top-left-radius: var(--border-radius-size);
-  --border-top-right-radius: var(--border-radius-size);
-  --border-bottom-left-radius: var(--border-radius-size);
-  --border-bottom-right-radius: var(--border-radius-size);
+  --border-top-left-radius: var(--control-radius);
+  --border-top-right-radius: var(--control-radius);
+  --border-bottom-left-radius: var(--control-radius);
+  --border-bottom-right-radius: var(--control-radius);
 
   width: calc-size(315);
   padding: var(--tooltip-vertical-padding) var(--tooltip-horizontal-padding);

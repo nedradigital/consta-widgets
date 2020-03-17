@@ -19,7 +19,7 @@
   }
 
   &.empty {
-    background-color: transparent;
+    background-color: var(--color-bg-system);
   }
 
   /* Размеры */

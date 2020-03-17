@@ -15,7 +15,7 @@ type Props = {
   isHorizontal: boolean
 }
 
-export const THRESHOLD_COLOR = '#f2c94c'
+export const THRESHOLD_COLOR = 'var(--color-bg-caution)'
 
 export const getFillPoints = (
   maxPoints: readonly NotEmptyItem[],

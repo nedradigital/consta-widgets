@@ -1,4 +1,4 @@
-.option {
+.main {
   display: flex;
   align-items: center;
 
@@ -8,7 +8,7 @@
   white-space: nowrap;
 
   border-radius: 2px;
-  background: rgba(250, 250, 250, 0.09);
+  background: var(--color-control-bg-ghost);
 }
 
 .label {
@@ -31,7 +31,9 @@
 
   cursor: pointer;
 
+  color: var(--color-control-typo-clear);
+
   &:hover {
-    opacity: 0.5;
+    color: var(--color-control-typo-clear-hover);
   }
 }

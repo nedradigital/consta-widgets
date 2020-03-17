@@ -1,6 +1,6 @@
 .item {
-  fill: #002d47;
-  stroke: rgba(246, 251, 253);
+  fill: var(--color-bg-secondary);
+  stroke: var(--color-bg-border);
   stroke-opacity: 0.28;
 
   &.isSelectable {
@@ -9,7 +9,7 @@
 
   &.isHovered,
   &.isSelected {
-    fill: #163d53;
+    fill: var(--color-control-bg-default-hover);
   }
 
   &.russia {

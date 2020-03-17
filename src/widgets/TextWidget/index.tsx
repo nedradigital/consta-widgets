@@ -284,6 +284,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
       <Text
         tag="div"
         {...textProps}
+        view="primary"
         className={classnames(
           css.text,
           Boolean(croppedLineCount) && css.isCropped,

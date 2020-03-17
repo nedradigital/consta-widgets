@@ -25,6 +25,6 @@
 
   &:hover,
   &.isDragging {
-    background-color: #0082cc;
+    background-color: var(--color-bg-link);
   }
 }

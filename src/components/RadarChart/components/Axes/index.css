@@ -1,5 +1,5 @@
 .main {
-  --axis-color: #fff;
+  --axis-color: var(--color-bg-border);
 }
 
 .label {

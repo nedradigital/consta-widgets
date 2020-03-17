@@ -12,7 +12,7 @@ storiesOf('components/TooltipContentForMultipleValues', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(
     blockCenteringDecorator({
-      backgroundColor: 'var(--bg-box)',
+      backgroundColor: 'var(--color-control-bg-default)',
       width: 250,
     })
   )
@@ -22,12 +22,12 @@ storiesOf('components/TooltipContentForMultipleValues', module)
         title="Тестовый заголовок"
         items={[
           {
-            color: 'red',
+            color: 'var(--color-bg-alert)',
             name: 'Первый длинный заголовок',
             value: '10',
           },
           {
-            color: 'blue',
+            color: 'var(--color-bg-normal)',
             name: 'Второй длинный заголовок',
             value: '10000000',
           },

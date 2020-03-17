@@ -12,7 +12,7 @@
 
     &:hover,
     &.isEditingSettings {
-      box-shadow: 0 0 5px aquamarine inset;
+      box-shadow: 0 0 5px var(--color-bg-success) inset;
     }
 
     &.isSwitch {
@@ -30,12 +30,12 @@
 
   padding: 10px 0;
 
-  border-radius: 4px;
-  background: var(--bg-constructor-butttons);
+  border-radius: var(--control-radius);
+  background: rgba(var(--color-nums-shadow), 0.5);
 
   /* stylelint-disable-next-line no-descending-specificity */
   &:hover {
-    background: var(--bg-constructor-butttons-hover);
+    background: rgba(var(--color-nums-shadow), 1);
   }
 
   @nest :--main:not(:hover) > & {
@@ -84,7 +84,7 @@
   }
 
   &:hover::before {
-    background: var(--bg-color-white);
+    background: var(--color-control-bg-ghost-hover);
   }
 
   @nest :--main.isCustomItem > :--editButtons:not(:hover) &:not(:first-child) {
@@ -102,9 +102,9 @@
 
   margin-left: 10px;
 
-  color: black;
-  background: #fff;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  color: var(--color-control-typo-default);
+  background: var(--color-bg-default);
+  box-shadow: 0 0 10px rgba(var(--color-nums-shadow), 0.5);
 }
 
 .content {

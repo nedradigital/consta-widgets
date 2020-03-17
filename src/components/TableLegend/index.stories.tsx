@@ -96,9 +96,9 @@ storiesOf('components/TableLegend', module)
       size="l"
       data={{
         colorGroups: object('colorGroups', {
-          first: 'red',
-          second: 'yellow',
-          third: 'green',
+          first: 'var(--color-bg-alert)',
+          second: 'var(--color-bg-caution)',
+          third: 'var(--color-bg-success)',
         }),
         list: getList(),
         legendFields: object('legendFields', [

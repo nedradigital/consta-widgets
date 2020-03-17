@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const SelectedOption: React.FC<Props> = ({ name, onRemove }) => (
-  <div className={css.option}>
+  <div className={css.main}>
     <Text tag="p" size="xs" weight="regular" className={css.label}>
       {name}
     </Text>
@@ -23,7 +23,7 @@ export const SelectedOption: React.FC<Props> = ({ name, onRemove }) => (
       className={css.buttonCross}
       type="button"
     >
-      <IconClose size="xs" view="secondary" />
+      <IconClose size="xs" />
     </button>
   </div>
 )

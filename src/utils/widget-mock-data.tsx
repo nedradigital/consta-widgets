@@ -412,9 +412,9 @@ const mockData: DataMap = {
   },
   [DataType.Donut]: {
     colorGroups: {
-      first: '#EB5757',
-      second: '#F2C94C',
-      third: '#56B9F2',
+      first: 'var(--color-bg-alert)',
+      second: 'var(--color-bg-caution)',
+      third: 'var(--color-bg-normal)',
     },
     data: [
       {
@@ -436,9 +436,9 @@ const mockData: DataMap = {
   },
   [DataType.BarChart]: {
     colorGroups: {
-      first: '#56B9F2',
-      second: '#EB5757',
-      third: '#FCA355',
+      first: 'var(--color-bg-normal)',
+      second: 'var(--color-bg-alert)',
+      third: 'var(--color-bg-warning)',
     },
     groups: [
       {
@@ -470,8 +470,8 @@ const mockData: DataMap = {
   },
   [DataType.LinearChart]: {
     colorGroups: {
-      first: '#20B55F',
-      second: '#56B9F2',
+      first: 'var(--color-bg-success)',
+      second: 'var(--color-bg-normal)',
     },
     data: [
       {
@@ -548,11 +548,11 @@ const mockData: DataMap = {
   },
   [DataType.TableLegend]: {
     colorGroups: {
-      first: 'red',
-      second: 'yellow',
-      third: 'green',
-      fourth: 'yellowgreen',
-      fifth: 'white',
+      first: 'var(--color-bg-alert)',
+      second: 'var(--color-bg-caution)',
+      third: 'var(--color-bg-success)',
+      fourth: 'var(--color-bg-warning)',
+      fifth: 'var(--color-bg-critical)',
     },
     list: tableLegendList,
     legendFields: [
@@ -628,10 +628,9 @@ const mockData: DataMap = {
   },
   [DataType.MultiBarChart]: {
     colorGroups: {
-      apples: '#56B9F2',
-      bananas: '#EB5757',
-      cherries: '#FCA355',
-      melon: 'aquamarine',
+      apples: 'var(--color-bg-normal)',
+      bananas: 'var(--color-bg-alert)',
+      cherries: 'var(--color-bg-warning)',
     },
     groups: [
       { groupName: 'Q1-2016', values: [{ apples: 30, bananas: 20, cherries: 23 }] },
@@ -642,11 +641,11 @@ const mockData: DataMap = {
   },
   [DataType.Legend]: {
     colorGroups: {
-      first: 'red',
-      second: 'yellow',
-      third: 'aquamarine',
-      fourth: 'purple',
-      fifth: 'green',
+      first: 'var(--color-bg-normal)',
+      second: 'var(--color-bg-alert)',
+      third: 'var(--color-bg-warning)',
+      fourth: 'var(--color-bg-success)',
+      fifth: 'var(--color-bg-caution)',
     },
     data: [
       {
@@ -673,9 +672,9 @@ const mockData: DataMap = {
   },
   [DataType.ProgressBar]: {
     colorGroups: {
-      first: '#FFBA3B',
-      second: '#39BA21',
-      third: '#00CFDE',
+      first: 'var(--color-bg-warning)',
+      second: 'var(--color-bg-success)',
+      third: 'var(--color-bg-normal)',
     },
     data: [
       {
@@ -741,8 +740,8 @@ const mockData: DataMap = {
   },
   [DataType.RadarChart]: {
     colorGroups: {
-      first: '#20B55F',
-      second: '#56B9F2',
+      first: 'var(--color-bg-success)',
+      second: 'var(--color-bg-normal)',
     },
     axesLabels: {
       job: 'Охрана труда',
@@ -797,10 +796,10 @@ const mockData: DataMap = {
         value: '5',
       },
       colorGroups: {
-        green: '#219653',
-        violet: '#AB63EE',
-        blue: '#56B9F2',
-        orange: '#FFA10A',
+        green: 'var(--color-bg-success)',
+        violet: 'var(--color-bg-caution)',
+        blue: 'var(--color-bg-normal)',
+        orange: 'var(--color-bg-warning)',
       },
       data: roadmapData,
       legend: [

@@ -17,7 +17,7 @@ const dataItemWithoutData = {
     sections: [{ value: null }, { value: null }, { value: null }],
   },
   colorGroup: {
-    forth: 'pink',
+    forth: 'var(--color-bg-alert)',
   },
 }
 
@@ -35,8 +35,8 @@ export const progressDonutData = {
     },
   ],
   colorGroups: {
-    plan: 'rgba(86, 185, 242, 0.19)',
-    fact: '#F38B00',
+    plan: 'var(--color-bg-border)',
+    fact: 'var(--color-bg-warning)',
   },
 }
 
@@ -44,7 +44,7 @@ storiesOf('components/DonutChart', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(
     blockCenteringDecorator({
-      backgroundColor: 'var(--bg-box)',
+      backgroundColor: 'var(--color-control-bg-default)',
       width: 200,
       height: 200,
     })

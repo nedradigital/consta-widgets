@@ -25,10 +25,10 @@ addDecorator(storyFn => {
     'theme_gap_small',
     'theme_size_gpn-default',
     'theme_space_gpn-default',
-    'theme_color_gpn-dark',
+    'theme_color_gpn-display',
   )
 
-  document.body.style.backgroundColor = 'var(--bg-color)'
+  document.body.style.backgroundColor = 'var(--color-bg-default)'
 
   return storyFn()
 })

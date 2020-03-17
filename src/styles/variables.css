@@ -3,19 +3,6 @@
 :root {
   --base-size: 16;
 
-  /* Цвета */
-  --opaque-color: rgba(0, 0, 0, 0);
-  --bg-color: rgb(0, 32, 51);
-  --bg-color-white: rgba(255, 255, 255, 0.1);
-  --bg-constructor-butttons: rgba(0, 0, 0, 0.5);
-  --bg-constructor-butttons-hover: rgba(0, 0, 0, 0.8);
-  --bg-box: #002d47;
-  --bg-widget: #0d2337;
-  --bg-dashboard: #061e31;
-  --bg-menu: #2d70ae;
-  --color-dashboard: #506573;
-  --table-even-row-background: rgba(0, 0, 0, 0.05);
-
   /* Размеры */
   --resizer-width: 5px;
 
@@ -29,8 +16,8 @@
   --fast-transition: 0.15s ease-out;
 
   /* Скроллбар */
-  --scroll-bar-color: rgba(255, 255, 255, 0.7);
+  --scroll-bar-color: var(--color-control-typo-ghost);
   --scrollbar-handle-size: 2px;
-  --scrollbar-padding: 4px;
+  --scrollbar-padding: var(--control-radius);
   --scrollbar-size: calc(var(--scrollbar-handle-size) + 2 * var(--scrollbar-padding));
 }

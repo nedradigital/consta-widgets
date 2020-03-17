@@ -74,13 +74,7 @@ export const FilterTooltip: React.FC<Props> = ({
             <MultiSelect options={options} values={selectedValues} onChange={setSelectedValues} />
             <div className={css.actionsRow}>
               <div className={css.action}>
-                <Button
-                  onClick={onCancel}
-                  type="button"
-                  wpSize="s"
-                  view="ghost"
-                  className={css.cancelButton}
-                >
+                <Button onClick={onCancel} type="button" wpSize="s" view="ghost">
                   Отмена
                 </Button>
               </div>

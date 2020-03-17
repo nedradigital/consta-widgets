@@ -12,7 +12,7 @@
 
   &[value]::-webkit-progress-bar {
     border-radius: 3px;
-    background-color: #13384e;
+    background-color: var(--color-bg-ghost);
   }
 
   &.isWithData[value]::-webkit-progress-value {

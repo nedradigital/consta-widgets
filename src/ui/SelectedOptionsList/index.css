@@ -1,4 +1,6 @@
 .selectedFilters {
+  --filters-border: 1px solid var(--color-bg-border);
+
   position: relative;
 
   display: flex;
@@ -10,8 +12,8 @@
   cursor: default !important;
   text-transform: initial;
 
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: var(--filters-border);
+  border-bottom: var(--filters-border);
 }
 
 .buttonCross {
@@ -24,34 +26,12 @@
 
   cursor: pointer;
 
+  color: var(--color-control-typo-clear);
+
   transform: translateY(-50%);
 
-  &::before,
-  &::after {
-    position: absolute;
-
-    width: 10px;
-    height: 1px;
-
-    content: '';
-
-    background-color: rgba(246, 251, 253, 0.7);
-  }
-
-  &::before {
-    top: 50%;
-
-    transform: translateX(-50%) rotate(45deg);
-  }
-
-  &::after {
-    top: 50%;
-
-    transform: translateX(-50%) rotate(-45deg);
-  }
-
   &:hover {
-    opacity: 0.5;
+    color: var(--color-control-typo-clear-hover);
   }
 }
 

@@ -1,3 +1,4 @@
+import { IconClose } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { SelectedOption } from '@/ui/SelectedOption'
@@ -19,7 +20,9 @@ export const SelectedOptionsList: React.FC<Props> = ({ values, onRemove, onReset
           <SelectedOption name={option.name} onRemove={() => onRemove(option.id)} />
         </div>
       ))}
-      <button onClick={onReset} className={css.buttonCross} title="Сбросить всё фильтры" />
+      <button onClick={onReset} className={css.buttonCross} title="Сбросить все фильтры">
+        <IconClose size="xs" />
+      </button>
     </div>
   )
 }
