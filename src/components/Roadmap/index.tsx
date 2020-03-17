@@ -481,9 +481,15 @@ export const Roadmap: React.FC<Props> = props => {
                 <div className={classnames(css.titleWrapper, css.monthTitleWrapper)}>
                   {item.period ? (
                     <div className={css.periodWrapper}>
-                      <div className={css.periodText}>
+                      <Text
+                        tag="div"
+                        lineHeight="s"
+                        view="primary"
+                        spacing="xs"
+                        className={css.periodText}
+                      >
                         {item.period} {item.year}
-                      </div>
+                      </Text>
                     </div>
                   ) : null}
                   <ThText>{item.value}</ThText>

@@ -125,7 +125,7 @@ const getMonthWeeks = (date: Date) => {
 const weekDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((dayName, idx) => (
   <div key={idx} className={classnames(css.cell, css.isWeekDay)}>
     <div className={css.cellContent}>
-      <Text tag="span" size="2xs" transform="uppercase" view="ghost">
+      <Text tag="span" size="2xs" transform="uppercase" view="ghost" spacing="xs">
         {dayName}
       </Text>
     </div>
