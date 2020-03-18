@@ -31,6 +31,14 @@
     margin-top: calc(-1 * var(--space-2xs));
   }
 
+  &.isProgressCell {
+    min-width: calc-size(160);
+  }
+
+  &.isValueCell {
+    white-space: nowrap;
+  }
+
   @nest :--item:not(:first-child) :--row:first-child & {
     margin-top: var(--space-s);
   }
