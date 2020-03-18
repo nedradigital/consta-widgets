@@ -108,7 +108,7 @@
   --border-bottom-right-radius: var(--border-radius-size);
 
   width: calc-size(315);
-  padding: var(--space-s) var(--space-xs);
+  padding: var(--tooltip-vertical-padding) var(--tooltip-horizontal-padding);
 
   text-align: left;
 
