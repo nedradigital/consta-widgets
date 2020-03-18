@@ -9,7 +9,7 @@ type Data = DataMap[typeof dataType]
 
 export const widgetId = '4cbc790b-7124-402f-8c7f-ec48b3403f74'
 
-type Params = { [key: string]: never }
+type Params = {}
 
 export const defaultParams: Params = {}
 
@@ -21,6 +21,9 @@ export const ImageWidget = createWidget<Data, Params>({
   id: widgetId,
   name: 'Картинка',
   dataType,
-  defaultParams,
+  defaultParams: {
+    ...defaultParams,
+    growRatio: 1,
+  },
   Content: ImageWidgetContent,
 })
