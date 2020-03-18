@@ -90,16 +90,15 @@
     background-color: #e5e9eb;
   }
 
-  &.dates {
-    background-image: url('./icon_calendar_s.svg');
-  }
-
   &.comment {
     width: 27px;
 
     border-left: 1px solid #e5e9eb;
-    background-image: url('./icon_chat_s.svg');
   }
+}
+
+.icon {
+  margin: 0 auto;
 }
 
 .content {

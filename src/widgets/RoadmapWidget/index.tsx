@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import AnimateHeight from 'react-animate-height'
 
-import { Text } from '@gpn-design/uikit'
+import { IconArrowUp, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Legend } from '@/components/Legend'
@@ -10,7 +10,6 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
-import { ReactComponent as IconArrowSvg } from './icons/icon_arrow.svg'
 import css from './index.css'
 
 const dataType = DataType.Roadmap
@@ -42,7 +41,7 @@ const RoadmapBlock: React.FC<{
             onClick={!isButtonDisabled ? () => setOpen(!isOpened) : undefined}
           >
             {!isButtonDisabled ? (
-              <IconArrowSvg className={classnames(css.icon, isOpened && css.isOpened)} />
+              <IconArrowUp size="m" className={classnames(css.icon, isOpened && css.isOpened)} />
             ) : null}
             <Text tag="span" size="xl" weight="bold" view="primary">
               {item.title}

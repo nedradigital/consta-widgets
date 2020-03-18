@@ -1,5 +1,5 @@
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Text } from '@gpn-design/uikit'
+import { IconMeatball, Text } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
@@ -10,9 +10,9 @@ import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { PositionState } from '@/utils/tooltips'
+import { IconSize } from '@/utils/ui-kit'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
-import { ReactComponent as IconSettings } from './icons/settings.svg'
 import css from './index.css'
 
 const dataType = DataType.Text
@@ -101,18 +101,18 @@ const textType: TextType = {
   },
 }
 
-const iconSize: Record<Size, string> = {
-  '2xs': css.sizeXS,
-  xs: css.sizeXS,
-  s: css.sizeS,
-  m: css.sizeL,
-  l: css.sizeL,
-  xl: css.sizeXL,
-  '2xl': css.sizeXL,
-  '3xl': css.size3XL,
-  '4xl': css.size3XL,
-  '5xl': css.size3XL,
-  '6xl': css.size3XL,
+const iconSize: Record<Size, IconSize> = {
+  '2xs': 's',
+  xs: 's',
+  s: 's',
+  m: 's',
+  l: 's',
+  xl: 'm',
+  '2xl': 'm',
+  '3xl': 'm',
+  '4xl': 'm',
+  '5xl': 'm',
+  '6xl': 'm',
 }
 
 export const defaultParams: Params = { text: 'Заголовок', type: 'text1' }
@@ -198,14 +198,14 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
       {data && (data.tooltip || data.onClick) && (
         <div className={css.toggleable}>
           <button ref={buttonRef} className={css.button} onClick={onToggleClick}>
-            <IconSettings className={classnames(iconSize[size])} />
+            <IconMeatball size={iconSize[size]} />
           </button>
           <Tooltip
             ref={tooltipRef}
-            className={css.tooltip}
             isVisible={tooltipVisible}
             direction="downCenter"
             position={tooltipPosition}
+            isContentHoverable
           >
             {data.tooltip}
           </Tooltip>

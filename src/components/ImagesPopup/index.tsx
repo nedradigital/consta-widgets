@@ -1,14 +1,13 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 
+import { IconArrowLeft, IconArrowRight, IconClose } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
 import { Image } from '@/components/Image'
 import { ImageItem, ImagesList } from '@/components/ImagesList'
 
-import { ReactComponent as IconArrowSvg } from './images/arrow.svg'
-import { ReactComponent as IconCloseSvg } from './images/close.svg'
 import css from './index.css'
 
 type Props = {
@@ -91,12 +90,12 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
         </div>
         {currentImageIdx > 0 && (
           <button type="button" className={classnames(css.button, css.toLeft)} onClick={goLeft}>
-            <IconArrowSvg className={css.icon} />
+            <IconArrowLeft size="m" />
           </button>
         )}
         {currentImageIdx < images.length - 1 && (
           <button type="button" className={classnames(css.button, css.toRight)} onClick={goRight}>
-            <IconArrowSvg className={css.icon} />
+            <IconArrowRight size="m" />
           </button>
         )}
         <button
@@ -104,7 +103,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
           className={classnames(css.button, css.close)}
           onClick={onRequestClose}
         >
-          <IconCloseSvg className={css.icon} />
+          <IconClose size="m" />
         </button>
       </div>
     </div>,

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { Button, Text } from '@gpn-design/uikit'
+import { Button, IconBackward, IconForward, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import {
   addMonths,
@@ -16,7 +16,6 @@ import { times } from 'lodash'
 
 import { DateRange, isDateRange } from '../..'
 
-import { ReactComponent as IconNext } from './icons/arrow_next.svg'
 import css from './index.css'
 
 const MOVE_STEP = 6
@@ -234,7 +233,7 @@ export const Timeline: React.FC<Props> = ({
         disabled={offset === 0}
         onClick={handleMovePrev}
       >
-        <IconNext className={css.iconPrev} />
+        <IconBackward size="xs" />
       </Button>
       <div ref={timelineRef} className={css.timeline}>
         <div className={css.ticks} style={{ transform: `translateX(${offset}px)` }}>
@@ -275,7 +274,7 @@ export const Timeline: React.FC<Props> = ({
         disabled={offset === maxOffset}
         onClick={handleMoveNext}
       >
-        <IconNext />
+        <IconForward size="xs" />
       </Button>
     </div>
   )

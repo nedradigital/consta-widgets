@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
-import { Text } from '@gpn-design/uikit'
+import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { reverse } from 'lodash'
 
@@ -27,7 +27,7 @@ type Props = {
 const MAX_LENGTH_COMMENT = 280
 const CLEAN_COMMENT = 'Комментария нет'
 
-const stopEventHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) =>
+const stopEventHandler = (event: React.MouseEvent<HTMLElement, MouseEvent>) =>
   event.stopPropagation()
 
 const getDayText = (start: number, end: number) =>
@@ -123,20 +123,24 @@ export const RoadmapTooltip: React.FC<Props> = ({
       </div>
     ) : null,
     <div key="buttons" className={css.buttons}>
-      <div
+      <button
         className={classnames(css.button, css.dates, isActiveDates && css.active)}
         onClick={event => {
           stopEventHandler(event)
           changeActiveSection('dates')
         }}
-      />
-      <div
+      >
+        <IconCalendar size="s" view="primary" className={css.icon} />
+      </button>
+      <button
         className={classnames(css.button, css.comment, isActiveComment && css.active)}
         onClick={event => {
           stopEventHandler(event)
           changeActiveSection('comment')
         }}
-      />
+      >
+        <IconChat size="s" view="primary" className={css.icon} />
+      </button>
     </div>,
   ] as const
 
