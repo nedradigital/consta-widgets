@@ -3,6 +3,7 @@ import { Position, Size, Type } from '@/components/LegendItem'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -125,7 +126,10 @@ export const LegendWidget = createWidget<Data, Params>({
           name="Размер текста"
           value={params.fontSize}
           onChange={value => onChangeParam('fontSize', value)}
-          values={sizes}
+          values={sizes.map(({ name, value }) => ({
+            name: getFormattedFontSizeName({ name, value }),
+            value,
+          }))}
         />
       </>
     )

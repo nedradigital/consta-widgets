@@ -11,6 +11,7 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
+import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { PositionState } from '@/utils/tooltips'
 import { IconSize, TextSize } from '@/utils/ui-kit'
 import { widgetIdsByType } from '@/utils/widgets-list'
@@ -341,7 +342,10 @@ const ExtendedEditMode = ({ params, onChangeParam }: EditModeParams<ExtendedEdit
       name="Размер шрифта"
       value={params.size}
       onChange={value => onChangeParam('size', value)}
-      values={fontSizes.map(i => ({ value: i, name: i }))}
+      values={fontSizes.map(value => ({
+        name: getFormattedFontSizeName({ value }),
+        value,
+      }))}
       withEmptyValue
     />
     <WidgetSettingsSelect

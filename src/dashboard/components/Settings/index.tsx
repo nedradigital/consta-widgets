@@ -8,7 +8,8 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset, DataType } from '@/dashboard'
-import { sizeValues } from '@/dashboard/components/BoxItemWrapper'
+import { marginSizeValues } from '@/dashboard/size-constants'
+import { getFormattedMarginName } from '@/utils/size-name-formatters'
 import { themeColorLight } from '@/utils/theme'
 import { isGrid, isSwitch, isWidget } from '@/utils/type-guards'
 import { getWidget } from '@/utils/widgets-list'
@@ -22,7 +23,7 @@ type Props = {
   onChange: (newParams: BoxItem) => void
 }
 
-const marginSizes = Object.keys(sizeValues) as readonly BoxItemMarginSize[]
+const marginSizes = Object.keys(marginSizeValues) as readonly BoxItemMarginSize[]
 
 const stopDrag = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()
 
@@ -87,7 +88,10 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
       <WidgetSettingsSelect
         name="Отступ сверху"
         value={params.marginTop}
-        values={marginSizes.map(size => ({ value: size, name: size }))}
+        values={marginSizes.map(size => ({
+          name: getFormattedMarginName(size),
+          value: size,
+        }))}
         withEmptyValue
         onChange={value => onChangeParam('marginTop', value)}
       />
