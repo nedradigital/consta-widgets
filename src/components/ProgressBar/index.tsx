@@ -94,7 +94,6 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
               </div>
             </div>
 
-            {/* 3 строка */}
             {ticks.length ? (
               <div className={css.row}>
                 <div className={classnames(css.cell, css.isTicksCell)}>
