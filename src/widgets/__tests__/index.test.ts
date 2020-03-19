@@ -1,12 +1,14 @@
 import { readdirSync } from 'fs'
 import { sortBy } from 'lodash'
 
+import { widgetIdsByType } from '@/utils/widgets-list'
+
 import * as widgets from '../'
 
 const exportedWidgets = sortBy(Object.keys(widgets))
 const allWidgets = sortBy(readdirSync('src/widgets').filter(item => !/(\.)|(__.*__)/.test(item)))
 const widgetsNameIdMap = allWidgets.reduce<Record<string, string>>((acc, name) => {
-  acc[name] = require(`../${name}`).widgetId
+  acc[name] = require(`../${name}`)[name].id
   return acc
 }, {})
 const widgetsIds = Object.values(widgetsNameIdMap)
@@ -25,5 +27,11 @@ describe('widgets', () => {
     it(`у виджета ${name} уникальный идентификатор`, () => {
       expect(widgetsIds.filter(i => i === id).length).toEqual(1)
     })
+  })
+
+  it('проверяем, что используются все айдишники', () => {
+    const ids = Object.values(widgetIdsByType)
+
+    expect(sortBy(ids)).toEqual(sortBy(widgetsIds))
   })
 })

@@ -11,7 +11,7 @@ import { BoxItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { defaultParams, ImagesWidget, ImagesWidgetContent, widgetId } from '.'
+import { defaultParams, ImagesWidget, ImagesWidgetContent } from '.'
 
 storiesOf('widgets/ImagesWidget', module)
   .addDecorator(blockCenteringDecorator({ width: '30vw' }))
@@ -31,7 +31,7 @@ storiesOf('widgets/ImagesWidget', module)
         type: 'widget',
         debugName: 'ImagesWidget',
         id,
-        widgetType: widgetId,
+        widgetType: ImagesWidget.id,
         params: defaultParams,
       },
     ]

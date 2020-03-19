@@ -11,7 +11,7 @@ import { Settings } from '@/dashboard/components/Settings'
 import { Switch, switchId } from '@/dashboard/components/Switch'
 import { isSwitch, isWidget } from '@/utils/type-guards'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
-import { getWidget, getWidgetComponentName, widgetIds } from '@/utils/widgets-list'
+import { getWidget, getWidgetComponentName, WidgetId, widgetIds } from '@/utils/widgets-list'
 
 import { ItemTypes } from '../../dnd-constants'
 import {
@@ -52,6 +52,8 @@ const verticalAlignmentClasses = {
   middle: css.verticalAlignMiddle,
   top: undefined,
 }
+
+type WidgetAndCustomWidgetId = WidgetId | 'grid' | 'switch'
 
 const getDebugName = (item: BoxItem): string => {
   if (item.type === 'grid') {
@@ -97,7 +99,7 @@ export const Box: React.FC<Props> = ({
   verticalAlign = 'top',
   parentName,
 }) => {
-  const [selectedItem, changeSelected] = useState(widgetIds[0])
+  const [selectedItem, changeSelected] = useState<WidgetAndCustomWidgetId>(widgetIds[0])
   const [settingsOpenedFor, changeSettingsOpenedFor] = useState()
   const { getUniqueName, removeName } = useUniqueNameGenerator(
     items
@@ -268,7 +270,7 @@ export const Box: React.FC<Props> = ({
           <div className={css.panelHoveredContent}>
             <select
               value={selectedItem}
-              onChange={e => changeSelected(e.target.value)}
+              onChange={e => changeSelected(e.target.value as WidgetAndCustomWidgetId)}
               className={css.select}
             >
               <optgroup label="Виджеты">

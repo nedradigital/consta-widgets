@@ -1,25 +1,20 @@
+import _ from 'lodash'
+
+import { widgetIdsByType } from '@/dashboard/migration/migrations/current'
 import { WidgetType } from '@/utils/WidgetFactory'
 
-const req = require.context('../widgets', true, /index.tsx$/)
-const widgetsList: { [key: string]: any } = req.keys().reduce((acc, key) => {
-  const widgetName = key.replace(/\.\/(.*)\/.*$/, '$1')
-  const widgetId = req(key)[widgetName].id
+export { widgetIdsByType }
 
-  return {
-    ...acc,
-    [widgetId]: {
-      widgetName,
-      ...req(key),
-    },
-  }
-}, {})
+export const widgetIds = Object.values(widgetIdsByType)
 
-export const widgetIds = Object.keys(widgetsList)
+export type WidgetId = typeof widgetIds[number]
+export type WidgetName = keyof typeof widgetIdsByType
 
-export const getWidget = (id: string): WidgetType<any, any> => {
-  const name = widgetsList[id].widgetName
+export const getWidgetComponentName = (id: WidgetId) =>
+  _.findKey(widgetIdsByType, _.partial(_.isEqual, id)) as WidgetName
 
-  return widgetsList[id][name]
+export const getWidget = (id: WidgetId): WidgetType<any, any> => {
+  const widgetName = getWidgetComponentName(id)
+
+  return require(`../widgets/${widgetName}/index.tsx`)[widgetName]
 }
-
-export const getWidgetComponentName = (id: string): string => widgetsList[id].widgetName

@@ -1,9 +1,9 @@
 import { Layout } from 'react-grid-layout'
 
-import { LinearChartWidget } from '@/widgets/LinearChartWidget'
-
 import { Migration } from '../..'
 import { Dashboard5 } from '../dashboard5'
+
+export const LinearChartWidgetId = 'e63c468b-75bd-4c5c-95c7-696e598db6e3'
 
 export namespace Dashboard6 {
   export type ColumnsContent = ReadonlyArray<readonly BoxItem[]>
@@ -56,14 +56,14 @@ export const migration6: Migration<Dashboard5.State, Dashboard6.State> = {
   versionTo: 6,
   changes: ['У линейного виджета изменился пропс isVertical на isHorizontal'],
   up: data => {
-    const updateItem = (item: Dashboard6.BoxItem): Dashboard5.BoxItem => {
+    const updateItem = (item: Dashboard5.BoxItem): Dashboard6.BoxItem => {
       if (item.type === 'columns') {
         return {
           ...item,
           columns: item.columns.map(column => column.map(updateItem)),
         }
       } else {
-        if (item.widgetType === LinearChartWidget.id) {
+        if (item.widgetType === LinearChartWidgetId) {
           const { isVertical, ...restParams } = item.params
           return {
             ...item,
@@ -100,7 +100,7 @@ export const migration6: Migration<Dashboard5.State, Dashboard6.State> = {
           columns: item.columns.map(column => column.map(updateItem)),
         }
       } else {
-        if (item.widgetType === LinearChartWidget.id) {
+        if (item.widgetType === LinearChartWidgetId) {
           const { isHorizontal, ...restParams } = item.params
           return {
             ...item,

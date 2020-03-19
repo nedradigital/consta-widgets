@@ -1,6 +1,4 @@
-import { widgetId as textWidgetId } from '@/widgets/TextWidget'
-
-import { Dashboard10, migration10 } from '../'
+import { Dashboard10, migration10, widgetIdsByType } from '../'
 import { Dashboard9 } from '../../dashboard9'
 
 const createTextWidget = (name: string, params = {}) =>
@@ -8,7 +6,7 @@ const createTextWidget = (name: string, params = {}) =>
     type: 'widget',
     debugName: name,
     id: name,
-    widgetType: textWidgetId,
+    widgetType: widgetIdsByType.TextWidget,
     params,
   } as const)
 

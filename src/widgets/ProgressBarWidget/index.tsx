@@ -4,12 +4,11 @@ import { ProgressBar, Size, sizes } from '@/components/ProgressBar'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.ProgressBar
 type Data = DataMap[typeof dataType]
-
-export const widgetId = '944a8e67-5604-444f-afe0-f4a3263b734a'
 
 type Params = {
   size: Size
@@ -29,7 +28,7 @@ export const ProgressBarWidgetContent: React.FC<WidgetContentProps<Data, Params>
 }
 
 export const ProgressBarWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.ProgressBarWidget,
   name: 'Прогресс-бар ("градусник")',
   defaultParams,
   dataType,

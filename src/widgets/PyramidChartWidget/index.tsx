@@ -7,12 +7,11 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Pyramid
 type Data = DataMap[typeof dataType]
-
-export const widgetId = '7adf7782-03cd-4452-bfc7-20f1c02d8eac'
 
 type Params = {
   constraint?: boolean
@@ -61,7 +60,7 @@ export const PyramidChartWidgetContent: React.FC<WidgetContentProps<Data, Params
 }) => <PyramidChart data={data} {...params} />
 
 export const PyramidChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.PyramidChartWidget,
   name: 'Фиксированная пирамида',
   defaultParams,
   dataType,

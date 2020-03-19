@@ -8,14 +8,13 @@ import { Legend } from '@/components/Legend'
 import { Roadmap } from '@/components/Roadmap'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
 const dataType = DataType.Roadmap
 type Data = DataMap[typeof dataType]
-
-export const widgetId = '3e85c9b1-2507-4dd0-955c-469a3f1919b5'
 
 type Params = {
   areAllOpened: boolean
@@ -107,7 +106,7 @@ export const RoadmapWidgetContent: React.FC<WidgetContentProps<Data, Params>> = 
 )
 
 export const RoadmapWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.RoadmapWidget,
   name: 'Роадмап',
   defaultParams,
   dataType,

@@ -1,6 +1,4 @@
-import { LinearChartWidget } from '@/widgets/LinearChartWidget'
-
-import { Dashboard6, migration6 } from '../'
+import { Dashboard6, LinearChartWidgetId, migration6 } from '../'
 import { Dashboard5 } from '../../dashboard5'
 
 describe('migration6', () => {
@@ -14,7 +12,7 @@ describe('migration6', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: LinearChartWidget.id,
+            widgetType: LinearChartWidgetId,
             params: {
               isVertical: true,
             },
@@ -36,7 +34,7 @@ describe('migration6', () => {
                   type: 'widget',
                   debugName: '3',
                   id: '3',
-                  widgetType: LinearChartWidget.id,
+                  widgetType: LinearChartWidgetId,
                   params: {
                     isVertical: false,
                   },
@@ -61,7 +59,7 @@ describe('migration6', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: LinearChartWidget.id,
+            widgetType: LinearChartWidgetId,
             params: {
               isHorizontal: false,
             },
@@ -83,7 +81,7 @@ describe('migration6', () => {
                   type: 'widget',
                   debugName: '3',
                   id: '3',
-                  widgetType: LinearChartWidget.id,
+                  widgetType: LinearChartWidgetId,
                   params: {
                     isHorizontal: true,
                   },
@@ -112,7 +110,7 @@ describe('migration6', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: LinearChartWidget.id,
+            widgetType: LinearChartWidgetId,
             params: {
               isHorizontal: true,
             },
@@ -137,7 +135,7 @@ describe('migration6', () => {
                   type: 'widget',
                   debugName: '3',
                   id: '3',
-                  widgetType: LinearChartWidget.id,
+                  widgetType: LinearChartWidgetId,
                   params: {
                     isHorizontal: false,
                   },
@@ -159,7 +157,7 @@ describe('migration6', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: LinearChartWidget.id,
+            widgetType: LinearChartWidgetId,
             params: {
               isVertical: false,
             },
@@ -181,7 +179,7 @@ describe('migration6', () => {
                   type: 'widget',
                   debugName: '3',
                   id: '3',
-                  widgetType: LinearChartWidget.id,
+                  widgetType: LinearChartWidgetId,
                   params: {
                     isVertical: true,
                   },

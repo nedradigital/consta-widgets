@@ -9,12 +9,10 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { exampleDatasets } from '@/dashboard/index.stories'
 import { BoxItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import {
-  defaultParams as statsWidgetDefaultParams,
-  widgetId as statsWidgetId,
-} from '@/widgets/StatsWidget'
-import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
+import { defaultParams as statsWidgetDefaultParams } from '@/widgets/StatsWidget'
+import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
 
 import { Box } from '.'
 
@@ -24,14 +22,14 @@ const initialItems: readonly BoxItem[] = [
     type: 'widget',
     debugName: 'TitleWidget',
     id: getUniqueName('TitleWidget'),
-    widgetType: textWidgetId,
+    widgetType: widgetIdsByType.TextWidget,
     params: textDefaultParams,
   },
   {
     type: 'widget',
     debugName: 'StatsWidget',
     id: statsWidgetKey,
-    widgetType: statsWidgetId,
+    widgetType: widgetIdsByType.StatsWidget,
     params: statsWidgetDefaultParams,
   },
 ]

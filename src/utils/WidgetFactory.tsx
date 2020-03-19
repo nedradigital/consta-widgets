@@ -9,6 +9,7 @@ import {
 } from '@/dashboard/types'
 import { dataColorsValidator, widgetDataIsEmpty } from '@/utils/validators'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
+import { WidgetId } from '@/utils/widgets-list'
 
 export type WidgetType<Data, Params> = React.FC<{
   data: DashboardData
@@ -20,7 +21,7 @@ export type WidgetType<Data, Params> = React.FC<{
   showName: string // name у React.FC уже есть
   mockData: Data
   defaultParams: Params
-  id: string
+  id: WidgetId
   dataType: DataType | null
   getSettings: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
 }
@@ -40,7 +41,7 @@ export const createWidget = <
   Data extends DataMap[keyof DataMap] | typeof undefined,
   Params extends { [key: string]: any } = {}
 >(opts: {
-  id: string
+  id: WidgetId
   name: string
   dataType: DataType | null
   defaultParams: CommonBoxItemParams & Params

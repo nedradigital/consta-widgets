@@ -13,6 +13,7 @@ import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { PositionState } from '@/utils/tooltips'
 import { IconSize, TextSize } from '@/utils/ui-kit'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
@@ -441,7 +442,7 @@ export const EditMode = (props: EditModeParams<Params>) => (
 )
 
 export const TextWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.TextWidget,
   name: 'Текст',
   defaultParams,
   dataType,

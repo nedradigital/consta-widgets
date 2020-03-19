@@ -6,6 +6,7 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.MultiBarChart
@@ -18,8 +19,6 @@ type Params = {
   valuesTicks: number
   unitPosition: UnitPosition
 }
-
-export const widgetId = '653e4b44-2bac-4483-8366-ace725375a35'
 
 export const defaultParams: Params = {
   orientation: 'vertical',
@@ -45,7 +44,7 @@ export const MultiBarChartWidgetContent: React.FC<WidgetContentProps<Data, Param
 )
 
 export const MultiBarChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.MultiBarChartWidget,
   name: 'МультиБарчарт',
   defaultParams: {
     ...defaultParams,

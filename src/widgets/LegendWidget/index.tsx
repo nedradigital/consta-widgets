@@ -3,12 +3,11 @@ import { Position, Size, Type } from '@/components/LegendItem'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Legend
 type Data = DataMap[typeof dataType]
-
-export const widgetId = '2538ed91-7c6d-403e-9c3e-d68d3ecd8d00'
 
 type Params = {
   direction: Direction
@@ -87,7 +86,7 @@ export const LegendWidgetContent: React.FC<WidgetContentProps<Data, Params>> = (
 )
 
 export const LegendWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.LegendWidget,
   name: 'Легенда',
   defaultParams,
   dataType,

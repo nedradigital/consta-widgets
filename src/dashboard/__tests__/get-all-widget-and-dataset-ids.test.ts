@@ -1,7 +1,4 @@
-import { widgetId as textWidgetId } from '@/widgets/TextWidget'
-
-// Чтобы тесты не падали на require.context
-jest.mock('@/utils/widgets-list', () => ({}))
+import { widgetIdsByType } from '@/utils/widgets-list'
 
 import { DashboardState, getAllWidgetAndDatasetIds } from '../'
 
@@ -10,7 +7,7 @@ const createTextWidget = (name: string, params = {}) =>
     type: 'widget',
     debugName: name,
     id: name,
-    widgetType: textWidgetId,
+    widgetType: widgetIdsByType.TextWidget,
     params: {
       ...params,
       datasetId: `datasetId${name}`,

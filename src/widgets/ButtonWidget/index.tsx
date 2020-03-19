@@ -5,12 +5,11 @@ import { Button } from '@gpn-design/uikit'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Button
 type Data = DataMap[typeof dataType]
-
-export const widgetId = '950e2e88-06e7-4429-86be-0a26dc93944e'
 
 const widths = ['full', 'auto'] as const
 type Width = typeof widths[number]
@@ -71,7 +70,7 @@ export const ButtonWidgetContent: React.FC<WidgetContentProps<Data, Params>> = (
 )
 
 export const ButtonWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.ButtonWidget,
   name: 'Кнопка',
   defaultParams,
   dataType: DataType.Button,
