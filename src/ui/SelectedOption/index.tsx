@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text } from '@gpn-design/uikit'
+import { IconClose, Text } from '@gpn-design/uikit'
 
 import css from './index.css'
 
@@ -22,6 +22,8 @@ export const SelectedOption: React.FC<Props> = ({ name, onRemove }) => (
       }}
       className={css.buttonCross}
       type="button"
-    />
+    >
+      <IconClose size="xs" view="secondary" />
+    </button>
   </div>
 )

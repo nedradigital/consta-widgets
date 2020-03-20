@@ -55,10 +55,10 @@ export const FilterTooltip: React.FC<Props> = ({
     <>
       <button
         ref={buttonRef}
-        className={classnames(css.iconFilter, isOpened && css.isOpened, className)}
+        className={classnames(css.button, isOpened && css.isOpened, className)}
         onClick={() => handleFilterTogglerClick()}
       >
-        <IconFunnel size="xs" />
+        <IconFunnel size="xs" className={css.iconFilter} />
       </button>
       {isOpened &&
         isDefinedPosition(tooltipPosition) &&

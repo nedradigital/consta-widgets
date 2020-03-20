@@ -31,30 +31,6 @@
 
   cursor: pointer;
 
-  &::before,
-  &::after {
-    position: absolute;
-
-    width: 10px;
-    height: 1px;
-
-    content: '';
-
-    background-color: rgba(246, 251, 253, 0.7);
-  }
-
-  &::before {
-    top: 50%;
-
-    transform: translateX(-50%) rotate(45deg);
-  }
-
-  &::after {
-    top: 50%;
-
-    transform: translateX(-50%) rotate(-45deg);
-  }
-
   &:hover {
     opacity: 0.5;
   }

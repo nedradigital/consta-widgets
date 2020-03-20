@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Checkbox, Text } from '@gpn-design/uikit'
+import { Checkbox, IconSelect, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
@@ -62,7 +62,7 @@ export const MultiSelect: React.FC<Props> = ({
             {placeholder}
           </Text>
         )}
-        <div className={css.iconArrow} />
+        <IconSelect size="xs" view="secondary" className={css.iconArrow} />
       </div>
 
       {isSelectOpened && (

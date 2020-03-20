@@ -15,8 +15,6 @@
 
   margin-right: calc-size(8);
 
-  vertical-align: bottom;
-
   transition: transform 0.3s;
   transform: rotate(180deg);
 
