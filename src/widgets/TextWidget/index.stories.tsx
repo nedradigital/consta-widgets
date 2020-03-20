@@ -6,23 +6,65 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { defaultParams, TextWidgetContent, typeNames } from '.'
+import {
+  defaultParams,
+  fontFamilies,
+  fontSizes,
+  fontWeights,
+  lineHeights,
+  textAligns,
+  textSpacings,
+  TextWidgetContent,
+  typeNames,
+} from '.'
 
 storiesOf('widgets/TextWidget', module)
   .addDecorator(
     blockCenteringDecorator({ backgroundColor: 'var(--bg-box)', padding: 20, width: 350 })
   )
-  .add('interactive', () => (
+  .add('стандартный режим', () => (
     <TextWidgetContent
       data={{
         text: text('data', ''),
         tooltip: <p>Контент тултипа</p>,
       }}
       params={{
-        text: text('title', defaultParams.text),
         type: select('type', typeNames, defaultParams.type),
+        text: text('text', defaultParams.text),
         croppedLineCount: number('croppedLineCount', 0),
         croppedWithGradient: boolean('croppedWithGradient', false),
+      }}
+    />
+  ))
+  .add('расширенный режим', () => (
+    <TextWidgetContent
+      data={{
+        text: text('data', defaultParams.text),
+        tooltip: <p>Контент тултипа</p>,
+      }}
+      params={{
+        type: 'advanced',
+        text: text('text', defaultParams.text),
+        croppedLineCount: number('croppedLineCount', 0),
+        croppedWithGradient: boolean('croppedWithGradient', false),
+        size: select('size', fontSizes, 'm'),
+        align: select(
+          'align',
+          {
+            left: textAligns[0],
+            center: textAligns[1],
+            right: textAligns[2],
+            '--': undefined,
+          },
+          undefined
+        ),
+        decoration: boolean('underline', false) ? 'underline' : undefined,
+        font: select('font', fontFamilies, undefined),
+        lineHeight: select('lineHeight', lineHeights, undefined),
+        spacing: select('spacing', textSpacings, undefined),
+        fontStyle: boolean('italic', false) ? 'italic' : undefined,
+        transform: boolean('uppercase', false) ? 'uppercase' : undefined,
+        weight: select('weight', fontWeights, undefined),
       }}
     />
   ))

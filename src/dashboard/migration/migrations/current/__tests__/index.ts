@@ -1,7 +1,8 @@
 import { widgetId as textWidgetId } from '@/widgets/TextWidget'
 
 import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard9 } from '../../dashboard9'
+import { Dashboard10 } from '../../dashboard10'
+import CommonBoxItemParams = CurrentDashboard.CommonBoxItemParams
 
 const createTextWidget = (name: string, params = {}) =>
   ({
@@ -12,36 +13,58 @@ const createTextWidget = (name: string, params = {}) =>
     params,
   } as const)
 
+const commonBoxItemsParams: CommonBoxItemParams & { datasetId?: string } = {
+  datasetId: '123',
+  fallbackPlaceholderText: '123',
+  growRatio: 0,
+  marginTop: '2xs',
+}
+
+const commonTextWidgetParams = {
+  text: 'Заголовок1',
+  croppedLineCount: 0,
+  croppedWithGradient: false,
+}
+
+const advancedTextWidgetParams = {
+  type: 'advanced',
+  font: 'mono',
+  align: 'center',
+  decoration: 'underline',
+}
+
 describe('currentMigration', () => {
   it('повышает версию', () => {
-    const source: Dashboard9.State = {
-      version: 9,
+    const widgetParams = {
+      type: 'text1',
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+    }
+    const source: Dashboard10.State = {
+      version: 10,
       boxes: [],
       config: {
-        Box0: [
-          createTextWidget('1', {
-            croppedLineCount: 1,
-          }),
+        Box0: [createTextWidget('1', widgetParams)],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1', widgetParams)]],
+            params: {},
+          },
         ],
         Box2: [
           {
             type: 'grid',
             grid: {
-              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
-              rowParams: [{}],
+              columnParams: [],
+              rowParams: [],
               items: [
                 // Строка 1
-                [
-                  // Колонка 1
-                  [createTextWidget('col1-1'), createTextWidget('col1-2')],
-                  // Колонка 2
-                  [createTextWidget('col2-1')],
-                ],
+                [[createTextWidget('col1-1', widgetParams)]],
               ],
             },
-            params: {
-              growRatio: 1,
-            },
+            params: {},
           },
         ],
       },
@@ -49,33 +72,30 @@ describe('currentMigration', () => {
     }
 
     const result: CurrentDashboard.State = {
-      version: 10,
+      version: 11,
       boxes: [],
       config: {
-        Box0: [
-          createTextWidget('1', {
-            croppedLineCount: 1,
-          }),
+        Box0: [createTextWidget('1', widgetParams)],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1', widgetParams)]],
+            params: {},
+          },
         ],
         Box2: [
           {
             type: 'grid',
             grid: {
-              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
-              rowParams: [{}],
+              columnParams: [],
+              rowParams: [],
               items: [
                 // Строка 1
-                [
-                  // Колонка 1
-                  [createTextWidget('col1-1'), createTextWidget('col1-2')],
-                  // Колонка 2
-                  [createTextWidget('col2-1')],
-                ],
+                [[createTextWidget('col1-1', widgetParams)]],
               ],
             },
-            params: {
-              growRatio: 1,
-            },
+            params: {},
           },
         ],
       },
@@ -86,16 +106,34 @@ describe('currentMigration', () => {
   })
 
   it('понижает версию', () => {
-    const source: CurrentDashboard.State = {
-      version: 10,
+    const sourceBasicTextWidgetParams = {
+      type: 'heading1',
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+    }
+
+    const sourceAdvancedTextWidgetParams = {
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+      ...advancedTextWidgetParams,
+    }
+
+    const resultBasicTextWidgetParams = {
+      type: 'text1',
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+    }
+
+    const sourceBasicMode: CurrentDashboard.State = {
+      version: 11,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1')],
+        Box0: [createTextWidget('1', sourceBasicTextWidgetParams)],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1')], [createTextWidget('1.2')]],
+            displays: [[createTextWidget('1.1', sourceBasicTextWidgetParams)]],
             params: {},
           },
         ],
@@ -103,42 +141,11 @@ describe('currentMigration', () => {
           {
             type: 'grid',
             grid: {
-              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
-              rowParams: [{}],
+              columnParams: [],
+              rowParams: [],
               items: [
                 // Строка 1
-                [
-                  // Колонка 1
-                  [createTextWidget('2.1a'), createTextWidget('2.1b')],
-                  // Колонка 2
-                  [createTextWidget('2.2')],
-                ],
-              ],
-            },
-            params: {
-              growRatio: 1,
-            },
-          },
-        ],
-        Box3: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [{}],
-              rowParams: [{}],
-              items: [
-                // строка
-                [
-                  // колонка
-                  [
-                    {
-                      id: 'switchId',
-                      type: 'switch',
-                      displays: [[createTextWidget('3.1')], [createTextWidget('3.2')]],
-                      params: {},
-                    },
-                  ],
-                ],
+                [[createTextWidget('col1-1', sourceBasicTextWidgetParams)]],
               ],
             },
             params: {},
@@ -148,44 +155,61 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    const result: Dashboard9.State = {
-      version: 9,
+    const resultBasicMode: Dashboard10.State = {
+      version: 10,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1')],
-        Box1: [createTextWidget('1.1')],
+        Box0: [createTextWidget('1', sourceBasicTextWidgetParams)],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1', sourceBasicTextWidgetParams)]],
+            params: {},
+          },
+        ],
         Box2: [
           {
             type: 'grid',
             grid: {
-              columnParams: [{ growRatio: 11 }, { growRatio: 22 }],
-              rowParams: [{}],
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [[createTextWidget('col1-1', sourceBasicTextWidgetParams)]],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    const sourceExtendedMode: CurrentDashboard.State = {
+      version: 11,
+      boxes: [],
+      config: {
+        Box0: [createTextWidget('1', sourceAdvancedTextWidgetParams)],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1', sourceAdvancedTextWidgetParams)]],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
               items: [
                 // Строка 1
                 [
                   // Колонка 1
-                  [createTextWidget('2.1a'), createTextWidget('2.1b')],
-                  // Колонка 2
-                  [createTextWidget('2.2')],
-                ],
-              ],
-            },
-            params: {
-              growRatio: 1,
-            },
-          },
-        ],
-        Box3: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [{}],
-              rowParams: [{}],
-              items: [
-                // строка
-                [
-                  // колонка
-                  [createTextWidget('3.1')],
+                  [createTextWidget('col1-1', sourceAdvancedTextWidgetParams)],
                 ],
               ],
             },
@@ -196,6 +220,39 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    expect(currentMigration.down(source)).toEqual(result)
+    const resultExtendedMode: Dashboard10.State = {
+      version: 10,
+      boxes: [],
+      config: {
+        Box0: [createTextWidget('1', resultBasicTextWidgetParams)],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [[createTextWidget('1.1', resultBasicTextWidgetParams)]],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [[createTextWidget('col1-1', resultBasicTextWidgetParams)]],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    expect(currentMigration.down(sourceBasicMode)).toEqual(resultBasicMode)
+
+    expect(currentMigration.down(sourceExtendedMode)).toEqual(resultExtendedMode)
   })
 })
