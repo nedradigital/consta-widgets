@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
 import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
-import { reverse } from 'lodash'
 
 import { Direction, Tooltip } from '@/components/Tooltip'
 import { ColorGroups } from '@/dashboard/types'
@@ -121,25 +120,27 @@ export const RoadmapTooltip: React.FC<Props> = ({
         ? renderComment(comment)
         : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
     </div>,
-    <div key="buttons" className={css.buttons}>
-      <button
-        className={classnames(css.button, css.dates, isActiveDates && css.active)}
-        onClick={event => {
-          stopEventHandler(event)
-          changeActiveSection('dates')
-        }}
-      >
-        <IconCalendar size="s" view={getIconView(isActiveDates)} className={css.icon} />
-      </button>
-      <button
-        className={classnames(css.button, css.comment, isActiveComment && css.active)}
-        onClick={event => {
-          stopEventHandler(event)
-          changeActiveSection('comment')
-        }}
-      >
-        <IconChat size="s" view={getIconView(isActiveComment)} className={css.icon} />
-      </button>
+    <div key="buttons">
+      <div className={css.buttons}>
+        <button
+          className={classnames(css.button, css.dates, isActiveDates && css.active)}
+          onClick={event => {
+            stopEventHandler(event)
+            changeActiveSection('dates')
+          }}
+        >
+          <IconCalendar size="s" view={getIconView(isActiveDates)} className={css.icon} />
+        </button>
+        <button
+          className={classnames(css.button, css.comment, isActiveComment && css.active)}
+          onClick={event => {
+            stopEventHandler(event)
+            changeActiveSection('comment')
+          }}
+        >
+          <IconChat size="s" view={getIconView(isActiveComment)} className={css.icon} />
+        </button>
+      </div>
     </div>,
   ] as const
 
@@ -149,18 +150,18 @@ export const RoadmapTooltip: React.FC<Props> = ({
         themeColorLight,
         css.main,
         {
-          left: '',
-          right: '',
+          left: css.left,
+          right: css.right,
           upLeft: css.upLeft,
-          upCenter: '',
+          upCenter: css.upCenter,
           upRight: css.upRight,
           downLeft: css.downLeft,
-          downCenter: '',
+          downCenter: css.downCenter,
           downRight: css.downRight,
         }[contentDirection]
       )}
     >
-      {contentDirection.includes('up') ? content : reverse([...content])}
+      {content}
     </div>
   )
 
