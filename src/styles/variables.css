@@ -23,9 +23,6 @@
   --z-filter--tooltip: 1;
   --z-multi-select: calc(var(--z-filter--tooltip) + 1);
   --resizer-z: 1;
-  --z-datepicker-date: 0;
-  --z-datepicker-date-bg: calc(var(--z-datepicker-date) - 1);
-  --z-datepicker-date-sub-bg: calc(var(--z-datepicker-date-bg) - 1);
   --z-box-wrapper: 1;
 
   /* Анимации */

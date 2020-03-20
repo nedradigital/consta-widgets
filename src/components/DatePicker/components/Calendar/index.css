@@ -16,6 +16,9 @@
   --color-primary: #56b9f2;
   --color-secondary: #abdbf7;
   --day-bg: transparent;
+  --z-date: 0;
+  --z-date-bg: calc(var(--z-date) - 1);
+  --z-date-sub-bg: calc(var(--z-date-bg) - 1);
 
   display: flex;
 
@@ -76,6 +79,7 @@
 
 .cellContent {
   position: relative;
+  z-index: var(--z-date);
 
   display: flex;
   align-items: center;
@@ -88,7 +92,7 @@
     --color-today: var(--color-primary);
 
     position: absolute;
-    z-index: var(--z-datepicker-date-bg);
+    z-index: var(--z-date-bg);
     top: 0;
     right: 0;
     bottom: 0;
@@ -106,7 +110,7 @@
 
   @nest :--isSingleDate &::before {
     position: absolute;
-    z-index: var(--z-datepicker-date-sub-bg);
+    z-index: var(--z-date-sub-bg);
     top: 0;
     right: 0;
     bottom: 0;
@@ -132,7 +136,7 @@
 
   @nest :--isRange &::before {
     position: absolute;
-    z-index: var(--z-datepicker-date-sub-bg);
+    z-index: var(--z-date-sub-bg);
     top: 0;
     right: calc(var(--cell-bg-side-offset) * -1);
     bottom: 0;
@@ -153,7 +157,7 @@
 
   @nest :--isRange &::after {
     position: absolute;
-    z-index: var(--z-datepicker-date-bg);
+    z-index: var(--z-date-bg);
     top: 0;
     right: 0;
     bottom: 0;
