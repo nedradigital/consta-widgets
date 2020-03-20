@@ -35,6 +35,11 @@ type Props = {
 const ARC_PAD = 1
 const ARC_RADIUS = 100
 
+const fullCircleAngle = {
+  startAngle: 0,
+  endAngle: 2 * Math.PI,
+}
+
 const getAnglesByHalfDonut = (halfDonut?: HalfDonut) => {
   switch (halfDonut) {
     case 'top': {
@@ -62,12 +67,13 @@ const getAnglesByHalfDonut = (halfDonut?: HalfDonut) => {
       }
     }
     default: {
-      return {
-        startAngle: 0,
-        endAngle: 2 * Math.PI,
-      }
+      return fullCircleAngle
     }
   }
+}
+
+const isEmpty = (pieData: ReadonlyArray<Omit<DataItem, 'colorGroupName' | 'name'>>) => {
+  return pieData.map(pieDatum => pieDatum.value).every(value => value === 0)
 }
 
 export const Donut: React.FC<Props> = ({
@@ -122,13 +128,21 @@ export const Donut: React.FC<Props> = ({
       onMouseOut={handleMouseOut}
       className={classnames(css.donut, isTooltipVisible && css.isTransparent)}
     >
-      {pieData.map((pieDatum, idx) => (
+      {isEmpty(pieData) ? (
         <path
-          key={idx}
-          d={arc(pieDatum) || undefined}
-          fill={colorGroups[pieDatum.data.colorGroupName]}
+          d={arc({ ...pieData[0], ...fullCircleAngle }) || undefined}
+          fill="var(--color-bg-ghost)"
+          fillOpacity={0.2}
         />
-      ))}
+      ) : (
+        pieData.map((pieDatum, idx) => (
+          <path
+            key={idx}
+            d={arc(pieDatum) || undefined}
+            fill={colorGroups[pieDatum.data.colorGroupName]}
+          />
+        ))
+      )}
     </g>
   )
 }
