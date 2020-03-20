@@ -9,16 +9,6 @@
   top: 50%;
   right: 10px;
 
-  width: 0;
-  height: 0;
-
-  content: '';
-
-  opacity: 0.7;
-  border-top: 4px solid #f6fbfd;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
-
   transition: transform 0.25s;
   transform: translateY(-50%);
 }
