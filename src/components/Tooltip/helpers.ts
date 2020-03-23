@@ -4,14 +4,26 @@ import { isDefinedPosition } from '@/utils/type-guards'
 
 type Size = Pick<ClientRect, 'width' | 'height'>
 
-const getIsInBorders = ({
+const isDirectionUp = (direction: Direction) => {
+  return ['upLeft', 'upCenter', 'upRight'].includes(direction)
+}
+
+const isDirectionDown = (direction: Direction) => {
+  return ['downLeft', 'downCenter', 'downRight'].includes(direction)
+}
+
+export const getIsInBorders = ({
   position,
   parentSize,
   tooltipSize,
+  anchorSize = { width: 0, height: 0 },
+  offset = 0,
 }: {
   position: Position
   parentSize: Size
   tooltipSize: Size
+  anchorSize?: Size
+  offset?: number
 }): {
   top: boolean
   bottom: boolean
@@ -20,11 +32,12 @@ const getIsInBorders = ({
   left: boolean
   horizontal: boolean
 } => {
-  const isInTopBorder = position.y <= tooltipSize.height
-  const isInBottomBorder = position.y >= parentSize.height - tooltipSize.height
+  const isInTopBorder = position.y - anchorSize.height <= tooltipSize.height + offset
+  const isInBottomBorder = position.y >= parentSize.height - tooltipSize.height - offset
   const isInVerticalBorders = isInTopBorder && isInBottomBorder
-  const isInLeftBorder = position.x <= tooltipSize.width
-  const isInRightBorder = position.x >= parentSize.width - tooltipSize.width
+  const isInLeftBorder = position.x <= tooltipSize.width + offset
+  const isInRightBorder =
+    position.x + anchorSize.width >= parentSize.width - tooltipSize.width - offset
   const isInHorizontalBorders = isInLeftBorder && isInRightBorder
 
   return {
@@ -56,34 +69,16 @@ export const getComputedPositionAndDirection = (
     x: undefined,
     y: undefined,
   }
-  const closestToCornerPosition: NonNullable<PositionState> = { ...initialPosition }
 
   if ('anchorClientRect' in props) {
     initialPosition.x = props.anchorClientRect.left
     initialPosition.y = props.anchorClientRect.bottom
-
-    closestToCornerPosition.x =
-      props.anchorClientRect.left < parentSize.width - props.anchorClientRect.right
-        ? props.anchorClientRect.left
-        : props.anchorClientRect.right
-    closestToCornerPosition.y =
-      props.anchorClientRect.top < parentSize.height - props.anchorClientRect.bottom
-        ? props.anchorClientRect.top
-        : props.anchorClientRect.bottom
   } else if ('position' in props && isDefinedPosition(props.position)) {
     initialPosition.x = props.position.x
     initialPosition.y = props.position.y
   }
 
-  let positionToCheckIfIsInBorders
-
-  if ('position' in props) {
-    positionToCheckIfIsInBorders = initialPosition
-  } else if ('anchorClientRect' in props) {
-    positionToCheckIfIsInBorders = closestToCornerPosition
-  }
-
-  if (!isDefinedPosition(positionToCheckIfIsInBorders) || !isDefinedPosition(initialPosition)) {
+  if (!isDefinedPosition(initialPosition)) {
     return { direction: initialDirection, position: initialPosition }
   }
 
@@ -92,9 +87,11 @@ export const getComputedPositionAndDirection = (
   const anchorHeight = ('anchorClientRect' in props && props.anchorClientRect?.height) || 0
 
   const isInBorders = getIsInBorders({
-    position: positionToCheckIfIsInBorders,
+    position: initialPosition,
     parentSize,
     tooltipSize,
+    offset,
+    anchorSize: { width: anchorWidth, height: anchorHeight },
   })
 
   const leftPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth))
@@ -178,15 +175,45 @@ export const getComputedPositionAndDirection = (
         return 'upRight'
       }
       case isInBorders.top: {
-        return 'downCenter'
+        if (['left', 'upLeft'].includes(initialDirection)) {
+          return 'downLeft'
+        }
+        if (['right', 'upRight'].includes(initialDirection)) {
+          return 'downRight'
+        }
+        if (initialDirection === 'upCenter') {
+          return 'downCenter'
+        }
+        return initialDirection
       }
       case isInBorders.right: {
+        if (isDirectionUp(initialDirection)) {
+          return 'upLeft'
+        }
+        if (isDirectionDown(initialDirection)) {
+          return 'downLeft'
+        }
         return 'left'
       }
       case isInBorders.bottom: {
-        return 'upCenter'
+        if (['left', 'downLeft'].includes(initialDirection)) {
+          return 'upLeft'
+        }
+        if (['right', 'downRight'].includes(initialDirection)) {
+          return 'upRight'
+        }
+        if (initialDirection === 'downCenter') {
+          return 'upCenter'
+        }
+        return initialDirection
       }
       case isInBorders.left: {
+        if (isDirectionUp(initialDirection)) {
+          return 'upRight'
+        }
+        if (isDirectionDown(initialDirection)) {
+          return 'downRight'
+        }
         return 'right'
       }
       default: {
