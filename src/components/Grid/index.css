@@ -1,5 +1,5 @@
 .main {
-  color: rgba(213, 221, 226, 0.5);
+  color: var(--color-bg-border);
 }
 
 .line {

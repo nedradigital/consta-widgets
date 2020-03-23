@@ -1,7 +1,7 @@
 .dashboard {
   width: 100%;
 
-  background-color: var(--bg-dashboard);
+  background-color: var(--color-bg-default);
 
   /* эти стили нужны для корректной работы react-grid-layout */
 
@@ -44,7 +44,7 @@
       user-select: none;
 
       opacity: 0.2;
-      background: red;
+      background: var(--color-bg-alert);
 
       transition-duration: 100ms;
     }
@@ -72,7 +72,7 @@
 
     & .react-draggable-dragging,
     & .react-grid-item.resizing {
-      box-shadow: 0 0 5px black;
+      box-shadow: 0 0 5px rgba(var(--color-nums-shadow), 1);
     }
 
     /* stylelint-enable */

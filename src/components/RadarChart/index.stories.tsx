@@ -12,8 +12,8 @@ import { Figure, RadarChart } from './'
 
 const getColorGroups = () => {
   return object('colorGroups', {
-    mainCharacter: '#20B55F',
-    partyMember: '#56B9F2',
+    mainCharacter: 'var(--color-bg-success)',
+    partyMember: 'var(--color-bg-normal)',
   })
 }
 
@@ -122,7 +122,7 @@ storiesOf('components/RadarChart', module)
       maxValue={10}
       figures={figures}
       ticks={4}
-      backgroundColor="var(--bg-color)"
+      backgroundColor="var(--color-bg-default)"
       formatValueForLabel={getFormattedValueForLabel()}
       formatValueForTooltip={getFormattedValueForTooltip()}
       withConcentricColor={false}
@@ -136,7 +136,7 @@ storiesOf('components/RadarChart', module)
       maxValue={10}
       figures={emptyFigures}
       ticks={4}
-      backgroundColor="var(--bg-color)"
+      backgroundColor="var(--color-bg-default)"
       formatValueForLabel={getFormattedValueForLabel()}
       formatValueForTooltip={getFormattedValueForTooltip()}
       withConcentricColor={false}
@@ -150,7 +150,7 @@ storiesOf('components/RadarChart', module)
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={4}
-      backgroundColor="var(--bg-color)"
+      backgroundColor="var(--color-bg-default)"
       formatValueForLabel={getFormattedValueForLabel()}
       withConcentricColor={false}
       labelSize="s"
@@ -163,7 +163,7 @@ storiesOf('components/RadarChart', module)
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={5}
-      backgroundColor="var(--bg-color)"
+      backgroundColor="var(--color-bg-default)"
       withConcentricColor
       labelSize="s"
     />
@@ -175,7 +175,7 @@ storiesOf('components/RadarChart', module)
       maxValue={10}
       figures={[emptyFigures[0]]}
       ticks={5}
-      backgroundColor="var(--bg-color)"
+      backgroundColor="var(--color-bg-default)"
       withConcentricColor
       labelSize="s"
     />
@@ -190,7 +190,7 @@ storiesOf('components/RadarChart', module)
       maxValue: 10,
       figures,
       ticks: 4,
-      backgroundColor: 'var(--bg-color)',
+      backgroundColor: 'var(--color-bg-default)',
       withConcentricColor: true,
       labelSize: 's',
     } as const

@@ -20,10 +20,10 @@ storiesOf('widgets/MultiBarChartWidget', module)
     <MultiBarChartWidgetContent
       data={object('data', {
         colorGroups: {
-          apples: '#56B9F2',
-          bananas: '#EB5757',
-          cherries: '#FCA355',
-          year: 'aquamarine',
+          apples: 'var(--color-bg-normal)',
+          bananas: 'var(--color-bg-alert)',
+          cherries: 'var(--color-bg-warning)',
+          year: 'var(--color-bg-success)',
         },
         ...DataWithTwoColumnsOnDate,
         unit: 'тыс м3',

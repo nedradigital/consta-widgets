@@ -7,6 +7,7 @@ import classnames from 'classnames'
 
 import { BoxItem } from '@/dashboard'
 import { BoxItemMarginSize } from '@/dashboard/types'
+import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'
 
@@ -131,8 +132,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
         portalEl &&
         ReactDOM.createPortal(
           <ClickOutHandler onClickOut={() => onOpenSettings(undefined)}>
-            {}
-            <div className={css.settings} style={{ left, top }}>
+            <div className={classnames(themeColorLight, css.settings)} style={{ left, top }}>
               {settings}
             </div>
           </ClickOutHandler>,

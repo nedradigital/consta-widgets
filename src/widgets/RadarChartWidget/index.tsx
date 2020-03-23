@@ -27,7 +27,7 @@ type Data = DataMap[typeof dataType]
 export const RadarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params,
   data,
-}) => <RadarChart {...data} {...params} backgroundColor="var(--bg-box)" />
+}) => <RadarChart {...data} {...params} backgroundColor="var(--color-control-bg-default)" />
 
 export const RadarChartWidget = createWidget<Data, Params>({
   id: widgetId,

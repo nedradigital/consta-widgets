@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
 
-  background-color: rgba(0, 32, 51, 0.9);
+  background-color: var(--color-bg-tone);
 
   transition: opacity var(--show-transition);
 

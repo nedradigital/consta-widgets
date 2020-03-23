@@ -65,7 +65,6 @@ export const Axis: React.FC<Props> = ({
   size,
   horizontalStyles = {},
   verticalStyles = {},
-  bottomControls,
   formatValue,
 }) => {
   const mainRef = useRef<HTMLDivElement>(null)
@@ -73,14 +72,6 @@ export const Axis: React.FC<Props> = ({
 
   const getStyles = (position: Position) => {
     return position === 'top' || position === 'bottom' ? horizontalStyles : verticalStyles
-  }
-
-  const getBottomControlsWidth = () => {
-    if (!mainRef.current) {
-      return 0
-    }
-
-    return mainRef.current.getBoundingClientRect().width
   }
 
   const renderValues = (position: Position) => (
@@ -136,14 +127,7 @@ export const Axis: React.FC<Props> = ({
       <div className={css.topTicks}>{showPositions.top && renderHorizontal('top')}</div>
       <div className={css.rightTicks}>{showPositions.right && renderVertical('right')}</div>
       <div className={css.graph}>{children}</div>
-      <div className={css.bottomTicks}>
-        {showPositions.bottom && renderHorizontal('bottom')}
-        {bottomControls && (
-          <div className={css.bottomControls} style={{ width: getBottomControlsWidth() }}>
-            {bottomControls}
-          </div>
-        )}
-      </div>
+      <div className={css.bottomTicks}>{showPositions.bottom && renderHorizontal('bottom')}</div>
       <div className={css.leftTicks}>{showPositions.left && renderVertical('left')}</div>
       {unit && showUnitBottom && renderUnit(css.bottomUnit, unit)}
     </div>

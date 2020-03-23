@@ -12,10 +12,6 @@
   }
 }
 
-body {
-  color: var(--color-typo-primary);
-}
-
 button {
   padding: 0;
 
@@ -34,7 +30,7 @@ button {
 }
 
 ::-webkit-scrollbar-thumb {
-  border: var(--scrollbar-padding) solid var(--opaque-color);
+  border: var(--scrollbar-padding) solid rgba(var(--color-nums-shadow), 1);
   border-radius: 2px;
   background-color: var(--scroll-bar-color);
   background-clip: padding-box;

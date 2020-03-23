@@ -36,9 +36,9 @@
 
   cursor: pointer;
 
-  color: rgba(246, 251, 253, var(--color-opacity));
+  color: var(--color-control-typo-clear);
 
   &:hover {
-    --color-opacity: 0.9;
+    color: var(--color-control-typo-clear-hover);
   }
 }

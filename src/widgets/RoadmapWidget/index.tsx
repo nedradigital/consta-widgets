@@ -64,7 +64,7 @@ const RoadmapBlock: React.FC<{
             >
               {item.subTitle.name}
             </Text>
-            <Text tag="span" size="xl" weight="bold">
+            <Text tag="span" size="xl" weight="bold" view="primary">
               {item.subTitle.value}
             </Text>
           </>

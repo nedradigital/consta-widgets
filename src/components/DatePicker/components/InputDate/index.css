@@ -21,9 +21,6 @@
 }
 
 .input {
-  --color-control-bg-default: transparent;
-  --color-control-bg-border-focus: rgba(0, 145, 230, 0.99);
-
   font-size: var(--size-text-s);
 
   max-width: calc-size(155);

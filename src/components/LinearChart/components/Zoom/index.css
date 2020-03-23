@@ -12,9 +12,9 @@
 
   cursor: grab;
 
-  opacity: 0.2;
+  color: var(--color-control-typo-ghost);
   border-radius: 2px;
-  background: #d5dde2;
+  background: currentColor;
 
   transition: opacity var(--fast-transition);
 
@@ -47,7 +47,7 @@
   &:active {
     cursor: grabbing;
 
-    opacity: 0.7;
+    color: var(--color-control-typo-ghost-hover);
   }
 }
 
@@ -76,7 +76,7 @@
 .buttonGroup {
   display: flex;
 
-  background: #02273b;
+  background: var(--color-control-bg-ghost);
 
   @nest :--horizontal & {
     right: 8px;
@@ -108,8 +108,7 @@
   box-sizing: content-box;
   width: var(--button-size);
 
-  color: var(--color-typo-secondary);
-  border: 1px solid currentColor;
+  color: var(--color-control-typo-ghost);
 
   transition: color var(--fast-transition);
 
@@ -148,15 +147,14 @@
   }
 
   &:disabled {
-    color: var(--color-typo-ghost);
+    color: var(--color-control-typo-disable);
   }
 
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover {
-      color: var(--color-typo-primary);
-      background: rgba(86, 185, 242, 0.3);
+      color: var(--color-control-typo-ghost-hover);
     }
   }
 }

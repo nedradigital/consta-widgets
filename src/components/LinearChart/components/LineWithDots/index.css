@@ -10,6 +10,6 @@
   fill: currentColor;
 
   &.isActive {
-    stroke: var(--bg-color);
+    stroke: var(--color-bg-default);
   }
 }

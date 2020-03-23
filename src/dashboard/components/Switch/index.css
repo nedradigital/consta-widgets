@@ -8,8 +8,8 @@
   height: 100%;
 
   &:not(.isViewMode) {
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--color-bg-border);
+    background: var(--color-bg-ghost);
   }
 }
 
@@ -23,8 +23,8 @@
 
   padding: 10px 0;
 
-  border-radius: 4px;
-  background: var(--bg-constructor-butttons);
+  border-radius: var(--control-radius);
+  background: var(--color-control-bg-default);
 
   transform: translate(0, -50%);
 
@@ -42,6 +42,8 @@
 
   cursor: pointer;
 
+  color: var(--color-typo-primary);
+
   &::before {
     position: absolute;
     top: -5px;
@@ -55,7 +57,7 @@
   }
 
   &:hover::before {
-    background: var(--bg-color-white);
+    background: var(--color-control-bg-clear-hover);
   }
 
   @nest :--main > :--buttons:not(:hover) &:not(:first-child) {

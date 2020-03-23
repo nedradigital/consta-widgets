@@ -50,7 +50,12 @@ const TooltipPositionedByAnchorStory = () => {
         }}
       >
         <button
-          style={{ width: 100, height: 50, backgroundColor: 'red', cursor: 'pointer' }}
+          style={{
+            width: 100,
+            height: 50,
+            backgroundColor: 'var(--color-bg-alert)',
+            cursor: 'pointer',
+          }}
           onClick={handleClickOnAnchor}
           ref={anchorRef}
         >

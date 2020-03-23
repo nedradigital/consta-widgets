@@ -6,7 +6,7 @@
   cursor: pointer;
 
   &.isActive {
-    stroke: #fff;
+    stroke: var(--color-bg-soft);
   }
 
   &.isHoverable {

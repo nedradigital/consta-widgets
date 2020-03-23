@@ -1,12 +1,11 @@
 @custom-selector :--tick-line :global(.tick) > line;
 
 .main {
-  --grid-line-color: rgba(213, 221, 226, 0.5);
   pointer-events: none;
 }
 
 .grid {
-  color: var(--grid-line-color);
+  color: var(--color-bg-border);
 
   & > :global(.domain) {
     stroke: none;
@@ -27,7 +26,7 @@
   }
 
   & > :--tick-line {
-    color: var(--grid-line-color);
+    color: var(--color-bg-border);
   }
 
   &_x&_bottom > :--tick-line {

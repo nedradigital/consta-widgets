@@ -20,7 +20,11 @@ import {
 
 storiesOf('widgets/TextWidget', module)
   .addDecorator(
-    blockCenteringDecorator({ backgroundColor: 'var(--bg-box)', padding: 20, width: 350 })
+    blockCenteringDecorator({
+      backgroundColor: 'var(--color-bg-secondary)',
+      padding: 20,
+      width: 350,
+    })
   )
   .add('стандартный режим', () => (
     <TextWidgetContent
