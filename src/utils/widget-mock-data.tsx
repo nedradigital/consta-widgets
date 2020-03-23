@@ -792,7 +792,7 @@ const mockData: DataMap = {
     {
       title: 'ДО 1',
       subTitle: {
-        name: 'объектов',
+        name: 'Комплексов',
         value: '5',
       },
       colorGroups: {

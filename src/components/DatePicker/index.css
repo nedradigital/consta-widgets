@@ -4,7 +4,7 @@
 }
 
 .delimiter {
-  padding: 0 calc-size(8);
+  padding: 0 var(--space-xs);
 }
 
 .tooltip {

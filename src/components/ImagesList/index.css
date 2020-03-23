@@ -34,7 +34,7 @@
   transition: opacity 0.1s linear;
 
   & + & {
-    margin-left: calc-size(12);
+    margin-left: var(--space-s);
   }
 
   &:hover {

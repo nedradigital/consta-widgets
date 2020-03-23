@@ -2,7 +2,7 @@
   width: 100%;
 
   & + & {
-    margin-top: calc-size(20);
+    margin-top: var(--space-l);
   }
 }
 
@@ -13,7 +13,7 @@
 .icon {
   display: inline-flex;
 
-  margin-right: calc-size(8);
+  margin-right: var(--space-xs);
 
   transition: transform 0.3s;
   transform: rotate(180deg);
@@ -24,11 +24,10 @@
 }
 
 .subTitle {
-  margin-right: calc-size(8);
-  margin-left: calc-size(32);
+  margin-right: var(--space-xs);
+  margin-left: var(--space-2xl);
 }
 
 .table {
-  margin-top: calc-size(10);
-  margin-bottom: calc-size(10);
+  margin: var(--space-m) 0;
 }
