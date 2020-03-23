@@ -3,7 +3,6 @@ import { XLabelsPosition, YLabelsPosition } from '@/components/LinearChart/compo
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
-import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard/types'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -24,7 +23,6 @@ type Params = {
   yLabelTicks?: number
   yGridTicks?: number
   yGuide?: boolean
-  unit?: string
   yWithPaddings?: boolean
 }
 
@@ -40,7 +38,6 @@ export const defaultParams: Params = {
   yLabelTicks: 0,
   yGridTicks: 0,
   yGuide: false,
-  unit: '',
   yWithPaddings: false,
 }
 
@@ -195,11 +192,6 @@ export const LinearChartWidget = createWidget<Data, Params>({
           name="Отображать нулевую ось"
           value={params.yGuide}
           onChange={value => onChangeParam('yGuide', value)}
-        />
-        <WidgetSettingsText
-          name="Единица измерения оси Y"
-          value={params.unit}
-          onChange={value => onChangeParam('unit', value)}
         />
       </>
     )
