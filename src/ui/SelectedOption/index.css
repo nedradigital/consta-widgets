@@ -37,3 +37,9 @@
     color: var(--color-control-typo-clear-hover);
   }
 }
+
+.icon {
+  display: block;
+
+  margin: 0 auto;
+}

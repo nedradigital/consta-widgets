@@ -35,6 +35,12 @@
   }
 }
 
+.icon {
+  display: block;
+
+  margin: 0 auto;
+}
+
 .selectedOptionWrapper {
   margin: var(--space-3xs) 0;
 

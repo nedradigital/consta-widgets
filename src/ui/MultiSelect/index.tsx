@@ -62,7 +62,7 @@ export const MultiSelect: React.FC<Props> = ({
             {placeholder}
           </Text>
         )}
-        <IconSelect size="xs" view="secondary" className={css.iconArrow} />
+        <IconSelect size="xs" className={css.iconArrow} />
       </div>
 
       {isSelectOpened && (
