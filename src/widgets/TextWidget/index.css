@@ -21,12 +21,6 @@
   }
 }
 
-.toggleable {
-  position: relative;
-
-  margin-left: calc-size(10);
-}
-
 .button {
   --color-opacity: 0.7;
 

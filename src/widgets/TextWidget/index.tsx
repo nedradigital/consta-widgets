@@ -105,7 +105,7 @@ const textType: TextType = {
   },
 }
 
-const iconSize: Record<TextSize, IconSize> = {
+const iconSizes: Record<TextSize, IconSize> = {
   '2xs': 's',
   xs: 's',
   s: 's',
@@ -117,6 +117,20 @@ const iconSize: Record<TextSize, IconSize> = {
   '4xl': 'm',
   '5xl': 'm',
   '6xl': 'm',
+}
+
+const iconMargins: Record<TextSize, string> = {
+  '2xs': 'var(--space-xs)',
+  xs: 'var(--space-xs)',
+  s: 'var(--space-xs)',
+  m: 'var(--space-xs)',
+  l: 'var(--space-s)',
+  xl: 'var(--space-s)',
+  '2xl': 'var(--space-m)',
+  '3xl': 'var(--space-m)',
+  '4xl': 'var(--space-m)',
+  '5xl': 'var(--space-m)',
+  '6xl': 'var(--space-m)',
 }
 
 const editMods: ReadonlyArray<ChoiceT<boolean>> = [
@@ -293,9 +307,9 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
         <div ref={textRef}>{text}</div>
       </Text>
       {data && (data.tooltip || data.onClick) && (
-        <div className={css.toggleable}>
+        <div style={{ marginLeft: iconMargins[size] }}>
           <button ref={buttonRef} className={css.button} onClick={onToggleClick}>
-            <IconMeatball size={iconSize[size]} />
+            <IconMeatball size={iconSizes[size]} />
           </button>
           <Tooltip
             ref={tooltipRef}

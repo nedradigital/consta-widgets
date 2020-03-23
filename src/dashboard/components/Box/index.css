@@ -17,7 +17,7 @@
   }
 
   &:not(.isNested) {
-    padding: calc-size(14);
+    padding: var(--space-s);
 
     background: var(--bg-box);
   }
