@@ -28,13 +28,13 @@
 }
 
 .buttons {
-  display: inline-block;
-  overflow: hidden;
-
   --border-top-left-radius: 0;
   --border-top-right-radius: 0;
   --border-bottom-left-radius: 0;
   --border-bottom-right-radius: 0;
+
+  display: inline-block;
+  overflow: hidden;
 
   height: 26px;
 
@@ -43,6 +43,7 @@
 
   border-radius: var(--border-top-left-radius) var(--border-top-right-radius)
     var(--border-bottom-right-radius) var(--border-bottom-left-radius);
+  background: var(--color-bg-default);
 
   :--isTopLeft & {
     --border-bottom-left-radius: var(--control-radius);
@@ -67,21 +68,20 @@
   width: 26px;
   height: 26px;
 
+  cursor: pointer;
   vertical-align: middle;
 
-  background-color: var(--color-bg-default);
   background-repeat: no-repeat;
   background-position: center center;
 
-  &:hover,
-  &.active {
-    background-color: var(--color-control-bg-default-hover);
+  &:not(.active) {
+    background-color: var(--color-bg-ghost);
   }
 
   &.comment {
     width: 27px;
 
-    border-left: 1px solid var(--color-bg-border);
+    border-left: 1px solid var(--color-control-bg-border-default);
   }
 }
 
