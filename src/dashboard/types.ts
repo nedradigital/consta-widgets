@@ -19,7 +19,6 @@ import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { CurrentDashboard } from '@/dashboard/migration/migrations/current'
-import { Status } from '@/ui/Badge'
 import { Filters, TableColumn } from '@/utils/table'
 import { ChoiceGroupData } from '@/widgets/ChoiceGroupWidget'
 
@@ -44,10 +43,6 @@ export type DashboardState = Dashboard.State
 export type DashboardVersion = DashboardState['version']
 
 export enum DataType {
-  Chart2D,
-  PieChart,
-  Number,
-  NumberWithPercentAndStatus,
   Stats,
   Donut,
   BarChart,
@@ -77,19 +72,6 @@ type WithColorGroups = { colorGroups: ColorGroups }
 export type FormatValue = (value: number) => string
 
 export type DataMap = {
-  [DataType.Chart2D]: {
-    values: readonly number[]
-  }
-  [DataType.PieChart]: {
-    values: readonly number[]
-    color: readonly string[]
-  }
-  [DataType.Number]: number
-  [DataType.NumberWithPercentAndStatus]: {
-    value: number
-    percentage: number
-    status: Status
-  }
   [DataType.Stats]: StatsData
   [DataType.Donut]: DonutChartData & WithColorGroups
   [DataType.BarChart]: BarChartData &

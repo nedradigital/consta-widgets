@@ -13,24 +13,9 @@ const getRowsCount = () => number('rowsCount', 4)
 
 export const exampleDatasets: readonly Dataset[] = [
   {
-    name: 'График добычи нефти',
-    type: DataType.Chart2D,
-    id: 'oil',
-  },
-  {
     name: 'Работа скважины',
     type: DataType.LinearChart,
     id: 'skvazhina',
-  },
-  {
-    name: 'Доля полезного продукта',
-    type: DataType.PieChart,
-    id: 'product',
-  },
-  {
-    name: 'Потрачено',
-    type: DataType.NumberWithPercentAndStatus,
-    id: 'wasted',
   },
   {
     name: 'Месторождение',
