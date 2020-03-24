@@ -33,7 +33,7 @@ export const WidgetSettingsDatasetSelect = <T extends string | number | undefine
   onChange,
   withEmptyValue,
 }: Props<T>) => {
-  const datasetGroups = _.sortedUniq(values.map(dataset => dataset.groupName))
+  const datasetGroups = _.sortedUniq(_.sortBy(values.map(dataset => dataset.groupName)))
 
   const datasetsByGroups = datasetGroups
     .reduce((acc: DatasetsByGroups<T>, cur) => {
