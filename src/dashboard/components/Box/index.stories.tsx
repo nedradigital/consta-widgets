@@ -7,7 +7,7 @@ import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { BoxItem } from '@/dashboard'
-import { exampleDatasets } from '@/dashboard/index.stories'
+import { exampleDatasets } from '@/dashboard/mockData'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { blockCenteringDecorator } from '@/utils/Storybook'
