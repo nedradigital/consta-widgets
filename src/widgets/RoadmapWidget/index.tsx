@@ -47,7 +47,7 @@ const RoadmapBlock: React.FC<{
                 className={classnames(css.icon, isOpened && css.isOpened)}
               />
             ) : null}
-            <Text tag="span" size="l" weight="bold" view="primary">
+            <Text tag="span" size="xl" weight="bold" view="primary">
               {item.title}
             </Text>
           </span>
