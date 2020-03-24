@@ -21,7 +21,7 @@ export const SelectedOptionsList: React.FC<Props> = ({ values, onRemove, onReset
         </div>
       ))}
       <button onClick={onReset} className={css.buttonCross} title="Сбросить все фильтры">
-        <IconClose size="xs" />
+        <IconClose className={css.icon} size="xs" />
       </button>
     </div>
   )

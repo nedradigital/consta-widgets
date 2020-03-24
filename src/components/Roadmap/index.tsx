@@ -298,8 +298,16 @@ const Table: React.FC<TableProps> = ({ children, titles, className, renderTitle,
 const TableWithStringTitles = Table as React.FC<TableProps<TableColumn>>
 const TableWithMonthTitles = Table as React.FC<TableProps<MonthItem>>
 
-const ThText: React.FC = ({ children }) => (
-  <Text tag="span" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+const ThText: React.FC<{ className?: string }> = ({ className, children }) => (
+  <Text
+    tag="span"
+    size="xs"
+    transform="uppercase"
+    weight="bold"
+    spacing="xs"
+    view="primary"
+    className={className}
+  >
     {children}
   </Text>
 )
@@ -426,7 +434,7 @@ export const Roadmap: React.FC<Props> = props => {
               key={accessor}
               className={classnames(css.cell, visibleFilter === accessor && css.isFilterOpened)}
             >
-              <div className={css.titleWrapper}>
+              <ThText className={css.titleWrapper}>
                 {filters && fieldFiltersPresent(filters, accessor) && (
                   <FilterTooltip
                     field={accessor}
@@ -439,8 +447,8 @@ export const Roadmap: React.FC<Props> = props => {
                     className={css.iconFilter}
                   />
                 )}
-                <ThText>{title}</ThText>
-              </div>
+                {title}
+              </ThText>
             </th>
           )}
           subTitle={

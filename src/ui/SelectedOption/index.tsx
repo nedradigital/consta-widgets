@@ -23,7 +23,7 @@ export const SelectedOption: React.FC<Props> = ({ name, onRemove }) => (
       className={css.buttonCross}
       type="button"
     >
-      <IconClose size="xs" />
+      <IconClose className={css.icon} size="xs" />
     </button>
   </div>
 )

@@ -9,6 +9,8 @@
   top: 50%;
   right: 10px;
 
+  color: var(--color-control-typo-clear);
+
   transition: transform 0.25s;
   transform: translateY(-50%);
 }
