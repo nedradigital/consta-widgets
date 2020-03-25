@@ -121,6 +121,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         (computedPosition.x !== position.x || computedPosition.y !== position.y)
       ) {
         setPosition(computedPosition)
+      }
+
+      if (direction !== computedDirection) {
         setDirection(computedDirection)
       }
     }
