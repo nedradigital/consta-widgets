@@ -58,13 +58,13 @@
     ]
   },
   "peerDependencies": {
-    "@gpn-design/uikit": "0.1.15",
+    "@gpn-design/uikit": "0.1.16",
     "react": "16.8.6",
     "react-dom": "16.8.6"
   },
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
-    "@csssr/gpn-utils": "0.2.7",
+    "@csssr/gpn-utils": "0.2.8",
     "@rehooks/component-size": "1.0.3",
     "@types/d3": "5.7.2",
     "@types/react-grid-layout": "0.17.0",

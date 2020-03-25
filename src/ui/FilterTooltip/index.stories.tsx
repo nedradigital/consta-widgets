@@ -8,9 +8,9 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { FilterTooltip } from '.'
 
 const fewOptions = [
-  { id: 'condition1', name: 'Условие 1' },
-  { id: 'condition2', name: 'Условие 2' },
-  { id: 'condition3', name: 'Условие 3' },
+  { value: 'condition1', label: 'Условие 1' },
+  { value: 'condition2', label: 'Условие 2' },
+  { value: 'condition3', label: 'Условие 3' },
 ] as const
 
 storiesOf('ui/FilterTooltip', module)
@@ -18,7 +18,6 @@ storiesOf('ui/FilterTooltip', module)
   .add('interactive', () => {
     const [isOpened, setIsOpened] = useState(true)
     const onSave = action('onSave')
-    const onCancel = action('onCancel')
 
     return (
       <FilterTooltip
@@ -29,10 +28,6 @@ storiesOf('ui/FilterTooltip', module)
         onSave={(...args) => {
           setIsOpened(false)
           onSave(...args)
-        }}
-        onCancel={(...args) => {
-          setIsOpened(false)
-          onCancel(...args)
         }}
         handleFilterTogglerClick={() => setIsOpened(!isOpened)}
       />

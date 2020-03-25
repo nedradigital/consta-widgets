@@ -380,9 +380,7 @@ export const Roadmap: React.FC<Props> = props => {
   const closeTooltip = () => {
     setVisibleFilter(null)
   }
-  const handleTooltipCancel = () => {
-    closeTooltip()
-  }
+
   const handleTooltipSave = (field: string, tooltipSelectedFilters: FieldSelectedValues) => {
     updateSelectedFilters(field, tooltipSelectedFilters)
     closeTooltip()
@@ -442,7 +440,6 @@ export const Roadmap: React.FC<Props> = props => {
                     options={getOptionsForFilters(filters, accessor)}
                     values={selectedFilters[accessor]}
                     onSave={handleTooltipSave}
-                    onCancel={handleTooltipCancel}
                     handleFilterTogglerClick={handleFilterTogglerClick(accessor)}
                     className={css.iconFilter}
                   />
