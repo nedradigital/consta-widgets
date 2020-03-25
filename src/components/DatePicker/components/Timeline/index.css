@@ -1,18 +1,13 @@
 .main {
+  --height: var(--control-height-m);
+
   display: flex;
 
   user-select: none;
 }
 
 .button {
-  --control-border-width: 1px;
-  --color-control-bg-border-secondary: rgba(0, 0, 0, 0.51);
-  --color-control-typo-secondary: var(--color-control-bg-border-secondary);
-  --button-space: 0;
-
   flex-shrink: 0;
-
-  width: 32px;
 }
 
 .timeline {
@@ -22,7 +17,7 @@
   overflow-x: hidden;
 
   width: 100%;
-  height: 32px;
+  height: var(--height);
   margin: 0 var(--space-xs);
 
   background-color: #ededed;
@@ -93,7 +88,7 @@
   position: absolute;
 
   width: 19px;
-  height: 32px;
+  height: var(--height);
   margin: 0 1px;
 
   pointer-events: none;
