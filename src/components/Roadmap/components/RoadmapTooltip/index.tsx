@@ -96,6 +96,8 @@ const renderComment = (comment: string) => {
   )
 }
 
+const getIconView = (isPrimary: boolean) => (isPrimary ? 'primary' : 'ghost')
+
 export const RoadmapTooltip: React.FC<Props> = ({
   fact,
   plan,
@@ -104,24 +106,21 @@ export const RoadmapTooltip: React.FC<Props> = ({
   direction = 'upRight',
   position,
 }) => {
-  const [activeSection, changeActiveSection] = useState('')
+  const [activeSection, changeActiveSection] = useState('dates')
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
-  const isOpened = isActiveDates || isActiveComment
   const { groupName } = plan
   const comment = fact?.comment || forecast?.comment || CLEAN_COMMENT
   const content = [
-    isOpened ? (
-      <div
-        onClick={stopEventHandler}
-        key="content"
-        className={classnames(css.content, isActiveDates && css.dates)}
-      >
-        {isActiveComment
-          ? renderComment(comment)
-          : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
-      </div>
-    ) : null,
+    <div
+      onClick={stopEventHandler}
+      key="content"
+      className={classnames(css.content, isActiveDates && css.dates)}
+    >
+      {isActiveComment
+        ? renderComment(comment)
+        : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
+    </div>,
     <div key="buttons" className={css.buttons}>
       <button
         className={classnames(css.button, css.dates, isActiveDates && css.active)}
@@ -130,7 +129,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
           changeActiveSection('dates')
         }}
       >
-        <IconCalendar size="s" view="primary" className={css.icon} />
+        <IconCalendar size="s" view={getIconView(isActiveDates)} className={css.icon} />
       </button>
       <button
         className={classnames(css.button, css.comment, isActiveComment && css.active)}
@@ -139,7 +138,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
           changeActiveSection('comment')
         }}
       >
-        <IconChat size="s" view="primary" className={css.icon} />
+        <IconChat size="s" view={getIconView(isActiveComment)} className={css.icon} />
       </button>
     </div>,
   ] as const
@@ -149,7 +148,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
       className={classnames(
         themeColorLight,
         css.main,
-        isOpened && css.isOpened,
         {
           left: '',
           right: '',
