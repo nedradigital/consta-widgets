@@ -152,6 +152,27 @@ const TickSelector: React.FC<{ isWide: boolean; offsetLeft: number }> = ({
   />
 )
 
+const MovePeriodButton: React.FC<{
+  direction: 'backward' | 'forward'
+  onClick: () => void
+  disabled: boolean
+}> = ({ direction, onClick, disabled }) => {
+  const Icon = direction === 'backward' ? IconBackward : IconForward
+
+  return (
+    <Button
+      className={css.button}
+      wpSize="m"
+      view="clear"
+      iconOnly
+      disabled={disabled}
+      onClick={onClick}
+    >
+      <Icon size="m" />
+    </Button>
+  )
+}
+
 export const Timeline: React.FC<Props> = ({
   currentVisibleDate,
   minDate,
@@ -226,15 +247,7 @@ export const Timeline: React.FC<Props> = ({
 
   return (
     <div className={css.main}>
-      <Button
-        className={css.button}
-        wpSize="s"
-        view="secondary"
-        disabled={offset === 0}
-        onClick={handleMovePrev}
-      >
-        <IconBackward size="xs" />
-      </Button>
+      <MovePeriodButton direction="backward" onClick={handleMovePrev} disabled={offset === 0} />
       <div ref={timelineRef} className={css.timeline}>
         <div className={css.ticks} style={{ transform: `translateX(${offset}px)` }}>
           {baseDate && isSelectedWithinAllowedLimits({ value, minDate, maxDate }) && (
@@ -267,15 +280,11 @@ export const Timeline: React.FC<Props> = ({
           )}
         </div>
       </div>
-      <Button
-        className={css.button}
-        wpSize="s"
-        view="secondary"
-        disabled={offset === maxOffset}
+      <MovePeriodButton
+        direction="forward"
         onClick={handleMoveNext}
-      >
-        <IconForward size="xs" />
-      </Button>
+        disabled={offset === maxOffset}
+      />
     </div>
   )
 }
