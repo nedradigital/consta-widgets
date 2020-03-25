@@ -10,6 +10,7 @@ import {
   getDaysInMonth,
   isSameMonth,
   isWithinInterval,
+  startOfMonth,
   subMonths,
 } from 'date-fns'
 import { times } from 'lodash'
@@ -50,7 +51,7 @@ const getBaseDate = (value?: Date | DateRange) => {
   return isDateRange(value) ? value[0] || value[1] : value
 }
 
-const getDateOffsetOnTimeline = ({
+export const getDateOffsetOnTimeline = ({
   date,
   minDate,
   tickWidth,
@@ -62,10 +63,11 @@ const getDateOffsetOnTimeline = ({
   ticksOutsideRange: number
 }) => {
   const startDay = date.getDate()
-  const monthsOffsetPx = (differenceInMonths(date, minDate) + ticksOutsideRange) * tickWidth
-  const daysOffsetPx = (tickWidth * startDay) / getDaysInMonth(startDay)
+  const monthsOffsetPx =
+    (differenceInMonths(date, startOfMonth(minDate)) + ticksOutsideRange) * tickWidth
+  const daysOffsetPx = (tickWidth * startDay) / getDaysInMonth(date)
 
-  return monthsOffsetPx + daysOffsetPx
+  return Math.round(monthsOffsetPx + daysOffsetPx)
 }
 
 const getSelectedDayWidth = (date: Date, tickWidth: number) => {
