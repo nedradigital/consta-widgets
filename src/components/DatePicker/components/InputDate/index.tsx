@@ -53,11 +53,7 @@ export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
         value={getInputValue(value)}
         onChange={handleChange}
       />
-      <IconCalendar
-        size={iconSize}
-        view="secondary"
-        className={classnames(css.icon, iconSize === 'm' && css.sizeM)}
-      />
+      <IconCalendar size={iconSize} className={css.icon} />
     </div>
   )
 }
