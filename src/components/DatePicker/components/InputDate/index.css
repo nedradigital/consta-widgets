@@ -1,26 +1,31 @@
+@custom-selector :--input .input;
+@custom-selector :--icon .icon;
+
 .main {
   position: relative;
 
   display: inline-block;
 }
 
-.icon {
-  --position-right: calc-size(10);
-
+:--icon {
   position: absolute;
   top: 50%;
-  right: var(--position-right);
+  right: var(--space-s);
 
   pointer-events: none;
 
+  color: var(--color-control-typo-clear);
+
   transform: translateY(-50%);
 
-  &.sizeM {
-    --position-right: calc-size(12);
+  fill: currentColor;
+
+  @nest :--input:hover + & {
+    color: var(--color-control-typo-clear-hover);
   }
 }
 
-.input {
+:--input {
   font-size: var(--size-text-s);
 
   max-width: calc-size(155);
