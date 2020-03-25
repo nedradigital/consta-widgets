@@ -2,12 +2,11 @@ import { DonutChart } from '@/components/DonutChart'
 import { HalfDonut } from '@/components/DonutChart/components/Donut'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Donut
 type Data = DataMap[typeof dataType]
-
-export const widgetId = 'c7709106-fe0d-4e7c-bfce-2e5b88aa6d50'
 
 type Params = {
   halfDonut?: HalfDonut
@@ -21,7 +20,7 @@ export const DonutChartWidgetContent: React.FC<WidgetContentProps<Data, Params>>
 }) => <DonutChart {...data} halfDonut={halfDonut} />
 
 export const DonutChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.DonutChartWidget,
   name: 'Пончик',
   defaultParams: {
     ...defaultParams,

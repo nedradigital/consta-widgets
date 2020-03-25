@@ -1,15 +1,21 @@
-import { widgetId as textWidgetId } from '@/widgets/TextWidget'
-
-import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard10 } from '../../dashboard10'
+import {
+  CurrentDashboard,
+  currentMigration,
+  widgetIdsByType as CurrentDashboardWidgetIdsByType,
+} from '../'
+import { Dashboard10, widgetIdsByType as Dashboard10WidgetIdsByType } from '../../dashboard10'
 import CommonBoxItemParams = CurrentDashboard.CommonBoxItemParams
 
-const createTextWidget = (name: string, params = {}) =>
+const createTextWidget = (
+  name: string,
+  widgetType: CurrentDashboard.WidgetItem['widgetType'] | Dashboard10.WidgetItem['widgetType'],
+  params = {}
+) =>
   ({
     type: 'widget',
     debugName: name,
     id: name,
-    widgetType: textWidgetId,
+    widgetType,
     params,
   } as const)
 
@@ -44,12 +50,14 @@ describe('currentMigration', () => {
       version: 10,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', widgetParams)],
+        Box0: [createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', widgetParams)]],
+            displays: [
+              [createTextWidget('1.1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)],
+            ],
             params: {},
           },
         ],
@@ -61,7 +69,7 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', widgetParams)]],
+                [[createTextWidget('col1-1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)]],
               ],
             },
             params: {},
@@ -75,12 +83,14 @@ describe('currentMigration', () => {
       version: 11,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', widgetParams)],
+        Box0: [createTextWidget('1', CurrentDashboardWidgetIdsByType.TextWidget, widgetParams)],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', widgetParams)]],
+            displays: [
+              [createTextWidget('1.1', CurrentDashboardWidgetIdsByType.TextWidget, widgetParams)],
+            ],
             params: {},
           },
         ],
@@ -92,7 +102,15 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', widgetParams)]],
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      CurrentDashboardWidgetIdsByType.TextWidget,
+                      widgetParams
+                    ),
+                  ],
+                ],
               ],
             },
             params: {},
@@ -128,12 +146,26 @@ describe('currentMigration', () => {
       version: 11,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', sourceBasicTextWidgetParams)],
+        Box0: [
+          createTextWidget(
+            '1',
+            CurrentDashboardWidgetIdsByType.TextWidget,
+            sourceBasicTextWidgetParams
+          ),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', sourceBasicTextWidgetParams)]],
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  CurrentDashboardWidgetIdsByType.TextWidget,
+                  sourceBasicTextWidgetParams
+                ),
+              ],
+            ],
             params: {},
           },
         ],
@@ -145,7 +177,15 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', sourceBasicTextWidgetParams)]],
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      CurrentDashboardWidgetIdsByType.TextWidget,
+                      sourceBasicTextWidgetParams
+                    ),
+                  ],
+                ],
               ],
             },
             params: {},
@@ -159,12 +199,22 @@ describe('currentMigration', () => {
       version: 10,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', sourceBasicTextWidgetParams)],
+        Box0: [
+          createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, sourceBasicTextWidgetParams),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', sourceBasicTextWidgetParams)]],
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  Dashboard10WidgetIdsByType.TextWidget,
+                  sourceBasicTextWidgetParams
+                ),
+              ],
+            ],
             params: {},
           },
         ],
@@ -176,7 +226,15 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', sourceBasicTextWidgetParams)]],
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      Dashboard10WidgetIdsByType.TextWidget,
+                      sourceBasicTextWidgetParams
+                    ),
+                  ],
+                ],
               ],
             },
             params: {},
@@ -190,12 +248,26 @@ describe('currentMigration', () => {
       version: 11,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', sourceAdvancedTextWidgetParams)],
+        Box0: [
+          createTextWidget(
+            '1',
+            CurrentDashboardWidgetIdsByType.TextWidget,
+            sourceAdvancedTextWidgetParams
+          ),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', sourceAdvancedTextWidgetParams)]],
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  CurrentDashboardWidgetIdsByType.TextWidget,
+                  sourceAdvancedTextWidgetParams
+                ),
+              ],
+            ],
             params: {},
           },
         ],
@@ -209,7 +281,13 @@ describe('currentMigration', () => {
                 // Строка 1
                 [
                   // Колонка 1
-                  [createTextWidget('col1-1', sourceAdvancedTextWidgetParams)],
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      CurrentDashboardWidgetIdsByType.TextWidget,
+                      sourceAdvancedTextWidgetParams
+                    ),
+                  ],
                 ],
               ],
             },
@@ -224,12 +302,22 @@ describe('currentMigration', () => {
       version: 10,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', resultBasicTextWidgetParams)],
+        Box0: [
+          createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, resultBasicTextWidgetParams),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
-            displays: [[createTextWidget('1.1', resultBasicTextWidgetParams)]],
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  Dashboard10WidgetIdsByType.TextWidget,
+                  resultBasicTextWidgetParams
+                ),
+              ],
+            ],
             params: {},
           },
         ],
@@ -241,7 +329,15 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', resultBasicTextWidgetParams)]],
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      Dashboard10WidgetIdsByType.TextWidget,
+                      resultBasicTextWidgetParams
+                    ),
+                  ],
+                ],
               ],
             },
             params: {},

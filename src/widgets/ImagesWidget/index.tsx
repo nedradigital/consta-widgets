@@ -3,12 +3,11 @@ import React, { useState } from 'react'
 import { ImagesList } from '@/components/ImagesList'
 import { ImagesPopup } from '@/components/ImagesPopup'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Images
 type Data = DataMap[typeof dataType]
-
-export const widgetId = 'd1a60ed1-96de-49b2-badd-052e0408d55a'
 
 type Params = { [key: string]: never }
 
@@ -30,7 +29,7 @@ export const ImagesWidgetContent: React.FC<WidgetContentProps<Data, Params>> = (
 }
 
 export const ImagesWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.ImagesWidget,
   name: 'Картинки',
   dataType,
   defaultParams,

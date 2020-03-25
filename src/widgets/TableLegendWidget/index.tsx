@@ -4,6 +4,7 @@ import { Size, sizes, TableLegend } from '@/components/TableLegend'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.TableLegend
@@ -13,8 +14,6 @@ type Params = {
   size: Size
   isShowLegend?: boolean
 }
-
-export const widgetId = '2f8f8f8e-21eb-4751-ab81-56ea11ac6342'
 
 export const defaultParams: Params = { size: 'l' }
 
@@ -26,7 +25,7 @@ export const TableLegendWidgetContent: React.FC<WidgetContentProps<Data, Params>
 }
 
 export const TableLegendWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.TableLegendWidget,
   name: 'Таблица с легендой',
   defaultParams,
   dataType,

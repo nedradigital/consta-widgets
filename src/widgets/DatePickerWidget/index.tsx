@@ -3,12 +3,11 @@ import React from 'react'
 import { DatePicker, Size, sizes } from '@/components/DatePicker'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.DatePicker
 type Data = DataMap[typeof dataType]
-
-export const widgetId = 'f62a900b-99a2-4194-a277-eb58c49d68ff'
 
 type Params = {
   size: Size
@@ -24,7 +23,7 @@ export const DatePickerWidgetContent: React.FC<WidgetContentProps<Data, Params>>
 }) => <DatePicker {...data} size={size} />
 
 export const DatePickerWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.DatePickerWidget,
   name: 'Выбор даты',
   defaultParams,
   dataType,

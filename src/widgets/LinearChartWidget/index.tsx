@@ -4,12 +4,11 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.LinearChart
 type Data = DataMap[typeof dataType]
-
-export const widgetId = 'e63c468b-75bd-4c5c-95c7-696e598db6e3'
 
 type Params = {
   withZoom?: boolean
@@ -98,7 +97,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
 )
 
 export const LinearChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.LinearChartWidget,
   name: 'Линейный график',
   defaultParams: {
     ...defaultParams,

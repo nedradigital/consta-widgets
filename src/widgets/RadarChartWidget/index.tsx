@@ -5,6 +5,7 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 type Params = {
@@ -12,8 +13,6 @@ type Params = {
   withConcentricColor: boolean
   labelSize: RadarChartLabelSize
 }
-
-export const widgetId = '94456b61-fba4-4121-a29c-a313cac4f4c0'
 
 export const defaultParams: Params = {
   ticks: 4,
@@ -30,7 +29,7 @@ export const RadarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>>
 }) => <RadarChart {...data} {...params} backgroundColor="var(--color-control-bg-default)" />
 
 export const RadarChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.RadarChartWidget,
   name: 'Радар',
   dataType,
   defaultParams: {

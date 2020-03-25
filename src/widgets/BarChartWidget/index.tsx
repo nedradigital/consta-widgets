@@ -5,6 +5,7 @@ import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.BarChart
@@ -18,8 +19,6 @@ type Params = {
   valuesTicks: number
   unitPosition: UnitPosition
 }
-
-export const widgetId = '1a8a7577-36e3-4fe6-a23e-244a51cd37c8'
 
 export const defaultParams: Params = {
   orientation: 'vertical',
@@ -48,7 +47,7 @@ export const BarChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> =
 )
 
 export const BarChartWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.BarChartWidget,
   name: 'Барчарт',
   defaultParams: {
     ...defaultParams,

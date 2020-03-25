@@ -1,6 +1,4 @@
-import { TextWidget } from '@/widgets/TextWidget'
-
-import { Dashboard8, migration8 } from '../'
+import { Dashboard8, migration8, TextWidgetId } from '../'
 import { Dashboard7 } from '../../dashboard7'
 
 describe('migration8', () => {
@@ -14,7 +12,7 @@ describe('migration8', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: TextWidget.id,
+            widgetType: TextWidgetId,
             params: {
               croppedLineCount: 1,
             },
@@ -38,7 +36,7 @@ describe('migration8', () => {
                     type: 'widget',
                     debugName: '3',
                     id: '3',
-                    widgetType: TextWidget.id,
+                    widgetType: TextWidgetId,
                     params: {},
                   },
                 ],
@@ -62,7 +60,7 @@ describe('migration8', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: TextWidget.id,
+            widgetType: TextWidgetId,
             params: {
               croppedLineCount: 1,
               croppedWithGradient: true,
@@ -87,7 +85,7 @@ describe('migration8', () => {
                     type: 'widget',
                     debugName: '3',
                     id: '3',
-                    widgetType: TextWidget.id,
+                    widgetType: TextWidgetId,
                     params: {
                       croppedWithGradient: false,
                     },
@@ -117,7 +115,7 @@ describe('migration8', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: TextWidget.id,
+            widgetType: TextWidgetId,
             params: {
               croppedLineCount: 1,
               croppedWithGradient: true,
@@ -147,7 +145,7 @@ describe('migration8', () => {
                     type: 'widget',
                     debugName: '3',
                     id: '3',
-                    widgetType: TextWidget.id,
+                    widgetType: TextWidgetId,
                     params: {
                       croppedWithGradient: false,
                     },
@@ -170,7 +168,7 @@ describe('migration8', () => {
             type: 'widget',
             debugName: '1',
             id: '1',
-            widgetType: TextWidget.id,
+            widgetType: TextWidgetId,
             params: {
               croppedLineCount: 1,
             },
@@ -199,7 +197,7 @@ describe('migration8', () => {
                     type: 'widget',
                     debugName: '3',
                     id: '3',
-                    widgetType: TextWidget.id,
+                    widgetType: TextWidgetId,
                     params: {},
                   },
                 ],

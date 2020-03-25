@@ -7,16 +7,11 @@ import { storiesOf } from '@storybook/react'
 
 import { GridContent, GridItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import {
-  defaultParams as linearChartWidgetDefaultParams,
-  widgetId as linearChartWidgetId,
-} from '@/widgets/LinearChartWidget'
-import {
-  defaultParams as statsWidgetDefaultParams,
-  widgetId as statsWidgetId,
-} from '@/widgets/StatsWidget'
-import { defaultParams as textDefaultParams, widgetId as textWidgetId } from '@/widgets/TextWidget'
+import { defaultParams as linearChartWidgetDefaultParams } from '@/widgets/LinearChartWidget'
+import { defaultParams as statsWidgetDefaultParams } from '@/widgets/StatsWidget'
+import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
 
 import { Grid } from '.'
 
@@ -34,14 +29,14 @@ const gridItem: GridItem = {
             type: 'widget',
             debugName: 'TitleWidget',
             id: getUniqueName('TitleWidget'),
-            widgetType: textWidgetId,
+            widgetType: widgetIdsByType.TextWidget,
             params: textDefaultParams,
           },
           {
             type: 'widget',
             debugName: 'StatsWidget',
             id: getUniqueName('StatsWidget'),
-            widgetType: statsWidgetId,
+            widgetType: widgetIdsByType.StatsWidget,
             params: statsWidgetDefaultParams,
           },
         ],
@@ -51,7 +46,7 @@ const gridItem: GridItem = {
             type: 'widget',
             debugName: 'StatsWidget',
             id: getUniqueName('StatsWidget'),
-            widgetType: statsWidgetId,
+            widgetType: widgetIdsByType.StatsWidget,
             params: statsWidgetDefaultParams,
           },
         ],
@@ -64,7 +59,7 @@ const gridItem: GridItem = {
             type: 'widget',
             debugName: 'StatsWidget',
             id: getUniqueName('StatsWidget'),
-            widgetType: statsWidgetId,
+            widgetType: widgetIdsByType.StatsWidget,
             params: statsWidgetDefaultParams,
           },
         ],
@@ -74,7 +69,7 @@ const gridItem: GridItem = {
             type: 'widget',
             debugName: 'LinearChartWidget',
             id: getUniqueName('LinearChartWidget'),
-            widgetType: linearChartWidgetId,
+            widgetType: widgetIdsByType.LinearChartWidget,
             params: {
               ...linearChartWidgetDefaultParams,
               growRatio: 1,

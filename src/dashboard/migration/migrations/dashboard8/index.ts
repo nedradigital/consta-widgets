@@ -1,9 +1,9 @@
 import { Layout } from 'react-grid-layout'
 
-import { TextWidget } from '@/widgets/TextWidget'
-
 import { Migration } from '../..'
 import { Dashboard7 } from '../dashboard7'
+
+export const TextWidgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
 
 export namespace Dashboard8 {
   export type ColumnParams = {
@@ -75,7 +75,7 @@ export const migration8: Migration<Dashboard7.State, Dashboard8.State> = {
           })),
         }
       } else {
-        if (item.widgetType === TextWidget.id) {
+        if (item.widgetType === TextWidgetId) {
           const { croppedLineCount, ...restParams } = item.params
 
           return {
@@ -117,7 +117,7 @@ export const migration8: Migration<Dashboard7.State, Dashboard8.State> = {
           })),
         }
       } else {
-        if (item.widgetType === TextWidget.id) {
+        if (item.widgetType === TextWidgetId) {
           const { croppedWithGradient, ...restParams } = item.params
 
           return {

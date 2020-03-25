@@ -1,6 +1,7 @@
 import * as _ from 'lodash'
 
 import { GridContent, WidgetItem } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 
 import {
   addColumn,
@@ -18,7 +19,7 @@ const createWidget = (name: string): WidgetItem => ({
   type: 'widget',
   debugName: name,
   id: name,
-  widgetType: name,
+  widgetType: widgetIdsByType.TextWidget,
   params: {},
 })
 

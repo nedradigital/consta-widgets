@@ -4,12 +4,12 @@ import { ChoiceGroup } from '@gpn-design/uikit'
 
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard/types'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.ChoiceGroup
 type Data = DataMap[typeof dataType]
 
-export const widgetId = '430768bb-be37-42b0-a1e7-57c6c1bebcea'
 const sizes = ['xs', 's', 'm', 'l'] as const
 type Size = typeof sizes[number]
 
@@ -71,7 +71,7 @@ export const ChoiceGroupWidgetContent: React.FC<WidgetContentProps<Data, Params>
 }
 
 export const ChoiceGroupWidget = createWidget<Data, Params>({
-  id: widgetId,
+  id: widgetIdsByType.ChoiceGroupWidget,
   name: 'Choice Group',
   defaultParams,
   dataType: DataType.ChoiceGroup,
