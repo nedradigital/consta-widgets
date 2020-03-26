@@ -58,6 +58,7 @@ const textType: TextType = {
     text: 'Заголовок 1',
     props: {
       size: '3xl',
+      lineHeight: 'xs',
       weight: 'bold',
     },
   },
@@ -65,6 +66,7 @@ const textType: TextType = {
     text: 'Заголовок 2',
     props: {
       size: 'xl',
+      lineHeight: 's',
       weight: 'bold',
     },
   },
@@ -72,6 +74,7 @@ const textType: TextType = {
     text: 'Заголовок 3',
     props: {
       size: 'l',
+      lineHeight: 's',
       weight: 'bold',
     },
   },
@@ -79,6 +82,7 @@ const textType: TextType = {
     text: 'Заголовок 4',
     props: {
       size: 's',
+      lineHeight: 's',
       weight: 'bold',
       transform: 'uppercase',
     },
@@ -87,12 +91,14 @@ const textType: TextType = {
     text: 'Текст 1',
     props: {
       size: 's',
+      lineHeight: 'xs',
     },
   },
   text2: {
     text: 'Текст 2',
     props: {
       size: 'xs',
+      lineHeight: 's',
       view: 'secondary',
     },
   },
@@ -100,6 +106,7 @@ const textType: TextType = {
     text: 'Текст 3',
     props: {
       size: 'xs',
+      lineHeight: 's',
       view: 'secondary',
       weight: 'bold',
     },
