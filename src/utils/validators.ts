@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { flattenDeep, isEmpty, uniq } from 'lodash'
 

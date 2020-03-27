@@ -1,13 +1,5 @@
 const ONE_DAY = 1000 * 60 * 60 * 24
 
-export const formatDateToInputString = (value?: Date) => {
-  if (!value || !(value instanceof Date)) {
-    return ''
-  }
-
-  return value.toISOString().split('T')[0]
-}
-
 type FormatDateOptions = {
   withoutZero?: boolean
   separator?: string

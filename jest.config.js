@@ -6,4 +6,24 @@ module.exports = {
     // Транспайлим библиотеки на es-модулях в commonjs-модули
     `${SLASH}node_modules${SLASH}(?!(react-dnd|dnd-core|react-dnd-html5-backend|@amcharts/amcharts4-geodata)${SLASH}).+\\.(js|jsx|ts|tsx)`,
   ],
+  coverageThreshold: {
+    "./src/utils/": {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100
+    },
+    "./src/components/**/helpers.ts": {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100
+    },
+    "./src/dashboard/migration": {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100
+    }
+  }
 };

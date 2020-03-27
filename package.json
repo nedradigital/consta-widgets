@@ -23,8 +23,8 @@
     "lint-fix:css": "stylelint 'src/**/*.css' --fix",
     "generate-css-types": "node node_modules/@csssr/gpn-configs/scripts/generate-css-types.js",
     "checktypes": "yarn generate-css-types && tsc --noEmit --extendedDiagnostics",
-    "unit": "NODE_PATH=./node_modules TZ=Europe/Moscow jest",
-    "unit:watch": "NODE_PATH=./node_modules TZ=Europe/Moscow jest --watchAll",
+    "unit": "NODE_PATH=./node_modules TZ=Europe/Moscow jest --coverage",
+    "unit:watch": "yarn unit --watchAll",
     "test": "npm-run-all --parallel lint checktypes unit",
     "prepublishOnly": "yarn && yarn build && node node_modules/@csssr/gpn-configs/scripts/typescript-validations.js",
     "migration:create": "node scripts/migration/index.js"

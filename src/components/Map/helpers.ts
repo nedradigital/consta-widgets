@@ -12,6 +12,7 @@ import {
   SelectedObjectId,
 } from './'
 
+/* istanbul ignore next */
 export const featureToObject = (type: 'country' | 'region') => (
   feature: ExtendedFeature
 ): GeoObject => ({
@@ -20,6 +21,7 @@ export const featureToObject = (type: 'country' | 'region') => (
   geoData: feature,
 })
 
+/* istanbul ignore next */
 export const geoCoordsToPixels = (
   projection: d3.GeoProjection,
   geoCoords: Coords

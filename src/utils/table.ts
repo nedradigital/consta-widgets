@@ -29,6 +29,7 @@ type SelectedFiltersList = ReadonlyArray<{
   name: string
 }>
 
+/* istanbul ignore next */
 export const getOptionsForFilters = (filters: Filters, field: string) => {
   return filters.filter(({ field: filterField }) => filterField === field)
 }
@@ -47,12 +48,15 @@ export const getSelectedFiltersInitialState = (filters?: Filters) => {
   }, {})
 }
 
+/* istanbul ignore next */
 export const fieldFiltersPresent = (tableFilters: Filters, field: string) => {
   return tableFilters.some(({ field: filterField }) => filterField === field)
 }
+/* istanbul ignore next */
 export const isSelectedFiltersPresent = (selectedFilters: SelectedFilters) =>
   Object.values(selectedFilters).some(filterGroup => filterGroup.length > 0)
 
+/* istanbul ignore next */
 export const getSelectedFiltersList = ({
   filters,
   selectedFilters,
@@ -122,6 +126,7 @@ export const filterTableData = <T extends TableRow>({
         }
       }
 
+      /* istanbul ignore next */
       if (!rowIsValid) {
         break
       }
@@ -135,6 +140,7 @@ export const filterTableData = <T extends TableRow>({
   return mutableFilteredData
 }
 
+/* istanbul ignore next */
 export const useSelectedFilters = (filters?: Filters) => {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
     getSelectedFiltersInitialState(filters)
