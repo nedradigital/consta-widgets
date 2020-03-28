@@ -16,7 +16,7 @@
 
   margin-top: 0;
   margin-bottom: 0;
-  padding-right: 9px;
+  padding-right: var(--space-s);
 
   text-overflow: ellipsis;
 
@@ -24,11 +24,6 @@
 }
 
 .buttonCross {
-  position: relative;
-
-  width: 16px;
-  height: 16px;
-
   cursor: pointer;
 
   color: var(--color-control-typo-clear);
@@ -40,6 +35,4 @@
 
 .icon {
   display: block;
-
-  margin: 0 auto;
 }
