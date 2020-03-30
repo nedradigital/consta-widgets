@@ -27,7 +27,7 @@
   justify-content: flex-end;
 
   width: calc-size(315);
-  height: calc-size(180);
+  height: calc-size(200);
 
   &:--isBottom {
     --flex-direction: column-reverse;

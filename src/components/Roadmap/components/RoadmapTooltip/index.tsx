@@ -105,7 +105,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
   direction = 'upRight',
   position,
 }) => {
-  const [activeSection, changeActiveSection] = useState('dates')
+  const [activeSection, changeActiveSection] = useState<'dates' | 'comment'>('dates')
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
   const { groupName } = plan
