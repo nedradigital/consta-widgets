@@ -132,7 +132,6 @@ export const Donut: React.FC<Props> = ({
         <path
           d={arc({ ...pieData[0], ...fullCircleAngle }) || undefined}
           fill="var(--color-bg-ghost)"
-          fillOpacity={0.2}
         />
       ) : (
         pieData.map((pieDatum, idx) => (
