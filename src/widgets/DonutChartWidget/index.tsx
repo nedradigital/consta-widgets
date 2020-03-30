@@ -34,8 +34,8 @@ export const DonutChartWidget = createWidget<Data, Params>({
         name="Обрезать пончик"
         value={params.halfDonut}
         onChange={value => onChangeParam('halfDonut', value)}
+        withEmptyValue
         values={[
-          { name: '--', value: undefined },
           { name: 'Сверху', value: 'top' },
           { name: 'Справа', value: 'right' },
           { name: 'Снизу', value: 'bottom' },

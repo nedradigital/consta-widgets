@@ -344,63 +344,63 @@ const ExtendedEditMode = ({ params, onChangeParam }: EditModeParams<ExtendedEdit
       value={params.size}
       onChange={value => onChangeParam('size', value)}
       values={fontSizes.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Выравнивание"
       value={params.align}
       onChange={value => onChangeParam('align', value)}
       values={textAligns.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Оформление"
       value={params.decoration}
       onChange={value => onChangeParam('decoration', value)}
       values={textDecorations.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Тип шрифта"
       value={params.font}
       onChange={value => onChangeParam('font', value)}
       values={fontFamilies.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Межстрочный интервал"
       value={params.lineHeight}
       onChange={value => onChangeParam('lineHeight', value)}
       values={lineHeights.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Межбуквенный интервал"
       value={params.spacing}
       onChange={value => onChangeParam('spacing', value)}
       values={textSpacings.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Начертание"
       value={params.fontStyle}
       onChange={value => onChangeParam('fontStyle', value)}
       values={fontStyles.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Регистр"
       value={params.transform}
       onChange={value => onChangeParam('transform', value)}
       values={textTransforms.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
     <WidgetSettingsSelect
       name="Насыщенность"
       value={params.weight}
       onChange={value => onChangeParam('weight', value)}
       values={fontWeights.map(i => ({ value: i, name: i }))}
-      withEmptyValue={true}
+      withEmptyValue
     />
   </>
 )
