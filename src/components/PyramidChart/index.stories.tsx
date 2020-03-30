@@ -8,7 +8,7 @@ import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { PyramidChart } from './index'
+import { DEFAULT_COLORS, PyramidChart } from './index'
 
 storiesOf('components/PyramidChart', module)
   .addDecorator(withSmartKnobs())
@@ -16,14 +16,7 @@ storiesOf('components/PyramidChart', module)
   .add('interactive', () => (
     <PyramidChart
       data={getWidgetMockData(DataType.Pyramid)}
-      colors={[
-        'var(--color-bg-critical)',
-        'var(--color-bg-alert)',
-        'var(--color-bg-warning)',
-        'var(--color-bg-caution)',
-        'var(--color-bg-normal)',
-        'var(--color-bg-success)',
-      ]}
+      colors={DEFAULT_COLORS}
       constraint={boolean('constraint', true)}
       fontSize="m"
     />

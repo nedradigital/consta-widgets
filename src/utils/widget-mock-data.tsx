@@ -784,7 +784,7 @@ const mockData: DataMap = {
       },
       colorGroups: {
         green: 'var(--color-bg-success)',
-        violet: 'var(--color-bg-caution)',
+        violet: '#A13DFF',
         blue: 'var(--color-bg-normal)',
         orange: 'var(--color-bg-warning)',
       },

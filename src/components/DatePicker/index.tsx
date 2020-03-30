@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
+import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 import { endOfDay, startOfDay } from 'date-fns'
 
@@ -70,7 +71,9 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
   return (
     <div className={css.controls}>
       <InputDate value={startDate} onChange={date => onChange([date, endDate])} size={size} />
-      <span className={css.delimiter}>–</span>
+      <Text tag="span" view="primary" className={css.delimiter}>
+        –
+      </Text>
       <InputDate value={endDate} onChange={date => onChange([startDate, date])} size={size} />
     </div>
   )

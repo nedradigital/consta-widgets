@@ -21,7 +21,6 @@
 }
 
 .circle {
-  opacity: 0.2;
   fill: none;
   stroke: var(--axis-color);
   stroke-width: 2;

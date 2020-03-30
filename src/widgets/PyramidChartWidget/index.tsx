@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { removeAt } from '@csssr/gpn-utils/lib/array'
 
-import { PyramidChart, Size, sizes } from '@/components/PyramidChart'
+import { DEFAULT_COLORS, PyramidChart, Size, sizes } from '@/components/PyramidChart'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
@@ -43,14 +43,7 @@ const AddColor: React.FC<AddLabelProps> = ({ onAdd }) => {
 
 export const defaultParams: Params = {
   constraint: true,
-  colors: [
-    'var(--color-bg-critical)',
-    'var(--color-bg-alert)',
-    'var(--color-bg-warning)',
-    'var(--color-bg-caution)',
-    'var(--color-bg-normal)',
-    'var(--color-bg-success)',
-  ],
+  colors: DEFAULT_COLORS,
   fontSize: 's',
 }
 
