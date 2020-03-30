@@ -1940,7 +1940,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
-
 "@gpn-design/uikit@0.1.15":
   version "0.1.15"
   resolved "https://registry.yarnpkg.com/@gpn-design/uikit/-/uikit-0.1.15.tgz#c2b1291fc96982e2f5eb01b58740d5c094007b62"

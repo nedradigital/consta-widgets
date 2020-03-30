@@ -15,11 +15,13 @@ type Props = {
 export const SelectedOptionsList: React.FC<Props> = ({ values, onRemove, onReset, className }) => {
   return (
     <div className={classnames(css.selectedFilters, className)}>
-      {values.map(option => (
-        <div className={css.selectedOptionWrapper} key={option.id}>
-          <SelectedOption name={option.name} onRemove={() => onRemove(option.id)} />
-        </div>
-      ))}
+      <div className={css.options}>
+        {values.map(option => (
+          <div className={css.selectedOptionWrapper} key={option.id}>
+            <SelectedOption name={option.name} onRemove={() => onRemove(option.id)} />
+          </div>
+        ))}
+      </div>
       <button onClick={onReset} className={css.buttonCross} title="Сбросить все фильтры">
         <IconClose className={css.icon} size="xs" />
       </button>
