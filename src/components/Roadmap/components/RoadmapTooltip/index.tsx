@@ -95,8 +95,6 @@ const renderComment = (comment: string) => {
   )
 }
 
-const getIconView = (isPrimary: boolean) => (isPrimary ? 'primary' : 'ghost')
-
 export const RoadmapTooltip: React.FC<Props> = ({
   fact,
   plan,
@@ -120,27 +118,25 @@ export const RoadmapTooltip: React.FC<Props> = ({
         ? renderComment(comment)
         : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
     </div>,
-    <div key="buttons">
-      <div className={css.buttons}>
-        <button
-          className={classnames(css.button, css.dates, isActiveDates && css.active)}
-          onClick={event => {
-            stopEventHandler(event)
-            changeActiveSection('dates')
-          }}
-        >
-          <IconCalendar size="s" view={getIconView(isActiveDates)} className={css.icon} />
-        </button>
-        <button
-          className={classnames(css.button, css.comment, isActiveComment && css.active)}
-          onClick={event => {
-            stopEventHandler(event)
-            changeActiveSection('comment')
-          }}
-        >
-          <IconChat size="s" view={getIconView(isActiveComment)} className={css.icon} />
-        </button>
-      </div>
+    <div key="buttons" className={css.buttons}>
+      <button
+        className={classnames(css.button, css.dates, isActiveDates && css.active)}
+        onClick={event => {
+          stopEventHandler(event)
+          changeActiveSection('dates')
+        }}
+      >
+        <IconCalendar size="s" view="primary" className={css.icon} />
+      </button>
+      <button
+        className={classnames(css.button, css.comment, isActiveComment && css.active)}
+        onClick={event => {
+          stopEventHandler(event)
+          changeActiveSection('comment')
+        }}
+      >
+        <IconChat size="s" view="primary" className={css.icon} />
+      </button>
     </div>,
   ] as const
 

@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { Text } from '@gpn-design/uikit'
+
 import css from './index.css'
 
 type Props = {
@@ -42,7 +44,9 @@ export const RadarChartAxisName: React.FC<Props> = ({
         fontSize: `${fontSize}px`,
       }}
     >
-      {label}
+      <Text tag="div" view="secondary">
+        {label}
+      </Text>
     </div>
   )
 }

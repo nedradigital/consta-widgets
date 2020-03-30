@@ -65,10 +65,12 @@ export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', da
     return (
       <>
         <Tooltip isVisible={tooltipVisible && !!comment} position={tooltipPosition}>
-          <Text tag="div" weight="bold" transform="uppercase" spacing="xs">
+          <Text tag="div" weight="bold" transform="uppercase" spacing="xs" view="primary">
             Комментарий:
           </Text>
-          <div className={css.tooltipContent}>{comment}</div>
+          <Text className={css.tooltipContent} tag="div" view="primary">
+            {comment}
+          </Text>
         </Tooltip>
         <div
           className={classnames(css.background, sizeClasses[size])}

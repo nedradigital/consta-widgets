@@ -1,3 +1,4 @@
+import { Text } from '@gpn-design/uikit'
 import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
@@ -10,13 +11,13 @@ storiesOf('widgets/MapWidget', module)
     <>
       <MapWidgetContent data={MapWidget.mockData} params={{}} />
       <div>
-        <p>
+        <Text tag="p" view="primary">
           Тестовые данные в виджет не добавлял, чтобы не раздувать размер бандла тяжёлыми
           мок-данными.
-        </p>
-        <p>
+        </Text>
+        <Text tag="p" view="primary">
           См. стори компонента: <code>components/Map</code>
-        </p>
+        </Text>
       </div>
     </>
   ))

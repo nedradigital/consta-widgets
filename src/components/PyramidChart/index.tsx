@@ -22,6 +22,15 @@ type Props = {
   fontSize?: Size
 }
 
+export const DEFAULT_COLORS = [
+  '#FC4449',
+  '#FF6D32',
+  '#FF9724',
+  '#F7CC1D',
+  '#59D72C',
+  '#00BD59',
+] as const
+
 const PYRAMID_WIDTH = 312
 const SECTION_HEIGHT = 45
 const SECTION_TEXT_WIDTH = 300

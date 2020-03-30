@@ -125,21 +125,6 @@ storiesOf('components/DonutChart', module)
       />
     )
   })
-  .add('без данных по одной группе целиком', () => {
-    return (
-      <DonutChart
-        data={object('data', [
-          ...getWidgetMockData(DataType.Donut).data,
-          { ...dataItemWithoutData.data },
-        ])}
-        colorGroups={object('colorGroups', {
-          ...getWidgetMockData(DataType.Donut).colorGroups,
-          ...dataItemWithoutData.colorGroup,
-        })}
-        formatValueForTooltip={cubeMeterFormatValue}
-      />
-    )
-  })
   .add('без данных по одной группе в одном круге', () => {
     return (
       <DonutChart
