@@ -23,7 +23,15 @@ type Props = {
   onSelect: (value: Date | DateRange) => void
 }
 
-const getQuarters = (date: Date, minDate: Date, maxDate: Date): readonly DateRange[] => {
+export const getQuarters = ({
+  date,
+  minDate,
+  maxDate,
+}: {
+  date: Date
+  minDate: Date
+  maxDate: Date
+}): readonly DateRange[] => {
   const startDate = startOfYear(date)
   const endDate = endOfYear(date)
   const quarterAmount = differenceInQuarters(endDate, startDate) + 1
@@ -32,7 +40,7 @@ const getQuarters = (date: Date, minDate: Date, maxDate: Date): readonly DateRan
     const start = startOfDay(addQuarters(startDate, index))
     const end = endOfDay(endOfQuarter(start))
 
-    if (start < minDate || end > maxDate) {
+    if (end < minDate || start > maxDate) {
       return []
     }
 
@@ -49,7 +57,7 @@ export const ActionButtons: React.FC<Props> = ({
   onSelect,
 }) => {
   const currentYear = currentVisibleDate.getFullYear()
-  const quarters = getQuarters(currentVisibleDate, minDate, maxDate)
+  const quarters = getQuarters({ date: currentVisibleDate, minDate, maxDate })
 
   const handleClickOnToday = () => {
     onChangeVisibleDate(new Date())
