@@ -7,6 +7,7 @@ import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { TextWidgetContent, TypeName as TypeText } from '@/widgets/TextWidget'
 
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
@@ -30,6 +31,11 @@ export type Item = { x: number | null; y: number | null }
 export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
+
+type TitleData = {
+  text: string
+  type: TypeText
+}
 
 type ThresholdLine = {
   name?: string
@@ -62,6 +68,7 @@ type Props = {
   formatValueForTooltipTitle?: FormatValue
   colorGroups: ColorGroups
   unit?: string
+  titleData?: TitleData
   onClickHoverLine?: (value: number) => void
 }
 
@@ -178,6 +185,7 @@ export class LinearChart extends React.Component<Props, State> {
         formatValueForTooltipTitle,
         colorGroups,
         unit,
+        titleData,
         onClickHoverLine,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
@@ -201,7 +209,7 @@ export class LinearChart extends React.Component<Props, State> {
     const yOnLeft = yLabelsPos === 'left'
 
     return (
-      <div ref={this.ref} className={css.main}>
+      <div className={css.main}>
         <LineTooltip
           lines={this.getLines()}
           isHorizontal={isHorizontal}
@@ -215,118 +223,125 @@ export class LinearChart extends React.Component<Props, State> {
           formatValueForTooltip={formatValueForTooltip}
           formatValueForTooltipTitle={formatValueForTooltipTitle}
         />
-        <svg
-          ref={this.svgWrapperRef}
-          className={css.svg}
-          width={svgWidth}
-          height={svgHeight}
-          style={{
-            ...(xOnBottom ? { top: 0 } : { bottom: 0 }),
-            ...(yOnLeft ? { right: 0 } : { left: 0 }),
-          }}
-        >
-          <defs>
-            <clipPath id={this.lineClipId}>
-              <rect width={svgWidth} height={svgHeight} />
-            </clipPath>
-            <clipPath id={this.dotsClipId}>
-              <rect
-                width={svgWidth + 2 * dotRadius}
-                height={svgHeight + 2 * dotRadius}
-                x={-1 * dotRadius}
-                y={-1 * dotRadius}
-              />
-            </clipPath>
-          </defs>
-
-          <Axis
+        {titleData && (
+          <div className={css.title} style={{ paddingLeft: paddingX }}>
+            <TextWidgetContent data={undefined} params={titleData} />
+          </div>
+        )}
+        <div ref={this.ref} className={css.graph}>
+          <svg
+            ref={this.svgWrapperRef}
+            className={css.svg}
             width={svgWidth}
             height={svgHeight}
-            scales={{
-              x: scaleX,
-              y: scaleY,
+            style={{
+              ...(xOnBottom ? { top: 0 } : { bottom: 0 }),
+              ...(yOnLeft ? { right: 0 } : { left: 0 }),
             }}
-            gridConfig={gridConfig}
-            lineClipPath={lineClipPath}
-            onAxisSizeChange={this.onAxisSizeChange}
-            mainLabelTickValues={mainLabelTickValues}
-            mainGridTickValues={mainGridTickValues}
-            secondaryLabelTickValues={secondaryLabelTickValues}
-            secondaryGridTickValues={secondaryGridTickValues}
-            isHorizontal={isHorizontal}
-            formatValueForLabel={formatValueForLabel}
-            secondaryScaleUnit={unit}
-            xGuideValue={xGuideValue}
-            yGuideValue={yGuideValue}
-          />
+          >
+            <defs>
+              <clipPath id={this.lineClipId}>
+                <rect width={svgWidth} height={svgHeight} />
+              </clipPath>
+              <clipPath id={this.dotsClipId}>
+                <rect
+                  width={svgWidth + 2 * dotRadius}
+                  height={svgHeight + 2 * dotRadius}
+                  x={-1 * dotRadius}
+                  y={-1 * dotRadius}
+                />
+              </clipPath>
+            </defs>
 
-          <HoverLines
-            lines={this.getLines()}
-            scaleX={scaleX}
-            scaleY={scaleY}
-            width={svgWidth}
-            height={svgHeight}
-            isHorizontal={isHorizontal}
-            hoveredMainValue={hoveredMainValue}
-            onChangeHoveredMainValue={this.setHoveredMainValue}
-            onClickLine={onClickHoverLine}
-          />
+            <Axis
+              width={svgWidth}
+              height={svgHeight}
+              scales={{
+                x: scaleX,
+                y: scaleY,
+              }}
+              gridConfig={gridConfig}
+              lineClipPath={lineClipPath}
+              onAxisSizeChange={this.onAxisSizeChange}
+              mainLabelTickValues={mainLabelTickValues}
+              mainGridTickValues={mainGridTickValues}
+              secondaryLabelTickValues={secondaryLabelTickValues}
+              secondaryGridTickValues={secondaryGridTickValues}
+              isHorizontal={isHorizontal}
+              formatValueForLabel={formatValueForLabel}
+              secondaryScaleUnit={unit}
+              xGuideValue={xGuideValue}
+              yGuideValue={yGuideValue}
+            />
 
-          {threshold && (
-            <Threshold
+            <HoverLines
+              lines={this.getLines()}
               scaleX={scaleX}
               scaleY={scaleY}
-              maxPoints={threshold.max.values}
-              minPoints={threshold.min?.values}
-              clipPath={lineClipPath}
+              width={svgWidth}
+              height={svgHeight}
               isHorizontal={isHorizontal}
+              hoveredMainValue={hoveredMainValue}
+              onChangeHoveredMainValue={this.setHoveredMainValue}
+              onClickLine={onClickHoverLine}
             />
-          )}
 
-          {this.getLines().map(line => {
-            const gradientProps = line.withGradient
-              ? ({
-                  withGradient: true,
-                  areaBottom: isHorizontal ? yDomain[0] : xDomain[0],
-                } as const)
-              : ({
-                  withGradient: false,
-                } as const)
-
-            return (
-              <LineWithDots
-                key={line.colorGroupName}
-                values={[...line.values]}
-                color={colorGroups[line.colorGroupName]}
-                hasDotRadius={line.dots}
-                defaultDotRadius={dotRadius}
+            {threshold && (
+              <Threshold
                 scaleX={scaleX}
                 scaleY={scaleY}
-                lineClipPath={lineClipPath}
-                dotsClipPath={dotsClipPath}
-                hoveredMainValue={hoveredMainValue}
+                maxPoints={threshold.max.values}
+                minPoints={threshold.min?.values}
+                clipPath={lineClipPath}
                 isHorizontal={isHorizontal}
-                {...gradientProps}
               />
-            )
-          })}
-        </svg>
+            )}
 
-        {withZoom && (
-          <Zoom
-            isHorizontal={isHorizontal}
-            xRange={getXRange(svgWidth)}
-            yRange={getYRange(svgHeight)}
-            paddingX={paddingX}
-            paddingY={paddingY}
-            xLabelsPos={xLabelsPos}
-            yLabelsPos={yLabelsPos}
-            domain={mainAxis.currentDomain}
-            originalDomain={mainAxis.getDomain(this.getAllValues())}
-            onZoom={this.onZoom}
-            lines={lines}
-          />
-        )}
+            {this.getLines().map(line => {
+              const gradientProps = line.withGradient
+                ? ({
+                    withGradient: true,
+                    areaBottom: isHorizontal ? yDomain[0] : xDomain[0],
+                  } as const)
+                : ({
+                    withGradient: false,
+                  } as const)
+
+              return (
+                <LineWithDots
+                  key={line.colorGroupName}
+                  values={[...line.values]}
+                  color={colorGroups[line.colorGroupName]}
+                  hasDotRadius={line.dots}
+                  defaultDotRadius={dotRadius}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  lineClipPath={lineClipPath}
+                  dotsClipPath={dotsClipPath}
+                  hoveredMainValue={hoveredMainValue}
+                  isHorizontal={isHorizontal}
+                  {...gradientProps}
+                />
+              )
+            })}
+          </svg>
+
+          {withZoom && (
+            <Zoom
+              isHorizontal={isHorizontal}
+              xRange={getXRange(svgWidth)}
+              yRange={getYRange(svgHeight)}
+              paddingX={paddingX}
+              paddingY={paddingY}
+              xLabelsPos={xLabelsPos}
+              yLabelsPos={yLabelsPos}
+              domain={mainAxis.currentDomain}
+              originalDomain={mainAxis.getDomain(this.getAllValues())}
+              onZoom={this.onZoom}
+              lines={lines}
+            />
+          )}
+        </div>
       </div>
     )
   }

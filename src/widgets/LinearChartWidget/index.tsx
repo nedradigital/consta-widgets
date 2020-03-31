@@ -3,9 +3,11 @@ import { XLabelsPosition, YLabelsPosition } from '@/components/LinearChart/compo
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
-import { DataMap, DataType } from '@/dashboard/types'
+import { WidgetSettingsText } from '@/components/WidgetSettingsText'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
+import { TypeName, typeNames } from '@/widgets/TextWidget'
 
 const dataType = DataType.LinearChart
 type Data = DataMap[typeof dataType]
@@ -23,6 +25,8 @@ type Params = {
   yGridTicks?: number
   yGuide?: boolean
   yWithPaddings?: boolean
+  title?: string
+  titleType?: TypeName
 }
 
 export const defaultParams: Params = {
@@ -38,6 +42,7 @@ export const defaultParams: Params = {
   yGridTicks: 0,
   yGuide: false,
   yWithPaddings: false,
+  titleType: 'text1',
 }
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
@@ -54,6 +59,8 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     yGridTicks,
     yGuide,
     yWithPaddings,
+    title,
+    titleType,
   },
   data: {
     data,
@@ -65,36 +72,49 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
     threshold,
     onClickHoverLine,
   },
-}) => (
-  <LinearChart
-    gridConfig={{
-      x: {
-        labels: xLabels,
-        labelTicks: xLabelTicks,
-        gridTicks: xGridTicks,
-        guide: xGuide,
-        withPaddings: xWithPaddings,
-      },
-      y: {
-        labels: yLabels,
-        labelTicks: yLabelTicks,
-        gridTicks: yGridTicks,
-        guide: yGuide,
-        withPaddings: yWithPaddings,
-      },
-    }}
-    lines={data}
-    colorGroups={colorGroups}
-    withZoom={withZoom}
-    isHorizontal={Boolean(isHorizontal)}
-    formatValueForLabel={formatValueForLabel ? formatValueForLabel : v => String(v)}
-    formatValueForTooltip={formatValueForTooltip}
-    formatValueForTooltipTitle={formatValueForTooltipTitle}
-    unit={unit}
-    threshold={threshold}
-    onClickHoverLine={onClickHoverLine}
-  />
-)
+}) => {
+  const gridConfig = {
+    x: {
+      labels: xLabels,
+      labelTicks: xLabelTicks,
+      gridTicks: xGridTicks,
+      guide: xGuide,
+      withPaddings: xWithPaddings,
+    },
+    y: {
+      labels: yLabels,
+      labelTicks: yLabelTicks,
+      gridTicks: yGridTicks,
+      guide: yGuide,
+      withPaddings: yWithPaddings,
+    },
+  }
+
+  const titleData =
+    title && titleType
+      ? {
+          text: title,
+          type: titleType,
+        }
+      : undefined
+
+  return (
+    <LinearChart
+      gridConfig={gridConfig}
+      lines={data}
+      colorGroups={colorGroups}
+      withZoom={withZoom}
+      isHorizontal={Boolean(isHorizontal)}
+      formatValueForLabel={formatValueForLabel ? formatValueForLabel : String}
+      formatValueForTooltip={formatValueForTooltip}
+      formatValueForTooltipTitle={formatValueForTooltipTitle}
+      unit={unit}
+      threshold={threshold}
+      titleData={titleData}
+      onClickHoverLine={onClickHoverLine}
+    />
+  )
+}
 
 export const LinearChartWidget = createWidget<Data, Params>({
   id: widgetIdsByType.LinearChartWidget,
@@ -108,6 +128,19 @@ export const LinearChartWidget = createWidget<Data, Params>({
   renderSettings(params, onChangeParam) {
     return (
       <>
+        <WidgetSettingsText
+          name="Заголовок"
+          value={params.title}
+          onChange={value => onChangeParam('title', value)}
+        />
+        {params.title && (
+          <WidgetSettingsSelect
+            name="Тип заголовка"
+            value={params.titleType}
+            values={typeNames.map(type => ({ value: type, name: type }))}
+            onChange={value => onChangeParam('titleType', value)}
+          />
+        )}
         <WidgetSettingsCheckbox
           name="Горизонтальное отображение"
           value={params.isHorizontal}

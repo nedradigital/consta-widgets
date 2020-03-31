@@ -135,6 +135,19 @@ storiesOf('components/LinearChart', module)
       />
     )
   })
+  .add('с заголовком', () => {
+    return (
+      <LinearChart
+        {...getCommonProps()}
+        colorGroups={object('colorGroups', colorGroups)}
+        isHorizontal
+        titleData={object('titleData', {
+          text: 'LTIF',
+          type: 'heading4',
+        })}
+      />
+    )
+  })
 
 storiesOf('components/LinearChart', module)
   .addDecorator(withSmartKnobs())

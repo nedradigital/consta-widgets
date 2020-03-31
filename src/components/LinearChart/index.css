@@ -1,11 +1,22 @@
 .main {
-  position: relative;
+  display: flex;
+  flex-direction: column;
 
   width: 100%;
   height: 100%;
 
   /* Используется в осях и зуме */
   --axis-tick-offset: var(--space-xs);
+}
+
+.title {
+  padding-bottom: var(--space-s);
+}
+
+.graph {
+  position: relative;
+
+  flex: 1;
 }
 
 .svg {
