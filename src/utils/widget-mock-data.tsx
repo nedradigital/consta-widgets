@@ -503,6 +503,7 @@ const mockData: DataMap = {
         ],
       },
     },
+    unit: 'тыс м3',
   },
   [DataType.Pyramid]: [
     {
