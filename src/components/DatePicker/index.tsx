@@ -12,6 +12,7 @@ import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
 import { InputDate } from './components/InputDate'
 import { Timeline } from './components/Timeline'
+import { getCurrentVisibleDate } from './helpers'
 import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
@@ -87,8 +88,8 @@ export const DatePicker: React.FC<Props> = props => {
   const controlsRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
-  const [currentVisibleDate, setCurrentVisibleDate] = useState(
-    props.type === 'date' && props.value ? props.value : new Date()
+  const [currentVisibleDate, setCurrentVisibleDate] = useState<Date>(
+    getCurrentVisibleDate({ value: props.value, minDate, maxDate })
   )
 
   useClickOutside([controlsRef, tooltipRef], () => setIsTooltipVisible(false))
@@ -108,14 +109,12 @@ export const DatePicker: React.FC<Props> = props => {
     if (props.type === 'date-range' && props.value && props.value[1] && !props.value[0]) {
       props.onChange([undefined, undefined])
     }
-    if (props.type === 'date-range') {
-      setCurrentVisibleDate(props.value && props.value[0] ? props.value[0] : minDate)
-    }
-    if (props.type === 'date') {
-      setCurrentVisibleDate(props.value ? props.value : minDate)
+
+    if (!isTooltipVisible) {
+      setCurrentVisibleDate(getCurrentVisibleDate({ value: props.value, minDate, maxDate }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props])
+  }, [props, isTooltipVisible])
 
   const renderControls = () => {
     if (props.type === 'date') {
