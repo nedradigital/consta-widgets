@@ -24,10 +24,12 @@ export const GROUP_INNER_PADDING: Record<Size, number> = {
 
 export const OUTER_PADDING = 2
 
+/* istanbul ignore next */
 export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
   return shouldFlip ? [size, 0] : [0, size]
 }
 
+/* istanbul ignore next */
 export const getTotalByColumn = (column: Column) =>
   sum(Object.keys(column).map(key => column[key])) || 0
 
@@ -41,6 +43,7 @@ export const getNormalizedValue = ({
   total: number
 }) => Math.round((maxValue * value) / total)
 
+/* istanbul ignore next */
 export const getColumnDetails = ({
   column,
   columnName,
@@ -107,6 +110,7 @@ export const getColumnDetails = ({
     }, [] as readonly ColumnDetail[])
 }
 
+/* istanbul ignore next */
 export const getDomain = (groups: Groups): NumberRange => {
   const numbers = flattenDeep(
     groups.map(group =>
@@ -161,6 +165,7 @@ export const getDataColumns = ({
         .filter(isDefined),
     }))
 
+/* istanbul ignore next */
 export const transformBarChartGroupsToCommonGroups = (groups: SingleBarChartGroups): Groups =>
   groups.map(group => ({
     ...group,
@@ -199,6 +204,7 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
   const groupsCount = groupsSizes.length - sizes.length
   const nextGraphSize = graphSize - sumSizes
 
+  /* istanbul ignore next */
   if (groupsCount === 1) {
     return nextGraphSize
   }
@@ -209,6 +215,7 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
   )
 }
 
+/* istanbul ignore next */
 export const scaleBand = ({
   groupsSizes,
   range,

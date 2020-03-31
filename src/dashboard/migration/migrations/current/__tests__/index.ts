@@ -254,6 +254,13 @@ describe('currentMigration', () => {
             CurrentDashboardWidgetIdsByType.TextWidget,
             sourceAdvancedTextWidgetParams
           ),
+          {
+            type: 'widget',
+            debugName: '2',
+            id: '2',
+            widgetType: CurrentDashboardWidgetIdsByType.BarChartWidget,
+            params: {},
+          },
         ],
         Box1: [
           {
@@ -304,6 +311,13 @@ describe('currentMigration', () => {
       config: {
         Box0: [
           createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, resultBasicTextWidgetParams),
+          {
+            type: 'widget',
+            debugName: '2',
+            id: '2',
+            widgetType: Dashboard10WidgetIdsByType.BarChartWidget,
+            params: {},
+          },
         ],
         Box1: [
           {

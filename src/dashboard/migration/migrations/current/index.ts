@@ -162,6 +162,7 @@ export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.Sta
             }
           : item
       }
+
       return item
     }
 

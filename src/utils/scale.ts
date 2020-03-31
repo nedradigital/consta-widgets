@@ -15,6 +15,7 @@ type ScaleBandParams = {
   align?: number
 }
 
+/* istanbul ignore next */
 export const scaleBand = ({
   domain,
   range,

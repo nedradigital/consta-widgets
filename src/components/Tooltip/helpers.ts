@@ -57,6 +57,7 @@ type ComputedPositionAndDirectionProps = {
   direction: Direction
 } & ({ anchorClientRect: ClientRect } | AttachedToPosition)
 
+/* istanbul ignore next */
 export const getComputedPositionAndDirection = (
   props: ComputedPositionAndDirectionProps
 ): {
