@@ -3,7 +3,7 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
-import { endOfDay, startOfDay } from 'date-fns'
+import { endOfDay, format, isWithinInterval, startOfDay } from 'date-fns'
 
 import { Tooltip } from '@/components/Tooltip'
 import { themeColorLight } from '@/utils/theme'
@@ -13,6 +13,8 @@ import { Calendar } from './components/Calendar'
 import { InputDate } from './components/InputDate'
 import { Timeline } from './components/Timeline'
 import { getCurrentVisibleDate } from './helpers'
+// TODO: использовать иконку из UI-кита https://jira.csssr.io/browse/GDC-36
+import { ReactComponent as IconWarning } from './images/icon_warning.svg'
 import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
@@ -33,6 +35,8 @@ type RenderControls<V> = (
   props: {
     value?: V
     onChange: (value?: V) => void
+    isInvalid: boolean
+    tooltipContent?: React.ReactNode
   } & StyleProps
 ) => React.ReactNode
 
@@ -59,23 +63,67 @@ const OFFSET_FROM_CONTROLS = 4
 export const isDateRange = (value?: Date | DateRange): value is DateRange =>
   Array.isArray(value) && value.length <= 2
 
-const defaultRenderSingleControl: RenderControls<Date> = props => {
-  const { size, value, onChange } = props
+const isDateOutOfRange = ({
+  date,
+  minDate,
+  maxDate,
+}: {
+  date?: Date
+  minDate: Date
+  maxDate: Date
+}) => {
+  return !!date && !isWithinInterval(date, { start: minDate, end: maxDate })
+}
 
-  return <InputDate value={value} onChange={onChange} size={size} />
+const formatOutOfRangeDate = (date: Date) => format(date, 'dd.MM.yyyy')
+
+const DateOutOfRangeTooptipContent: React.FC<BaseProps> = ({ minDate, maxDate }) => {
+  return (
+    <div className={css.warningTooltip}>
+      <IconWarning className={css.iconWarning} />
+      <Text tag="div" size="xs" view="primary" lineHeight="m">
+        Укажите дату в промежутке {formatOutOfRangeDate(minDate)} - {formatOutOfRangeDate(maxDate)}
+      </Text>
+    </div>
+  )
+}
+
+const defaultRenderSingleControl: RenderControls<Date> = props => {
+  const { size, value, onChange, isInvalid, tooltipContent } = props
+
+  return (
+    <InputDate
+      value={value}
+      onChange={onChange}
+      size={size}
+      isInvalid={isInvalid}
+      tooltipContent={tooltipContent}
+    />
+  )
 }
 
 const defaultRenderRangeControls: RenderControls<DateRange> = props => {
-  const { size, value, onChange } = props
+  const { size, value, onChange, isInvalid, tooltipContent } = props
   const [startDate, endDate] = value || [undefined, undefined]
 
   return (
     <div className={css.controls}>
-      <InputDate value={startDate} onChange={date => onChange([date, endDate])} size={size} />
+      <InputDate
+        value={startDate}
+        onChange={date => onChange([date, endDate])}
+        size={size}
+        isInvalid={isInvalid}
+      />
       <Text tag="span" view="primary" className={css.delimiter}>
         –
       </Text>
-      <InputDate value={endDate} onChange={date => onChange([startDate, date])} size={size} />
+      <InputDate
+        value={endDate}
+        onChange={date => onChange([startDate, date])}
+        size={size}
+        isInvalid={isInvalid}
+        tooltipContent={tooltipContent}
+      />
     </div>
   )
 }
@@ -134,13 +182,46 @@ export const DatePicker: React.FC<Props> = props => {
   }, [props, isTooltipVisible])
 
   const renderControls = () => {
+    const isInvalid =
+      props.type === 'date'
+        ? isDateOutOfRange({
+            date: props.value,
+            minDate: props.minDate,
+            maxDate: props.maxDate,
+          })
+        : !!props.value &&
+          props.value.some(value =>
+            isDateOutOfRange({
+              date: value,
+              minDate: props.minDate,
+              maxDate: props.maxDate,
+            })
+          )
+    const tooltipContent = isInvalid && !isTooltipVisible && (
+      <DateOutOfRangeTooptipContent minDate={props.minDate} maxDate={props.maxDate} />
+    )
+
     if (props.type === 'date') {
       const renderSingle = props.renderControls || defaultRenderSingleControl
-      return renderSingle({ size, value: props.value, onChange: props.onChange })
+
+      return renderSingle({
+        size,
+        isInvalid,
+        tooltipContent,
+        value: props.value,
+        onChange: props.onChange,
+      })
     }
 
     const renderRange = props.renderControls || defaultRenderRangeControls
-    return renderRange({ size, value: props.value, onChange: props.onChange })
+
+    return renderRange({
+      size,
+      isInvalid,
+      tooltipContent,
+      value: props.value,
+      onChange: props.onChange,
+    })
   }
 
   return (
