@@ -22,11 +22,11 @@
 .sign {
   display: inline-block;
 
-  @nest :--left & {
+  :--left & {
     margin-right: var(--space-xs);
   }
 
-  @nest :--top & {
+  :--top & {
     margin-bottom: var(--space-2xs);
   }
 }
@@ -36,7 +36,8 @@
 
   border-radius: 100%;
 
-  @nest :--extra-small &, :--small & {
+  :--extra-small &,
+  :--small & {
     margin-bottom: calc-size(-1);
   }
 }
@@ -45,7 +46,7 @@
   width: calc-size(20);
   height: calc-size(2);
 
-  @nest :--left & {
+  :--left & {
     vertical-align: middle;
   }
 

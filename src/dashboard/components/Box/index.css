@@ -48,7 +48,7 @@
     background: rgba(var(--color-nums-shadow), 1);
   }
 
-  @nest :--main:not(:hover) > & {
+  :--main:not(:hover) > & {
     opacity: 0.2;
   }
 }
@@ -69,7 +69,7 @@
 
   transform: translateX(-50%);
 
-  @nest .panel:not(:hover) & {
+  .panel:not(:hover) & {
     display: none;
   }
 }

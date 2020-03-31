@@ -115,13 +115,13 @@
     color: var(--color-control-typo-clear-hover);
   }
 
-  @nest .cell:not(:hover) & {
+  .cell:not(:hover) & {
     visibility: hidden;
   }
 }
 
 .iconFilter {
-  @nest .cell:hover:not(.isFilterOpened) & {
+  .cell:hover:not(.isFilterOpened) & {
     opacity: 1;
     color: var(--color-control-typo-clear);
   }
@@ -134,7 +134,7 @@
 
   transform: translateX(100%);
 
-  @nest .cell.isSortingActive & {
+  .cell.isSortingActive & {
     visibility: initial;
   }
 }

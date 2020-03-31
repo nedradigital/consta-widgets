@@ -41,7 +41,7 @@
 
   /* Отступ между прогрессбарами */
 
-  @nest :--item:not(:first-child) :--row:first-child & {
+  :--item:not(:first-child) :--row:first-child & {
     margin-top: var(--space-xs);
 
     &.isTitleCell {

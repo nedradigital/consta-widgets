@@ -50,11 +50,11 @@
     border: var(--arrow-size) solid transparent;
   }
 
-  @nest :--upDirection:--withArrow & {
+  :--upDirection:--withArrow & {
     margin-bottom: var(--tooltip-positive-arrow-offset);
   }
 
-  @nest .upLeft:--withArrow & {
+  .upLeft:--withArrow & {
     --border-bottom-right-radius: 0;
 
     &::after {
@@ -69,7 +69,7 @@
     }
   }
 
-  @nest .upCenter:--withArrow &::after {
+  .upCenter:--withArrow &::after {
     bottom: var(--tooltip-negative-arrow-offset);
     left: 50%;
 
@@ -78,7 +78,7 @@
     transform: translate(-50%, 0);
   }
 
-  @nest .upRight:--withArrow & {
+  .upRight:--withArrow & {
     --border-bottom-left-radius: 0;
 
     &::after {
@@ -93,7 +93,7 @@
     }
   }
 
-  @nest .right:--withArrow & {
+  .right:--withArrow & {
     margin-left: var(--tooltip-positive-arrow-offset);
 
     &::after {
@@ -106,11 +106,11 @@
     }
   }
 
-  @nest :--downDirection:--withArrow & {
+  :--downDirection:--withArrow & {
     margin-top: var(--tooltip-positive-arrow-offset);
   }
 
-  @nest .downLeft:--withArrow & {
+  .downLeft:--withArrow & {
     --border-top-right-radius: 0;
 
     &::after {
@@ -125,7 +125,7 @@
     }
   }
 
-  @nest .downCenter:--withArrow &::after {
+  .downCenter:--withArrow &::after {
     top: var(--tooltip-negative-arrow-offset);
     left: 50%;
 
@@ -134,7 +134,7 @@
     transform: translate(-50%, 0);
   }
 
-  @nest .downRight:--withArrow & {
+  .downRight:--withArrow & {
     --border-top-left-radius: 0;
 
     &::after {
@@ -149,7 +149,7 @@
     }
   }
 
-  @nest .left:--withArrow & {
+  .left:--withArrow & {
     margin-right: var(--tooltip-positive-arrow-offset);
 
     &::after {

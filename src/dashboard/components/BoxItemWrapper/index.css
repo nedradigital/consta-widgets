@@ -38,23 +38,23 @@
     background: rgba(var(--color-nums-shadow), 1);
   }
 
-  @nest :--main:not(:hover) > & {
+  :--main:not(:hover) > & {
     display: none;
   }
 
-  @nest :--main.isGrid > & {
+  :--main.isGrid > & {
     right: 0;
     bottom: 0;
 
     flex-direction: row-reverse;
   }
 
-  @nest :--main.isSwitch > & {
+  :--main.isSwitch > & {
     bottom: 0;
     left: 0;
   }
 
-  @nest :--main:not(.isCustomItem) > & {
+  :--main:not(.isCustomItem) > & {
     top: 50%;
     left: 50%;
 
@@ -87,7 +87,7 @@
     background: var(--color-control-bg-ghost-hover);
   }
 
-  @nest :--main.isCustomItem > :--editButtons:not(:hover) &:not(:first-child) {
+  :--main.isCustomItem > :--editButtons:not(:hover) &:not(:first-child) {
     /* В гриде показываем только 1 кнопку, а остальные появляются по ховеру */
     display: none;
   }

@@ -35,11 +35,11 @@
 
   transition: transform var(--show-transition);
 
-  @nest :--main:--isHidden & {
+  :--main:--isHidden & {
     transform: scale(0.8);
   }
 
-  @nest :--main.isOpening & * {
+  :--main.isOpening & * {
     /* Чтобы не было видно пролистывания картинок в момент открытия */
     transition-duration: 0s;
   }

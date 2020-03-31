@@ -18,11 +18,11 @@
 
   transition: opacity var(--fast-transition);
 
-  @nest :--vertical & {
+  :--vertical & {
     width: 4px;
   }
 
-  @nest :--horizontal & {
+  :--horizontal & {
     height: 4px;
   }
 
@@ -56,19 +56,19 @@
 
   display: flex;
 
-  @nest :--horizontal & {
+  :--horizontal & {
     right: 8px;
     bottom: 0;
   }
 
-  @nest :--vertical & {
+  :--vertical & {
     bottom: 0;
     left: 0;
 
     flex-direction: column;
   }
 
-  @nest :--main:not(:hover) & {
+  :--main:not(:hover) & {
     display: none;
   }
 }
@@ -78,21 +78,21 @@
 
   background: var(--color-control-bg-ghost);
 
-  @nest :--horizontal & {
+  :--horizontal & {
     right: 8px;
     bottom: 0;
   }
 
-  @nest :--vertical & {
+  :--vertical & {
     flex-direction: column-reverse;
   }
 
   & + & {
-    @nest :--horizontal & {
+    :--horizontal & {
       margin-left: 4px;
     }
 
-    @nest :--vertical & {
+    :--vertical & {
       margin-top: 4px;
     }
   }
@@ -113,35 +113,35 @@
   transition: color var(--fast-transition);
 
   &:first-child {
-    @nest :--horizontal & {
+    :--horizontal & {
       border-top-left-radius: var(--button-radius);
       border-bottom-left-radius: var(--button-radius);
     }
 
-    @nest :--vertical & {
+    :--vertical & {
       border-bottom-right-radius: var(--button-radius);
       border-bottom-left-radius: var(--button-radius);
     }
   }
 
   &:last-child {
-    @nest :--horizontal & {
+    :--horizontal & {
       border-top-right-radius: var(--button-radius);
       border-bottom-right-radius: var(--button-radius);
     }
 
-    @nest :--vertical & {
+    :--vertical & {
       border-top-left-radius: var(--button-radius);
       border-top-right-radius: var(--button-radius);
     }
   }
 
   & + & {
-    @nest :--horizontal & {
+    :--horizontal & {
       margin-left: -1px;
     }
 
-    @nest :--vertical & {
+    :--vertical & {
       margin-bottom: -1px;
     }
   }

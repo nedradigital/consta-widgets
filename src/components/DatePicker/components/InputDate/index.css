@@ -7,24 +7,6 @@
   display: inline-block;
 }
 
-:--icon {
-  position: absolute;
-  top: 50%;
-  right: var(--space-s);
-
-  pointer-events: none;
-
-  color: var(--color-control-typo-clear);
-
-  transform: translateY(-50%);
-
-  fill: currentColor;
-
-  @nest :--input:hover + & {
-    color: var(--color-control-typo-clear-hover);
-  }
-}
-
 :--input {
   font-size: var(--size-text-s);
 
@@ -57,5 +39,23 @@
 
   &.sizeL {
     min-width: calc-size(155);
+  }
+}
+
+:--icon {
+  position: absolute;
+  top: 50%;
+  right: var(--space-s);
+
+  pointer-events: none;
+
+  color: var(--color-control-typo-clear);
+
+  transform: translateY(-50%);
+
+  fill: currentColor;
+
+  :--input:hover + & {
+    color: var(--color-control-typo-clear-hover);
   }
 }

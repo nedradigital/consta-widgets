@@ -129,7 +129,8 @@
     border-left: 1px solid var(--color-control-bg-border-default);
   }
 
-  @nest :--isLeft &.comment, :--isRight &.comment {
+  :--isLeft &.comment,
+  :--isRight &.comment {
     width: 26px;
 
     border-left: none;

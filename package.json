@@ -85,7 +85,7 @@
     "@types/react": "16.8.23"
   },
   "devDependencies": {
-    "@csssr/gpn-configs": "0.2.19",
+    "@csssr/gpn-configs": "0.2.21",
     "@storybook/addon-actions": "5.3.17",
     "@storybook/addon-info": "5.3.17",
     "@storybook/addon-knobs": "5.3.17",

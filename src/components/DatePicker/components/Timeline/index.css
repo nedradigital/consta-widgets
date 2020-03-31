@@ -79,7 +79,8 @@
     background-color: rgba(0, 0, 0, 0.5);
   }
 
-  @nest .isDisabled &, .isDisabled &.isBig {
+  .isDisabled &,
+  .isDisabled &.isBig {
     background-color: rgba(0, 0, 0, 0.1);
   }
 }
