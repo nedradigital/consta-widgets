@@ -90,18 +90,33 @@ export const DatePicker: React.FC<Props> = props => {
   const [currentVisibleDate, setCurrentVisibleDate] = useState(
     props.type === 'date' && props.value ? props.value : new Date()
   )
+  const [currentValue, changeCurrentValue] = useState(props.value)
 
-  useClickOutside([controlsRef, tooltipRef], () => setIsTooltipVisible(false))
+  const handleApplyDate = () => {
+    if (currentValue) {
+      if (!isDateRange(currentValue) && props.type === 'date') {
+        props.onChange(currentValue)
+      }
+
+      if (isDateRange(currentValue) && props.type === 'date-range') {
+        props.onChange(currentValue)
+      }
+    }
+
+    setIsTooltipVisible(false)
+  }
 
   const handleSelectDate = (value: Date | DateRange) => {
     if (!isDateRange(value) && props.type === 'date') {
-      return props.onChange(value)
+      return changeCurrentValue(value)
     }
 
     if (isDateRange(value) && props.type === 'date-range') {
-      return props.onChange(value)
+      return changeCurrentValue(value)
     }
   }
+
+  useClickOutside([controlsRef, tooltipRef], () => handleApplyDate())
 
   useLayoutEffect(() => {
     // сброс интервала в случае, если сторонним инпутом сброшена только первая дата
@@ -114,6 +129,8 @@ export const DatePicker: React.FC<Props> = props => {
     if (props.type === 'date') {
       setCurrentVisibleDate(props.value ? props.value : minDate)
     }
+
+    changeCurrentValue(props.value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props])
 
@@ -150,13 +167,13 @@ export const DatePicker: React.FC<Props> = props => {
           currentVisibleDate={currentVisibleDate}
           minDate={minDate}
           maxDate={maxDate}
-          value={props.value}
+          value={currentValue}
           onChange={setCurrentVisibleDate}
         />
         <Calendar
           minDate={minDate}
           maxDate={maxDate}
-          value={props.value}
+          value={currentValue}
           currentVisibleDate={currentVisibleDate}
           onSelect={handleSelectDate}
         />
@@ -165,7 +182,7 @@ export const DatePicker: React.FC<Props> = props => {
           minDate={minDate}
           maxDate={maxDate}
           currentVisibleDate={currentVisibleDate}
-          onChangeVisibleDate={setCurrentVisibleDate}
+          onApply={handleApplyDate}
           onSelect={handleSelectDate}
         />
       </Tooltip>
