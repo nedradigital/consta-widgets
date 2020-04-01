@@ -46,6 +46,7 @@ const textType: TextType = {
       size: '3xl',
       lineHeight: 'xs',
       weight: 'bold',
+      view: 'primary',
     },
   },
   heading2: {
@@ -54,6 +55,7 @@ const textType: TextType = {
       size: 'xl',
       lineHeight: 's',
       weight: 'bold',
+      view: 'primary',
     },
   },
   heading3: {
@@ -62,6 +64,7 @@ const textType: TextType = {
       size: 'l',
       lineHeight: 's',
       weight: 'bold',
+      view: 'primary',
     },
   },
   heading4: {
@@ -70,6 +73,7 @@ const textType: TextType = {
       size: 's',
       lineHeight: 's',
       weight: 'bold',
+      view: 'primary',
       transform: 'uppercase',
     },
   },
@@ -78,6 +82,7 @@ const textType: TextType = {
     props: {
       size: 's',
       lineHeight: 'xs',
+      view: 'primary',
     },
   },
   text2: {
@@ -179,6 +184,17 @@ export const fontWeights: ReadonlyArray<NonNullable<TextProps['weight']>> = [
   'semibold',
   'thin',
 ] as const
+export const views: ReadonlyArray<NonNullable<TextProps['view']>> = [
+  'alert',
+  'brand',
+  'ghost',
+  'link',
+  'link-minor',
+  'primary',
+  'secondary',
+  'success',
+  'warning',
+] as const
 
 const dataType = DataType.Text
 type Data = DataMap[typeof dataType] | typeof undefined
@@ -205,6 +221,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
   const textProps = isExtendedEditMode(params)
     ? {
         align: params.align,
+        view: params.view,
         decoration: params.decoration,
         font: params.font,
         lineHeight: params.lineHeight,
@@ -272,7 +289,6 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
       <Text
         tag="div"
         {...textProps}
-        view="primary"
         className={classnames(
           css.text,
           Boolean(croppedLineCount) && css.isCropped,
@@ -344,6 +360,13 @@ const ExtendedEditMode = ({
       value={params.font}
       onChange={value => onChangeParam('font', value)}
       values={fontFamilies.map(i => ({ value: i, name: i }))}
+      withEmptyValue
+    />
+    <WidgetSettingsSelect
+      name="Цвет"
+      value={params.view}
+      onChange={value => onChangeParam('view', value)}
+      values={views.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect

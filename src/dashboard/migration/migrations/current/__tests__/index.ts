@@ -3,14 +3,27 @@ import {
   currentMigration,
   widgetIdsByType as CurrentDashboardWidgetIdsByType,
 } from '../'
-import { Dashboard10, widgetIdsByType as Dashboard10WidgetIdsByType } from '../../dashboard10'
+import { Dashboard11, widgetIdsByType as Dashboard11WidgetIdsByType } from '../../dashboard11'
 import CommonBoxItemParams = CurrentDashboard.CommonBoxItemParams
+
+const commonBoxItemsParams: CommonBoxItemParams & { datasetId?: string } = {
+  marginTop: '2xs',
+  growRatio: 0,
+  fallbackPlaceholderText: '123',
+  datasetId: '123',
+}
+
+const commonTextWidgetParams = {
+  text: 'Заголовок1',
+  croppedLineCount: 0,
+  croppedWithGradient: false,
+}
 
 const createTextWidget = (
   name: string,
   widgetType:
     | typeof CurrentDashboardWidgetIdsByType.TextWidget
-    | typeof Dashboard10WidgetIdsByType.TextWidget,
+    | typeof Dashboard11WidgetIdsByType.TextWidget,
   params = {}
 ) =>
   ({
@@ -25,44 +38,69 @@ const createTextWidget = (
     },
   } as const)
 
-const commonBoxItemsParams: CommonBoxItemParams & { datasetId?: string } = {
-  datasetId: '123',
-  fallbackPlaceholderText: '123',
-  growRatio: 0,
-  marginTop: '2xs',
-}
-
-const commonTextWidgetParams = {
-  text: 'Заголовок1',
-  croppedLineCount: 0,
-  croppedWithGradient: false,
-}
-
-const advancedTextWidgetParams = {
-  type: 'advanced',
-  font: 'mono',
-  align: 'center',
-  decoration: 'underline',
-}
+const createCheckboxWidget = (
+  name: string,
+  widgetType:
+    | typeof CurrentDashboardWidgetIdsByType.CheckboxWidget
+    | typeof Dashboard11WidgetIdsByType.CheckboxWidget
+) =>
+  ({
+    type: 'widget',
+    debugName: name,
+    id: name,
+    widgetType,
+    params: {
+      size: 'm',
+      content: 'Выбор',
+      ...commonBoxItemsParams,
+    },
+  } as const)
 
 describe('currentMigration', () => {
   it('повышает версию', () => {
-    const widgetParams = {
-      type: 'text1',
+    const widgetExtendedModeParamsBeforeUpdate = {
       ...commonBoxItemsParams,
       ...commonTextWidgetParams,
+      type: 'advanced',
     }
-    const source: Dashboard10.State = {
-      version: 10,
+
+    const widgetExtendedModeParamsAfterUpdate = {
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+      type: 'advanced',
+      view: undefined,
+    }
+
+    const widgetBasicModeParams = {
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
+      type: 'text1',
+    }
+
+    const sourceExtendedMode: Dashboard11.State = {
+      version: 11,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)],
+        Box0: [
+          createTextWidget(
+            '1',
+            Dashboard11WidgetIdsByType.TextWidget,
+            widgetExtendedModeParamsBeforeUpdate
+          ),
+          createCheckboxWidget('2', Dashboard11WidgetIdsByType.CheckboxWidget),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
             displays: [
-              [createTextWidget('1.1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)],
+              [
+                createTextWidget(
+                  '1.1',
+                  Dashboard11WidgetIdsByType.TextWidget,
+                  widgetExtendedModeParamsBeforeUpdate
+                ),
+              ],
             ],
             params: {},
           },
@@ -75,7 +113,15 @@ describe('currentMigration', () => {
               rowParams: [],
               items: [
                 // Строка 1
-                [[createTextWidget('col1-1', Dashboard10WidgetIdsByType.TextWidget, widgetParams)]],
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      Dashboard11WidgetIdsByType.TextWidget,
+                      widgetExtendedModeParamsBeforeUpdate
+                    ),
+                  ],
+                ],
               ],
             },
             params: {},
@@ -85,17 +131,30 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    const result: CurrentDashboard.State = {
-      version: 11,
+    const resultExtendedMode: CurrentDashboard.State = {
+      version: 12,
       boxes: [],
       config: {
-        Box0: [createTextWidget('1', CurrentDashboardWidgetIdsByType.TextWidget, widgetParams)],
+        Box0: [
+          createTextWidget(
+            '1',
+            CurrentDashboardWidgetIdsByType.TextWidget,
+            widgetExtendedModeParamsAfterUpdate
+          ),
+          createCheckboxWidget('2', CurrentDashboardWidgetIdsByType.CheckboxWidget),
+        ],
         Box1: [
           {
             id: 'switchId',
             type: 'switch',
             displays: [
-              [createTextWidget('1.1', CurrentDashboardWidgetIdsByType.TextWidget, widgetParams)],
+              [
+                createTextWidget(
+                  '1.1',
+                  CurrentDashboardWidgetIdsByType.TextWidget,
+                  widgetExtendedModeParamsAfterUpdate
+                ),
+              ],
             ],
             params: {},
           },
@@ -113,7 +172,7 @@ describe('currentMigration', () => {
                     createTextWidget(
                       'col1-1',
                       CurrentDashboardWidgetIdsByType.TextWidget,
-                      widgetParams
+                      widgetExtendedModeParamsAfterUpdate
                     ),
                   ],
                 ],
@@ -126,154 +185,142 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    expect(currentMigration.up(source)).toEqual(result)
+    const sourceBasicMode: Dashboard11.State = {
+      version: 11,
+      boxes: [],
+      config: {
+        Box0: [
+          createTextWidget('1', Dashboard11WidgetIdsByType.TextWidget, widgetBasicModeParams),
+          createCheckboxWidget('2', Dashboard11WidgetIdsByType.CheckboxWidget),
+        ],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  Dashboard11WidgetIdsByType.TextWidget,
+                  widgetBasicModeParams
+                ),
+              ],
+            ],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      Dashboard11WidgetIdsByType.TextWidget,
+                      widgetBasicModeParams
+                    ),
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    const resultBasicMode: CurrentDashboard.State = {
+      version: 12,
+      boxes: [],
+      config: {
+        Box0: [
+          createTextWidget('1', CurrentDashboardWidgetIdsByType.TextWidget, widgetBasicModeParams),
+          createCheckboxWidget('2', CurrentDashboardWidgetIdsByType.CheckboxWidget),
+        ],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  CurrentDashboardWidgetIdsByType.TextWidget,
+                  widgetBasicModeParams
+                ),
+              ],
+            ],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      CurrentDashboardWidgetIdsByType.TextWidget,
+                      widgetBasicModeParams
+                    ),
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    expect(currentMigration.up(sourceBasicMode)).toEqual(resultBasicMode)
+
+    expect(currentMigration.up(sourceExtendedMode)).toEqual(resultExtendedMode)
   })
 
   it('понижает версию', () => {
-    const sourceBasicTextWidgetParams = {
-      type: 'heading1',
+    const widgetExtendedModeParamsBeforeUpdate = {
       ...commonBoxItemsParams,
       ...commonTextWidgetParams,
+      type: 'advanced',
+      view: 'primary',
     }
 
-    const sourceAdvancedTextWidgetParams = {
+    const widgetExtendedModeParamsAfterUpdate = {
       ...commonBoxItemsParams,
       ...commonTextWidgetParams,
-      ...advancedTextWidgetParams,
+      type: 'advanced',
     }
 
-    const resultBasicTextWidgetParams = {
+    const widgetBasicModeParams = {
+      ...commonBoxItemsParams,
+      ...commonTextWidgetParams,
       type: 'text1',
-      ...commonBoxItemsParams,
-      ...commonTextWidgetParams,
-    }
-
-    const sourceBasicMode: CurrentDashboard.State = {
-      version: 11,
-      boxes: [],
-      config: {
-        Box0: [
-          createTextWidget(
-            '1',
-            CurrentDashboardWidgetIdsByType.TextWidget,
-            sourceBasicTextWidgetParams
-          ),
-        ],
-        Box1: [
-          {
-            id: 'switchId',
-            type: 'switch',
-            displays: [
-              [
-                createTextWidget(
-                  '1.1',
-                  CurrentDashboardWidgetIdsByType.TextWidget,
-                  sourceBasicTextWidgetParams
-                ),
-              ],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                // Строка 1
-                [
-                  [
-                    createTextWidget(
-                      'col1-1',
-                      CurrentDashboardWidgetIdsByType.TextWidget,
-                      sourceBasicTextWidgetParams
-                    ),
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
-        ],
-      },
-      settings: {},
-    }
-
-    const resultBasicMode: Dashboard10.State = {
-      version: 10,
-      boxes: [],
-      config: {
-        Box0: [
-          createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, sourceBasicTextWidgetParams),
-        ],
-        Box1: [
-          {
-            id: 'switchId',
-            type: 'switch',
-            displays: [
-              [
-                createTextWidget(
-                  '1.1',
-                  Dashboard10WidgetIdsByType.TextWidget,
-                  sourceBasicTextWidgetParams
-                ),
-              ],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                // Строка 1
-                [
-                  [
-                    createTextWidget(
-                      'col1-1',
-                      Dashboard10WidgetIdsByType.TextWidget,
-                      sourceBasicTextWidgetParams
-                    ),
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
-        ],
-      },
-      settings: {},
     }
 
     const sourceExtendedMode: CurrentDashboard.State = {
-      version: 11,
+      version: 12,
       boxes: [],
       config: {
         Box0: [
           createTextWidget(
             '1',
             CurrentDashboardWidgetIdsByType.TextWidget,
-            sourceAdvancedTextWidgetParams
+            widgetExtendedModeParamsBeforeUpdate
           ),
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: CurrentDashboardWidgetIdsByType.BarChartWidget,
-            params: {
-              orientation: 'vertical',
-              size: 'm',
-              gridTicks: 4,
-              valuesTicks: 1,
-              showValues: false,
-              unitPosition: 'none',
-            },
-          },
+          createCheckboxWidget('2', CurrentDashboardWidgetIdsByType.CheckboxWidget),
         ],
         Box1: [
           {
@@ -284,7 +331,7 @@ describe('currentMigration', () => {
                 createTextWidget(
                   '1.1',
                   CurrentDashboardWidgetIdsByType.TextWidget,
-                  sourceAdvancedTextWidgetParams
+                  widgetExtendedModeParamsBeforeUpdate
                 ),
               ],
             ],
@@ -300,12 +347,11 @@ describe('currentMigration', () => {
               items: [
                 // Строка 1
                 [
-                  // Колонка 1
                   [
                     createTextWidget(
                       'col1-1',
                       CurrentDashboardWidgetIdsByType.TextWidget,
-                      sourceAdvancedTextWidgetParams
+                      widgetExtendedModeParamsBeforeUpdate
                     ),
                   ],
                 ],
@@ -318,26 +364,17 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    const resultExtendedMode: Dashboard10.State = {
-      version: 10,
+    const resultExtendedMode: Dashboard11.State = {
+      version: 11,
       boxes: [],
       config: {
         Box0: [
-          createTextWidget('1', Dashboard10WidgetIdsByType.TextWidget, resultBasicTextWidgetParams),
-          {
-            type: 'widget',
-            debugName: '2',
-            id: '2',
-            widgetType: Dashboard10WidgetIdsByType.BarChartWidget,
-            params: {
-              orientation: 'vertical',
-              size: 'm',
-              gridTicks: 4,
-              valuesTicks: 1,
-              showValues: false,
-              unitPosition: 'none',
-            },
-          },
+          createTextWidget(
+            '1',
+            Dashboard11WidgetIdsByType.TextWidget,
+            widgetExtendedModeParamsAfterUpdate
+          ),
+          createCheckboxWidget('2', Dashboard11WidgetIdsByType.CheckboxWidget),
         ],
         Box1: [
           {
@@ -347,8 +384,8 @@ describe('currentMigration', () => {
               [
                 createTextWidget(
                   '1.1',
-                  Dashboard10WidgetIdsByType.TextWidget,
-                  resultBasicTextWidgetParams
+                  Dashboard11WidgetIdsByType.TextWidget,
+                  widgetExtendedModeParamsAfterUpdate
                 ),
               ],
             ],
@@ -367,8 +404,108 @@ describe('currentMigration', () => {
                   [
                     createTextWidget(
                       'col1-1',
-                      Dashboard10WidgetIdsByType.TextWidget,
-                      resultBasicTextWidgetParams
+                      Dashboard11WidgetIdsByType.TextWidget,
+                      widgetExtendedModeParamsAfterUpdate
+                    ),
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    const sourceBasicMode: CurrentDashboard.State = {
+      version: 12,
+      boxes: [],
+      config: {
+        Box0: [
+          createTextWidget('1', CurrentDashboardWidgetIdsByType.TextWidget, widgetBasicModeParams),
+          createCheckboxWidget('2', CurrentDashboardWidgetIdsByType.CheckboxWidget),
+        ],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  CurrentDashboardWidgetIdsByType.TextWidget,
+                  widgetBasicModeParams
+                ),
+              ],
+            ],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      CurrentDashboardWidgetIdsByType.TextWidget,
+                      widgetBasicModeParams
+                    ),
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+      },
+      settings: {},
+    }
+
+    const resultBasicMode: Dashboard11.State = {
+      version: 11,
+      boxes: [],
+      config: {
+        Box0: [
+          createTextWidget('1', Dashboard11WidgetIdsByType.TextWidget, widgetBasicModeParams),
+          createCheckboxWidget('2', Dashboard11WidgetIdsByType.CheckboxWidget),
+        ],
+        Box1: [
+          {
+            id: 'switchId',
+            type: 'switch',
+            displays: [
+              [
+                createTextWidget(
+                  '1.1',
+                  Dashboard11WidgetIdsByType.TextWidget,
+                  widgetBasicModeParams
+                ),
+              ],
+            ],
+            params: {},
+          },
+        ],
+        Box2: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                // Строка 1
+                [
+                  [
+                    createTextWidget(
+                      'col1-1',
+                      Dashboard11WidgetIdsByType.TextWidget,
+                      widgetBasicModeParams
                     ),
                   ],
                 ],
