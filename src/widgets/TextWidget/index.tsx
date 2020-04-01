@@ -161,7 +161,7 @@ export const typeNames = [
   'text2',
   'text3',
 ] as const
-type TypeName = typeof typeNames[number]
+export type TypeName = typeof typeNames[number]
 
 export const fontSizes: readonly TextSize[] = [
   '2xs',
