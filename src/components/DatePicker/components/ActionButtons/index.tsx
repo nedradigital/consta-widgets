@@ -1,4 +1,4 @@
-import { Button, Text } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit'
 import {
   addQuarters,
   differenceInQuarters,
@@ -19,8 +19,8 @@ type Props = {
   showQuartersSelector: boolean
   minDate: Date
   maxDate: Date
-  onChangeVisibleDate: (value: Date) => void
   onSelect: (value: Date | DateRange) => void
+  onApply: () => void
 }
 
 export const getQuarters = ({
@@ -53,40 +53,32 @@ export const ActionButtons: React.FC<Props> = ({
   showQuartersSelector,
   minDate,
   maxDate,
-  onChangeVisibleDate,
   onSelect,
+  onApply,
 }) => {
   const currentYear = currentVisibleDate.getFullYear()
   const quarters = getQuarters({ date: currentVisibleDate, minDate, maxDate })
 
-  const handleClickOnToday = () => {
-    onChangeVisibleDate(new Date())
-  }
-
   return (
     <div className={css.main}>
-      <Button wpSize="xs" view="secondary" onClick={handleClickOnToday}>
-        Сегодня
-      </Button>
-      {showQuartersSelector && (
-        <div className={css.quarters}>
-          <Text tag="div" size="xs" view="primary">
-            Выбрать:
-          </Text>
-          {quarters.map((quarter, idx) => (
+      <div className={css.quarters}>
+        {showQuartersSelector &&
+          quarters.map((quarter, idx) => (
             <Button
               key={idx}
               className={css.button}
               wpSize="xs"
-              view="secondary"
+              view="ghost"
               disabled={!quarter.length}
               onClick={() => onSelect(quarter)}
             >
               {idx + 1}кв. {currentYear}
             </Button>
           ))}
-        </div>
-      )}
+      </div>
+      <Button wpSize="xs" view="primary" onClick={onApply}>
+        Выбрать
+      </Button>
     </div>
   )
 }

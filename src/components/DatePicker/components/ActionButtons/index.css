@@ -1,16 +1,17 @@
 .main {
   display: flex;
+  justify-content: space-between;
 }
 
 .quarters {
   display: flex;
   align-items: baseline;
-
-  padding-left: var(--space-2xl);
 }
 
 .button {
-  margin-left: var(--space-xs);
-
   user-select: none;
+
+  & + & {
+    margin-left: var(--space-xs);
+  }
 }
