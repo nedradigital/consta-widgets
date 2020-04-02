@@ -12,7 +12,7 @@ import {
   SwitchItem,
   VerticalAlignment,
   WidgetItem,
-} from '@/dashboard/types'
+} from '@/dashboard'
 import { isSwitch, isWidget } from '@/utils/type-guards'
 
 import { Box } from '../Box'

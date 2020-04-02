@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 
-import { GridContent, WidgetItem } from '@/dashboard/types'
+import { GridContent, WidgetItem } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 
 import {

@@ -7,7 +7,7 @@ import {
   filters as tableLegendFilters,
   list as tableLegendList,
 } from '@/components/TableLegend/mockData'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { Filters, TableColumn } from '@/utils/table'
 
 const roadmapFilters = [

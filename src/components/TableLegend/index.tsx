@@ -8,7 +8,7 @@ import { isNil, orderBy } from 'lodash'
 
 import { LegendItem, Type as TypeLegend, types as defaultTypeLegend } from '@/components/LegendItem'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard'
 import { FilterTooltip } from '@/ui/FilterTooltip'
 import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
 import {

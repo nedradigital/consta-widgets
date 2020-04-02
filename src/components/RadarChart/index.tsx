@@ -5,7 +5,7 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard'
 import { getFormattedValue } from '@/utils/chart'
 
 import { RadarChartAxes } from './components/Axes'

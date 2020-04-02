@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { unitPositions } from '@/components/BarChartAxis'
-import { DataType } from '@/dashboard/types'
+import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 

@@ -4,7 +4,7 @@ import { boolean, number, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { Dataset, DataType } from '@/dashboard/types'
+import { Dataset, DataType } from '@/dashboard'
 
 import { Constructor, DashboardState, EMPTY_DASHBOARD } from './'
 

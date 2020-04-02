@@ -4,7 +4,7 @@ import { Button } from '@gpn-design/uikit'
 
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 

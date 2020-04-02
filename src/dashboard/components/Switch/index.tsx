@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
 import classnames from 'classnames'
 
-import { Data, Dataset, DataType, SwitchContent } from '@/dashboard/types'
+import { Data, Dataset, DataType, SwitchContent } from '@/dashboard'
 import { isWidget } from '@/utils/type-guards'
 
 import { Box } from '../Box'

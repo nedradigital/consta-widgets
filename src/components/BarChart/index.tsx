@@ -5,7 +5,7 @@ import useComponentSize from '@rehooks/component-size'
 import { Axis, UnitPosition } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard'
 import { scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 

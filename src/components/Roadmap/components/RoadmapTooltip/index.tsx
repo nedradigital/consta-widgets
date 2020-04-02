@@ -5,7 +5,7 @@ import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Direction, Tooltip } from '@/components/Tooltip'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard'
 import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
 import { Position } from '@/utils/tooltips'

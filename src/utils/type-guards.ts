@@ -1,6 +1,6 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
-import { BoxItem, GridItem, SwitchItem, WidgetItem } from '@/dashboard/types'
+import { BoxItem, GridItem, SwitchItem, WidgetItem } from '@/dashboard'
 import { Position, PositionState } from '@/utils/tooltips'
 
 export const isWidget = (item: BoxItem): item is WidgetItem => item.type === 'widget'

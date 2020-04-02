@@ -5,7 +5,7 @@ import HTML5Backend from 'react-dnd-html5-backend'
 import { boolean, number } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { SwitchContent, SwitchItem } from '@/dashboard/types'
+import { SwitchContent, SwitchItem } from '@/dashboard'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { blockCenteringDecorator } from '@/utils/Storybook'

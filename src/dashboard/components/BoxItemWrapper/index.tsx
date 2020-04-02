@@ -6,7 +6,7 @@ import { calcSize } from '@csssr/gpn-utils/lib/css'
 import classnames from 'classnames'
 
 import { BoxItem } from '@/dashboard'
-import { BoxItemMarginSize } from '@/dashboard/types'
+import { BoxItemMarginSize } from '@/dashboard'
 import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'

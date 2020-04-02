@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { FormatValue } from '@/dashboard/types'
+import { FormatValue } from '@/dashboard'
 
 import { ScaleLinear, TickValues } from '../..'
 

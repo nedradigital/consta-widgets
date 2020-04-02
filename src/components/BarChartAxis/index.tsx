@@ -5,7 +5,7 @@ import classnames from 'classnames'
 
 import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
-import { FormatValue } from '@/dashboard/types'
+import { FormatValue } from '@/dashboard'
 import { Scaler } from '@/utils/scale'
 
 import css from './index.css'

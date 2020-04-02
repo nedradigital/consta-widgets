@@ -7,7 +7,7 @@ import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
 import { uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard'
 import { FilterTooltip } from '@/ui/FilterTooltip'
 import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
 import {
