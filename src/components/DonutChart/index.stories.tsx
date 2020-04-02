@@ -164,6 +164,18 @@ storiesOf('components/DonutChart', module)
       />
     )
   })
+  .add('Как прогресс бар с текстом внутри', () => {
+    return (
+      <DonutChart
+        data={object('data', progressDonutData.data)}
+        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        formatValueForTooltip={emptyFormatValue}
+        textData={object('textData', {
+          value: '15%',
+        })}
+      />
+    )
+  })
   .add('Как прогресс бар без данных по факту', () => {
     return (
       <DonutChart

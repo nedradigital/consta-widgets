@@ -1,68 +1,105 @@
 import React from 'react'
+import { Textfit } from 'react-textfit'
 
-import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/contexts'
 
+import {
+  isHalfDonutHorizontal as getIsHorizontal,
+  isHalfDonutVertical as getIsVertical,
+} from '../../helpers'
 import { HalfDonut } from '../Donut'
 
+import {
+  getContentBorderRadius,
+  getValueMaxFontSize,
+  getValueMaxWidth,
+  MIN_FONT_SIZE,
+  SUBVALUE_FONT_SIZE_RATIO,
+  TITLE_FONT_SIZE_RATIO,
+  VALUE_MAX_FONT_SIZE,
+} from './helpers'
 import css from './index.css'
 
 export type Data = {
-  title: string
   value: string
+  title?: string
   subTitle?: string
   subValue?: string
 }
 
 type Props = {
-  position: HalfDonut
-  maxSize: number
   data: Data
+  radius: number
+  lineWidth: number
+  position?: HalfDonut
 }
 
-export const DonutText: React.FC<Props> = ({ data, position, maxSize }) => {
-  const isRightOrLeft = ['left', 'right'].includes(position)
-  const isSubBlock = isRightOrLeft && data.subTitle && data.subValue
-
+export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, position }) => {
+  const [baseFontSize, setBaseFontSize] = React.useState(0)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
-  const paddingFromBorder = getCalculatedSizeWithBaseSize(8)
+
+  const isHorizontal = getIsHorizontal(position)
+  const isVertical = getIsVertical(position)
+  const isSubBlock = isVertical && data.subTitle && data.subValue
+  const diameter = radius * 2
+  const paddingFromLine = position ? lineWidth : 0
+  const paddingFromBorder = position ? getCalculatedSizeWithBaseSize(8) : 0
+  const titleFontSize = Math.round(baseFontSize * TITLE_FONT_SIZE_RATIO)
+  const subValueFontSize = Math.round(baseFontSize * SUBVALUE_FONT_SIZE_RATIO)
+  const valueMaxSize = getValueMaxFontSize({
+    diameter: diameter - paddingFromLine - paddingFromBorder,
+    maxFontSize: getCalculatedSizeWithBaseSize(VALUE_MAX_FONT_SIZE),
+    position,
+  })
+  const valueMaxWidth = getValueMaxWidth(diameter, position)
 
   const elements = [
-    <Text key="title" tag="div" size="xs" view="secondary" className={css.title}>
-      {data.title}
-    </Text>,
-    <Text key="value" tag="div" size={data.value.length > 2 ? '3xl' : '4xl'} view="primary">
-      {data.value}
-    </Text>,
+    position ? (
+      <div key="title" className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
+        {data.title}
+      </div>
+    ) : null,
+    valueMaxSize > 0 ? (
+      <Textfit
+        key="value"
+        className={css.value}
+        mode="single"
+        min={getCalculatedSizeWithBaseSize(MIN_FONT_SIZE)}
+        max={valueMaxSize}
+        style={{ maxWidth: valueMaxWidth ? `${valueMaxWidth}px` : undefined }}
+        onReady={setBaseFontSize}
+      >
+        {data.value}
+      </Textfit>
+    ) : null,
   ] as const
+
+  const contentStyle: React.CSSProperties = {
+    maxWidth: isVertical ? radius : diameter,
+    maxHeight: isHorizontal ? radius : diameter,
+    borderRadius: getContentBorderRadius(radius, position),
+  }
 
   return (
     <div
-      className={classnames(css.main, css[position])}
+      className={classnames(css.main, position && css.withPosition, position && css[position])}
       style={{
         ['--padding-from-border' as string]: `${paddingFromBorder}px`,
       }}
     >
-      <div
-        className={css.content}
-        style={{
-          maxWidth: isRightOrLeft ? maxSize - paddingFromBorder : undefined,
-        }}
-      >
+      <div className={css.content} style={contentStyle}>
         {position === 'bottom' ? [...elements].reverse() : elements}
-        {isSubBlock ? (
+        {isSubBlock && (
           <>
-            <Text tag="div" size="xs" view="secondary" className={css.title}>
+            <div className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
               {data.subTitle}
-            </Text>
-            <Text tag="div" size="l" weight="bold" view="primary">
+            </div>
+            <div className={css.subvalue} style={{ fontSize: `${subValueFontSize}px` }}>
               {data.subValue}
-            </Text>
+            </div>
           </>
-        ) : (
-          undefined
         )}
       </div>
     </div>

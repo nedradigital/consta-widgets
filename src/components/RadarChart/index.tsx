@@ -7,6 +7,7 @@ import * as _ from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/dashboard'
 import { getFormattedValue } from '@/utils/chart'
+import { deg2rad } from '@/utils/math'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'
@@ -78,8 +79,6 @@ export type ExtendedFigure = Figure & {
 
 export const pointIsNotEmpty = (point: Point): point is NotEmptyPoint =>
   isNotNil(point.originalValue)
-
-export const deg2rad = (deg: number) => deg * (Math.PI / 180)
 
 // Преобразуем кординаты от центра круга в координаты svg: 0 -> 50%, 1 -> 100%
 const circleCoordToRelative = (circlePos: number) => _.round(50 * (1 + circlePos), 2)

@@ -1,6 +1,8 @@
 import * as _ from 'lodash'
 
-import { angleToCoord, deg2rad, sortFigureValues } from '../'
+import { deg2rad } from '@/utils/math'
+
+import { angleToCoord, sortFigureValues } from '../'
 
 describe('angleToCoord', () => {
   it('рассчитывает координаты для крайней правой точки', () => {

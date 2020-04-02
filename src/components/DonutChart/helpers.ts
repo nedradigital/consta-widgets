@@ -1,0 +1,77 @@
+import { HalfDonut } from './components/Donut'
+
+export const MAX_CIRCLES_TO_RENDER = 3
+
+export const donutSize: Record<number, number> = {
+  1: 18,
+  2: 14,
+  3: 10,
+}
+
+export const minChartSize: Record<number, number> = {
+  1: 42,
+  2: 100,
+  3: 150,
+}
+
+export const paddingBetweenDonuts: Record<number, number> = {
+  1: 0,
+  2: 12,
+  3: 16,
+}
+
+export const isHalfDonutHorizontal = (halfDonut?: HalfDonut) => {
+  return halfDonut === 'top' || halfDonut === 'bottom'
+}
+
+export const isHalfDonutVertical = (halfDonut?: HalfDonut) => {
+  return halfDonut === 'right' || halfDonut === 'left'
+}
+
+export const getMinChartSize = (
+  countLines: number,
+  isExistTextData?: boolean,
+  halfDonut?: HalfDonut
+) => {
+  if (countLines === 1 && isExistTextData && !halfDonut) {
+    return 75
+  }
+
+  if (countLines === 1 && isExistTextData && halfDonut) {
+    return 143
+  }
+
+  return minChartSize[countLines]
+}
+
+export const getPadding = (countLines: number) => {
+  return paddingBetweenDonuts[countLines]
+}
+
+export const getChartSize = ({
+  width,
+  height,
+  halfDonut,
+}: {
+  width: number
+  height: number
+  halfDonut?: HalfDonut
+}) => {
+  if (isHalfDonutHorizontal(halfDonut)) {
+    return Math.min(width, height * 2)
+  }
+
+  if (isHalfDonutVertical(halfDonut)) {
+    return Math.min(width * 2, height)
+  }
+
+  return Math.min(width, height)
+}
+
+export const getSizeDonut = (countLines: number, halfDonut?: HalfDonut) => {
+  return halfDonut ? 16 : donutSize[countLines]
+}
+
+export const getDonutRadius = (mainRadius: number, index: number, countLines: number) => {
+  return mainRadius - (getSizeDonut(countLines) + getPadding(countLines)) * index
+}
