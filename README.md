@@ -15,12 +15,6 @@
 $ yarn install
 ```
 
-## Миграции
-
-Чтобы больше узнать о работе с миграциями смотри раздел [Версионирование дашбордов](DASHBOARD_VERSIONING.md).
-
-## [Скейлинг и переменные размеров](SCALING.md)
-
 ## Основные команды
 
 ```bash
@@ -65,3 +59,23 @@ $ yarn test
 ├── yarn.lock
 └── .prettierrc/.stylelintrc/.editorconfig и др. конфиги
 ```
+
+## Документация
+- [Версионирование дашбордов](docs/DASHBOARD_VERSIONING.md)
+- [Скейлинг и переменные размеров](docs/SCALING.md)
+- [Описание концепции datasets и способов обработки raw data](docs/DATASETS_CONCEPT.md)
+- [Правила работы с git и github](docs/GIT.md)
+- [Парное программирование](docs/PAIR_PROGRAMMING.md)
+- [Задачи на исследование/анализ (research)](docs/RESEARCH_TASKS.md)
+- [Обновление версии пакета](docs/VERSION_UPDATE.md)
+- [Договоренности по оформлению кода](docs/ARRANGEMENTS_FOR_CODE_STYLE.md)
+    - [Оформление директории компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#DirectoryStyle)
+    - [Разбивка компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#SplitComponent)
+    - [Использование enums](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#Enums)
+    - [Наименование boolean-методов и констант для сохранения значения](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#BooleanNames)
+    - [Type vs Interface](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#TypeVsInterface)
+    - [Default Props](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#DefaultProps)
+    - [Комментарии к типам](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#TypeComments)
+    - [Стилизация switch конструкций](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#Switch)
+    - [Использование formatLabel и unit](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#FormatLabel)
+    - [Порядок сущностей внутри *.ts(x) файлов](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#CodeOrder)
