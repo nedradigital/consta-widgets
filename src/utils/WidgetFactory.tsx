@@ -23,7 +23,7 @@ export type WidgetType<Data, Params> = React.FC<{
   mockData: Data
   defaultParams: Params
   id: WidgetId
-  dataType: DataType | null
+  dataType: DataType
   getSettings: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
 }
 
@@ -44,7 +44,7 @@ export const createWidget = <
 >(opts: {
   id: WidgetId
   name: string
-  dataType: DataType | null
+  dataType: DataType
   defaultParams: CommonBoxItemParams & Params
   Content: React.ComponentType<WidgetContentProps<Data, Params>>
   renderSettings?: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
@@ -78,9 +78,7 @@ export const createWidget = <
 
   Widget.showName = name
   Widget.defaultParams = defaultParams
-  if (dataType) {
-    Widget.mockData = getWidgetMockData(dataType) as Data
-  }
+  Widget.mockData = getWidgetMockData(dataType) as Data
   Widget.id = id
   Widget.dataType = dataType
   Widget.getSettings = (params, onChangeParam) =>
