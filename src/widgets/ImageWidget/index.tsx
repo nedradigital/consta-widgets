@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Image } from '@/components/Image'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 

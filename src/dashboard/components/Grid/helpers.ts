@@ -1,7 +1,7 @@
 import { move, removeAt, updateAt } from '@csssr/gpn-utils/lib/array'
 import * as _ from 'lodash'
 
-import { ColumnParams, GridContent, RowParams, SwitchItem, WidgetItem } from '@/dashboard/types'
+import { ColumnParams, GridContent, RowParams, SwitchItem, WidgetItem } from '@/dashboard'
 
 export const updateCellItems = ({
   grid,

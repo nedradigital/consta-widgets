@@ -4,7 +4,7 @@ import { getCalculatedSize } from '@csssr/gpn-utils/lib/css'
 
 import { Tooltip } from '@/components/Tooltip'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard'
 import { PositionState } from '@/utils/tooltips'
 
 import { Size } from '../..'

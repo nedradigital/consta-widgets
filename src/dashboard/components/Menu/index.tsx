@@ -1,8 +1,8 @@
 import * as React from 'react'
 
+import { MarginSize, Settings } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
 import { migrations } from '@/dashboard/migration/migrations'
-import { MarginSize, Settings } from '@/dashboard/types'
 
 import css from './index.css'
 

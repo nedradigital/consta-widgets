@@ -1,13 +1,7 @@
 /* istanbul ignore file */
 import * as React from 'react'
 
-import {
-  CommonBoxItemParams,
-  Data as DashboardData,
-  DataMap,
-  Dataset,
-  DataType,
-} from '@/dashboard/types'
+import { CommonBoxItemParams, Data as DashboardData, DataMap, Dataset, DataType } from '@/dashboard'
 import { dataColorsValidator, widgetDataIsEmpty } from '@/utils/validators'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { WidgetId } from '@/utils/widgets-list'

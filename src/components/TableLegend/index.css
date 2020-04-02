@@ -104,7 +104,7 @@
   fill: currentColor;
 
   &:hover {
-    color:  var(--color-control-typo-clear-hover);
+    color: var(--color-control-typo-clear-hover);
   }
 
   @nest .cell:not(:hover) & {

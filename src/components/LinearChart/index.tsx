@@ -6,7 +6,7 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard'
 import { TextWidgetContent, TypeName as TypeText } from '@/widgets/TextWidget'
 
 import { HoverLines } from './components/HoverLines'

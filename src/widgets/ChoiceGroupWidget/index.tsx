@@ -3,7 +3,7 @@ import React from 'react'
 import { ChoiceGroup } from '@gpn-design/uikit'
 
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 

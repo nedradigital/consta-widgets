@@ -2,7 +2,7 @@
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { flattenDeep, isEmpty, uniq } from 'lodash'
 
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 
 /**
  * @return имена невалидных цветовых групп, для которых не задан цвет

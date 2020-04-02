@@ -5,7 +5,7 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Legend, Tick } from '@/components/ProgressBar/components/Legend'
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard'
 import { TextSize } from '@/utils/ui-kit'
 import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 

@@ -8,9 +8,9 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { BaseSizeContext } from '@/contexts/baseSize'
+import { BoxItem, DashboardState, Data, Dataset } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
 import { ItemTypes } from '@/dashboard/dnd-constants'
-import { BoxItem, DashboardState, Data, Dataset } from '@/dashboard/types'
 import { useUniqueNameGenerator } from '@/utils/uniq-name-hook'
 
 import css from './index.css'

@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { Layout, layouts, Size, sizes, Stats } from '@/components/Stats'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 

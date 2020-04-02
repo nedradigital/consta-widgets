@@ -4,7 +4,7 @@ import classnames from 'classnames'
 import { flattenDeep, uniq } from 'lodash'
 
 import { useBaseSize } from '@/contexts'
-import { ColorGroups, FormatValue } from '@/dashboard/types'
+import { ColorGroups, FormatValue } from '@/dashboard'
 import { Scaler } from '@/utils/scale'
 
 import { Size } from '../..'

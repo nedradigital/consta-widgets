@@ -5,7 +5,7 @@ import * as _ from 'lodash'
 
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
-import { FormatValue } from '@/dashboard/types'
+import { FormatValue } from '@/dashboard'
 import { getFormattedValue } from '@/utils/chart'
 
 import { Axis, ExtendedFigure } from '../..'

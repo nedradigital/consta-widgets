@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import { Legend } from '@/components/Legend'
 import { Roadmap } from '@/components/Roadmap'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
-import { DataMap, DataType } from '@/dashboard/types'
+import { DataMap, DataType } from '@/dashboard'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 

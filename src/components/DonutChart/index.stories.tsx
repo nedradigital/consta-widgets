@@ -5,7 +5,7 @@ import { storiesOf } from '@storybook/react'
 import { times } from 'lodash'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { DataType } from '@/dashboard/types'
+import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator, cubeMeterFormatValue, emptyFormatValue } from '@/utils/Storybook'
 

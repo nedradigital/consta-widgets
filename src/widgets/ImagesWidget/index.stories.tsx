@@ -6,8 +6,8 @@ import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { noop } from 'lodash'
 
+import { BoxItem } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
-import { BoxItem } from '@/dashboard/types'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 

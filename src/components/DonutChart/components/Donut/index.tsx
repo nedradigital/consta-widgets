@@ -3,7 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { ColorGroups } from '@/dashboard/types'
+import { ColorGroups } from '@/dashboard'
 
 import css from './index.css'
 
