@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 
 import { updateAt } from '@csssr/gpn-utils/lib/array'
-import { Text } from '@gpn-design/uikit'
+import { IconSortDown, IconSortUp, Text } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
@@ -25,9 +25,6 @@ import {
 } from '@/utils/table'
 
 import { Resizer } from './components/Resizer'
-import { ReactComponent as IconSortAscSvg } from './images/sort-asc.svg'
-import { ReactComponent as IconSortDescSvg } from './images/sort-desc.svg'
-import { ReactComponent as IconSortSvg } from './images/sort-icon.svg'
 import css from './index.css'
 
 export const sizes = ['l', 'm', 's'] as const
@@ -139,7 +136,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
   const thRender = columns.map((obj, idx) => {
     const isSortingActive = accessor === obj.accessor
     const IconSort =
-      (isSortingActive && (isOrderByDesc ? IconSortDescSvg : IconSortAscSvg)) || IconSortSvg
+      (isSortingActive && (isOrderByDesc ? IconSortDown : IconSortUp)) || IconSortDown
     const handleColumnResize = (delta: number) => {
       const columnMinWidth = Math.min(getCalculatedSizeWithBaseSize(150), initialColumnWidths[idx])
       const newColumnWidth = Math.max(columnMinWidth, columnWidths[idx] + delta)
@@ -160,6 +157,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           css.cell,
           css.isHeader,
           alignClasses[obj.align],
+          isSortingActive && css.isSortingActive,
           visibleFilter === obj.accessor && css.isFilterOpened
         )}
         style={{ width: columnWidths[idx] }}
@@ -185,13 +183,12 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               className={css.iconFilter}
             />
           )}
-          <span className={css.title} onClick={() => sortBy(obj.accessor)}>
+          <button type="button" className={css.title} onClick={() => sortBy(obj.accessor)}>
             {obj.title}
-          </span>
-          <IconSort
-            onClick={() => sortBy(obj.accessor)}
-            className={classnames(css.icon, css.iconSort)}
-          />
+          </button>
+          <button type="button" onClick={() => sortBy(obj.accessor)}>
+            <IconSort size="xs" className={classnames(css.icon, css.iconSort)} />
+          </button>
         </Text>
         <Resizer
           height={tableHeight}

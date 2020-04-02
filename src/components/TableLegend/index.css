@@ -84,7 +84,15 @@
 }
 
 .title {
+  font-weight: inherit;
+  line-height: inherit;
+
   cursor: pointer;
+  text-align: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+
+  color: inherit;
 }
 
 .icon {
@@ -104,7 +112,7 @@
   fill: currentColor;
 
   &:hover {
-    color:  var(--color-control-typo-clear-hover);
+    color: var(--color-control-typo-clear-hover);
   }
 
   @nest .cell:not(:hover) & {
@@ -124,10 +132,11 @@
 
   overflow: visible;
 
-  width: calc-size(12);
-  height: calc-size(8);
+  transform: translateX(100%);
 
-  transform: translateX(100%) translateY(calc-size(1));
+  @nest .cell.isSortingActive & {
+    visibility: initial;
+  }
 }
 
 .selectedFiltersRow {
