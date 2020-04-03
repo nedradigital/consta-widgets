@@ -125,6 +125,7 @@ export const BarChart: React.FC<Props> = props => {
   const groupScale = scaleBand({
     groupsSizes: getGroupsSizes(),
     range: getRange(isVertical ? svgWidth : svgHeight),
+    groupsNames: groupsDomain,
     paddingInner,
     paddingOuter,
   })

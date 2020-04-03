@@ -215,21 +215,21 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
   )
 }
 
-/* istanbul ignore next */
 export const scaleBand = ({
   groupsSizes,
   range,
   paddingInner = 0,
   paddingOuter = 0,
   align = 0.5,
+  groupsNames,
 }: {
   groupsSizes: Record<string, number>
   range: NumberRange
   paddingInner?: number
   paddingOuter?: number
   align?: number
+  groupsNames: readonly string[]
 }): Scaler<string> => {
-  const groupsNames = Object.keys(groupsSizes)
   const [start, end] = range
   const fullPaddingOuter = paddingOuter * 2
   const fullPaddingInner = paddingInner * (groupsNames.length - 1)
