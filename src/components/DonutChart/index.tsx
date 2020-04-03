@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react'
 
+import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
@@ -13,6 +14,15 @@ import { PositionState } from '@/utils/tooltips'
 
 import { Data as DonutData, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, DonutText } from './components/Text'
+import {
+  getChartSize,
+  getDonutRadius,
+  getMinChartSize,
+  getSizeDonut,
+  isHalfDonutHorizontal as getIsHalfDonutHorizontal,
+  isHalfDonutVertical as getIsHalfDonutVertical,
+  MAX_CIRCLES_TO_RENDER,
+} from './helpers'
 import css from './index.css'
 
 export type Data = {
@@ -39,40 +49,11 @@ type TooltipDataState = ReadonlyArray<{
   name: string
 }>
 
-// Максимально кол-во кругов, которые можно отрисовать = 3
-const MAX_CIRCLES = 3
-const minChartSize: { [key in number]: number } = {
-  1: 42,
-  2: 100,
-  3: 150,
-}
-const donutSize: { [key in number]: number } = {
-  1: 18,
-  2: 14,
-  3: 10,
-}
-const paddingBetweenDonuts: { [key in number]: number } = {
-  1: 0,
-  2: 12,
-  3: 16,
-}
-const getSizeDonut = (countLines: number, halfDonut?: HalfDonut) =>
-  halfDonut ? 16 : donutSize[countLines]
-const getPadding = (countLines: number) => paddingBetweenDonuts[countLines]
-
-const getDonutRadius = (mainRadius: number, index: number, countLines: number) =>
-  mainRadius - (getSizeDonut(countLines) + getPadding(countLines)) * index
-
-const getSize = (width: number, height: number, halfDonut?: HalfDonut) => {
-  if (!halfDonut) {
-    return Math.min(width, height)
-  }
-
-  if (['left', 'right'].includes(halfDonut)) {
-    return Math.min(width * 2, height)
-  }
-
-  return Math.min(width, height * 2)
+const halfDonutClasses: Record<HalfDonut, string> = {
+  top: css.halfTop,
+  right: css.halfRight,
+  bottom: css.halfBottom,
+  left: css.halfLeft,
 }
 
 export const DonutChart: React.FC<Props> = ({
@@ -87,10 +68,13 @@ export const DonutChart: React.FC<Props> = ({
 
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
-  const isHalfDonutHorizontal = halfDonut === 'top' || halfDonut === 'bottom'
-  const isHalfDonutVertical = halfDonut === 'right' || halfDonut === 'left'
-  const circlesCount = Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES)
-  const size = width && height ? getSize(width, height, halfDonut) : 0
+  const isHalfDonutHorizontal = getIsHalfDonutHorizontal(halfDonut)
+  const isHalfDonutVertical = getIsHalfDonutVertical(halfDonut)
+  const circlesCount = Math.min(
+    Math.max(...data.map(i => i.sections.length)),
+    MAX_CIRCLES_TO_RENDER
+  )
+  const size = width && height ? getChartSize({ width, height, halfDonut }) : 0
   const mainRadius = size / 2
   const sizeDonut = getSizeDonut(circlesCount, halfDonut)
   const svgOffsetX = halfDonut === 'left' ? 0 : -mainRadius
@@ -99,6 +83,16 @@ export const DonutChart: React.FC<Props> = ({
   const svgHeight = isHalfDonutHorizontal ? mainRadius : size
   const viewBox = `${svgOffsetX}, ${svgOffsetY}, ${svgWidth}, ${svgHeight}`
   const isTooltipVisible = Boolean(tooltipData.length)
+
+  const linesRadiuses = createArrayOfIndexes(circlesCount).map(index => {
+    const outerRadius = getDonutRadius(mainRadius, index, circlesCount)
+    const innerRadius = outerRadius - sizeDonut
+
+    return {
+      outerRadius,
+      innerRadius,
+    }
+  })
 
   const handleMouseOver = (d: DonutData) => {
     changeTooltipData(
@@ -126,6 +120,7 @@ export const DonutChart: React.FC<Props> = ({
     })
   }
 
+  const minChartSize = getMinChartSize(circlesCount, isDefined(textData), halfDonut)
   const values = zip(
     ...data.map(item =>
       item.sections.slice(0, circlesCount).map(section => ({
@@ -142,33 +137,28 @@ export const DonutChart: React.FC<Props> = ({
       ref={ref}
       className={css.main}
       style={{
-        ['--min-size' as string]: `${minChartSize[circlesCount]}px`,
+        ['--min-size' as string]: `${minChartSize}px`,
         ['--donut-width' as string]: `${sizeDonut}px`,
       }}
     >
-      {halfDonut && values.length === 1 && textData && (
-        <DonutText data={textData} maxSize={mainRadius} position={halfDonut} />
+      {values.length === 1 && textData && (
+        <DonutText
+          data={textData}
+          radius={linesRadiuses[0].innerRadius}
+          lineWidth={sizeDonut}
+          position={halfDonut}
+        />
       )}
       <Tooltip isVisible={isTooltipVisible} position={mousePosition}>
         <TooltipContentForMultipleValues items={tooltipData} />
       </Tooltip>
       <svg
-        className={classnames(
-          css.svg,
-          halfDonut &&
-            {
-              left: css.halfLeft,
-              right: css.halfRight,
-              top: css.halfTop,
-              bottom: css.halfBottom,
-            }[halfDonut]
-        )}
+        className={classnames(css.svg, halfDonut && halfDonutClasses[halfDonut])}
         viewBox={viewBox}
         onMouseMove={handleMouseMove}
       >
         {values.map((d, index) => {
-          const outerRadius = getDonutRadius(mainRadius, index, circlesCount)
-          const innerRadius = outerRadius - sizeDonut
+          const { outerRadius, innerRadius } = linesRadiuses[index]
 
           return (
             <Donut

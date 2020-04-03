@@ -72,3 +72,18 @@ declare module '*.geojson' {
   const content: d3.ExtendedFeatureCollection
   export = content
 }
+
+declare module 'react-textfit' {
+  import React from 'react'
+
+  type TextfitProps = {
+    mode?: 'multi' | 'single'
+    forceSingleModeWidth?: boolean
+    min?: number
+    max?: number
+    throttle?: number
+    onReady?: (fontSize: number) => void
+  } & React.HTMLAttributes<HTMLDivElement>
+
+  export const Textfit: React.ComponentType<TextfitProps>
+}
