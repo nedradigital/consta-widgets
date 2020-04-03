@@ -127,19 +127,8 @@ const iconSizes: Record<TextSize, IconSize> = {
   '6xl': 'm',
 }
 
-const iconMargins: Record<TextSize, string> = {
-  '2xs': 'var(--space-xs)',
-  xs: 'var(--space-xs)',
-  s: 'var(--space-xs)',
-  m: 'var(--space-xs)',
-  l: 'var(--space-s)',
-  xl: 'var(--space-s)',
-  '2xl': 'var(--space-m)',
-  '3xl': 'var(--space-m)',
-  '4xl': 'var(--space-m)',
-  '5xl': 'var(--space-m)',
-  '6xl': 'var(--space-m)',
-}
+const getIconMargin = (textSize: TextSize): string =>
+  ['2xs', 'xs', 's', 'm'].includes(textSize) ? 'var(--space-xs)' : 'var(--space-s)'
 
 const editMods: ReadonlyArray<ChoiceT<boolean>> = [
   {
@@ -316,7 +305,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
         <div ref={textRef}>{text}</div>
       </Text>
       {data && (data.tooltip || data.onClick) && (
-        <div style={{ marginLeft: iconMargins[size] }}>
+        <div style={{ marginLeft: getIconMargin(size) }}>
           <button ref={buttonRef} className={css.button} onClick={onToggleClick}>
             <IconMeatball size={iconSizes[size]} />
           </button>
