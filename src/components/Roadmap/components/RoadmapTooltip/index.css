@@ -26,7 +26,7 @@
   flex-direction: var(--flex-direction);
   justify-content: flex-end;
 
-  width: calc-size(315);
+  min-width: calc-size(315);
   height: calc-size(200);
 
   &:--isBottom {
