@@ -29,19 +29,19 @@
     color: var(--color-bg-border);
   }
 
-  &_x&_bottom > :--tick-line {
+  &.isAxisX.isPositionBottom > :--tick-line {
     transform: translateY(var(--axis-tick-offset));
   }
 
-  &_x&_top > :--tick-line {
+  &.isAxisX.isPositionTop > :--tick-line {
     transform: translateY(calc(-1 * var(--axis-tick-offset)));
   }
 
-  &_y&_left > :--tick-line {
+  &.isAxisY.isPositionLeft > :--tick-line {
     transform: translateX(calc(-1 * var(--axis-tick-offset)));
   }
 
-  &_y&_right > :--tick-line {
+  &.isAxisY.isPositionRight > :--tick-line {
     transform: translateX(var(--axis-tick-offset));
   }
 }
@@ -53,7 +53,7 @@
 .unit {
   fill: currentColor;
 
-  &_y {
+  &.isAxisY {
     transform: translateY(calc(-1 * var(--space-m)));
   }
 }

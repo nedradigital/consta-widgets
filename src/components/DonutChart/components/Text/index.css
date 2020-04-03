@@ -41,11 +41,11 @@
 }
 
 .content {
-  @nest :--main.left & {
+  :--main.left & {
     padding-right: var(--donut-width);
   }
 
-  @nest :--main.right & {
+  :--main.right & {
     padding-left: var(--donut-width);
   }
 }

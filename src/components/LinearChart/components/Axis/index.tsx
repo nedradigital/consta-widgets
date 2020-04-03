@@ -101,11 +101,11 @@ export const Axis: React.FC<Props> = ({
       ticks: xLabelTicks,
       classes: classnames(
         css.labels,
-        css.labels_x,
+        css.isAxisX,
         xLabelsPos &&
           {
-            bottom: css.labels_bottom,
-            top: css.labels_top,
+            bottom: css.isPositionBottom,
+            top: css.isPositionTop,
           }[xLabelsPos]
       ),
       transform: xOnBottom ? `translateY(${height}px)` : '',
@@ -120,11 +120,11 @@ export const Axis: React.FC<Props> = ({
       ticks: yLabelTicks,
       classes: classnames(
         css.labels,
-        css.labels_y,
+        css.isAxisY,
         yLabelsPos &&
           {
-            left: css.labels_left,
-            right: css.labels_right,
+            left: css.isPositionLeft,
+            right: css.isPositionRight,
           }[yLabelsPos]
       ),
       transform: yOnLeft ? '' : `translateX(${width}px)`,
@@ -275,7 +275,7 @@ export const Axis: React.FC<Props> = ({
           <g ref={yLabelsRef} />
           {isHorizontal && (
             <text
-              className={classnames(css.labels, css.unit, css.unit_y)}
+              className={classnames(css.labels, css.unit, css.isAxisY)}
               x={yOnLeft ? -UNIT_X_OFFSET : width + UNIT_X_OFFSET}
               y={0}
               textAnchor={yOnLeft ? 'end' : 'start'}

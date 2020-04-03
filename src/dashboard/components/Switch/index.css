@@ -28,7 +28,7 @@
 
   transform: translate(0, -50%);
 
-  @nest :--main:not(:hover) & {
+  :--main:not(:hover) & {
     display: none;
   }
 }
@@ -60,7 +60,7 @@
     background: var(--color-control-bg-clear-hover);
   }
 
-  @nest :--main > :--buttons:not(:hover) &:not(:first-child) {
+  :--main > :--buttons:not(:hover) &:not(:first-child) {
     /* В свитчере показываем только 1 кнопку, а остальные появляются по ховеру */
     display: none;
   }

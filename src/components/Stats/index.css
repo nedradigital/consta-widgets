@@ -75,7 +75,8 @@
 .title {
   grid-area: title;
 
-  @nest :--full-without-title &, :--compact-unit & {
+  :--full-without-title &,
+  :--compact-unit & {
     display: none;
   }
 }
@@ -88,25 +89,26 @@
   position: relative;
   grid-area: badge;
 
-  @nest :--compact-title &, :--compact-unit & {
+  :--compact-title &,
+  :--compact-unit & {
     display: none;
   }
 
   /* Сдвигаем бэдж, чтобы его нижняя граница была по бэйзлайну числа слева */
 
-  @nest :--extra-small:not(:--full-reversed) & {
+  :--extra-small:not(:--full-reversed) & {
     bottom: 0.4em;
   }
 
-  @nest :--small:not(:--full-reversed) & {
+  :--small:not(:--full-reversed) & {
     bottom: 0.5em;
   }
 
-  @nest :--medium:not(:--full-reversed) & {
+  :--medium:not(:--full-reversed) & {
     bottom: 0.5em;
   }
 
-  @nest :--large:not(:--full-reversed) & {
+  :--large:not(:--full-reversed) & {
     bottom: 0.45em;
   }
 }
@@ -114,7 +116,7 @@
 .unit {
   grid-area: unit;
 
-  @nest :--compact-title & {
+  :--compact-title & {
     display: none;
   }
 }

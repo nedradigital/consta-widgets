@@ -1653,10 +1653,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@csssr/gpn-configs@0.2.19":
-  version "0.2.19"
-  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.19/d7f823b503941f28e1f8098b60584affcc8d9cc4a02e6e776fc35ecfa21797f6#6fbe0ec0dfbc1307f7a769c2faae8216577459cc"
-  integrity sha512-9Xdrd4YSnjZYF0GWkO09eZ9afvGC7C2fQN75dyFd6cgoXzqEJOLU8ttNhgbhPgfgdm5gsBn6ULfWYLi9Fi6Jyw==
+"@csssr/gpn-configs@0.2.21":
+  version "0.2.21"
+  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.21/e31baa08e0fe4b3a543b435839e5aa719a7ef8250bf7e8e78699dd2ec51b10e4#9eb272c1dbc4162c290f0da86b802d70c31501f1"
+  integrity sha512-xzQs/pC836ivRqY3awY+UBcuPMTrI8lUbTI9NvsmVkLClVI/0eXylH0TS9tAW9afSJRhVYjv/rL/qp74H5crfA==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -1706,7 +1706,7 @@
     mini-css-extract-plugin "0.7.0"
     ora "3.4.0"
     postcss-loader "3.0.0"
-    postcss-nested "4.1.2"
+    postcss-nested "4.2.1"
     postcss-preset-env "6.6.0"
     prettier "1.19.1"
     react-docgen-typescript-loader "3.3.0"
@@ -11989,13 +11989,13 @@ postcss-modules-values@^3.0.0:
     icss-utils "^4.0.0"
     postcss "^7.0.6"
 
-postcss-nested@4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-4.1.2.tgz#8e0570f736bfb4be5136e31901bf2380b819a561"
-  integrity sha512-9bQFr2TezohU3KRSu9f6sfecXmf/x6RXDedl8CHF6fyuyVW7UqgNMRdWMHZQWuFY6Xqs2NYk+Fj4Z4vSOf7PQg==
+postcss-nested@4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/postcss-nested/-/postcss-nested-4.2.1.tgz#4bc2e5b35e3b1e481ff81e23b700da7f82a8b248"
+  integrity sha512-AMayXX8tS0HCp4O4lolp4ygj9wBn32DJWXvG6gCv+ZvJrEa00GUxJcJEEzMh87BIe6FrWdYkpR2cuyqHKrxmXw==
   dependencies:
-    postcss "^7.0.14"
-    postcss-selector-parser "^5.0.0"
+    postcss "^7.0.21"
+    postcss-selector-parser "^6.0.2"
 
 postcss-nesting@^7.0.0:
   version "7.0.1"
@@ -12348,7 +12348,7 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.1
     source-map "^0.6.1"
     supports-color "^6.1.0"
 
-postcss@^7.0.26:
+postcss@^7.0.21, postcss@^7.0.26:
   version "7.0.27"
   resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.27.tgz#cc67cdc6b0daa375105b7c424a85567345fc54d9"
   integrity sha512-WuQETPMcW9Uf1/22HWUWP9lgsIC+KEHg2kozMflKjbeUtw9ujvFX6QmIfozaErDkmLWS9WEnEdEe6Uo9/BNTdQ==

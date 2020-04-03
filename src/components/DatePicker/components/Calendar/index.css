@@ -88,7 +88,7 @@
   width: 100%;
   height: 100%;
 
-  @nest .cell:--isToday &::after {
+  .cell:--isToday &::after {
     --color-today: var(--color-primary);
 
     position: absolute;
@@ -104,11 +104,11 @@
     border-radius: 50%;
   }
 
-  @nest .cell:--isToday &:hover::after {
+  .cell:--isToday &:hover::after {
     --color-today: var(--color-secondary);
   }
 
-  @nest :--isSingleDate &::before {
+  :--isSingleDate &::before {
     position: absolute;
     z-index: var(--z-date-sub-bg);
     top: 0;
@@ -122,19 +122,19 @@
     background-color: var(--day-bg);
   }
 
-  @nest :--isSingleDate:not(:--isDisabled) &:hover::before {
+  :--isSingleDate:--isSelected &::before {
+    --day-bg: var(--color-primary);
+  }
+
+  :--isSingleDate:--isSelected &:hover::before {
+    --day-bg: var(--color-primary);
+  }
+
+  :--isSingleDate:not(:--isDisabled) &:hover::before {
     --day-bg: var(--color-secondary);
   }
 
-  @nest :--isSingleDate:--isSelected &::before {
-    --day-bg: var(--color-primary);
-  }
-
-  @nest :--isSingleDate:--isSelected &:hover::before {
-    --day-bg: var(--color-primary);
-  }
-
-  @nest :--isRange &::before {
+  :--isRange &::before {
     position: absolute;
     z-index: var(--z-date-sub-bg);
     top: 0;
@@ -147,15 +147,15 @@
     background-color: var(--day-bg);
   }
 
-  @nest :--isRange:first-child &::before {
+  :--isRange:first-child &::before {
     left: 0;
   }
 
-  @nest :--isRange:last-child &::before {
+  :--isRange:last-child &::before {
     right: 0;
   }
 
-  @nest :--isRange &::after {
+  :--isRange &::after {
     position: absolute;
     z-index: var(--z-date-bg);
     top: 0;
@@ -168,91 +168,91 @@
     background-color: var(--day-bg);
   }
 
-  @nest :--isRange:not(:--isDisabled) &:hover::after {
+  :--isRange:not(:--isDisabled) &:hover::after {
     --day-bg: var(--color-secondary);
 
     border-radius: 50%;
   }
 
-  @nest :--isRange:--isSelected:--isFirstDate:not(:--isOnlyOneValue) &::before,
-    :--isRange:--isSelected:--isLastDate:not(:--isOnlyOneValue) &::before {
+  :--isRange:--isSelected:--isFirstDate:not(:--isOnlyOneValue) &::before,
+  :--isRange:--isSelected:--isLastDate:not(:--isOnlyOneValue) &::before {
     --day-bg: var(--color-secondary);
   }
 
-  @nest :--isRange:--isSelected:--isFirstDate:not(:--isSelectedBackwards) &::before {
+  :--isRange:--isSelected:--isFirstDate:not(:--isSelectedBackwards) &::before {
     left: 0;
 
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
   }
 
-  @nest :--isRange:--isSelected:--isFirstDate:--isSelectedBackwards &::before,
-    :--isRange:--isSelected:--isLastDate &::before {
+  :--isRange:--isSelected:--isFirstDate:--isSelectedBackwards &::before,
+  :--isRange:--isSelected:--isLastDate &::before {
     right: 0;
 
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
   }
 
-  @nest :--isRange:--isSelected:--isFirstDate &::after,
-    :--isRange:--isSelected:--isLastDate &::after {
+  :--isRange:--isSelected:--isFirstDate &::after,
+  :--isRange:--isSelected:--isLastDate &::after {
     --day-bg: var(--color-primary);
 
     border-radius: 50%;
   }
 
-  @nest :--isRange:--isSelected:not(:--isFirstDate):not(:--isLastDate) &::before {
+  :--isRange:--isSelected:not(:--isFirstDate):not(:--isLastDate) &::before {
     --day-bg: var(--color-secondary);
   }
 
-  @nest :--isRange:--isSelected:--isOnlyOneValue &::before {
+  :--isRange:--isSelected:--isOnlyOneValue &::before {
     right: 0;
 
     border-radius: 50%;
   }
 
-  @nest :--isRange:--isSelected &:hover::after {
+  :--isRange:--isSelected &:hover::after {
     --day-bg: var(--color-primary);
   }
 
-  @nest :--isRange:--isHighlighted &::before {
+  :--isRange:--isHighlighted &::before {
     --day-bg: var(--color-secondary);
   }
 
-  @nest :--isRange:--isHighlighted:--isFirstDate:not(:--isSelectedBackwards) &::before {
+  :--isRange:--isHighlighted:--isFirstDate:not(:--isSelectedBackwards) &::before {
     right: calc(var(--cell-bg-side-offset) * -1);
 
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  @nest :--isRange:--isHighlighted:--isFirstDate:--isSelectedBackwards &::before {
+  :--isRange:--isHighlighted:--isFirstDate:--isSelectedBackwards &::before {
     right: 0;
 
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  @nest :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):not(:--isSelectedBackwards):hover
-      &::after {
+  :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):not(:--isSelectedBackwards):hover
+    &::after {
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
   }
 
-  @nest :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):--isSelectedBackwards:hover
-      &::after {
+  :--isRange:--isHighlighted:--isOnlyOneValue:not(:--isFirstDate):--isSelectedBackwards:hover
+    &::after {
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
   }
 
-  @nest :--isRange:--isHighlighted:not(:--isSelectedBackwards):hover &::before {
+  :--isRange:--isHighlighted:not(:--isSelectedBackwards):hover &::before {
     right: 0;
 
     border-top-right-radius: 50%;
     border-bottom-right-radius: 50%;
   }
 
-  @nest :--isRange:--isHighlighted:--isSelectedBackwards:hover &::before {
+  :--isRange:--isHighlighted:--isSelectedBackwards:hover &::before {
     left: 0;
 
     border-top-left-radius: 50%;
