@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
 import { BoxItem, GridItem, SwitchItem, WidgetItem } from '@/dashboard'
