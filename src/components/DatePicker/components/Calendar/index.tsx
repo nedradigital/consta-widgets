@@ -17,18 +17,16 @@ import {
 } from 'date-fns'
 import * as _ from 'lodash'
 
-import { DateRange } from '../../'
-import { isDateRange } from '../../helpers'
+import { DateLimitProps, DateRange, ValueProps } from '../../'
+import { getMonthTitle, isDateRange } from '../../helpers'
 
 import css from './index.css'
 
 type Props = {
-  minDate: Date
-  maxDate: Date
-  value?: Date | DateRange
   currentVisibleDate: Date
   onSelect: (value: Date | DateRange) => void
-}
+} & ValueProps<Date | DateRange> &
+  DateLimitProps
 
 const getStartAndEndDate = (date1: Date, date2: Date) => {
   const [start, end] = _.sortBy([date1, date2])
@@ -42,9 +40,8 @@ const isDateHighlighted = ({
   hoveredDate,
 }: {
   date: Date
-  value?: Date | DateRange
   hoveredDate?: Date
-}) => {
+} & ValueProps<Date | DateRange>) => {
   if (!hoveredDate || !isDateRange(value) || !value[0] || value[1]) {
     return false
   }
@@ -59,10 +56,8 @@ const isDateSelected = ({
   maxDate,
 }: {
   date: Date
-  value?: Date
-  minDate: Date
-  maxDate: Date
-}) => {
+} & ValueProps<Date> &
+  DateLimitProps) => {
   return value
     ? isWithinInterval(date, { start: minDate, end: maxDate }) && isSameDay(value, date)
     : false
@@ -96,13 +91,6 @@ export const isValueSelected = ({
   } else {
     return isDateSelected({ date, value, minDate, maxDate })
   }
-}
-
-const getMonthTitle = (date: Date) => {
-  const name = date.toLocaleDateString('ru', { month: 'long' })
-  const year = date.getFullYear()
-
-  return `${name} ${year}`
 }
 
 const getMonthWeeks = (date: Date) => {
@@ -225,21 +213,22 @@ export const Calendar: React.FC<Props> = ({
       {_.times(monthsAmount, idx => {
         const month = addMonths(currentVisibleDate, idx)
         const weeks = getMonthWeeks(month)
-        const title = getMonthTitle(month)
 
         return (
           <div key={idx} className={css.month}>
-            <Text
-              tag="div"
-              size="s"
-              weight="bold"
-              transform="uppercase"
-              view="primary"
-              spacing="xs"
-              className={css.title}
-            >
-              {title}
-            </Text>
+            {isDateRange(value) && (
+              <Text
+                tag="div"
+                size="s"
+                weight="bold"
+                transform="uppercase"
+                view="primary"
+                spacing="xs"
+                className={css.title}
+              >
+                {getMonthTitle(month)}
+              </Text>
+            )}
             <div className={classnames(css.row, css.isWithDaynames)}>{weekDays}</div>
             {weeks.map((week, weekIdx) => (
               <div key={weekIdx} className={css.row}>

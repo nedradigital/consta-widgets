@@ -1,9 +1,9 @@
-import { getDateOffsetOnTimeline } from '@/components/DatePicker/components/Timeline'
+import { getDateOffsetOnTimeline } from '../../MonthsSliderRange'
 
 const TICK_WIDTH = 20
 const NOT_ALLOWED_MONTHS_AMOUNT = 12
 
-describe('<Timeline />', () => {
+describe('<MonthsSliderRange />', () => {
   describe('getDateOffsetOnTimeline', () => {
     it('возвращает отступ периода при отсутствии недоступных для выбора месяцев', () => {
       const date = new Date(2020, 5, 5)

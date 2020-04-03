@@ -1,10 +1,10 @@
 import MockDate from 'mockdate'
 
-import { getCurrentVisibleDate, isDateIsInvalid, isDateRange } from '../helpers'
+import { getCurrentVisibleDate, getMonthTitle, isDateIsInvalid, isDateRange } from '../helpers'
 
 describe('isDateRange', () => {
   it('не опознает используемое значение как интервал, если оно не передано', () => {
-    expect(isDateRange()).toBe(false)
+    expect(isDateRange(undefined)).toBe(false)
   })
 
   it('не опознает используемое значение как интервал, если передана дата', () => {
@@ -201,6 +201,12 @@ describe('getCurrentVisibleDate', () => {
         })
       })
     })
+  })
+})
+
+describe('getMonthTitle', () => {
+  it('возвращает название месяца в русской локали', () => {
+    expect(getMonthTitle(new Date(2020, 0, 1))).toEqual('январь')
   })
 })
 
