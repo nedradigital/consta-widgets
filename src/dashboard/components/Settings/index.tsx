@@ -39,7 +39,7 @@ export const Settings: React.FC<Props> = props => {
   )
 }
 
-const DatasetSelect: React.FC<Props & { dataType?: DataType }> = ({
+const DatasetSelect: React.FC<Props & { dataType: DataType }> = ({
   datasets,
   dataType,
   onChange,
@@ -100,9 +100,7 @@ const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
     return (
       <>
         <WidgetSettingsItem name="id">{item.id}</WidgetSettingsItem>
-        {dataType && (
-          <DatasetSelect item={item} dataType={dataType} datasets={datasets} onChange={onChange} />
-        )}
+        <DatasetSelect item={item} dataType={dataType} datasets={datasets} onChange={onChange} />
         {commonSettings}
         <WidgetSettingsText
           name="Замещающий текст"
