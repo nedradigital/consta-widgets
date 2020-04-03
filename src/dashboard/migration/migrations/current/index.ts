@@ -3,8 +3,6 @@ import { Layout } from 'react-grid-layout'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
-import { isWidget } from '@/utils/type-guards'
-
 import { Migration } from '../..'
 import { Dashboard10 } from '../dashboard10'
 
@@ -105,6 +103,9 @@ export namespace CurrentDashboard {
     settings: Settings
   }
 }
+
+const isWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+  item.type === 'widget'
 
 export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.State> = {
   versionTo: 11,

@@ -2,8 +2,6 @@ import { Layout } from 'react-grid-layout'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
-import { isWidget } from '@/utils/type-guards'
-
 import { Migration } from '../..'
 import { Dashboard9 } from '../dashboard9'
 
@@ -104,6 +102,9 @@ export namespace Dashboard10 {
     settings: Settings
   }
 }
+
+const isWidget = (item: Dashboard10.BoxItem): item is Dashboard10.WidgetItem =>
+  item.type === 'widget'
 
 export const migration10: Migration<Dashboard9.State, Dashboard10.State> = {
   versionTo: 10,
