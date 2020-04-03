@@ -26,6 +26,15 @@ export const isParsedDateExists = (dateFromInput: string) => {
 }
 
 export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
+  const [isRealDate, setIsRealDate] = React.useState(true)
+  const ref = React.useRef<HTMLInputElement>(null)
+
+  const checkIsRealDate = () => {
+    if (ref.current) {
+      setIsRealDate(!ref.current.validity.badInput)
+    }
+  }
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!isParsedDateExists(event.target.value)) {
       return onChange(undefined)
@@ -42,16 +51,25 @@ export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
     l: 'm',
   } as const)[size]
 
+  React.useLayoutEffect(checkIsRealDate, [value])
+
   return (
     <div className={css.main}>
       <Input
-        className={classnames(css.input, { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size])}
+        inputRef={ref}
+        className={classnames(
+          css.input,
+          !isRealDate && css.isInvalid,
+          { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
+        )}
         type="date"
         wpSize={size}
         view="default"
         form="default"
         value={getInputValue(value)}
         onChange={handleChange}
+        // ловим смену даты на onKeyUp, т.к. onChange не срабатывает, если первая введенная дата - невалидная
+        onKeyUp={checkIsRealDate}
       />
       <IconCalendar size={iconSize} className={css.icon} />
     </div>
