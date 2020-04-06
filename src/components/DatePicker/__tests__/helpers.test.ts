@@ -63,6 +63,7 @@ describe('getCurrentVisibleDate', () => {
       ).toEqual(maxDate)
     })
   })
+
   describe('если значение задано', () => {
     const minDate = new Date(2020, 2, 15)
     const maxDate = new Date(2020, 6, 15)

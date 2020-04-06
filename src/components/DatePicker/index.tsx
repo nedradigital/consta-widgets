@@ -170,6 +170,12 @@ export const DatePicker: React.FC<Props> = props => {
     handler: handleApplyDate,
   })
 
+  const handleSelectQuarter = (value: DateRange) => {
+    setCurrentVisibleDate(getCurrentVisibleDate({ value: [value[0], undefined], minDate, maxDate }))
+
+    return handleSelectDate(value)
+  }
+
   useLayoutEffect(() => {
     // сброс интервала в случае, если сторонним инпутом сброшена только первая дата
     if (props.type === 'date-range' && props.value && props.value[1] && !props.value[0]) {
@@ -266,7 +272,7 @@ export const DatePicker: React.FC<Props> = props => {
           maxDate={maxDate}
           currentVisibleDate={currentVisibleDate}
           onApply={handleApplyDate}
-          onSelect={handleSelectDate}
+          onSelect={handleSelectQuarter}
         />
       </Tooltip>
     </div>
