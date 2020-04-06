@@ -1,7 +1,7 @@
 import { scaleLinear } from '@/utils/scale'
 
 import { Groups } from '../'
-import { getDataColumns, getDomain, getEveryNTick, getGraphStepSize } from '../helpers'
+import { getDataColumns, getDomain, getEveryNTick, getGraphStepSize, scaleBand } from '../helpers'
 
 const COLOR_GROUPS = {
   baton: 'black',
@@ -313,5 +313,50 @@ describe('getGraphStepSize', () => {
 
   it('возвращает значение размера шага группы', () => {
     expect(getGraphStepSize(450, [150, 50, 50, 150])).toEqual(75)
+  })
+})
+
+describe('scaleBand', () => {
+  const groupsNames = ['3', 'чет', 'абв', '1', 'где'] as const
+  const groupScale = scaleBand({
+    groupsSizes: groupsNames.reduce((acc, curr) => ({ ...acc, [curr]: 50 }), {}),
+    range: [0, 500],
+    groupsNames,
+  })
+
+  it('возвращает позицию для группы с сохранением её порядка', () => {
+    expect(groupScale.scale(groupsNames[0])).toEqual(0)
+    expect(groupScale.scale(groupsNames[1])).toEqual(100)
+    expect(groupScale.scale(groupsNames[2])).toEqual(200)
+    expect(groupScale.scale(groupsNames[3])).toEqual(300)
+    expect(groupScale.scale(groupsNames[4])).toEqual(400)
+  })
+
+  it('возвращает значение, если не передано имя группы', () => {
+    expect(groupScale.bandwidth!()).toEqual(0)
+  })
+
+  it('возвращает посчитанный размер группы, если передано имя группы', () => {
+    expect(groupScale.bandwidth!(groupsNames[0])).toEqual(100)
+    expect(groupScale.bandwidth!(groupsNames[1])).toEqual(100)
+    expect(groupScale.bandwidth!(groupsNames[2])).toEqual(100)
+    expect(groupScale.bandwidth!(groupsNames[3])).toEqual(100)
+    expect(groupScale.bandwidth!(groupsNames[4])).toEqual(100)
+  })
+
+  it('возвращает минимальный размер группы, если передано имя группы', () => {
+    const groupScaleMinSize = scaleBand({
+      groupsSizes: {
+        1: 50,
+        2: 100,
+        3: 150,
+      },
+      range: [0, 300],
+      groupsNames: ['1', '2', '3'],
+    })
+
+    expect(groupScaleMinSize.bandwidth!('1')).toEqual(50)
+    expect(groupScaleMinSize.bandwidth!('2')).toEqual(100)
+    expect(groupScaleMinSize.bandwidth!('3')).toEqual(150)
   })
 })
