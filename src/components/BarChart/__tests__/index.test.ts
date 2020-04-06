@@ -1,7 +1,17 @@
 import { scaleLinear } from '@/utils/scale'
 
 import { Groups } from '../'
-import { getDataColumns, getDomain, getEveryNTick, getGraphStepSize, scaleBand } from '../helpers'
+import {
+  getColumnDetails,
+  getDataColumns,
+  getDomain,
+  getEveryNTick,
+  getGraphStepSize,
+  getRange,
+  getTotalByColumn,
+  scaleBand,
+  transformBarChartGroupsToCommonGroups,
+} from '../helpers'
 
 const COLOR_GROUPS = {
   baton: 'black',
@@ -282,6 +292,17 @@ describe('getDomain', () => {
   it('возвращает значение для домена', () => {
     expect(getDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
   })
+
+  it('возвращает значения для домена с отрицательными значениями', () => {
+    expect(
+      getDomain([
+        {
+          groupName: '1',
+          values: [{ baton: -100 }, { buhanka: 50 }, { korovay: 100 }],
+        },
+      ])
+    ).toEqual([-100, 100])
+  })
 })
 
 describe('getEveryNTick', () => {
@@ -309,6 +330,10 @@ describe('getGraphStepSize', () => {
 
   it('возвращает размер графика, как размер группы если массив размеров содержит 1 элемент', () => {
     expect(getGraphStepSize(450, [50])).toEqual(450)
+  })
+
+  it('возвращает значение размера шага второй группы, если их всего 2', () => {
+    expect(getGraphStepSize(450, [250, 50])).toEqual(200)
   })
 
   it('возвращает значение размера шага группы', () => {
@@ -358,5 +383,263 @@ describe('scaleBand', () => {
     expect(groupScaleMinSize.bandwidth!('1')).toEqual(50)
     expect(groupScaleMinSize.bandwidth!('2')).toEqual(100)
     expect(groupScaleMinSize.bandwidth!('3')).toEqual(150)
+  })
+})
+
+describe('getRange', () => {
+  it('возвращает диапазон', () => {
+    expect(getRange(100)).toEqual([0, 100])
+  })
+
+  it('возвращает перевернутый диапазон', () => {
+    expect(getRange(100, true)).toEqual([100, 0])
+  })
+})
+
+describe('getTotalByColumn', () => {
+  it('возвращает 0 если в колонке нет данных', () => {
+    expect(getTotalByColumn({})).toEqual(0)
+  })
+
+  it('возвращает сумму значений всей колонки', () => {
+    expect(getTotalByColumn({ baton: 10, buhanka: 5, korovay: 30 })).toEqual(45)
+  })
+
+  it('возвращает сумму значений всей колонки, не учитывая пустые значения', () => {
+    expect(getTotalByColumn({ baton: 10, buhanka: undefined, korovay: 30 })).toEqual(40)
+  })
+})
+
+describe('getColumnDetails', () => {
+  const CATEGORIES = ['baton', 'buhanka'] as const
+
+  describe('горизонтальный график', () => {
+    it('получение детальной информации о столбце', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: 10, buhanka: 30 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 10,
+          positionBegin: 0,
+          positionEnd: 10,
+          value: 10,
+        },
+        {
+          category: 'buhanka',
+          columnName: '1',
+          columnSize: 30,
+          positionBegin: 10,
+          positionEnd: 40,
+          value: 30,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце с отрицательным значением', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: -100 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 100,
+          positionBegin: 0,
+          positionEnd: 100,
+          value: -100,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце где размер колонки не может быть меньше 5', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: 1 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 5,
+          positionBegin: 0,
+          positionEnd: 5,
+          value: 1,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце с пропуском значения', () => {
+      expect(
+        getColumnDetails({
+          categories: ['baton', 'buhanka', 'korovay'],
+          column: { baton: 10, buhanka: undefined, korovay: 30 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 10,
+          positionBegin: 0,
+          positionEnd: 10,
+          value: 10,
+        },
+        {
+          category: 'korovay',
+          columnName: '1',
+          columnSize: 30,
+          positionBegin: 10,
+          positionEnd: 40,
+          value: 30,
+        },
+      ])
+    })
+  })
+
+  describe('вертикальный график', () => {
+    const scaler = scaleLinear({
+      domain: [MAX_VALUE, 0],
+      range: [0, MAX_VALUE],
+    })
+
+    it('получение детальной информации о столбце', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: 10, buhanka: 30 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale: scaler,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 10,
+          positionBegin: 185,
+          positionEnd: 175,
+          value: 10,
+        },
+        {
+          category: 'buhanka',
+          columnName: '1',
+          columnSize: 30,
+          positionBegin: 175,
+          positionEnd: 145,
+          value: 30,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце с отрицательным значением', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: -100 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale: scaler,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 100,
+          positionBegin: 185,
+          positionEnd: 85,
+          value: -100,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце где размер колонки не может быть меньше 5', () => {
+      expect(
+        getColumnDetails({
+          categories: CATEGORIES,
+          column: { baton: 1 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale: scaler,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 5,
+          positionBegin: 185,
+          positionEnd: 180,
+          value: 1,
+        },
+      ])
+    })
+
+    it('получение детальной информации о столбце с пропуском значения', () => {
+      expect(
+        getColumnDetails({
+          categories: ['baton', 'buhanka', 'korovay'],
+          column: { baton: 10, buhanka: undefined, korovay: 30 },
+          columnName: '1',
+          maxValue: MAX_VALUE,
+          valuesScale: scaler,
+        })
+      ).toEqual([
+        {
+          category: 'baton',
+          columnName: '1',
+          columnSize: 10,
+          positionBegin: 185,
+          positionEnd: 175,
+          value: 10,
+        },
+        {
+          category: 'korovay',
+          columnName: '1',
+          columnSize: 30,
+          positionBegin: 175,
+          positionEnd: 145,
+          value: 30,
+        },
+      ])
+    })
+  })
+})
+
+describe('transformBarChartGroupsToCommonGroups', () => {
+  it('преобразование групп колонок к общему виду', () => {
+    expect(
+      transformBarChartGroupsToCommonGroups([
+        {
+          groupName: '1',
+          values: [
+            { colorGroupName: 'success', value: 1 },
+            { colorGroupName: 'warning', value: 2 },
+          ],
+        },
+      ])
+    ).toEqual([
+      {
+        groupName: '1',
+        values: [{ success: 1 }, { warning: 2 }],
+      },
+    ])
   })
 })

@@ -2,14 +2,14 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { INITIAL_DOMAIN, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
+import { Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
 import { GridConfig } from './components/Axis'
 
-/* istanbul ignore next */
+export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
+
 export const getIndexWithFallbackToDefault = (index: number, def: number): number =>
   index < 0 ? def : index
 
-/* istanbul ignore next */
 export const padDomain = ({
   domain,
   paddingStart,
@@ -28,9 +28,7 @@ export const padDomain = ({
   return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
 }
 
-/* istanbul ignore next */
 export const getXRange = (width: number) => [0, width] as NumberRange
-/* istanbul ignore next */
 export const getYRange = (height: number) =>
   [
     // Чтобы нарисовался гридлайн на нижней оси
@@ -38,21 +36,18 @@ export const getYRange = (height: number) =>
     0,
   ] as NumberRange
 
-/* istanbul ignore next */
 export const getXScale = (domain: NumberRange, width: number) =>
   d3
     .scaleLinear()
     .domain([...domain])
     .range(getXRange(width))
 
-/* istanbul ignore next */
 export const getYScale = (domain: NumberRange, height: number) =>
   d3
     .scaleLinear()
     .domain([...domain])
     .range(getYRange(height))
 
-/* istanbul ignore next */
 export const calculateSecondaryDomain = (
   mainDomainMin: number,
   mainDomainMax: number,
@@ -85,22 +80,21 @@ export const calculateSecondaryDomain = (
   ] as NumberRange
 }
 
-/* istanbul ignore next */
 export const getUniqValues = (
   items: readonly Item[],
   domain: NumberRange,
-  type: 'x' | 'y',
-  isHorizontal?: boolean
-): readonly number[] =>
-  _.sortBy(
+  type: 'x' | 'y'
+): readonly number[] => {
+  const minInDomain = Math.min(...domain)
+  const maxInDomain = Math.max(...domain)
+
+  return _.sortBy(
     _.uniq(items.map(v => v[type]))
       .filter(isNotNil)
-      .filter(i =>
-        isHorizontal ? i >= domain[0] && i <= domain[1] : i >= domain[1] && i <= domain[0]
-      )
+      .filter(i => i >= minInDomain && i <= maxInDomain)
   )
+}
 
-/* istanbul ignore next */
 export const getMainTickValues = ({
   items,
   domain,
@@ -121,7 +115,7 @@ export const getMainTickValues = ({
   }
 
   const config = gridConfig[isHorizontal ? 'x' : 'y']
-  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y', isHorizontal)
+  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y')
   const ticks = config[tickType] || 0
   const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
   const result =
@@ -134,7 +128,6 @@ export const getMainTickValues = ({
   return _.uniq(result.concat(isGuide ? [guideValue] : []))
 }
 
-/* istanbul ignore next */
 export const getSecondaryTickValues = ({
   items,
   domain,
@@ -155,7 +148,7 @@ export const getSecondaryTickValues = ({
   }
 
   const config = gridConfig[isHorizontal ? 'y' : 'x']
-  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'y' : 'x', true)
+  const uniqValues = getUniqValues(items, domain, isHorizontal ? 'y' : 'x')
   const ticks = config[tickType] || 0
   const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
   const result = ticks === 0 ? [] : d3.ticks(domain[0], domain[1], ticks)
@@ -167,7 +160,6 @@ export const getSecondaryTickValues = ({
   return _.uniq(result.concat(isGuide ? [guideValue] : []))
 }
 
-/* istanbul ignore next */
 export function flipPointsOnAxes<T extends Item | NotEmptyItem>(
   items: readonly T[],
   isHorizontal?: boolean

@@ -23,6 +23,7 @@ import {
   getXScale,
   getYRange,
   getYScale,
+  INITIAL_DOMAIN,
   padDomain,
 } from './helpers'
 import css from './index.css'
@@ -86,8 +87,6 @@ type State = {
   yGuideValue: number
   hoveredMainValue: HoveredMainValue
 }
-
-export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
 export const TRANSITION_DURATIONS = {
   ZOOM: 750,

@@ -1,4 +1,3 @@
-import * as d3 from 'd3'
 import { ExtendedFeature } from 'd3'
 import { MultiPoint } from 'geojson'
 
@@ -12,7 +11,8 @@ import {
   SelectedObjectId,
 } from './'
 
-/* istanbul ignore next */
+type Projection = (mutablePoint: [number, number]) => readonly [number, number] | null
+
 export const featureToObject = (type: 'country' | 'region') => (
   feature: ExtendedFeature
 ): GeoObject => ({
@@ -21,9 +21,8 @@ export const featureToObject = (type: 'country' | 'region') => (
   geoData: feature,
 })
 
-/* istanbul ignore next */
 export const geoCoordsToPixels = (
-  projection: d3.GeoProjection,
+  projection: Projection,
   geoCoords: Coords
 ): { x: number; y: number } | undefined => {
   const pixelCoords = projection([geoCoords[0], geoCoords[1]])
