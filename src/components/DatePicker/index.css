@@ -17,3 +17,21 @@
     max-width: 592px;
   }
 }
+
+.warningTooltip {
+  display: flex;
+}
+
+.iconWarning {
+  position: relative;
+  top: calc(var(--line-height-text-m) / 2);
+
+  flex-shrink: 0;
+
+  width: calc-size(12);
+  margin-right: var(--space-xs);
+
+  color: var(--color-bg-alert);
+
+  transform: translateY(-50%);
+}

@@ -46,6 +46,10 @@
   }
 }
 
+.tooltip {
+  max-width: 196px;
+}
+
 :--icon {
   position: absolute;
   top: 50%;

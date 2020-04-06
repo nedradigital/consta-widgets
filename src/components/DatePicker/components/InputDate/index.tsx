@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import { format } from 'date-fns'
 
 import { Size } from '@/components/DatePicker'
+import { Tooltip } from '@/components/Tooltip'
 import { isValidDate } from '@/utils/type-guards'
 
 import css from './index.css'
@@ -11,6 +12,8 @@ type Props = {
   size?: Size
   value?: Date
   onChange: (value?: Date) => void
+  isInvalid: boolean
+  tooltipContent?: React.ReactNode
 }
 
 export const getInputValue = (value?: Date) => {
@@ -25,13 +28,20 @@ export const isParsedDateExists = (dateFromInput: string) => {
   return isValidDate(new Date(dateFromInput))
 }
 
-export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
+export const InputDate: React.FC<Props> = ({
+  value,
+  size = 'm',
+  isInvalid,
+  tooltipContent,
+  onChange,
+}) => {
   const [isRealDate, setIsRealDate] = React.useState(true)
-  const ref = React.useRef<HTMLInputElement>(null)
+  const ref = React.useRef<HTMLDivElement>(null)
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const checkIsRealDate = () => {
-    if (ref.current) {
-      setIsRealDate(!ref.current.validity.badInput)
+    if (inputRef.current) {
+      setIsRealDate(!inputRef.current.validity.badInput)
     }
   }
 
@@ -54,12 +64,12 @@ export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
   React.useLayoutEffect(checkIsRealDate, [value])
 
   return (
-    <div className={css.main}>
+    <div className={css.main} ref={ref}>
       <Input
-        inputRef={ref}
+        inputRef={inputRef}
         className={classnames(
           css.input,
-          !isRealDate && css.isInvalid,
+          (isInvalid || !isRealDate) && css.isInvalid,
           { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
         )}
         type="date"
@@ -72,6 +82,18 @@ export const InputDate: React.FC<Props> = ({ value, size = 'm', onChange }) => {
         onKeyUp={checkIsRealDate}
       />
       <IconCalendar size={iconSize} className={css.icon} />
+      {tooltipContent && (
+        <Tooltip
+          isVisible
+          anchorRef={ref}
+          direction="right"
+          offset={1}
+          isContentHoverable
+          className={css.tooltip}
+        >
+          {tooltipContent}
+        </Tooltip>
+      )}
     </div>
   )
 }
