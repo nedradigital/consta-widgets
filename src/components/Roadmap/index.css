@@ -114,7 +114,8 @@
 
 .iconFilter {
   .cell:hover:not(.isFilterOpened) & {
-    opacity: 0.2;
+    opacity: 1;
+    color: var(--color-control-typo-clear);
   }
 }
 
