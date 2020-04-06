@@ -30,9 +30,10 @@ type SelectedFiltersList = ReadonlyArray<{
 }>
 
 /* istanbul ignore next */
-export const getOptionsForFilters = (filters: Filters, field: string) => {
-  return filters.filter(({ field: filterField }) => filterField === field)
-}
+export const getOptionsForFilters = (filters: Filters, field: string) =>
+  filters
+    .filter(({ field: filterField }) => filterField === field)
+    .map(({ id, name }) => ({ value: id, label: name }))
 
 export const getSelectedFiltersInitialState = (filters?: Filters) => {
   if (!filters) {

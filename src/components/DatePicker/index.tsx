@@ -165,7 +165,10 @@ export const DatePicker: React.FC<Props> = props => {
     }
   }
 
-  useClickOutside([controlsRef, tooltipRef], () => handleApplyDate())
+  useClickOutside({
+    requiredRefs: [controlsRef, tooltipRef],
+    handler: handleApplyDate,
+  })
 
   useLayoutEffect(() => {
     // сброс интервала в случае, если сторонним инпутом сброшена только первая дата

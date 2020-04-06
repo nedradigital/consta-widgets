@@ -2,22 +2,22 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Button, IconFunnel, Text } from '@gpn-design/uikit'
+import { IconFunnel, MultiSelect, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { MultiSelect } from '@/ui/MultiSelect'
 import { PositionState } from '@/utils/tooltips'
 import { isDefinedPosition } from '@/utils/type-guards'
 
-import { Props as MultiSelectProps } from '../MultiSelect'
-
 import css from './index.css'
 
-export type Props = Omit<MultiSelectProps, 'onChange'> & {
+type Values = readonly string[]
+
+type Props = {
+  options: Readonly<React.ComponentProps<typeof MultiSelect>['options']>
+  values: Values
   field: string
   isOpened: boolean
-  onCancel: () => void
-  onSave: (field: string, values: MultiSelectProps['values']) => void
+  onSave: (field: string, values: Values) => void
   handleFilterTogglerClick: () => void
   className?: string
 }
@@ -28,14 +28,14 @@ export const FilterTooltip: React.FC<Props> = ({
   options,
   values,
   className,
-  onCancel,
   onSave,
   handleFilterTogglerClick,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
   const [tooltipPosition, setTooltipPosition] = useState<PositionState>()
-  const [selectedValues, setSelectedValues] = useState(values)
+  const [selectedValues, setSelectedValues] = useState<Values | undefined>(values)
 
   useLayoutEffect(() => {
     if (buttonRef.current && isOpened) {
@@ -49,14 +49,21 @@ export const FilterTooltip: React.FC<Props> = ({
     setSelectedValues(values)
   }, [values])
 
-  useClickOutside([tooltipRef, buttonRef], onCancel)
+  useClickOutside({
+    requiredRefs: [buttonRef, tooltipRef],
+    optionalRefs: [menuRef],
+    handler: () => onSave(field, selectedValues || []),
+  })
 
   return (
     <>
       <button
         ref={buttonRef}
         className={classnames(css.button, isOpened && css.isOpened, className)}
-        onClick={() => handleFilterTogglerClick()}
+        onClick={() => {
+          onSave(field, selectedValues || [])
+          handleFilterTogglerClick()
+        }}
       >
         <IconFunnel size="xs" className={css.iconFilter} />
       </button>
@@ -65,30 +72,22 @@ export const FilterTooltip: React.FC<Props> = ({
         ReactDOM.createPortal(
           <div
             ref={tooltipRef}
-            className={classnames(css.tooltip)}
+            className={css.tooltip}
             style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
           >
             <Text tag="div" size="xs" view="primary" className={css.title}>
               Фильтровать по условию
             </Text>
-            <MultiSelect options={options} values={selectedValues} onChange={setSelectedValues} />
-            <div className={css.actionsRow}>
-              <div className={css.action}>
-                <Button onClick={onCancel} type="button" wpSize="s" view="ghost">
-                  Отмена
-                </Button>
-              </div>
-              <div className={css.action}>
-                <Button
-                  onClick={() => onSave(field, selectedValues)}
-                  type="button"
-                  wpSize="s"
-                  view="primary"
-                >
-                  Ок
-                </Button>
-              </div>
-            </div>
+            <MultiSelect
+              name={field}
+              menuRef={menuRef}
+              wpSize="xs"
+              onChange={setSelectedValues}
+              onClearValue={() => setSelectedValues(undefined)}
+              placeholder="Выберите пункт"
+              options={[...options]}
+              value={selectedValues ? [...selectedValues] : undefined}
+            />
           </div>,
           document.body
         )}

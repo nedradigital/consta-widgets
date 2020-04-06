@@ -283,8 +283,10 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
     setTooltipPosition({ x, y })
   }, [buttonRef, tooltipVisible, tooltipPosition, setTooltipPosition])
 
-  useClickOutside([buttonRef, tooltipRef], () => setTooltipVisibility(false))
-
+  useClickOutside({
+    requiredRefs: [buttonRef, tooltipRef],
+    handler: () => setTooltipVisibility(false),
+  })
   return (
     <div
       className={css.main}
