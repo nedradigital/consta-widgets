@@ -312,8 +312,13 @@ const ThText: React.FC<{ className?: string }> = ({ className, children }) => (
   </Text>
 )
 
-const TdText: React.FC = ({ children }) => (
-  <Text tag="span" size="m" view="primary">
+type TdTextProps = {
+  className?: string
+  tag?: 'div' | 'span'
+}
+
+const TdText: React.FC<TdTextProps> = ({ children, tag = 'span', className }) => (
+  <Text tag={tag} size="m" view="primary" className={className}>
     {children}
   </Text>
 )
@@ -519,9 +524,9 @@ export const Roadmap: React.FC<Props> = props => {
                   <div
                     className={classnames(css.wrapper, activeLine.groupName && css.hideInactive)}
                   >
-                    <div className={css.fakeBlock}>
+                    <TdText tag="div" className={css.fakeBlock}>
                       {firstColumn.length > secondColumn.length ? firstColumn : secondColumn}
-                    </div>
+                    </TdText>
                     {plan.map(
                       renderChartLine({
                         key: 'plan',
