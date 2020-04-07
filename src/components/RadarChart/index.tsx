@@ -6,6 +6,7 @@ import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/dashboard'
+import { fontSizeValues } from '@/dashboard/size-constants'
 import { getFormattedValue } from '@/utils/chart'
 import { deg2rad } from '@/utils/math'
 
@@ -136,15 +137,15 @@ const concentricColorsByTicksAmount: { [key: number]: ConcentricColorInfo } = {
 
 const BREAKPOINTS = [
   {
-    fontSize: 12,
+    fontSize: fontSizeValues.xs,
     minRadarSize: 0,
   },
   {
-    fontSize: 14,
+    fontSize: fontSizeValues.s,
     minRadarSize: 151,
   },
   {
-    fontSize: 16,
+    fontSize: fontSizeValues.m,
     minRadarSize: 191,
   },
 ] as const

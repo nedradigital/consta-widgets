@@ -23,7 +23,7 @@ type Props = {
   onChangeActiveAxis: (axis?: Axis) => void
 }
 
-const labelTextSizes: Record<RadarChartLabelSize, TextSize> = {
+export const labelTextSizes: Record<RadarChartLabelSize, TextSize> = {
   s: '2xs',
   m: 'xs',
 }

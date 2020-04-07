@@ -6,10 +6,11 @@ import * as _ from 'lodash'
 
 import { getApplicableMigrations, migrate } from '@/dashboard/migration'
 import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
+import { marginSizeValues } from '@/dashboard/size-constants'
 import { isGrid, isSwitch } from '@/utils/type-guards'
 
 import { Dashboard, DashboardProps } from './components/Dashboard'
-import { marginSizes, Menu, MenuProps } from './components/Menu'
+import { Menu, MenuProps } from './components/Menu'
 import css from './index.css'
 import { currentMigration } from './migration/migrations/current'
 import { DashboardState, GridItem, SwitchItem, WidgetItem } from './types'
@@ -153,7 +154,7 @@ export const Constructor: React.FC<ConstructorProps> = props => {
   }
 
   const { margin = 'l' } = dashboard.settings
-  const margins = baseMargin || [marginSizes[margin], marginSizes[margin]]
+  const margins = baseMargin || [marginSizeValues[margin], marginSizeValues[margin]]
 
   const handleChange = (newParts: Partial<DashboardState>) => {
     !viewMode && onChange({ ...dashboard, ...newParts })

@@ -6,19 +6,10 @@ import { calcSize } from '@csssr/gpn-utils/lib/css'
 import classnames from 'classnames'
 
 import { BoxItem } from '@/dashboard'
-import { BoxItemMarginSize } from '@/dashboard'
+import { marginSizeValues } from '@/dashboard/size-constants'
 import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'
-
-export const sizeValues: { [key in BoxItemMarginSize]: number } = {
-  xl: 24,
-  l: 20,
-  m: 16,
-  s: 12,
-  xs: 8,
-  '2xs': 4,
-}
 
 type Props = {
   debugName: string
@@ -83,7 +74,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
       style={{
         flexGrow: params.growRatio,
         flexBasis: params.growRatio ? 0 : undefined,
-        marginTop: params.marginTop && calcSize(sizeValues[params.marginTop]),
+        marginTop: params.marginTop && calcSize(marginSizeValues[params.marginTop]),
       }}
       ref={ref}
     >

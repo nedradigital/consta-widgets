@@ -3,17 +3,12 @@ import * as React from 'react'
 import { MarginSize, Settings } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
 import { migrations } from '@/dashboard/migration/migrations'
+import { marginSizeValues } from '@/dashboard/size-constants'
+import { getFormattedMarginName } from '@/utils/size-name-formatters'
 
 import css from './index.css'
 
-export const marginSizes = {
-  s: 12,
-  m: 16,
-  l: 20,
-  xl: 24,
-}
-
-const margins = Object.keys(marginSizes) as readonly MarginSize[]
+const margins = Object.keys(marginSizeValues) as readonly MarginSize[]
 
 type Props = {
   settings: Settings
@@ -67,7 +62,7 @@ export const Menu: React.FC<Props & MenuProps> = ({
           <option value={''}>--</option>
           {margins.map(size => (
             <option key={size} value={size}>
-              {size}
+              {getFormattedMarginName(size)}
             </option>
           ))}
         </select>
