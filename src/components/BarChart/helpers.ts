@@ -1,5 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { flattenDeep, max, min, sum } from 'lodash'
+import { flattenDeep, sum } from 'lodash'
 
 import { getEveryN } from '@/utils/array'
 import { Scaler } from '@/utils/scale'
@@ -24,12 +24,10 @@ export const GROUP_INNER_PADDING: Record<Size, number> = {
 
 export const OUTER_PADDING = 2
 
-/* istanbul ignore next */
 export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
   return shouldFlip ? [size, 0] : [0, size]
 }
 
-/* istanbul ignore next */
 export const getTotalByColumn = (column: Column) =>
   sum(Object.keys(column).map(key => column[key])) || 0
 
@@ -43,7 +41,6 @@ export const getNormalizedValue = ({
   total: number
 }) => Math.round((maxValue * value) / total)
 
-/* istanbul ignore next */
 export const getColumnDetails = ({
   column,
   columnName,
@@ -61,68 +58,46 @@ export const getColumnDetails = ({
 }): readonly ColumnDetail[] => {
   const zeroPoint = Math.ceil(valuesScale.scale(0))
 
-  return categories
-    .filter(category => isDefined(column[category]))
-    .map(category => {
-      const value = column[category]
+  return categories.reduce<readonly ColumnDetail[]>((previousValue, category) => {
+    const value = column[category]
 
-      if (!hasRatio || !value) {
-        return {
+    if (value === undefined) {
+      return previousValue
+    }
+
+    const normalizedValue = hasRatio
+      ? getNormalizedValue({
+          maxValue,
           value,
-          normalizedValue: value,
-          category,
-        }
-      }
+          total: getTotalByColumn(column),
+        })
+      : value
 
-      const total = getTotalByColumn(column)
+    const prevElement = previousValue[previousValue.length - 1]
+    const positionBegin = prevElement ? prevElement.positionEnd : zeroPoint
+    const positionEnd = Math.ceil(positionBegin + (zeroPoint - valuesScale.scale(normalizedValue)))
+    const size = Math.abs(positionBegin - positionEnd)
+    const columnSize = size < BAR_MIN_SIZE && value !== 0 ? BAR_MIN_SIZE : size
 
-      return {
-        value,
-        normalizedValue: getNormalizedValue({ maxValue, value, total }),
-        category,
-      }
-    })
-    .reduce((previousValue, curr, currentIndex) => {
-      const { value, normalizedValue, category } = curr
+    const result = {
+      category,
+      columnName,
+      positionBegin,
+      positionEnd: zeroPoint > 0 ? positionBegin - columnSize : positionBegin + columnSize,
+      columnSize,
+      value,
+    }
 
-      if (value === undefined || normalizedValue === undefined) {
-        return previousValue
-      }
-
-      const prevElement = previousValue[currentIndex - 1]
-      const positionBegin = prevElement ? prevElement.positionEnd : zeroPoint
-      const positionEnd = Math.ceil(
-        positionBegin + (zeroPoint - valuesScale.scale(normalizedValue))
-      )
-      const size = Math.abs(positionBegin - positionEnd)
-      const columnSize = size < BAR_MIN_SIZE && value !== 0 ? BAR_MIN_SIZE : size
-
-      const result = {
-        category,
-        columnName,
-        positionBegin,
-        positionEnd: zeroPoint > 0 ? positionBegin - columnSize : positionBegin + columnSize,
-        columnSize,
-        value,
-      }
-
-      return previousValue.concat(result)
-    }, [] as readonly ColumnDetail[])
+    return previousValue.concat(result)
+  }, [])
 }
 
-/* istanbul ignore next */
 export const getDomain = (groups: Groups): NumberRange => {
-  const numbers = flattenDeep(
-    groups.map(group =>
-      group.values.map(value =>
-        sum(Object.keys(value).map(key => (isDefined(value[key]) ? value[key] : 0)))
-      )
-    )
-  )
+  const numbers = flattenDeep(groups.map(group => group.values.map(getTotalByColumn)))
 
-  const minNumber = min(numbers) || 0
-  const maxNumber = max(numbers) || 0
-  const maxInDomain = max([-minNumber, maxNumber]) || 0
+  const minNumber = Math.min(...numbers, 0)
+  const maxNumber = Math.max(...numbers, 0)
+  const maxInDomain = Math.max(-minNumber, maxNumber)
 
   if (minNumber < 0) {
     return [-maxInDomain, maxInDomain]
@@ -165,7 +140,6 @@ export const getDataColumns = ({
         .filter(isDefined),
     }))
 
-/* istanbul ignore next */
 export const transformBarChartGroupsToCommonGroups = (groups: SingleBarChartGroups): Groups =>
   groups.map(group => ({
     ...group,
@@ -204,7 +178,6 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
   const groupsCount = groupsSizes.length - sizes.length
   const nextGraphSize = graphSize - sumSizes
 
-  /* istanbul ignore next */
   if (groupsCount === 1) {
     return nextGraphSize
   }

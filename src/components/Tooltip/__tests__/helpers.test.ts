@@ -874,6 +874,146 @@ describe('getComputedPositionAndDirection', () => {
         position: { x: 100, y: 250 },
       })
     })
+
+    it('если элемент входит в горизонтальные и нижнюю границы, то отображаем его вверх по центру', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 25, y: 500 },
+        })
+      ).toEqual({
+        direction: 'upCenter',
+        position: { x: -25, y: 450 },
+      })
+    })
+
+    it('если элемент входит в горизонтальные границы и по умолчанию он отображается вверх, то отображаем его вверх по центру', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'upRight',
+          position: { x: 25, y: 250 },
+        })
+      ).toEqual({
+        direction: 'upCenter',
+        position: { x: -25, y: 200 },
+      })
+    })
+
+    it('если элемент входит в горизонтальные границы и по умолчанию он отображается вниз, то отображаем его вниз по центру', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 25, y: 250 },
+        })
+      ).toEqual({
+        direction: 'downCenter',
+        position: { x: -25, y: 250 },
+      })
+    })
+
+    it('если элемент не входит ни в одну из границ, то используем его стандарное положение', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 1000, height: 1000 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 500, y: 500 },
+        })
+      ).toEqual({
+        direction: 'downCenter',
+        position: { x: 450, y: 500 },
+      })
+    })
+
+    it('если элемент входит в вертикальные границы, то отображаем', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 500, height: 25 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downLeft',
+          position: { x: 250, y: 12.5 },
+        })
+      ).toEqual({
+        direction: 'left',
+        position: { x: 150, y: 13 },
+      })
+    })
+
+    it('если элемент входит в вертикальные границы и по умолчанию он отображается вниз вправо, то отображаем его вправо', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 500, height: 25 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downRight',
+          position: { x: 250, y: 12.5 },
+        })
+      ).toEqual({
+        direction: 'right',
+        position: { x: 250, y: 13 },
+      })
+    })
+
+    it('если элемент входит в вертикальные и левую границы, то отображаем его вправо', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 500, height: 25 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downLeft',
+          position: { x: 0, y: 12.5 },
+        })
+      ).toEqual({
+        direction: 'right',
+        position: { x: 0, y: 13 },
+      })
+    })
+
+    it('если элемент входит в вертикальные и правую границы, то отображаем его влево', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 500, height: 25 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downRight',
+          position: { x: 500, y: 12.5 },
+        })
+      ).toEqual({
+        direction: 'left',
+        position: { x: 400, y: 13 },
+      })
+    })
+
+    it('если элемент выходит сразу за все границы, то используем первоначальные настройки', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 10, height: 10 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downRight',
+          position: { x: 5, y: 5 },
+        })
+      ).toEqual({
+        direction: 'downRight',
+        position: { x: 5, y: 5 },
+      })
+    })
+
+    it('если позиция элемента неизвестна возвращает первоначальные настройки позиционирования', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 10, height: 10 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downRight',
+          position: { x: undefined, y: undefined },
+        })
+      ).toEqual({
+        direction: 'downRight',
+        position: { x: undefined, y: undefined },
+      })
+    })
   })
 
   describe('если тултип спозициронирован относительно элемента', () => {

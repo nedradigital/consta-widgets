@@ -35,9 +35,7 @@ export type SingleBarChartGroups = ReadonlyArray<{
   }>
 }>
 
-export type Column = {
-  [key: string]: number | undefined
-}
+export type Column = Record<string, number | undefined>
 
 type Group = {
   values: readonly Column[]

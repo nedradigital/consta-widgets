@@ -29,11 +29,11 @@ type SelectedFiltersList = ReadonlyArray<{
   name: string
 }>
 
-/* istanbul ignore next */
-export const getOptionsForFilters = (filters: Filters, field: string) =>
-  filters
+export const getOptionsForFilters = (filters: Filters, field: string) => {
+  return filters
     .filter(({ field: filterField }) => filterField === field)
     .map(({ id, name }) => ({ value: id, label: name }))
+}
 
 export const getSelectedFiltersInitialState = (filters?: Filters) => {
   if (!filters) {
@@ -49,15 +49,14 @@ export const getSelectedFiltersInitialState = (filters?: Filters) => {
   }, {})
 }
 
-/* istanbul ignore next */
 export const fieldFiltersPresent = (tableFilters: Filters, field: string) => {
   return tableFilters.some(({ field: filterField }) => filterField === field)
 }
-/* istanbul ignore next */
-export const isSelectedFiltersPresent = (selectedFilters: SelectedFilters) =>
-  Object.values(selectedFilters).some(filterGroup => filterGroup.length > 0)
 
-/* istanbul ignore next */
+export const isSelectedFiltersPresent = (selectedFilters: SelectedFilters) => {
+  return Object.values(selectedFilters).some(filterGroup => filterGroup.length > 0)
+}
+
 export const getSelectedFiltersList = ({
   filters,
   selectedFilters,
@@ -113,7 +112,7 @@ export const filterTableData = <T extends TableRow>({
 
         for (const filterId of columnFilters) {
           const filter = filters.find(({ id }) => id === filterId)
-          const cellContent = String(row[columnName])
+          const cellContent = row[columnName]
 
           if (filter && filter.filterer(cellContent)) {
             cellIsValid = true
@@ -123,11 +122,9 @@ export const filterTableData = <T extends TableRow>({
 
         if (!cellIsValid) {
           rowIsValid = false
-          break
         }
       }
 
-      /* istanbul ignore next */
       if (!rowIsValid) {
         break
       }

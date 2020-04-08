@@ -57,7 +57,6 @@ type ComputedPositionAndDirectionProps = {
   direction: Direction
 } & ({ anchorClientRect: ClientRect } | AttachedToPosition)
 
-/* istanbul ignore next */
 export const getComputedPositionAndDirection = (
   props: ComputedPositionAndDirectionProps
 ): {
@@ -84,8 +83,8 @@ export const getComputedPositionAndDirection = (
   }
 
   const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
-  const anchorWidth = ('anchorClientRect' in props && props.anchorClientRect?.width) || 0
-  const anchorHeight = ('anchorClientRect' in props && props.anchorClientRect?.height) || 0
+  const anchorWidth = ('anchorClientRect' in props && props.anchorClientRect.width) || 0
+  const anchorHeight = ('anchorClientRect' in props && props.anchorClientRect.height) || 0
 
   const isInBorders = getIsInBorders({
     position: initialPosition,
