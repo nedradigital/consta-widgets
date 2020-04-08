@@ -146,13 +146,13 @@ export const RoadmapTooltip: React.FC<Props> = ({
         themeColorLight,
         css.main,
         {
-          left: css.left,
-          right: css.right,
+          left: '',
+          right: '',
           upLeft: css.upLeft,
-          upCenter: css.upCenter,
+          upCenter: '',
           upRight: css.upRight,
           downLeft: css.downLeft,
-          downCenter: css.downCenter,
+          downCenter: '',
           downRight: css.downRight,
         }[contentDirection]
       )}
@@ -169,6 +169,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
       isContentHoverable
       renderContent={renderContent}
       className={css.tooltip}
+      possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
     />
   )
 }

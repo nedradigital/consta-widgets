@@ -12,6 +12,15 @@ const isDirectionDown = (direction: Direction) => {
   return ['downLeft', 'downCenter', 'downRight'].includes(direction)
 }
 
+type IsInBorders = {
+  top: boolean
+  bottom: boolean
+  vertical: boolean
+  right: boolean
+  left: boolean
+  horizontal: boolean
+}
+
 export const getIsInBorders = ({
   position,
   parentSize,
@@ -24,14 +33,7 @@ export const getIsInBorders = ({
   tooltipSize: Size
   anchorSize?: Size
   offset?: number
-}): {
-  top: boolean
-  bottom: boolean
-  vertical: boolean
-  right: boolean
-  left: boolean
-  horizontal: boolean
-} => {
+}): IsInBorders => {
   const isInTopBorder = position.y - anchorSize.height <= tooltipSize.height + offset
   const isInBottomBorder = position.y >= parentSize.height - tooltipSize.height - offset
   const isInVerticalBorders = isInTopBorder && isInBottomBorder
@@ -50,11 +52,95 @@ export const getIsInBorders = ({
   }
 }
 
+const getDirections = (
+  isInBorders: IsInBorders,
+  initialDirection: Direction
+): readonly Direction[] => {
+  const mutableDirections: Direction[] = []
+
+  switch (true) {
+    case isInBorders.vertical && isInBorders.right: {
+      mutableDirections.push('left')
+    }
+    case isInBorders.vertical && isInBorders.left: {
+      mutableDirections.push('right')
+    }
+    case isInBorders.vertical: {
+      mutableDirections.push(
+        initialDirection.toLocaleLowerCase().includes('left') ? 'left' : 'right'
+      )
+    }
+    case isInBorders.horizontal && isInBorders.bottom: {
+      mutableDirections.push('upCenter')
+    }
+    case isInBorders.horizontal: {
+      mutableDirections.push(initialDirection.includes('up') ? 'upCenter' : 'downCenter')
+    }
+    case isInBorders.top && isInBorders.right: {
+      mutableDirections.push('downLeft')
+    }
+    case isInBorders.top && isInBorders.left: {
+      mutableDirections.push('downRight')
+    }
+    case isInBorders.bottom && isInBorders.right: {
+      mutableDirections.push('upLeft')
+    }
+    case isInBorders.bottom && isInBorders.left: {
+      mutableDirections.push('upRight')
+    }
+    case isInBorders.top: {
+      if (['left', 'upLeft'].includes(initialDirection)) {
+        mutableDirections.push('downLeft')
+      }
+      if (['right', 'upRight'].includes(initialDirection)) {
+        mutableDirections.push('downRight')
+      }
+      if (initialDirection === 'upCenter') {
+        mutableDirections.push('downCenter')
+      }
+      mutableDirections.push(initialDirection)
+    }
+    case isInBorders.right: {
+      if (isDirectionUp(initialDirection)) {
+        mutableDirections.push('upLeft')
+      }
+      if (isDirectionDown(initialDirection)) {
+        mutableDirections.push('downLeft')
+      }
+      mutableDirections.push('left')
+    }
+    case isInBorders.bottom: {
+      if (['left', 'downLeft'].includes(initialDirection)) {
+        mutableDirections.push('upLeft')
+      }
+      if (['right', 'downRight'].includes(initialDirection)) {
+        mutableDirections.push('upRight')
+      }
+      if (initialDirection === 'downCenter') {
+        mutableDirections.push('upCenter')
+      }
+      mutableDirections.push(initialDirection)
+    }
+    case isInBorders.left: {
+      if (isDirectionUp(initialDirection)) {
+        mutableDirections.push('upRight')
+      }
+      if (isDirectionDown(initialDirection)) {
+        mutableDirections.push('downRight')
+      }
+      mutableDirections.push('right')
+    }
+  }
+
+  return mutableDirections
+}
+
 type ComputedPositionAndDirectionProps = {
   tooltipSize: Size
   parentSize: Size
   offset?: number
   direction: Direction
+  possibleDirections: readonly Direction[]
 } & ({ anchorClientRect: ClientRect } | AttachedToPosition)
 
 export const getComputedPositionAndDirection = (
@@ -63,7 +149,13 @@ export const getComputedPositionAndDirection = (
   direction: Direction
   position: NonNullable<PositionState>
 } => {
-  const { offset = 0, parentSize, direction: initialDirection, tooltipSize } = props
+  const {
+    offset = 0,
+    parentSize,
+    direction: initialDirection,
+    tooltipSize,
+    possibleDirections,
+  } = props
 
   const initialPosition: NonNullable<PositionState> = {
     x: undefined,
@@ -145,82 +237,9 @@ export const getComputedPositionAndDirection = (
     return defaultPositionAndDirection
   }
 
-  const direction: Direction | undefined = (inBorders => {
-    switch (true) {
-      case inBorders.vertical && inBorders.right: {
-        return 'left'
-      }
-      case isInBorders.vertical && isInBorders.left: {
-        return 'right'
-      }
-      case isInBorders.vertical: {
-        return initialDirection.toLocaleLowerCase().includes('left') ? 'left' : 'right'
-      }
-      case isInBorders.horizontal && isInBorders.bottom: {
-        return 'upCenter'
-      }
-      case isInBorders.horizontal: {
-        return initialDirection.includes('up') ? 'upCenter' : 'downCenter'
-      }
-      case isInBorders.top && isInBorders.right: {
-        return 'downLeft'
-      }
-      case isInBorders.top && isInBorders.left: {
-        return 'downRight'
-      }
-      case isInBorders.bottom && isInBorders.right: {
-        return 'upLeft'
-      }
-      case isInBorders.bottom && isInBorders.left: {
-        return 'upRight'
-      }
-      case isInBorders.top: {
-        if (['left', 'upLeft'].includes(initialDirection)) {
-          return 'downLeft'
-        }
-        if (['right', 'upRight'].includes(initialDirection)) {
-          return 'downRight'
-        }
-        if (initialDirection === 'upCenter') {
-          return 'downCenter'
-        }
-        return initialDirection
-      }
-      case isInBorders.right: {
-        if (isDirectionUp(initialDirection)) {
-          return 'upLeft'
-        }
-        if (isDirectionDown(initialDirection)) {
-          return 'downLeft'
-        }
-        return 'left'
-      }
-      case isInBorders.bottom: {
-        if (['left', 'downLeft'].includes(initialDirection)) {
-          return 'upLeft'
-        }
-        if (['right', 'downRight'].includes(initialDirection)) {
-          return 'upRight'
-        }
-        if (initialDirection === 'downCenter') {
-          return 'upCenter'
-        }
-        return initialDirection
-      }
-      case isInBorders.left: {
-        if (isDirectionUp(initialDirection)) {
-          return 'upRight'
-        }
-        if (isDirectionDown(initialDirection)) {
-          return 'downRight'
-        }
-        return 'right'
-      }
-      default: {
-        return undefined
-      }
-    }
-  })(isInBorders)
+  const direction = getDirections(isInBorders, initialDirection).find(dir =>
+    possibleDirections.includes(dir)
+  )
 
   if (direction) {
     return {
