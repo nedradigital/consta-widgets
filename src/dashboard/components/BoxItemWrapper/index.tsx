@@ -47,7 +47,7 @@ export const BoxItemWrapper: React.FC<Props> = ({
   useLayoutEffect(() => {
     if (isEditingSettings && ref.current) {
       const rect = ref.current.getBoundingClientRect()
-      setPosition({ left: rect.right, top: rect.top })
+      setPosition({ left: rect.right, top: rect.top + window.scrollY })
 
       if (!portalEl) {
         // eslint-disable-next-line react-hooks/exhaustive-deps

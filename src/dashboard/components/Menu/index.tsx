@@ -53,7 +53,7 @@ export const Menu: React.FC<Props & MenuProps> = ({
       />
       <div className={css.buttons}>
         <button type="button" onClick={onClear}>
-          Clear
+          Сбросить
         </button>
       </div>
       <div className={css.settings}>

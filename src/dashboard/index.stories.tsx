@@ -4,35 +4,22 @@ import { boolean, number, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { Dataset, DataType } from '@/dashboard'
-
-import { Constructor, DashboardState, EMPTY_DASHBOARD } from './'
+import { Constructor, DashboardState } from './'
+import { exampleDashboardData, exampleDatasets, initialDashboardState } from './mockData'
 
 const getPadding = () => [number('padding x', 15), number('padding y', 15)] as const
 const getRowsCount = () => number('rowsCount', 4)
 
-export const exampleDatasets: readonly Dataset[] = [
-  {
-    name: 'Работа скважины',
-    type: DataType.LinearChart,
-    id: 'skvazhina',
-  },
-  {
-    name: 'Месторождение',
-    type: DataType.TableLegend,
-    id: 'field',
-  },
-  {
-    name: 'Пример переключателя',
-    type: DataType.Switch,
-    id: 'switchExample',
-  },
-]
 const cols = 12
 
-const storageName = 'story::dashboard'
+export const storageName = 'story::dashboard'
 
 const viewMode = false
+
+export const handleClear = () => {
+  localStorage.setItem(storageName, JSON.stringify(initialDashboardState))
+  location.reload()
+}
 
 const getStateFromStorage = (): DashboardState => {
   const str = localStorage.getItem(storageName)
@@ -41,7 +28,7 @@ const getStateFromStorage = (): DashboardState => {
     return JSON.parse(str)
   }
 
-  return EMPTY_DASHBOARD
+  return initialDashboardState
 }
 
 const setStateToStorage = (value: DashboardState) => {
@@ -49,7 +36,7 @@ const setStateToStorage = (value: DashboardState) => {
 }
 
 const DashboardStory = () => {
-  const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
+  const [dashboard, setDashboard] = React.useState<DashboardState>(initialDashboardState)
 
   React.useEffect(() => {
     setDashboard(getStateFromStorage())
@@ -63,17 +50,14 @@ const DashboardStory = () => {
   return (
     <div style={{ height: '100vh' }}>
       <Constructor
+        viewMode={boolean('viewMode', viewMode)}
         datasets={object('datasets', exampleDatasets)}
-        cols={object('cols', cols)}
         dashboard={dashboard}
         onChange={handler}
         onChangeVersion={handler}
-        onClear={() => {
-          localStorage.removeItem(storageName)
-          location.reload()
-        }}
-        viewMode={boolean('viewMode', viewMode)}
-        data={object('data', {})}
+        onClear={handleClear}
+        data={object('data', exampleDashboardData)}
+        cols={object('cols', cols)}
         baseWidthForScaling={number('baseWidthForScaling', 1024)}
         baseHeightForScaling={number('baseHeightForScaling', 768)}
         baseFontSize={number('baseFontSize', 16)}

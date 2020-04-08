@@ -24,7 +24,7 @@ type ConstructorProps = DashboardProps &
     onChangeVersion: (state: DashboardState) => void
   }
 
-const SUPPORTED_DASHBOARD_VERSION = currentMigration.versionTo
+export const SUPPORTED_DASHBOARD_VERSION = currentMigration.versionTo
 
 export const EMPTY_DASHBOARD: DashboardState = {
   version: SUPPORTED_DASHBOARD_VERSION,
