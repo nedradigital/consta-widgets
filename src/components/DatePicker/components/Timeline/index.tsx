@@ -15,7 +15,8 @@ import {
 } from 'date-fns'
 import { times } from 'lodash'
 
-import { DateRange, isDateRange } from '../..'
+import { DateRange } from '../..'
+import { isDateRange } from '../../helpers'
 
 import css from './index.css'
 

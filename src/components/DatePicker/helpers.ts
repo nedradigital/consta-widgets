@@ -1,6 +1,13 @@
-import { endOfMonth, startOfMonth } from 'date-fns'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { endOfMonth, isWithinInterval, startOfMonth } from 'date-fns'
 
-import { DateRange, isDateRange } from './'
+import { DateRange } from './'
+import { isDateFromInputIsFullyEntered } from './components/InputDate/helpers'
+
+export const isDateRange = (value?: Date | DateRange): value is DateRange =>
+  Array.isArray(value) &&
+  value.length === 2 &&
+  value.every(date => date instanceof Date || !isDefined(date))
 
 export const getCurrentVisibleDate = ({
   value,
@@ -23,4 +30,36 @@ export const getCurrentVisibleDate = ({
   }
 
   return selectedDate
+}
+
+export const isDateOutOfRange = ({
+  date,
+  minDate,
+  maxDate,
+}: {
+  date?: Date
+  minDate: Date
+  maxDate: Date
+}) => {
+  return !!date && !isWithinInterval(date, { start: minDate, end: maxDate })
+}
+
+export const isDateIsInvalid = ({
+  date,
+  minDate,
+  maxDate,
+}: {
+  date?: Date
+  minDate: Date
+  maxDate: Date
+}) => {
+  return (
+    !!date &&
+    isDateFromInputIsFullyEntered(date) &&
+    isDateOutOfRange({
+      date,
+      minDate,
+      maxDate,
+    })
+  )
 }

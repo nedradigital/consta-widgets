@@ -2,14 +2,11 @@ import { date as knobsDate, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import {
-  getDateMidnightFromString,
-  getInputValue,
-} from '@/components/DatePicker/components/InputDate'
 import { isValidDate } from '@/utils/type-guards'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { DatePicker, DateRange, sizes } from '.'
+import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'
 
 const setInputValue = (value?: string) => {
   if (!value) {

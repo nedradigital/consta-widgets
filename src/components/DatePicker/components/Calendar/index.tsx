@@ -16,7 +16,8 @@ import {
 } from 'date-fns'
 import * as _ from 'lodash'
 
-import { DateRange, isDateRange } from '@/components/DatePicker'
+import { DateRange } from '../../'
+import { isDateRange } from '../../helpers'
 
 import css from './index.css'
 
