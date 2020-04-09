@@ -9,6 +9,7 @@ import {
   endOfWeek,
   isBefore,
   isSameDay,
+  isSunday,
   isToday,
   isWithinInterval,
   startOfMonth,
@@ -202,14 +203,15 @@ export const Calendar: React.FC<Props> = ({
           !isDateRange(value) && css.isSingleDate,
           isDateRange(value) && css.isRange,
           isDateRange(value) && isHighlighted && css.isHighlighted,
-          isDateRange(value) && value[0] && !value[1] && css.isOnlyOneValue
+          isDateRange(value) && value[0] && !value[1] && css.isOnlyOneValue,
+          isDateRange(value) && isSunday(date) && css.isLastWeekDay
         )}
         onMouseEnter={() => handleHoverDate(date)}
         onMouseLeave={() => setHoveredDate(undefined)}
         onClick={() => handleSelectDate(date)}
       >
         <div className={css.cellContent}>
-          <Text tag="span" size="s" view="primary">
+          <Text tag="span" size="s">
             {date.getDate()}
           </Text>
         </div>
