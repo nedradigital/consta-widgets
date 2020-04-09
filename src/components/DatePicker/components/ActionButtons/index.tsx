@@ -19,7 +19,7 @@ type Props = {
   showQuartersSelector: boolean
   minDate: Date
   maxDate: Date
-  onSelect: (value: Date | DateRange) => void
+  onSelect: (value: DateRange) => void
   onApply: () => void
 }
 
@@ -72,7 +72,7 @@ export const ActionButtons: React.FC<Props> = ({
               disabled={!quarter.length}
               onClick={() => onSelect(quarter)}
             >
-              {idx + 1}кв. {currentYear}
+              {idx + 1} кв. {currentYear}
             </Button>
           ))}
       </div>
