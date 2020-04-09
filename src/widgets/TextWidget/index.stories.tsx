@@ -4,6 +4,7 @@ import { action } from '@storybook/addon-actions'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
+import { textParams } from '@/dashboard/widget-params'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import {
@@ -15,7 +16,6 @@ import {
   textAligns,
   textSpacings,
   TextWidgetContent,
-  typeNames,
 } from '.'
 
 storiesOf('widgets/TextWidget', module)
@@ -33,7 +33,7 @@ storiesOf('widgets/TextWidget', module)
         tooltip: <p>Контент тултипа</p>,
       }}
       params={{
-        type: select('type', typeNames, defaultParams.type),
+        type: select('type', textParams.typeNames, defaultParams.type),
         text: text('text', defaultParams.text),
         croppedLineCount: number('croppedLineCount', 0),
         croppedWithGradient: boolean('croppedWithGradient', false),
@@ -80,7 +80,7 @@ storiesOf('widgets/TextWidget', module)
       }}
       params={{
         text: text('title', defaultParams.text),
-        type: select('type', typeNames, defaultParams.type),
+        type: select('type', textParams.typeNames, defaultParams.type),
         croppedLineCount: number('croppedLineCount', 0),
         croppedWithGradient: boolean('croppedWithGradient', false),
       }}
@@ -94,7 +94,7 @@ storiesOf('widgets/TextWidget', module)
           'text',
           'Текст, который мы хотим перенести вот тут\nВот тут вот да и тут\nНу думаю смысл понятен'
         ),
-        type: select('type', typeNames, defaultParams.type),
+        type: select('type', textParams.typeNames, defaultParams.type),
         croppedLineCount: 0,
         croppedWithGradient: false,
       }}
@@ -108,7 +108,7 @@ storiesOf('widgets/TextWidget', module)
           'text',
           'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.'
         ),
-        type: select('type', typeNames, defaultParams.type),
+        type: select('type', textParams.typeNames, defaultParams.type),
         croppedLineCount: number('croppedLineCount', 4),
         croppedWithGradient: boolean('croppedWithGradient', true),
       }}

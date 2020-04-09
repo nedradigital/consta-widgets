@@ -7,12 +7,12 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { types } from '@/components/LegendItem'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { DataType } from '@/dashboard'
+import { TrafficLightParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 import { WidgetContentProps } from '@/utils/WidgetFactory'
 import {
   defaultParams as defaultTrafficLightParams,
-  Params as TrafficLightParams,
   TrafficLightWidgetContent,
 } from '@/widgets/TrafficLightWidget'
 

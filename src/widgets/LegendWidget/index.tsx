@@ -3,20 +3,13 @@ import { Position, Size, Type } from '@/components/LegendItem'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { LegendParams as Params } from '@/dashboard/widget-params'
 import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Legend
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  direction: Direction
-  labelType: Type
-  fontSize: Size
-  labelPosition: Position
-  lineBold?: boolean
-}
 
 type ParamValues<T> = { value: T; name: string }
 

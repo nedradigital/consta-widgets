@@ -4,22 +4,12 @@ import { ChoiceGroup } from '@gpn-design/uikit'
 
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { choiceGroupParams, ChoiceGroupParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.ChoiceGroup
 type Data = DataMap[typeof dataType]
-
-const sizes = ['xs', 's', 'm', 'l'] as const
-type Size = typeof sizes[number]
-
-const forms = ['default', 'round', 'brick'] as const
-type Form = typeof forms[number]
-
-type Params = {
-  size: Size
-  form?: Form
-}
 
 export const defaultParams: Params = {
   size: 's',
@@ -82,13 +72,13 @@ export const ChoiceGroupWidget = createWidget<Data, Params>({
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          values={sizes.map(i => ({ value: i, name: i }))}
+          values={choiceGroupParams.sizes.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('size', value)}
         />
         <WidgetSettingsSelect
           name="Форма"
           value={params.form}
-          values={forms.map(i => ({ value: i, name: i }))}
+          values={choiceGroupParams.forms.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('form', value)}
         />
       </>

@@ -3,13 +3,12 @@ import React, { useState } from 'react'
 import { ImagesList } from '@/components/ImagesList'
 import { ImagesPopup } from '@/components/ImagesPopup'
 import { DataMap, DataType } from '@/dashboard'
+import { ImagesParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Images
 type Data = DataMap[typeof dataType]
-
-type Params = { [key: string]: never }
 
 export const defaultParams: Params = {}
 

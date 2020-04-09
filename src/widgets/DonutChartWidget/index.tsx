@@ -1,16 +1,12 @@
 import { DonutChart } from '@/components/DonutChart'
-import { HalfDonut } from '@/components/DonutChart/components/Donut'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { DonutParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Donut
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  halfDonut?: HalfDonut
-}
 
 export const defaultParams: Params = {}
 

@@ -20,7 +20,10 @@ const createWidget = (name: string): WidgetItem => ({
   debugName: name,
   id: name,
   widgetType: widgetIdsByType.TextWidget,
-  params: {},
+  params: {
+    text: 'text',
+    type: 'text3',
+  },
 })
 
 describe('Grid helpers', () => {

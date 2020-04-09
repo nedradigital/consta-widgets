@@ -5,43 +5,12 @@ import { Button } from '@gpn-design/uikit'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
+import { buttonParams, ButtonParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Button
 type Data = DataMap[typeof dataType]
-
-const widths = ['full', 'auto'] as const
-type Width = typeof widths[number]
-
-const sizes = ['xs', 's', 'm', 'l'] as const
-type Size = typeof sizes[number]
-
-const views = ['clear', 'primary', 'secondary', 'ghost'] as const
-type View = typeof views[number]
-
-const iconAligns = ['left', 'right'] as const
-type IconAlign = typeof iconAligns[number]
-
-const forms = [
-  'default',
-  'brick',
-  'round',
-  'brick-round',
-  'round-brick',
-  'brick-default',
-  'default-brick',
-] as const
-type Form = typeof forms[number]
-
-type Params = {
-  size: Size
-  view: View
-  width: Width
-  form: Form
-  content?: string
-  withIcon?: IconAlign
-}
 
 export const defaultParams: Params = {
   size: 's',
@@ -81,25 +50,25 @@ export const ButtonWidget = createWidget<Data, Params>({
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          values={sizes.map(i => ({ value: i, name: i }))}
+          values={buttonParams.sizes.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('size', value)}
         />
         <WidgetSettingsSelect
           name="Вид"
           value={params.view}
-          values={views.map(i => ({ value: i, name: i }))}
+          values={buttonParams.views.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('view', value)}
         />
         <WidgetSettingsSelect
           name="Ширина"
           value={params.width}
-          values={widths.map(i => ({ value: i, name: i }))}
+          values={buttonParams.widths.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('width', value)}
         />
         <WidgetSettingsSelect
           name="Форма"
           value={params.form}
-          values={forms.map(i => ({ value: i, name: i }))}
+          values={buttonParams.forms.map(i => ({ value: i, name: i }))}
           onChange={value => onChangeParam('form', value)}
         />
         <WidgetSettingsText
@@ -111,7 +80,7 @@ export const ButtonWidget = createWidget<Data, Params>({
         <WidgetSettingsSelect
           name="Расположение иконки"
           value={params.withIcon}
-          values={iconAligns.map(item => ({ value: item, name: item || '--' }))}
+          values={buttonParams.iconAligns.map(item => ({ value: item, name: item || '--' }))}
           withEmptyValue
           onChange={value => onChangeParam('withIcon', value)}
         />

@@ -6,6 +6,29 @@ import * as _ from 'lodash'
 import { Migration } from '../..'
 import { Dashboard10 } from '../dashboard10'
 
+import {
+  BarChartParams,
+  ButtonParams,
+  CheckboxParams,
+  ChoiceGroupParams,
+  DatePickerParams,
+  DonutParams,
+  ImageParams,
+  ImagesParams,
+  LegendParams,
+  LinearChartParams,
+  MapParams,
+  MultiBarChartParams,
+  ProgressBarParams,
+  PyramidChartParams,
+  RadarChartParams,
+  RoadmapParams,
+  StatsParams,
+  TableLegendParams,
+  TextParams,
+  TrafficLightParams,
+} from './widget-params'
+
 export const widgetIdsByType = {
   BarChartWidget: '1a8a7577-36e3-4fe6-a23e-244a51cd37c8',
   ButtonWidget: '950e2e88-06e7-4429-86be-0a26dc93944e',
@@ -28,8 +51,6 @@ export const widgetIdsByType = {
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
   TrafficLightWidget: 'fbeb7619-ae6b-4742-ae62-deea18e1382d',
 } as const
-
-const widgetIds = Object.values(widgetIdsByType)
 
 export namespace CurrentDashboard {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
@@ -74,16 +95,37 @@ export namespace CurrentDashboard {
     }
   }
 
-  export type WidgetItem = {
+  type WidgetItemParams<WidgetType, Params> = {
     type: 'widget'
     id: string
     debugName: string
-    widgetType: typeof widgetIds[number]
+    widgetType: WidgetType
     params: CommonBoxItemParams & {
-      [key: string]: any
       datasetId?: string
-    }
+    } & Params
   }
+
+  export type WidgetItem =
+    | WidgetItemParams<typeof widgetIdsByType.BarChartWidget, BarChartParams>
+    | WidgetItemParams<typeof widgetIdsByType.ButtonWidget, ButtonParams>
+    | WidgetItemParams<typeof widgetIdsByType.CheckboxWidget, CheckboxParams>
+    | WidgetItemParams<typeof widgetIdsByType.ChoiceGroupWidget, ChoiceGroupParams>
+    | WidgetItemParams<typeof widgetIdsByType.DatePickerWidget, DatePickerParams>
+    | WidgetItemParams<typeof widgetIdsByType.DonutChartWidget, DonutParams>
+    | WidgetItemParams<typeof widgetIdsByType.ImagesWidget, ImagesParams>
+    | WidgetItemParams<typeof widgetIdsByType.ImageWidget, ImageParams>
+    | WidgetItemParams<typeof widgetIdsByType.LegendWidget, LegendParams>
+    | WidgetItemParams<typeof widgetIdsByType.LinearChartWidget, LinearChartParams>
+    | WidgetItemParams<typeof widgetIdsByType.MapWidget, MapParams>
+    | WidgetItemParams<typeof widgetIdsByType.MultiBarChartWidget, MultiBarChartParams>
+    | WidgetItemParams<typeof widgetIdsByType.ProgressBarWidget, ProgressBarParams>
+    | WidgetItemParams<typeof widgetIdsByType.PyramidChartWidget, PyramidChartParams>
+    | WidgetItemParams<typeof widgetIdsByType.RadarChartWidget, RadarChartParams>
+    | WidgetItemParams<typeof widgetIdsByType.RoadmapWidget, RoadmapParams>
+    | WidgetItemParams<typeof widgetIdsByType.StatsWidget, StatsParams>
+    | WidgetItemParams<typeof widgetIdsByType.TableLegendWidget, TableLegendParams>
+    | WidgetItemParams<typeof widgetIdsByType.TextWidget, TextParams>
+    | WidgetItemParams<typeof widgetIdsByType.TrafficLightWidget, TrafficLightParams>
 
   export type BoxItem = WidgetItem | GridItem | SwitchItem
 
@@ -104,7 +146,10 @@ export namespace CurrentDashboard {
   }
 }
 
-const isWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+const isCurrentWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+  item.type === 'widget'
+
+const isDashboard10Widget = (item: Dashboard10.BoxItem): item is Dashboard10.WidgetItem =>
   item.type === 'widget'
 
 export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.State> = {
@@ -112,9 +157,40 @@ export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.Sta
   changes: ['Добавлена кастомизация текстового виджета'],
   // MIGRATION_GENERATION:METHOD:START
   up: data => {
+    const updateItem = (item: Dashboard10.BoxItem): CurrentDashboard.BoxItem => {
+      if (item.type === 'switch') {
+        return {
+          ...item,
+          displays: item.displays.map(widgets => widgets.map(updateItem).filter(isCurrentWidget)),
+        }
+      }
+
+      if (item.type === 'grid') {
+        return {
+          ...item,
+          grid: {
+            ...item.grid,
+            items: item.grid.items.map(row =>
+              row.map(column => column.map(updateItem).filter(isCurrentWidget))
+            ),
+          },
+        }
+      }
+
+      return item as CurrentDashboard.WidgetItem
+    }
+
     return {
       ...data,
       version: 11,
+      config: Object.keys(data.config).reduce((newConfig, key) => {
+        const items = data.config[key]
+
+        return {
+          ...newConfig,
+          [key]: items.map(updateItem).filter(isDefined),
+        }
+      }, {}),
     }
   },
   // MIGRATION_GENERATION:METHOD:END
@@ -125,7 +201,9 @@ export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.Sta
       if (item.type === 'switch') {
         return {
           ...item,
-          displays: item.displays.map(widgets => widgets.map(updateItem).filter(isWidget)),
+          displays: item.displays.map(widgets =>
+            widgets.map(updateItem).filter(isDashboard10Widget)
+          ),
         }
       }
 
@@ -135,7 +213,7 @@ export const currentMigration: Migration<Dashboard10.State, CurrentDashboard.Sta
           grid: {
             ...item.grid,
             items: item.grid.items.map(row =>
-              row.map(column => column.map(updateItem).filter(isWidget))
+              row.map(column => column.map(updateItem).filter(isDashboard10Widget))
             ),
           },
         }

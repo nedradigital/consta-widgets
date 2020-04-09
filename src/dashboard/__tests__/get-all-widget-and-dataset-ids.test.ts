@@ -10,6 +10,8 @@ const createTextWidget = (name: string, params = {}) =>
     widgetType: widgetIdsByType.TextWidget,
     params: {
       ...params,
+      text: 'text',
+      type: 'text3',
       datasetId: `datasetId${name}`,
     },
   } as const)

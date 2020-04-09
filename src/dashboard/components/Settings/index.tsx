@@ -7,7 +7,15 @@ import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
-import { BoxItem, BoxItemMarginSize, BoxItemParams, Dataset, DataType } from '@/dashboard'
+import {
+  BoxItem,
+  BoxItemMarginSize,
+  BoxItemParams,
+  Dataset,
+  DataType,
+  SwitchItem,
+  WidgetItem,
+} from '@/dashboard'
 import { marginSizeValues } from '@/dashboard/size-constants'
 import { getFormattedMarginName } from '@/utils/size-name-formatters'
 import { themeColorLight } from '@/utils/theme'
@@ -17,17 +25,17 @@ import { OnChangeParam } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
-type Props = {
-  item: BoxItem
+type Props<T> = {
+  item: T
   datasets: readonly Dataset[]
-  onChange: (newParams: BoxItem) => void
+  onChange: (newParams: T) => void
 }
 
 const marginSizes = Object.keys(marginSizeValues) as readonly BoxItemMarginSize[]
 
 const stopDrag = (event: React.MouseEvent<HTMLDivElement>) => event.stopPropagation()
 
-export const Settings: React.FC<Props> = props => {
+export const Settings = <T extends BoxItem>(props: Props<T>) => {
   return (
     <div
       className={classnames(themeColorLight, css.main)}
@@ -40,12 +48,12 @@ export const Settings: React.FC<Props> = props => {
   )
 }
 
-const DatasetSelect: React.FC<Props & { dataType: DataType }> = ({
+const DatasetSelect = <T extends WidgetItem | SwitchItem>({
   datasets,
   dataType,
   onChange,
   item,
-}) => {
+}: Props<T> & { dataType: DataType }) => {
   if (isGrid(item)) {
     return null
   }
@@ -65,7 +73,7 @@ const DatasetSelect: React.FC<Props & { dataType: DataType }> = ({
   )
 }
 
-const SettingsList: React.FC<Props> = ({ item, onChange, datasets }) => {
+const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>) => {
   const { params } = item
 
   const onChangeParam: OnChangeParam<BoxItemParams> = (paramName, newValue) =>
