@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Text } from '@gpn-design/uikit'
@@ -42,6 +42,7 @@ type Props = {
   isContentHoverable?: boolean
   offset?: number
   withArrow?: boolean
+  possibleDirections?: readonly Direction[]
 } & (AttachedToAnchor | AttachedToPosition) &
   (
     | {
@@ -72,11 +73,12 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     isContentHoverable,
     offset = 0,
     withArrow = true,
+    possibleDirections = directions,
   } = props
 
   const mainRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(mainRef)
-  const [position, setPosition] = useState<PositionState>()
+  const [position, setPosition] = React.useState<PositionState>()
   const [direction, setDirection] = React.useState<Direction>(passedDirection)
 
   React.useLayoutEffect(() => {
@@ -113,6 +115,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         parentSize: TOOLTIP_PARENT_ELEMENT.getBoundingClientRect(),
         offset,
         direction: passedDirection,
+        possibleDirections,
         ...basePositionData,
       })
 
@@ -127,7 +130,18 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         setDirection(computedDirection)
       }
     }
-  }, [props, isVisible, mainRef, position, direction, passedDirection, offset, width, height])
+  }, [
+    props,
+    isVisible,
+    mainRef,
+    position,
+    direction,
+    passedDirection,
+    offset,
+    width,
+    height,
+    possibleDirections,
+  ])
 
   if (!isVisible || !isDefinedPosition(position)) {
     return null

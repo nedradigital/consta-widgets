@@ -1,12 +1,8 @@
-@custom-selector :--isLeft .left;
-@custom-selector :--isRight .right;
 @custom-selector :--isTop .upLeft, .upRight;
 @custom-selector :--isBottom .downLeft, .downRight;
 @custom-selector :--isTopLeft .upLeft;
-@custom-selector :--isTopCenter .upCenter;
 @custom-selector :--isTopRight .upRight;
 @custom-selector :--isBottomLeft .downLeft;
-@custom-selector :--isBottomCenter .downCenter;
 @custom-selector :--isBottomRight .downRight;
 
 .tooltip {
@@ -26,7 +22,7 @@
   flex-direction: var(--flex-direction);
   justify-content: flex-end;
 
-  min-width: calc-size(315);
+  width: calc-size(315);
   height: calc-size(200);
 
   &:--isBottom {
@@ -36,16 +32,6 @@
   &:--isTopLeft,
   &:--isBottomLeft {
     --align-items: flex-end;
-  }
-
-  &:--isLeft {
-    --flex-direction: row;
-    --align-items: center;
-  }
-
-  &:--isRight {
-    --flex-direction: row-reverse;
-    --align-items: center;
   }
 }
 
@@ -81,30 +67,6 @@
   :--isBottomRight & {
     --border-top-right-radius: var(--control-radius);
   }
-
-  :--isTopCenter & {
-    --border-bottom-left-radius: var(--control-radius);
-    --border-bottom-right-radius: var(--control-radius);
-  }
-
-  :--isBottomCenter & {
-    --border-top-left-radius: var(--control-radius);
-    --border-top-right-radius: var(--control-radius);
-  }
-
-  :--isLeft & {
-    --border-top-right-radius: var(--control-radius);
-    --border-bottom-right-radius: var(--control-radius);
-
-    flex-direction: column;
-  }
-
-  :--isRight & {
-    --border-top-left-radius: var(--control-radius);
-    --border-bottom-left-radius: var(--control-radius);
-
-    flex-direction: column;
-  }
 }
 
 .button {
@@ -127,13 +89,6 @@
     width: 27px;
 
     border-left: 1px solid var(--color-control-bg-border-default);
-  }
-
-  :--isLeft &.comment,
-  :--isRight &.comment {
-    width: 26px;
-
-    border-left: none;
   }
 }
 

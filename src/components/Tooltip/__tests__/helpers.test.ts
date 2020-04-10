@@ -1,5 +1,7 @@
 import { getComputedPositionAndDirection, getIsInBorders } from '@/components/Tooltip/helpers'
 
+import { directions } from '../'
+
 const PARENT_SIZE = {
   width: 500,
   height: 500,
@@ -392,13 +394,18 @@ describe('getComputedPositionAndDirection', () => {
   const ANCHOR_OFFSET = 5
 
   describe('если тултип спозициронирован относительно координат', () => {
+    const params = {
+      tooltipSize: ELEMENT_SIZE,
+      parentSize: PARENT_SIZE,
+      possibleDirections: directions,
+    }
+
     it('если позиция входит в верхнюю левую границу, то переворачиваем элемент вниз и ровняем по левому краю', () => {
       const position = { x: 50, y: 50 }
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -416,8 +423,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'left',
         })
@@ -428,8 +434,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'right',
         })
@@ -440,8 +445,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upLeft',
         })
@@ -452,8 +456,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -464,8 +467,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upRight',
         })
@@ -476,8 +478,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downLeft',
         })
@@ -488,8 +489,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downCenter',
         })
@@ -500,8 +500,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downRight',
         })
@@ -516,8 +515,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -532,8 +530,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upRight',
         })
@@ -544,8 +541,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -556,8 +552,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upLeft',
         })
@@ -568,8 +563,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'left',
         })
@@ -580,8 +574,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'right',
         })
@@ -592,8 +585,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downRight',
         })
@@ -604,8 +596,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downCenter',
         })
@@ -616,8 +607,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downLeft',
         })
@@ -632,8 +622,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -648,8 +637,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'left',
         })
@@ -660,8 +648,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'right',
         })
@@ -672,8 +659,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downLeft',
         })
@@ -684,8 +670,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downCenter',
         })
@@ -696,8 +681,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downRight',
         })
@@ -708,8 +692,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upLeft',
         })
@@ -720,8 +703,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -732,8 +714,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upRight',
         })
@@ -748,8 +729,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -764,8 +744,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'left',
         })
@@ -776,8 +755,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'right',
         })
@@ -788,8 +766,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upLeft',
         })
@@ -800,8 +777,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upCenter',
         })
@@ -812,8 +788,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'upRight',
         })
@@ -824,8 +799,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downLeft',
         })
@@ -836,8 +810,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downCenter',
         })
@@ -848,8 +821,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'downRight',
         })
@@ -864,8 +836,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
+          ...params,
           position,
           direction: 'right',
         })
@@ -878,6 +849,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в горизонтальные и нижнюю границы, то отображаем его вверх по центру', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 50, height: 500 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downCenter',
@@ -892,6 +864,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в горизонтальные границы и по умолчанию он отображается вверх, то отображаем его вверх по центру', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 50, height: 500 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'upRight',
@@ -906,6 +879,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в горизонтальные границы и по умолчанию он отображается вниз, то отображаем его вниз по центру', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 50, height: 500 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downCenter',
@@ -920,6 +894,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент не входит ни в одну из границ, то используем его стандарное положение', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 1000, height: 1000 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downCenter',
@@ -934,6 +909,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в вертикальные границы, то отображаем', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 500, height: 25 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downLeft',
@@ -948,6 +924,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в вертикальные границы и по умолчанию он отображается вниз вправо, то отображаем его вправо', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 500, height: 25 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downRight',
@@ -962,6 +939,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в вертикальные и левую границы, то отображаем его вправо', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 500, height: 25 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downLeft',
@@ -976,6 +954,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент входит в вертикальные и правую границы, то отображаем его влево', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 500, height: 25 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downRight',
@@ -990,6 +969,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если элемент выходит сразу за все границы, то используем первоначальные настройки', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 10, height: 10 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downRight',
@@ -1004,6 +984,7 @@ describe('getComputedPositionAndDirection', () => {
     it('если позиция элемента неизвестна возвращает первоначальные настройки позиционирования', () => {
       expect(
         getComputedPositionAndDirection({
+          ...params,
           parentSize: { width: 10, height: 10 },
           tooltipSize: { width: 100, height: 50 },
           direction: 'downRight',
@@ -1017,6 +998,13 @@ describe('getComputedPositionAndDirection', () => {
   })
 
   describe('если тултип спозициронирован относительно элемента', () => {
+    const params = {
+      tooltipSize: ELEMENT_SIZE,
+      parentSize: PARENT_SIZE,
+      offset: ANCHOR_OFFSET,
+      possibleDirections: directions,
+    }
+
     it('если якорь входит в верхнюю левую границу, то переворачиваем элемент вниз и ровняем по левому краю', () => {
       const anchorClientRect = {
         ...ANCHOR_SIZE,
@@ -1028,9 +1016,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1054,9 +1040,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'left',
         })
@@ -1070,9 +1054,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'right',
         })
@@ -1086,9 +1068,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upLeft',
         })
@@ -1102,9 +1082,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1118,9 +1096,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upRight',
         })
@@ -1134,9 +1110,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downLeft',
         })
@@ -1150,9 +1124,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1166,9 +1138,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downRight',
         })
@@ -1192,9 +1162,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1215,9 +1183,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upRight',
         })
@@ -1228,9 +1194,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1241,9 +1205,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upLeft',
         })
@@ -1254,9 +1216,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'left',
         })
@@ -1267,9 +1227,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'right',
         })
@@ -1280,9 +1238,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downRight',
         })
@@ -1293,9 +1249,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1306,9 +1260,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downLeft',
         })
@@ -1329,9 +1281,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1352,9 +1302,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'left',
         })
@@ -1365,9 +1313,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'right',
         })
@@ -1378,9 +1324,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downLeft',
         })
@@ -1391,9 +1335,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1404,9 +1346,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downRight',
         })
@@ -1417,9 +1357,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upLeft',
         })
@@ -1430,9 +1368,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1443,9 +1379,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upRight',
         })
@@ -1466,9 +1400,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1489,9 +1421,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'left',
         })
@@ -1502,9 +1432,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'right',
         })
@@ -1515,9 +1443,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upLeft',
         })
@@ -1528,9 +1454,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upCenter',
         })
@@ -1541,9 +1465,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'upRight',
         })
@@ -1554,9 +1476,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downLeft',
         })
@@ -1567,9 +1487,7 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downCenter',
         })
@@ -1580,15 +1498,30 @@ describe('getComputedPositionAndDirection', () => {
 
       expect(
         getComputedPositionAndDirection({
-          tooltipSize: ELEMENT_SIZE,
-          parentSize: PARENT_SIZE,
-          offset: ANCHOR_OFFSET,
+          ...params,
           anchorClientRect,
           direction: 'downRight',
         })
       ).toEqual({
         direction: 'downRight',
         position: { x: 0, y: 230 },
+      })
+    })
+  })
+
+  describe('если список разрешенных сторон состоит не из всех возможных вариантов', () => {
+    it('всегда отображаем элемент вниз', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 25, y: 500 },
+          possibleDirections: ['downCenter', 'downLeft', 'downRight'],
+        })
+      ).toEqual({
+        direction: 'downCenter',
+        position: { x: -25, y: 500 },
       })
     })
   })
