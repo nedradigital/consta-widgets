@@ -1,6 +1,6 @@
 import { endOfDay, startOfDay } from 'date-fns'
 
-import { getQuarters } from '@/components/DatePicker/components/ActionButtons'
+import { getQuarters } from '../helpers'
 
 const QUARTERS_START_AND_END = [
   [startOfDay(new Date(2019, 0, 1)), endOfDay(new Date(2019, 2, 31))],

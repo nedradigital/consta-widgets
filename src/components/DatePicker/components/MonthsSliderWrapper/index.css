@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+
+  user-select: none;
+}
+
+.button {
+  flex-shrink: 0;
+}

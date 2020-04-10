@@ -1,9 +1,10 @@
 import { IconCalendar, Input } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { Size } from '@/components/DatePicker'
 import { Tooltip } from '@/components/Tooltip'
 import { isValidDate } from '@/utils/type-guards'
+
+import { Size } from '../../'
 
 import {
   getDateMidnightFromString,

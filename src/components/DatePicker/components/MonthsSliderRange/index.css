@@ -1,0 +1,72 @@
+.timeline {
+  --height: var(--control-height-m);
+  --z-index: 1;
+
+  /* задается в js */
+  --tick-width: 1px;
+
+  display: flex;
+  overflow-x: hidden;
+
+  width: 100%;
+  height: var(--height);
+  margin: 0 var(--space-xs);
+
+  border-radius: var(--control-radius);
+  background-color: var(--color-control-bg-ghost);
+}
+
+.selected {
+  position: absolute;
+
+  height: 100%;
+
+  background-color: rgba(0, 120, 210, 0.3);
+}
+
+.year {
+  position: relative;
+
+  display: flex;
+}
+
+.yearName {
+  position: absolute;
+  bottom: var(--line-height-text-2xs);
+  left: 50%;
+
+  transform: translateX(-50%);
+}
+
+.ticks {
+  position: relative;
+
+  display: flex;
+
+  transition: transform 0.4s;
+}
+
+.tick {
+  z-index: calc(var(--z-index) + 2);
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  width: var(--tick-width);
+  height: 100%;
+
+  cursor: pointer;
+}
+
+.selector {
+  position: absolute;
+
+  width: calc(2 * var(--tick-width));
+  height: var(--height);
+
+  pointer-events: none;
+
+  border-radius: var(--control-radius);
+  background-color: var(--color-control-bg-ghost);
+}

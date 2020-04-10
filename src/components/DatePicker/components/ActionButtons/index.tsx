@@ -1,52 +1,16 @@
 import { Button } from '@gpn-design/uikit'
-import {
-  addQuarters,
-  differenceInQuarters,
-  endOfDay,
-  endOfQuarter,
-  endOfYear,
-  startOfDay,
-  startOfYear,
-} from 'date-fns'
-import { times } from 'lodash'
 
-import { DateRange } from '@/components/DatePicker'
+import { DateLimitProps, DateRange } from '../../'
 
+import { getQuarters } from './helpers'
 import css from './index.css'
 
 type Props = {
   currentVisibleDate: Date
   showQuartersSelector: boolean
-  minDate: Date
-  maxDate: Date
   onSelect: (value: DateRange) => void
   onApply: () => void
-}
-
-export const getQuarters = ({
-  date,
-  minDate,
-  maxDate,
-}: {
-  date: Date
-  minDate: Date
-  maxDate: Date
-}): readonly DateRange[] => {
-  const startDate = startOfYear(date)
-  const endDate = endOfYear(date)
-  const quarterAmount = differenceInQuarters(endDate, startDate) + 1
-
-  return times(quarterAmount, index => {
-    const start = startOfDay(addQuarters(startDate, index))
-    const end = endOfDay(endOfQuarter(start))
-
-    if (end < minDate || start > maxDate) {
-      return []
-    }
-
-    return [start, end]
-  })
-}
+} & DateLimitProps
 
 export const ActionButtons: React.FC<Props> = ({
   currentVisibleDate,

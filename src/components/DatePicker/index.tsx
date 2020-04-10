@@ -11,7 +11,8 @@ import { themeColorLight } from '@/utils/theme'
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
 import { InputDate } from './components/InputDate'
-import { Timeline } from './components/Timeline'
+import { MonthsSliderRange } from './components/MonthsSliderRange'
+import { MonthsSliderSingle } from './components/MonthsSliderSingle'
 import { getCurrentVisibleDate, isDateIsInvalid, isDateRange } from './helpers'
 // TODO: использовать иконку из UI-кита https://jira.csssr.io/browse/GDC-36
 import { ReactComponent as IconWarning } from './images/icon_warning.svg'
@@ -26,44 +27,46 @@ export type StyleProps = {
   size?: Size
 }
 
-type BaseProps = {
+export type DateLimitProps = {
   minDate: Date
   maxDate: Date
 }
 
+export type ValueProps<V> = {
+  value?: V
+}
+
 type RenderControls<V> = (
   props: {
-    value?: V
     onChange: (value?: V) => void
     isInvalid: boolean
     tooltipContent?: React.ReactNode
     isCalendarOpened: boolean
-  } & StyleProps
+  } & ValueProps<V> &
+    StyleProps
 ) => React.ReactNode
 
 type SingleProps = {
   type: 'date'
-  value?: Date
   onChange: (value?: Date) => void
   renderControls?: RenderControls<Date>
-}
+} & ValueProps<Date>
 
 type RangeProps = {
   type: 'date-range'
-  value?: DateRange
   onChange: (value?: DateRange) => void
   renderControls?: RenderControls<DateRange>
-}
+} & ValueProps<DateRange>
 
-export type Data = BaseProps & (SingleProps | RangeProps)
+export type Data = DateLimitProps & (SingleProps | RangeProps)
 
-type Props = BaseProps & StyleProps & (SingleProps | RangeProps)
+type Props = DateLimitProps & StyleProps & (SingleProps | RangeProps)
 
 const OFFSET_FROM_CONTROLS = 4
 
 const formatOutOfRangeDate = (date: Date) => format(date, 'dd.MM.yyyy')
 
-const DateOutOfRangeTooptipContent: React.FC<BaseProps> = ({ minDate, maxDate }) => {
+const DateOutOfRangeTooptipContent: React.FC<DateLimitProps> = ({ minDate, maxDate }) => {
   return (
     <div className={css.warningTooltip}>
       <IconWarning className={css.iconWarning} />
@@ -110,6 +113,15 @@ export const DatePicker: React.FC<Props> = props => {
     getCurrentVisibleDate({ value: props.value, minDate, maxDate })
   )
   const [currentValue, changeCurrentValue] = useState(props.value)
+  const baseCommonProps = {
+    currentVisibleDate,
+    minDate,
+    maxDate,
+  }
+  const monthsPanelCommonProps = {
+    ...baseCommonProps,
+    onChange: setCurrentVisibleDate,
+  }
 
   const handleApplyDate = () => {
     if (currentValue) {
@@ -213,25 +225,18 @@ export const DatePicker: React.FC<Props> = props => {
         direction="downRight"
         isContentHoverable
       >
-        <Timeline
-          currentVisibleDate={currentVisibleDate}
-          minDate={minDate}
-          maxDate={maxDate}
-          value={currentValue}
-          onChange={setCurrentVisibleDate}
-        />
-        <Calendar
-          minDate={minDate}
-          maxDate={maxDate}
-          value={currentValue}
-          currentVisibleDate={currentVisibleDate}
-          onSelect={handleSelectDate}
-        />
+        {props.type === 'date' ? (
+          <MonthsSliderSingle {...monthsPanelCommonProps} />
+        ) : (
+          <MonthsSliderRange
+            {...monthsPanelCommonProps}
+            value={isDateRange(currentValue) ? currentValue : undefined}
+          />
+        )}
+        <Calendar {...baseCommonProps} value={currentValue} onSelect={handleSelectDate} />
         <ActionButtons
+          {...baseCommonProps}
           showQuartersSelector={props.type === 'date-range'}
-          minDate={minDate}
-          maxDate={maxDate}
-          currentVisibleDate={currentVisibleDate}
           onApply={handleApplyDate}
           onSelect={handleSelectQuarter}
         />
