@@ -24,28 +24,28 @@
   }
 }
 
-.rowL {
-  height: 45px;
-}
-
-.rowM {
-  height: 37px;
-}
-
-.rowS {
-  height: 30px;
-}
-
 .cell {
-  --column-padding-horizontal: var(--space-m);
-  --column-padding-vertical: var(--space-s);
+  --cell-padding-horizontal: var(--space-m);
+  --cell-padding-vertical: var(--space-s);
 
-  padding-top: var(--column-padding-vertical);
-  padding-right: calc(var(--column-padding-horizontal) + var(--resizer-width));
-  padding-bottom: var(--column-padding-vertical);
-  padding-left: var(--column-padding-horizontal);
+  padding-top: var(--cell-padding-vertical);
+  padding-right: calc(var(--cell-padding-horizontal) + var(--resizer-width));
+  padding-bottom: var(--cell-padding-vertical);
+  padding-left: var(--cell-padding-horizontal);
 
   vertical-align: top;
+
+  &.sizeL {
+    --cell-padding-vertical: var(--space-s);
+  }
+
+  &.sizeM {
+    --cell-padding-vertical: var(--space-xs);
+  }
+
+  &.sizeS {
+    --cell-padding-vertical: var(--space-2xs);
+  }
 
   &.isHeader {
     position: relative;
