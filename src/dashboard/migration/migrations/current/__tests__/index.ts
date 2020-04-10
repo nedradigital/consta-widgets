@@ -8,7 +8,9 @@ import CommonBoxItemParams = CurrentDashboard.CommonBoxItemParams
 
 const createTextWidget = (
   name: string,
-  widgetType: CurrentDashboard.WidgetItem['widgetType'] | Dashboard10.WidgetItem['widgetType'],
+  widgetType:
+    | typeof CurrentDashboardWidgetIdsByType.TextWidget
+    | typeof Dashboard10WidgetIdsByType.TextWidget,
   params = {}
 ) =>
   ({
@@ -16,7 +18,11 @@ const createTextWidget = (
     debugName: name,
     id: name,
     widgetType,
-    params,
+    params: {
+      text: 'text',
+      type: 'text1',
+      ...params,
+    },
   } as const)
 
 const commonBoxItemsParams: CommonBoxItemParams & { datasetId?: string } = {
@@ -259,7 +265,14 @@ describe('currentMigration', () => {
             debugName: '2',
             id: '2',
             widgetType: CurrentDashboardWidgetIdsByType.BarChartWidget,
-            params: {},
+            params: {
+              orientation: 'vertical',
+              size: 'm',
+              gridTicks: 4,
+              valuesTicks: 1,
+              showValues: false,
+              unitPosition: 'none',
+            },
           },
         ],
         Box1: [
@@ -316,7 +329,14 @@ describe('currentMigration', () => {
             debugName: '2',
             id: '2',
             widgetType: Dashboard10WidgetIdsByType.BarChartWidget,
-            params: {},
+            params: {
+              orientation: 'vertical',
+              size: 'm',
+              gridTicks: 4,
+              valuesTicks: 1,
+              showValues: false,
+              unitPosition: 'none',
+            },
           },
         ],
         Box1: [

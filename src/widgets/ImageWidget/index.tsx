@@ -2,13 +2,12 @@ import React from 'react'
 
 import { Image } from '@/components/Image'
 import { DataMap, DataType } from '@/dashboard'
+import { ImageParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Image
 type Data = DataMap[typeof dataType]
-
-type Params = {}
 
 export const defaultParams: Params = {}
 

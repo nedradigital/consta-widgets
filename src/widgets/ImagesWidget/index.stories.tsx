@@ -8,6 +8,7 @@ import { noop } from 'lodash'
 
 import { BoxItem } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
+import { widgetIdsByType } from '@/dashboard/migration/migrations/dashboard9'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
@@ -31,7 +32,7 @@ storiesOf('widgets/ImagesWidget', module)
         type: 'widget',
         debugName: 'ImagesWidget',
         id,
-        widgetType: ImagesWidget.id,
+        widgetType: widgetIdsByType.ImagesWidget,
         params: defaultParams,
       },
     ]

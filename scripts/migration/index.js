@@ -7,6 +7,7 @@ const PATH_MIGRATIONS = path.resolve('src/dashboard/migration/migrations')
 const PATH_TEMPLATES = path.resolve('scripts/migration')
 const PATH_CURRENT_MIGRATION = path.join(PATH_MIGRATIONS, 'current')
 const PATH_CURRENT_MIGRATION_TESTS = path.join(PATH_CURRENT_MIGRATION, '__tests__')
+const WIDGET_PARAMS_FOLDER_NAME = 'widget-params'
 
 const spinner = ora().start()
 
@@ -54,6 +55,9 @@ const sourceMigration = getRawData(path.join(PATH_CURRENT_MIGRATION, 'index.ts')
 const sourceMigrationTest = getRawData(path.join(PATH_CURRENT_MIGRATION_TESTS, 'index.ts'))
 const sourceMigrationTestTemplate = getRawData(path.join(PATH_TEMPLATES, 'test.tpl'))
 const sourceMigrationsRegister = getRawData(path.join(PATH_MIGRATIONS, 'index.ts'))
+const fileNamesFromWidgetParams = fs.readdirSync(
+  path.join(PATH_CURRENT_MIGRATION, WIDGET_PARAMS_FOLDER_NAME)
+)
 
 const version = getCurrentVersion(sourceMigration)
 const nextVersion = version + 1
@@ -61,9 +65,10 @@ const nextVersion = version + 1
 // Пути к директориям зависящим от текущей версии
 const PATH_PREV_MIGRATION = path.join(PATH_MIGRATIONS, `dashboard${version}`)
 const PATH_PREV_MIGRATION_TESTS = path.join(PATH_PREV_MIGRATION, '__tests__')
+const PATH_PREV_MIGRATION_WIGDET_PARAMS = path.join(PATH_PREV_MIGRATION, WIDGET_PARAMS_FOLDER_NAME)
 
 spinner.info('Создание директорий для новой миграции')
-createFolders([PATH_PREV_MIGRATION, PATH_PREV_MIGRATION_TESTS])
+createFolders([PATH_PREV_MIGRATION, PATH_PREV_MIGRATION_TESTS, PATH_PREV_MIGRATION_WIGDET_PARAMS])
 
 spinner.info('Регистрация миграции в реестре всех миграций')
 fs.writeFileSync(
@@ -98,6 +103,11 @@ fs.writeFileSync(
     .replace(/CurrentDashboard/g, `Dashboard${version}`)
     .replace(/currentMigration/g, `migration${version}`)
 )
+
+fileNamesFromWidgetParams.forEach(fileName => {
+  const source = getRawData(path.join(PATH_CURRENT_MIGRATION, WIDGET_PARAMS_FOLDER_NAME, fileName))
+  fs.writeFileSync(path.join(PATH_PREV_MIGRATION_WIGDET_PARAMS, fileName), source)
+})
 
 spinner.info('Обновление текущей миграции')
 fs.writeFileSync(

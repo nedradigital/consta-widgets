@@ -3,16 +3,12 @@ import React from 'react'
 import { Checkbox } from '@gpn-design/uikit'
 
 import { DataMap, DataType } from '@/dashboard'
+import { CheckboxParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Checkbox
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  size: 'm' | 'l'
-  content?: React.ReactNode
-}
 
 export const defaultParams: Params = {
   size: 'm',

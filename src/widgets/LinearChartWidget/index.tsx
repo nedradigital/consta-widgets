@@ -1,33 +1,15 @@
 import { LinearChart } from '@/components/LinearChart'
-import { XLabelsPosition, YLabelsPosition } from '@/components/LinearChart/components/Axis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
+import { LinearChartParams as Params, textParams } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
-import { TypeName, typeNames } from '@/widgets/TextWidget'
 
 const dataType = DataType.LinearChart
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  withZoom?: boolean
-  isHorizontal?: boolean
-  xLabels?: XLabelsPosition
-  xLabelTicks?: number
-  xGridTicks?: number
-  xGuide?: boolean
-  xWithPaddings?: boolean
-  yLabels?: YLabelsPosition
-  yLabelTicks?: number
-  yGridTicks?: number
-  yGuide?: boolean
-  yWithPaddings?: boolean
-  title?: string
-  titleType?: TypeName
-}
 
 export const defaultParams: Params = {
   isHorizontal: true,
@@ -137,7 +119,7 @@ export const LinearChartWidget = createWidget<Data, Params>({
           <WidgetSettingsSelect
             name="Тип заголовка"
             value={params.titleType}
-            values={typeNames.map(type => ({ value: type, name: type }))}
+            values={textParams.typeNames.map(type => ({ value: type, name: type }))}
             onChange={value => onChangeParam('titleType', value)}
           />
         )}

@@ -1,24 +1,14 @@
 import * as React from 'react'
 
-import { Layout, layouts, Size, sizes, Stats } from '@/components/Stats'
+import { layouts, sizes, Stats } from '@/components/Stats'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { StatsParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.Stats
 type Data = DataMap[typeof dataType]
-
-export const topTypes = ['label', 'sublabel'] as const
-export type TopTypes = typeof topTypes[number]
-
-export const positionNames = ['right', 'bottom'] as const
-export type PositionNames = typeof positionNames[number]
-
-type Params = {
-  size: Size
-  layout: Layout
-}
 
 export const defaultParams: Params = {
   size: 'xs',

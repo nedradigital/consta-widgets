@@ -1,20 +1,15 @@
 import * as React from 'react'
 
-import { RadarChart, RadarChartLabelSize, radarChartLabelSizes } from '@/components/RadarChart'
+import { RadarChart, radarChartLabelSizes } from '@/components/RadarChart'
 import { labelTextSizes } from '@/components/RadarChart/components/Axes'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { RadarChartParams as Params } from '@/dashboard/widget-params'
 import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
-
-type Params = {
-  ticks: number
-  withConcentricColor: boolean
-  labelSize: RadarChartLabelSize
-}
 
 export const defaultParams: Params = {
   ticks: 4,

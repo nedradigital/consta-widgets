@@ -1,24 +1,17 @@
 import * as React from 'react'
 
-import { BarChart, Orientation } from '@/components/BarChart'
-import { UnitPosition, unitPositions } from '@/components/BarChartAxis'
+import { BarChart } from '@/components/BarChart'
+import { unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { MultiBarChartParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.MultiBarChart
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  orientation: Orientation
-  hasRatio: boolean
-  gridTicks: number
-  valuesTicks: number
-  unitPosition: UnitPosition
-}
 
 export const defaultParams: Params = {
   orientation: 'vertical',

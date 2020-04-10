@@ -11,37 +11,22 @@ import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
+import {
+  TextBasicEditModeParams,
+  TextExtendedEditModeParams,
+  textParams,
+  TextParams as Params,
+} from '@/dashboard/widget-params'
 import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { PositionState } from '@/utils/tooltips'
-import { IconSize, TextSize } from '@/utils/ui-kit'
+import { IconSize, TextProps, TextSize } from '@/utils/ui-kit'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
-type TextProps = Omit<
-  React.ComponentProps<typeof Text>,
-  'children' | 'tag' | 'display' | 'type' | 'className'
->
-
-type CommonParams = {
-  text: string
-  croppedLineCount?: number
-  croppedWithGradient?: boolean
-}
-
-type BasicEditModeParams = CommonParams & {
-  type: TypeName
-}
-
-type ExtendedEditModeParams = CommonParams & {
-  type: 'advanced'
-} & TextProps
-
-type Params = BasicEditModeParams | ExtendedEditModeParams
-
 type TextType = {
-  [key in TypeName]: {
+  [key in TextBasicEditModeParams['type']]: {
     text: string
     props: TextProps
   }
@@ -142,17 +127,6 @@ const editMods: ReadonlyArray<ChoiceT<boolean>> = [
   },
 ]
 
-export const typeNames = [
-  'heading1',
-  'heading2',
-  'heading3',
-  'heading4',
-  'text1',
-  'text2',
-  'text3',
-] as const
-export type TypeName = typeof typeNames[number]
-
 export const fontSizes: readonly TextSize[] = [
   '2xs',
   'xs',
@@ -209,9 +183,9 @@ export const fontWeights: ReadonlyArray<NonNullable<TextProps['weight']>> = [
 const dataType = DataType.Text
 type Data = DataMap[typeof dataType] | typeof undefined
 
-export const defaultParams: BasicEditModeParams = { text: 'Заголовок', type: 'text1' }
+export const defaultParams: TextBasicEditModeParams = { text: 'Заголовок', type: 'text1' }
 
-const isExtendedEditMode = (params: Params): params is ExtendedEditModeParams =>
+const isExtendedEditMode = (params: Params): params is TextExtendedEditModeParams =>
   params.type === 'advanced'
 
 export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ data, params }) => {
@@ -327,16 +301,19 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
   )
 }
 
-const BasicEditMode = ({ params, onChangeParam }: EditModeParams<BasicEditModeParams>) => (
+const BasicEditMode = ({ params, onChangeParam }: EditModeParams<TextBasicEditModeParams>) => (
   <WidgetSettingsSelect
     name="Тип"
     value={params.type}
     onChange={value => onChangeParam('type', value)}
-    values={typeNames.map(i => ({ value: i, name: i }))}
+    values={textParams.typeNames.map(i => ({ value: i, name: i }))}
   />
 )
 
-const ExtendedEditMode = ({ params, onChangeParam }: EditModeParams<ExtendedEditModeParams>) => (
+const ExtendedEditMode = ({
+  params,
+  onChangeParam,
+}: EditModeParams<TextExtendedEditModeParams>) => (
   <>
     <WidgetSettingsSelect
       name="Размер шрифта"

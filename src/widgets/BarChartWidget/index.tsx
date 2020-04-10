@@ -1,24 +1,16 @@
-import { BarChart, Orientation, Size, sizes } from '@/components/BarChart'
+import { BarChart, sizes } from '@/components/BarChart'
 import { transformBarChartGroupsToCommonGroups } from '@/components/BarChart/helpers'
-import { UnitPosition, unitPositions } from '@/components/BarChartAxis'
+import { unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { BarChartParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.BarChart
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  orientation: Orientation
-  size: Size
-  showValues: boolean
-  gridTicks: number
-  valuesTicks: number
-  unitPosition: UnitPosition
-}
 
 export const defaultParams: Params = {
   orientation: 'vertical',

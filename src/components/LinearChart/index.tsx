@@ -7,7 +7,8 @@ import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups, FormatValue } from '@/dashboard'
-import { TextWidgetContent, TypeName as TypeText } from '@/widgets/TextWidget'
+import { TextBasicEditModeParams } from '@/dashboard/widget-params'
+import { TextWidgetContent } from '@/widgets/TextWidget'
 
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
@@ -35,7 +36,7 @@ export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
 
 type TitleData = {
   text: string
-  type: TypeText
+  type: TextBasicEditModeParams['type']
 }
 
 type ThresholdLine = {

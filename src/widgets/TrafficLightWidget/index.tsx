@@ -1,18 +1,14 @@
 import React from 'react'
 
-import { Size, sizes, TrafficLight, ValueType, valueTypes } from '@/components/TrafficLight'
+import { sizes, TrafficLight, valueTypes } from '@/components/TrafficLight'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { TrafficLightParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.TrafficLight
 type Data = DataMap[typeof dataType]
-
-export type Params = {
-  type: ValueType
-  size?: Size
-}
 
 export const defaultParams: Params = {
   type: 'default',

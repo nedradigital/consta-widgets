@@ -1,19 +1,15 @@
 import * as React from 'react'
 
-import { ProgressBar, Size, sizes } from '@/components/ProgressBar'
+import { ProgressBar, sizes } from '@/components/ProgressBar'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
+import { ProgressBarParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
 const dataType = DataType.ProgressBar
 type Data = DataMap[typeof dataType]
-
-type Params = {
-  size: Size
-  isCaptionBold?: boolean
-}
 
 export const defaultParams: Params = {
   size: 'm',
