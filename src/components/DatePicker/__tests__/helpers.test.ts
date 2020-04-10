@@ -1,6 +1,37 @@
 import MockDate from 'mockdate'
 
-import { getCurrentVisibleDate } from '../helpers'
+import { getCurrentVisibleDate, isDateIsInvalid, isDateRange } from '../helpers'
+
+describe('isDateRange', () => {
+  it('не опознает используемое значение как интервал, если оно не передано', () => {
+    expect(isDateRange()).toBe(false)
+  })
+
+  it('не опознает используемое значение как интервал, если передана дата', () => {
+    expect(isDateRange(new Date())).toBe(false)
+  })
+
+  it('не опознает используемое значение как интервал, если передан пустой контейнер', () => {
+    expect(isDateRange([])).toBe(false)
+  })
+
+  it('не опознает используемое значение как интервал, если передан контейнер с одной датой', () => {
+    expect(isDateRange([new Date()])).toBe(false)
+  })
+
+  it('опознает используемое значение как интервал, если передан контейнер с двумя пустыми значениями', () => {
+    expect(isDateRange([undefined, undefined])).toBe(true)
+  })
+
+  it('опознает используемое значение как интервал, если передан контейнер с одним пустым значением и одной датой', () => {
+    expect(isDateRange([new Date(), undefined])).toBe(true)
+    expect(isDateRange([undefined, new Date()])).toBe(true)
+  })
+
+  it('опознает используемое значение как интервал, если передан контейнер с двумя датами', () => {
+    expect(isDateRange([new Date(), new Date()])).toBe(true)
+  })
+})
 
 describe('getCurrentVisibleDate', () => {
   const currentDate = new Date(2020, 4, 15)
@@ -170,5 +201,71 @@ describe('getCurrentVisibleDate', () => {
         })
       })
     })
+  })
+})
+
+describe('isDateIsInvalid', () => {
+  it('не срабатывает, если дата не введена', () => {
+    expect(
+      isDateIsInvalid({ minDate: new Date(2020, 2, 15), maxDate: new Date(2020, 3, 15) })
+    ).toBe(false)
+  })
+
+  it('не срабатывает, если переданная дата введена не полностью', () => {
+    expect(
+      isDateIsInvalid({
+        date: new Date(''),
+        minDate: new Date('2020-01-15'),
+        maxDate: new Date('2020-02-15'),
+      })
+    ).toBe(false)
+
+    expect(
+      isDateIsInvalid({
+        date: new Date('20-01-22'),
+        minDate: new Date('2020-01-15'),
+        maxDate: new Date('2020-02-15'),
+      })
+    ).toBe(false)
+  })
+
+  it('определяет, что передана существующая дата', () => {
+    expect(
+      isDateIsInvalid({
+        date: new Date(2020, 1, 28),
+        minDate: new Date(2020, 1, 15),
+        maxDate: new Date(2020, 2, 15),
+      })
+    ).toBe(false)
+  })
+
+  it('не определяет, что передана несуществующая дата', () => {
+    expect(
+      isDateIsInvalid({
+        date: new Date(2020, 1, 31),
+        minDate: new Date(2020, 1, 15),
+        maxDate: new Date(2020, 2, 15),
+      })
+    ).toBe(false)
+  })
+
+  it('определяет, что переданная дата входит в разрешенные пределы', () => {
+    expect(
+      isDateIsInvalid({
+        date: new Date(2020, 2, 15),
+        minDate: new Date(2020, 1, 15),
+        maxDate: new Date(2020, 2, 15),
+      })
+    ).toBe(false)
+  })
+
+  it('определяет, что переданная дата выходит за разрешенные пределы', () => {
+    expect(
+      isDateIsInvalid({
+        date: new Date(2020, 2, 22),
+        minDate: new Date(2020, 1, 15),
+        maxDate: new Date(2020, 2, 15),
+      })
+    ).toBe(true)
   })
 })
