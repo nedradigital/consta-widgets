@@ -90,6 +90,10 @@ storiesOf('components/TableLegend', module)
       data={object('data', getWidgetMockData(DataType.TableLegend))}
     />
   ))
+
+storiesOf('components/TableLegend', module)
+  .addDecorator(withSmartKnobs())
+  .addDecorator(blockCenteringDecorator({ width: 500 }))
   .add('со "Светофором"', () => (
     <TableLegend
       isShowLegend={false}
