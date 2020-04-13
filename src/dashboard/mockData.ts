@@ -518,7 +518,7 @@ const exampleDashboardState: CurrentDashboard.State = {
     Box_12: [...initialDashboardState.config.Box_12],
   },
   settings: {},
-  version: 11,
+  version: SUPPORTED_DASHBOARD_VERSION,
 }
 /* eslint-enable camelcase */
 

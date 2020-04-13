@@ -16,6 +16,7 @@ import {
   textAligns,
   textSpacings,
   TextWidgetContent,
+  views,
 } from '.'
 
 storiesOf('widgets/TextWidget', module)
@@ -65,7 +66,18 @@ storiesOf('widgets/TextWidget', module)
         decoration: boolean('underline', false) ? 'underline' : undefined,
         font: select('font', fontFamilies, undefined),
         lineHeight: select('lineHeight', lineHeights, undefined),
-        spacing: select('spacing', textSpacings, undefined),
+        view: select('view', views, 'primary'),
+        spacing: select(
+          'spacing',
+          {
+            xs: textSpacings[0],
+            s: textSpacings[1],
+            m: textSpacings[2],
+            l: textSpacings[3],
+            '--': undefined,
+          },
+          undefined
+        ),
         fontStyle: boolean('italic', false) ? 'italic' : undefined,
         transform: boolean('uppercase', false) ? 'uppercase' : undefined,
         weight: select('weight', fontWeights, undefined),

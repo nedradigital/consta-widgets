@@ -4,7 +4,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard11 } from '../dashboard11'
+import { Dashboard10 } from '../dashboard10'
 
 import {
   BarChartParams,
@@ -52,7 +52,7 @@ export const widgetIdsByType = {
   TrafficLightWidget: 'fbeb7619-ae6b-4742-ae62-deea18e1382d',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard11 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -139,25 +139,24 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 12
+    version: 11
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isCurrentWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+const isCurrentWidget = (item: Dashboard11.BoxItem): item is Dashboard11.WidgetItem =>
   item.type === 'widget'
 
-const isDashboard11Widget = (item: Dashboard11.BoxItem): item is Dashboard11.WidgetItem =>
+const isDashboard10Widget = (item: Dashboard10.BoxItem): item is Dashboard10.WidgetItem =>
   item.type === 'widget'
 
-export const currentMigration: Migration<Dashboard11.State, CurrentDashboard.State> = {
-  versionTo: 12,
-  changes: ['Добавлено новое поле текстового виджета view'],
-  // MIGRATION_GENERATION:METHOD:START
+export const migration11: Migration<Dashboard10.State, Dashboard11.State> = {
+  versionTo: 11,
+  changes: ['Добавлена кастомизация текстового виджета'],
   up: data => {
-    const updateItem = (item: Dashboard11.BoxItem): CurrentDashboard.BoxItem => {
+    const updateItem = (item: Dashboard10.BoxItem): Dashboard11.BoxItem => {
       if (item.type === 'switch') {
         return {
           ...item,
@@ -177,72 +176,7 @@ export const currentMigration: Migration<Dashboard11.State, CurrentDashboard.Sta
         }
       }
 
-      if (item.widgetType === widgetIdsByType.TextWidget) {
-        return item.params.type === 'advanced'
-          ? {
-              ...item,
-              params: {
-                ...item.params,
-                view: undefined,
-              },
-            }
-          : item
-      }
-
-      return item
-    }
-
-    return {
-      ...data,
-      version: 12,
-      config: Object.keys(data.config).reduce((newConfig, key) => {
-        const items = data.config[key]
-
-        return {
-          ...newConfig,
-          [key]: items.map(updateItem).filter(isDefined),
-        }
-      }, {}),
-    }
-  },
-  // MIGRATION_GENERATION:METHOD:END
-
-  // MIGRATION_GENERATION:METHOD:START
-  down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard11.BoxItem => {
-      if (item.type === 'switch') {
-        return {
-          ...item,
-          displays: item.displays.map(widgets =>
-            widgets.map(updateItem).filter(isDashboard11Widget)
-          ),
-        }
-      }
-
-      if (item.type === 'grid') {
-        return {
-          ...item,
-          grid: {
-            ...item.grid,
-            items: item.grid.items.map(row =>
-              row.map(column => column.map(updateItem).filter(isDashboard11Widget))
-            ),
-          },
-        }
-      }
-
-      if (item.widgetType === widgetIdsByType.TextWidget) {
-        return item.params.type === 'advanced'
-          ? {
-              ...item,
-              params: {
-                ..._.omit(item.params, ['view']),
-              },
-            }
-          : item
-      }
-
-      return item
+      return item as Dashboard11.WidgetItem
     }
 
     return {
@@ -258,5 +192,67 @@ export const currentMigration: Migration<Dashboard11.State, CurrentDashboard.Sta
       }, {}),
     }
   },
-  // MIGRATION_GENERATION:METHOD:END
+
+  down: data => {
+    const updateItem = (item: Dashboard11.BoxItem): Dashboard10.BoxItem => {
+      if (item.type === 'switch') {
+        return {
+          ...item,
+          displays: item.displays.map(widgets =>
+            widgets.map(updateItem).filter(isDashboard10Widget)
+          ),
+        }
+      }
+
+      if (item.type === 'grid') {
+        return {
+          ...item,
+          grid: {
+            ...item.grid,
+            items: item.grid.items.map(row =>
+              row.map(column => column.map(updateItem).filter(isDashboard10Widget))
+            ),
+          },
+        }
+      }
+
+      if (item.widgetType === widgetIdsByType.TextWidget) {
+        return item.params.type === 'advanced'
+          ? {
+              ...item,
+              params: {
+                type: 'text1',
+                ..._.omit(item.params, [
+                  'type',
+                  'size',
+                  'fontStyle',
+                  'lineHeight',
+                  'align',
+                  'weight',
+                  'transform',
+                  'spacing',
+                  'font',
+                  'decoration',
+                ]),
+              },
+            }
+          : item
+      }
+
+      return item
+    }
+
+    return {
+      ...data,
+      version: 10,
+      config: Object.keys(data.config).reduce((newConfig, key) => {
+        const items = data.config[key]
+
+        return {
+          ...newConfig,
+          [key]: items.map(updateItem).filter(isDefined),
+        }
+      }, {}),
+    }
+  },
 }
