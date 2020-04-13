@@ -98,12 +98,10 @@
 .icon {
   position: absolute;
   z-index: calc(var(--resizer-z) + 1);
-  top: 0;
-  bottom: 0;
+  top: var(--line-height-text-m);
 
   box-sizing: content-box;
-  margin: auto 0;
-  padding: 4px;
+  padding: var(--space-2xs);
 
   cursor: pointer;
 
@@ -121,6 +119,14 @@
 }
 
 .iconFilter {
+  left: 0;
+
+  transform: translate(-100%, -100%);
+
+  .cell.isFilterOpened & {
+    visibility: initial;
+  }
+
   .cell:hover:not(.isFilterOpened) & {
     opacity: 1;
     color: var(--color-control-typo-clear);
@@ -132,7 +138,7 @@
 
   overflow: visible;
 
-  transform: translateX(100%);
+  transform: translate(100%, -100%);
 
   .cell.isSortingActive & {
     visibility: initial;

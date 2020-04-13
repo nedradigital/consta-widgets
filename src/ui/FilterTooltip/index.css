@@ -1,13 +1,7 @@
 .button {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-
   box-sizing: content-box;
   width: calc-size(12);
   height: calc-size(12);
-  margin: auto 0;
   padding: var(--space-2xs);
 
   cursor: pointer;
@@ -16,7 +10,6 @@
   color: var(--color-control-typo-clear);
 
   transition: opacity var(--show-transition);
-  transform: translateX(-100%);
 
   &:hover {
     opacity: 1 !important;
