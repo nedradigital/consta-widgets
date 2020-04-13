@@ -177,7 +177,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               values={selectedFilters[obj.accessor]}
               onSave={handleTooltipSave}
               handleFilterTogglerClick={handleFilterTogglerClick(obj.accessor)}
-              className={css.iconFilter}
+              className={classnames(css.icon, css.iconFilter)}
             />
           )}
           <button type="button" className={css.title} onClick={() => sortBy(obj.accessor)}>

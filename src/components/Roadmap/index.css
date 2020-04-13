@@ -113,6 +113,12 @@
 }
 
 .iconFilter {
+  position: absolute;
+  top: var(--line-height-text-m);
+  left: 0;
+
+  transform: translate(-100%, -100%);
+
   .cell:hover:not(.isFilterOpened) & {
     opacity: 1;
     color: var(--color-control-typo-clear);
