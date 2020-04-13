@@ -7,19 +7,33 @@
 }
 
 .button {
+  position: relative;
+
+  padding-left: var(--space-xl);
+
   cursor: pointer;
+  text-align: left;
+
+  &:disabled {
+
+    padding-left: 0;
+
+    cursor: default;
+  }
 }
 
 .icon {
-  display: inline-flex;
+  position: absolute;
+  top: var(--line-height-text-m);
+  left: 0;
 
   margin-right: var(--space-xs);
 
   transition: transform 0.3s;
-  transform: rotate(180deg);
+  transform: translateY(-100%) rotate(180deg);
 
   &.isOpened {
-    transform: rotate(0);
+    transform: translateY(-100%) rotate(0);
   }
 }
 
