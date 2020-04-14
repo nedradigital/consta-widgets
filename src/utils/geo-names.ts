@@ -1,6 +1,6 @@
 import ruCountryNames from '@amcharts/amcharts4-geodata/lang/RU'
 
-const ruNames: { [key: string]: string } = {
+export const ruNames: { [key: string]: string } = {
   ...ruCountryNames,
   'RU-AD': 'Республика Адыгея',
   'RU-ALT': 'Алтайский край',
