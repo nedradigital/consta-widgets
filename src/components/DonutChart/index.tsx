@@ -152,6 +152,9 @@ export const DonutChart: React.FC<Props> = ({
       <Tooltip isVisible={isTooltipVisible} position={mousePosition}>
         <TooltipContentForMultipleValues items={tooltipData} />
       </Tooltip>
+      {halfDonut && (
+        <div className={classnames(css.shadow, halfDonut && halfDonutClasses[halfDonut])} />
+      )}
       <svg
         className={classnames(css.svg, halfDonut && halfDonutClasses[halfDonut])}
         viewBox={viewBox}
