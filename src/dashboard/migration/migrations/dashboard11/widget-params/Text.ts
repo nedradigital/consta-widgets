@@ -1,4 +1,24 @@
-import { TextProps } from '@/utils/ui-kit'
+type TextProps = {
+  align?: 'left' | 'center' | 'right'
+  decoration?: 'underline'
+  size?: '2xs' | 'xs' | 's' | 'm' | 'l' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl' | '6xl'
+  font?: 'mono' | 'sans' | 'serif'
+  lineHeight?: '2xs' | 'xs' | 's' | 'm' | 'l'
+  spacing?: 'xs' | 's' | 'm' | 'l'
+  fontStyle?: 'italic'
+  transform?: 'uppercase'
+  weight?: 'black' | 'bold' | 'light' | 'regular' | 'semibold' | 'thin'
+  view?:
+    | 'alert'
+    | 'brand'
+    | 'ghost'
+    | 'link'
+    | 'link-minor'
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+}
 
 const typeNames = [
   'heading1',

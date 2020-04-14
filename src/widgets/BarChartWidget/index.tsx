@@ -1,11 +1,10 @@
-import { BarChart, sizes } from '@/components/BarChart'
+import { BarChart } from '@/components/BarChart'
 import { transformBarChartGroupsToCommonGroups } from '@/components/BarChart/helpers'
-import { unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { BarChartParams as Params } from '@/dashboard/widget-params'
+import { barChartParams, BarChartParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -64,7 +63,7 @@ export const BarChartWidget = createWidget<Data, Params>({
           name="Размер"
           value={params.size}
           onChange={value => onChangeParam('size', value)}
-          values={sizes.map(i => ({ name: i, value: i }))}
+          values={barChartParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsSelect
           name="Ориентация"
@@ -91,7 +90,10 @@ export const BarChartWidget = createWidget<Data, Params>({
         <WidgetSettingsSelect
           name="Позиция единиц измерения"
           value={params.unitPosition}
-          values={unitPositions.map(position => ({ value: position, name: position }))}
+          values={barChartParams.unitPositions.map(position => ({
+            value: position,
+            name: position,
+          }))}
           onChange={value => onChangeParam('unitPosition', value)}
         />
       </>

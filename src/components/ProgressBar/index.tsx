@@ -6,14 +6,12 @@ import classnames from 'classnames'
 
 import { Legend, Tick } from '@/components/ProgressBar/components/Legend'
 import { ColorGroups } from '@/dashboard'
+import { ProgressBarParams } from '@/dashboard/widget-params'
 import { TextSize } from '@/utils/ui-kit'
 import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 
 import { Data as ProgressData, Progress } from './components/Progress'
 import css from './index.css'
-
-export const sizes = ['s', 'm', 'l'] as const
-export type Size = typeof sizes[number]
 
 export type Data = ProgressData & {
   ticks?: readonly Tick[]
@@ -22,6 +20,8 @@ export type Data = ProgressData & {
   caption?: string
   tooltip?: React.ReactNode
 }
+
+export type Size = ProgressBarParams['size']
 
 type Props = {
   size?: Size

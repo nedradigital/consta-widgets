@@ -6,12 +6,10 @@ import classnames from 'classnames'
 import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
 import { FormatValue } from '@/dashboard'
+import { BarChartParams } from '@/dashboard/widget-params'
 import { Scaler } from '@/utils/scale'
 
 import css from './index.css'
-
-export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
-export type UnitPosition = typeof unitPositions[number]
 
 type ShowPositions = {
   [key in Position]: boolean
@@ -27,7 +25,7 @@ type Props = {
   showValueLine?: boolean
   showLabelLine?: boolean
   unit?: string
-  unitPosition?: UnitPosition
+  unitPosition?: BarChartParams['unitPosition']
   size?: Size
   horizontalStyles?: React.CSSProperties
   verticalStyles?: React.CSSProperties

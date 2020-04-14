@@ -1,5 +1,4 @@
-import { Direction, Legend } from '@/components/Legend'
-import { Position, Size, Type } from '@/components/LegendItem'
+import { Legend } from '@/components/Legend'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
@@ -13,7 +12,7 @@ type Data = DataMap[typeof dataType]
 
 type ParamValues<T> = { value: T; name: string }
 
-const labelTypes: ReadonlyArray<ParamValues<Type>> = [
+const labelTypes: ReadonlyArray<ParamValues<Params['labelType']>> = [
   {
     value: 'dot',
     name: 'Точка',
@@ -24,7 +23,7 @@ const labelTypes: ReadonlyArray<ParamValues<Type>> = [
   },
 ]
 
-const sizes: ReadonlyArray<ParamValues<Size>> = [
+const sizes: ReadonlyArray<ParamValues<Params['fontSize']>> = [
   {
     value: 's',
     name: 'Стандартный',
@@ -35,7 +34,7 @@ const sizes: ReadonlyArray<ParamValues<Size>> = [
   },
 ]
 
-const directions: ReadonlyArray<ParamValues<Direction>> = [
+const directions: ReadonlyArray<ParamValues<Params['direction']>> = [
   {
     value: 'column',
     name: 'Колонкой',
@@ -46,7 +45,7 @@ const directions: ReadonlyArray<ParamValues<Direction>> = [
   },
 ]
 
-const labelPositions: ReadonlyArray<ParamValues<Position>> = [
+const labelPositions: ReadonlyArray<ParamValues<Params['labelPosition']>> = [
   {
     value: 'left',
     name: 'Слева',

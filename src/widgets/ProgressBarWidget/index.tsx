@@ -1,10 +1,10 @@
 import * as React from 'react'
 
-import { ProgressBar, sizes } from '@/components/ProgressBar'
+import { ProgressBar } from '@/components/ProgressBar'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { ProgressBarParams as Params } from '@/dashboard/widget-params'
+import { progressBarParams, ProgressBarParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -36,7 +36,7 @@ export const ProgressBarWidget = createWidget<Data, Params>({
           name="Размер"
           value={params.size}
           onChange={value => onChangeParam('size', value)}
-          values={sizes.map(i => ({ name: i, value: i }))}
+          values={progressBarParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsCheckbox
           name="Заголовок жирный"

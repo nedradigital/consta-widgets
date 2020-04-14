@@ -1,7 +1,11 @@
-import { RadarChartLabelSize } from '@/components/RadarChart'
+const labelSizes = ['s', 'm'] as const
 
 export type RadarChartParams = {
   ticks: number
   withConcentricColor: boolean
-  labelSize: RadarChartLabelSize
+  labelSize: typeof labelSizes[number]
+}
+
+export const radarChartParams = {
+  labelSizes,
 }

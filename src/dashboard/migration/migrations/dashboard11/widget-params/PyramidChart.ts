@@ -1,7 +1,11 @@
-import { Size } from '@/components/PyramidChart'
+const fontSizes = ['xs', 's', 'm'] as const
 
 export type PyramidChartParams = {
   constraint?: boolean
-  fontSize?: Size
+  fontSize?: typeof fontSizes[number]
   colors: readonly string[]
+}
+
+export const pyramidChartParams = {
+  fontSizes,
 }

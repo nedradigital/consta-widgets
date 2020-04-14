@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { sizes, TrafficLight, valueTypes } from '@/components/TrafficLight'
+import { TrafficLight } from '@/components/TrafficLight'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { TrafficLightParams as Params } from '@/dashboard/widget-params'
+import { trafficLightParams, TrafficLightParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -33,13 +33,13 @@ export const TrafficLightWidget = createWidget<Data, Params>({
           name="Тип"
           value={params.type}
           onChange={value => onChangeParam('type', value)}
-          values={valueTypes.map(i => ({ name: i, value: i }))}
+          values={trafficLightParams.valueTypes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
           onChange={value => onChangeParam('size', value)}
-          values={sizes.map(i => ({ name: i, value: i }))}
+          values={trafficLightParams.sizes.map(i => ({ name: i, value: i }))}
         />
       </>
     )

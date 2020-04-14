@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { DatePicker, sizes } from '@/components/DatePicker'
+import { DatePicker } from '@/components/DatePicker'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { DatePickerParams as Params } from '@/dashboard/widget-params'
+import { datePickerParams, DatePickerParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -31,7 +31,7 @@ export const DatePickerWidget = createWidget<Data, Params>({
         name="Размер"
         value={params.size}
         onChange={value => onChangeParam('size', value)}
-        values={sizes.map(i => ({ name: i, value: i }))}
+        values={datePickerParams.sizes.map(i => ({ name: i, value: i }))}
       />
     )
   },

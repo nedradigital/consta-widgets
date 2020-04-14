@@ -1,11 +1,16 @@
-import { Orientation, Size } from '@/components/BarChart'
-import { UnitPosition } from '@/components/BarChartAxis'
+const sizes = ['s', 'm'] as const
+const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 
 export type BarChartParams = {
-  orientation: Orientation
-  size: Size
+  orientation: 'horizontal' | 'vertical'
+  size: typeof sizes[number]
   showValues: boolean
   gridTicks: number
   valuesTicks: number
-  unitPosition: UnitPosition
+  unitPosition: typeof unitPositions[number]
+}
+
+export const barChartParams = {
+  sizes,
+  unitPositions,
 }

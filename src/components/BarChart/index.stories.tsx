@@ -4,8 +4,8 @@ import { boolean, object, select } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { unitPositions } from '@/components/BarChartAxis'
 import { DataType } from '@/dashboard'
+import { barChartParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
@@ -38,7 +38,7 @@ export const DataWithTwoColumnsOnDate = {
   ],
 }
 
-const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+const getUnitPosition = () => select('unitPosition', barChartParams.unitPositions, 'none')
 
 const defaultProps = {
   orientation: 'vertical',

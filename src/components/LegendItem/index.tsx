@@ -2,24 +2,16 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/contexts'
+import { LegendParams } from '@/dashboard/widget-params'
 
 import css from './index.css'
-
-export const types = ['dot', 'line'] as const
-export type Type = typeof types[number]
-
-export const positions = ['top', 'left'] as const
-export type Position = typeof positions[number]
-
-export const sizes = ['xs', 's', 'm'] as const
-export type Size = typeof sizes[number]
 
 type Props = {
   children: React.ReactNode
   color: string
-  type?: Type
-  fontSize?: Size
-  position?: Position
+  type?: LegendParams['labelType']
+  fontSize?: LegendParams['fontSize']
+  position?: LegendParams['labelPosition']
   lineBold?: boolean
   className?: string
   /** Обрезать текст, если он больше 2 строк */

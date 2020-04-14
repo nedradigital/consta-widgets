@@ -1,5 +1,3 @@
-import { HalfDonut } from '@/components/DonutChart/components/Donut'
-
 export type DonutParams = {
-  halfDonut?: HalfDonut
+  halfDonut?: 'top' | 'left' | 'right' | 'bottom'
 }

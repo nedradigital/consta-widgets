@@ -1,5 +1,9 @@
-import { Size } from '@/components/DatePicker'
+const sizes = ['s', 'm', 'l'] as const
 
 export type DatePickerParams = {
-  size: Size
+  size: typeof sizes[number]
+}
+
+export const datePickerParams = {
+  sizes,
 }

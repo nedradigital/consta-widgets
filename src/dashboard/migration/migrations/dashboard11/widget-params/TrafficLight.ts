@@ -1,6 +1,12 @@
-import { Size, ValueType } from '@/components/TrafficLight'
+const valueTypes = ['default', 'text'] as const
+const sizes = ['s', 'm'] as const
 
 export type TrafficLightParams = {
-  type: ValueType
-  size?: Size
+  type: typeof valueTypes[number]
+  size?: typeof sizes[number]
+}
+
+export const trafficLightParams = {
+  valueTypes,
+  sizes,
 }

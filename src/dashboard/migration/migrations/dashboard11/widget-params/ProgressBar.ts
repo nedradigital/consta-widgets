@@ -1,6 +1,10 @@
-import { Size } from '@/components/ProgressBar'
+const sizes = ['s', 'm', 'l'] as const
 
 export type ProgressBarParams = {
-  size: Size
+  size: typeof sizes[number]
   isCaptionBold?: boolean
+}
+
+export const progressBarParams = {
+  sizes,
 }
