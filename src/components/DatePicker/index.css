@@ -11,11 +11,7 @@
   --tooltip-vertical-padding: var(--space-l);
   --tooltip-horizontal-padding: var(--space-l);
 
-  max-width: 288px;
-
-  &.isWide {
-    max-width: 552px;
-  }
+  max-width: none;
 }
 
 .warningTooltip {

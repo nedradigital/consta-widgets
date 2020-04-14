@@ -4,13 +4,14 @@
 
   /* задается в js */
   --tick-width: 1px;
+  --space-to-show-year: 4px;
 
   display: flex;
   overflow-x: hidden;
 
-  width: 100%;
+  width: calc(var(--tick-width) * 13 + var(--space-to-show-year));
   height: var(--height);
-  margin: 0 var(--space-xs);
+  margin: 0 auto;
 
   border-radius: var(--control-radius);
   background-color: var(--color-control-bg-ghost);
