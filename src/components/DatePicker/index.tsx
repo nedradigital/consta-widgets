@@ -175,13 +175,10 @@ export const DatePicker: React.FC<Props> = props => {
   const renderControls = () => {
     const isInvalid =
       props.type === 'date'
-        ? isDateIsInvalid({ date: props.value, minDate: props.minDate, maxDate: props.maxDate })
-        : !!props.value &&
-          props.value.some(date =>
-            isDateIsInvalid({ date, minDate: props.minDate, maxDate: props.maxDate })
-          )
+        ? isDateIsInvalid({ date: props.value, minDate, maxDate })
+        : !!props.value && props.value.some(date => isDateIsInvalid({ date, minDate, maxDate }))
     const tooltipContent = isInvalid && !isTooltipVisible && (
-      <DateOutOfRangeTooptipContent minDate={props.minDate} maxDate={props.maxDate} />
+      <DateOutOfRangeTooptipContent minDate={minDate} maxDate={maxDate} />
     )
     const commonProps = { size, isInvalid, tooltipContent }
 
