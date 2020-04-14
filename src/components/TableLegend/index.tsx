@@ -208,7 +208,15 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           tag="td"
           size="s"
           view="primary"
-          className={classnames(css.cell, alignClasses[column.align])}
+          className={classnames(
+            css.cell,
+            alignClasses[column.align],
+            {
+              l: css.sizeL,
+              m: css.sizeM,
+              s: css.sizeS,
+            }[size]
+          )}
         >
           {isShowLegend && index === 0 ? (
             <LegendItem
@@ -244,18 +252,7 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
         </thead>
         <tbody>
           {filteredData.map((row, idx) => (
-            <tr
-              key={idx}
-              className={classnames(
-                {
-                  l: css.rowL,
-                  m: css.rowM,
-                  s: css.rowS,
-                }[size]
-              )}
-            >
-              {renderTableRowWithData(row)}
-            </tr>
+            <tr key={idx}>{renderTableRowWithData(row)}</tr>
           ))}
         </tbody>
       </table>
