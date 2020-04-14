@@ -12,6 +12,7 @@
 .main {
   --cell-size: 28px;
   --cell-padding-left: var(--space-xs);
+  --space-between-months: var(--space-m);
   --cell-bg-side-offset: calc(var(--cell-padding-left) / 2);
   --space-between-weeks: var(--space-xs);
   --color-bg-selected-primary: var(--color-control-bg-primary);
@@ -40,7 +41,7 @@
   flex-direction: column;
 
   & + & {
-    margin-left: var(--space-m);
+    margin-left: var(--space-between-months);
   }
 }
 
