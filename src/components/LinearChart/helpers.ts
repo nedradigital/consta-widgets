@@ -118,8 +118,7 @@ export const getMainTickValues = ({
   const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y')
   const ticks = config[tickType] || 0
   const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
-  const result =
-    ticks === 0 ? [] : _.chunk(uniqValues, Math.ceil(uniqValues.length / ticks)).map(arr => arr[0])
+  const result = d3.ticks(Math.min(...domain), Math.max(...domain), ticks).filter(Number.isInteger)
 
   if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
     return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])

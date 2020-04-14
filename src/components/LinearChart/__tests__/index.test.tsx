@@ -455,6 +455,26 @@ describe('getMainTickValues', () => {
 
       expect(result).toEqual([])
     })
+
+    it('отображает засечки даже там, где пропущено значение', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        items: flipPointsOnAxes(
+          [
+            { x: 1, y: 1 },
+            { x: 3, y: 3 },
+            { x: 4, y: 4 },
+            { x: 5, y: 5 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 5, guide: true }),
+        domain: [1, 5],
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([1, 2, 3, 4, 5])
+    })
   })
 })
 
