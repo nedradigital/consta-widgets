@@ -299,7 +299,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
       </Text>
       {data && (data.tooltip || data.onClick) && (
         <div style={{ marginLeft: getIconMargin(size) }}>
-          <button ref={buttonRef} className={css.button} onClick={onToggleClick}>
+          <button type="button" ref={buttonRef} className={css.button} onClick={onToggleClick}>
             <IconMeatball size={iconSizes[size]} />
           </button>
           <Tooltip

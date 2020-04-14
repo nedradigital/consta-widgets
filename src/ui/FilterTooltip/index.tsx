@@ -58,6 +58,7 @@ export const FilterTooltip: React.FC<Props> = ({
   return (
     <>
       <button
+        type="button"
         ref={buttonRef}
         className={classnames(css.button, isOpened && css.isOpened, className)}
         onClick={() => {

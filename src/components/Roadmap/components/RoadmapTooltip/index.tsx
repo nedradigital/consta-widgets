@@ -120,6 +120,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
     </div>,
     <div key="buttons" className={css.buttons}>
       <button
+        type="button"
         className={classnames(css.button, css.dates, isActiveDates && css.active)}
         onClick={event => {
           stopEventHandler(event)
@@ -129,6 +130,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
         <IconCalendar size="s" view="primary" className={css.icon} />
       </button>
       <button
+        type="button"
         className={classnames(css.button, css.comment, isActiveComment && css.active)}
         onClick={event => {
           stopEventHandler(event)

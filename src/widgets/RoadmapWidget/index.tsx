@@ -30,12 +30,14 @@ const RoadmapBlock: React.FC<{
 
   return (
     <div className={css.block}>
-      <>
+      <button
+        type="button"
+        className={css.button}
+        disabled={isButtonDisabled}
+        onClick={() => setOpen(!isOpened)}
+      >
         {item.title ? (
-          <span
-            className={css.button}
-            onClick={!isButtonDisabled ? () => setOpen(!isOpened) : undefined}
-          >
+          <>
             {!isButtonDisabled ? (
               <IconArrowUp
                 size="s"
@@ -46,7 +48,7 @@ const RoadmapBlock: React.FC<{
             <Text tag="span" size="xl" weight="bold" view="primary">
               {item.title}
             </Text>
-          </span>
+          </>
         ) : null}
         {item.subTitle ? (
           <>
@@ -58,7 +60,7 @@ const RoadmapBlock: React.FC<{
             </Text>
           </>
         ) : null}
-      </>
+      </button>
       <AnimateHeight delay={300} height={isOpened ? 'auto' : 0}>
         <div className={css.table}>
           <Roadmap
