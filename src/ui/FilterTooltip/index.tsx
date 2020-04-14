@@ -1,12 +1,11 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { IconFunnel, MultiSelect, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { PositionState } from '@/utils/tooltips'
-import { isDefinedPosition } from '@/utils/type-guards'
+import { Tooltip } from '@/components/Tooltip'
+import { themeColorDisplay } from '@/utils/theme'
 
 import css from './index.css'
 
@@ -34,16 +33,7 @@ export const FilterTooltip: React.FC<Props> = ({
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  const [tooltipPosition, setTooltipPosition] = useState<PositionState>()
   const [selectedValues, setSelectedValues] = useState<Values | undefined>(values)
-
-  useLayoutEffect(() => {
-    if (buttonRef.current && isOpened) {
-      const { left, bottom } = buttonRef.current.getBoundingClientRect()
-
-      setTooltipPosition({ x: left, y: bottom })
-    }
-  }, [buttonRef, isOpened])
 
   useEffect(() => {
     setSelectedValues(values)
@@ -67,30 +57,30 @@ export const FilterTooltip: React.FC<Props> = ({
       >
         <IconFunnel size="xs" className={css.iconFilter} />
       </button>
-      {isOpened &&
-        isDefinedPosition(tooltipPosition) &&
-        ReactDOM.createPortal(
-          <div
-            ref={tooltipRef}
-            className={css.tooltip}
-            style={{ top: tooltipPosition.y, left: tooltipPosition.x }}
-          >
-            <Text tag="div" size="xs" view="primary" className={css.title}>
-              Фильтровать по условию
-            </Text>
-            <MultiSelect
-              name={field}
-              menuRef={menuRef}
-              wpSize="xs"
-              onChange={setSelectedValues}
-              onClearValue={() => setSelectedValues(undefined)}
-              placeholder="Выберите пункт"
-              options={[...options]}
-              value={selectedValues ? [...selectedValues] : undefined}
-            />
-          </div>,
-          document.body
-        )}
+      <Tooltip
+        isContentHoverable
+        isVisible={isOpened}
+        className={classnames(css.tooltip, themeColorDisplay)}
+        anchorRef={buttonRef}
+        possibleDirections={['downRight', 'downLeft']}
+        direction="downRight"
+        withArrow={false}
+        ref={tooltipRef}
+      >
+        <Text tag="div" size="xs" view="primary" className={css.title}>
+          Фильтровать по условию
+        </Text>
+        <MultiSelect
+          name={field}
+          menuRef={menuRef}
+          wpSize="xs"
+          onChange={setSelectedValues}
+          onClearValue={() => setSelectedValues(undefined)}
+          placeholder="Выберите пункт"
+          options={[...options]}
+          value={selectedValues ? [...selectedValues] : undefined}
+        />
+      </Tooltip>
     </>
   )
 }

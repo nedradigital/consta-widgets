@@ -27,12 +27,9 @@
 }
 
 .tooltip {
-  position: absolute;
-
   width: calc-size(312);
   padding: var(--space-s);
 
-  border-radius: 6px;
   background-color: var(--color-bg-secondary);
   box-shadow: 0 2px 4px rgba(var(--color-nums-shadow), 0.3);
 
