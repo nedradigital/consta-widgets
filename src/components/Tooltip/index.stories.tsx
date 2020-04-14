@@ -50,6 +50,7 @@ const TooltipPositionedByAnchorStory = () => {
         }}
       >
         <button
+          type="button"
           style={{
             width: 100,
             height: 50,

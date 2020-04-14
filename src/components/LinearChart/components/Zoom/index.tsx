@@ -157,6 +157,7 @@ export const Zoom: React.FC<Props> = ({
       <div className={css.buttons}>
         <div className={css.buttonGroup}>
           <button
+            type="button"
             className={classnames(css.button, css.resetButton)}
             onClick={() => setZoom(1)}
             disabled={zoom === 1}
@@ -166,6 +167,7 @@ export const Zoom: React.FC<Props> = ({
         </div>
         <div className={css.buttonGroup}>
           <button
+            type="button"
             className={css.button}
             onClick={() => changeZoom(1 / ZOOM_STEP)}
             disabled={zoom <= MIN_ZOOM}
@@ -173,6 +175,7 @@ export const Zoom: React.FC<Props> = ({
             −
           </button>
           <button
+            type="button"
             className={css.button}
             onClick={() => changeZoom(ZOOM_STEP)}
             disabled={zoom >= MAX_ZOOM}
