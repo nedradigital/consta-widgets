@@ -15,7 +15,6 @@
   text-align: left;
 
   &:disabled {
-
     padding-left: 0;
 
     cursor: default;

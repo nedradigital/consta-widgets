@@ -4,10 +4,9 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard12, widgetIdsByType as Dashboard12WidgetIdsByType } from '../dashboard12'
+import { Dashboard11 } from '../dashboard11'
 
 import {
-  BadgeParams,
   BarChartParams,
   ButtonParams,
   CheckboxParams,
@@ -27,10 +26,10 @@ import {
   StatsParams,
   TableLegendParams,
   TextParams,
+  TrafficLightParams,
 } from './widget-params'
 
 export const widgetIdsByType = {
-  BadgeWidget: 'fbeb7619-ae6b-4742-ae62-deea18e1382d',
   BarChartWidget: '1a8a7577-36e3-4fe6-a23e-244a51cd37c8',
   ButtonWidget: '950e2e88-06e7-4429-86be-0a26dc93944e',
   CheckboxWidget: '07645756-85d1-43da-b66c-10f96e5aff0b',
@@ -50,9 +49,10 @@ export const widgetIdsByType = {
   StatsWidget: '506fa3ba-e016-4b94-9ad3-547f7e70c464',
   TableLegendWidget: '2f8f8f8e-21eb-4751-ab81-56ea11ac6342',
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
+  TrafficLightWidget: 'fbeb7619-ae6b-4742-ae62-deea18e1382d',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard12 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -106,7 +106,6 @@ export namespace CurrentDashboard {
   }
 
   export type WidgetItem =
-    | WidgetItemParams<typeof widgetIdsByType.BadgeWidget, BadgeParams>
     | WidgetItemParams<typeof widgetIdsByType.BarChartWidget, BarChartParams>
     | WidgetItemParams<typeof widgetIdsByType.ButtonWidget, ButtonParams>
     | WidgetItemParams<typeof widgetIdsByType.CheckboxWidget, CheckboxParams>
@@ -126,6 +125,7 @@ export namespace CurrentDashboard {
     | WidgetItemParams<typeof widgetIdsByType.StatsWidget, StatsParams>
     | WidgetItemParams<typeof widgetIdsByType.TableLegendWidget, TableLegendParams>
     | WidgetItemParams<typeof widgetIdsByType.TextWidget, TextParams>
+    | WidgetItemParams<typeof widgetIdsByType.TrafficLightWidget, TrafficLightParams>
 
   export type BoxItem = WidgetItem | GridItem | SwitchItem
 
@@ -139,25 +139,24 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 13
+    version: 12
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isCurrentWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+const isCurrentWidget = (item: Dashboard12.BoxItem): item is Dashboard12.WidgetItem =>
   item.type === 'widget'
 
-const isDashboard12Widget = (item: Dashboard12.BoxItem): item is Dashboard12.WidgetItem =>
+const isDashboard11Widget = (item: Dashboard11.BoxItem): item is Dashboard11.WidgetItem =>
   item.type === 'widget'
 
-export const currentMigration: Migration<Dashboard12.State, CurrentDashboard.State> = {
-  versionTo: 13,
-  changes: ['Виджет светофора стал бэджем'],
-  // MIGRATION_GENERATION:METHOD:START
+export const migration12: Migration<Dashboard11.State, Dashboard12.State> = {
+  versionTo: 12,
+  changes: ['Добавлено новое поле текстового виджета view'],
   up: data => {
-    const updateItem = (item: Dashboard12.BoxItem): CurrentDashboard.BoxItem => {
+    const updateItem = (item: Dashboard11.BoxItem): Dashboard12.BoxItem => {
       if (item.type === 'switch') {
         return {
           ...item,
@@ -177,73 +176,16 @@ export const currentMigration: Migration<Dashboard12.State, CurrentDashboard.Sta
         }
       }
 
-      if (item.widgetType === Dashboard12WidgetIdsByType.TrafficLightWidget) {
-        return {
-          ...item,
-          widgetType: widgetIdsByType.BadgeWidget,
-          params: {
-            ..._.omit(item.params, 'type'),
-            size: item.params.size || 's',
-            view: 'filled',
-            isMinified: item.params.type === 'default',
-          },
-        }
-      }
-
-      return item
-    }
-
-    return {
-      ...data,
-      version: 13,
-      config: Object.keys(data.config).reduce((newConfig, key) => {
-        const items = data.config[key]
-
-        return {
-          ...newConfig,
-          [key]: items.map(updateItem).filter(isDefined),
-        }
-      }, {}),
-    }
-  },
-  // MIGRATION_GENERATION:METHOD:END
-
-  // MIGRATION_GENERATION:METHOD:START
-  down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard12.BoxItem => {
-      if (item.type === 'switch') {
-        return {
-          ...item,
-          displays: item.displays.map(widgets =>
-            widgets.map(updateItem).filter(isDashboard12Widget)
-          ),
-        }
-      }
-
-      if (item.type === 'grid') {
-        return {
-          ...item,
-          grid: {
-            ...item.grid,
-            items: item.grid.items.map(row =>
-              row.map(column => column.map(updateItem).filter(isDashboard12Widget))
-            ),
-          },
-        }
-      }
-
-      if (item.widgetType === widgetIdsByType.BadgeWidget) {
-        const { size, isMinified } = item.params
-
-        return {
-          ...item,
-          widgetType: Dashboard12WidgetIdsByType.TrafficLightWidget,
-          params: {
-            ..._.omit(item.params, ['view', 'form', 'isMinified']),
-            size: size === 'l' ? 'm' : size,
-            type: isMinified ? 'default' : 'text',
-          },
-        }
+      if (item.widgetType === widgetIdsByType.TextWidget) {
+        return item.params.type === 'advanced'
+          ? {
+              ...item,
+              params: {
+                ...item.params,
+                view: undefined,
+              },
+            }
+          : item
       }
 
       return item
@@ -262,5 +204,55 @@ export const currentMigration: Migration<Dashboard12.State, CurrentDashboard.Sta
       }, {}),
     }
   },
-  // MIGRATION_GENERATION:METHOD:END
+
+  down: data => {
+    const updateItem = (item: Dashboard12.BoxItem): Dashboard11.BoxItem => {
+      if (item.type === 'switch') {
+        return {
+          ...item,
+          displays: item.displays.map(widgets =>
+            widgets.map(updateItem).filter(isDashboard11Widget)
+          ),
+        }
+      }
+
+      if (item.type === 'grid') {
+        return {
+          ...item,
+          grid: {
+            ...item.grid,
+            items: item.grid.items.map(row =>
+              row.map(column => column.map(updateItem).filter(isDashboard11Widget))
+            ),
+          },
+        }
+      }
+
+      if (item.widgetType === widgetIdsByType.TextWidget) {
+        return item.params.type === 'advanced'
+          ? {
+              ...item,
+              params: {
+                ..._.omit(item.params, ['view']),
+              },
+            }
+          : item
+      }
+
+      return item
+    }
+
+    return {
+      ...data,
+      version: 11,
+      config: Object.keys(data.config).reduce((newConfig, key) => {
+        const items = data.config[key]
+
+        return {
+          ...newConfig,
+          [key]: items.map(updateItem).filter(isDefined),
+        }
+      }, {}),
+    }
+  },
 }

@@ -17,8 +17,8 @@ import { Data as RadarChartData } from '@/components/RadarChart'
 import { Data as RoadmapData } from '@/components/Roadmap'
 import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
-import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { CurrentDashboard } from '@/dashboard/migration/migrations/current'
+import { Status as BadgeStatus } from '@/ui/Badge'
 import { Filters, TableColumn } from '@/utils/table'
 import { ChoiceGroupData } from '@/widgets/ChoiceGroupWidget'
 
@@ -50,7 +50,7 @@ export enum DataType {
   Pyramid,
   Text,
   TableLegend,
-  TrafficLight,
+  Badge,
   MultiBarChart,
   ProgressBar,
   Legend,
@@ -90,7 +90,11 @@ export type DataMap = {
   [DataType.Pyramid]: readonly PyramidData[]
   [DataType.Text]: { text: string; tooltip?: React.ReactNode; onClick?: Function }
   [DataType.TableLegend]: TableLegendData
-  [DataType.TrafficLight]: TrafficLightData
+  [DataType.Badge]: {
+    status: BadgeStatus
+    text?: string
+    comment?: string
+  }
   [DataType.ProgressBar]: {
     data: readonly ProgressBarData[]
   } & WithColorGroups

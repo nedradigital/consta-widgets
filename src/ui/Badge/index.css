@@ -1,39 +1,11 @@
-.badge {
-  display: inline-block;
+.sizeS {
+  --badge-size: calc-size(20);
+}
 
-  border-radius: 2px;
-  background-color: var(--color-bg-system);
+.sizeM {
+  --badge-size: calc-size(24);
+}
 
-  /* Статусы */
-
-  &.normal {
-    background-color: var(--color-bg-normal);
-  }
-
-  &.warning {
-    background-color: var(--color-bg-warning);
-  }
-
-  &.danger {
-    background-color: var(--color-bg-alert);
-  }
-
-  &.empty {
-    background-color: var(--color-bg-system);
-  }
-
-  /* Размеры */
-
-  &.sizeXS {
-    padding: 0 var(--space-3xs);
-  }
-
-  &.sizeL {
-    padding: var(--space-3xs) var(--space-2xs);
-  }
-
-  &.sizeXL,
-  &.size2XL {
-    padding: var(--space-3xs) var(--space-xs);
-  }
+.sizeL {
+  --badge-size: calc-size(32);
 }

@@ -610,7 +610,7 @@ const mockData: DataMap = {
     ],
     filters: tableLegendFilters,
   },
-  [DataType.TrafficLight]: {
+  [DataType.Badge]: {
     status: 'normal',
     text: 'Работа по расписанию',
     comment: 'Хотели как лучше, а получилось как всегда.',

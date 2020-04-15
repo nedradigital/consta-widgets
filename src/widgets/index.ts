@@ -10,7 +10,7 @@ export { ProgressBarWidgetContent as ProgressBarWidget } from './ProgressBarWidg
 export { DatePickerWidgetContent as DatePickerWidget } from './DatePickerWidget'
 export { MultiBarChartWidgetContent as MultiBarChartWidget } from './MultiBarChartWidget'
 export { RadarChartWidgetContent as RadarChartWidget } from './RadarChartWidget'
-export { TrafficLightWidgetContent as TrafficLightWidget } from './TrafficLightWidget'
+export { BadgeWidgetContent as BadgeWidget } from './BadgeWidget'
 export { ImageWidgetContent as ImageWidget } from './ImageWidget'
 export { ImagesWidgetContent as ImagesWidget } from './ImagesWidget'
 export { ButtonWidgetContent as ButtonWidget } from './ButtonWidget'

@@ -4,36 +4,33 @@ import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { DataType } from '@/dashboard'
-import { legendParams, TrafficLightParams } from '@/dashboard/widget-params'
+import { BadgeParams, legendParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
-import { WidgetContentProps } from '@/utils/WidgetFactory'
-import {
-  defaultParams as defaultTrafficLightParams,
-  TrafficLightWidgetContent,
-} from '@/widgets/TrafficLightWidget'
+import { BadgeWidgetContent } from '@/widgets/BadgeWidget'
 
 import { TableLegend } from '.'
 
-type TrafficLightProps = WidgetContentProps<TrafficLightData, TrafficLightParams>
+type BadgeProps = React.ComponentProps<typeof BadgeWidgetContent>
 
-type ListItem = Record<string, string | number | TrafficLightProps>
+type ListItem = Record<string, string | number | BadgeProps>
 
 const convertItem = (obj: ListItem) => {
   return Object.keys(obj).reduce<Record<string, React.ReactNode>>((acc, key) => {
     const item = obj[key]
 
     acc[key] =
-      typeof item !== 'string' && typeof item !== 'number' ? (
-        <TrafficLightWidgetContent {...item} />
-      ) : (
-        item
-      )
+      typeof item !== 'string' && typeof item !== 'number' ? <BadgeWidgetContent {...item} /> : item
 
     return acc
   }, {})
+}
+
+const badgeParams: BadgeParams = {
+  view: 'filled',
+  isMinified: true,
+  size: 'm',
 }
 
 const getList = () => {
@@ -47,7 +44,7 @@ const getList = () => {
           text: '',
           comment: '',
         },
-        params: defaultTrafficLightParams,
+        params: badgeParams,
       },
     },
     {
@@ -59,7 +56,7 @@ const getList = () => {
           text: '',
           comment: '',
         },
-        params: defaultTrafficLightParams,
+        params: badgeParams,
       },
     },
     {
@@ -67,11 +64,11 @@ const getList = () => {
       sum: 7,
       status: {
         data: {
-          status: 'danger',
+          status: 'error',
           text: '',
           comment: '',
         },
-        params: defaultTrafficLightParams,
+        params: badgeParams,
       },
     },
   ])
