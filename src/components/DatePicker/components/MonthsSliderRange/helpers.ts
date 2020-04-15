@@ -1,0 +1,97 @@
+import { addMonths, differenceInCalendarMonths, getDaysInMonth, isWithinInterval } from 'date-fns'
+import { times } from 'lodash'
+
+import { DateLimitProps, DateRange, ValueProps } from '../../'
+
+export const getMonths = ({ minDate, maxDate }: DateLimitProps): readonly Date[] => {
+  const monthAmount = differenceInCalendarMonths(maxDate, minDate) + 1
+
+  return times(monthAmount, i => addMonths(minDate, i))
+}
+
+export const getBaseDate = (value?: DateRange) => {
+  const [startDate, endDate] = value || []
+
+  return startDate || endDate
+}
+
+export const getDateOffsetOnTimeline = ({
+  date,
+  minDate,
+  tickWidth,
+}: {
+  date: Date
+  tickWidth: number
+} & Pick<DateLimitProps, 'minDate'>) => {
+  const startDay = date.getDate()
+  const monthsOffsetPx = differenceInCalendarMonths(date, minDate) * tickWidth
+  const daysOffsetPx = (tickWidth * startDay) / getDaysInMonth(date)
+
+  return Math.round(monthsOffsetPx + daysOffsetPx)
+}
+
+export const getSelectedDayWidth = (date: Date, tickWidth: number) => {
+  return Math.max(Math.round(tickWidth / getDaysInMonth(date)), 1)
+}
+
+export const isSelectedWithinAllowedLimits = ({
+  value = [],
+  minDate,
+  maxDate,
+}: ValueProps<DateRange> & DateLimitProps) => {
+  const [startDate, endDate] = value
+
+  if (startDate && endDate) {
+    return startDate.valueOf() >= minDate.valueOf() && endDate.valueOf() <= maxDate.valueOf()
+  }
+
+  const baseDate = getBaseDate(value)
+
+  return baseDate ? isWithinInterval(baseDate, { start: minDate, end: maxDate }) : false
+}
+
+export const getSelectedBlockStyles = ({
+  value = [],
+  minDate,
+  tickWidth,
+}: {
+  tickWidth: number
+} & ValueProps<DateRange> &
+  Pick<DateLimitProps, 'minDate'>) => {
+  const baseDate = getBaseDate(value)
+
+  if (!baseDate) {
+    return {
+      width: 0,
+    }
+  }
+
+  const [startDate, endDate] = value
+
+  if (startDate && endDate) {
+    const leftCorner = getDateOffsetOnTimeline({
+      date: startDate,
+      minDate,
+      tickWidth,
+    })
+    const rightCorner = getDateOffsetOnTimeline({
+      date: endDate,
+      minDate,
+      tickWidth,
+    })
+
+    return {
+      left: leftCorner,
+      width: Math.max(rightCorner - leftCorner, 1) + getSelectedDayWidth(endDate, tickWidth),
+    }
+  }
+
+  return {
+    left: getDateOffsetOnTimeline({
+      date: baseDate,
+      minDate,
+      tickWidth,
+    }),
+    width: Math.max(getSelectedDayWidth(baseDate, tickWidth), 1),
+  }
+}

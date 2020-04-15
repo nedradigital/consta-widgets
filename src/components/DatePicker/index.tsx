@@ -1,4 +1,6 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
+import { DndProvider } from 'react-dnd'
+import HTML5Backend from 'react-dnd-html5-backend'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit'
@@ -103,6 +105,21 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
 }
 
 export const DatePicker: React.FC<Props> = props => {
+  /**
+   * Не деструктурируем value и type из объекта props, т.к. при их деструктуризации
+   * TypeScript выводит общий тип из объединения в пересечение, пример:
+   * ```
+   * // Исходные типы:
+   * value: Date | DateRange
+   * type: 'date' | 'date-range'
+   * // Типы после деструктуризации:
+   * value: Date & DateRange
+   * type: unknown // из-за того, что строка не может быть `date` и `date-range` одновременно
+   * ```
+   * Вместо деструктуризации в местах обработки value используем type guard isDateRange,
+   * чтобы разделять обработку для Date и DateRange через условия, а type можно проверять напрямую
+   * без type guard, т.к. без деструктуризации он сохраняет исходный тип date | date-range.
+   */
   const { minDate: sourceMinDate, maxDate: sourceMaxDate, size } = props
   const minDate = startOfDay(sourceMinDate)
   const maxDate = endOfDay(sourceMaxDate)
@@ -159,8 +176,9 @@ export const DatePicker: React.FC<Props> = props => {
       setCurrentVisibleDate(getCurrentVisibleDate({ value: props.value, minDate, maxDate }))
     }
 
+    // отключаем проверку, чтобы избежать неявных эффектов, вызванных изменением всех props
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props, isTooltipVisible])
+  }, [props.value, props.type, props.minDate, props.maxDate, isTooltipVisible])
 
   const renderControls = () => {
     const isInvalid =
@@ -211,10 +229,12 @@ export const DatePicker: React.FC<Props> = props => {
         {props.type === 'date' ? (
           <MonthsSliderSingle {...monthsPanelCommonProps} />
         ) : (
-          <MonthsSliderRange
-            {...monthsPanelCommonProps}
-            value={isDateRange(props.value) ? props.value : undefined}
-          />
+          <DndProvider backend={HTML5Backend}>
+            <MonthsSliderRange
+              {...monthsPanelCommonProps}
+              value={isDateRange(props.value) ? props.value : undefined}
+            />
+          </DndProvider>
         )}
         <Calendar {...baseCommonProps} value={props.value} onSelect={handleSelectDate} />
         <ActionButtons

@@ -34,9 +34,13 @@
 .yearName {
   position: absolute;
   bottom: var(--line-height-text-2xs);
-  left: 50%;
+  left: 0;
 
-  transform: translateX(-50%);
+  &.isActive {
+    left: 50%;
+
+    transform: translateX(-50%);
+  }
 }
 
 .ticks {
@@ -48,7 +52,7 @@
 }
 
 .tick {
-  z-index: calc(var(--z-index) + 2);
+  z-index: calc(var(--z-index) + 1);
 
   display: flex;
   align-items: flex-end;
@@ -62,12 +66,17 @@
 
 .selector {
   position: absolute;
+  z-index: calc(var(--z-index) + 2);
 
   width: calc(2 * var(--tick-width));
   height: var(--height);
 
-  pointer-events: none;
+  cursor: grab;
 
   border-radius: var(--control-radius);
   background-color: var(--color-control-bg-ghost);
+
+  &.isDragging {
+    cursor: grabbing;
+  }
 }
