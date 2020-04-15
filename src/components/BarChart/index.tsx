@@ -2,10 +2,11 @@ import React, { useRef, useState } from 'react'
 
 import useComponentSize from '@rehooks/component-size'
 
-import { Axis, UnitPosition } from '@/components/BarChartAxis'
+import { Axis } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard'
+import { BarChartParams } from '@/dashboard/widget-params'
 import { scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
@@ -23,9 +24,7 @@ import {
 } from './helpers'
 import css from './index.css'
 
-export type Orientation = 'horizontal' | 'vertical'
-export const sizes = ['s', 'm'] as const
-export type Size = typeof sizes[number]
+export type Size = BarChartParams['size']
 
 export type SingleBarChartGroups = ReadonlyArray<{
   groupName: string
@@ -51,11 +50,11 @@ export type Groups = readonly Group[]
 
 type Props = {
   groups: Groups
-  orientation: Orientation
+  orientation: BarChartParams['orientation']
   colorGroups: ColorGroups
   gridTicks: number
   valuesTicks: number
-  unitPosition?: UnitPosition
+  unitPosition?: BarChartParams['unitPosition']
   size?: Size
 } & Data &
   (

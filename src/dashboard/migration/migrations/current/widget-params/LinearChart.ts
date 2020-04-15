@@ -1,16 +1,14 @@
-import { XLabelsPosition, YLabelsPosition } from '@/components/LinearChart/components/Axis'
-
 import { TextBasicEditModeParams } from './Text'
 
 export type LinearChartParams = {
   withZoom?: boolean
   isHorizontal?: boolean
-  xLabels?: XLabelsPosition
+  xLabels?: 'top' | 'bottom'
   xLabelTicks?: number
   xGridTicks?: number
   xGuide?: boolean
   xWithPaddings?: boolean
-  yLabels?: YLabelsPosition
+  yLabels?: 'left' | 'right'
   yLabelTicks?: number
   yGridTicks?: number
   yGuide?: boolean

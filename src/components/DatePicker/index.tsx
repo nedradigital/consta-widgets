@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import { endOfDay, format, startOfDay } from 'date-fns'
 
 import { Tooltip } from '@/components/Tooltip'
+import { DatePickerParams } from '@/dashboard/widget-params'
 import { themeColorLight } from '@/utils/theme'
 
 import { ActionButtons } from './components/ActionButtons'
@@ -20,8 +21,7 @@ import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
 
-export const sizes = ['s', 'm', 'l'] as const
-export type Size = typeof sizes[number]
+export type Size = DatePickerParams['size']
 
 export type StyleProps = {
   size?: Size

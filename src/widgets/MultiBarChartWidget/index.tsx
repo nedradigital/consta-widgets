@@ -1,12 +1,11 @@
 import * as React from 'react'
 
 import { BarChart } from '@/components/BarChart'
-import { unitPositions } from '@/components/BarChartAxis'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { MultiBarChartParams as Params } from '@/dashboard/widget-params'
+import { barChartParams, MultiBarChartParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -82,7 +81,10 @@ export const MultiBarChartWidget = createWidget<Data, Params>({
           name="Позиция единиц измерения"
           value={params.unitPosition}
           onChange={value => onChangeParam('unitPosition', value)}
-          values={unitPositions.map(position => ({ value: position, name: position }))}
+          values={barChartParams.unitPositions.map(position => ({
+            value: position,
+            name: position,
+          }))}
         />
       </>
     )

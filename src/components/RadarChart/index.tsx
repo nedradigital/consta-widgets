@@ -7,6 +7,7 @@ import * as _ from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/dashboard'
 import { fontSizeValues } from '@/dashboard/size-constants'
+import { RadarChartParams } from '@/dashboard/widget-params'
 import { getFormattedValue } from '@/utils/chart'
 import { deg2rad } from '@/utils/math'
 
@@ -17,8 +18,7 @@ import { RadarChartFigure } from './components/Figure'
 import { RadarChartPoints } from './components/Points'
 import css from './index.css'
 
-export const radarChartLabelSizes = ['s', 'm'] as const
-export type RadarChartLabelSize = typeof radarChartLabelSizes[number]
+export type RadarChartLabelSize = RadarChartParams['labelSize']
 
 export type Point = {
   xPercent: number

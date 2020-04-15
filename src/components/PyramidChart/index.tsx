@@ -4,6 +4,7 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Text } from '@gpn-design/uikit'
 
 import { useBaseSize } from '@/contexts/baseSize'
+import { PyramidChartParams } from '@/dashboard/widget-params'
 
 import css from './index.css'
 
@@ -12,14 +13,11 @@ export type Data = {
   value: string | number | null | undefined
 }
 
-export const sizes = ['xs', 's', 'm'] as const
-export type Size = typeof sizes[number]
-
 type Props = {
   data: readonly Data[]
   colors: readonly string[]
   constraint?: boolean
-  fontSize?: Size
+  fontSize?: PyramidChartParams['fontSize']
 }
 
 export const DEFAULT_COLORS = [

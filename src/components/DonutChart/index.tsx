@@ -49,7 +49,7 @@ type TooltipDataState = ReadonlyArray<{
   name: string
 }>
 
-const halfDonutClasses: Record<HalfDonut, string> = {
+const halfDonutClasses: Record<NonNullable<HalfDonut>, string> = {
   top: css.halfTop,
   right: css.halfRight,
   bottom: css.halfBottom,

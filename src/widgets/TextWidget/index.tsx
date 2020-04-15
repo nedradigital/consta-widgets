@@ -19,7 +19,7 @@ import {
 } from '@/dashboard/widget-params'
 import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { PositionState } from '@/utils/tooltips'
-import { IconSize, TextProps, TextSize } from '@/utils/ui-kit'
+import { IconSize, TextSize } from '@/utils/ui-kit'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -28,7 +28,10 @@ import css from './index.css'
 type TextType = {
   [key in TextBasicEditModeParams['type']]: {
     text: string
-    props: TextProps
+    props: Omit<
+      TextExtendedEditModeParams,
+      'text' | 'croppedLineCount' | 'croppedWithGradient' | 'type'
+    >
   }
 }
 
@@ -146,37 +149,39 @@ export const fontSizes: readonly TextSize[] = [
   '6xl',
 ] as const
 
-export const textAligns: ReadonlyArray<NonNullable<TextProps['align']>> = [
+export const textAligns: ReadonlyArray<NonNullable<TextExtendedEditModeParams['align']>> = [
   'left',
   'center',
   'right',
 ] as const
-export const textDecorations: ReadonlyArray<NonNullable<TextProps['decoration']>> = [
-  'underline',
-] as const
-export const fontFamilies: ReadonlyArray<NonNullable<TextProps['font']>> = [
+export const textDecorations: ReadonlyArray<NonNullable<
+  TextExtendedEditModeParams['decoration']
+>> = ['underline'] as const
+export const fontFamilies: ReadonlyArray<NonNullable<TextExtendedEditModeParams['font']>> = [
   'mono',
   'sans',
   'serif',
 ] as const
-export const lineHeights: ReadonlyArray<NonNullable<TextProps['lineHeight']>> = [
+export const lineHeights: ReadonlyArray<NonNullable<TextExtendedEditModeParams['lineHeight']>> = [
   '2xs',
   'xs',
   's',
   'm',
   'l',
 ] as const
-export const textSpacings: ReadonlyArray<NonNullable<TextProps['spacing']>> = [
+export const textSpacings: ReadonlyArray<NonNullable<TextExtendedEditModeParams['spacing']>> = [
   'xs',
   's',
   'm',
   'l',
 ] as const
-export const fontStyles: ReadonlyArray<NonNullable<TextProps['fontStyle']>> = ['italic'] as const
-export const textTransforms: ReadonlyArray<NonNullable<TextProps['transform']>> = [
+export const fontStyles: ReadonlyArray<NonNullable<TextExtendedEditModeParams['fontStyle']>> = [
+  'italic',
+] as const
+export const textTransforms: ReadonlyArray<NonNullable<TextExtendedEditModeParams['transform']>> = [
   'uppercase',
 ] as const
-export const fontWeights: ReadonlyArray<NonNullable<TextProps['weight']>> = [
+export const fontWeights: ReadonlyArray<NonNullable<TextExtendedEditModeParams['weight']>> = [
   'black',
   'bold',
   'light',
@@ -184,7 +189,7 @@ export const fontWeights: ReadonlyArray<NonNullable<TextProps['weight']>> = [
   'semibold',
   'thin',
 ] as const
-export const views: ReadonlyArray<NonNullable<TextProps['view']>> = [
+export const views: ReadonlyArray<NonNullable<TextExtendedEditModeParams['view']>> = [
   'alert',
   'brand',
   'ghost',

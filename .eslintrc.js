@@ -5,7 +5,7 @@ module.exports = {
   overrides: [
     {
       files: [
-        "./src/dashboard/migration/migrations/**/index.ts"
+        "./src/dashboard/migration/migrations/**/*.ts"
       ],
       rules: {
         "no-restricted-imports": [

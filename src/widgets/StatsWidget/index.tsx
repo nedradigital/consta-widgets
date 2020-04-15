@@ -1,9 +1,9 @@
 import * as React from 'react'
 
-import { layouts, sizes, Stats } from '@/components/Stats'
+import { Stats } from '@/components/Stats'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { StatsParams as Params } from '@/dashboard/widget-params'
+import { statsParams, StatsParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -33,13 +33,13 @@ export const StatsWidget = createWidget<Data, Params>({
           name="Размер"
           value={params.size}
           onChange={value => onChangeParam('size', value)}
-          values={sizes.map(i => ({ value: i, name: i }))}
+          values={statsParams.sizes.map(i => ({ value: i, name: i }))}
         />
         <WidgetSettingsSelect
           name="Расположение элементов"
           value={params.layout}
           onChange={value => onChangeParam('layout', value)}
-          values={layouts.map(i => ({ value: i, name: i }))}
+          values={statsParams.layouts.map(i => ({ value: i, name: i }))}
         />
       </>
     )

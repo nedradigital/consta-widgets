@@ -1,10 +1,9 @@
-import { Orientation } from '@/components/BarChart'
-import { UnitPosition } from '@/components/BarChartAxis'
+import { BarChartParams } from './BarChart'
 
 export type MultiBarChartParams = {
-  orientation: Orientation
+  orientation: BarChartParams['orientation']
   hasRatio: boolean
   gridTicks: number
   valuesTicks: number
-  unitPosition: UnitPosition
+  unitPosition: BarChartParams['unitPosition']
 }

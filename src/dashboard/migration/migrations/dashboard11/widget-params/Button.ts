@@ -1,15 +1,7 @@
 const widths = ['full', 'auto'] as const
-type Width = typeof widths[number]
-
 const sizes = ['xs', 's', 'm', 'l'] as const
-type Size = typeof sizes[number]
-
 const views = ['clear', 'primary', 'secondary', 'ghost'] as const
-type View = typeof views[number]
-
 const iconAligns = ['left', 'right'] as const
-type IconAlign = typeof iconAligns[number]
-
 const forms = [
   'default',
   'brick',
@@ -19,15 +11,14 @@ const forms = [
   'brick-default',
   'default-brick',
 ] as const
-type Form = typeof forms[number]
 
 export type ButtonParams = {
-  size: Size
-  view: View
-  width: Width
-  form: Form
+  size: typeof sizes[number]
+  view: typeof views[number]
+  width: typeof widths[number]
+  form: typeof forms[number]
   content?: string
-  withIcon?: IconAlign
+  withIcon?: typeof iconAligns[number]
 }
 
 export const buttonParams = {

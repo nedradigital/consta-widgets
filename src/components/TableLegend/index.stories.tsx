@@ -4,10 +4,9 @@ import { object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { types } from '@/components/LegendItem'
 import { Data as TrafficLightData } from '@/components/TrafficLight'
 import { DataType } from '@/dashboard'
-import { TrafficLightParams } from '@/dashboard/widget-params'
+import { legendParams, TrafficLightParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 import { WidgetContentProps } from '@/utils/WidgetFactory'
@@ -109,17 +108,17 @@ storiesOf('components/TableLegend', module)
           {
             field: 'Северный бур',
             colorGroupName: 'first',
-            typeLegend: types[0],
+            typeLegend: legendParams.labelTypes[0],
           },
           {
             field: 'Южное месторождение',
             colorGroupName: 'second',
-            typeLegend: types[0],
+            typeLegend: legendParams.labelTypes[0],
           },
           {
             field: 'Западный разлом',
             colorGroupName: 'third',
-            typeLegend: types[0],
+            typeLegend: legendParams.labelTypes[0],
           },
         ]),
         columns: object('columns', [

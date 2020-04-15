@@ -4,22 +4,19 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
+import { TrafficLightParams } from '@/dashboard/widget-params'
 import { Badge, BadgeSize, Status } from '@/ui/Badge'
 import { PositionState } from '@/utils/tooltips'
 
 import css from './index.css'
 
-export const valueTypes = ['default', 'text'] as const
-export type ValueType = typeof valueTypes[number]
+type Size = NonNullable<TrafficLightParams['size']>
 
 export type Data = {
   status: Status
   text?: string
   comment?: string
 }
-
-export const sizes = ['s', 'm'] as const
-export type Size = typeof sizes[number]
 
 const badgeSizes: Record<Size, BadgeSize> = {
   s: 'xs',
@@ -31,7 +28,7 @@ const sizeClasses: Record<Size, string> = { s: css.sizeS, m: css.sizeM }
 type Props = {
   data: Data
   size?: Size
-  type?: ValueType
+  type?: TrafficLightParams['type']
 }
 
 export const TrafficLight: React.FC<Props> = ({ type = 'default', size = 's', data }) => {

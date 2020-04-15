@@ -1,10 +1,10 @@
 import * as React from 'react'
 
-import { sizes, TableLegend } from '@/components/TableLegend'
+import { TableLegend } from '@/components/TableLegend'
 import { WidgetSettingsCheckbox } from '@/components/WidgetSettingsCheckbox'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { DataMap, DataType } from '@/dashboard'
-import { TableLegendParams as Params } from '@/dashboard/widget-params'
+import { tableLegendParams, TableLegendParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 
@@ -33,7 +33,7 @@ export const TableLegendWidget = createWidget<Data, Params>({
           name="Высота строки"
           value={params.size}
           onChange={value => onChangeParam('size', value)}
-          values={sizes.map(i => ({ name: i, value: i }))}
+          values={tableLegendParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsCheckbox
           name="Показать легенду"
