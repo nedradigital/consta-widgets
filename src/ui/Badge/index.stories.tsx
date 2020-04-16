@@ -9,6 +9,10 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 import { Badge } from '.'
 
 storiesOf('ui/Badge', module)
-  .addDecorator(withSmartKnobs())
+  .addDecorator(withSmartKnobs({ ignoreProps: ['withIcon', 'icon'] }))
   .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => <Badge size="xs">{text('children', '+4.8%')}</Badge>)
+  .add('interactive', () => (
+    <Badge wpSize="s" view="filled" status="normal">
+      {text('children', '+4.8%')}
+    </Badge>
+  ))

@@ -10,12 +10,12 @@ import { defaultParams, DonutChartWidget, DonutChartWidgetContent } from '.'
 
 const halfDonutData = {
   ...progressDonutData,
-  textData: object('textData', {
+  textData: {
     title: 'всего',
     value: '90',
     subTitle: 'МГРП',
     subValue: '20',
-  }),
+  },
 } as const
 
 const formatValueForTooltip = cubeMeterFormatValue

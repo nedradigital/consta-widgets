@@ -2,7 +2,7 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { StatsParams } from '@/dashboard/widget-params'
-import { Badge, BadgeSize, Status } from '@/ui/Badge'
+import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/ui/Badge'
 import { TextSize } from '@/utils/ui-kit'
 
 import css from './index.css'
@@ -14,7 +14,7 @@ export type Data = {
   title?: string
   badge?: {
     percentage: number
-    status: Status
+    status: BadgeStatus
   }
   unit?: string
 }
@@ -47,10 +47,10 @@ const numberSizes: Record<Size, TextSize> = {
 }
 
 const badgeSizes: Record<Size, BadgeSize> = {
-  xs: 'xs',
-  s: 'l',
-  m: 'xl',
-  l: '2xl',
+  xs: 's',
+  s: 's',
+  m: 'm',
+  l: 'l',
 }
 
 const unitSizes: Record<Size, TextSize> = {
@@ -89,9 +89,8 @@ export const Stats: React.FC<Props> = ({
       </Text>
 
       {badge && (
-        <Badge size={badgeSizes[size]} status={badge.status} className={css.badge}>
-          {getNumberSign(badge.percentage, withSign)}
-          {badge.percentage}%
+        <Badge view="filled" wpSize={badgeSizes[size]} status={badge.status} className={css.badge}>
+          {`${getNumberSign(badge.percentage, withSign)} ${badge.percentage}%`}
         </Badge>
       )}
 

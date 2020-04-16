@@ -1,4 +1,5 @@
 import { getWidgetMockData } from '@/utils/widget-mock-data'
+import { defaultParams as badgeParams } from '@/widgets/BadgeWidget'
 import { defaultParams as barChartDefaultParams } from '@/widgets/BarChartWidget'
 import { defaultParams as buttonDefaultParams } from '@/widgets/ButtonWidget'
 import { defaultParams as checkboxDefaultParams } from '@/widgets/CheckboxWidget'
@@ -18,7 +19,6 @@ import { defaultParams as roadmapDefaultParams } from '@/widgets/RoadmapWidget'
 import { defaultParams as statsDefaultParams } from '@/widgets/StatsWidget'
 import { defaultParams as tableLegendDefaultParams } from '@/widgets/TableLegendWidget'
 import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
-import { defaultParams as trafficLightDefaultParams } from '@/widgets/TrafficLightWidget'
 
 import { SUPPORTED_DASHBOARD_VERSION } from './'
 import { handleClear, storageName } from './index.stories'
@@ -242,13 +242,13 @@ export const exampleDatasets: readonly Dataset[] = [
   },
   {
     name: 'Светофор вне группы',
-    type: DataType.TrafficLight,
-    id: 'trafficLightExample1',
+    type: DataType.Badge,
+    id: 'badgeExample1',
   },
   {
     name: 'Светофор в группе',
-    type: DataType.TrafficLight,
-    id: 'trafficLightExample2',
+    type: DataType.Badge,
+    id: 'badgeExample2',
     groupName: 'Группа светофоров',
   },
 ]
@@ -479,8 +479,8 @@ const exampleDashboardState: CurrentDashboard.State = {
         type: 'widget',
         debugName: 'Светофор',
         id: 'fbeb7619-ae6b-4742-ae62-deea18e1382d_0',
-        widgetType: widgetIdsByType.TrafficLightWidget,
-        params: trafficLightDefaultParams,
+        widgetType: widgetIdsByType.BadgeWidget,
+        params: badgeParams,
       },
       {
         type: 'widget',
@@ -557,5 +557,5 @@ export const exampleDashboardData = {
   '2f8f8f8e-21eb-4751-ab81-56ea11ac6342_0': getWidgetMockData(DataType.TableLegend),
   'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5_0': getWidgetMockData(DataType.Text),
   'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5_1': { text: 'Это текст без тултипа' },
-  'fbeb7619-ae6b-4742-ae62-deea18e1382d_0': getWidgetMockData(DataType.TrafficLight),
+  'fbeb7619-ae6b-4742-ae62-deea18e1382d_0': getWidgetMockData(DataType.Badge),
 }

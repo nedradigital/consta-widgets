@@ -56,7 +56,7 @@
   /* Размеры */
 
   &:--extra-small {
-    --column-gap: var(--space-2xs);
+    --column-gap: var(--space-xs);
   }
 
   &:--small {
@@ -97,19 +97,19 @@
   /* Сдвигаем бэдж, чтобы его нижняя граница была по бэйзлайну числа слева */
 
   :--extra-small:not(:--full-reversed) & {
-    bottom: 0.4em;
+    bottom: 0.6em;
   }
 
   :--small:not(:--full-reversed) & {
-    bottom: 0.5em;
+    bottom: 0.6em;
   }
 
   :--medium:not(:--full-reversed) & {
-    bottom: 0.5em;
+    bottom: 0.6em;
   }
 
   :--large:not(:--full-reversed) & {
-    bottom: 0.45em;
+    bottom: 0.75em;
   }
 }
 

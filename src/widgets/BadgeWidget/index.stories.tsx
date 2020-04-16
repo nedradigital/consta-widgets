@@ -5,13 +5,13 @@ import { storiesOf } from '@storybook/react'
 
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
-import { defaultParams, TrafficLightWidget, TrafficLightWidgetContent } from '.'
+import { BadgeWidget, BadgeWidgetContent, defaultParams } from '.'
 
-storiesOf('widgets/TrafficLightWidget', module)
+storiesOf('widgets/BadgeWidget', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <TrafficLightWidgetContent
-      data={object('data', TrafficLightWidget.mockData)}
+    <BadgeWidgetContent
+      data={object('data', BadgeWidget.mockData)}
       params={object('params', defaultParams)}
     />
   ))
