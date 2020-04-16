@@ -2,10 +2,13 @@
 @custom-selector :--editButtons .editButtons;
 
 :--main {
+  --z-box-wrapper: 1;
   --z-edit-buttons: calc(var(--z-box-wrapper) + 1);
   --z-arrows: calc(var(--z-edit-buttons) + 1);
 
   position: relative;
+
+  box-sizing: border-box;
 
   &:not(.isViewMode) {
     min-height: 30px;
@@ -63,6 +66,8 @@
 }
 
 .button {
+  @mixin button;
+
   font-size: 12px;
 
   position: relative;

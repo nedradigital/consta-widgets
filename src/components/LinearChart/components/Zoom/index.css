@@ -3,6 +3,8 @@
 @custom-selector :--vertical :--main.isVertical;
 
 :--main {
+  --fast-transition: 0.15s ease-out;
+
   position: absolute;
   z-index: 2;
 }
@@ -99,6 +101,8 @@
 }
 
 .button {
+  @mixin button;
+
   --button-size: 14px;
   --button-radius: 2px;
 

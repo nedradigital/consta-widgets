@@ -1,6 +1,7 @@
 .menu {
   font-size: var(--size-text-s);
 
+  box-sizing: border-box;
   width: 160px;
 
   color: var(--color-typo-primary);

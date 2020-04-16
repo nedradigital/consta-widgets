@@ -1,4 +1,6 @@
 .button {
+  @mixin button;
+
   box-sizing: content-box;
   width: calc-size(12);
   height: calc-size(12);

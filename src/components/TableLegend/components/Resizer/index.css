@@ -1,4 +1,6 @@
 .main {
+  --fast-transition: 0.15s ease-out;
+
   position: absolute;
   z-index: var(--resizer-z);
   top: 0;

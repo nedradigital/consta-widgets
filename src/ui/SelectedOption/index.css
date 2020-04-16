@@ -24,6 +24,8 @@
 }
 
 .buttonCross {
+  @mixin button;
+
   cursor: pointer;
 
   color: var(--color-control-typo-clear);

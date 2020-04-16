@@ -21,6 +21,8 @@
 }
 
 .item {
+  @mixin button;
+
   flex-shrink: 0;
 
   box-sizing: content-box;

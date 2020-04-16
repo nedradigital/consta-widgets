@@ -16,6 +16,7 @@
   border-collapse: collapse;
 
   & td {
+    box-sizing: border-box;
     padding: 0 var(--space-m);
 
     vertical-align: middle;
