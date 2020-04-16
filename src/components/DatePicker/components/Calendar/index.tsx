@@ -18,7 +18,7 @@ import {
 import * as _ from 'lodash'
 
 import { DateLimitProps, DateRange, ValueProps } from '../../'
-import { getMonthTitle, isDateRange } from '../../helpers'
+import { getMonthTitle, isDateRange, isOnlyOneDateInRange } from '../../helpers'
 
 import css from './index.css'
 
@@ -34,7 +34,7 @@ const getStartAndEndDate = (date1: Date, date2: Date) => {
   return { start, end }
 }
 
-const isDateHighlighted = ({
+export const isDateHighlighted = ({
   date,
   value,
   hoveredDate,
@@ -42,11 +42,21 @@ const isDateHighlighted = ({
   date: Date
   hoveredDate?: Date
 } & ValueProps<Date | DateRange>) => {
-  if (!hoveredDate || !isDateRange(value) || !value[0] || value[1]) {
+  if (!hoveredDate || !isDateRange(value) || !isOnlyOneDateInRange(value)) {
     return false
   }
 
-  return isWithinInterval(date, getStartAndEndDate(value[0], hoveredDate))
+  const [startDate, endDate] = value
+
+  if (isDefined(startDate)) {
+    return isWithinInterval(date, getStartAndEndDate(startDate, hoveredDate))
+  }
+
+  if (isDefined(endDate)) {
+    return isWithinInterval(date, getStartAndEndDate(endDate, hoveredDate))
+  }
+
+  return false
 }
 
 const isDateSelected = ({
@@ -91,6 +101,22 @@ export const isValueSelected = ({
   } else {
     return isDateSelected({ date, value, minDate, maxDate })
   }
+}
+
+export const isValueSelectedBackwards = ({
+  value,
+  hoveredDate,
+}: {
+  value?: Date | DateRange
+  hoveredDate?: Date
+}) => {
+  return (
+    hoveredDate &&
+    isDateRange(value) &&
+    isOnlyOneDateInRange(value) &&
+    ((isDefined(value[0]) && isBefore(hoveredDate, value[0])) ||
+      (isDefined(value[1]) && isBefore(hoveredDate, value[1])))
+  )
 }
 
 const getMonthWeeks = (date: Date) => {
@@ -148,13 +174,19 @@ export const Calendar: React.FC<Props> = ({
       return onSelect(date)
     }
 
-    const [startDate] = value
-
-    if (!isDefined(startDate) || value.every(isDefined)) {
+    if (!isOnlyOneDateInRange(value)) {
       return onSelect([date, undefined])
     }
 
-    return onSelect(startDate > date ? [date, startDate] : [startDate, date])
+    const [startDate, endDate] = value
+
+    if (isDefined(startDate)) {
+      return onSelect(startDate > date ? [date, startDate] : [startDate, date])
+    }
+
+    if (isDefined(endDate)) {
+      return onSelect(endDate > date ? [date, endDate] : [endDate, date])
+    }
   }
 
   const monthsAmount = isDateRange(value) ? 2 : 1
@@ -172,8 +204,7 @@ export const Calendar: React.FC<Props> = ({
     const isDisabled = !isWithinInterval(date, { start: minDate, end: maxDate })
     const isHighlighted = isDateHighlighted({ date, value, hoveredDate })
     const isSelected = isValueSelected({ date, value, minDate, maxDate })
-    const isSelectedBackwards =
-      isDateRange(value) && hoveredDate && value[0] && !value[1] && isBefore(hoveredDate, value[0])
+    const isSelectedBackwards = isValueSelectedBackwards({ value, hoveredDate })
     const [firstDate, lastDate] = isDateRange(value) ? _.sortBy(value) : [undefined, undefined]
     const isFirstDate = isDateRange(value) && firstDate ? isSameDay(firstDate, date) : false
     const isLastDate = isDateRange(value) && lastDate ? isSameDay(lastDate, date) : false
@@ -192,7 +223,7 @@ export const Calendar: React.FC<Props> = ({
           !isDateRange(value) && css.isSingleDate,
           isDateRange(value) && css.isRange,
           isDateRange(value) && isHighlighted && css.isHighlighted,
-          isDateRange(value) && value[0] && !value[1] && css.isOnlyOneValue,
+          isDateRange(value) && isOnlyOneDateInRange(value) && css.isOnlyOneValue,
           isDateRange(value) && isSunday(date) && css.isLastWeekDay
         )}
         onMouseEnter={() => handleHoverDate(date)}

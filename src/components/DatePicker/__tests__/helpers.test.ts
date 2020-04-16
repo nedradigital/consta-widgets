@@ -1,6 +1,12 @@
 import MockDate from 'mockdate'
 
-import { getCurrentVisibleDate, getMonthTitle, isDateIsInvalid, isDateRange } from '../helpers'
+import {
+  getCurrentVisibleDate,
+  getMonthTitle,
+  isDateIsInvalid,
+  isDateRange,
+  isOnlyOneDateInRange,
+} from '../helpers'
 
 describe('isDateRange', () => {
   it('не опознает используемое значение как интервал, если оно не передано', () => {
@@ -273,5 +279,23 @@ describe('isDateIsInvalid', () => {
         maxDate: new Date(2020, 2, 15),
       })
     ).toBe(true)
+  })
+})
+
+describe('isOnlyOneDateInRange', () => {
+  it('возвращает false, если в интервале нет дат', () => {
+    expect(isOnlyOneDateInRange([undefined, undefined])).toBeFalse()
+  })
+
+  it('возвращает false, если в интервале указаны обе даты', () => {
+    expect(isOnlyOneDateInRange([new Date(), new Date()])).toBeFalse()
+  })
+
+  it('возвращает true, если в интервале указана только первая дата', () => {
+    expect(isOnlyOneDateInRange([new Date(), undefined])).toBeTrue()
+  })
+
+  it('возвращает true, если в интервале указана только вторая дата', () => {
+    expect(isOnlyOneDateInRange([undefined, new Date()])).toBeTrue()
   })
 })

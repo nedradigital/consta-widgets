@@ -159,11 +159,6 @@ export const DatePicker: React.FC<Props> = props => {
   }
 
   useLayoutEffect(() => {
-    // сброс интервала в случае, если сторонним инпутом сброшена только первая дата
-    if (props.type === 'date-range' && props.value && props.value[1] && !props.value[0]) {
-      props.onChange([undefined, undefined])
-    }
-
     if (!isTooltipVisible) {
       setCurrentVisibleDate(getCurrentVisibleDate({ value: props.value, minDate, maxDate }))
     }
