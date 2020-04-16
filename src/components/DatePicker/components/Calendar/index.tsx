@@ -230,11 +230,13 @@ export const Calendar: React.FC<Props> = ({
               </Text>
             )}
             <div className={classnames(css.row, css.isWithDaynames)}>{weekDays}</div>
-            {weeks.map((week, weekIdx) => (
-              <div key={weekIdx} className={css.row}>
-                {week.map(renderDay)}
-              </div>
-            ))}
+            <div className={css.weeks}>
+              {weeks.map((week, weekIdx) => (
+                <div key={weekIdx} className={css.row}>
+                  {week.map(renderDay)}
+                </div>
+              ))}
+            </div>
           </div>
         )
       })}
