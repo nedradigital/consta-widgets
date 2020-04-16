@@ -21,3 +21,9 @@ storiesOf('widgets/ButtonWidget', module)
       params={object('params', defaultParams)}
     />
   ))
+  .add('с тултипом при наведении', () => (
+    <ButtonWidgetContent
+      data={object('data', { ...ButtonWidget.mockData, tooltip: 'Я – тултип!' })}
+      params={object('params', defaultParams)}
+    />
+  ))
