@@ -311,6 +311,70 @@ describe('getMainTickValues', () => {
 
       expect(result).toEqual([])
     })
+
+    it('вернёт значения с шагом не по единице', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        domain: [0, 400],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 100, y: 0 },
+            { x: 200, y: 0 },
+            { x: 300, y: 0 },
+            { x: 400, y: 0 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 5 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 100, 200, 300, 400])
+    })
+
+    it('вернёт значения с дробным шагом', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        domain: [0, 1],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0.2, y: 0 },
+            { x: 0.4, y: 0 },
+            { x: 0.6, y: 0 },
+            { x: 0.8, y: 0 },
+            { x: 1, y: 0 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
+    })
+
+    it('вернёт только те значения, которые присутствуют во входных данных', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        domain: [0, 1],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0.2, y: 0 },
+            { x: 0.4, y: 0 },
+            { x: 0.8, y: 0 },
+            { x: 1, y: 0 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 0.2, 0.4, 0.8, 1])
+    })
   })
 
   describe('вертикальный график', () => {
@@ -456,24 +520,68 @@ describe('getMainTickValues', () => {
       expect(result).toEqual([])
     })
 
-    it('отображает засечки даже там, где пропущено значение', () => {
+    it('вернёт значения с шагом не по единице', () => {
       const result = getMainTickValues({
         ...commonParams,
+        domain: [400, 0],
         items: flipPointsOnAxes(
           [
-            { x: 1, y: 1 },
-            { x: 3, y: 3 },
-            { x: 4, y: 4 },
-            { x: 5, y: 5 },
+            { x: 0, y: 0 },
+            { x: 100, y: 0 },
+            { x: 200, y: 0 },
+            { x: 300, y: 0 },
+            { x: 400, y: 0 },
           ],
           isHorizontal
         ),
-        gridConfig: getGridConfig({ labelTicks: 5, guide: true }),
-        domain: [1, 5],
+        gridConfig: getGridConfig({ labelTicks: 5 }),
         tickType: 'labelTicks',
       })
 
-      expect(result).toEqual([1, 2, 3, 4, 5])
+      expect(result).toEqual([0, 100, 200, 300, 400])
+    })
+
+    it('вернёт значения с дробным шагом', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        domain: [1, 0],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0.2, y: 0 },
+            { x: 0.4, y: 0 },
+            { x: 0.6, y: 0 },
+            { x: 0.8, y: 0 },
+            { x: 1, y: 0 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
+    })
+
+    it('вернёт только те значения, которые присутствуют во входных данных', () => {
+      const result = getMainTickValues({
+        ...commonParams,
+        domain: [1, 0],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0.2, y: 0 },
+            { x: 0.4, y: 0 },
+            { x: 0.8, y: 0 },
+            { x: 1, y: 0 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 0.2, 0.4, 0.8, 1])
     })
   })
 })
@@ -508,7 +616,6 @@ describe('getSecondaryTickValues', () => {
       guideValue: 0,
       isHorizontal,
     } as const
-
     it('вернёт пустой массив', () => {
       const result = getSecondaryTickValues({
         ...commonParams,
@@ -579,6 +686,26 @@ describe('getSecondaryTickValues', () => {
       })
 
       expect(result).toEqual([])
+    })
+
+    it('вернёт массив с заполненными пропусками', () => {
+      const result = getSecondaryTickValues({
+        ...commonParams,
+        domain: [0, 1],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0, y: 0.4 },
+            { x: 0, y: 0.8 },
+            { x: 0, y: 1 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([0, 0.2, 0.4, 0.6, 0.8, 1])
     })
   })
 
@@ -663,6 +790,26 @@ describe('getSecondaryTickValues', () => {
       })
 
       expect(result).toEqual([])
+    })
+
+    it('вернёт массив с заполненными пропусками', () => {
+      const result = getSecondaryTickValues({
+        ...commonParams,
+        domain: [1, 0],
+        items: flipPointsOnAxes(
+          [
+            { x: 0, y: 0 },
+            { x: 0, y: 0.4 },
+            { x: 0, y: 0.8 },
+            { x: 0, y: 1 },
+          ],
+          isHorizontal
+        ),
+        gridConfig: getGridConfig({ labelTicks: 6 }),
+        tickType: 'labelTicks',
+      })
+
+      expect(result).toEqual([1, 0.8, 0.6, 0.4, 0.2, 0])
     })
   })
 })
