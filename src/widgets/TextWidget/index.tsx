@@ -18,7 +18,7 @@ import {
   TextParams as Params,
 } from '@/dashboard/widget-params'
 import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
-import { PositionState } from '@/utils/tooltips'
+import { useTooltipReposition } from '@/utils/tooltips'
 import { IconSize, TextSize } from '@/utils/ui-kit'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
@@ -220,7 +220,6 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
 
   const [isVisibleGradient, changeIsVisibleGradient] = React.useState(false)
   const [tooltipVisible, setTooltipVisibility] = React.useState(false)
-  const [tooltipPosition, setTooltipPosition] = React.useState<PositionState>()
 
   const text = data && data.text ? data.text : paramsText
   const textProps = isExtendedEditMode(params)
@@ -257,33 +256,17 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
     setTooltipVisibility(!tooltipVisible)
   }
 
-  /* Позиционирование тултипа */
-  React.useLayoutEffect(() => {
-    if (!buttonRef.current) {
-      return
-    }
-
-    const {
-      top,
-      left,
-      width: buttonWidth,
-      height: buttonHeight,
-    } = buttonRef.current.getBoundingClientRect()
-
-    const x = left + buttonWidth / 2
-    const y = top + buttonHeight
-
-    if (tooltipPosition && tooltipPosition.x === x && tooltipPosition.y === y) {
-      return
-    }
-
-    setTooltipPosition({ x, y })
-  }, [buttonRef, tooltipVisible, tooltipPosition, setTooltipPosition])
-
   useClickOutside({
     requiredRefs: [buttonRef, tooltipRef],
     handler: () => setTooltipVisibility(false),
   })
+
+  useTooltipReposition({
+    isVisible: tooltipVisible,
+    anchorRef: buttonRef,
+    onRequestReposition: () => setTooltipVisibility(false),
+  })
+
   return (
     <div
       className={css.main}
@@ -311,7 +294,7 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
             ref={tooltipRef}
             isVisible={tooltipVisible}
             direction="downCenter"
-            position={tooltipPosition}
+            anchorRef={buttonRef}
             isContentHoverable
           >
             {data.tooltip}
