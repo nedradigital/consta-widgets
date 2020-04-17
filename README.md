@@ -83,6 +83,7 @@ $ yarn test
 - [Задачи на исследование/анализ (research)](docs/RESEARCH_TASKS.md)
 - [Обновление версии пакета](docs/VERSION_UPDATE.md)
 - [Миксины стилей](docs/STYLES_MIXINS.md)
+- [Release Flow](docs/RELEASE_FLOW.md)
 - [Договоренности по оформлению кода](docs/ARRANGEMENTS_FOR_CODE_STYLE.md)
     - [Оформление директории компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#DirectoryStyle)
     - [Разбивка компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#SplitComponent)
