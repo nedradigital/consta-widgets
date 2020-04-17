@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 
 import { Button } from '@gpn-design/uikit'
 
+import { Tooltip } from '@/components/Tooltip'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
 import { buttonParams, ButtonParams as Params } from '@/dashboard/widget-params'
 import { widgetIdsByType } from '@/utils/widgets-list'
 import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
+
+import css from './index.css'
 
 const dataType = DataType.Button
 type Data = DataMap[typeof dataType]
@@ -22,21 +25,48 @@ export const defaultParams: Params = {
 export const ButtonWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
   params: { content, form, size, view, width, withIcon },
-}) => (
-  <Button
-    type="button"
-    disabled={data && data.disabled}
-    wpSize={size}
-    onClick={data && data.onClick}
-    view={view}
-    width={width}
-    form={form}
-    iconOnly={data && data.iconOnly}
-    withIcon={withIcon}
-  >
-    {data && data.content ? data.content : content}
-  </Button>
-)
+}) => {
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseEnter = () => {
+    setIsTooltipVisible(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsTooltipVisible(false)
+  }
+
+  return (
+    <>
+      <div
+        className={css.wrapper}
+        ref={wrapperRef}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <Button
+          type="button"
+          disabled={data && data.disabled}
+          wpSize={size}
+          onClick={data && data.onClick}
+          view={view}
+          width={width}
+          form={form}
+          iconOnly={data && data.iconOnly}
+          withIcon={withIcon}
+        >
+          {data && data.content ? data.content : content}
+        </Button>
+      </div>
+      {data.tooltip && (
+        <Tooltip anchorRef={wrapperRef} isVisible={isTooltipVisible}>
+          {data.tooltip}
+        </Tooltip>
+      )}
+    </>
+  )
+}
 
 export const ButtonWidget = createWidget<Data, Params>({
   id: widgetIdsByType.ButtonWidget,

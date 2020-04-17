@@ -129,6 +129,7 @@ export type DataMap = {
   [DataType.Images]: readonly ImageItem[]
   [DataType.Button]: {
     content: React.ReactNode
+    tooltip?: React.ReactNode
     disabled?: boolean
     iconOnly?: boolean
     onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
