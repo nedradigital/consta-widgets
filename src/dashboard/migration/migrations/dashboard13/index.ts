@@ -4,7 +4,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard13 } from '../dashboard13'
+import { Dashboard12, widgetIdsByType as Dashboard12WidgetIdsByType } from '../dashboard12'
 
 import {
   BadgeParams,
@@ -52,7 +52,7 @@ export const widgetIdsByType = {
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard13 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -139,35 +139,28 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 14
+    version: 13
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isDashboard13Widget = (item: Dashboard13.BoxItem): item is Dashboard13.WidgetItem =>
+const isCurrentWidget = (item: Dashboard13.BoxItem): item is Dashboard13.WidgetItem =>
   item.type === 'widget'
 
-export const currentMigration: Migration<Dashboard13.State, CurrentDashboard.State> = {
-  versionTo: 14,
-  changes: ['В виджет линейного графика добавлено направление в вертикальном отображении'],
-  // MIGRATION_GENERATION:METHOD:START
-  up: data => ({
-    ...data,
-    version: 14,
-  }),
-  // MIGRATION_GENERATION:METHOD:END
+const isDashboard12Widget = (item: Dashboard12.BoxItem): item is Dashboard12.WidgetItem =>
+  item.type === 'widget'
 
-  // MIGRATION_GENERATION:METHOD:START
-  down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard13.BoxItem => {
+export const migration13: Migration<Dashboard12.State, Dashboard13.State> = {
+  versionTo: 13,
+  changes: ['Виджет светофора стал бэджем'],
+  up: data => {
+    const updateItem = (item: Dashboard12.BoxItem): Dashboard13.BoxItem => {
       if (item.type === 'switch') {
         return {
           ...item,
-          displays: item.displays.map(widgets =>
-            widgets.map(updateItem).filter(isDashboard13Widget)
-          ),
+          displays: item.displays.map(widgets => widgets.map(updateItem).filter(isCurrentWidget)),
         }
       }
 
@@ -177,17 +170,21 @@ export const currentMigration: Migration<Dashboard13.State, CurrentDashboard.Sta
           grid: {
             ...item.grid,
             items: item.grid.items.map(row =>
-              row.map(column => column.map(updateItem).filter(isDashboard13Widget))
+              row.map(column => column.map(updateItem).filter(isCurrentWidget))
             ),
           },
         }
       }
 
-      if (item.widgetType === widgetIdsByType.LinearChartWidget) {
+      if (item.widgetType === Dashboard12WidgetIdsByType.TrafficLightWidget) {
         return {
           ...item,
+          widgetType: widgetIdsByType.BadgeWidget,
           params: {
-            ..._.omit(item.params, ['direction']),
+            ..._.omit(item.params, 'type'),
+            size: item.params.size || 's',
+            view: 'filled',
+            isMinified: item.params.type === 'default',
           },
         }
       }
@@ -208,5 +205,58 @@ export const currentMigration: Migration<Dashboard13.State, CurrentDashboard.Sta
       }, {}),
     }
   },
-  // MIGRATION_GENERATION:METHOD:END
+
+  down: data => {
+    const updateItem = (item: Dashboard13.BoxItem): Dashboard12.BoxItem => {
+      if (item.type === 'switch') {
+        return {
+          ...item,
+          displays: item.displays.map(widgets =>
+            widgets.map(updateItem).filter(isDashboard12Widget)
+          ),
+        }
+      }
+
+      if (item.type === 'grid') {
+        return {
+          ...item,
+          grid: {
+            ...item.grid,
+            items: item.grid.items.map(row =>
+              row.map(column => column.map(updateItem).filter(isDashboard12Widget))
+            ),
+          },
+        }
+      }
+
+      if (item.widgetType === widgetIdsByType.BadgeWidget) {
+        const { size, isMinified } = item.params
+
+        return {
+          ...item,
+          widgetType: Dashboard12WidgetIdsByType.TrafficLightWidget,
+          params: {
+            ..._.omit(item.params, ['view', 'form', 'isMinified']),
+            size: size === 'l' ? 'm' : size,
+            type: isMinified ? 'default' : 'text',
+          },
+        }
+      }
+
+      return item
+    }
+
+    return {
+      ...data,
+      version: 12,
+      config: Object.keys(data.config).reduce((newConfig, key) => {
+        const items = data.config[key]
+
+        return {
+          ...newConfig,
+          [key]: items.map(updateItem).filter(isDefined),
+        }
+      }, {}),
+    }
+  },
 }

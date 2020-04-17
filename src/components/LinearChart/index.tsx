@@ -7,7 +7,7 @@ import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups, FormatValue } from '@/dashboard'
-import { TextBasicEditModeParams } from '@/dashboard/widget-params'
+import { LinearChartParams, TextBasicEditModeParams } from '@/dashboard/widget-params'
 import { TextWidgetContent } from '@/widgets/TextWidget'
 
 import { HoverLines } from './components/HoverLines'
@@ -58,8 +58,10 @@ export type Line = {
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
+export type Direction = LinearChartParams['direction']
 
 type Props = {
+  direction?: Direction
   lines: readonly Line[]
   gridConfig: GridConfig
   threshold?: Threshold
@@ -177,6 +179,7 @@ export class LinearChart extends React.Component<Props, State> {
           x: { labels: xLabelsPos },
           y: { labels: yLabelsPos },
         },
+        direction = 'toRight',
         withZoom,
         isHorizontal,
         lines,
@@ -202,7 +205,7 @@ export class LinearChart extends React.Component<Props, State> {
 
     const lineClipPath = `url(#${this.lineClipId})`
     const dotsClipPath = `url(#${this.dotsClipId})`
-    const scaleX = getXScale(xDomain, svgWidth)
+    const scaleX = getXScale(xDomain, svgWidth, direction)
     const scaleY = getYScale(yDomain, svgHeight)
     const dotRadius = DOT_SIZE / 2
     const xOnBottom = xLabelsPos === 'bottom'
@@ -302,6 +305,7 @@ export class LinearChart extends React.Component<Props, State> {
                 ? ({
                     withGradient: true,
                     areaBottom: isHorizontal ? yDomain[0] : xDomain[0],
+                    gradientDirection: direction,
                   } as const)
                 : ({
                     withGradient: false,

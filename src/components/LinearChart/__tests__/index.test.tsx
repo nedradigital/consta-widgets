@@ -753,6 +753,13 @@ describe('getXScale', () => {
     expect(scaler(1)).toEqual(0)
     expect(scaler(2)).toEqual(100)
   })
+
+  it('получение значение позиции точки на оси X в пикселях для построения графика справа налево', () => {
+    const scaler = getXScale(DOMAIN, WIDTH, 'toLeft')
+
+    expect(scaler(1)).toEqual(100)
+    expect(scaler(2)).toEqual(0)
+  })
 })
 
 describe('getYScale', () => {
