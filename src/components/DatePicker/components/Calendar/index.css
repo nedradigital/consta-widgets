@@ -13,6 +13,7 @@
   --cell-size: 28px;
   --cell-padding-left: var(--space-xs);
   --cell-bg-side-offset: calc(var(--cell-padding-left) / 2);
+  --space-between-weeks: var(--space-xs);
   --color-bg-selected-primary: var(--color-control-bg-primary);
   --color-bg-selected-secondary: var(--color-control-bg-ghost);
   --color-bg-hovered: var(--color-control-bg-primary-hover);
@@ -43,11 +44,20 @@
   }
 }
 
+.weeks {
+  --max-weeks-in-month: 6;
+
+  min-height: calc(
+    (var(--cell-size) * var(--max-weeks-in-month)) +
+      (var(--space-between-weeks) * (var(--max-weeks-in-month) - 1))
+  );
+}
+
 .row {
   display: flex;
 
   & + & {
-    margin-top: var(--space-xs);
+    margin-top: var(--space-between-weeks);
   }
 
   &.isWithDaynames + & {
