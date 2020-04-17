@@ -6,6 +6,7 @@ import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
 import '@gpn-design/uikit/dist/style.css'
 
 import '@/index.css'
+import './storybook.css'
 
 addDecorator(withPropsTable)
 addDecorator(withKnobs)
@@ -27,8 +28,6 @@ addDecorator(storyFn => {
     'theme_space_gpn-default',
     'theme_color_gpn-display',
   )
-
-  document.body.style.backgroundColor = 'var(--color-bg-default)'
 
   return storyFn()
 })

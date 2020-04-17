@@ -1,0 +1,17 @@
+@define-mixin button {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+
+  overflow: visible;
+
+  margin: 0;
+  padding: 0;
+
+  text-transform: none;
+
+  color: inherit;
+  border: none;
+  outline: none;
+  background: none;
+}

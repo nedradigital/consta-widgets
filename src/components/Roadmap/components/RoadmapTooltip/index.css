@@ -70,6 +70,8 @@
 }
 
 .button {
+  @mixin button;
+
   display: inline-flex;
 
   width: 26px;

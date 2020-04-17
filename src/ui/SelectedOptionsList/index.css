@@ -21,6 +21,8 @@
 }
 
 .buttonCross {
+  @mixin button;
+
   width: 18px;
   height: 18px;
   margin: var(--space-2xs);

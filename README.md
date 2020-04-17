@@ -1,6 +1,20 @@
 # Dashboard constructor
 Репозиторий для констркутора дашбордов
 
+## Использование
+
+Если виджеты используются отдельно от конструктора, то для корректного отображения
+необходимо добавить настройку базового размера элементов для скейлинга, эту настройку
+необходимо добавлять в `:root`:
+
+```css
+:root {
+  --dashboard-constructor-base-size: 16;
+}
+```
+
+По необходимости можно увеличивать или уменьшать это значение.
+
 ## Установка, обновление, публикация и подключение пакета
 
 Инструкции находятся в пакете [gpn-configs](https://github.com/CSSSR/gpn-configs)
@@ -68,6 +82,7 @@ $ yarn test
 - [Парное программирование](docs/PAIR_PROGRAMMING.md)
 - [Задачи на исследование/анализ (research)](docs/RESEARCH_TASKS.md)
 - [Обновление версии пакета](docs/VERSION_UPDATE.md)
+- [Миксины стилей](docs/STYLES_MIXINS.md)
 - [Договоренности по оформлению кода](docs/ARRANGEMENTS_FOR_CODE_STYLE.md)
     - [Оформление директории компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#DirectoryStyle)
     - [Разбивка компонента](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#SplitComponent)

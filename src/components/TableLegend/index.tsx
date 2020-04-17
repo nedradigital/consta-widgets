@@ -181,8 +181,12 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           <button type="button" className={css.title} onClick={() => sortBy(obj.accessor)}>
             {obj.title}
           </button>
-          <button type="button" onClick={() => sortBy(obj.accessor)}>
-            <IconSort size="xs" className={classnames(css.icon, css.iconSort)} />
+          <button
+            type="button"
+            className={classnames(css.icon, css.iconSort)}
+            onClick={() => sortBy(obj.accessor)}
+          >
+            <IconSort size="xs" />
           </button>
         </Text>
         <Resizer
