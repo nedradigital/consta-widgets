@@ -34,6 +34,7 @@ export type Item = {
 }
 
 export type Data = {
+  id: string
   firstColumn: string
   secondColumn: string
   plan: readonly Item[]

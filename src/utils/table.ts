@@ -4,6 +4,7 @@ import { compact, xor } from 'lodash'
 
 export type TableRow = {
   [key: string]: React.ReactNode
+  id: string
 }
 
 export type TableColumn = {

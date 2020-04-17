@@ -20,9 +20,27 @@
 
     table-layout: fixed;
   }
+}
 
-  & tr:nth-child(even) {
-    background: var(--color-bg-stripe);
+.dataRow {
+  --row-bg-color: transparent;
+
+  background: var(--row-bg-color);
+
+  &:nth-child(even) {
+    --row-bg-color: var(--color-bg-stripe);
+  }
+
+  &.isActive {
+    --row-bg-color: var(--color-control-bg-ghost);
+  }
+
+  &.isHoverable {
+    cursor: pointer;
+
+    &:hover {
+      --row-bg-color: var(--color-control-bg-ghost-hover);
+    }
   }
 }
 
