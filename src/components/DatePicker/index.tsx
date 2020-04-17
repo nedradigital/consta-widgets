@@ -212,11 +212,7 @@ export const DatePicker: React.FC<Props> = props => {
         isVisible={isTooltipVisible}
         ref={tooltipRef}
         anchorRef={controlsRef}
-        className={classnames(
-          themeColorLight,
-          css.tooltip,
-          props.type === 'date-range' && css.isWide
-        )}
+        className={classnames(themeColorLight, css.tooltip)}
         withArrow={false}
         offset={OFFSET_FROM_CONTROLS}
         direction="downRight"
