@@ -2,7 +2,6 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 import { Text } from '@gpn-design/uikit'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { themeColorLight } from '@/utils/theme'
@@ -64,6 +63,10 @@ const directionClasses: Record<Direction, string> = {
   downRight: css.downRight,
 }
 
+const isAnchorRef = (
+  p: AttachedToAnchor['anchorRef'] | AttachedToPosition['position']
+): p is AttachedToAnchor['anchorRef'] => Boolean(p && 'current' in p)
+
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
     children,
@@ -76,21 +79,22 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     possibleDirections = directions,
   } = props
 
+  const positionOrAnchorRef = 'position' in props ? props.position : props.anchorRef
+
   const mainRef = React.useRef<HTMLDivElement>(null)
-  const { width, height } = useComponentSize(mainRef)
   const [position, setPosition] = React.useState<PositionState>()
   const [direction, setDirection] = React.useState<Direction>(passedDirection)
 
   React.useLayoutEffect(() => {
     if (isVisible && !mainRef.current && !isDefinedPosition(position)) {
-      if ('anchorRef' in props && props.anchorRef && props.anchorRef.current) {
-        const { left, top } = props.anchorRef.current.getBoundingClientRect()
+      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
+        const { left, top } = positionOrAnchorRef.current.getBoundingClientRect()
 
         return setPosition({ x: left, y: top })
       }
 
-      if ('position' in props && isDefinedPosition(props.position)) {
-        return setPosition({ x: props.position.x, y: props.position.y })
+      if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
+        return setPosition({ x: positionOrAnchorRef.x, y: positionOrAnchorRef.y })
       }
 
       return
@@ -99,10 +103,10 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     if (mainRef.current && isDefinedPosition(position)) {
       let basePositionData
 
-      if ('anchorRef' in props && props.anchorRef && props.anchorRef.current) {
-        basePositionData = { anchorClientRect: props.anchorRef.current.getBoundingClientRect() }
-      } else if ('position' in props && isDefinedPosition(props.position)) {
-        basePositionData = { position: props.position }
+      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
+        basePositionData = { anchorClientRect: positionOrAnchorRef.current.getBoundingClientRect() }
+      } else if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
+        basePositionData = { position: positionOrAnchorRef }
       } else {
         return
       }
@@ -131,15 +135,13 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       }
     }
   }, [
-    props,
+    positionOrAnchorRef,
     isVisible,
     mainRef,
     position,
     direction,
     passedDirection,
     offset,
-    width,
-    height,
     possibleDirections,
   ])
 
