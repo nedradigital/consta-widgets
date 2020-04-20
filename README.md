@@ -94,3 +94,7 @@ $ yarn test
     - [Стилизация switch конструкций](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#Switch)
     - [Использование formatLabel и unit](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#FormatLabel)
     - [Порядок сущностей внутри *.ts(x) файлов](docs/ARRANGEMENTS_FOR_CODE_STYLE.md#CodeOrder)
+- [Дизайн](docs/DESIGN.md)
+    - [Цвета и отступы](docs/DESIGN.md#Цвета-и-отступы)
+    - [Текст](docs/DESIGN.md#Текст)
+    - [Тестирование](docs/DESIGN.md#Тестирование)
