@@ -1,7 +1,6 @@
 import { TextBasicEditModeParams } from './Text'
 
 export type LinearChartParams = {
-  direction?: 'toRight' | 'toLeft'
   withZoom?: boolean
   isHorizontal?: boolean
   xLabels?: 'top' | 'bottom'

@@ -2,7 +2,7 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
+import { Direction, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
 import { GridConfig } from './components/Axis'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
@@ -36,10 +36,10 @@ export const getYRange = (height: number) =>
     0,
   ] as NumberRange
 
-export const getXScale = (domain: NumberRange, width: number) =>
+export const getXScale = (domain: NumberRange, width: number, direction: Direction = 'toRight') =>
   d3
     .scaleLinear()
-    .domain([...domain])
+    .domain(direction === 'toRight' ? [...domain] : [...domain].reverse())
     .range(getXRange(width))
 
 export const getYScale = (domain: NumberRange, height: number) =>

@@ -12,6 +12,7 @@ const dataType = DataType.LinearChart
 type Data = DataMap[typeof dataType]
 
 export const defaultParams: Params = {
+  direction: 'toRight',
   isHorizontal: true,
   withZoom: false,
   xLabels: 'bottom',
@@ -29,6 +30,7 @@ export const defaultParams: Params = {
 
 export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   params: {
+    direction,
     isHorizontal,
     withZoom,
     xLabels,
@@ -86,6 +88,7 @@ export const LinearChartWidgetContent: React.FC<WidgetContentProps<Data, Params>
       lines={data}
       colorGroups={colorGroups}
       withZoom={withZoom}
+      direction={direction}
       isHorizontal={Boolean(isHorizontal)}
       formatValueForLabel={formatValueForLabel ? formatValueForLabel : String}
       formatValueForTooltip={formatValueForTooltip}
@@ -128,6 +131,23 @@ export const LinearChartWidget = createWidget<Data, Params>({
           value={params.isHorizontal}
           onChange={value => onChangeParam('isHorizontal', value)}
         />
+        {!params.isHorizontal && (
+          <WidgetSettingsSelect
+            name="Направление графика"
+            value={params.direction}
+            onChange={value => onChangeParam('direction', value)}
+            values={[
+              {
+                name: 'Вправо',
+                value: 'toRight',
+              },
+              {
+                name: 'Влево',
+                value: 'toLeft',
+              },
+            ]}
+          />
+        )}
         <WidgetSettingsCheckbox
           name="Зум"
           value={params.withZoom}

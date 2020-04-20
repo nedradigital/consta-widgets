@@ -2,6 +2,8 @@ import React from 'react'
 
 import classnames from 'classnames'
 
+import { Direction } from '@/components/LinearChart'
+
 import { HoveredMainValue, Item, itemIsNotEmpty, ScaleLinear } from '../../'
 import { Area } from '../Area'
 import { Line } from '../Line'
@@ -14,6 +16,7 @@ type GradientProps =
     }
   | {
       withGradient: true
+      gradientDirection: Direction
       areaBottom: number
     }
 
@@ -60,6 +63,7 @@ export const LineWithDots: React.FC<Props> = props => {
             scaleY={scaleY}
             isHorizontal={isHorizontal}
             areaBottom={props.areaBottom}
+            gradientDirection={props.gradientDirection}
           />
         )}
       </g>
