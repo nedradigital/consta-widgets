@@ -8,6 +8,7 @@ import { endOfDay, format, startOfDay } from 'date-fns'
 import { Tooltip } from '@/components/Tooltip'
 import { DatePickerParams } from '@/dashboard/widget-params'
 import { themeColorLight } from '@/utils/theme'
+import { useTooltipReposition } from '@/utils/tooltips'
 
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
@@ -139,6 +140,12 @@ export const DatePicker: React.FC<Props> = props => {
   useClickOutside({
     requiredRefs: [controlsRef, tooltipRef],
     handler: handleApplyDate,
+  })
+
+  useTooltipReposition({
+    isVisible: isTooltipVisible,
+    anchorRef: controlsRef,
+    onRequestReposition: handleApplyDate,
   })
 
   const handleSelectQuarter = (value: DateRange) => {

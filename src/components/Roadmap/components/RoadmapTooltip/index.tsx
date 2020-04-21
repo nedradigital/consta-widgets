@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { RefObject, useState } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
 import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
@@ -8,7 +8,7 @@ import { Direction, Tooltip } from '@/components/Tooltip'
 import { ColorGroups } from '@/dashboard'
 import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
-import { Position } from '@/utils/tooltips'
+import { Position, useTooltipReposition } from '@/utils/tooltips'
 
 import { Item } from '../..'
 
@@ -21,6 +21,8 @@ type Props = {
   fact?: Item
   forecast?: Item
   position: Position
+  anchorRef: RefObject<HTMLElement>
+  onRequestReposition: () => void
 }
 
 const MAX_LENGTH_COMMENT = 280
@@ -102,8 +104,17 @@ export const RoadmapTooltip: React.FC<Props> = ({
   colorGroups,
   direction = 'upRight',
   position,
+  anchorRef,
+  onRequestReposition,
 }) => {
   const [activeSection, changeActiveSection] = useState<'dates' | 'comment'>('dates')
+
+  useTooltipReposition({
+    isVisible: true,
+    anchorRef,
+    onRequestReposition,
+  })
+
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
   const { groupName } = plan

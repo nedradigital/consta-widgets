@@ -170,7 +170,9 @@ type RenderChartLine = {
   startDate: number
 }
 
-type RenderInteractiveChartLine = {
+type InteractiveChartLineProps = {
+  groupName: string
+  index: number
   facts: readonly Item[]
   forecasts: readonly Item[]
   plans: readonly Item[]
@@ -188,6 +190,7 @@ type RenderInteractiveChartLine = {
   rowIndex: number
   activeLine?: ActiveLineState
   colorGroups: ColorGroups
+  onRequestTooltipReposition: () => void
 }
 
 const renderChartLine = ({
@@ -217,7 +220,9 @@ const renderChartLine = ({
   )
 }
 
-const renderInteractiveChartLine = ({
+const InteractiveChartLine = ({
+  groupName,
+  index,
   plans,
   forecasts,
   facts,
@@ -227,7 +232,9 @@ const renderInteractiveChartLine = ({
   rowIndex,
   activeLine,
   colorGroups,
-}: RenderInteractiveChartLine) => (groupName: string, index: number) => {
+  onRequestTooltipReposition,
+}: InteractiveChartLineProps) => {
+  const ref = React.useRef(null)
   const withMargin = index !== 0
   const fact = facts.find(item => item.groupName === groupName)
   const forecast = forecasts.find(item => item.groupName === groupName)
@@ -246,6 +253,7 @@ const renderInteractiveChartLine = ({
   return (
     <div
       key={groupName}
+      ref={ref}
       className={classnames(css.chartLine, css.isInteractive)}
       style={{
         left,
@@ -272,6 +280,8 @@ const renderInteractiveChartLine = ({
             x: activeLine.x,
             y: activeLine.y,
           }}
+          anchorRef={ref}
+          onRequestReposition={onRequestTooltipReposition}
         />
       ) : null}
     </div>
@@ -350,16 +360,23 @@ export const Roadmap: React.FC<Props> = props => {
   } = useSelectedFilters(filters)
   const factBlockSize = getCalculatedSizeWithBaseSize(FACT_BLOCK_SIZE)
 
+  const resetActiveLine = useCallback(
+    () => changeActiveLine({ index: undefined, groupName: undefined, y: 0, x: 0 }),
+    [changeActiveLine]
+  )
+
   const scrollHandler = useCallback(event => {
     changeShadowMode(event.target.scrollLeft > 0)
-    changeActiveLine({ index: undefined, groupName: undefined, y: 0, x: 0 })
   }, [])
 
-  const handleWindowClick = useCallback(event => {
-    if (!event.target.classList.contains(css.isInteractive)) {
-      changeActiveLine({ index: undefined, groupName: undefined, y: 0, x: 0 })
-    }
-  }, [])
+  const handleWindowClick = useCallback(
+    event => {
+      if (!event.target.classList.contains(css.isInteractive)) {
+        resetActiveLine()
+      }
+    },
+    [resetActiveLine]
+  )
 
   const handleClick = useCallback(
     ({ event, index, groupName }) => {
@@ -559,17 +576,23 @@ export const Roadmap: React.FC<Props> = props => {
                       })
                     )}
                     {uniq([...fact, ...forecast].map(item => item.groupName)).map(
-                      renderInteractiveChartLine({
-                        plans: plan,
-                        facts: fact,
-                        forecasts: forecast,
-                        monthWidth,
-                        startDate,
-                        onClick: handleClick,
-                        rowIndex: index,
-                        colorGroups,
-                        activeLine,
-                      })
+                      (groupName, lineIndex) => (
+                        <InteractiveChartLine
+                          key={groupName}
+                          groupName={groupName}
+                          index={lineIndex}
+                          plans={plan}
+                          facts={fact}
+                          forecasts={forecast}
+                          monthWidth={monthWidth}
+                          startDate={startDate}
+                          onClick={handleClick}
+                          rowIndex={index}
+                          colorGroups={colorGroups}
+                          activeLine={activeLine}
+                          onRequestTooltipReposition={resetActiveLine}
+                        />
+                      )
                     )}
                     {index === 0 && (
                       <div

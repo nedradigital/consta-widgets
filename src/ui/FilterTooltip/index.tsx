@@ -6,6 +6,7 @@ import classnames from 'classnames'
 
 import { Tooltip } from '@/components/Tooltip'
 import { themeColorDisplay } from '@/utils/theme'
+import { useTooltipReposition } from '@/utils/tooltips'
 
 import css from './index.css'
 
@@ -39,10 +40,18 @@ export const FilterTooltip: React.FC<Props> = ({
     setSelectedValues(values)
   }, [values])
 
+  const save = () => onSave(field, selectedValues || [])
+
   useClickOutside({
     requiredRefs: [buttonRef, tooltipRef],
     optionalRefs: [menuRef],
-    handler: () => onSave(field, selectedValues || []),
+    handler: save,
+  })
+
+  useTooltipReposition({
+    isVisible: isOpened,
+    anchorRef: buttonRef,
+    onRequestReposition: save,
   })
 
   return (
@@ -52,7 +61,7 @@ export const FilterTooltip: React.FC<Props> = ({
         ref={buttonRef}
         className={classnames(css.button, isOpened && css.isOpened, className)}
         onClick={() => {
-          onSave(field, selectedValues || [])
+          save()
           handleFilterTogglerClick()
         }}
       >

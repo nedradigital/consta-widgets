@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
-import { PositionState } from '@/utils/tooltips'
+import { PositionState, useTooltipReposition } from '@/utils/tooltips'
 
 import { directions, Tooltip } from '.'
 
@@ -76,6 +76,68 @@ const TooltipPositionedByAnchorStory = () => {
   )
 }
 
+const TooltipWithAutoClosingStory = () => {
+  const anchorRef = useRef<HTMLButtonElement>(null)
+  const tooltipRef = useRef(null)
+  const [isTooltipVisible, setIsTooltipVisible] = useState(true)
+
+  useTooltipReposition({
+    isVisible: isTooltipVisible,
+    anchorRef,
+    onRequestReposition: () => setIsTooltipVisible(false),
+  })
+
+  const handleClickOnAnchor = () => {
+    setIsTooltipVisible(!isTooltipVisible)
+  }
+
+  return (
+    <>
+      <div
+        style={{
+          width: '100%',
+          height: '150vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <button
+          type="button"
+          style={{
+            width: 100,
+            height: 50,
+            backgroundColor: 'var(--color-bg-alert)',
+            cursor: 'pointer',
+          }}
+          onClick={handleClickOnAnchor}
+          ref={anchorRef}
+        >
+          Кликай сюда
+        </button>
+      </div>
+      <Tooltip
+        ref={tooltipRef}
+        isVisible={isTooltipVisible}
+        anchorRef={anchorRef}
+        isContentHoverable
+      >
+        <div
+          style={{
+            height: '2.2em',
+            overflow: 'auto',
+          }}
+        >
+          Попробуй поскроллить или поресайзить окно
+          <br />
+          Скролл внутри тултипа закрывать не должен
+        </div>
+      </Tooltip>
+    </>
+  )
+}
+
 storiesOf('components/Tooltip', module)
   .add('с позиционированием по координатам', () => <TooltipPositionedByCoordsStory />)
   .add('с позиционированием по якорю', () => <TooltipPositionedByAnchorStory />)
+  .add('с автозакрытием при скролле и ресайзе окна', () => <TooltipWithAutoClosingStory />)
