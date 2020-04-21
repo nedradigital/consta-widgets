@@ -25,11 +25,10 @@ storiesOf('ui/FilterTooltip', module)
         isOpened={isOpened}
         values={[]}
         options={fewOptions}
-        onSave={(...args) => {
-          setIsOpened(false)
+        onChange={(...args) => {
           onSave(...args)
         }}
-        handleFilterTogglerClick={() => setIsOpened(!isOpened)}
+        onToggle={() => setIsOpened(!isOpened)}
       />
     )
   })

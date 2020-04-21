@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { IconFunnel, MultiSelect, Text } from '@gpn-design/uikit'
@@ -17,8 +17,8 @@ type Props = {
   values: Values
   field: string
   isOpened: boolean
-  onSave: (field: string, values: Values) => void
-  handleFilterTogglerClick: () => void
+  onChange: (field: string, values: Values) => void
+  onToggle: () => void
   className?: string
 }
 
@@ -28,30 +28,23 @@ export const FilterTooltip: React.FC<Props> = ({
   options,
   values,
   className,
-  onSave,
-  handleFilterTogglerClick,
+  onChange,
+  onToggle,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
-  const [selectedValues, setSelectedValues] = useState<Values | undefined>(values)
-
-  useEffect(() => {
-    setSelectedValues(values)
-  }, [values])
-
-  const save = () => onSave(field, selectedValues || [])
 
   useClickOutside({
     requiredRefs: [buttonRef, tooltipRef],
     optionalRefs: [menuRef],
-    handler: save,
+    handler: onToggle,
   })
 
   useTooltipReposition({
     isVisible: isOpened,
     anchorRef: buttonRef,
-    onRequestReposition: save,
+    onRequestReposition: onToggle,
   })
 
   return (
@@ -60,10 +53,7 @@ export const FilterTooltip: React.FC<Props> = ({
         type="button"
         ref={buttonRef}
         className={classnames(css.button, isOpened && css.isOpened, className)}
-        onClick={() => {
-          save()
-          handleFilterTogglerClick()
-        }}
+        onClick={onToggle}
       >
         <IconFunnel size="xs" className={css.iconFilter} />
       </button>
@@ -84,11 +74,12 @@ export const FilterTooltip: React.FC<Props> = ({
           name={field}
           menuRef={menuRef}
           wpSize="xs"
-          onChange={setSelectedValues}
-          onClearValue={() => setSelectedValues(undefined)}
+          onChange={v => onChange(field, v || [])}
+          onClearValue={() => onChange(field, [])}
           placeholder="Выберите пункт"
           options={[...options]}
-          value={selectedValues ? [...selectedValues] : undefined}
+          value={values ? [...values] : undefined}
+          isHierarchical={false}
         />
       </Tooltip>
     </>
