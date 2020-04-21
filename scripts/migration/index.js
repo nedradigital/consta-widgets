@@ -118,8 +118,24 @@ fs.writeFileSync(
     .replace(/(versionTo:\s)(\d+)/, `$1${nextVersion}`)
     .replace(/changes:\s\[(\n?|.)+?\]/, 'changes: []')
     .replace(
-      /(\/\/ MIGRATION_GENERATION:METHOD:START)\n(\s+)(\w+\:)(?:\n|.(?!MIGRATION_GENERATION:METHOD:END))+(\/\/ MIGRATION_GENERATION:METHOD:END)/g,
-      `$1\n$2$3 () => {},\n$2$4`
+      /up:(.|\n)+?(\s+down)/gm,
+      `
+  up: data => ({
+    ...data,
+    version: ${nextVersion},
+    config: upgradeConfig(data.config, widgetItem => widgetItem),
+  }),$2
+        `.trim()
+    )
+    .replace(
+      /down:(.|\n)+?(\s+^})/gm,
+      `
+  down: data => ({
+    ...data,
+    version: ${version},
+    config: downgradeConfig(data.config, widgetItem => widgetItem),
+  }),$2
+        `.trim()
     )
 )
 

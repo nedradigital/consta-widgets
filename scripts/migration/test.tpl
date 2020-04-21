@@ -1,12 +1,41 @@
-import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard{{PREV_VERSION}} } from '../../dashboard{{PREV_VERSION}}'
+import { CurrentDashboard, currentMigration, widgetIdsByType as currentWidgetIdsByType } from '../'
+import {
+  Dashboard{{PREV_VERSION}} as PreviousDashboard,
+  widgetIdsByType as previousWidgetIdsByType
+} from '../../dashboard{{PREV_VERSION}}'
 
 describe('currentMigration', () => {
   it('повышает версию', () => {
-    const source: Dashboard{{PREV_VERSION}}.State = {
+    const source: PreviousDashboard.State = {
       version: {{PREV_VERSION}},
       boxes: [],
-      config: {},
+      config: {
+        Box0: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                [
+                  [
+                    /* место для вашего виджета */
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+        Box1: [
+          {
+            type: 'switch',
+            id: 'switch',
+            displays: [[]],
+            params: {},
+          },
+        ],
+      },
       settings: {},
     }
 
@@ -24,11 +53,37 @@ describe('currentMigration', () => {
     const source: CurrentDashboard.State = {
       version: {{NEXT_VERSION}},
       boxes: [],
-      config: {},
+      config: {
+        Box0: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                [
+                  [
+                    /* место для вашего виджета */
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+        Box1: [
+          {
+            type: 'switch',
+            id: 'switch',
+            displays: [[]],
+            params: {},
+          },
+        ],
+      },
       settings: {},
     }
 
-    const result: Dashboard{{PREV_VERSION}}.State = {
+    const result: PreviousDashboard.State = {
       version: {{PREV_VERSION}},
       boxes: [],
       config: {},

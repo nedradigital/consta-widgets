@@ -1,18 +1,43 @@
-import { CurrentDashboard, currentMigration } from '../'
-import { Dashboard13, widgetIdsByType as Dashboard13WidgetIdsByType } from '../../dashboard13'
+import { CurrentDashboard, currentMigration, widgetIdsByType as currentWidgetIdsByType } from '../'
+import {
+  Dashboard13 as PreviousDashboard,
+  widgetIdsByType as previousWidgetIdsByType,
+} from '../../dashboard13'
 
 describe('currentMigration', () => {
   it('повышает версию', () => {
-    const source: Dashboard13.State = {
+    const source: PreviousDashboard.State = {
       version: 13,
       boxes: [],
       config: {
         Box0: [
           {
-            type: 'widget',
-            widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
-            id: 'linear_chart_1',
-            debugName: 'linear_chart_1',
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                [
+                  [
+                    {
+                      type: 'widget',
+                      widgetType: previousWidgetIdsByType.LinearChartWidget,
+                      id: 'linear_chart_1',
+                      debugName: 'linear_chart_1',
+                      params: {},
+                    },
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+        Box1: [
+          {
+            type: 'switch',
+            id: 'switch',
+            displays: [[]],
             params: {},
           },
         ],
@@ -26,10 +51,32 @@ describe('currentMigration', () => {
       config: {
         Box0: [
           {
-            type: 'widget',
-            widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
-            id: 'linear_chart_1',
-            debugName: 'linear_chart_1',
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                [
+                  [
+                    {
+                      type: 'widget',
+                      widgetType: currentWidgetIdsByType.LinearChartWidget,
+                      id: 'linear_chart_1',
+                      debugName: 'linear_chart_1',
+                      params: {},
+                    },
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+        Box1: [
+          {
+            type: 'switch',
+            id: 'switch',
+            displays: [[]],
             params: {},
           },
         ],
@@ -48,7 +95,7 @@ describe('currentMigration', () => {
         Box0: [
           {
             type: 'widget',
-            widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+            widgetType: currentWidgetIdsByType.LinearChartWidget,
             id: 'linear_chart_1',
             debugName: 'linear_chart_1',
             params: {
@@ -64,7 +111,7 @@ describe('currentMigration', () => {
               [
                 {
                   type: 'widget',
-                  widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+                  widgetType: currentWidgetIdsByType.LinearChartWidget,
                   id: 'traffic_light_2',
                   debugName: 'traffic_light_2',
                   params: {
@@ -87,7 +134,7 @@ describe('currentMigration', () => {
                   [
                     {
                       type: 'widget',
-                      widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+                      widgetType: currentWidgetIdsByType.LinearChartWidget,
                       id: 'traffic_light_3',
                       debugName: 'traffic_light_3',
                       params: {
@@ -98,7 +145,7 @@ describe('currentMigration', () => {
                   [
                     {
                       type: 'widget',
-                      widgetType: Dashboard13WidgetIdsByType.ImageWidget,
+                      widgetType: currentWidgetIdsByType.ImageWidget,
                       id: 'image',
                       debugName: 'image',
                       params: {
@@ -116,14 +163,14 @@ describe('currentMigration', () => {
       settings: {},
     }
 
-    const result: Dashboard13.State = {
+    const result: PreviousDashboard.State = {
       version: 13,
       boxes: [],
       config: {
         Box0: [
           {
             type: 'widget',
-            widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+            widgetType: previousWidgetIdsByType.LinearChartWidget,
             id: 'linear_chart_1',
             debugName: 'linear_chart_1',
             params: {},
@@ -137,7 +184,7 @@ describe('currentMigration', () => {
               [
                 {
                   type: 'widget',
-                  widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+                  widgetType: previousWidgetIdsByType.LinearChartWidget,
                   id: 'traffic_light_2',
                   debugName: 'traffic_light_2',
                   params: {},
@@ -158,7 +205,7 @@ describe('currentMigration', () => {
                   [
                     {
                       type: 'widget',
-                      widgetType: Dashboard13WidgetIdsByType.LinearChartWidget,
+                      widgetType: previousWidgetIdsByType.LinearChartWidget,
                       id: 'traffic_light_3',
                       debugName: 'traffic_light_3',
                       params: {},
@@ -167,7 +214,7 @@ describe('currentMigration', () => {
                   [
                     {
                       type: 'widget',
-                      widgetType: Dashboard13WidgetIdsByType.ImageWidget,
+                      widgetType: previousWidgetIdsByType.ImageWidget,
                       id: 'image',
                       debugName: 'image',
                       params: {

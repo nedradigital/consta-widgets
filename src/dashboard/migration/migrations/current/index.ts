@@ -146,67 +146,108 @@ export namespace CurrentDashboard {
   }
 }
 
+const isCurrentWidget = (item: CurrentDashboard.BoxItem): item is CurrentDashboard.WidgetItem =>
+  item.type === 'widget'
+
+const upgradeConfig = (
+  config: Dashboard13.Config,
+  widgetUpgrader: (widgetItem: Dashboard13.WidgetItem) => CurrentDashboard.WidgetItem
+): CurrentDashboard.Config => {
+  const upgradeItem = (item: Dashboard13.BoxItem): CurrentDashboard.BoxItem => {
+    if (item.type === 'switch') {
+      return {
+        ...item,
+        displays: item.displays.map(widgets => widgets.map(upgradeItem).filter(isCurrentWidget)),
+      }
+    }
+
+    if (item.type === 'grid') {
+      return {
+        ...item,
+        grid: {
+          ...item.grid,
+          items: item.grid.items.map(row =>
+            row.map(column => column.map(upgradeItem).filter(isCurrentWidget))
+          ),
+        },
+      }
+    }
+
+    return widgetUpgrader(item)
+  }
+
+  return Object.keys(config).reduce((newConfig, key) => {
+    const items = config[key]
+
+    return {
+      ...newConfig,
+      [key]: items.map(upgradeItem).filter(isDefined),
+    }
+  }, {})
+}
+
 const isDashboard13Widget = (item: Dashboard13.BoxItem): item is Dashboard13.WidgetItem =>
   item.type === 'widget'
+
+const downgradeConfig = (
+  config: CurrentDashboard.Config,
+  widgetDowngrader: (widgetItem: CurrentDashboard.WidgetItem) => Dashboard13.WidgetItem
+): Dashboard13.Config => {
+  const downgradeItem = (item: CurrentDashboard.BoxItem): Dashboard13.BoxItem => {
+    if (item.type === 'switch') {
+      return {
+        ...item,
+        displays: item.displays.map(widgets =>
+          widgets.map(downgradeItem).filter(isDashboard13Widget)
+        ),
+      }
+    }
+
+    if (item.type === 'grid') {
+      return {
+        ...item,
+        grid: {
+          ...item.grid,
+          items: item.grid.items.map(row =>
+            row.map(column => column.map(downgradeItem).filter(isDashboard13Widget))
+          ),
+        },
+      }
+    }
+
+    return widgetDowngrader(item)
+  }
+
+  return Object.keys(config).reduce((newConfig, key) => {
+    const items = config[key]
+
+    return {
+      ...newConfig,
+      [key]: items.map(downgradeItem).filter(isDefined),
+    }
+  }, {})
+}
 
 export const currentMigration: Migration<Dashboard13.State, CurrentDashboard.State> = {
   versionTo: 14,
   changes: ['В виджет линейного графика добавлено направление в вертикальном отображении'],
-  // MIGRATION_GENERATION:METHOD:START
   up: data => ({
     ...data,
+    config: upgradeConfig(data.config, widgetItem => widgetItem),
     version: 14,
   }),
-  // MIGRATION_GENERATION:METHOD:END
-
-  // MIGRATION_GENERATION:METHOD:START
-  down: data => {
-    const updateItem = (item: CurrentDashboard.BoxItem): Dashboard13.BoxItem => {
-      if (item.type === 'switch') {
-        return {
-          ...item,
-          displays: item.displays.map(widgets =>
-            widgets.map(updateItem).filter(isDashboard13Widget)
-          ),
-        }
-      }
-
-      if (item.type === 'grid') {
-        return {
-          ...item,
-          grid: {
-            ...item.grid,
-            items: item.grid.items.map(row =>
-              row.map(column => column.map(updateItem).filter(isDashboard13Widget))
-            ),
-          },
-        }
-      }
-
-      if (item.widgetType === widgetIdsByType.LinearChartWidget) {
-        return {
-          ...item,
-          params: {
-            ..._.omit(item.params, ['direction']),
-          },
-        }
-      }
-
-      return item
-    }
-
-    return {
-      ...data,
-      version: 13,
-      config: Object.keys(data.config).reduce((newConfig, key) => {
-        const items = data.config[key]
-
-        return {
-          ...newConfig,
-          [key]: items.map(updateItem).filter(isDefined),
-        }
-      }, {}),
-    }
-  },
-  // MIGRATION_GENERATION:METHOD:END
+  down: data => ({
+    ...data,
+    version: 13,
+    config: downgradeConfig(data.config, widgetItem =>
+      widgetItem.widgetType === widgetIdsByType.LinearChartWidget
+        ? {
+            ...widgetItem,
+            params: {
+              ..._.omit(widgetItem.params, ['direction']),
+            },
+          }
+        : widgetItem
+    ),
+  }),
 }
