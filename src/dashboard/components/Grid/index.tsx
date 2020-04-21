@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { calcSize } from '@csssr/gpn-utils/lib/css'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
@@ -8,11 +9,13 @@ import {
   Data,
   Dataset,
   GridContent,
+  GridItemParams,
   RowParams,
   SwitchItem,
   VerticalAlignment,
   WidgetItem,
 } from '@/dashboard'
+import { marginSizeValues } from '@/dashboard/size-constants'
 import { isSwitch, isWidget } from '@/utils/type-guards'
 
 import { Box } from '../Box'
@@ -36,6 +39,7 @@ type Props = {
   datasets: readonly Dataset[]
   viewMode: boolean
   onChange: (grid: GridContent) => void
+  params: GridItemParams
 }
 
 export const EMPTY_GRID_CONTENT: GridContent = _.flow(
@@ -226,13 +230,16 @@ const getGridTemplate = (params: ReadonlyArray<ColumnParams | RowParams>): strin
     .map(({ growRatio = DEFAULT_GROW_RATIO }) => (growRatio ? `${growRatio}fr` : 'auto'))
     .join(' ')
 
-export const Grid: React.FC<Props> = ({ datasets, viewMode, onChange, data, grid }) => {
+export const Grid: React.FC<Props> = ({ datasets, viewMode, onChange, data, grid, params }) => {
+  const { horizontalMargin, verticalMargin } = params
   return (
     <div
       className={classnames(css.main, viewMode && css.viewMode)}
       style={{
         gridTemplateColumns: getGridTemplate(grid.columnParams),
         gridTemplateRows: getGridTemplate(grid.rowParams),
+        gridRowGap: horizontalMargin && calcSize(marginSizeValues[horizontalMargin]),
+        gridColumnGap: verticalMargin && calcSize(marginSizeValues[verticalMargin]),
       }}
     >
       {grid.items.map((row, rowIdx) => (

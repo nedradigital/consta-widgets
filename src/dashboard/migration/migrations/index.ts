@@ -14,6 +14,7 @@ import { Dashboard10, migration10 } from './dashboard10'
 import { Dashboard11, migration11 } from './dashboard11'
 import { Dashboard12, migration12 } from './dashboard12'
 import { Dashboard13, migration13 } from './dashboard13'
+import { Dashboard14, migration14 } from './dashboard14'
 // MIGRATION_GENERATION:ADD_IMPORT
 
 export type AnyDashboardStateVersion =
@@ -31,6 +32,7 @@ export type AnyDashboardStateVersion =
   | Dashboard11.State
   | Dashboard12.State
   | Dashboard13.State
+  | Dashboard14.State
   // MIGRATION_GENERATION:ADD_STATE
   | CurrentDashboard.State
 
@@ -48,6 +50,7 @@ export const migrations = [
   migration11,
   migration12,
   migration13,
+  migration14,
   // MIGRATION_GENERATION:ADD_MIGRATION
   currentMigration,
 ] as const

@@ -1,84 +1,87 @@
-import { CurrentDashboard, currentMigration, widgetIdsByType as currentWidgetIdsByType } from '../'
 import {
-  Dashboard13 as PreviousDashboard,
-  widgetIdsByType as previousWidgetIdsByType,
-} from '../../dashboard13'
+  CurrentDashboard,
+  currentMigration,
+  widgetIdsByType as CurrentDashboardWidgetIdsByType,
+} from '../'
+import { Dashboard14, widgetIdsByType as Dashboard14WidgetIdsByType } from '../../dashboard14'
+import Dashboard14GridItem = Dashboard14.GridItem
+
+const commonBoxItemParams:
+  | CurrentDashboard.CommonBoxItemParams
+  | Dashboard14.CommonBoxItemParams = {
+  marginTop: 'm',
+  fallbackPlaceholderText: 'test',
+  growRatio: 1,
+}
+
+const additiveGridParams: CurrentDashboard.GridItem['params'] = {
+  verticalMargin: 'xs',
+  horizontalMargin: 'xs',
+}
+
+const createGridWidget = (
+  params: Dashboard14GridItem['params'] | CurrentDashboard.GridItem['params']
+): CurrentDashboard.GridItem | Dashboard14.GridItem =>
+  ({
+    type: 'grid',
+    params,
+    grid: {
+      items: [
+        [[], [], []],
+        [[], [], []],
+      ],
+      columnParams: [{}, {}, {}],
+      rowParams: [{}, {}, {}],
+    },
+  } as const)
+
+const createCheckboxWidget = (
+  name: string,
+  widgetType:
+    | typeof Dashboard14WidgetIdsByType.CheckboxWidget
+    | typeof CurrentDashboardWidgetIdsByType.CheckboxWidget
+) =>
+  ({
+    type: 'widget',
+    debugName: name,
+    id: name,
+    widgetType,
+    params: {
+      size: 'm',
+      content: 'Выбор',
+      ...commonBoxItemParams,
+    },
+  } as const)
 
 describe('currentMigration', () => {
   it('повышает версию', () => {
-    const source: PreviousDashboard.State = {
-      version: 13,
+    const gridParamsBeforeUpdate = {
+      ...commonBoxItemParams,
+    }
+    const gridParamsAfterUpdate = {
+      ...commonBoxItemParams,
+      ...additiveGridParams,
+    }
+
+    const source: Dashboard14.State = {
+      version: 14,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                [
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: previousWidgetIdsByType.LinearChartWidget,
-                      id: 'linear_chart_1',
-                      debugName: 'linear_chart_1',
-                      params: {},
-                    },
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [[]],
-            params: {},
-          },
+          createGridWidget(gridParamsBeforeUpdate),
+          createCheckboxWidget('1', Dashboard14WidgetIdsByType.CheckboxWidget),
         ],
       },
       settings: {},
     }
 
     const result: CurrentDashboard.State = {
-      version: 14,
+      version: 15,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                [
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: currentWidgetIdsByType.LinearChartWidget,
-                      id: 'linear_chart_1',
-                      debugName: 'linear_chart_1',
-                      params: {},
-                    },
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [[]],
-            params: {},
-          },
+          createGridWidget(gridParamsAfterUpdate),
+          createCheckboxWidget('1', CurrentDashboardWidgetIdsByType.CheckboxWidget),
         ],
       },
       settings: {},
@@ -88,145 +91,33 @@ describe('currentMigration', () => {
   })
 
   it('понижает версию', () => {
+    const gridParamsBeforeUpdate = {
+      ...commonBoxItemParams,
+      ...additiveGridParams,
+    }
+    const gridParamsAfterUpdate = {
+      ...commonBoxItemParams,
+    }
+
     const source: CurrentDashboard.State = {
-      version: 14,
+      version: 15,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'widget',
-            widgetType: currentWidgetIdsByType.LinearChartWidget,
-            id: 'linear_chart_1',
-            debugName: 'linear_chart_1',
-            params: {
-              direction: 'toRight',
-            },
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [
-              [
-                {
-                  type: 'widget',
-                  widgetType: currentWidgetIdsByType.LinearChartWidget,
-                  id: 'traffic_light_2',
-                  debugName: 'traffic_light_2',
-                  params: {
-                    direction: 'toRight',
-                  },
-                },
-              ],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                [
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: currentWidgetIdsByType.LinearChartWidget,
-                      id: 'traffic_light_3',
-                      debugName: 'traffic_light_3',
-                      params: {
-                        direction: 'toRight',
-                      },
-                    },
-                  ],
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: currentWidgetIdsByType.ImageWidget,
-                      id: 'image',
-                      debugName: 'image',
-                      params: {
-                        growRatio: 222,
-                      },
-                    },
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
+          createGridWidget(gridParamsBeforeUpdate),
+          createCheckboxWidget('1', CurrentDashboardWidgetIdsByType.CheckboxWidget),
         ],
       },
       settings: {},
     }
 
-    const result: PreviousDashboard.State = {
-      version: 13,
+    const result: Dashboard14.State = {
+      version: 14,
       boxes: [],
       config: {
         Box0: [
-          {
-            type: 'widget',
-            widgetType: previousWidgetIdsByType.LinearChartWidget,
-            id: 'linear_chart_1',
-            debugName: 'linear_chart_1',
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [
-              [
-                {
-                  type: 'widget',
-                  widgetType: previousWidgetIdsByType.LinearChartWidget,
-                  id: 'traffic_light_2',
-                  debugName: 'traffic_light_2',
-                  params: {},
-                },
-              ],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [
-                [
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: previousWidgetIdsByType.LinearChartWidget,
-                      id: 'traffic_light_3',
-                      debugName: 'traffic_light_3',
-                      params: {},
-                    },
-                  ],
-                  [
-                    {
-                      type: 'widget',
-                      widgetType: previousWidgetIdsByType.ImageWidget,
-                      id: 'image',
-                      debugName: 'image',
-                      params: {
-                        growRatio: 222,
-                      },
-                    },
-                  ],
-                ],
-              ],
-            },
-            params: {},
-          },
+          createGridWidget(gridParamsAfterUpdate),
+          createCheckboxWidget('1', Dashboard14WidgetIdsByType.CheckboxWidget),
         ],
       },
       settings: {},
