@@ -112,7 +112,6 @@ export const DatePicker: React.FC<Props> = props => {
   const [currentVisibleDate, setCurrentVisibleDate] = useState<Date>(
     getCurrentVisibleDate({ value: props.value, minDate, maxDate })
   )
-  const [currentValue, changeCurrentValue] = useState(props.value)
   const baseCommonProps = {
     currentVisibleDate,
     minDate,
@@ -124,26 +123,16 @@ export const DatePicker: React.FC<Props> = props => {
   }
 
   const handleApplyDate = () => {
-    if (currentValue) {
-      if (!isDateRange(currentValue) && props.type === 'date') {
-        props.onChange(currentValue)
-      }
-
-      if (isDateRange(currentValue) && props.type === 'date-range') {
-        props.onChange(currentValue)
-      }
-    }
-
     setIsTooltipVisible(false)
   }
 
   const handleSelectDate = (value: Date | DateRange) => {
     if (!isDateRange(value) && props.type === 'date') {
-      return changeCurrentValue(value)
+      return props.onChange(value)
     }
 
     if (isDateRange(value) && props.type === 'date-range') {
-      return changeCurrentValue(value)
+      return props.onChange(value)
     }
   }
 
@@ -168,7 +157,6 @@ export const DatePicker: React.FC<Props> = props => {
       setCurrentVisibleDate(getCurrentVisibleDate({ value: props.value, minDate, maxDate }))
     }
 
-    changeCurrentValue(props.value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props, isTooltipVisible])
 
@@ -223,10 +211,10 @@ export const DatePicker: React.FC<Props> = props => {
         ) : (
           <MonthsSliderRange
             {...monthsPanelCommonProps}
-            value={isDateRange(currentValue) ? currentValue : undefined}
+            value={isDateRange(props.value) ? props.value : undefined}
           />
         )}
-        <Calendar {...baseCommonProps} value={currentValue} onSelect={handleSelectDate} />
+        <Calendar {...baseCommonProps} value={props.value} onSelect={handleSelectDate} />
         <ActionButtons
           {...baseCommonProps}
           showQuartersSelector={props.type === 'date-range'}
