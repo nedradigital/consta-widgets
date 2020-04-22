@@ -141,6 +141,7 @@ type ComputedPositionAndDirectionProps = {
   offset?: number
   direction: Direction
   possibleDirections: readonly Direction[]
+  bannedDirections: readonly Direction[]
 } & ({ anchorClientRect: ClientRect } | AttachedToPosition)
 
 export const getComputedPositionAndDirection = (
@@ -155,6 +156,7 @@ export const getComputedPositionAndDirection = (
     direction: initialDirection,
     tooltipSize,
     possibleDirections,
+    bannedDirections,
   } = props
 
   const initialPosition: NonNullable<PositionState> = {
@@ -237,8 +239,8 @@ export const getComputedPositionAndDirection = (
     return defaultPositionAndDirection
   }
 
-  const direction = getDirections(isInBorders, initialDirection).find(dir =>
-    possibleDirections.includes(dir)
+  const direction = getDirections(isInBorders, initialDirection).find(
+    dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir)
   )
 
   if (direction) {

@@ -3,8 +3,6 @@
 @custom-selector :--downDirection .downLeft, .downCenter, .downRight;
 
 .main {
-  --arrow-size: 6px;
-  --tooltip-positive-arrow-offset: calc(2 * var(--arrow-size));
   --tooltip-negative-arrow-offset: calc(-2 * var(--arrow-size));
   --arrow-side-size: calc(var(--arrow-size) / 2);
   --tooltip-vertical-padding: var(--space-xs);
@@ -51,10 +49,6 @@
     border: var(--arrow-size) solid transparent;
   }
 
-  :--upDirection:--withArrow & {
-    margin-bottom: var(--tooltip-positive-arrow-offset);
-  }
-
   .upLeft:--withArrow & {
     --border-bottom-right-radius: 0;
 
@@ -94,21 +88,13 @@
     }
   }
 
-  .right:--withArrow & {
-    margin-left: var(--tooltip-positive-arrow-offset);
+  .right:--withArrow &::after {
+    top: 50%;
+    left: var(--tooltip-negative-arrow-offset);
 
-    &::after {
-      top: 50%;
-      left: var(--tooltip-negative-arrow-offset);
+    border-right-color: var(--tooltip-bg-color);
 
-      border-right-color: var(--tooltip-bg-color);
-
-      transform: translate(0, -50%);
-    }
-  }
-
-  :--downDirection:--withArrow & {
-    margin-top: var(--tooltip-positive-arrow-offset);
+    transform: translate(0, -50%);
   }
 
   .downLeft:--withArrow & {
@@ -150,16 +136,12 @@
     }
   }
 
-  .left:--withArrow & {
-    margin-right: var(--tooltip-positive-arrow-offset);
+  .left:--withArrow &::after {
+    top: 50%;
+    right: var(--tooltip-negative-arrow-offset);
 
-    &::after {
-      top: 50%;
-      right: var(--tooltip-negative-arrow-offset);
+    border-left-color: var(--tooltip-bg-color);
 
-      border-left-color: var(--tooltip-bg-color);
-
-      transform: translate(0, -50%);
-    }
+    transform: translate(0, -50%);
   }
 }
