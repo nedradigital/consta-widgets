@@ -2,8 +2,8 @@ import * as React from 'react'
 
 import { MarginSize, Settings } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
-import { migrations } from '@/dashboard/migration/migrations'
 import { marginSizeValues } from '@/dashboard/size-constants'
+import { migrations } from '@/migrations'
 import { getFormattedMarginName } from '@/utils/size-name-formatters'
 
 import css from './index.css'

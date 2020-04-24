@@ -5,13 +5,23 @@ module.exports = {
   overrides: [
     {
       files: [
-        "./src/dashboard/migration/migrations/**/*.ts"
+        "./src/migrations/**/*.ts"
       ],
       rules: {
+        "ordered-imports": "off",
         "no-restricted-imports": [
           "error",
           {
-            patterns: ["@/*"]
+            patterns: [
+              "@/*",
+              "**/components/**/*",
+              "**/contexts/**/*",
+              "**/dashboard/**/*",
+              "**/ui/**/*",
+              "**/utils/**/*",
+              "**/widget-helpers/**/*",
+              "**/widgets/**/*"
+            ]
           }
         ]
       }

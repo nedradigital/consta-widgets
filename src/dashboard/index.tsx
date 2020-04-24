@@ -4,15 +4,15 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import * as _ from 'lodash'
 
-import { getApplicableMigrations, migrate } from '@/dashboard/migration'
-import { AnyDashboardStateVersion } from '@/dashboard/migration/migrations'
 import { marginSizeValues } from '@/dashboard/size-constants'
+import { AnyDashboardStateVersion } from '@/migrations'
+import { currentMigration } from '@/migrations/current'
+import { getApplicableMigrations, migrate } from '@/migrations/utils'
 import { isGrid, isSwitch } from '@/utils/type-guards'
 
 import { Dashboard, DashboardProps } from './components/Dashboard'
 import { Menu, MenuProps } from './components/Menu'
 import css from './index.css'
-import { currentMigration } from './migration/migrations/current'
 import { DashboardState, GridItem, SwitchItem, WidgetItem } from './types'
 
 export * from './types'

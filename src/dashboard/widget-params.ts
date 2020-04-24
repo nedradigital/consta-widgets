@@ -1,1 +1,1 @@
-export * from './migration/migrations/current/widget-params'
+export * from '@/migrations/current/widget-params'

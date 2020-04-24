@@ -19,11 +19,11 @@ import { Meta } from '@storybook/addon-docs/blocks'
 Чтобы создать новую миграцию, нужно:
 
 1. Запустить скрипт с помошью команд `yarn migration:create` или `npm run migration:create`;
-1. Обновить новую миграцию в файле `src/dashboard/migration/migrations/current/index.ts`:
+1. Обновить новую миграцию в файле `src/migrations/current/index.ts`:
     * добавить/изменить необходимые типы;
     * обновить метод `up` (функция повышения версии с предыдущей);
     * обновить метод `down` (функция понижения версии до предыдущей).
-1. Обновить тесты для новой миграции в  файле `src/dashboard/migration/migrations/current/__tests__/index.ts`.
+1. Обновить тесты для новой миграции в  файле `src/migrations/current/__tests__/index.ts`.
 
 ### Причины
 Изменения, после которых **нужно** писать миграцию:
