@@ -1,8 +1,10 @@
-import { addDecorator, configure } from '@storybook/react'
+import { addDecorator, configure, addParameters } from '@storybook/react'
 import { withKnobs } from '@storybook/addon-knobs'
 import { withInfo } from '@storybook/addon-info'
 import { withPropsTable } from 'storybook-addon-react-docgen'
 import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
+import { themes } from '@storybook/theming';
+import stub from './stub.mdx'
 import '@gpn-design/uikit/dist/style.css'
 
 import '@/index.css'
@@ -15,10 +17,23 @@ addDecorator(
     header: false,
   })
 )
-addDecorator(storyFn => {
+
+addParameters({
+  docs: {
+    page: stub,
+  },
+  options: {
+    theme: themes.dark,
+    showRoots: true,
+  }
+});
+
+function loadStories() {
+  updateBaseSize(16, window.document.body)
+
   window.document.documentElement.lang = 'ru'
 
-  document.body.classList.add(
+  window.document.body.classList.add(
     'theme',
     'theme_breakpoint_default',
     'theme_control_gpn-default',
@@ -29,16 +44,10 @@ addDecorator(storyFn => {
     'theme_color_gpn-display',
   )
 
-  return storyFn()
-})
-
-// automatically import all files ending in *.stories.tsx
-const req = require.context('@', true, /.stories\.tsx$/)
-
-function loadStories() {
-  req.keys().forEach(req)
-
-  updateBaseSize(16, window.document.body)
+  return [
+    require.context('../docs', true, /\.mdx$/),
+    require.context('../src', true, /index.stories\.tsx$/),
+  ];
 }
 
-configure(loadStories, module)
+configure(loadStories(), module)
