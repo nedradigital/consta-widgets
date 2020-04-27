@@ -55,7 +55,7 @@
   background: none;
 
   & td {
-    padding: var(--space-xs) 0;
+    padding: var(--space-s) 0;
 
     text-align: center;
     vertical-align: top;
@@ -126,10 +126,15 @@
 }
 
 .chartLine {
-  position: absolute;
-  top: calc-size(10);
+  --chart-line-height: calc-size(8);
+  --space-between-lines: calc-size(1);
 
-  height: calc-size(8);
+  position: absolute;
+  top: calc(var(--line-height-text-m) / 2);
+
+  height: var(--chart-line-height);
+
+  transform: translateY(var(--space-between-lines));
 
   &.isInteractive {
     cursor: pointer;
@@ -140,9 +145,9 @@
   }
 
   &.isPlan {
-    top: 0;
-
     opacity: 0.6;
+
+    transform: translateY(calc((var(--chart-line-height) + var(--space-between-lines)) * -1));
   }
 
   &.isForecast {
