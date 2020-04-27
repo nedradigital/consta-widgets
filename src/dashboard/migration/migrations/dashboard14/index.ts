@@ -4,7 +4,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard14 } from '../dashboard14'
+import { Dashboard13 } from '../dashboard13'
 
 import {
   BadgeParams,
@@ -52,7 +52,7 @@ export const widgetIdsByType = {
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard14 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -78,15 +78,10 @@ export namespace CurrentDashboard {
     fallbackPlaceholderText?: string
   }
 
-  export type GridItemParams = {
-    verticalMargin?: BoxItemMarginSize
-    horizontalMargin?: BoxItemMarginSize
-  }
-
   export type GridItem = {
     type: 'grid'
     grid: GridContent
-    params: CommonBoxItemParams & GridItemParams
+    params: CommonBoxItemParams
   }
 
   export type SwitchContent = ReadonlyArray<readonly WidgetItem[]>
@@ -144,27 +139,41 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 15
+    version: 14
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const upgradeConfig = (config: Dashboard14.Config): CurrentDashboard.Config => {
-  const upgradeItem = (item: Dashboard14.BoxItem): CurrentDashboard.BoxItem => {
+const isCurrentWidget = (item: Dashboard14.BoxItem): item is Dashboard14.WidgetItem =>
+  item.type === 'widget'
+
+const upgradeConfig = (
+  config: Dashboard13.Config,
+  widgetUpgrader: (widgetItem: Dashboard13.WidgetItem) => Dashboard14.WidgetItem
+): Dashboard14.Config => {
+  const upgradeItem = (item: Dashboard13.BoxItem): Dashboard14.BoxItem => {
+    if (item.type === 'switch') {
+      return {
+        ...item,
+        displays: item.displays.map(widgets => widgets.map(upgradeItem).filter(isCurrentWidget)),
+      }
+    }
+
     if (item.type === 'grid') {
       return {
         ...item,
-        params: {
-          ...item.params,
-          verticalMargin: 'xs',
-          horizontalMargin: 'xs',
+        grid: {
+          ...item.grid,
+          items: item.grid.items.map(row =>
+            row.map(column => column.map(upgradeItem).filter(isCurrentWidget))
+          ),
         },
       }
     }
 
-    return item
+    return widgetUpgrader(item)
   }
 
   return Object.keys(config).reduce((newConfig, key) => {
@@ -177,16 +186,36 @@ const upgradeConfig = (config: Dashboard14.Config): CurrentDashboard.Config => {
   }, {})
 }
 
-const downgradeConfig = (config: CurrentDashboard.Config): Dashboard14.Config => {
-  const downgradeItem = (item: CurrentDashboard.BoxItem): Dashboard14.BoxItem => {
-    if (item.type === 'grid') {
+const isDashboard13Widget = (item: Dashboard13.BoxItem): item is Dashboard13.WidgetItem =>
+  item.type === 'widget'
+
+const downgradeConfig = (
+  config: Dashboard14.Config,
+  widgetDowngrader: (widgetItem: Dashboard14.WidgetItem) => Dashboard13.WidgetItem
+): Dashboard13.Config => {
+  const downgradeItem = (item: Dashboard14.BoxItem): Dashboard13.BoxItem => {
+    if (item.type === 'switch') {
       return {
         ...item,
-        params: _.omit(item.params, ['verticalMargin', 'horizontalMargin']),
+        displays: item.displays.map(widgets =>
+          widgets.map(downgradeItem).filter(isDashboard13Widget)
+        ),
       }
     }
 
-    return item
+    if (item.type === 'grid') {
+      return {
+        ...item,
+        grid: {
+          ...item.grid,
+          items: item.grid.items.map(row =>
+            row.map(column => column.map(downgradeItem).filter(isDashboard13Widget))
+          ),
+        },
+      }
+    }
+
+    return widgetDowngrader(item)
   }
 
   return Object.keys(config).reduce((newConfig, key) => {
@@ -199,17 +228,26 @@ const downgradeConfig = (config: CurrentDashboard.Config): Dashboard14.Config =>
   }, {})
 }
 
-export const currentMigration: Migration<Dashboard14.State, CurrentDashboard.State> = {
-  versionTo: 15,
-  changes: ['В виджет сетки добавились настройки отступов'],
+export const migration14: Migration<Dashboard13.State, Dashboard14.State> = {
+  versionTo: 14,
+  changes: ['В виджет линейного графика добавлено направление в вертикальном отображении'],
   up: data => ({
     ...data,
-    version: 15,
-    config: upgradeConfig(data.config),
+    config: upgradeConfig(data.config, widgetItem => widgetItem),
+    version: 14,
   }),
   down: data => ({
     ...data,
-    version: 14,
-    config: downgradeConfig(data.config),
+    version: 13,
+    config: downgradeConfig(data.config, widgetItem =>
+      widgetItem.widgetType === widgetIdsByType.LinearChartWidget
+        ? {
+            ...widgetItem,
+            params: {
+              ..._.omit(widgetItem.params, ['direction']),
+            },
+          }
+        : widgetItem
+    ),
   }),
 }

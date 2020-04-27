@@ -44,7 +44,10 @@ type Props = {
 const emptyGrid: GridItem = {
   type: 'grid',
   grid: EMPTY_GRID_CONTENT,
-  params: {},
+  params: {
+    horizontalMargin: 'xs',
+    verticalMargin: 'xs',
+  },
 }
 
 const verticalAlignmentClasses = {
@@ -213,11 +216,12 @@ export const Box: React.FC<Props> = ({
         if (item.type === 'grid') {
           component = (
             <Grid
+              data={data}
+              params={item.params}
               datasets={datasets}
               grid={item.grid}
               viewMode={viewMode}
               onChange={gridContent => updateGrid(index, gridContent)}
-              data={data}
             />
           )
         }

@@ -2,7 +2,7 @@ import React from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { boolean } from '@storybook/addon-knobs'
+import { boolean, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 
 import { GridContent, GridItem } from '@/dashboard'
@@ -94,6 +94,10 @@ const GridStory = () => {
       <Grid
         viewMode={boolean('viewMode', false)}
         onChange={handler}
+        params={object('params', {
+          verticalMargin: 'xs',
+          horizontalMargin: 'xs',
+        })}
         data={{}}
         datasets={[]}
         {...config}

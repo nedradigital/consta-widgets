@@ -10,9 +10,9 @@ import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import {
   BoxItem,
   BoxItemMarginSize,
-  BoxItemParams,
   Dataset,
   DataType,
+  GridItem,
   SwitchItem,
   WidgetItem,
 } from '@/dashboard'
@@ -74,34 +74,39 @@ const DatasetSelect = <T extends WidgetItem | SwitchItem>({
 }
 
 const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>) => {
-  const { params } = item
-
-  const onChangeParam: OnChangeParam<BoxItemParams> = (paramName, newValue) =>
+  const getOnChangeParamByItemType = <I extends BoxItem>(): OnChangeParam<I['params']> => (
+    paramName,
+    newValue
+  ) =>
     onChange({
       ...item,
       params: {
-        ...params,
+        ...item.params,
         [paramName]: newValue,
       },
     })
+
+  const onChangeCommonParam = getOnChangeParamByItemType<BoxItem>()
+  const onChangeWidgetParam = getOnChangeParamByItemType<WidgetItem>()
+  const onChangeGridParam = getOnChangeParamByItemType<GridItem>()
 
   const commonSettings = (
     <>
       <WidgetSettingsNumber
         name="Коэффициент растяжения"
-        value={params.growRatio}
+        value={item.params.growRatio}
         minValue={0}
-        onChange={value => onChangeParam('growRatio', value)}
+        onChange={value => onChangeCommonParam('growRatio', value)}
       />
       <WidgetSettingsSelect
         name="Отступ сверху"
-        value={params.marginTop}
+        value={item.params.marginTop}
         values={marginSizes.map(size => ({
           name: getFormattedMarginName(size),
           value: size,
         }))}
         withEmptyValue
-        onChange={value => onChangeParam('marginTop', value)}
+        onChange={value => onChangeCommonParam('marginTop', value)}
       />
     </>
   )
@@ -116,10 +121,10 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
         {commonSettings}
         <WidgetSettingsText
           name="Замещающий текст"
-          value={params.fallbackPlaceholderText}
-          onChange={value => onChangeParam('fallbackPlaceholderText', value)}
+          value={item.params.fallbackPlaceholderText}
+          onChange={value => onChangeWidgetParam('fallbackPlaceholderText', value)}
         />
-        {getSettings && getSettings(params, onChangeParam)}
+        {getSettings && getSettings(item.params, onChangeWidgetParam)}
       </>
     )
   }
@@ -135,6 +140,34 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
           onChange={onChange}
         />
         {commonSettings}
+      </>
+    )
+  }
+
+  if (isGrid(item)) {
+    return (
+      <>
+        {commonSettings}
+        <WidgetSettingsSelect
+          name="Вертикальные отступы"
+          value={item.params.verticalMargin}
+          values={marginSizes.map(size => ({
+            name: getFormattedMarginName(size),
+            value: size,
+          }))}
+          withEmptyValue
+          onChange={value => onChangeGridParam('verticalMargin', value)}
+        />
+        <WidgetSettingsSelect
+          name="Горизонтальные отступы"
+          value={item.params.horizontalMargin}
+          values={marginSizes.map(size => ({
+            name: getFormattedMarginName(size),
+            value: size,
+          }))}
+          withEmptyValue
+          onChange={value => onChangeGridParam('horizontalMargin', value)}
+        />
       </>
     )
   }
