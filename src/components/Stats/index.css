@@ -34,6 +34,7 @@
   }
 
   &:--full {
+    grid-template-columns: min-content;
     grid-template-areas:
       'title title'
       'number badge'
@@ -82,6 +83,7 @@
 }
 
 .number {
+  white-space: nowrap;
   grid-area: number;
 }
 
