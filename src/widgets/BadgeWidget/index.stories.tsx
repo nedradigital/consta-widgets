@@ -3,28 +3,21 @@ import React from 'react'
 import { Preview } from '@storybook/addon-docs/blocks'
 import { object } from '@storybook/addon-knobs'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { BadgeWidget, BadgeWidgetContent, defaultParams } from '.'
 import page from './docs.mdx'
 
-export default {
-  title: 'widgets/BadgeWidget',
-  decorators: [blockCenteringDecorator()],
-  includeStories: ['interactive'],
-  parameters: { docs: { page } },
-}
-
-export const interactive = () => (
+export const Interactive = createStory(() => (
   <BadgeWidgetContent
     data={object('data', BadgeWidget.mockData)}
     params={object('params', defaultParams)}
   />
-)
+))
 
 export const PreviewWrapper = () => (
   <Preview>
-    {interactive()}
+    <Interactive />
     <BadgeWidgetContent
       data={object('data', BadgeWidget.mockData)}
       params={{
@@ -43,3 +36,10 @@ export const PreviewWrapper = () => (
     />
   </Preview>
 )
+
+export default createMetadata({
+  title: 'widgets/BadgeWidget',
+  decorators: [blockCenteringDecorator()],
+  includeStories: ['Interactive'],
+  parameters: { docs: { page } },
+})

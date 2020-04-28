@@ -1,17 +1,19 @@
 import React from 'react'
 
 import { object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { defaultParams, LegendWidget, LegendWidgetContent } from '.'
 
-storiesOf('widgets/LegendWidget', module)
-  .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => (
-    <LegendWidgetContent
-      data={object('data', LegendWidget.mockData)}
-      params={object('params', defaultParams)}
-    />
-  ))
+export const Interactive = createStory(() => (
+  <LegendWidgetContent
+    data={object('data', LegendWidget.mockData)}
+    params={object('params', defaultParams)}
+  />
+))
+
+export default createMetadata({
+  title: 'widgets/LegendWidget',
+  decorators: [blockCenteringDecorator()],
+})

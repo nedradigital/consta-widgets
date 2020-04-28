@@ -2,10 +2,9 @@ import React from 'react'
 
 import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
 import { object, text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { LinearChart } from '.'
 
@@ -82,10 +81,13 @@ const getCommonProps = () => {
   }
 }
 
-storiesOf('components/LinearChart', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '60vw', height: '50vh' }))
-  .add('horizontal', () => {
+const decorators = [
+  withSmartKnobs(),
+  blockCenteringDecorator({ width: '60vw', height: '50vh' }),
+] as const
+
+export const Horizontal = createStory(
+  () => {
     return (
       <LinearChart
         {...getCommonProps()}
@@ -93,8 +95,12 @@ storiesOf('components/LinearChart', module)
         isHorizontal
       />
     )
-  })
-  .add('с пропусками', () => {
+  },
+  { name: 'горизонтальный', decorators }
+)
+
+export const WithNullData = createStory(
+  () => {
     return (
       <LinearChart
         colorGroups={colorGroups}
@@ -124,8 +130,12 @@ storiesOf('components/LinearChart', module)
         withZoom
       />
     )
-  })
-  .add('с обработкой клика', () => {
+  },
+  { name: 'с пропусками', decorators }
+)
+
+export const WithClickHandler = createStory(
+  () => {
     return (
       <LinearChart
         {...getCommonProps()}
@@ -134,8 +144,12 @@ storiesOf('components/LinearChart', module)
         onClickHoverLine={value => alert(new Date(value))}
       />
     )
-  })
-  .add('с заголовком', () => {
+  },
+  { name: 'с обработкой клика', decorators }
+)
+
+export const WithTitle = createStory(
+  () => {
     return (
       <LinearChart
         {...getCommonProps()}
@@ -147,12 +161,12 @@ storiesOf('components/LinearChart', module)
         })}
       />
     )
-  })
+  },
+  { name: 'с заголовком', decorators }
+)
 
-storiesOf('components/LinearChart', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: 300, height: '80vh' }))
-  .add('vertical', () => {
+export const Vertical = createStory(
+  () => {
     return (
       <LinearChart
         {...getCommonProps()}
@@ -160,4 +174,13 @@ storiesOf('components/LinearChart', module)
         isHorizontal={false}
       />
     )
-  })
+  },
+  {
+    name: 'вертикальный',
+    decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 300, height: '80vh' })],
+  }
+)
+
+export default createMetadata({
+  title: 'components/LinearChart',
+})

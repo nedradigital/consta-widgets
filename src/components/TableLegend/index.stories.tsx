@@ -1,13 +1,12 @@
 import React from 'react'
 
 import { boolean, object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { DataType } from '@/dashboard'
 import { BadgeParams, legendParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 import { BadgeWidgetContent } from '@/widgets/BadgeWidget'
 
 import { TableLegend } from '.'
@@ -87,40 +86,45 @@ const getList = () => {
   return data.map(convertItem)
 }
 
-const TableLegendWithSelectedRow = () => {
-  const [activeRowId, setActiveRowId] = React.useState<string | undefined>()
+const decorators = [withSmartKnobs(), blockCenteringDecorator({ width: '90vw' })] as const
 
-  return (
-    <TableLegend
-      isShowLegend={false}
-      size="l"
-      data={{
-        ...object('data', getWidgetMockData(DataType.TableLegend)),
-        activeRow: {
-          id: activeRowId,
-          onChange: setActiveRowId,
-        },
-      }}
-    />
-  )
-}
-
-storiesOf('components/TableLegend', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '90vw' }))
-  .add('обычная', () => (
+export const Interactive = createStory(
+  () => (
     <TableLegend
       isShowLegend={boolean('isShowLegend', false)}
       size="l"
       data={object('data', getWidgetMockData(DataType.TableLegend))}
     />
-  ))
-  .add('c возможностью выбора активной строки', () => <TableLegendWithSelectedRow />)
+  ),
+  {
+    name: 'обычная',
+    decorators,
+  }
+)
 
-storiesOf('components/TableLegend', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: 500 }))
-  .add('со "Светофором"', () => (
+export const TableLegendWithSelectedRow = createStory(
+  () => {
+    const [activeRowId, setActiveRowId] = React.useState<string | undefined>()
+
+    return (
+      <TableLegend
+        isShowLegend={false}
+        size="l"
+        data={{
+          ...object('data', getWidgetMockData(DataType.TableLegend)),
+          activeRow: {
+            id: activeRowId,
+            onChange: setActiveRowId,
+          },
+        }}
+      />
+    )
+  },
+  { name: 'c возможностью выбора активной строки', decorators }
+)
+
+export const WithTrafficLight = createStory(
+  () => (
     <TableLegend
       isShowLegend={false}
       size="l"
@@ -206,4 +210,13 @@ storiesOf('components/TableLegend', module)
         ],
       }}
     />
-  ))
+  ),
+  {
+    name: 'со "Светофором"',
+    decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 500 })],
+  }
+)
+
+export default createMetadata({
+  title: 'components/TableLegend',
+})

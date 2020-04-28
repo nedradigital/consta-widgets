@@ -3,12 +3,11 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { boolean, object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
 import { GridContent, GridItem } from '@/dashboard'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { widgetIdsByType } from '@/utils/widgets-list'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 import { defaultParams as linearChartWidgetDefaultParams } from '@/widgets/LinearChartWidget'
 import { defaultParams as statsWidgetDefaultParams } from '@/widgets/StatsWidget'
 import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
@@ -82,7 +81,7 @@ const gridItem: GridItem = {
   params: {},
 }
 
-const GridStory = () => {
+export const Interactive = createStory(() => {
   const [config, changeConfig] = React.useState(gridItem)
 
   const handler = (newGridContent: GridContent) => {
@@ -104,8 +103,9 @@ const GridStory = () => {
       />
     </DndProvider>
   )
-}
+})
 
-storiesOf('dashboard/Grid', module)
-  .addDecorator(blockCenteringDecorator({ width: 600 }))
-  .add('interactive', () => <GridStory />)
+export default createMetadata({
+  title: 'dashboard/Grid',
+  decorators: [blockCenteringDecorator({ width: 600 })],
+})

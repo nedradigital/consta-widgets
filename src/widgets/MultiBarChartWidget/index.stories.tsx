@@ -1,22 +1,21 @@
 import React from 'react'
 
 import { object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
 import { DataWithTwoColumnsOnDate } from '@/components/BarChart/index.stories'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { defaultParams, MultiBarChartWidget, MultiBarChartWidgetContent } from '.'
 
-storiesOf('widgets/MultiBarChartWidget', module)
-  .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
-  .add('interactive', () => (
-    <MultiBarChartWidgetContent
-      data={object('data', MultiBarChartWidget.mockData)}
-      params={object('params', defaultParams)}
-    />
-  ))
-  .add('interactive/2 columns', () => (
+export const Interactive = createStory(() => (
+  <MultiBarChartWidgetContent
+    data={object('data', MultiBarChartWidget.mockData)}
+    params={object('params', defaultParams)}
+  />
+))
+
+export const InteractiveWithTwoColumns = createStory(
+  () => (
     <MultiBarChartWidgetContent
       data={object('data', {
         colorGroups: {
@@ -30,4 +29,11 @@ storiesOf('widgets/MultiBarChartWidget', module)
       })}
       params={object('params', defaultParams)}
     />
-  ))
+  ),
+  { name: 'с 2 колонками' }
+)
+
+export default createMetadata({
+  title: 'widgets/MultiBarChartWidget',
+  decorators: [blockCenteringDecorator({ width: '60vw', height: '80vh' })],
+})

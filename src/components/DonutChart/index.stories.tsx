@@ -1,13 +1,18 @@
 import React from 'react'
 
 import { object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { times } from 'lodash'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
-import { blockCenteringDecorator, cubeMeterFormatValue, emptyFormatValue } from '@/utils/Storybook'
+import {
+  blockCenteringDecorator,
+  createMetadata,
+  createStory,
+  cubeMeterFormatValue,
+  emptyFormatValue,
+} from '@/utils/Storybook'
 
 import { DonutChart } from '.'
 
@@ -72,16 +77,8 @@ export const progressDonutData = {
   },
 }
 
-storiesOf('components/DonutChart', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(
-    blockCenteringDecorator({
-      backgroundColor: 'var(--color-control-bg-default)',
-      width: 200,
-      height: 200,
-    })
-  )
-  .add('стандартный', () => {
+export const Interactive = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', getWidgetMockData(DataType.Donut).data)}
@@ -89,8 +86,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('с нулевыми данными по единственной группе', () => {
+  },
+  { name: 'стандартный' }
+)
+
+export const WithZeroDataInOneGroup = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -106,8 +107,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('с нулевыми данными не по всем группам', () => {
+  },
+  { name: 'с нулевыми данными по единственной группе' }
+)
+
+export const WithZeroDataInSomeGroups = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', dataItemsWithZeroAndPositiveData)}
@@ -115,8 +120,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('с нулевыми данными по всем группам', () => {
+  },
+  { name: 'с нулевыми данными не по всем группам' }
+)
+
+export const WithZeroDataInAllGroups = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', dataItemsWithZeroData)}
@@ -124,8 +133,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('без данных по одной группе в одном круге', () => {
+  },
+  { name: 'с нулевыми данными по всем группам' }
+)
+
+export const WithoutDataForOneGroup = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -139,8 +152,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('без данных по одной группе целиком', () => {
+  },
+  { name: 'без данных по одной группе в одном круге' }
+)
+
+export const WithouDataForOneGroupAsWhole = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -154,8 +171,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
-  })
-  .add('Как прогресс бар', () => {
+  },
+  { name: 'без данных по одной группе целиком' }
+)
+
+export const LikeProgressBar = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', progressDonutData.data)}
@@ -163,8 +184,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={emptyFormatValue}
       />
     )
-  })
-  .add('Как прогресс бар с текстом внутри', () => {
+  },
+  { name: 'Как прогресс бар' }
+)
+
+export const LikeProgressBarWithText = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', progressDonutData.data)}
@@ -175,8 +200,12 @@ storiesOf('components/DonutChart', module)
         })}
       />
     )
-  })
-  .add('Как прогресс бар без данных по факту', () => {
+  },
+  { name: 'Как прогресс бар с текстом внутри' }
+)
+
+export const LikeProgressBarWithoutFacts = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -187,8 +216,12 @@ storiesOf('components/DonutChart', module)
         formatValueForTooltip={emptyFormatValue}
       />
     )
-  })
-  .add('Как полукруг с текстом', () => {
+  },
+  { name: 'Как прогресс бар без данных по факту' }
+)
+
+export const HalfDonut = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', progressDonutData.data)}
@@ -203,8 +236,12 @@ storiesOf('components/DonutChart', module)
         })}
       />
     )
-  })
-  .add('Как полукруг с текстом и нулевыми данными', () => {
+  },
+  { name: 'Как полукруг с текстом' }
+)
+
+export const HalfDonutWithZeroData = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -222,8 +259,12 @@ storiesOf('components/DonutChart', module)
         })}
       />
     )
-  })
-  .add('Как полукруг с текстом без данных по факту', () => {
+  },
+  { name: 'Как полукруг с текстом и нулевыми данными' }
+)
+
+export const HalfDonutWithoutFacts = createStory(
+  () => {
     return (
       <DonutChart
         data={object('data', [
@@ -241,4 +282,19 @@ storiesOf('components/DonutChart', module)
         })}
       />
     )
-  })
+  },
+  { name: 'Как полукруг с текстом без данных по факту' }
+)
+
+export default createMetadata({
+  title: 'components/DonutChart',
+  decorators: [
+    withSmartKnobs(),
+    blockCenteringDecorator({
+      backgroundColor: 'var(--color-control-bg-default)',
+      width: 200,
+      height: 200,
+    }),
+  ],
+  excludeStories: ['progressDonutData'],
+})

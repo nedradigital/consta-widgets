@@ -1,18 +1,19 @@
 import React from 'react'
 
 import { text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Badge } from '.'
 
-storiesOf('ui/Badge', module)
-  .addDecorator(withSmartKnobs({ ignoreProps: ['withIcon', 'icon'] }))
-  .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => (
-    <Badge wpSize="s" view="filled" status="normal">
-      {text('children', '+4.8%')}
-    </Badge>
-  ))
+export const Interactive = createStory(() => (
+  <Badge wpSize="s" view="filled" status="normal">
+    {text('children', '+4.8%')}
+  </Badge>
+))
+
+export default createMetadata({
+  title: 'ui/Badge',
+  decorators: [withSmartKnobs({ ignoreProps: ['withIcon', 'icon'] }), blockCenteringDecorator()],
+})

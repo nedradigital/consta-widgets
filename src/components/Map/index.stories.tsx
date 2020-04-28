@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 
 import { boolean, object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Map } from '.'
 import {
@@ -39,7 +38,15 @@ const MapTsubPrototypeStory = () => {
   )
 }
 
-storiesOf('components/Map', module)
-  .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
-  .add('Пример для ЦУБ-а', () => <MapTsubPrototypeStory />)
-  .add('Пример для Инфопанелей', () => <MapGinfPrototypeStory />)
+export const ExampleForTSUB = createStory(() => <MapTsubPrototypeStory />, {
+  name: 'Пример для ЦУБ-а',
+})
+
+export const ExampleForInfopanels = createStory(() => <MapGinfPrototypeStory />, {
+  name: 'Пример для Инфопанелей',
+})
+
+export default createMetadata({
+  title: 'components/Map',
+  decorators: [blockCenteringDecorator({ width: '100vw', height: '100vh' })],
+})
