@@ -106,13 +106,8 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
     setVisibleFilter(visibleFilter === id ? null : id)
   }
 
-  const closeTooltip = () => {
-    setVisibleFilter(null)
-  }
-
   const handleTooltipSave = (field: string, tooltipSelectedFilters: FieldSelectedValues) => {
     updateSelectedFilters(field, tooltipSelectedFilters)
-    closeTooltip()
   }
 
   const removeSelectedFilter = (tableFilters: Filters) => (filter: string) => {
@@ -173,8 +168,8 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               isOpened={visibleFilter === obj.accessor}
               options={getOptionsForFilters(filters, obj.accessor)}
               values={selectedFilters[obj.accessor]}
-              onSave={handleTooltipSave}
-              handleFilterTogglerClick={handleFilterTogglerClick(obj.accessor)}
+              onChange={handleTooltipSave}
+              onToggle={handleFilterTogglerClick(obj.accessor)}
               className={classnames(css.icon, css.iconFilter)}
             />
           )}
