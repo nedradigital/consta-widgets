@@ -1,4 +1,4 @@
-@custom-selector :--container .container;
+@custom-selector :--extra-extra-small .size2XS;
 @custom-selector :--extra-small .sizeXS;
 @custom-selector :--small .sizeS;
 @custom-selector :--medium .sizeM;
@@ -9,7 +9,7 @@
 @custom-selector :--full-without-title .full-without-title;
 @custom-selector :--full-reversed .full-reversed;
 
-:--container {
+.container {
   display: grid;
 
   grid-auto-columns: max-content;
@@ -55,6 +55,10 @@
 
   /* Размеры */
 
+  &:--extra-extra-small {
+    --column-gap: var(--space-xs);
+  }
+
   &:--extra-small {
     --column-gap: var(--space-xs);
   }
@@ -96,14 +100,9 @@
 
   /* Сдвигаем бэдж, чтобы его нижняя граница была по бэйзлайну числа слева */
 
-  :--extra-small:not(:--full-reversed) & {
-    bottom: 0.6em;
-  }
-
-  :--small:not(:--full-reversed) & {
-    bottom: 0.6em;
-  }
-
+  :--extra-extra-small:not(:--full-reversed) &,
+  :--extra-small:not(:--full-reversed) &,
+  :--small:not(:--full-reversed) &,
   :--medium:not(:--full-reversed) & {
     bottom: 0.6em;
   }
