@@ -12,6 +12,7 @@ import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
 import { DataMap, DataType } from '@/dashboard'
 import {
+  ExtendedEditModeOnlyParams,
   TextBasicEditModeParams,
   TextExtendedEditModeParams,
   textParams,
@@ -21,7 +22,7 @@ import { getFormattedFontSizeName } from '@/utils/size-name-formatters'
 import { useTooltipReposition } from '@/utils/tooltips'
 import { IconSize, TextSize } from '@/utils/ui-kit'
 import { widgetIdsByType } from '@/utils/widgets-list'
-import { createWidget, OnChangeParam, WidgetContentProps } from '@/utils/WidgetFactory'
+import { createWidget, OnChangeParams, WidgetContentProps } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
@@ -37,7 +38,7 @@ type TextType = {
 
 type EditModeParams<T> = {
   params: T
-  onChangeParam: OnChangeParam<T>
+  onChangeParams: OnChangeParams<T>
 }
 
 export const widgetId = 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5'
@@ -206,6 +207,19 @@ type Data = DataMap[typeof dataType] | typeof undefined
 
 export const defaultParams: TextBasicEditModeParams = { text: 'Заголовок', type: 'text1' }
 
+const extendedModeReset: Record<keyof ExtendedEditModeOnlyParams, undefined> = {
+  view: undefined,
+  fontStyle: undefined,
+  align: undefined,
+  size: undefined,
+  decoration: undefined,
+  font: undefined,
+  lineHeight: undefined,
+  spacing: undefined,
+  transform: undefined,
+  weight: undefined,
+}
+
 const isExtendedEditMode = (params: Params): params is TextExtendedEditModeParams =>
   params.type === 'advanced'
 
@@ -306,24 +320,24 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
   )
 }
 
-const BasicEditMode = ({ params, onChangeParam }: EditModeParams<TextBasicEditModeParams>) => (
+const BasicEditMode = ({ params, onChangeParams }: EditModeParams<TextBasicEditModeParams>) => (
   <WidgetSettingsSelect
     name="Тип"
     value={params.type}
-    onChange={value => onChangeParam('type', value)}
+    onChange={value => onChangeParams({ type: value })}
     values={textParams.typeNames.map(i => ({ value: i, name: i }))}
   />
 )
 
 const ExtendedEditMode = ({
   params,
-  onChangeParam,
+  onChangeParams,
 }: EditModeParams<TextExtendedEditModeParams>) => (
   <>
     <WidgetSettingsSelect
       name="Размер шрифта"
       value={params.size}
-      onChange={value => onChangeParam('size', value)}
+      onChange={value => onChangeParams({ size: value })}
       values={fontSizes.map(value => ({
         name: getFormattedFontSizeName({ value }),
         value,
@@ -333,104 +347,117 @@ const ExtendedEditMode = ({
     <WidgetSettingsSelect
       name="Выравнивание"
       value={params.align}
-      onChange={value => onChangeParam('align', value)}
+      onChange={value => onChangeParams({ align: value })}
       values={textAligns.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Оформление"
       value={params.decoration}
-      onChange={value => onChangeParam('decoration', value)}
+      onChange={value => onChangeParams({ decoration: value })}
       values={textDecorations.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Тип шрифта"
       value={params.font}
-      onChange={value => onChangeParam('font', value)}
+      onChange={value => onChangeParams({ font: value })}
       values={fontFamilies.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Цвет"
       value={params.view}
-      onChange={value => onChangeParam('view', value)}
+      onChange={value => onChangeParams({ view: value })}
       values={views.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Межстрочный интервал"
       value={params.lineHeight}
-      onChange={value => onChangeParam('lineHeight', value)}
+      onChange={value => onChangeParams({ lineHeight: value })}
       values={lineHeights.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Межбуквенный интервал"
       value={params.spacing}
-      onChange={value => onChangeParam('spacing', value)}
+      onChange={value => onChangeParams({ spacing: value })}
       values={textSpacings.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Начертание"
       value={params.fontStyle}
-      onChange={value => onChangeParam('fontStyle', value)}
+      onChange={value => onChangeParams({ fontStyle: value })}
       values={fontStyles.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Регистр"
       value={params.transform}
-      onChange={value => onChangeParam('transform', value)}
+      onChange={value => onChangeParams({ transform: value })}
       values={textTransforms.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
     <WidgetSettingsSelect
       name="Насыщенность"
       value={params.weight}
-      onChange={value => onChangeParam('weight', value)}
+      onChange={value => onChangeParams({ weight: value })}
       values={fontWeights.map(i => ({ value: i, name: i }))}
       withEmptyValue
     />
   </>
 )
 
-export const EditMode = (props: EditModeParams<Params>) => (
-  <>
-    <WidgetSettingsText
-      name="Текст"
-      value={props.params.text}
-      onChange={value => props.onChangeParam('text', value)}
-    />
-    <WidgetSettingsNumber
-      name="После какой строки обрезать текст"
-      value={props.params.croppedLineCount}
-      onChange={value => props.onChangeParam('croppedLineCount', value)}
-    />
-    <WidgetSettingsCheckbox
-      name="Закрашивать градиентом обрезаемую строку"
-      value={props.params.croppedWithGradient}
-      onChange={value => props.onChangeParam('croppedWithGradient', value)}
-    />
-    <WidgetSettingsItem name={'Режим редактирования'}>
-      <ChoiceGroup
-        items={[...editMods]}
-        value={isExtendedEditMode(props.params)}
-        isMultiple={false}
-        wpSize="s"
-        onChange={newValue =>
-          props.onChangeParam('type', newValue ? 'advanced' : defaultParams.type)
-        }
+export const EditMode = ({ params, onChangeParams }: EditModeParams<Params>) => {
+  const handleChangeMode = (isModeSwitchedToExtended: boolean | null) => {
+    onChangeParams(
+      isModeSwitchedToExtended
+        ? {
+            type: 'advanced',
+          }
+        : {
+            ...extendedModeReset,
+            ...defaultParams,
+          }
+    )
+  }
+
+  return (
+    <>
+      <WidgetSettingsText
+        name="Текст"
+        value={params.text}
+        onChange={value => onChangeParams({ text: value })}
       />
-    </WidgetSettingsItem>
-    {isExtendedEditMode(props.params) ? (
-      <ExtendedEditMode params={props.params} onChangeParam={props.onChangeParam} />
-    ) : (
-      <BasicEditMode params={props.params} onChangeParam={props.onChangeParam} />
-    )}
-  </>
-)
+      <WidgetSettingsNumber
+        name="После какой строки обрезать текст"
+        value={params.croppedLineCount}
+        onChange={value => onChangeParams({ croppedLineCount: value })}
+      />
+      <WidgetSettingsCheckbox
+        name="Закрашивать градиентом обрезаемую строку"
+        value={params.croppedWithGradient}
+        onChange={value => onChangeParams({ croppedWithGradient: value })}
+      />
+      <WidgetSettingsItem name={'Режим редактирования'}>
+        <ChoiceGroup
+          items={[...editMods]}
+          value={isExtendedEditMode(params)}
+          isMultiple={false}
+          wpSize="s"
+          onChange={handleChangeMode}
+        />
+      </WidgetSettingsItem>
+      {isExtendedEditMode(params) ? (
+        <ExtendedEditMode params={params} onChangeParams={onChangeParams} />
+      ) : (
+        <BasicEditMode params={params} onChangeParams={onChangeParams} />
+      )}
+    </>
+  )
+}
 
 export const TextWidget = createWidget<Data, Params>({
   id: widgetIdsByType.TextWidget,
@@ -439,7 +466,7 @@ export const TextWidget = createWidget<Data, Params>({
   dataType,
   Content: TextWidgetContent,
   allowEmptyData: true,
-  renderSettings(params, onChangeParam) {
-    return <EditMode params={params} onChangeParam={onChangeParam} />
+  renderSettings(params, onChangeParams) {
+    return <EditMode params={params} onChangeParams={onChangeParams} />
   },
 })

@@ -110,13 +110,13 @@ export const RoadmapWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: RoadmapWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsCheckbox
           name="При открытии развернуть все блоки"
           value={params.areAllOpened}
-          onChange={value => onChangeParam('areAllOpened', value)}
+          onChange={value => onChangeParams({ areAllOpened: value })}
         />
       </>
     )

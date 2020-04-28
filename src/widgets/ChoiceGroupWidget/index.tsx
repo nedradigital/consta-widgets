@@ -66,20 +66,20 @@ export const ChoiceGroupWidget = createWidget<Data, Params>({
   defaultParams,
   dataType: DataType.ChoiceGroup,
   Content: ChoiceGroupWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
           values={choiceGroupParams.sizes.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
         />
         <WidgetSettingsSelect
           name="Форма"
           value={params.form}
           values={choiceGroupParams.forms.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('form', value)}
+          onChange={value => onChangeParams({ form: value })}
         />
       </>
     )

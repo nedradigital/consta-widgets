@@ -84,26 +84,26 @@ export const LegendWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: LegendWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Направление легенды"
           value={params.direction}
-          onChange={value => onChangeParam('direction', value)}
+          onChange={value => onChangeParams({ direction: value })}
           values={directions}
         />
         <WidgetSettingsSelect
           name="Тип лейбла"
           value={params.labelType}
-          onChange={value => onChangeParam('labelType', value)}
+          onChange={value => onChangeParams({ labelType: value })}
           values={labelTypes}
         />
         {params.labelType === 'line' ? (
           <WidgetSettingsSelect
             name="Положение лейбла"
             value={params.labelPosition}
-            onChange={value => onChangeParam('labelPosition', value)}
+            onChange={value => onChangeParams({ labelPosition: value })}
             values={labelPositions}
           />
         ) : null}
@@ -111,13 +111,13 @@ export const LegendWidget = createWidget<Data, Params>({
           <WidgetSettingsCheckbox
             name="Жирность линии"
             value={params.lineBold}
-            onChange={value => onChangeParam('lineBold', value)}
+            onChange={value => onChangeParams({ lineBold: value })}
           />
         ) : null}
         <WidgetSettingsSelect
           name="Размер текста"
           value={params.fontSize}
-          onChange={value => onChangeParam('fontSize', value)}
+          onChange={value => onChangeParams({ fontSize: value })}
           values={sizes.map(({ name, value }) => ({
             name: getFormattedFontSizeName({ name, value }),
             value,

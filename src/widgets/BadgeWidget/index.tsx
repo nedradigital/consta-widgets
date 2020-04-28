@@ -81,18 +81,18 @@ export const BadgeWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: BadgeWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsCheckbox
           name="Как кружок без текста"
           value={params.isMinified}
-          onChange={value => onChangeParam('isMinified', value)}
+          onChange={value => onChangeParams({ isMinified: value })}
         />
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
           values={badgeParams.sizes.map(i => ({ name: i, value: i }))}
         />
         {!params.isMinified && (
@@ -100,13 +100,13 @@ export const BadgeWidget = createWidget<Data, Params>({
             <WidgetSettingsSelect
               name="Вид"
               value={params.view}
-              onChange={value => onChangeParam('view', value)}
+              onChange={value => onChangeParams({ view: value })}
               values={badgeParams.views.map(i => ({ name: i, value: i }))}
             />
             <WidgetSettingsSelect
               name="Форма"
               value={params.form}
-              onChange={value => onChangeParam('form', value)}
+              onChange={value => onChangeParams({ form: value })}
               values={badgeParams.forms.map(i => ({ name: i, value: i }))}
               withEmptyValue
             />

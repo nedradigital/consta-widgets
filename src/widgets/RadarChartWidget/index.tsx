@@ -34,18 +34,18 @@ export const RadarChartWidget = createWidget<Data, Params>({
     growRatio: 1,
   },
   Content: RadarChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsNumber
           name="Количество засечек"
           value={params.ticks}
-          onChange={value => onChangeParam('ticks', value)}
+          onChange={value => onChangeParams({ ticks: value })}
         />
         <WidgetSettingsSelect
           name="Размер подписи у засечек"
           value={params.labelSize}
-          onChange={value => onChangeParam('labelSize', value)}
+          onChange={value => onChangeParams({ labelSize: value })}
           values={radarChartParams.labelSizes.map(value => ({
             name: getFormattedFontSizeName({ name: value, value: labelTextSizes[value] }),
             value,
@@ -54,7 +54,7 @@ export const RadarChartWidget = createWidget<Data, Params>({
         <WidgetSettingsCheckbox
           name="Раскрасить градиентом"
           value={params.withConcentricColor}
-          onChange={value => onChangeParam('withConcentricColor', value)}
+          onChange={value => onChangeParams({ withConcentricColor: value })}
         />
       </>
     )

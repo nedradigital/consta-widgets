@@ -110,32 +110,32 @@ export const LinearChartWidget = createWidget<Data, Params>({
   },
   dataType: DataType.LinearChart,
   Content: LinearChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsText
           name="Заголовок"
           value={params.title}
-          onChange={value => onChangeParam('title', value)}
+          onChange={value => onChangeParams({ title: value })}
         />
         {params.title && (
           <WidgetSettingsSelect
             name="Тип заголовка"
             value={params.titleType}
             values={textParams.typeNames.map(type => ({ value: type, name: type }))}
-            onChange={value => onChangeParam('titleType', value)}
+            onChange={value => onChangeParams({ titleType: value })}
           />
         )}
         <WidgetSettingsCheckbox
           name="Горизонтальное отображение"
           value={params.isHorizontal}
-          onChange={value => onChangeParam('isHorizontal', value)}
+          onChange={value => onChangeParams({ isHorizontal: value })}
         />
         {!params.isHorizontal && (
           <WidgetSettingsSelect
             name="Направление графика"
             value={params.direction}
-            onChange={value => onChangeParam('direction', value)}
+            onChange={value => onChangeParams({ direction: value })}
             values={[
               {
                 name: 'Вправо',
@@ -151,14 +151,14 @@ export const LinearChartWidget = createWidget<Data, Params>({
         <WidgetSettingsCheckbox
           name="Зум"
           value={params.withZoom}
-          onChange={value => onChangeParam('withZoom', value)}
+          onChange={value => onChangeParams({ withZoom: value })}
         />
 
         <p>Настройка оси Х</p>
         <WidgetSettingsSelect
           name="Расположение оси"
           value={params.xLabels}
-          onChange={value => onChangeParam('xLabels', value)}
+          onChange={value => onChangeParams({ xLabels: value })}
           values={[
             {
               name: 'Сверху',
@@ -173,29 +173,29 @@ export const LinearChartWidget = createWidget<Data, Params>({
         <WidgetSettingsNumber
           name="Частота обновления подписей"
           value={params.xLabelTicks}
-          onChange={value => onChangeParam('xLabelTicks', value)}
+          onChange={value => onChangeParams({ xLabelTicks: value })}
         />
         <WidgetSettingsNumber
           name="Частота обновления линий"
           value={params.xGridTicks}
-          onChange={value => onChangeParam('xGridTicks', value)}
+          onChange={value => onChangeParams({ xGridTicks: value })}
         />
         <WidgetSettingsCheckbox
           name="Отображать отступы на оси"
           value={params.xWithPaddings}
-          onChange={value => onChangeParam('xWithPaddings', value)}
+          onChange={value => onChangeParams({ xWithPaddings: value })}
         />
         <WidgetSettingsCheckbox
           name="Отображать нулевую ось"
           value={params.xGuide}
-          onChange={value => onChangeParam('xGuide', value)}
+          onChange={value => onChangeParams({ xGuide: value })}
         />
 
         <p>Настройка оси Y</p>
         <WidgetSettingsSelect
           name="Расположение оси"
           value={params.yLabels}
-          onChange={value => onChangeParam('yLabels', value)}
+          onChange={value => onChangeParams({ yLabels: value })}
           values={[
             {
               name: 'Слева',
@@ -210,22 +210,22 @@ export const LinearChartWidget = createWidget<Data, Params>({
         <WidgetSettingsNumber
           name="Частота обновления подписей"
           value={params.yLabelTicks}
-          onChange={value => onChangeParam('yLabelTicks', value)}
+          onChange={value => onChangeParams({ yLabelTicks: value })}
         />
         <WidgetSettingsNumber
           name="Частота обновления линий"
           value={params.yGridTicks}
-          onChange={value => onChangeParam('yGridTicks', value)}
+          onChange={value => onChangeParams({ yGridTicks: value })}
         />
         <WidgetSettingsCheckbox
           name="Отображать отступы на оси"
           value={params.yWithPaddings}
-          onChange={value => onChangeParam('yWithPaddings', value)}
+          onChange={value => onChangeParams({ yWithPaddings: value })}
         />
         <WidgetSettingsCheckbox
           name="Отображать нулевую ось"
           value={params.yGuide}
-          onChange={value => onChangeParam('yGuide', value)}
+          onChange={value => onChangeParams({ yGuide: value })}
         />
       </>
     )

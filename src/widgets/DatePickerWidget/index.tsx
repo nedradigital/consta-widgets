@@ -25,12 +25,12 @@ export const DatePickerWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: DatePickerWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <WidgetSettingsSelect
         name="Размер"
         value={params.size}
-        onChange={value => onChangeParam('size', value)}
+        onChange={value => onChangeParams({ size: value })}
         values={datePickerParams.sizes.map(i => ({ name: i, value: i }))}
       />
     )
