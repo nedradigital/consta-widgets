@@ -398,6 +398,7 @@ describe('getComputedPositionAndDirection', () => {
       tooltipSize: ELEMENT_SIZE,
       parentSize: PARENT_SIZE,
       possibleDirections: directions,
+      bannedDirections: [],
     }
 
     it('если позиция входит в верхнюю левую границу, то переворачиваем элемент вниз и ровняем по левому краю', () => {
@@ -1003,6 +1004,7 @@ describe('getComputedPositionAndDirection', () => {
       parentSize: PARENT_SIZE,
       offset: ANCHOR_OFFSET,
       possibleDirections: directions,
+      bannedDirections: [],
     }
 
     it('если якорь входит в верхнюю левую границу, то переворачиваем элемент вниз и ровняем по левому краю', () => {
@@ -1518,6 +1520,41 @@ describe('getComputedPositionAndDirection', () => {
           direction: 'downCenter',
           position: { x: 25, y: 500 },
           possibleDirections: ['downCenter', 'downLeft', 'downRight'],
+          bannedDirections: [],
+        })
+      ).toEqual({
+        direction: 'downCenter',
+        position: { x: -25, y: 500 },
+      })
+    })
+  })
+
+  describe('если есть список запрещенных сторон', () => {
+    it('если вычисленная сторона под запретом, то возвращаем следующую подходящую сторону', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 25, y: 500 },
+          possibleDirections: directions,
+          bannedDirections: ['downCenter'],
+        })
+      ).toEqual({
+        direction: 'upCenter',
+        position: { x: -25, y: 450 },
+      })
+    })
+
+    it('если все стороны под запретом, то возвращаем дефолтную позицию', () => {
+      expect(
+        getComputedPositionAndDirection({
+          parentSize: { width: 50, height: 500 },
+          tooltipSize: { width: 100, height: 50 },
+          direction: 'downCenter',
+          position: { x: 25, y: 500 },
+          possibleDirections: directions,
+          bannedDirections: directions,
         })
       ).toEqual({
         direction: 'downCenter',

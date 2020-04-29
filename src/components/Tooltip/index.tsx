@@ -12,6 +12,8 @@ import { getComputedPositionAndDirection } from './helpers'
 import css from './index.css'
 
 const TOOLTIP_PARENT_ELEMENT = window.document.body
+const ARROW_SIZE = 6
+const ARROW_SIZE_OFFSET = ARROW_SIZE * 2
 
 export const directions = [
   'upLeft',
@@ -84,22 +86,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const mainRef = React.useRef<HTMLDivElement>(null)
   const [position, setPosition] = React.useState<PositionState>()
   const [direction, setDirection] = React.useState<Direction>(passedDirection)
+  const [bannedDirections, setBannedDirections] = React.useState<readonly Direction[]>([])
 
-  React.useLayoutEffect(() => {
-    if (isVisible && !mainRef.current && !isDefinedPosition(position)) {
-      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
-        const { left, top } = positionOrAnchorRef.current.getBoundingClientRect()
-
-        return setPosition({ x: left, y: top })
-      }
-
-      if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
-        return setPosition({ x: positionOrAnchorRef.x, y: positionOrAnchorRef.y })
-      }
-
-      return
-    }
-
+  const calculateLayout = React.useCallback(() => {
     if (mainRef.current && isDefinedPosition(position)) {
       let basePositionData
 
@@ -117,9 +106,10 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       } = getComputedPositionAndDirection({
         tooltipSize: mainRef.current.getBoundingClientRect(),
         parentSize: TOOLTIP_PARENT_ELEMENT.getBoundingClientRect(),
-        offset,
+        offset: offset + ARROW_SIZE_OFFSET,
         direction: passedDirection,
         possibleDirections,
+        bannedDirections,
         ...basePositionData,
       })
 
@@ -131,19 +121,51 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       }
 
       if (direction !== computedDirection) {
+        if (isAnchorRef(positionOrAnchorRef)) {
+          /**
+           * Может возникнуть ситуация, когда перерасчет тултипа всегда будет выдавать 2 направления
+           * и бесконечно зацикливать себя, отчего будет падать всё приложение. Для избежания таких кейсов
+           * мы запоминаем стороны, которые не подошли, что бы не возвращаться к ним и предотвратить бесконечный ререндер.
+           * При закрытии тултипа эти стороны сбрасываются.
+           */
+          setBannedDirections([...bannedDirections, direction])
+        }
+
         setDirection(computedDirection)
       }
     }
   }, [
-    positionOrAnchorRef,
-    isVisible,
-    mainRef,
     position,
     direction,
-    passedDirection,
+    mainRef,
     offset,
     possibleDirections,
+    passedDirection,
+    positionOrAnchorRef,
+    bannedDirections,
   ])
+
+  React.useLayoutEffect(() => {
+    if (isVisible && !mainRef.current && !isDefinedPosition(position)) {
+      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
+        const { left, top } = positionOrAnchorRef.current.getBoundingClientRect()
+
+        return setPosition({ x: left, y: top })
+      }
+
+      if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
+        return setPosition({ x: positionOrAnchorRef.x, y: positionOrAnchorRef.y })
+      }
+
+      return
+    }
+
+    if (mainRef.current && isDefinedPosition(position)) {
+      calculateLayout()
+    }
+
+    setBannedDirections(state => (!isVisible && bannedDirections.length ? [] : state))
+  }, [positionOrAnchorRef, isVisible, mainRef, position, calculateLayout, bannedDirections])
 
   if (!isVisible || !isDefinedPosition(position)) {
     return null
@@ -159,7 +181,11 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         withArrow && css.withArrow,
         isContentHoverable && css.isHoverable
       )}
-      style={{ top: position.y, left: position.x }}
+      style={{
+        top: position.y,
+        left: position.x,
+        ['--arrow-size' as string]: `${ARROW_SIZE}px`,
+      }}
     >
       <div ref={ref} className={classnames(css.tooltip, className)}>
         {'renderContent' in props ? (
