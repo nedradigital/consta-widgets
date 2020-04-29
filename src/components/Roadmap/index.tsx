@@ -389,7 +389,7 @@ export const Roadmap: React.FC<Props> = props => {
           index,
           groupName,
           x: Math.max(tableRect.left, elementRect.left),
-          y: elementRect.top + factBlockSize / 2 + window.scrollY,
+          y: elementRect.top + factBlockSize / 2,
         })
       }
     },

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
+import * as _ from 'lodash'
 
 import { themeColorLight } from '@/utils/theme'
 import { PositionState } from '@/utils/tooltips'
@@ -115,11 +116,14 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         ...basePositionData,
       })
 
-      if (
-        isDefinedPosition(computedPosition) &&
-        (computedPosition.x !== position.x || computedPosition.y !== position.y)
-      ) {
-        setPosition(computedPosition)
+      if (isDefinedPosition(computedPosition)) {
+        // Корректируем позицию с учётом скролла окна
+        computedPosition.y += window.scrollY
+        computedPosition.x += window.scrollX
+
+        if (!_.isEqual(position, computedPosition)) {
+          setPosition(computedPosition)
+        }
       }
 
       if (direction !== computedDirection) {

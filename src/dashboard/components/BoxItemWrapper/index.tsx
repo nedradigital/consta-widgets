@@ -1,13 +1,10 @@
-import React, { useLayoutEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
-import ClickOutHandler from 'react-onclickout'
-
 import { calcSize } from '@csssr/gpn-utils/lib/css'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import classnames from 'classnames'
 
+import { Tooltip } from '@/components/Tooltip'
 import { BoxItem } from '@/dashboard'
 import { marginSizeValues } from '@/dashboard/size-constants'
-import { themeColorLight } from '@/utils/theme'
 
 import css from './index.css'
 
@@ -39,24 +36,13 @@ export const BoxItemWrapper: React.FC<Props> = ({
   params,
   debugName,
 }) => {
-  const ref = React.createRef<HTMLDivElement>()
-  const [{ left, top }, setPosition] = useState({ left: 0, top: 0 })
+  const ref = React.useRef<HTMLDivElement>(null)
+  const tooltipRef = React.useRef(null)
 
-  let portalEl = document.querySelector(`.${css.portal}`)
-
-  useLayoutEffect(() => {
-    if (isEditingSettings && ref.current) {
-      const rect = ref.current.getBoundingClientRect()
-      setPosition({ left: rect.right, top: rect.top + window.scrollY })
-
-      if (!portalEl) {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        portalEl = document.createElement('div')
-        portalEl.classList.add(css.portal)
-        document.body.append(portalEl)
-      }
-    }
-  }, [isEditingSettings])
+  useClickOutside({
+    requiredRefs: [tooltipRef],
+    handler: () => onOpenSettings(undefined),
+  })
 
   return (
     <div
@@ -119,16 +105,15 @@ export const BoxItemWrapper: React.FC<Props> = ({
 
       <div className={css.content}>{children}</div>
 
-      {isEditingSettings &&
-        portalEl &&
-        ReactDOM.createPortal(
-          <ClickOutHandler onClickOut={() => onOpenSettings(undefined)}>
-            <div className={classnames(themeColorLight, css.settings)} style={{ left, top }}>
-              {settings}
-            </div>
-          </ClickOutHandler>,
-          portalEl
-        )}
+      <Tooltip
+        isVisible={isEditingSettings}
+        anchorRef={ref}
+        ref={tooltipRef}
+        possibleDirections={['downLeft', 'downCenter', 'downRight']}
+        isContentHoverable
+      >
+        {settings}
+      </Tooltip>
     </div>
   )
 }
