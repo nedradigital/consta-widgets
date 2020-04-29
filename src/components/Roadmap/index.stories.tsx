@@ -15,6 +15,7 @@ const roadmapData = {
   endDate: Date.UTC(2019, 6, 10),
   values: [
     {
+      id: 'row1',
       firstColumn: '1. Ямбургское НГКМ',
       secondColumn: 'МУПН 1500',
       plan: [
@@ -56,6 +57,7 @@ const roadmapData = {
       forecast: [],
     },
     {
+      id: 'row2',
       firstColumn: '2. Место установки 2',
       secondColumn: 'ZHQ-342-23',
       plan: [

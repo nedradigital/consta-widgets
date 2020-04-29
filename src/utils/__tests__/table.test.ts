@@ -65,14 +65,17 @@ const FILTERS = [...COUNT_FILTERS, ...PRICE_FILTERS] as const
 
 const DATA = [
   {
+    id: 'row1',
     count: 150,
     price: 50,
   },
   {
+    id: 'row2',
     count: 100,
     price: 150,
   },
   {
+    id: 'row3',
     count: 50,
     price: 100,
   },

@@ -78,6 +78,7 @@ const roadmapData = {
   endDate: Date.UTC(2020, 11, 31),
   values: [
     {
+      id: 'row1',
       firstColumn: '1. Ямбургское НГКМ',
       secondColumn: 'МУПН 1500',
       plan: [
@@ -139,6 +140,7 @@ const roadmapData = {
       ],
     },
     {
+      id: 'row2',
       firstColumn: '2. Место установки 2',
       secondColumn: 'ZHQ-342-23',
       plan: [
@@ -198,6 +200,7 @@ const roadmapData = {
       ],
     },
     {
+      id: 'row3',
       firstColumn: '3. Место установки 3',
       secondColumn: 'МУПН 1300',
       plan: [
@@ -256,6 +259,7 @@ const roadmapData = {
       ],
     },
     {
+      id: 'row4',
       firstColumn: '4. Место установки установок',
       secondColumn: 'МУПН 1600',
       plan: [
@@ -315,6 +319,7 @@ const roadmapData = {
       ],
     },
     {
+      id: 'row5',
       firstColumn: '5. Станция бурения в океане',
       secondColumn: 'МУПН 1700',
       plan: [

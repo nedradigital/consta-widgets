@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 
 import { updateAt } from '@csssr/gpn-utils/lib/array'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { IconSortDown, IconSortUp, Text } from '@gpn-design/uikit'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
@@ -44,6 +45,10 @@ export type Data = {
   legendFields: readonly LegendFields[]
   list: readonly TableRow[]
   filters?: Filters
+  activeRow?: {
+    id: string | undefined
+    onChange: (id: string | undefined) => void
+  }
 }
 
 const alignClasses = {
@@ -59,7 +64,7 @@ type Props = {
 }
 
 export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
-  const { columns, legendFields, list, colorGroups, filters } = data
+  const { columns, legendFields, list, colorGroups, filters, activeRow } = data
 
   const containerRef = useRef<HTMLDivElement>(null)
   const tableRef = useRef<HTMLTableElement>(null)
@@ -248,9 +253,25 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
           )}
         </thead>
         <tbody>
-          {filteredData.map((row, idx) => (
-            <tr key={idx}>{renderTableRowWithData(row)}</tr>
-          ))}
+          {filteredData.map(row =>
+            isDefined(activeRow) ? (
+              <tr
+                key={row.id}
+                onClick={() => activeRow.onChange(row.id === activeRow.id ? undefined : row.id)}
+                className={classnames(
+                  css.dataRow,
+                  css.isHoverable,
+                  row.id === activeRow.id && css.isActive
+                )}
+              >
+                {renderTableRowWithData(row)}
+              </tr>
+            ) : (
+              <tr key={row.id} className={css.dataRow}>
+                {renderTableRowWithData(row)}
+              </tr>
+            )
+          )}
         </tbody>
       </table>
     </div>

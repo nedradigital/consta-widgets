@@ -14,18 +14,26 @@ import { TableLegend } from '.'
 
 type BadgeProps = React.ComponentProps<typeof BadgeWidgetContent>
 
-type ListItem = Record<string, string | number | BadgeProps>
+type RowId = { id: string }
 
-const convertItem = (obj: ListItem) => {
-  return Object.keys(obj).reduce<Record<string, React.ReactNode>>((acc, key) => {
-    const item = obj[key]
+type ListItem = Record<string, string | number | BadgeProps> & RowId
 
-    acc[key] =
-      typeof item !== 'string' && typeof item !== 'number' ? <BadgeWidgetContent {...item} /> : item
+const convertItem = ({ id, ...obj }: ListItem) =>
+  Object.keys(obj).reduce<Record<string, React.ReactNode> & RowId>(
+    (acc, key) => {
+      const item = obj[key]
 
-    return acc
-  }, {})
-}
+      acc[key] =
+        typeof item !== 'string' && typeof item !== 'number' ? (
+          <BadgeWidgetContent {...item} />
+        ) : (
+          item
+        )
+
+      return acc
+    },
+    { id }
+  )
 
 const badgeParams: BadgeParams = {
   view: 'filled',
@@ -36,6 +44,7 @@ const badgeParams: BadgeParams = {
 const getList = () => {
   const data: readonly ListItem[] = object('list', [
     {
+      id: 'row1',
       field: 'Северный бур',
       sum: 20,
       status: {
@@ -48,6 +57,7 @@ const getList = () => {
       },
     },
     {
+      id: 'row2',
       field: 'Южное месторождение',
       sum: 15,
       status: {
@@ -60,6 +70,7 @@ const getList = () => {
       },
     },
     {
+      id: 'row3',
       field: 'Западный разлом',
       sum: 7,
       status: {
@@ -76,6 +87,24 @@ const getList = () => {
   return data.map(convertItem)
 }
 
+const TableLegendWithSelectedRow = () => {
+  const [activeRowId, setActiveRowId] = React.useState<string | undefined>()
+
+  return (
+    <TableLegend
+      isShowLegend={false}
+      size="l"
+      data={{
+        ...object('data', getWidgetMockData(DataType.TableLegend)),
+        activeRow: {
+          id: activeRowId,
+          onChange: setActiveRowId,
+        },
+      }}
+    />
+  )
+}
+
 storiesOf('components/TableLegend', module)
   .addDecorator(withSmartKnobs())
   .addDecorator(blockCenteringDecorator({ width: '90vw' }))
@@ -86,6 +115,7 @@ storiesOf('components/TableLegend', module)
       data={object('data', getWidgetMockData(DataType.TableLegend))}
     />
   ))
+  .add('c возможностью выбора активной строки', () => <TableLegendWithSelectedRow />)
 
 storiesOf('components/TableLegend', module)
   .addDecorator(withSmartKnobs())

@@ -173,6 +173,7 @@ export const filters = [
 
 export const list = [
   {
+    id: 'row1',
     field: 'Приобское',
     year: 1982,
     type: 'Нефтяное',
@@ -182,6 +183,7 @@ export const list = [
     total: 313,
   },
   {
+    id: 'row2',
     field: 'Уренгойское газонефтеконденсат­ное',
     year: 2001,
     type: 'Конденсатное',
@@ -191,6 +193,7 @@ export const list = [
     total: 88,
   },
   {
+    id: 'row3',
     field: 'Красноленинская группа',
     year: 1985,
     type: 'Комбинированное',
@@ -200,6 +203,7 @@ export const list = [
     total: 434,
   },
   {
+    id: 'row4',
     field: 'Великое',
     year: 1989,
     type: 'Конденсатное',
@@ -209,6 +213,7 @@ export const list = [
     total: 236,
   },
   {
+    id: 'row5',
     field: 'Русское газонефтяное',
     year: 1997,
     type: 'Нефтяное',
