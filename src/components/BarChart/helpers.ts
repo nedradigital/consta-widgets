@@ -39,7 +39,7 @@ export const getNormalizedValue = ({
   maxValue: number
   value: number
   total: number
-}) => Math.round((maxValue * value) / total)
+}) => (maxValue * value) / total
 
 export const getColumnDetails = ({
   column,
@@ -75,7 +75,7 @@ export const getColumnDetails = ({
 
     const prevElement = previousValue[previousValue.length - 1]
     const positionBegin = prevElement ? prevElement.positionEnd : zeroPoint
-    const positionEnd = Math.ceil(positionBegin + (zeroPoint - valuesScale.scale(normalizedValue)))
+    const positionEnd = Math.round(positionBegin + (zeroPoint - valuesScale.scale(normalizedValue)))
     const size = Math.abs(positionBegin - positionEnd)
     const columnSize = size < BAR_MIN_SIZE && value !== 0 ? BAR_MIN_SIZE : size
 

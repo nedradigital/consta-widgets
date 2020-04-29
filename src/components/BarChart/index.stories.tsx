@@ -66,7 +66,12 @@ storiesOf('components/BarChart', module)
     return (
       <BarChart
         {...DataWithTwoColumnsOnDate}
-        colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
+        colorGroups={object('colorGroups', {
+          apples: 'var(--color-bg-normal)',
+          bananas: 'var(--color-bg-alert)',
+          cherries: 'var(--color-bg-warning)',
+          melon: 'var(--color-bg-success)',
+        })}
         {...defaultProps}
         unitPosition={getUnitPosition()}
         isMultiBar
