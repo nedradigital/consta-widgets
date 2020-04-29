@@ -62,3 +62,7 @@ export const isDateIsInvalid = ({
     })
   )
 }
+
+export const isOnlyOneDateInRange = (range: DateRange) => {
+  return Boolean((range[0] && !range[1]) || (!range[0] && range[1]))
+}
