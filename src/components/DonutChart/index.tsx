@@ -76,7 +76,7 @@ export const DonutChart: React.FC<Props> = ({
   )
   const size = width && height ? getChartSize({ width, height, halfDonut }) : 0
   const mainRadius = size / 2
-  const sizeDonut = getSizeDonut(circlesCount, halfDonut)
+  const sizeDonut = getSizeDonut(circlesCount, isDefined(textData), halfDonut)
   const svgOffsetX = halfDonut === 'left' ? 0 : -mainRadius
   const svgOffsetY = halfDonut === 'top' ? 0 : -mainRadius
   const svgWidth = isHalfDonutVertical ? mainRadius : size
@@ -146,7 +146,7 @@ export const DonutChart: React.FC<Props> = ({
           data={textData}
           radius={linesRadiuses[0].innerRadius}
           lineWidth={sizeDonut}
-          position={halfDonut}
+          halfDonut={halfDonut}
         />
       )}
       <Tooltip isVisible={isTooltipVisible} position={mousePosition}>

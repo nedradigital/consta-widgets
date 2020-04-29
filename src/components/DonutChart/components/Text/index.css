@@ -1,6 +1,4 @@
-@custom-selector :--main .main;
-
-:--main {
+.main {
   display: flex;
   justify-content: center;
 
@@ -46,38 +44,38 @@
   width: 100%;
   height: 100%;
 
-  :--main:not(.withPosition) & {
+  .main:not(.withPosition) & {
     margin: var(--donut-width);
-    padding: var(--donut-width);
+    padding: var(--padding-from-line);
   }
 
-  :--main.top & {
+  .main.top & {
     justify-content: flex-start;
 
-    padding-top: var(--space-xs);
+    padding-top: var(--padding-from-border);
     padding-bottom: var(--donut-width);
   }
 
-  :--main.right & {
+  .main.right & {
     align-items: flex-end;
 
-    padding-right: var(--space-xs);
+    padding-right: var(--padding-from-border);
     padding-left: var(--donut-width);
 
     text-align: right;
   }
 
-  :--main.bottom & {
+  .main.bottom & {
     justify-content: flex-end;
 
     padding-top: var(--donut-width);
-    padding-bottom: var(--space-xs);
+    padding-bottom: var(--padding-from-border);
   }
 
-  :--main.left & {
+  .main.left & {
     align-items: flex-start;
 
-    padding: 0 var(--space-xs);
+    padding: 0 var(--padding-from-border);
     padding-right: var(--donut-width);
 
     text-align: left;
@@ -95,9 +93,20 @@
 .value {
   line-height: var(--line-height-text-s);
 
+  display: flex;
+  justify-content: center;
+
   width: 100%;
 
   color: var(--color-typo-primary);
+
+  .main.left & {
+    justify-content: flex-start;
+  }
+
+  .main.right & {
+    justify-content: flex-end;
+  }
 }
 
 .subvalue {

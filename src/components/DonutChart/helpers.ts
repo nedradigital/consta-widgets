@@ -34,11 +34,11 @@ export const getMinChartSize = (
   halfDonut?: HalfDonut
 ) => {
   if (countLines === 1 && isExistTextData && !halfDonut) {
-    return 75
+    return 96
   }
 
   if (countLines === 1 && isExistTextData && halfDonut) {
-    return 143
+    return 170
   }
 
   return minChartSize[countLines]
@@ -68,8 +68,12 @@ export const getChartSize = ({
   return Math.min(width, height)
 }
 
-export const getSizeDonut = (countLines: number, halfDonut?: HalfDonut) => {
-  return halfDonut ? 16 : donutSize[countLines]
+export const getSizeDonut = (
+  countLines: number,
+  isExistTextData?: boolean,
+  halfDonut?: HalfDonut
+) => {
+  return halfDonut || isExistTextData ? 16 : donutSize[countLines]
 }
 
 export const getDonutRadius = (mainRadius: number, index: number, countLines: number) => {

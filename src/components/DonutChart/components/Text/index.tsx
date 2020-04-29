@@ -6,13 +6,14 @@ import classnames from 'classnames'
 import { useBaseSize } from '@/contexts'
 
 import {
-  isHalfDonutHorizontal as getIsHorizontal,
-  isHalfDonutVertical as getIsVertical,
+  isHalfDonutHorizontal as getIsHalfDonutHorizontal,
+  isHalfDonutVertical as getIsHalfDonutVertical,
 } from '../../helpers'
 import { HalfDonut } from '../Donut'
 
 import {
   getContentBorderRadius,
+  getContentHeight,
   getValueMaxFontSize,
   getValueMaxWidth,
   MIN_FONT_SIZE,
@@ -33,30 +34,38 @@ type Props = {
   data: Data
   radius: number
   lineWidth: number
-  position?: HalfDonut
+  halfDonut?: HalfDonut
 }
 
-export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, position }) => {
+export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut }) => {
   const [baseFontSize, setBaseFontSize] = React.useState(0)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
-  const isHorizontal = getIsHorizontal(position)
-  const isVertical = getIsVertical(position)
-  const isSubBlock = isVertical && data.subTitle && data.subValue
+  const isHalfDonutHorizontal = getIsHalfDonutHorizontal(halfDonut)
+  const isHalfDonutVertical = getIsHalfDonutVertical(halfDonut)
+  const isSubBlock = isHalfDonutVertical && data.subTitle && data.subValue
   const diameter = radius * 2
-  const paddingFromLine = position ? lineWidth : 0
-  const paddingFromBorder = position ? getCalculatedSizeWithBaseSize(8) : 0
+  const paddingFromLine = halfDonut ? lineWidth : getCalculatedSizeWithBaseSize(7)
+  const paddingFromBorder = halfDonut ? getCalculatedSizeWithBaseSize(8) : 0
   const titleFontSize = Math.round(baseFontSize * TITLE_FONT_SIZE_RATIO)
   const subValueFontSize = Math.round(baseFontSize * SUBVALUE_FONT_SIZE_RATIO)
-  const valueMaxSize = getValueMaxFontSize({
-    diameter: diameter - paddingFromLine - paddingFromBorder,
-    maxFontSize: getCalculatedSizeWithBaseSize(VALUE_MAX_FONT_SIZE),
-    position,
+  const contentHeight = getContentHeight({
+    diameter,
+    radius,
+    isHalfDonutHorizontal,
+    isHalfDonutVertical,
+    paddingFromBorder,
+    paddingFromLine,
   })
-  const valueMaxWidth = getValueMaxWidth(diameter, position)
+  const valueMaxSize = getValueMaxFontSize({
+    height: contentHeight,
+    maxFontSize: VALUE_MAX_FONT_SIZE,
+    halfDonut,
+  })
+  const valueMaxWidth = getValueMaxWidth(diameter, halfDonut)
 
   const elements = [
-    position ? (
+    halfDonut ? (
       <div key="title" className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
         {data.title}
       </div>
@@ -66,7 +75,7 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, position }
         key="value"
         className={css.value}
         mode="single"
-        min={getCalculatedSizeWithBaseSize(MIN_FONT_SIZE)}
+        min={MIN_FONT_SIZE}
         max={valueMaxSize}
         style={{ maxWidth: valueMaxWidth ? `${valueMaxWidth}px` : undefined }}
         onReady={setBaseFontSize}
@@ -77,20 +86,21 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, position }
   ] as const
 
   const contentStyle: React.CSSProperties = {
-    maxWidth: isVertical ? radius : diameter,
-    maxHeight: isHorizontal ? radius : diameter,
-    borderRadius: getContentBorderRadius(radius, position),
+    maxWidth: isHalfDonutVertical ? radius : diameter,
+    maxHeight: isHalfDonutHorizontal ? radius : diameter,
+    borderRadius: getContentBorderRadius(radius, halfDonut),
   }
 
   return (
     <div
-      className={classnames(css.main, position && css.withPosition, position && css[position])}
+      className={classnames(css.main, halfDonut && css.withPosition, halfDonut && css[halfDonut])}
       style={{
+        ['--padding-from-line' as string]: `${paddingFromLine}px`,
         ['--padding-from-border' as string]: `${paddingFromBorder}px`,
       }}
     >
       <div className={css.content} style={contentStyle}>
-        {position === 'bottom' ? [...elements].reverse() : elements}
+        {halfDonut === 'bottom' ? [...elements].reverse() : elements}
         {isSubBlock && (
           <>
             <div className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
