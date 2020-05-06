@@ -36,6 +36,8 @@ export type AttachedToPosition = {
   position: PositionState
 }
 
+export type PositioningProps = AttachedToAnchor | AttachedToPosition
+
 type Props = {
   isVisible: boolean
   direction?: Direction
@@ -44,7 +46,7 @@ type Props = {
   offset?: number
   withArrow?: boolean
   possibleDirections?: readonly Direction[]
-} & (AttachedToAnchor | AttachedToPosition) &
+} & PositioningProps &
   (
     | {
         children: React.ReactNode
