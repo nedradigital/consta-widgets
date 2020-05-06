@@ -9,8 +9,15 @@ import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { defaultParams, TableLegendWidget, TableLegendWidgetContent } from '.'
 
+const getInitialParams = () => ({
+  size: select('Высота строки', tableLegendParams.sizes, defaultParams.size),
+  isShowLegend: boolean('Показать легенду', false),
+  isResizable: boolean('Настраиваемая ширина колонок', true),
+  isSortable: boolean('Разрешать сортировку', true),
+})
+
 const TableLegendWidgetWithSelectedRow = () => {
-  const [activeRowId, setActiveRowId] = React.useState<string | undefined>()
+  const [activeRowId, setActiveRowId] = React.useState<string>()
 
   return (
     <TableLegendWidgetContent
@@ -24,10 +31,7 @@ const TableLegendWidgetWithSelectedRow = () => {
           },
         },
       }}
-      params={{
-        size: select('Высота строки', tableLegendParams.sizes, defaultParams.size),
-        isShowLegend: boolean('Показать легенду', false),
-      }}
+      params={getInitialParams()}
     />
   )
 }
@@ -37,10 +41,7 @@ storiesOf('widgets/TableLegendWidget', module)
   .add('interactive', () => (
     <TableLegendWidgetContent
       data={object('data', TableLegendWidget.mockData)}
-      params={{
-        size: select('Высота строки', tableLegendParams.sizes, defaultParams.size),
-        isShowLegend: boolean('Показать легенду', false),
-      }}
+      params={getInitialParams()}
     />
   ))
   .add('clickable row', () => <TableLegendWidgetWithSelectedRow />)

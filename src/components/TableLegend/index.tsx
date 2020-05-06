@@ -58,12 +58,16 @@ const alignClasses = {
 }
 
 type Props = {
-  isShowLegend?: boolean
   data: Data
-  size: TableLegendParams['size']
-}
+} & TableLegendParams
 
-export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = false }) => {
+export const TableLegend: React.FC<Props> = ({
+  data,
+  size = 'l',
+  isShowLegend = false,
+  isResizable = true,
+  isSortable = true,
+}) => {
   const { columns, legendFields, list, colorGroups, filters, activeRow } = data
 
   const containerRef = useRef<HTMLDivElement>(null)
@@ -178,22 +182,30 @@ export const TableLegend: React.FC<Props> = ({ data, size = 'l', isShowLegend = 
               className={classnames(css.icon, css.iconFilter)}
             />
           )}
-          <button type="button" className={css.title} onClick={() => sortBy(obj.accessor)}>
-            {obj.title}
-          </button>
-          <button
-            type="button"
-            className={classnames(css.icon, css.iconSort)}
-            onClick={() => sortBy(obj.accessor)}
-          >
-            <IconSort size="xs" />
-          </button>
+          {isSortable ? (
+            <>
+              <button type="button" className={css.title} onClick={() => sortBy(obj.accessor)}>
+                {obj.title}
+              </button>
+              <button
+                type="button"
+                className={classnames(css.icon, css.iconSort)}
+                onClick={() => sortBy(obj.accessor)}
+              >
+                <IconSort size="xs" />
+              </button>
+            </>
+          ) : (
+            obj.title
+          )}
         </Text>
-        <Resizer
-          height={tableHeight}
-          onResize={handleColumnResize}
-          onDoubleClick={() => updateColumnWidth(idx, initialColumnWidths[idx])}
-        />
+        {isResizable && (
+          <Resizer
+            height={tableHeight}
+            onResize={handleColumnResize}
+            onDoubleClick={() => updateColumnWidth(idx, initialColumnWidths[idx])}
+          />
+        )}
       </th>
     )
   })
