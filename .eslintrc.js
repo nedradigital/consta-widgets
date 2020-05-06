@@ -15,6 +15,14 @@ module.exports = {
           }
         ]
       }
+    },
+    {
+      files: [
+        "./src/**/index.stories.tsx"
+      ],
+      rules: {
+        "import/no-default-export": ["off"]
+      }
     }
   ],
 }
