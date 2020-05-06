@@ -36,8 +36,8 @@ export const FilterTooltip: React.FC<Props> = ({
   const menuRef = useRef<HTMLDivElement>(null)
 
   useClickOutside({
-    requiredRefs: [buttonRef, tooltipRef],
-    optionalRefs: [menuRef],
+    isActive: isOpened,
+    ignoreClicksInsideRefs: [buttonRef, tooltipRef, menuRef],
     handler: onToggle,
   })
 
