@@ -4,7 +4,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard15 } from '../dashboard15'
+import { Dashboard14 } from '../dashboard14'
 
 import {
   BadgeParams,
@@ -52,7 +52,7 @@ export const widgetIdsByType = {
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard15 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -144,43 +144,49 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 16
+    version: 15
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isDashboard15Widget = (item: Dashboard15.BoxItem): item is Dashboard15.WidgetItem =>
-  item.type === 'widget'
-
-const downgradeConfig = (
-  config: CurrentDashboard.Config,
-  widgetDowngrader: (widgetItem: CurrentDashboard.WidgetItem) => Dashboard15.WidgetItem
-): Dashboard15.Config => {
-  const downgradeItem = (item: CurrentDashboard.BoxItem): Dashboard15.BoxItem => {
-    if (item.type === 'switch') {
-      return {
-        ...item,
-        displays: item.displays.map(widgets =>
-          widgets.map(downgradeItem).filter(isDashboard15Widget)
-        ),
-      }
-    }
-
+const upgradeConfig = (config: Dashboard14.Config): Dashboard15.Config => {
+  const upgradeItem = (item: Dashboard14.BoxItem): Dashboard15.BoxItem => {
     if (item.type === 'grid') {
       return {
         ...item,
-        grid: {
-          ...item.grid,
-          items: item.grid.items.map(row =>
-            row.map(column => column.map(downgradeItem).filter(isDashboard15Widget))
-          ),
+        params: {
+          ...item.params,
+          verticalMargin: 'xs',
+          horizontalMargin: 'xs',
         },
       }
     }
 
-    return widgetDowngrader(item)
+    return item
+  }
+
+  return Object.keys(config).reduce((newConfig, key) => {
+    const items = config[key]
+
+    return {
+      ...newConfig,
+      [key]: items.map(upgradeItem).filter(isDefined),
+    }
+  }, {})
+}
+
+const downgradeConfig = (config: Dashboard15.Config): Dashboard14.Config => {
+  const downgradeItem = (item: Dashboard15.BoxItem): Dashboard14.BoxItem => {
+    if (item.type === 'grid') {
+      return {
+        ...item,
+        params: _.omit(item.params, ['verticalMargin', 'horizontalMargin']),
+      }
+    }
+
+    return item
   }
 
   return Object.keys(config).reduce((newConfig, key) => {
@@ -193,26 +199,17 @@ const downgradeConfig = (
   }, {})
 }
 
-export const currentMigration: Migration<Dashboard15.State, CurrentDashboard.State> = {
-  versionTo: 16,
-  changes: ['У виджета Stats добавился новый размер: 2xs'],
+export const migration15: Migration<Dashboard14.State, Dashboard15.State> = {
+  versionTo: 15,
+  changes: ['В виджет сетки добавились настройки отступов'],
   up: data => ({
     ...data,
-    version: 16,
+    version: 15,
+    config: upgradeConfig(data.config),
   }),
   down: data => ({
     ...data,
-    version: 15,
-    config: downgradeConfig(data.config, widgetItem =>
-      widgetItem.widgetType === widgetIdsByType.StatsWidget
-        ? {
-            ...widgetItem,
-            params: {
-              ...widgetItem.params,
-              size: widgetItem.params.size === '2xs' ? 'xs' : widgetItem.params.size,
-            },
-          }
-        : widgetItem
-    ),
+    version: 14,
+    config: downgradeConfig(data.config),
   }),
 }

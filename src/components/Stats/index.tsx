@@ -26,6 +26,7 @@ type Props = Data & {
 }
 
 const sizeClass = {
+  '2xs': css.size2XS,
   xs: css.sizeXS,
   s: css.sizeS,
   m: css.sizeM,
@@ -33,6 +34,7 @@ const sizeClass = {
 }
 
 const titleSizes: Record<Size, TextSize> = {
+  '2xs': 'xs',
   xs: 's',
   s: 'l',
   m: 'xl',
@@ -40,6 +42,7 @@ const titleSizes: Record<Size, TextSize> = {
 }
 
 const numberSizes: Record<Size, TextSize> = {
+  '2xs': 'xl',
   xs: '2xl',
   s: '4xl',
   m: '5xl',
@@ -47,6 +50,7 @@ const numberSizes: Record<Size, TextSize> = {
 }
 
 const badgeSizes: Record<Size, BadgeSize> = {
+  '2xs': 's',
   xs: 's',
   s: 's',
   m: 'm',
@@ -54,6 +58,7 @@ const badgeSizes: Record<Size, BadgeSize> = {
 }
 
 const unitSizes: Record<Size, TextSize> = {
+  '2xs': 'xs',
   xs: 'xs',
   s: 'l',
   m: 'xl',

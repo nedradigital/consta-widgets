@@ -1,4 +1,4 @@
-const sizes = ['2xs', 'xs', 's', 'm', 'l'] as const
+const sizes = ['xs', 's', 'm', 'l'] as const
 
 const layouts = [
   'compact-title',
