@@ -18,6 +18,7 @@ const COLOR_GROUPS = {
   buhanka: 'white',
   korovay: 'gray',
 }
+
 const TEST_GROUPS: Groups = [
   {
     groupName: 'прошлогодний',
@@ -30,6 +31,21 @@ const TEST_GROUPS: Groups = [
   {
     groupName: 'свежий',
     values: [{ baton: 100 }, { buhanka: undefined }, { korovay: 127 }],
+  },
+]
+
+const TEST_GROUPS_WITH_RATIO: Groups = [
+  {
+    groupName: 'group1',
+    values: [{ baton: 1, buhanka: 1, korovay: 1 }],
+  },
+  {
+    groupName: 'group2',
+    values: [{ baton: 1, buhanka: 1, korovay: 2 }],
+  },
+  {
+    groupName: 'group3',
+    values: [{ baton: 1, buhanka: 1, korovay: 3 }],
   },
 ]
 
@@ -146,149 +162,136 @@ const COLUMNS_DATA = [
 
 const NORMALIZED_COLUMNS_DATA = [
   {
-    groupName: 'прошлогодний',
+    groupName: 'group1',
     columnDetails: [
       [
         {
           category: 'baton',
           columnName: '0',
+          columnSize: 5,
           positionBegin: 0,
-          positionEnd: 41,
-          value: 10,
-          columnSize: 41,
+          positionEnd: 5,
+          value: 1,
         },
         {
           category: 'buhanka',
           columnName: '0',
-          positionBegin: 41,
-          positionEnd: 62,
-          value: 5,
-          columnSize: 21,
+          columnSize: 5,
+          positionBegin: 5,
+          positionEnd: 10,
+          value: 1,
         },
         {
           category: 'korovay',
           columnName: '0',
-          positionBegin: 62,
-          positionEnd: 185,
-          value: 30,
-          columnSize: 123,
-        },
-      ],
-      [
-        {
-          category: 'baton',
-          columnName: '1',
-          positionBegin: 0,
-          positionEnd: 62,
-          value: 5,
-          columnSize: 62,
-        },
-        {
-          category: 'buhanka',
-          columnName: '1',
-          positionBegin: 62,
-          positionEnd: 62,
-          value: 0,
-          columnSize: 0,
-        },
-        {
-          category: 'korovay',
-          columnName: '1',
-          positionBegin: 62,
-          positionEnd: 185,
-          value: 10,
-          columnSize: 123,
-        },
-      ],
-      [
-        {
-          category: 'baton',
-          columnName: '2',
-          positionBegin: 0,
-          positionEnd: 100,
-          value: 100,
-          columnSize: 100,
-        },
-        {
-          category: 'buhanka',
-          columnName: '2',
-          positionBegin: 100,
-          positionEnd: 135,
-          value: 35,
-          columnSize: 35,
-        },
-        {
-          category: 'korovay',
-          columnName: '2',
-          positionBegin: 135,
-          positionEnd: 185,
-          value: 50,
-          columnSize: 50,
+          columnSize: 5,
+          positionBegin: 10,
+          positionEnd: 15,
+          value: 1,
         },
       ],
     ],
   },
   {
-    groupName: 'свежий',
+    groupName: 'group2',
     columnDetails: [
       [
         {
           category: 'baton',
           columnName: '0',
+          columnSize: 5,
           positionBegin: 0,
-          positionEnd: 185,
-          value: 100,
-          columnSize: 185,
+          positionEnd: 5,
+          value: 1,
         },
-      ],
-      [
+        {
+          category: 'buhanka',
+          columnName: '0',
+          columnSize: 5,
+          positionBegin: 5,
+          positionEnd: 10,
+          value: 1,
+        },
         {
           category: 'korovay',
-          columnName: '1',
+          columnName: '0',
+          columnSize: 5,
+          positionBegin: 10,
+          positionEnd: 15,
+          value: 2,
+        },
+      ],
+    ],
+  },
+  {
+    groupName: 'group3',
+    columnDetails: [
+      [
+        {
+          category: 'baton',
+          columnName: '0',
+          columnSize: 5,
           positionBegin: 0,
-          positionEnd: 185,
-          value: 127,
-          columnSize: 185,
+          positionEnd: 5,
+          value: 1,
+        },
+        {
+          category: 'buhanka',
+          columnName: '0',
+          columnSize: 5,
+          positionBegin: 5,
+          positionEnd: 10,
+          value: 1,
+        },
+        {
+          category: 'korovay',
+          columnName: '0',
+          columnSize: 5,
+          positionBegin: 10,
+          positionEnd: 15,
+          value: 3,
         },
       ],
     ],
   },
 ] as const
 
-const MAX_VALUE = 185
-
-const valuesScale = scaleLinear({
-  domain: [0, MAX_VALUE],
-  range: [0, MAX_VALUE],
-})
+const getValuesScale = (maxValue: number) =>
+  scaleLinear({
+    domain: [0, maxValue],
+    range: [0, maxValue],
+  })
 
 describe('getDataColumns', () => {
   it('возвращает массив с координатами для баров', () => {
+    const MAX_VALUE = 185
     expect(
       getDataColumns({
         groups: TEST_GROUPS,
         categories: Object.keys(COLOR_GROUPS),
         hasRatio: false,
         maxValue: 0,
-        valuesScale,
+        valuesScale: getValuesScale(MAX_VALUE),
       })
     ).toEqual(COLUMNS_DATA)
   })
 
   it('возвращает массив с координатами для баров, которые растянуты по максимальному значению оси', () => {
+    const MAX_VALUE = 5
     expect(
       getDataColumns({
-        groups: TEST_GROUPS,
+        groups: TEST_GROUPS_WITH_RATIO,
         categories: Object.keys(COLOR_GROUPS),
         hasRatio: true,
         maxValue: MAX_VALUE,
-        valuesScale,
+        valuesScale: getValuesScale(MAX_VALUE),
       })
     ).toEqual(NORMALIZED_COLUMNS_DATA)
   })
 })
 
 describe('getDomain', () => {
+  const MAX_VALUE = 185
   it('возвращает значение для домена', () => {
     expect(getDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
   })
@@ -414,6 +417,7 @@ describe('getColumnDetails', () => {
   const CATEGORIES = ['baton', 'buhanka'] as const
 
   describe('горизонтальный график', () => {
+    const MAX_VALUE = 185
     it('получение детальной информации о столбце', () => {
       expect(
         getColumnDetails({
@@ -421,7 +425,7 @@ describe('getColumnDetails', () => {
           column: { baton: 10, buhanka: 30 },
           columnName: '1',
           maxValue: MAX_VALUE,
-          valuesScale,
+          valuesScale: getValuesScale(MAX_VALUE),
         })
       ).toEqual([
         {
@@ -450,7 +454,7 @@ describe('getColumnDetails', () => {
           column: { baton: -100 },
           columnName: '1',
           maxValue: MAX_VALUE,
-          valuesScale,
+          valuesScale: getValuesScale(MAX_VALUE),
         })
       ).toEqual([
         {
@@ -471,7 +475,7 @@ describe('getColumnDetails', () => {
           column: { baton: 1 },
           columnName: '1',
           maxValue: MAX_VALUE,
-          valuesScale,
+          valuesScale: getValuesScale(MAX_VALUE),
         })
       ).toEqual([
         {
@@ -492,7 +496,7 @@ describe('getColumnDetails', () => {
           column: { baton: 10, buhanka: undefined, korovay: 30 },
           columnName: '1',
           maxValue: MAX_VALUE,
-          valuesScale,
+          valuesScale: getValuesScale(MAX_VALUE),
         })
       ).toEqual([
         {
@@ -516,6 +520,7 @@ describe('getColumnDetails', () => {
   })
 
   describe('вертикальный график', () => {
+    const MAX_VALUE = 185
     const scaler = scaleLinear({
       domain: [MAX_VALUE, 0],
       range: [0, MAX_VALUE],
