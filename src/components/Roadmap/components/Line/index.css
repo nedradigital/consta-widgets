@@ -1,0 +1,37 @@
+.line {
+  --chart-line-height: calc-size(8);
+  --space-between-lines: calc-size(1);
+
+  position: absolute;
+  top: calc(var(--line-height-text-m) / 2);
+
+  height: var(--chart-line-height);
+
+  transform: translateY(var(--space-between-lines));
+
+  &.isInteractive {
+    cursor: pointer;
+  }
+
+  &.isFact {
+    opacity: 1;
+  }
+
+  &.isForecast {
+    opacity: 0.2;
+  }
+
+  &.isPlan {
+    opacity: 0.4;
+
+    transform: translateY(calc((var(--chart-line-height) + var(--space-between-lines)) * -1));
+  }
+
+  &.isActive {
+    opacity: 1;
+  }
+
+  &.isInactive {
+    opacity: 0.3;
+  }
+}

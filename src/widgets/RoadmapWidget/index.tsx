@@ -60,7 +60,7 @@ const RoadmapBlock: React.FC<{
       <AnimateHeight delay={300} height={isOpened ? 'auto' : 0}>
         <div className={css.table}>
           <Roadmap
-            data={item.data.values}
+            rows={item.data.rows}
             titles={item.data.titles}
             filters={item.data.filters}
             currentDay={item.data.currentDay}

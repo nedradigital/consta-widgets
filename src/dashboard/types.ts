@@ -19,7 +19,6 @@ import { Data as StatsData } from '@/components/Stats'
 import { Data as TableLegendData } from '@/components/TableLegend'
 import { CurrentDashboard } from '@/migrations/current'
 import { Status as BadgeStatus } from '@/ui/Badge'
-import { Filters, TableColumn } from '@/utils/table'
 import { ChoiceGroupData } from '@/widgets/ChoiceGroupWidget'
 
 import Dashboard = CurrentDashboard
@@ -116,14 +115,7 @@ export type DataMap = {
         name: string
         value: string
       }
-      data: {
-        values: readonly RoadmapData[]
-        titles: readonly [TableColumn, TableColumn]
-        currentDay: number
-        startDate: number
-        endDate: number
-        filters?: Filters
-      }
+      data: RoadmapData
       legend?: LegendData
     } & WithColorGroups
   >
