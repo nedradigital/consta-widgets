@@ -37,3 +37,21 @@ body {
   border-radius: var(--control-radius);
   background-color: rgba(246, 251, 253, 0.24);
 }
+
+/* Стили якорей */
+:global {
+  .sbdocs-h1,
+  .sbdocs-h2,
+  .sbdocs-h3,
+  .sbdocs-h4,
+  .sbdocs-h5,
+  .sbdocs-h6 {
+    & > a {
+      color: inherit;
+
+      & > svg {
+        fill: currentColor;
+      }
+    }
+  }
+}
