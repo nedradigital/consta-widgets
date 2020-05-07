@@ -46,27 +46,35 @@
 
 .shadow {
   position: absolute;
-  top: var(--donut-width);
-  right: var(--donut-width);
-  bottom: var(--donut-width);
-  left: var(--donut-width);
 
   border-radius: 100%;
-  box-shadow: inset 0 0 10px 10px var(--color-control-bg-default);
+  box-shadow: inset 0 0 10px 10px var(--color-bg-secondary);
 
   &.halfRight {
+    top: var(--donut-width);
+    right: var(--donut-width);
+
     transform: translateX(calc(50% + var(--donut-width)));
   }
 
   &.halfLeft {
+    top: var(--donut-width);
+    left: var(--donut-width);
+
     transform: translateX(calc(-50% - var(--donut-width)));
   }
 
   &.halfBottom {
-    transform: translateY(calc(50% + var(--donut-width)));
+    bottom: var(--donut-width);
+    left: 50%;
+
+    transform: translate(-50%, calc(50% + var(--donut-width)));
   }
 
   &.halfTop {
-    transform: translateY(calc(-50% - var(--donut-width)));
+    top: var(--donut-width);
+    left: 50%;
+
+    transform: translate(-50%, calc(-50% - var(--donut-width)));
   }
 }
