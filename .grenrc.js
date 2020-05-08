@@ -11,7 +11,7 @@ module.exports = {
   "groupBy": false,
   template: {
       issue: ({ text, url, name }) => (
-          `- ${name.replace(/(([A-Z]+)-\d*)/, '[$1](https://jira.csssr.io/browse/$1)')} [${text}](${url})`
+          `- ${name.replace('[RFT]', '').replace(/(([A-Z]+)-\d*)/, '[$1](https://jira.csssr.io/browse/$1)').trim()} [${text}](${url})`
       ),
       changelogTitle: '### Изменения\n\n',
       release: '{{body}}'
