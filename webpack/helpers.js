@@ -1,5 +1,7 @@
-const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
+const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin')
 const { calcSize } = require('@csssr/gpn-utils/lib/css')
+const remarkExternalLinks = require('remark-external-links')
+const remarkSlug = require('remark-slug')
 
 const createRuleForMdx = (options = {}) => ({
   test: /\.mdx?$/,
@@ -12,8 +14,11 @@ const createRuleForMdx = (options = {}) => ({
     },
     {
       loader: '@mdx-js/loader',
-      options,
-    }
+      options: {
+        remarkPlugins: [remarkSlug, remarkExternalLinks],
+        ...options,
+      },
+    },
   ],
 })
 
@@ -59,5 +64,5 @@ module.exports = {
     })
 
     return config
-  }
+  },
 }
