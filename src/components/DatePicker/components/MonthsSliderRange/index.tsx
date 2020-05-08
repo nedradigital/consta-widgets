@@ -1,22 +1,30 @@
-import { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDrag, useDrop } from 'react-dnd'
 
 import { Text } from '@gpn-design/uikit'
+import classnames from 'classnames'
 import {
   addMonths,
   differenceInCalendarMonths,
-  differenceInMonths,
-  getDaysInMonth,
+  differenceInCalendarYears,
+  endOfYear,
   isSameMonth,
   isSameYear,
-  isWithinInterval,
-  startOfMonth,
-  subMonths,
+  startOfYear,
 } from 'date-fns'
-import { groupBy, times } from 'lodash'
+import { groupBy } from 'lodash'
+
+import { ItemTypes } from '@/dashboard/dnd-constants'
 
 import { DateLimitProps, DateRange, ValueProps } from '../../'
 import { MonthsSliderWrapper } from '../MonthsSliderWrapper'
 
+import {
+  getBaseDate,
+  getMonths,
+  getSelectedBlockStyles,
+  isSelectedWithinAllowedLimits,
+} from './helpers'
 import css from './index.css'
 
 type Props = {
@@ -27,214 +35,146 @@ type Props = {
 
 const MOVE_STEP = 12
 const TICK_WIDTH = 32
-const NOT_ALLOWED_MONTHS_AMOUNT = 12
+const MONTHS_AMOUNT_IN_RANGE = 2
 
-const getMonths = ({
-  minDate,
-  maxDate,
-  ticksOutsideRange,
-}: {
-  ticksOutsideRange: number
-} & DateLimitProps) => {
-  const startDate = subMonths(minDate, ticksOutsideRange)
-  const endDate = addMonths(maxDate, ticksOutsideRange)
-  const monthAmount = differenceInMonths(endDate, startDate) + 1
+const TickSelector: React.FC<{
+  offsetLeft: number
+}> = ({ offsetLeft }) => {
+  const [isDragging, setIsDragging] = useState(false)
+  const [, dragRef] = useDrag({
+    item: { type: ItemTypes.DATE_RAGE },
+  })
 
-  return times(monthAmount, i => addMonths(startDate, i))
-}
-
-const getBaseDate = (value?: DateRange) => {
-  return value ? value[0] || value[1] : undefined
-}
-
-export const getDateOffsetOnTimeline = ({
-  date,
-  minDate,
-  tickWidth,
-  ticksOutsideRange,
-}: {
-  date: Date
-  tickWidth: number
-  ticksOutsideRange: number
-} & Pick<DateLimitProps, 'minDate'>) => {
-  const startDay = date.getDate()
-  const monthsOffsetPx =
-    (differenceInMonths(date, startOfMonth(minDate)) + ticksOutsideRange) * tickWidth
-  const daysOffsetPx = (tickWidth * startDay) / getDaysInMonth(date)
-
-  return Math.round(monthsOffsetPx + daysOffsetPx)
-}
-
-const getSelectedDayWidth = (date: Date, tickWidth: number) => {
-  return Math.max(tickWidth / getDaysInMonth(date), 1)
-}
-
-const isSelectedWithinAllowedLimits = ({
-  value,
-  minDate,
-  maxDate,
-}: ValueProps<DateRange> & DateLimitProps) => {
-  if (value && value[0] && value[1]) {
-    return value[0].valueOf() >= minDate.valueOf() && value[1].valueOf() <= maxDate.valueOf()
+  const handleMouseDown = () => {
+    setIsDragging(true)
   }
 
-  const baseDate = getBaseDate(value)
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
 
-  return baseDate ? isWithinInterval(baseDate, { start: minDate, end: maxDate }) : false
+  return (
+    <div
+      ref={dragRef}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      className={classnames(css.selector, isDragging && css.isDragging)}
+      style={{
+        left: TICK_WIDTH * offsetLeft,
+      }}
+    />
+  )
 }
-
-const getSelectedBlockStyles = ({
-  value,
-  minDate,
-  tickWidth,
-  ticksOutsideRange,
-}: {
-  tickWidth: number
-  ticksOutsideRange: number
-} & ValueProps<DateRange> &
-  Pick<DateLimitProps, 'minDate'>) => {
-  const baseDate = getBaseDate(value)
-
-  if (!baseDate) {
-    return {
-      width: 0,
-    }
-  }
-
-  if (value && value[0] && value[1]) {
-    const leftCorner = getDateOffsetOnTimeline({
-      date: value[0],
-      minDate,
-      tickWidth,
-      ticksOutsideRange,
-    })
-    const rightCorner = getDateOffsetOnTimeline({
-      date: value[1],
-      minDate,
-      tickWidth,
-      ticksOutsideRange,
-    })
-
-    return {
-      left: leftCorner,
-      width: Math.max(rightCorner - leftCorner, 1) + getSelectedDayWidth(value[1], tickWidth),
-    }
-  }
-
-  return {
-    left: getDateOffsetOnTimeline({
-      date: baseDate,
-      minDate,
-      tickWidth,
-      ticksOutsideRange,
-    }),
-    width: Math.max(getSelectedDayWidth(baseDate, tickWidth), 1),
-  }
-}
-
-const TickSelector: React.FC<{ offsetLeft: number }> = ({ offsetLeft }) => (
-  <div
-    className={css.selector}
-    style={{
-      left: TICK_WIDTH * offsetLeft,
-    }}
-  />
-)
 
 export const MonthsSliderRange: React.FC<Props> = ({
-  currentVisibleDate,
-  minDate,
-  maxDate,
   value,
   onChange,
+  currentVisibleDate,
+  minDate: initialMinDate,
+  maxDate: initialMaxDate,
 }) => {
   const ref = useRef<HTMLDivElement>(null)
-  const [offset, setOffset] = useState(0)
+  const [offsetRatio, setOffsetRatio] = useState(0)
 
-  const months = getMonths({ minDate, maxDate, ticksOutsideRange: NOT_ALLOWED_MONTHS_AMOUNT })
+  const [, dropRef] = useDrop({
+    accept: ItemTypes.DATE_RAGE,
+    drop: (_, monitor) => {
+      const monitorCoords = monitor.getDifferenceFromInitialOffset()
+
+      if (!monitorCoords || !monitorCoords.x) {
+        return
+      }
+
+      const { x } = monitorCoords
+      const monthsAmountToMove = Math.floor(x / TICK_WIDTH)
+
+      if (!monthsAmountToMove) {
+        return
+      }
+
+      const newMonth = addMonths(currentVisibleDate, monthsAmountToMove)
+
+      onChange(newMonth)
+    },
+  })
+
+  const minDate = startOfYear(initialMinDate)
+  const maxDate = addMonths(endOfYear(initialMaxDate), MONTHS_AMOUNT_IN_RANGE)
+  const months = getMonths({ minDate, maxDate })
   const monthsGroupedByYear = groupBy(months, month => month.getFullYear())
-
-  const getMaxOffset = () => {
-    if (!ref.current) {
-      return 0
-    }
-
-    const { width } = ref.current.getBoundingClientRect()
-
-    return width - months.length * TICK_WIDTH
-  }
-
-  const maxOffset = getMaxOffset()
+  const maxOffsetRatio = isSameYear(minDate, maxDate)
+    ? 0
+    : differenceInCalendarYears(maxDate, minDate) - 1
+  const selectedBlockStyles = getSelectedBlockStyles({
+    value,
+    minDate,
+    tickWidth: TICK_WIDTH,
+  })
 
   useEffect(() => {
     if (!ref.current) {
       return
     }
 
-    const index = months.findIndex(item => isSameMonth(item, currentVisibleDate))
-    const { width } = ref.current.getBoundingClientRect()
+    const tickIdx = months.findIndex(item => isSameMonth(item, currentVisibleDate))
 
-    if (index !== -1) {
-      setOffset(width / 2 - (index + 1) * TICK_WIDTH)
-    }
+    setOffsetRatio(Math.floor(tickIdx / 12))
 
-    /**
-     * Отключаем проверку так как центрировать значение необходимо только при
-     * первом отображении линейки и при смене текущей отображаемой даты.
-     */
+    // Отключаем проверку, т.к. нужное положение выставляется только при первом отображении линейки
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref.current, currentVisibleDate])
+  }, [ref.current])
 
   const handleMovePrev = () => {
-    const nextOffset = offset + MOVE_STEP * TICK_WIDTH
-
-    setOffset(nextOffset > 0 ? 0 : nextOffset)
+    offsetRatio > 0 && setOffsetRatio(offsetRatio - 1)
   }
 
   const handleMoveNext = () => {
-    const nextOffset = offset - MOVE_STEP * TICK_WIDTH
-
-    setOffset(nextOffset < maxOffset ? maxOffset : nextOffset)
+    maxOffsetRatio > offsetRatio && setOffsetRatio(offsetRatio + 1)
   }
-
-  const selectedBlockStyles = getSelectedBlockStyles({
-    value,
-    minDate,
-    tickWidth: TICK_WIDTH,
-    ticksOutsideRange: NOT_ALLOWED_MONTHS_AMOUNT,
-  })
 
   return (
     <MonthsSliderWrapper
       onMovePrev={handleMovePrev}
-      isMovePrevDisabled={offset === 0}
+      isMovePrevDisabled={offsetRatio === 0}
       onMoveNext={handleMoveNext}
-      isMoveNextDisabled={offset === maxOffset}
+      isMoveNextDisabled={offsetRatio === maxOffsetRatio}
     >
       <div
         ref={ref}
         className={css.timeline}
         style={{ ['--tick-width' as string]: `${TICK_WIDTH}px` }}
       >
-        <div className={css.ticks} style={{ transform: `translateX(${offset}px)` }}>
+        <div
+          ref={dropRef}
+          className={css.ticks}
+          style={{ transform: `translateX(${-1 * offsetRatio * MOVE_STEP * TICK_WIDTH}px)` }}
+        >
+          <TickSelector
+            offsetLeft={differenceInCalendarMonths(currentVisibleDate, startOfYear(minDate))}
+          />
           {getBaseDate(value) && isSelectedWithinAllowedLimits({ value, minDate, maxDate }) && (
             <div className={css.selected} style={selectedBlockStyles} />
           )}
           {Object.entries(monthsGroupedByYear).map(([year, yearMonths], idxYear) => {
-            const yearNameView = isSameYear(new Date(Number(year), 0, 1), currentVisibleDate)
-              ? 'primary'
-              : 'ghost'
+            const isYearActive = idxYear === offsetRatio
+            const yearNameView = isYearActive ? 'primary' : 'ghost'
 
             return (
               <div className={css.year} key={idxYear}>
-                <Text size="s" tag="div" view={yearNameView} weight="bold" className={css.yearName}>
+                <Text
+                  size="s"
+                  tag="div"
+                  view={yearNameView}
+                  weight="bold"
+                  className={classnames(css.yearName, isYearActive && css.isActive)}
+                >
                   {year}
                 </Text>
-                {yearMonths.map((month, idx) => {
+                {yearMonths.map((month, idxMonth) => {
                   const name = month.toLocaleDateString('ru', { month: 'short' }).replace('.', '')
 
                   return (
-                    <div key={idx} className={css.tick} onClick={() => onChange(month)}>
+                    <div key={idxMonth} className={css.tick} onClick={() => onChange(month)}>
                       <Text tag="div" size="2xs" view="ghost">
                         {name}
                       </Text>
@@ -244,12 +184,6 @@ export const MonthsSliderRange: React.FC<Props> = ({
               </div>
             )
           })}
-          <TickSelector
-            offsetLeft={differenceInCalendarMonths(
-              currentVisibleDate,
-              subMonths(minDate, NOT_ALLOWED_MONTHS_AMOUNT)
-            )}
-          />
         </div>
       </div>
     </MonthsSliderWrapper>
