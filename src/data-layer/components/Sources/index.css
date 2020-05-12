@@ -1,0 +1,92 @@
+.main {
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+  height: 100%;
+  padding: var(--space-m);
+
+  color: var(--color-typo-primary);
+  border: 1px solid var(--color-bg-border);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-bottom: var(--space-s);
+
+  border-bottom: 1px solid var(--color-bg-border);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+
+  padding: var(--space-m) 0;
+}
+
+.sourceWrapper {
+  position: relative;
+
+  & + & {
+    margin-top: var(--space-m);
+  }
+}
+
+.source {
+  @mixin button;
+  width: 100%;
+  padding: var(--space-2xs);
+
+  cursor: pointer;
+  text-align: left;
+
+  border: 1px solid var(--color-bg-border);
+
+  &.isSelected {
+    background: var(--color-control-bg-ghost);
+  }
+
+  &:hover {
+    background: var(--color-control-bg-ghost-hover);
+  }
+}
+
+.removeSource {
+  position: absolute;
+  right: 0;
+}
+
+.preview {
+  overflow: auto;
+
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-m);
+
+  border-top: 1px solid var(--color-bg-border);
+
+  & table {
+    margin-top: var(--space-s);
+
+    border-collapse: collapse;
+  }
+
+  & th,
+  td {
+    padding: var(--space-2xs);
+
+    border: 1px solid var(--color-bg-border);
+  }
+}
+
+.addSettings {
+  display: grid;
+  align-items: baseline;
+
+  padding: var(--space-m) 0;
+  grid-template-columns: 1fr auto;
+  grid-row-gap: var(--space-m);
+  grid-column-gap: var(--space-m);
+}
