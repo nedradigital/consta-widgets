@@ -273,7 +273,8 @@ export const TableLegend: React.FC<Props> = ({
                 className={classnames(
                   css.dataRow,
                   css.isHoverable,
-                  row.id === activeRow.id && css.isActive
+                  row.id === activeRow.id && css.isActive,
+                  activeRow.id && row.id !== activeRow.id && css.isInactive
                 )}
               >
                 {renderTableRowWithData(row)}
