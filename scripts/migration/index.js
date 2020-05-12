@@ -3,7 +3,7 @@ const path = require('path')
 const ora = require('ora')
 
 // Пути к директориям не зависящим от текущей версии
-const PATH_MIGRATIONS = path.resolve('src/dashboard/migration/migrations')
+const PATH_MIGRATIONS = path.resolve('src/migrations')
 const PATH_TEMPLATES = path.resolve('scripts/migration')
 const PATH_CURRENT_MIGRATION = path.join(PATH_MIGRATIONS, 'current')
 const PATH_CURRENT_MIGRATION_TESTS = path.join(PATH_CURRENT_MIGRATION, '__tests__')

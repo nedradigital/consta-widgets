@@ -1,3 +1,4 @@
+import { CurrentDashboard, widgetIdsByType } from '@/migrations/current'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { defaultParams as badgeParams } from '@/widgets/BadgeWidget'
 import { defaultParams as barChartDefaultParams } from '@/widgets/BarChartWidget'
@@ -22,7 +23,6 @@ import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
 
 import { SUPPORTED_DASHBOARD_VERSION } from './'
 import { handleClear, storageName } from './index.stories'
-import { CurrentDashboard, widgetIdsByType } from './migration/migrations/current'
 import { Dataset, DataType } from './types'
 
 export const exampleDatasets: readonly Dataset[] = [

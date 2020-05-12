@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import { widgetIdsByType } from '@/dashboard/migration/migrations/current'
+import { widgetIdsByType } from '@/migrations/current'
 import { WidgetType } from '@/utils/WidgetFactory'
 
 export { widgetIdsByType }

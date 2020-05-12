@@ -8,8 +8,8 @@ import { noop } from 'lodash'
 
 import { BoxItem } from '@/dashboard'
 import { Box } from '@/dashboard/components/Box'
-import { widgetIdsByType } from '@/dashboard/migration/migrations/dashboard9'
 import { getUniqueName } from '@/utils/uniq-name-hook'
+import { widgetIdsByType } from '@/utils/widgets-list'
 import { blockCenteringDecorator } from '@/utils/Storybook'
 
 import { defaultParams, ImagesWidget, ImagesWidgetContent } from '.'
