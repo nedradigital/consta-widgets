@@ -4,7 +4,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../..'
-import { Dashboard16 } from '../dashboard16'
+import { Dashboard15 } from '../dashboard15'
 
 import {
   BadgeParams,
@@ -52,7 +52,7 @@ export const widgetIdsByType = {
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard16 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -144,65 +144,26 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 17
+    version: 16
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isDashboard16Widget = (item: Dashboard16.BoxItem): item is Dashboard16.WidgetItem =>
+const isDashboard15Widget = (item: Dashboard15.BoxItem): item is Dashboard15.WidgetItem =>
   item.type === 'widget'
 
-const upgradeConfig = (
-  config: Dashboard16.Config,
-  widgetUpgrader: (widgetItem: Dashboard16.WidgetItem) => CurrentDashboard.WidgetItem
-): CurrentDashboard.Config => {
-  const upgradeItem = (item: Dashboard16.BoxItem): CurrentDashboard.BoxItem => {
-    if (item.type === 'switch') {
-      return {
-        ...item,
-        displays: item.displays.map(widgets =>
-          widgets.map(upgradeItem).filter(isDashboard16Widget)
-        ),
-      }
-    }
-
-    if (item.type === 'grid') {
-      return {
-        ...item,
-        grid: {
-          ...item.grid,
-          items: item.grid.items.map(row =>
-            row.map(column => column.map(upgradeItem).filter(isDashboard16Widget))
-          ),
-        },
-      }
-    }
-
-    return widgetUpgrader(item)
-  }
-
-  return Object.keys(config).reduce((newConfig, key) => {
-    const items = config[key]
-
-    return {
-      ...newConfig,
-      [key]: items.map(upgradeItem).filter(isDefined),
-    }
-  }, {})
-}
-
 const downgradeConfig = (
-  config: CurrentDashboard.Config,
-  widgetDowngrader: (widgetItem: CurrentDashboard.WidgetItem) => Dashboard16.WidgetItem
-): Dashboard16.Config => {
-  const downgradeItem = (item: CurrentDashboard.BoxItem): Dashboard16.BoxItem => {
+  config: Dashboard16.Config,
+  widgetDowngrader: (widgetItem: Dashboard16.WidgetItem) => Dashboard15.WidgetItem
+): Dashboard15.Config => {
+  const downgradeItem = (item: Dashboard16.BoxItem): Dashboard15.BoxItem => {
     if (item.type === 'switch') {
       return {
         ...item,
         displays: item.displays.map(widgets =>
-          widgets.map(downgradeItem).filter(isDashboard16Widget)
+          widgets.map(downgradeItem).filter(isDashboard15Widget)
         ),
       }
     }
@@ -213,7 +174,7 @@ const downgradeConfig = (
         grid: {
           ...item.grid,
           items: item.grid.items.map(row =>
-            row.map(column => column.map(downgradeItem).filter(isDashboard16Widget))
+            row.map(column => column.map(downgradeItem).filter(isDashboard15Widget))
           ),
         },
       }
@@ -232,35 +193,24 @@ const downgradeConfig = (
   }, {})
 }
 
-export const currentMigration: Migration<Dashboard16.State, CurrentDashboard.State> = {
-  versionTo: 17,
-  changes: [
-    'У виджета TableLegend появилась возможность отключать сортировку и ресайз ширины колонок',
-  ],
+export const migration16: Migration<Dashboard15.State, Dashboard16.State> = {
+  versionTo: 16,
+  changes: ['У виджета Stats добавился новый размер: 2xs'],
   up: data => ({
     ...data,
-    version: 17,
-    config: upgradeConfig(data.config, widgetItem =>
-      widgetItem.widgetType === widgetIdsByType.TableLegendWidget
+    version: 16,
+  }),
+  down: data => ({
+    ...data,
+    version: 15,
+    config: downgradeConfig(data.config, widgetItem =>
+      widgetItem.widgetType === widgetIdsByType.StatsWidget
         ? {
             ...widgetItem,
             params: {
               ...widgetItem.params,
-              isResizable: true,
-              isSortable: true,
+              size: widgetItem.params.size === '2xs' ? 'xs' : widgetItem.params.size,
             },
-          }
-        : widgetItem
-    ),
-  }),
-  down: data => ({
-    ...data,
-    version: 16,
-    config: downgradeConfig(data.config, widgetItem =>
-      widgetItem.widgetType === widgetIdsByType.TableLegendWidget
-        ? {
-            ...widgetItem,
-            params: _.omit(widgetItem.params, ['isResizable', 'isSortable']),
           }
         : widgetItem
     ),

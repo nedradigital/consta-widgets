@@ -11,13 +11,21 @@ import { createWidget, WidgetContentProps } from '@/utils/WidgetFactory'
 const dataType = DataType.TableLegend
 type Data = DataMap[typeof dataType]
 
-export const defaultParams: Params = { size: 'l' }
+export const defaultParams: Params = { size: 'l', isResizable: true, isSortable: true }
 
 export const TableLegendWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({
   data,
-  params: { size, isShowLegend },
+  params: { size, isShowLegend, isResizable, isSortable },
 }) => {
-  return <TableLegend data={data} size={size} isShowLegend={isShowLegend} />
+  return (
+    <TableLegend
+      data={data}
+      size={size}
+      isShowLegend={isShowLegend}
+      isResizable={isResizable}
+      isSortable={isSortable}
+    />
+  )
 }
 
 export const TableLegendWidget = createWidget<Data, Params>({
@@ -39,6 +47,16 @@ export const TableLegendWidget = createWidget<Data, Params>({
           name="Показать легенду"
           value={params.isShowLegend}
           onChange={value => onChangeParam('isShowLegend', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Настраиваемая ширина колонок"
+          value={params.isResizable}
+          onChange={value => onChangeParam('isResizable', value)}
+        />
+        <WidgetSettingsCheckbox
+          name="Разрешать сортировку"
+          value={params.isSortable}
+          onChange={value => onChangeParam('isSortable', value)}
         />
       </>
     )
