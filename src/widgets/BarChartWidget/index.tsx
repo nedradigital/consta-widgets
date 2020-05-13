@@ -46,29 +46,29 @@ export const BarChartWidget = createWidget<Data, Params>({
   },
   dataType: DataType.BarChart,
   Content: BarChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsNumber
           name="Количество линий"
           value={params.gridTicks}
-          onChange={value => onChangeParam('gridTicks', value)}
+          onChange={value => onChangeParams({ gridTicks: value })}
         />
         <WidgetSettingsNumber
           name="Частота обновления подписей"
           value={params.valuesTicks}
-          onChange={value => onChangeParam('valuesTicks', value)}
+          onChange={value => onChangeParams({ valuesTicks: value })}
         />
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
           values={barChartParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsSelect
           name="Ориентация"
           value={params.orientation}
-          onChange={value => onChangeParam('orientation', value)}
+          onChange={value => onChangeParams({ orientation: value })}
           values={[
             {
               name: 'Вертикальная',
@@ -84,7 +84,7 @@ export const BarChartWidget = createWidget<Data, Params>({
           <WidgetSettingsCheckbox
             name="Показывать значения"
             value={params.showValues}
-            onChange={value => onChangeParam('showValues', value)}
+            onChange={value => onChangeParams({ showValues: value })}
           />
         ) : null}
         <WidgetSettingsSelect
@@ -94,7 +94,7 @@ export const BarChartWidget = createWidget<Data, Params>({
             value: position,
             name: position,
           }))}
-          onChange={value => onChangeParam('unitPosition', value)}
+          onChange={value => onChangeParams({ unitPosition: value })}
         />
       </>
     )

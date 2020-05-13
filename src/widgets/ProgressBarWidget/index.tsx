@@ -29,19 +29,19 @@ export const ProgressBarWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: ProgressBarWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
           values={progressBarParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsCheckbox
           name="Заголовок жирный"
           value={params.isCaptionBold}
-          onChange={value => onChangeParam('isCaptionBold', value)}
+          onChange={value => onChangeParams({ isCaptionBold: value })}
         />
       </>
     )

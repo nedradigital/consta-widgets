@@ -26,19 +26,19 @@ export const StatsWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: StatsWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
           values={statsParams.sizes.map(i => ({ value: i, name: i }))}
         />
         <WidgetSettingsSelect
           name="Расположение элементов"
           value={params.layout}
-          onChange={value => onChangeParam('layout', value)}
+          onChange={value => onChangeParams({ layout: value })}
           values={statsParams.layouts.map(i => ({ value: i, name: i }))}
         />
       </>

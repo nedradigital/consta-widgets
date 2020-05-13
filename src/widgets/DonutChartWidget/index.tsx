@@ -24,12 +24,12 @@ export const DonutChartWidget = createWidget<Data, Params>({
   },
   dataType: DataType.Donut,
   Content: DonutChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <WidgetSettingsSelect
         name="Обрезать пончик"
         value={params.halfDonut}
-        onChange={value => onChangeParam('halfDonut', value)}
+        onChange={value => onChangeParams({ halfDonut: value })}
         withEmptyValue
         values={[
           { name: 'Сверху', value: 'top' },

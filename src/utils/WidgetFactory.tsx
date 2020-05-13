@@ -18,7 +18,7 @@ export type WidgetType<Data, Params> = React.FC<{
   defaultParams: Params
   id: WidgetId
   dataType: DataType
-  getSettings: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
+  getSettings: (params: Params, onChangeParams: OnChangeParams<Params>) => React.ReactNode
 }
 
 export type WidgetContentProps<Data, Params> = {
@@ -27,10 +27,7 @@ export type WidgetContentProps<Data, Params> = {
   dataset?: Dataset
 }
 
-export type OnChangeParam<Params> = <K extends keyof Params, V extends Params[K]>(
-  key: K,
-  value: V
-) => void
+export type OnChangeParams<Params> = (params: Partial<Params>) => void
 
 export const createWidget = <
   Data extends DataMap[keyof DataMap] | typeof undefined,
@@ -41,7 +38,7 @@ export const createWidget = <
   dataType: DataType
   defaultParams: CommonBoxItemParams & Params
   Content: React.ComponentType<WidgetContentProps<Data, Params>>
-  renderSettings?: (params: Params, onChangeParam: OnChangeParam<Params>) => React.ReactNode
+  renderSettings?: (params: Params, onChangeParams: OnChangeParams<Params>) => React.ReactNode
   allowEmptyData?: boolean
 }) => {
   const { name, dataType, defaultParams, Content, renderSettings, id, allowEmptyData } = opts
@@ -75,8 +72,8 @@ export const createWidget = <
   Widget.mockData = getWidgetMockData(dataType) as Data
   Widget.id = id
   Widget.dataType = dataType
-  Widget.getSettings = (params, onChangeParam) =>
-    renderSettings ? renderSettings(params, onChangeParam) : undefined
+  Widget.getSettings = (params, onChangeParams) =>
+    renderSettings ? renderSettings(params, onChangeParams) : undefined
 
   return Widget
 }

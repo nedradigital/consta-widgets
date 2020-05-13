@@ -54,18 +54,18 @@ export const PyramidChartWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: PyramidChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsCheckbox
           name="Перенос текста"
           value={params.constraint}
-          onChange={value => onChangeParam('constraint', value)}
+          onChange={value => onChangeParams({ constraint: value })}
         />
         <WidgetSettingsSelect
           name="Размер текста"
           value={params.fontSize}
-          onChange={value => onChangeParam('fontSize', value)}
+          onChange={value => onChangeParams({ fontSize: value })}
           values={pyramidChartParams.fontSizes.map(value => ({
             name: getFormattedFontSizeName({ value }),
             value,
@@ -78,7 +78,7 @@ export const PyramidChartWidget = createWidget<Data, Params>({
                 <input type="color" value={color} disabled />
                 <button
                   type="button"
-                  onClick={() => onChangeParam('colors', removeAt(params.colors, index))}
+                  onClick={() => onChangeParams({ colors: removeAt(params.colors, index) })}
                 >
                   ➖
                 </button>
@@ -87,11 +87,7 @@ export const PyramidChartWidget = createWidget<Data, Params>({
           </div>
         </WidgetSettingsItem>
 
-        <AddColor
-          onAdd={newItem => {
-            onChangeParam('colors', [...params.colors, newItem])
-          }}
-        />
+        <AddColor onAdd={newItem => onChangeParams({ colors: [...params.colors, newItem] })} />
       </>
     )
   },

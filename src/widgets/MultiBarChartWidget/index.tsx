@@ -44,23 +44,23 @@ export const MultiBarChartWidget = createWidget<Data, Params>({
   },
   dataType: DataType.MultiBarChart,
   Content: MultiBarChartWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsNumber
           name="Количество линий"
           value={params.gridTicks}
-          onChange={value => onChangeParam('gridTicks', value)}
+          onChange={value => onChangeParams({ gridTicks: value })}
         />
         <WidgetSettingsNumber
           name="Частота обновления подписей"
           value={params.valuesTicks}
-          onChange={value => onChangeParam('valuesTicks', value)}
+          onChange={value => onChangeParams({ valuesTicks: value })}
         />
         <WidgetSettingsSelect
           name="Ориентация"
           value={params.orientation}
-          onChange={value => onChangeParam('orientation', value)}
+          onChange={value => onChangeParams({ orientation: value })}
           values={[
             {
               name: 'Вертикальная',
@@ -75,12 +75,12 @@ export const MultiBarChartWidget = createWidget<Data, Params>({
         <WidgetSettingsCheckbox
           name="Нормализовать значения"
           value={params.hasRatio}
-          onChange={value => onChangeParam('hasRatio', value)}
+          onChange={value => onChangeParams({ hasRatio: value })}
         />
         <WidgetSettingsSelect
           name="Позиция единиц измерения"
           value={params.unitPosition}
-          onChange={value => onChangeParam('unitPosition', value)}
+          onChange={value => onChangeParams({ unitPosition: value })}
           values={barChartParams.unitPositions.map(position => ({
             value: position,
             name: position,

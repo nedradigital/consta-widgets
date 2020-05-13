@@ -74,37 +74,37 @@ export const ButtonWidget = createWidget<Data, Params>({
   defaultParams,
   dataType: DataType.Button,
   Content: ButtonWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Размер"
           value={params.size}
           values={buttonParams.sizes.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
         />
         <WidgetSettingsSelect
           name="Вид"
           value={params.view}
           values={buttonParams.views.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('view', value)}
+          onChange={value => onChangeParams({ view: value })}
         />
         <WidgetSettingsSelect
           name="Ширина"
           value={params.width}
           values={buttonParams.widths.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('width', value)}
+          onChange={value => onChangeParams({ width: value })}
         />
         <WidgetSettingsSelect
           name="Форма"
           value={params.form}
           values={buttonParams.forms.map(i => ({ value: i, name: i }))}
-          onChange={value => onChangeParam('form', value)}
+          onChange={value => onChangeParams({ form: value })}
         />
         <WidgetSettingsText
           name="Текст"
           value={params.content}
-          onChange={value => onChangeParam('content', value)}
+          onChange={value => onChangeParams({ content: value })}
         />
         <b>Если есть иконка:</b>
         <WidgetSettingsSelect
@@ -112,7 +112,7 @@ export const ButtonWidget = createWidget<Data, Params>({
           value={params.withIcon}
           values={buttonParams.iconAligns.map(item => ({ value: item, name: item || '--' }))}
           withEmptyValue
-          onChange={value => onChangeParam('withIcon', value)}
+          onChange={value => onChangeParams({ withIcon: value })}
         />
       </>
     )

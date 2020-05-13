@@ -41,9 +41,11 @@ export type TextBasicEditModeParams = CommonParams & {
   type: TypeName
 }
 
+export type ExtendedEditModeOnlyParams = TextProps
+
 export type TextExtendedEditModeParams = CommonParams & {
   type: 'advanced'
-} & TextProps
+} & ExtendedEditModeOnlyParams
 
 export type TextParams = TextBasicEditModeParams | TextExtendedEditModeParams
 

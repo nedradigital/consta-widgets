@@ -1,27 +1,20 @@
 import React from 'react'
 
 import classnames from 'classnames'
+import * as _ from 'lodash'
 
 import { WidgetSettingsDatasetSelect } from '@/components/WidgetSettingsDatasetSelect'
 import { WidgetSettingsItem } from '@/components/WidgetSettingsItem'
 import { WidgetSettingsNumber } from '@/components/WidgetSettingsNumber'
 import { WidgetSettingsSelect } from '@/components/WidgetSettingsSelect'
 import { WidgetSettingsText } from '@/components/WidgetSettingsText'
-import {
-  BoxItem,
-  BoxItemMarginSize,
-  Dataset,
-  DataType,
-  GridItem,
-  SwitchItem,
-  WidgetItem,
-} from '@/dashboard'
+import { BoxItem, BoxItemMarginSize, Dataset, DataType, SwitchItem, WidgetItem } from '@/dashboard'
 import { marginSizeValues } from '@/dashboard/size-constants'
 import { getFormattedMarginName } from '@/utils/size-name-formatters'
 import { themeColorLight } from '@/utils/theme'
 import { isGrid, isSwitch, isWidget } from '@/utils/type-guards'
 import { getWidget } from '@/utils/widgets-list'
-import { OnChangeParam } from '@/utils/WidgetFactory'
+import { OnChangeParams } from '@/utils/WidgetFactory'
 
 import css from './index.css'
 
@@ -74,21 +67,17 @@ const DatasetSelect = <T extends WidgetItem | SwitchItem>({
 }
 
 const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>) => {
-  const getOnChangeParamByItemType = <I extends BoxItem>(): OnChangeParam<I['params']> => (
-    paramName,
-    newValue
-  ) =>
+  const onChangeParams: OnChangeParams<BoxItem['params']> = newParams =>
     onChange({
       ...item,
-      params: {
-        ...item.params,
-        [paramName]: newValue,
-      },
+      params: _.omitBy(
+        {
+          ...item.params,
+          ...newParams,
+        },
+        _.isUndefined
+      ),
     })
-
-  const onChangeCommonParam = getOnChangeParamByItemType<BoxItem>()
-  const onChangeWidgetParam = getOnChangeParamByItemType<WidgetItem>()
-  const onChangeGridParam = getOnChangeParamByItemType<GridItem>()
 
   const commonSettings = (
     <>
@@ -96,7 +85,7 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
         name="Коэффициент растяжения"
         value={item.params.growRatio}
         minValue={0}
-        onChange={value => onChangeCommonParam('growRatio', value)}
+        onChange={value => onChangeParams({ growRatio: value })}
       />
       <WidgetSettingsSelect
         name="Отступ сверху"
@@ -106,7 +95,7 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
           value: size,
         }))}
         withEmptyValue
-        onChange={value => onChangeCommonParam('marginTop', value)}
+        onChange={value => onChangeParams({ marginTop: value })}
       />
     </>
   )
@@ -122,9 +111,9 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
         <WidgetSettingsText
           name="Замещающий текст"
           value={item.params.fallbackPlaceholderText}
-          onChange={value => onChangeWidgetParam('fallbackPlaceholderText', value)}
+          onChange={value => onChangeParams({ fallbackPlaceholderText: value })}
         />
-        {getSettings && getSettings(item.params, onChangeWidgetParam)}
+        {getSettings && getSettings(item.params, onChangeParams)}
       </>
     )
   }
@@ -156,7 +145,7 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
             value: size,
           }))}
           withEmptyValue
-          onChange={value => onChangeGridParam('verticalMargin', value)}
+          onChange={value => onChangeParams({ verticalMargin: value })}
         />
         <WidgetSettingsSelect
           name="Горизонтальные отступы"
@@ -166,7 +155,7 @@ const SettingsList = <T extends BoxItem>({ item, onChange, datasets }: Props<T>)
             value: size,
           }))}
           withEmptyValue
-          onChange={value => onChangeGridParam('horizontalMargin', value)}
+          onChange={value => onChangeParams({ horizontalMargin: value })}
         />
       </>
     )

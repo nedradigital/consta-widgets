@@ -34,29 +34,29 @@ export const TableLegendWidget = createWidget<Data, Params>({
   defaultParams,
   dataType,
   Content: TableLegendWidgetContent,
-  renderSettings(params, onChangeParam) {
+  renderSettings(params, onChangeParams) {
     return (
       <>
         <WidgetSettingsSelect
           name="Высота строки"
           value={params.size}
-          onChange={value => onChangeParam('size', value)}
+          onChange={value => onChangeParams({ size: value })}
           values={tableLegendParams.sizes.map(i => ({ name: i, value: i }))}
         />
         <WidgetSettingsCheckbox
           name="Показать легенду"
           value={params.isShowLegend}
-          onChange={value => onChangeParam('isShowLegend', value)}
+          onChange={value => onChangeParams({ isShowLegend: value })}
         />
         <WidgetSettingsCheckbox
           name="Настраиваемая ширина колонок"
           value={params.isResizable}
-          onChange={value => onChangeParam('isResizable', value)}
+          onChange={value => onChangeParams({ isResizable: value })}
         />
         <WidgetSettingsCheckbox
           name="Разрешать сортировку"
           value={params.isSortable}
-          onChange={value => onChangeParam('isSortable', value)}
+          onChange={value => onChangeParams({ isSortable: value })}
         />
       </>
     )
