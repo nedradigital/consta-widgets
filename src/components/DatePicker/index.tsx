@@ -155,7 +155,8 @@ export const DatePicker: React.FC<Props> = props => {
   }
 
   useClickOutside({
-    requiredRefs: [controlsRef, tooltipRef],
+    isActive: isTooltipVisible,
+    ignoreClicksInsideRefs: [controlsRef, tooltipRef],
     handler: handleApplyDate,
   })
 

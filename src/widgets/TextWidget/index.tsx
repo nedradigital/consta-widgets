@@ -257,7 +257,8 @@ export const TextWidgetContent: React.FC<WidgetContentProps<Data, Params>> = ({ 
   }
 
   useClickOutside({
-    requiredRefs: [buttonRef, tooltipRef],
+    isActive: tooltipVisible,
+    ignoreClicksInsideRefs: [buttonRef, tooltipRef],
     handler: () => setTooltipVisibility(false),
   })
 

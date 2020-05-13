@@ -2131,10 +2131,10 @@
     webpack-cli "3.3.9"
     webpack-merge "4.2.1"
 
-"@csssr/gpn-utils@0.2.9":
-  version "0.2.9"
-  resolved "https://npm.pkg.github.com/download/@csssr/gpn-utils/0.2.9/d89f3a6d6705559bd30f14e96a5445c61276e04c14b3d7ebebd5eb1e02004c20#84ac8d684a16af9b888f4b91549980ada38a3f1e"
-  integrity sha512-eCjaErl56UkV+vLIbd3cUFr6nfC9YLWIDyA5l1KmOJ/yuteGLx0s4iWG/zEL50PJM9UabVA+BV+n41uikOXsMQ==
+"@csssr/gpn-utils@0.2.10":
+  version "0.2.10"
+  resolved "https://npm.pkg.github.com/download/@csssr/gpn-utils/0.2.10/0add4210236da904dc6974f754d08bf48e612bb5369b67dedabfdef51d47d83d#652e41965443ad51848c93f34cf93c51c39fc327"
+  integrity sha512-gRqzoerRTKTp6dt6eyKUWDQ+hJfjmBFIFj9Pmejqmwja28B3X0DeH4e1jgtwgOic7EIfGrmG4bxcWm1hK9WqXA==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"

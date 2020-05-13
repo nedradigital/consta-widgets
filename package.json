@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
-    "@csssr/gpn-utils": "0.2.9",
+    "@csssr/gpn-utils": "0.2.10",
     "@rehooks/component-size": "1.0.3",
     "@types/d3": "5.7.2",
     "@types/react-grid-layout": "0.17.0",
