@@ -1,9 +1,10 @@
 import { Layout } from 'react-grid-layout'
 
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { Migration } from '../'
-import { Dashboard17 } from '../dashboard17'
+import { Dashboard16 } from '../dashboard16'
 
 import {
   BadgeParams,
@@ -26,7 +27,6 @@ import {
   StatsParams,
   TableLegendParams,
   TextParams,
-  TornadoChartParams,
 } from './widget-params'
 
 export const widgetIdsByType = {
@@ -50,10 +50,9 @@ export const widgetIdsByType = {
   StatsWidget: '506fa3ba-e016-4b94-9ad3-547f7e70c464',
   TableLegendWidget: '2f8f8f8e-21eb-4751-ab81-56ea11ac6342',
   TextWidget: 'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5',
-  TornadoChartWidget: 'dfa08263-9699-40e1-a701-1ee25a416b9a',
 } as const
 
-export namespace CurrentDashboard {
+export namespace Dashboard17 {
   export type VerticalAlignment = 'top' | 'middle' | 'bottom'
 
   export type ColumnParams = {
@@ -132,7 +131,6 @@ export namespace CurrentDashboard {
     | WidgetItemParams<typeof widgetIdsByType.StatsWidget, StatsParams>
     | WidgetItemParams<typeof widgetIdsByType.TableLegendWidget, TableLegendParams>
     | WidgetItemParams<typeof widgetIdsByType.TextWidget, TextParams>
-    | WidgetItemParams<typeof widgetIdsByType.TornadoChartWidget, TornadoChartParams>
 
   export type BoxItem = WidgetItem | GridItem | SwitchItem
 
@@ -146,25 +144,26 @@ export namespace CurrentDashboard {
   }
 
   export type State = {
-    version: 18
+    version: 17
     boxes: readonly Layout[]
     config: Config
     settings: Settings
   }
 }
 
-const isDashboard17Widget = (item: CurrentDashboard.BoxItem): item is Dashboard17.WidgetItem =>
-  item.type === 'widget' && item.widgetType !== widgetIdsByType.TornadoChartWidget
-const isDashboard17Item = (item: CurrentDashboard.BoxItem): item is Dashboard17.BoxItem =>
-  item.type !== 'widget' || item.widgetType !== widgetIdsByType.TornadoChartWidget
+const isDashboard16Widget = (item: Dashboard16.BoxItem): item is Dashboard16.WidgetItem =>
+  item.type === 'widget'
 
-const downgradeConfig = (config: CurrentDashboard.Config): Dashboard17.Config => {
-  const downgradeItem = (item: Dashboard17.BoxItem): Dashboard17.BoxItem => {
+const upgradeConfig = (
+  config: Dashboard16.Config,
+  widgetUpgrader: (widgetItem: Dashboard16.WidgetItem) => Dashboard17.WidgetItem
+): Dashboard17.Config => {
+  const upgradeItem = (item: Dashboard16.BoxItem): Dashboard17.BoxItem => {
     if (item.type === 'switch') {
       return {
         ...item,
         displays: item.displays.map(widgets =>
-          widgets.map(downgradeItem).filter(isDashboard17Widget)
+          widgets.map(upgradeItem).filter(isDashboard16Widget)
         ),
       }
     }
@@ -175,13 +174,13 @@ const downgradeConfig = (config: CurrentDashboard.Config): Dashboard17.Config =>
         grid: {
           ...item.grid,
           items: item.grid.items.map(row =>
-            row.map(column => column.map(downgradeItem).filter(isDashboard17Widget))
+            row.map(column => column.map(upgradeItem).filter(isDashboard16Widget))
           ),
         },
       }
     }
 
-    return item
+    return widgetUpgrader(item)
   }
 
   return Object.keys(config).reduce((newConfig, key) => {
@@ -189,21 +188,81 @@ const downgradeConfig = (config: CurrentDashboard.Config): Dashboard17.Config =>
 
     return {
       ...newConfig,
-      [key]: items.filter(isDashboard17Item).map(downgradeItem),
+      [key]: items.map(upgradeItem).filter(isDefined),
     }
   }, {})
 }
 
-export const currentMigration: Migration<Dashboard17.State, CurrentDashboard.State> = {
-  versionTo: 18,
-  changes: ['Добавлен виджет Tornado Chart'],
+const downgradeConfig = (
+  config: Dashboard17.Config,
+  widgetDowngrader: (widgetItem: Dashboard17.WidgetItem) => Dashboard16.WidgetItem
+): Dashboard16.Config => {
+  const downgradeItem = (item: Dashboard17.BoxItem): Dashboard16.BoxItem => {
+    if (item.type === 'switch') {
+      return {
+        ...item,
+        displays: item.displays.map(widgets =>
+          widgets.map(downgradeItem).filter(isDashboard16Widget)
+        ),
+      }
+    }
+
+    if (item.type === 'grid') {
+      return {
+        ...item,
+        grid: {
+          ...item.grid,
+          items: item.grid.items.map(row =>
+            row.map(column => column.map(downgradeItem).filter(isDashboard16Widget))
+          ),
+        },
+      }
+    }
+
+    return widgetDowngrader(item)
+  }
+
+  return Object.keys(config).reduce((newConfig, key) => {
+    const items = config[key]
+
+    return {
+      ...newConfig,
+      [key]: items.map(downgradeItem).filter(isDefined),
+    }
+  }, {})
+}
+
+export const migration17: Migration<Dashboard16.State, Dashboard17.State> = {
+  versionTo: 17,
+  changes: [
+    'У виджета TableLegend появилась возможность отключать сортировку и ресайз ширины колонок',
+  ],
   up: data => ({
     ...data,
-    version: 18,
+    version: 17,
+    config: upgradeConfig(data.config, widgetItem =>
+      widgetItem.widgetType === widgetIdsByType.TableLegendWidget
+        ? {
+            ...widgetItem,
+            params: {
+              ...widgetItem.params,
+              isResizable: true,
+              isSortable: true,
+            },
+          }
+        : widgetItem
+    ),
   }),
   down: data => ({
     ...data,
-    version: 17,
-    config: downgradeConfig(data.config),
+    version: 16,
+    config: downgradeConfig(data.config, widgetItem =>
+      widgetItem.widgetType === widgetIdsByType.TableLegendWidget
+        ? {
+            ...widgetItem,
+            params: _.omit(widgetItem.params, ['isResizable', 'isSortable']),
+          }
+        : widgetItem
+    ),
   }),
 }

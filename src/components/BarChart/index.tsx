@@ -6,7 +6,7 @@ import { Axis } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
 import { ColorGroups, FormatValue } from '@/dashboard'
-import { BarChartParams } from '@/dashboard/widget-params'
+import { BarChartParams, TornadoChartParams } from '@/dashboard/widget-params'
 import { scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
@@ -14,9 +14,12 @@ import { Bar, COLUMN_PADDING, COLUMN_WIDTHS, TooltipData } from './components/Ba
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
+  createFormatValue,
+  getAxisShowPositions,
   getDataColumns,
   getDomain,
   getEveryNTick,
+  getGroupDomain,
   getRange,
   GROUP_INNER_PADDING,
   OUTER_PADDING,
@@ -50,7 +53,6 @@ export type Groups = readonly Group[]
 
 type Props = {
   groups: Groups
-  orientation: BarChartParams['orientation']
   colorGroups: ColorGroups
   gridTicks: number
   valuesTicks: number
@@ -66,6 +68,17 @@ type Props = {
         isMultiBar: false
         showValues?: boolean
       }
+  ) &
+  (
+    | {
+        isTornado?: false
+        orientation: BarChartParams['orientation']
+      }
+    | {
+        isTornado: true
+        xAxisShowPosition: TornadoChartParams['xAxisShowPosition']
+        yAxisShowPosition: TornadoChartParams['yAxisShowPosition']
+      }
   )
 
 export const BarChart: React.FC<Props> = props => {
@@ -73,7 +86,6 @@ export const BarChart: React.FC<Props> = props => {
     groups,
     formatValueForLabel,
     unit,
-    orientation,
     gridTicks,
     valuesTicks,
     colorGroups,
@@ -86,14 +98,14 @@ export const BarChart: React.FC<Props> = props => {
   const svgRef = useRef(null)
   const { width, height } = useComponentSize(ref)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
-  const isVertical = orientation !== 'horizontal'
+  const isVertical = !props.isTornado && props.orientation !== 'horizontal'
   const categories = Object.keys(colorGroups)
 
-  const groupsDomain = groups.map(group => group.groupName)
+  const groupsDomain = getGroupDomain(groups, props.isTornado)
 
-  const valuesDomain = getDomain(groups)
+  const valuesDomain = getDomain(groups, props.isTornado)
   const isNegative = Math.min(...valuesDomain) < 0
-  const paddingCount = isNegative ? 2 : 1
+  const paddingCount = isNegative || props.isTornado ? 2 : 1
   const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
   const paddingInner = getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[size])
   const paddingOuter = getCalculatedSizeWithBaseSize(OUTER_PADDING)
@@ -159,11 +171,17 @@ export const BarChart: React.FC<Props> = props => {
     right: !isVertical && isNegative,
     bottom: true,
     left: true,
+    ...(props.isTornado && getAxisShowPositions(props.xAxisShowPosition, props.yAxisShowPosition)),
   }
   const commonStyle = {
     paddingLeft: isNegative ? padding : 0,
     paddingRight: padding,
   }
+
+  const formatValue = createFormatValue({
+    isTornado: props.isTornado,
+    formatValue: formatValueForLabel,
+  })
 
   return (
     <Axis
@@ -175,7 +193,7 @@ export const BarChart: React.FC<Props> = props => {
       unit={unit}
       unitPosition={unitPosition}
       size={size}
-      formatValue={formatValueForLabel}
+      formatValue={formatValue}
       showPositions={axisShowPositions}
       horizontalStyles={commonStyle}
     >
@@ -213,6 +231,7 @@ export const BarChart: React.FC<Props> = props => {
                 formatValue={formatValueForLabel}
                 size={size}
                 showValues={!props.isMultiBar && props.showValues}
+                isTornado={props.isTornado}
               />
             )
           })}

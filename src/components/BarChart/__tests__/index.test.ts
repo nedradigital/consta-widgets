@@ -2,13 +2,17 @@ import { scaleLinear } from '@/utils/scale'
 
 import { Groups } from '../'
 import {
+  createFormatValue,
+  getAxisShowPositions,
   getColumnDetails,
   getDataColumns,
   getDomain,
   getEveryNTick,
   getGraphStepSize,
+  getGroupDomain,
   getRange,
   getTotalByColumn,
+  isLeftTornadoBar,
   scaleBand,
   transformBarChartGroupsToCommonGroups,
 } from '../helpers'
@@ -646,5 +650,113 @@ describe('transformBarChartGroupsToCommonGroups', () => {
         values: [{ success: 1 }, { warning: 2 }],
       },
     ])
+  })
+})
+
+describe('getGroupDomain', () => {
+  const groups: Groups = [
+    {
+      groupName: 'группа 1',
+      values: [
+        { value1: 10, value2: 5, value3: 30 },
+        { value1: 5, value2: 0, value3: 10 },
+      ],
+    },
+    {
+      groupName: 'группа 2',
+      values: [{ value1: 100 }, { value2: undefined }, { value3: 127 }],
+    },
+    {
+      groupName: 'группа 3',
+      values: [{ value1: 300 }, { value2: 12 }, { value3: 22 }],
+    },
+  ]
+
+  it('возвращает массив названий групп', () => {
+    expect(getGroupDomain(groups)).toEqual(['группа 1', 'группа 2', 'группа 3'])
+  })
+
+  it('возвращает отсортированный по убыванию значения массив названий групп для торнадо графика', () => {
+    expect(getGroupDomain(groups, true)).toEqual(['группа 3', 'группа 2', 'группа 1'])
+  })
+})
+
+describe('isLeftTornadoBar', () => {
+  it('возвращает true, если индекс бара четный', () => {
+    expect(isLeftTornadoBar(0)).toBeTrue()
+  })
+
+  it('возвращает false, если индекс бара нечетный', () => {
+    expect(isLeftTornadoBar(3)).toBeFalse()
+  })
+})
+
+describe('createFormatValue', () => {
+  it('возвращает функцию для форматирования', () => {
+    const formatValue = createFormatValue()
+
+    expect(formatValue).toBeFunction()
+  })
+
+  it('без параметров возвращает принимаемое значение', () => {
+    const formatValue = createFormatValue()
+
+    expect(formatValue(42)).toBe('42')
+    expect(formatValue(-42)).toBe('-42')
+  })
+
+  it('применяет перданную функцию форматирования', () => {
+    const formatValue = createFormatValue({
+      formatValue: value => `Value is ${value}`,
+    })
+
+    expect(formatValue(42)).toBe('Value is 42')
+  })
+
+  it('возвращает значение без знака "-" для торнадочарта', () => {
+    const formatValue = createFormatValue({ isTornado: true })
+
+    expect(formatValue(-42)).toBe('42')
+  })
+
+  it('передает функции форматирования значение без знака "-"  для торнадочарта', () => {
+    const formatValue = createFormatValue({
+      isTornado: true,
+      formatValue: value => `Value is ${value}`,
+    })
+
+    expect(formatValue(42)).toBe('Value is 42')
+  })
+})
+
+describe('getAxisShowPositions', () => {
+  it('возвращает объект с позициями для отображения осей', () => {
+    expect(getAxisShowPositions('top', 'left')).toEqual({
+      left: true,
+      right: false,
+      top: true,
+      bottom: false,
+    })
+
+    expect(getAxisShowPositions('both', 'both')).toEqual({
+      left: true,
+      right: true,
+      top: true,
+      bottom: true,
+    })
+
+    expect(getAxisShowPositions('none', 'both')).toEqual({
+      left: true,
+      right: true,
+      top: false,
+      bottom: false,
+    })
+
+    expect(getAxisShowPositions('bottom', 'both')).toEqual({
+      left: true,
+      right: true,
+      top: false,
+      bottom: true,
+    })
   })
 })

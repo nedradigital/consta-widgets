@@ -11,7 +11,7 @@ import { Scaler } from '@/utils/scale'
 
 import css from './index.css'
 
-type ShowPositions = {
+export type ShowPositions = {
   [key in Position]: boolean
 }
 

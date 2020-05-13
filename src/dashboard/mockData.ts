@@ -20,6 +20,7 @@ import { defaultParams as roadmapDefaultParams } from '@/widgets/RoadmapWidget'
 import { defaultParams as statsDefaultParams } from '@/widgets/StatsWidget'
 import { defaultParams as tableLegendDefaultParams } from '@/widgets/TableLegendWidget'
 import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
+import { defaultParams as tornadoChartDefaultParams } from '@/widgets/TornadoChartWidget'
 
 import { SUPPORTED_DASHBOARD_VERSION } from './'
 import { handleClear, storageName } from './index.stories'
@@ -250,6 +251,17 @@ export const exampleDatasets: readonly Dataset[] = [
     type: DataType.Badge,
     id: 'badgeExample2',
     groupName: 'Группа светофоров',
+  },
+  {
+    name: 'Торнадочарт в группе',
+    type: DataType.TornadoChart,
+    id: 'tornadoChartExample1',
+    groupName: 'Группа торнадочартов',
+  },
+  {
+    name: 'Торнадочарт вне группы',
+    type: DataType.TornadoChart,
+    id: 'tornadoChartExample2',
   },
 ]
 
@@ -516,6 +528,15 @@ const exampleDashboardState: CurrentDashboard.State = {
       },
     ],
     Box_12: [...initialDashboardState.config.Box_12],
+    Box_13: [
+      {
+        type: 'widget',
+        debugName: 'Торнадо график',
+        id: 'dfa08263-9699-40e1-a701-1ee25a416b9a_0',
+        widgetType: widgetIdsByType.TornadoChartWidget,
+        params: { ...tornadoChartDefaultParams, growRatio: 1 },
+      },
+    ],
   },
   settings: {},
   version: SUPPORTED_DASHBOARD_VERSION,
@@ -558,4 +579,5 @@ export const exampleDashboardData = {
   'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5_0': getWidgetMockData(DataType.Text),
   'b69b03e4-7fb6-4ac2-bdfa-e6c7fecdcca5_1': { text: 'Это текст без тултипа' },
   'fbeb7619-ae6b-4742-ae62-deea18e1382d_0': getWidgetMockData(DataType.Badge),
+  'dfa08263-9699-40e1-a701-1ee25a416b9a_0': getWidgetMockData(DataType.TornadoChart),
 }

@@ -18,3 +18,4 @@ export { ChoiceGroupWidgetContent as ChoiceGroupWidget } from './ChoiceGroupWidg
 export { MapWidgetContent as MapWidget } from './MapWidget'
 export { RoadmapWidgetContent as RoadmapWidget } from './RoadmapWidget'
 export { CheckboxWidgetContent as CheckboxWidget } from './CheckboxWidget'
+export { TornadoChartContent as TornadoChartWidget } from './TornadoChartWidget'

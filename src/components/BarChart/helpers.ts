@@ -1,13 +1,14 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { flattenDeep, sum } from 'lodash'
+import { flattenDeep, orderBy, sum } from 'lodash'
 
+import { ShowPositions } from '@/components/BarChartAxis'
+import { FormatValue } from '@/dashboard'
+import { XAxisShowPosition, YAxisShowPosition } from '@/dashboard/widget-params'
 import { getEveryN } from '@/utils/array'
-import { Scaler } from '@/utils/scale'
+import { NumberRange, Scaler } from '@/utils/scale'
 
 import { Column, Groups, SingleBarChartGroups, Size } from './'
 import { ColumnDetail } from './components/Bar'
-
-type NumberRange = readonly [number, number]
 
 type DataColumns = ReadonlyArray<{
   groupName: string
@@ -92,18 +93,29 @@ export const getColumnDetails = ({
   }, [])
 }
 
-export const getDomain = (groups: Groups): NumberRange => {
+export const getDomain = (groups: Groups, isTornado?: boolean): NumberRange => {
   const numbers = flattenDeep(groups.map(group => group.values.map(getTotalByColumn)))
 
   const minNumber = Math.min(...numbers, 0)
   const maxNumber = Math.max(...numbers, 0)
   const maxInDomain = Math.max(-minNumber, maxNumber)
 
-  if (minNumber < 0) {
+  if (minNumber < 0 || isTornado) {
     return [-maxInDomain, maxInDomain]
   }
 
   return [0, maxNumber]
+}
+
+export const getGroupDomain = (groups: Groups, isTornado?: boolean) => {
+  if (!isTornado) {
+    return groups.map(g => g.groupName)
+  }
+
+  const sumGroupValues = (group: Groups[number]) =>
+    sum(group.values.map(v => sum(Object.values(v))))
+
+  return orderBy(groups, sumGroupValues, 'desc').map(g => g.groupName)
 }
 
 export const getDataColumns = ({
@@ -236,5 +248,30 @@ export const scaleBand = ({
 
       return size > step ? size : step
     },
+  }
+}
+
+export const isLeftTornadoBar = (barIndex: number) => {
+  return barIndex % 2 === 0
+}
+
+export const createFormatValue = ({
+  formatValue,
+  isTornado,
+}: {
+  formatValue?: FormatValue
+  isTornado?: boolean
+} = {}): FormatValue => (value: number) => {
+  const nextValue = isTornado ? Math.abs(value) : value
+
+  return formatValue ? formatValue(nextValue) : String(nextValue)
+}
+
+export const getAxisShowPositions = (x: XAxisShowPosition, y: YAxisShowPosition): ShowPositions => {
+  return {
+    left: y === 'left' || y === 'both',
+    right: y === 'right' || y === 'both',
+    top: x === 'top' || x === 'both',
+    bottom: x === 'bottom' || x === 'both',
   }
 }

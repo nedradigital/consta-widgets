@@ -65,6 +65,7 @@ export enum DataType {
   Checkbox,
   Map,
   Switch,
+  TornadoChart,
 }
 
 export type ColorGroups = { [key: string]: string }
@@ -145,6 +146,10 @@ export type DataMap = {
   }
   [DataType.Map]: MapData
   [DataType.Switch]: number
+  [DataType.TornadoChart]: BarChartData &
+    WithColorGroups & {
+      groups: MultiBarChartGroup
+    }
 }
 
 export type Dataset = {
