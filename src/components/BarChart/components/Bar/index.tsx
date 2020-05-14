@@ -8,6 +8,7 @@ import { ColorGroups, FormatValue } from '@/dashboard'
 import { Scaler } from '@/utils/scale'
 
 import { Size } from '../..'
+import { isLeftTornadoBar } from '../../helpers'
 
 import css from './index.css'
 
@@ -56,6 +57,7 @@ type Props = {
   formatValue?: FormatValue
   size: Size
   showValues?: boolean
+  isTornado?: boolean
 }
 
 export const COLUMN_WIDTHS: Record<Size, number> = {
@@ -71,17 +73,27 @@ const getBarClassName = ({
   isVertical,
   isRounded,
   isNegative,
+  isTornado,
   size,
+  index,
 }: {
   isRounded: boolean
   isVertical: boolean
   isNegative: boolean
+  isTornado: boolean
   size: Size
+  index: number
 }) => {
   return classnames(
     css.bar,
-    isRounded && !isVertical && isNegative && css.borderLeft,
-    isRounded && !isVertical && !isNegative && css.borderRight,
+    isRounded &&
+      !isVertical &&
+      (isNegative || (isTornado && isLeftTornadoBar(index))) &&
+      css.borderLeft,
+    isRounded &&
+      !isVertical &&
+      (!isNegative || (isTornado && !isLeftTornadoBar(index))) &&
+      css.borderRight,
     isRounded && isVertical && isNegative && css.borderBottom,
     isRounded && isVertical && !isNegative && css.borderTop,
     size === 'm' && css.sizeM
@@ -100,9 +112,9 @@ export const Bar: React.FC<Props> = props => {
     groupName,
     size,
     showValues,
+    isTornado = false,
   } = props
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
-
   const uniqueColumnNames = uniq(
     flattenDeep(columnDetails.map(group => group.map(column => column.columnName)))
   )
@@ -112,8 +124,10 @@ export const Bar: React.FC<Props> = props => {
     columnDefaultSize * uniqueColumnNames.length + columnPadding * (uniqueColumnNames.length - 1)
   const zeroPoint = Math.ceil(valuesScale.scale(0))
 
-  const getTextPositionOnX = (value: number, width: number) => {
-    return value < 0 ? zeroPoint - width - columnPadding : zeroPoint + width + columnPadding
+  const getTextPositionOnX = (value: number, width: number, index: number) => {
+    return value < 0 || (isTornado && isLeftTornadoBar(index))
+      ? zeroPoint - width - columnPadding
+      : zeroPoint + width + columnPadding
   }
 
   const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth(groupName) : 0
@@ -131,6 +145,14 @@ export const Bar: React.FC<Props> = props => {
   }) => {
     const isAxisX = axis === 'x'
     const isAxisY = axis === 'y'
+
+    if (isTornado && isAxisX) {
+      return isLeftTornadoBar(index) ? part.positionBegin - part.columnSize : part.positionBegin
+    }
+
+    if (isTornado && isAxisY) {
+      return columnDefaultSize / 2 + columnPadding
+    }
 
     if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
       return (columnDefaultSize + columnPadding) * index
@@ -178,12 +200,22 @@ export const Bar: React.FC<Props> = props => {
     }
   })
 
-  const renderContent = (tooltipParams: TooltipData) => (column: Part, index: number) => {
-    const { x, y, columnSize, value, backgroundColor, isRounded } = column
+  const renderContent = ({
+    tooltipParams,
+    part,
+    partIndex,
+    columnIndex,
+  }: {
+    tooltipParams: TooltipData
+    part: Part
+    partIndex: number
+    columnIndex: number
+  }) => {
+    const { x, y, columnSize, value, backgroundColor, isRounded } = part
 
     return (
       <foreignObject
-        key={groupName + index}
+        key={groupName + partIndex}
         x={x}
         y={y}
         width={isVertical ? columnDefaultSize : columnSize}
@@ -196,7 +228,9 @@ export const Bar: React.FC<Props> = props => {
             isVertical,
             isRounded,
             isNegative: value < 0,
+            isTornado,
             size,
+            index: columnIndex,
           })}
           style={{ backgroundColor }}
         />
@@ -204,18 +238,26 @@ export const Bar: React.FC<Props> = props => {
     )
   }
 
-  const renderValues = (column: Part, index: number) => {
-    const { y, columnSize, value } = column
+  const renderValues = ({
+    part,
+    partIndex,
+    columnIndex,
+  }: {
+    part: Part
+    partIndex: number
+    columnIndex: number
+  }) => {
+    const { y, columnSize, value } = part
 
     const isNegative = value < 0
-    const textPositionX = getTextPositionOnX(value, columnSize)
+    const textPositionX = getTextPositionOnX(value, columnSize, columnIndex)
     const textPositionY = y + columnPadding + columnDefaultSize / 2
-    const textAnchor = isNegative ? 'end' : 'start'
+    const textAnchor = isNegative || (isTornado && isLeftTornadoBar(columnIndex)) ? 'end' : 'start'
 
     return (
       <text
-        key={groupName + index}
-        className={css.label}
+        key={groupName + partIndex}
+        className={classnames(css.label, size === 's' && css.sizeS, size === 'm' && css.sizeM)}
         x={textPositionX}
         y={textPositionY}
         textAnchor={textAnchor}
@@ -228,11 +270,22 @@ export const Bar: React.FC<Props> = props => {
   return (
     <g>
       <g transform={transform}>
-        {columnDetailsData.map(column => column.parts.map(renderContent(column.tooltipParams)))}
+        {columnDetailsData.map((column, columnIndex) =>
+          column.parts.map((part, partIndex) =>
+            renderContent({
+              tooltipParams: column.tooltipParams,
+              part,
+              partIndex,
+              columnIndex,
+            })
+          )
+        )}
       </g>
       {!isVertical && showValues && (
         <g transform={transform}>
-          {columnDetailsData.map(column => column.parts.map(renderValues))}
+          {columnDetailsData.map((column, columnIndex) =>
+            column.parts.map((part, partIndex) => renderValues({ part, partIndex, columnIndex }))
+          )}
         </g>
       )}
     </g>

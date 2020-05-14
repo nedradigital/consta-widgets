@@ -1,124 +1,32 @@
 import { CurrentDashboard, currentMigration, widgetIdsByType as currentWidgetIdsByType } from '../'
-import {
-  Dashboard16 as PreviousDashboard,
-  widgetIdsByType as previousWidgetIdsByType,
-} from '../../dashboard16'
-import { TableLegendParams as PreviousTableLegendParams } from '../../dashboard16/widget-params'
-import { TableLegendParams as CurrentTableLegendParams } from '../widget-params'
+import { Dashboard17 as PreviousDashboard } from '../../dashboard17'
 
-const createCurrentTableLegendWidget = ({
-  name,
-  size = 's',
-  isResizable = true,
-  isSortable = true,
-}: {
-  name: string
-  size?: CurrentTableLegendParams['size']
-  isResizable?: CurrentTableLegendParams['isResizable']
-  isSortable?: CurrentTableLegendParams['isSortable']
-}) =>
-  ({
-    type: 'widget',
-    debugName: name,
-    id: name,
-    widgetType: currentWidgetIdsByType.TableLegendWidget,
-    params: {
-      size,
-      isResizable,
-      isSortable,
-    },
-  } as const)
-
-const createPreviousTableLegendWidget = ({
-  name,
-  size = 's',
-}: {
-  name: string
-  size?: PreviousTableLegendParams['size']
-}) =>
-  ({
-    type: 'widget',
-    debugName: name,
-    id: name,
-    widgetType: previousWidgetIdsByType.TableLegendWidget,
-    params: {
-      size,
-    },
-  } as const)
-
-const createLinearChartWidget = (type: 'previous' | 'current') => {
-  const widgetIdsByType = type === 'previous' ? previousWidgetIdsByType : currentWidgetIdsByType
-
-  return {
-    type: 'widget',
-    widgetType: widgetIdsByType.LinearChartWidget,
-    id: 'linear_chart_1',
-    debugName: 'linear_chart_1',
-    params: {},
-  } as const
-}
+const TornadoChartWidget = {
+  type: 'widget',
+  widgetType: currentWidgetIdsByType.TornadoChartWidget,
+  id: currentWidgetIdsByType.TornadoChartWidget,
+  debugName: 'tornado_chart_1',
+  params: {
+    valuesTicks: 1,
+    gridTicks: 1,
+    xAxisShowPosition: 'bottom',
+    yAxisShowPosition: 'left',
+  },
+} as const
 
 describe('currentMigration', () => {
   it('повышает версию', () => {
     const source: PreviousDashboard.State = {
-      version: 16,
+      version: 17,
       boxes: [],
-      config: {
-        Box0: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [[[createPreviousTableLegendWidget({ name: 'table_legend_widget_0' })]]],
-            },
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [
-              [createPreviousTableLegendWidget({ name: 'table_legend_widget_1', size: 'm' })],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [createPreviousTableLegendWidget({ name: 'table_legend_widget_2', size: 'l' })],
-        Box3: [createLinearChartWidget('previous')],
-      },
+      config: {},
       settings: {},
     }
 
     const result: CurrentDashboard.State = {
-      version: 17,
+      version: 18,
       boxes: [],
-      config: {
-        Box0: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [[[createCurrentTableLegendWidget({ name: 'table_legend_widget_0' })]]],
-            },
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [
-              [createCurrentTableLegendWidget({ name: 'table_legend_widget_1', size: 'm' })],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [createCurrentTableLegendWidget({ name: 'table_legend_widget_2', size: 'l' })],
-        Box3: [createLinearChartWidget('current')],
-      },
+      config: {},
       settings: {},
     }
 
@@ -127,6 +35,42 @@ describe('currentMigration', () => {
 
   it('понижает версию', () => {
     const source: CurrentDashboard.State = {
+      version: 18,
+      boxes: [],
+      config: {
+        Box0: [
+          {
+            type: 'grid',
+            grid: {
+              columnParams: [],
+              rowParams: [],
+              items: [
+                [
+                  [
+                    {
+                      ...TornadoChartWidget,
+                    },
+                  ],
+                ],
+              ],
+            },
+            params: {},
+          },
+        ],
+        Box1: [
+          {
+            type: 'switch',
+            id: 'switch',
+            displays: [[{ ...TornadoChartWidget }]],
+            params: {},
+          },
+        ],
+        Box2: [{ ...TornadoChartWidget }],
+      },
+      settings: {},
+    }
+
+    const result: PreviousDashboard.State = {
       version: 17,
       boxes: [],
       config: {
@@ -136,7 +80,7 @@ describe('currentMigration', () => {
             grid: {
               columnParams: [],
               rowParams: [],
-              items: [[[createCurrentTableLegendWidget({ name: 'table_legend_widget_0' })]]],
+              items: [[[]]],
             },
             params: {},
           },
@@ -145,57 +89,11 @@ describe('currentMigration', () => {
           {
             type: 'switch',
             id: 'switch',
-            displays: [
-              [
-                createCurrentTableLegendWidget({
-                  name: 'table_legend_widget_1',
-                  size: 'm',
-                  isResizable: false,
-                }),
-              ],
-            ],
+            displays: [[]],
             params: {},
           },
         ],
-        Box2: [
-          createCurrentTableLegendWidget({
-            name: 'table_legend_widget_2',
-            size: 'l',
-            isSortable: false,
-          }),
-        ],
-        Box3: [createLinearChartWidget('current')],
-      },
-      settings: {},
-    }
-
-    const result: PreviousDashboard.State = {
-      version: 16,
-      boxes: [],
-      config: {
-        Box0: [
-          {
-            type: 'grid',
-            grid: {
-              columnParams: [],
-              rowParams: [],
-              items: [[[createPreviousTableLegendWidget({ name: 'table_legend_widget_0' })]]],
-            },
-            params: {},
-          },
-        ],
-        Box1: [
-          {
-            type: 'switch',
-            id: 'switch',
-            displays: [
-              [createPreviousTableLegendWidget({ name: 'table_legend_widget_1', size: 'm' })],
-            ],
-            params: {},
-          },
-        ],
-        Box2: [createPreviousTableLegendWidget({ name: 'table_legend_widget_2', size: 'l' })],
-        Box3: [createLinearChartWidget('previous')],
+        Box2: [],
       },
       settings: {},
     }

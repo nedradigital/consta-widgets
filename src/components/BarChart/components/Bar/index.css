@@ -1,3 +1,4 @@
+@custom-selector :--small .sizeS;
 @custom-selector :--medium .sizeM;
 
 .bar {
@@ -24,7 +25,13 @@
 }
 
 .label {
-  font-size: var(--size-text-xs);
-
   fill: var(--color-typo-primary);
+
+  &:--small {
+    font-size: var(--size-text-2xs);
+  }
+
+  &:--medium {
+    font-size: var(--size-text-xs);
+  }
 }

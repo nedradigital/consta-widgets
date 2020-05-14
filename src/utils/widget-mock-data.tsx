@@ -862,6 +862,39 @@ const mockData: DataMap = {
     onSelectedObjectIdChange: noop,
   },
   [DataType.Switch]: 1,
+  [DataType.TornadoChart]: {
+    groups: [
+      {
+        groupName: 'АО Мессояханефтегаз',
+        values: [{ first: 10 }, { second: 6 }],
+      },
+      {
+        groupName: 'ООО ГПН-Оренбург',
+        values: [{ first: 6 }, { second: 3 }],
+      },
+      {
+        groupName: 'ООО ГПН-Заполярьег',
+        values: [{ first: 4 }, { second: 3 }],
+      },
+      {
+        groupName: 'ООО ГПН-Ямал',
+        values: [{ first: 1 }, { second: 2 }],
+      },
+      {
+        groupName: 'ООО ГПН-Восток',
+        values: [{ first: 7 }, { second: 13 }],
+      },
+      {
+        groupName: 'ООО Газпром-инвест',
+        values: [{ first: 4 }, { second: 12 }],
+      },
+    ],
+    colorGroups: {
+      first: 'var(--color-bg-normal)',
+      second: 'var(--color-bg-alert)',
+    },
+    unit: 'млн. руб.',
+  },
 }
 
 export function getWidgetMockData<T extends DataType>(dataType: T): DataMap[T] {
