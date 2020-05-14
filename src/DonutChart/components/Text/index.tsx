@@ -16,6 +16,7 @@ import {
   getContentHeight,
   getValueMaxFontSize,
   getValueMaxWidth,
+  MARGIN_FROM_LINE,
   MIN_FONT_SIZE,
   SUBVALUE_FONT_SIZE_RATIO,
   TITLE_FONT_SIZE_RATIO,
@@ -86,8 +87,8 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
   ] as const
 
   const contentStyle: React.CSSProperties = {
-    maxWidth: isHalfDonutVertical ? radius : diameter,
-    maxHeight: isHalfDonutHorizontal ? radius : diameter,
+    maxWidth: (isHalfDonutVertical ? radius : diameter) - MARGIN_FROM_LINE,
+    maxHeight: (isHalfDonutHorizontal ? radius : diameter) - MARGIN_FROM_LINE,
     borderRadius: getContentBorderRadius(radius, halfDonut),
   }
 
