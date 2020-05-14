@@ -8,6 +8,7 @@ import { TextSize } from '@/utils/ui-kit'
 import css from './index.css'
 
 type Size = StatsParams['size']
+type Layout = StatsParams['layout']
 
 export type Data = {
   value: number
@@ -21,7 +22,7 @@ export type Data = {
 
 type Props = Data & {
   size: Size
-  layout?: StatsParams['layout']
+  layout?: Layout
   withSign?: boolean
 }
 
@@ -31,6 +32,14 @@ const sizeClass = {
   s: css.sizeS,
   m: css.sizeM,
   l: css.sizeL,
+}
+
+const layoutClass: Record<Layout, string> = {
+  'compact-unit': css.compactUnit,
+  'compact-title': css.compactTitle,
+  full: css.full,
+  'full-reversed': css.fullReversed,
+  'full-without-title': css.fullWithoutTitle,
 }
 
 const titleSizes: Record<Size, TextSize> = {
@@ -83,7 +92,7 @@ export const Stats: React.FC<Props> = ({
   withSign,
 }) => {
   return (
-    <div className={classnames(css.container, sizeClass[size], css[layout])}>
+    <div className={classnames(css.container, sizeClass[size], layoutClass[layout])}>
       <Text tag="div" size={titleSizes[size]} view="secondary" className={css.title}>
         {title}
       </Text>
