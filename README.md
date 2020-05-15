@@ -76,4 +76,4 @@ $ yarn test
 
 ## Документация
 
-См. [раздел «Документация»](http://master.dashboard-constructor.csssr.cloud/?path=/docs/документация) в Storybook
+См. [раздел «Документация»](http://master.dashboard-constructor.csssr.cloud/?path=/docs/документация-конструктор-и-виджеты--page) в Storybook
