@@ -35,7 +35,7 @@ describe('getMinChartSize', () => {
   })
 
   it('получение минимального размера необрезанного графика с 1 линией и текстом', () => {
-    expect(getMinChartSize(1, true)).toEqual(75)
+    expect(getMinChartSize(1, true)).toEqual(96)
   })
 
   it('получение минимального размера необрезанного графика с 2 линиями и текстом', () => {
@@ -47,10 +47,10 @@ describe('getMinChartSize', () => {
   })
 
   it('получение минимального размера обрезанного графика с 1 линией и текстом', () => {
-    expect(getMinChartSize(1, true, 'top')).toEqual(143)
-    expect(getMinChartSize(1, true, 'right')).toEqual(143)
-    expect(getMinChartSize(1, true, 'bottom')).toEqual(143)
-    expect(getMinChartSize(1, true, 'left')).toEqual(143)
+    expect(getMinChartSize(1, true, 'top')).toEqual(170)
+    expect(getMinChartSize(1, true, 'right')).toEqual(170)
+    expect(getMinChartSize(1, true, 'bottom')).toEqual(170)
+    expect(getMinChartSize(1, true, 'left')).toEqual(170)
   })
 
   it('получение минимального размера обрезанного графика с 2 линиями и текстом', () => {
@@ -83,12 +83,25 @@ describe('getSizeDonut', () => {
     })
   })
 
-  it('получение размера толщины линии обрезанного графика', () => {
+  it('получение размера толщины линии графика с текстом', () => {
+    expect(getSizeDonut(1, true)).toEqual(16)
+  })
+
+  it('получение размера толщины линии обрезанного графика без текста', () => {
     LINES.map(l => {
-      expect(getSizeDonut(l, 'top')).toEqual(16)
-      expect(getSizeDonut(l, 'right')).toEqual(16)
-      expect(getSizeDonut(l, 'bottom')).toEqual(16)
-      expect(getSizeDonut(l, 'left')).toEqual(16)
+      expect(getSizeDonut(l, false, 'top')).toEqual(16)
+      expect(getSizeDonut(l, false, 'right')).toEqual(16)
+      expect(getSizeDonut(l, false, 'bottom')).toEqual(16)
+      expect(getSizeDonut(l, false, 'left')).toEqual(16)
+    })
+  })
+
+  it('получение размера толщины линии обрезанного графика с текстом', () => {
+    LINES.map(l => {
+      expect(getSizeDonut(l, true, 'top')).toEqual(16)
+      expect(getSizeDonut(l, true, 'right')).toEqual(16)
+      expect(getSizeDonut(l, true, 'bottom')).toEqual(16)
+      expect(getSizeDonut(l, true, 'left')).toEqual(16)
     })
   })
 })
