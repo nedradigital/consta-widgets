@@ -2,10 +2,20 @@
   font-size: var(--size-text-xs);
 
   display: grid;
+  overflow-y: auto;
   align-items: baseline;
 
+  max-height: 300px;
   padding: 10px;
   grid-template-columns: 1fr auto;
   grid-row-gap: 16px;
   grid-column-gap: 16px;
+
+  &::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0.06);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.24);
+  }
 }

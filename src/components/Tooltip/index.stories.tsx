@@ -96,7 +96,7 @@ const TooltipWithAutoClosingStory = () => {
       <div
         style={{
           width: '100%',
-          height: '150vh',
+          height: '200vh',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

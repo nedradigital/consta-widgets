@@ -98,20 +98,6 @@
   }
 }
 
-.portal {
-  visibility: visible;
-}
-
-.settings {
-  position: absolute;
-
-  margin-left: 10px;
-
-  color: var(--color-control-typo-default);
-  background: var(--color-bg-default);
-  box-shadow: 0 0 10px rgba(var(--color-nums-shadow), 0.5);
-}
-
 .content {
   position: relative;
   z-index: var(--z-box-wrapper);
