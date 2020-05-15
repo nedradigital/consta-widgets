@@ -153,6 +153,7 @@ export namespace CurrentDashboard {
   }
 }
 
+// MIGRATION_GENERATION:METHODS:START
 const isDashboard17Widget = (item: CurrentDashboard.BoxItem): item is Dashboard17.WidgetItem =>
   item.type === 'widget' && item.widgetType !== widgetIdsByType.TornadoChartWidget
 const isDashboard17Item = (item: CurrentDashboard.BoxItem): item is Dashboard17.BoxItem =>
@@ -193,6 +194,7 @@ const downgradeConfig = (config: CurrentDashboard.Config): Dashboard17.Config =>
     }
   }, {})
 }
+// MIGRATION_GENERATION:METHODS:END
 
 export const currentMigration: Migration<Dashboard17.State, CurrentDashboard.State> = {
   versionTo: 18,

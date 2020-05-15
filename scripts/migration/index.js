@@ -54,6 +54,7 @@ spinner.info('Чтение исходных файлов')
 const sourceMigration = getRawData(path.join(PATH_CURRENT_MIGRATION, 'index.ts'))
 const sourceMigrationTest = getRawData(path.join(PATH_CURRENT_MIGRATION_TESTS, 'index.ts'))
 const sourceMigrationTestTemplate = getRawData(path.join(PATH_TEMPLATES, 'test.tpl'))
+const sourceMigrationMethodsTemplate = getRawData(path.join(PATH_TEMPLATES, 'methods.tpl'))
 const sourceMigrationsRegister = getRawData(path.join(PATH_MIGRATIONS, 'index.ts'))
 const fileNamesFromWidgetParams = fs.readdirSync(
   path.join(PATH_CURRENT_MIGRATION, WIDGET_PARAMS_FOLDER_NAME)
@@ -136,6 +137,14 @@ fs.writeFileSync(
     config: downgradeConfig(data.config, widgetItem => widgetItem),
   }),$2
         `.trim()
+    )
+    .replace(
+      /(\/\/ MIGRATION_GENERATION:METHODS:START)\n{0,}(\w)(?:\n|.(?!MIGRATION_GENERATION:METHODS:END))+(\/\/ MIGRATION_GENERATION:METHODS:END)/g,
+      `
+$1
+${sourceMigrationMethodsTemplate.replace(/{{PREV_VERSION}}/g, version)}
+$3
+      `.trim()
     )
 )
 
