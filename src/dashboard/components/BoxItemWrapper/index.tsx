@@ -40,7 +40,8 @@ export const BoxItemWrapper: React.FC<Props> = ({
   const tooltipRef = React.useRef(null)
 
   useClickOutside({
-    requiredRefs: [tooltipRef],
+    isActive: isEditingSettings,
+    ignoreClicksInsideRefs: [tooltipRef],
     handler: () => onOpenSettings(undefined),
   })
 
