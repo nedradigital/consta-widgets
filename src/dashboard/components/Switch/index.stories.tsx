@@ -3,12 +3,11 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { boolean, number } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
 import { SwitchContent, SwitchItem } from '@/dashboard'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { widgetIdsByType } from '@/utils/widgets-list'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 import { defaultParams as linearChartWidgetDefaultParams } from '@/widgets/LinearChartWidget'
 import { defaultParams as statsWidgetDefaultParams } from '@/widgets/StatsWidget'
 import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
@@ -51,7 +50,7 @@ const switchItem: SwitchItem = {
   params: {},
 }
 
-const SwitchStory = () => {
+export const Interactive = createStory(() => {
   const [config, changeConfig] = React.useState(switchItem)
 
   const handler = (displays: SwitchContent) => {
@@ -74,8 +73,9 @@ const SwitchStory = () => {
       />
     </DndProvider>
   )
-}
+})
 
-storiesOf('dashboard/Switch', module)
-  .addDecorator(blockCenteringDecorator({ height: 300, width: 600 }))
-  .add('interactive', () => <SwitchStory />)
+export default createMetadata({
+  title: 'dashboard/Switch',
+  decorators: [blockCenteringDecorator({ height: 300, width: 600 })],
+})

@@ -2,6 +2,7 @@ import React from 'react'
 
 import { text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
+import { CSFStory, StoryMetadata } from '@storybook/types'
 
 export const blockCenteringDecorator = (
   styles: React.CSSProperties = {}
@@ -32,3 +33,11 @@ export const percentFormatValue = (v: number) => {
 export const emptyFormatValue = (v: number) => {
   return `${v}${text('unit', '')}`
 }
+
+export const createStory = (component: CSFStory, params: CSFStory['story'] = {}) => {
+  component.story = { ...params }
+
+  return component
+}
+
+export const createMetadata = (params: StoryMetadata) => params

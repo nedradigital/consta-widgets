@@ -1,12 +1,11 @@
 import React from 'react'
 
 import { number, object, text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { DataType } from '@/dashboard'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Roadmap } from '.'
 
@@ -128,31 +127,30 @@ const roadmapData = {
   currentDay: Date.UTC(2019, 6, 10),
 } as const
 
-storiesOf('components/Roadmap', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '80vw' }))
-  .add('interactive', () => {
-    const {
-      data: { titles, values, currentDay, startDate, endDate, filters },
-      colorGroups,
-    } = getWidgetMockData(DataType.Roadmap)[0]
+export const Interactive = createStory(() => {
+  const {
+    data: { titles, values, currentDay, startDate, endDate, filters },
+    colorGroups,
+  } = getWidgetMockData(DataType.Roadmap)[0]
 
-    return (
-      <Roadmap
-        data={object('data', values)}
-        currentDay={number('currentDay', currentDay)}
-        titles={[
-          { title: text('firstColumn', titles[0].title), accessor: titles[0].accessor },
-          { title: text('secondColumn', titles[1].title), accessor: titles[1].accessor },
-        ]}
-        colorGroups={object('colorGroups', colorGroups)}
-        filters={object('filters', filters)}
-        startDate={startDate}
-        endDate={endDate}
-      />
-    )
-  })
-  .add('с малым количеством данных', () => {
+  return (
+    <Roadmap
+      data={object('data', values)}
+      currentDay={number('currentDay', currentDay)}
+      titles={[
+        { title: text('firstColumn', titles[0].title), accessor: titles[0].accessor },
+        { title: text('secondColumn', titles[1].title), accessor: titles[1].accessor },
+      ]}
+      colorGroups={object('colorGroups', colorGroups)}
+      filters={object('filters', filters)}
+      startDate={startDate}
+      endDate={endDate}
+    />
+  )
+})
+
+export const WithLittleData = createStory(
+  () => {
     const { colorGroups } = getWidgetMockData(DataType.Roadmap)[0]
     const { titles, currentDay, values, startDate, endDate, filters } = roadmapData
 
@@ -170,4 +168,11 @@ storiesOf('components/Roadmap', module)
         endDate={endDate}
       />
     )
-  })
+  },
+  { name: 'с малым количеством данных' }
+)
+
+export default createMetadata({
+  title: 'components/Roadmap',
+  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: '80vw' })],
+})

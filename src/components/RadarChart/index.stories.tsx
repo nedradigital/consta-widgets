@@ -1,12 +1,11 @@
 import React from 'react'
 
 import { boolean, number, object, text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { getFormattedValue } from '@/utils/chart'
 import { percentFormatValue } from '@/utils/Storybook'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Figure, RadarChart } from './'
 
@@ -112,10 +111,13 @@ const getFormattedValueForTooltip = () => {
   return (value: number | null) => getFormattedValue(value, v => `${v}${unit}`)
 }
 
-storiesOf('components/RadarChart', module)
-  .addDecorator(withSmartKnobs({ ignoreProps: ['backgroundColor'] }))
-  .addDecorator(blockCenteringDecorator({ width: '80vw', height: '80vh' }))
-  .add('2 фигуры', () => (
+const decorators = [
+  withSmartKnobs({ ignoreProps: ['backgroundColor'] }),
+  blockCenteringDecorator({ width: '80vw', height: '80vh' }),
+] as const
+
+export const TwoFigures = createStory(
+  () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -128,8 +130,12 @@ storiesOf('components/RadarChart', module)
       withConcentricColor={false}
       labelSize="s"
     />
-  ))
-  .add('2 фигуры сплошные без данных по одной и двум осям', () => (
+  ),
+  { name: '2 фигуры', decorators }
+)
+
+export const TwoFiguresWithoutData = createStory(
+  () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -142,8 +148,12 @@ storiesOf('components/RadarChart', module)
       withConcentricColor={false}
       labelSize="s"
     />
-  ))
-  .add('1 фигура сплошная', () => (
+  ),
+  { name: '2 фигуры сплошные без данных по одной и двум осям', decorators }
+)
+
+export const OneWholeFigure = createStory(
+  () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -155,8 +165,12 @@ storiesOf('components/RadarChart', module)
       withConcentricColor={false}
       labelSize="s"
     />
-  ))
-  .add('1 фигура радугой', () => (
+  ),
+  { name: '1 фигура сплошная', decorators }
+)
+
+export const OneRainbowFigure = createStory(
+  () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -167,8 +181,12 @@ storiesOf('components/RadarChart', module)
       withConcentricColor
       labelSize="s"
     />
-  ))
-  .add('1 фигура радугой без данных по двум осям', () => (
+  ),
+  { name: '1 фигура радугой', decorators }
+)
+
+export const OneRainbowFigureWithoutData = createStory(
+  () => (
     <RadarChart
       colorGroups={getColorGroups()}
       axesLabels={axesLabels}
@@ -179,11 +197,12 @@ storiesOf('components/RadarChart', module)
       withConcentricColor
       labelSize="s"
     />
-  ))
+  ),
+  { name: '1 фигура радугой без данных по двум осям', decorators }
+)
 
-storiesOf('components/RadarChart', module)
-  .addDecorator(blockCenteringDecorator({ width: '100vw', height: '100vh' }))
-  .add('уменьшение размера шрифта', () => {
+export const FontSizeReduction = createStory(
+  () => {
     const commonProps = {
       colorGroups: {},
       axesLabels,
@@ -216,4 +235,13 @@ storiesOf('components/RadarChart', module)
         </div>
       </div>
     )
-  })
+  },
+  {
+    name: 'уменьшение размера шрифта',
+    decorators: [blockCenteringDecorator({ width: '100vw', height: '100vh' })],
+  }
+)
+
+export default createMetadata({
+  title: 'components/RadarChart',
+})

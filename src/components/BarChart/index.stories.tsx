@@ -1,13 +1,12 @@
 import React from 'react'
 
 import { boolean, object, select } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { DataType } from '@/dashboard'
 import { barChartParams } from '@/dashboard/widget-params'
 import { getWidgetMockData } from '@/utils/widget-mock-data'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { BarChart } from '.'
 import { transformBarChartGroupsToCommonGroups } from './helpers'
@@ -47,10 +46,8 @@ const defaultProps = {
   unit: 'тыс м3',
 } as const
 
-storiesOf('components/BarChart', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
-  .add('с одним столбцом и несколькими значениями', () => {
+export const SingleColumn = createStory(
+  () => {
     return (
       <BarChart
         {...getWidgetMockData(DataType.MultiBarChart)}
@@ -61,8 +58,12 @@ storiesOf('components/BarChart', module)
         hasRatio={boolean('hasRatio', false)}
       />
     )
-  })
-  .add('с двумя столбцами и несколькими значениями', () => {
+  },
+  { name: 'с одним столбцом и несколькими значениями' }
+)
+
+export const TwoColumns = createStory(
+  () => {
     return (
       <BarChart
         {...DataWithTwoColumnsOnDate}
@@ -78,8 +79,12 @@ storiesOf('components/BarChart', module)
         hasRatio={boolean('hasRatio', false)}
       />
     )
-  })
-  .add('с тремя столбцами и одним значением', () => {
+  },
+  { name: 'с двумя столбцами и несколькими значениями' }
+)
+
+export const ThreeColumns = createStory(
+  () => {
     return (
       <BarChart
         groups={object(
@@ -93,8 +98,12 @@ storiesOf('components/BarChart', module)
         showValues
       />
     )
-  })
-  .add('с форматированием значений', () => {
+  },
+  { name: 'с тремя столбцами и одним значением' }
+)
+
+export const WithFormatValue = createStory(
+  () => {
     return (
       <BarChart
         groups={object('groups', [
@@ -124,8 +133,12 @@ storiesOf('components/BarChart', module)
         isMultiBar
       />
     )
-  })
-  .add('минималистичный вид', () => (
+  },
+  { name: 'с форматированием значений' }
+)
+
+export const Minimalistic = createStory(
+  () => (
     <BarChart
       {...getWidgetMockData(DataType.MultiBarChart)}
       colorGroups={object('colorGroups', getWidgetMockData(DataType.MultiBarChart).colorGroups)}
@@ -134,8 +147,12 @@ storiesOf('components/BarChart', module)
       valuesTicks={0}
       isMultiBar
     />
-  ))
-  .add('с отрицательными значениями', () => {
+  ),
+  { name: 'минималистичный вид' }
+)
+
+export const WithNegativeValues = createStory(
+  () => {
     return (
       <BarChart
         groups={object('groups', [
@@ -167,8 +184,12 @@ storiesOf('components/BarChart', module)
         orientation="horizontal"
       />
     )
-  })
-  .add('торнадо', () => (
+  },
+  { name: 'с отрицательными значениями' }
+)
+
+export const Tornado = createStory(
+  () => (
     <BarChart
       groups={[
         {
@@ -209,4 +230,12 @@ storiesOf('components/BarChart', module)
       xAxisShowPosition="bottom"
       yAxisShowPosition="left"
     />
-  ))
+  ),
+  { name: 'торнадо' }
+)
+
+export default createMetadata({
+  title: 'components/BarChart',
+  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: '60vw', height: '80vh' })],
+  excludeStories: ['DataWithTwoColumnsOnDate'],
+})

@@ -99,3 +99,30 @@ declare module '@storybook/addon-docs/blocks' {
     of: any
   }>
 }
+
+// После переезда на Storybook@6 брать типы оттуда
+// Задача: https://jira.csssr.io/browse/GDC-320
+declare module '@storybook/types' {
+  import { DecoratorFn } from '@storybook/react'
+
+  export type CSFStory = {
+    (): JSX.Element
+    story?: {
+      name?: string
+      decorators?: readonly DecoratorFn[]
+      parameters?: { [name: string]: unknown }
+    }
+  }
+
+  export type StoryMetadata = {
+    title: string
+    decorators?: readonly DecoratorFn[]
+    includeStories?: string[]
+    excludeStories?: string[]
+    parameters?: {
+      docs?: {
+        page: (props: any) => JSX.Element
+      }
+    }
+  }
+}

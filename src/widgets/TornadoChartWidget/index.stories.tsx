@@ -1,17 +1,19 @@
 import React from 'react'
 
 import { object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { defaultParams, TornadoChartContent, TornadoChartWidget } from '.'
 
-storiesOf('widgets/TornadoChartWidget', module)
-  .addDecorator(blockCenteringDecorator({ width: '60vw', height: '80vh' }))
-  .add('interactive', () => (
-    <TornadoChartContent
-      data={object('data', TornadoChartWidget.mockData)}
-      params={object('params', defaultParams)}
-    />
-  ))
+export const Interactive = createStory(() => (
+  <TornadoChartContent
+    data={object('data', TornadoChartWidget.mockData)}
+    params={object('params', defaultParams)}
+  />
+))
+
+export default createMetadata({
+  title: 'widgets/TornadoChartWidget',
+  decorators: [blockCenteringDecorator({ width: '60vw', height: '80vh' })],
+})

@@ -2,17 +2,17 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { LegendItem } from '.'
 
-export default {
-  title: 'components/LegendItem',
-  decorators: [withSmartKnobs(), blockCenteringDecorator({ maxWidth: 200 })],
-}
-
-export const interactive = () => (
+export const Interactive = createStory(() => (
   <LegendItem position="left" fontSize="s" type="dot" color="red">
     Тестовый текст
   </LegendItem>
-)
+))
+
+export default createMetadata({
+  title: 'components/LegendItem',
+  decorators: [withSmartKnobs(), blockCenteringDecorator({ maxWidth: 200 })],
+})

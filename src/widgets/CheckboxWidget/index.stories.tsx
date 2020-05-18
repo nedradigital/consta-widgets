@@ -1,13 +1,12 @@
 import React from 'react'
 
 import { boolean, object, text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { CheckboxWidgetContent, defaultParams } from '.'
 
-const CheckboxWidgetStory = () => {
+export const Interactive = createStory(() => {
   const [value, setValue] = React.useState(false)
 
   return (
@@ -22,8 +21,9 @@ const CheckboxWidgetStory = () => {
       params={object('params', defaultParams)}
     />
   )
-}
+})
 
-storiesOf('widgets/CheckboxWidget', module)
-  .addDecorator(blockCenteringDecorator())
-  .add('interactive', () => <CheckboxWidgetStory />)
+export default createMetadata({
+  title: 'widgets/CheckboxWidget',
+  decorators: [blockCenteringDecorator()],
+})

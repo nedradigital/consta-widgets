@@ -2,10 +2,9 @@ import React from 'react'
 
 import { action } from '@storybook/addon-actions'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
 import { textParams } from '@/dashboard/widget-params'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import {
   defaultParams,
@@ -19,15 +18,8 @@ import {
   views,
 } from '.'
 
-storiesOf('widgets/TextWidget', module)
-  .addDecorator(
-    blockCenteringDecorator({
-      backgroundColor: 'var(--color-bg-secondary)',
-      padding: 20,
-      width: 350,
-    })
-  )
-  .add('стандартный режим', () => (
+export const Interactive = createStory(
+  () => (
     <TextWidgetContent
       data={{
         text: text('data', ''),
@@ -40,8 +32,14 @@ storiesOf('widgets/TextWidget', module)
         croppedWithGradient: boolean('croppedWithGradient', false),
       }}
     />
-  ))
-  .add('расширенный режим', () => (
+  ),
+  {
+    name: 'стандартный режим',
+  }
+)
+
+export const Advanced = createStory(
+  () => (
     <TextWidgetContent
       data={{
         text: text('data', defaultParams.text),
@@ -83,8 +81,14 @@ storiesOf('widgets/TextWidget', module)
         weight: select('weight', fontWeights, undefined),
       }}
     />
-  ))
-  .add('с обработчиком для кнопки', () => (
+  ),
+  {
+    name: 'расширенный режим',
+  }
+)
+
+export const WithOnClick = createStory(
+  () => (
     <TextWidgetContent
       data={{
         text: text('data', ''),
@@ -97,8 +101,14 @@ storiesOf('widgets/TextWidget', module)
         croppedWithGradient: boolean('croppedWithGradient', false),
       }}
     />
-  ))
-  .add('с переносами', () => (
+  ),
+  {
+    name: 'с обработчиком для кнопки',
+  }
+)
+
+export const WithTextWrapping = createStory(
+  () => (
     <TextWidgetContent
       data={{ text: '' }}
       params={{
@@ -111,8 +121,14 @@ storiesOf('widgets/TextWidget', module)
         croppedWithGradient: false,
       }}
     />
-  ))
-  .add('обрезанный градиентом', () => (
+  ),
+  {
+    name: 'с переносами',
+  }
+)
+
+export const WithCroppedGradient = createStory(
+  () => (
     <TextWidgetContent
       data={{ text: '' }}
       params={{
@@ -125,4 +141,19 @@ storiesOf('widgets/TextWidget', module)
         croppedWithGradient: boolean('croppedWithGradient', true),
       }}
     />
-  ))
+  ),
+  {
+    name: 'обрезанный градиентом',
+  }
+)
+
+export default createMetadata({
+  title: 'widgets/TextWidget',
+  decorators: [
+    blockCenteringDecorator({
+      backgroundColor: 'var(--color-bg-secondary)',
+      padding: 20,
+      width: 350,
+    }),
+  ],
+})

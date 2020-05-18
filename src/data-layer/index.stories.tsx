@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { ChoiceGroup } from '@gpn-design/uikit'
-import { storiesOf } from '@storybook/react'
 
 import {
   DashboardState,
@@ -9,7 +8,7 @@ import {
   getAllWidgetAndDatasetIds,
   SUPPORTED_DASHBOARD_VERSION,
 } from '@/dashboard'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { DashboardWithDataLayer, DataLayerEditor } from '.'
 import { DataLayer } from './types'
@@ -191,120 +190,126 @@ const exampleDashboardConfig: DashboardState = {
   version: SUPPORTED_DASHBOARD_VERSION,
 }
 
-const DataLayerEditorFilledStory = () => {
-  const [config, setConfig] = React.useState<DataLayer.Config>(exampleDataLayerConfig)
+export const DataLayerEditorFilledStory = createStory(
+  () => {
+    const [config, setConfig] = React.useState<DataLayer.Config>(exampleDataLayerConfig)
 
-  return (
-    <DataLayerEditor
-      dataLayerConfig={config}
-      sourcesList={exampleSourcesList}
-      sourcesData={exampleSourcesData}
-      onChange={setConfig}
-    />
-  )
-}
+    return (
+      <DataLayerEditor
+        dataLayerConfig={config}
+        sourcesList={exampleSourcesList}
+        sourcesData={exampleSourcesData}
+        onChange={setConfig}
+      />
+    )
+  },
+  { name: 'редактор с данными' }
+)
 
-const DataLayerEditorEmptyStory = () => {
-  const [config, setConfig] = React.useState<DataLayer.Config>(exampleEmptyDataLayerConfig)
+export const DataLayerEditorEmptyStory = createStory(
+  () => {
+    const [config, setConfig] = React.useState<DataLayer.Config>(exampleEmptyDataLayerConfig)
 
-  return (
-    <DataLayerEditor
-      dataLayerConfig={config}
-      sourcesList={exampleSourcesList}
-      sourcesData={exampleSourcesData}
-      onChange={setConfig}
-    />
-  )
-}
+    return (
+      <DataLayerEditor
+        dataLayerConfig={config}
+        sourcesList={exampleSourcesList}
+        sourcesData={exampleSourcesData}
+        onChange={setConfig}
+      />
+    )
+  },
+  { name: 'редактор пустой' }
+)
 
-const DataLayerComboStory = () => {
-  const [dataLayerConfig, setDataLayerConfig] = React.useState<DataLayer.Config>([])
-  const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
-  const [currentView, setCurrentView] = React.useState<'constructor' | 'data-layer' | 'result'>(
-    'constructor'
-  )
+export const DataLayerComboStory = createStory(
+  () => {
+    const [dataLayerConfig, setDataLayerConfig] = React.useState<DataLayer.Config>([])
+    const [dashboard, setDashboard] = React.useState<DashboardState>(EMPTY_DASHBOARD)
+    const [currentView, setCurrentView] = React.useState<'constructor' | 'data-layer' | 'result'>(
+      'constructor'
+    )
 
-  React.useEffect(() => {
-    const newWidgetIds = getAllWidgetAndDatasetIds(dashboard.config)
-      .map(({ widgetId }) => widgetId)
-      .filter(id => !dataLayerConfig.some(i => i.type === 'widget' && i.widgetId === id))
+    React.useEffect(() => {
+      const newWidgetIds = getAllWidgetAndDatasetIds(dashboard.config)
+        .map(({ widgetId }) => widgetId)
+        .filter(id => !dataLayerConfig.some(i => i.type === 'widget' && i.widgetId === id))
 
-    if (newWidgetIds.length) {
-      setDataLayerConfig(state => [
-        ...state,
-        // todo нужно определять тип виджета
-        ...newWidgetIds.map(
-          (id): DataLayer.WidgetItem => ({
-            type: 'widget',
-            widgetId: id,
-            widgetType: 'LinearChart',
-            inputs: {},
-            config: {
-              y: [],
-            },
-          })
-        ),
-      ])
-    }
-  }, [dashboard, dataLayerConfig])
+      if (newWidgetIds.length) {
+        setDataLayerConfig(state => [
+          ...state,
+          // todo нужно определять тип виджета
+          ...newWidgetIds.map(
+            (id): DataLayer.WidgetItem => ({
+              type: 'widget',
+              widgetId: id,
+              widgetType: 'LinearChart',
+              inputs: {},
+              config: {
+                y: [],
+              },
+            })
+          ),
+        ])
+      }
+    }, [dashboard, dataLayerConfig])
 
-  return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ margin: '24px auto' }}>
-        <ChoiceGroup
-          items={[
-            {
-              label: 'Конструктор дашборда',
-              value: 'constructor',
-            } as const,
-            {
-              label: 'Редактирование данных',
-              value: 'data-layer',
-            } as const,
-            {
-              label: 'Результат',
-              value: 'result',
-            } as const,
-          ]}
-          value={currentView}
-          wpSize="l"
-          isMultiple={false}
-          onChange={newView => newView && setCurrentView(newView)}
-        />
-      </div>
-
-      <div
-        style={{
-          width: '100%',
-          flexGrow: 1,
-        }}
-      >
-        {currentView === 'data-layer' ? (
-          <DataLayerEditor
-            dataLayerConfig={dataLayerConfig}
-            sourcesList={exampleSourcesList}
-            sourcesData={exampleSourcesData}
-            onChange={setDataLayerConfig}
+    return (
+      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ margin: '24px auto' }}>
+          <ChoiceGroup
+            items={[
+              {
+                label: 'Конструктор дашборда',
+                value: 'constructor',
+              } as const,
+              {
+                label: 'Редактирование данных',
+                value: 'data-layer',
+              } as const,
+              {
+                label: 'Результат',
+                value: 'result',
+              } as const,
+            ]}
+            value={currentView}
+            wpSize="l"
+            isMultiple={false}
+            onChange={newView => newView && setCurrentView(newView)}
           />
-        ) : (
-          <DashboardWithDataLayer
-            dashboardConfig={dashboard}
-            dataLayerConfig={dataLayerConfig}
-            sourcesData={exampleSourcesData}
-            viewMode={currentView === 'result'}
-            onChange={setDashboard}
-          />
-        )}
-      </div>
-    </div>
-  )
-}
+        </div>
 
-storiesOf('data-layer', module)
-  .addDecorator(blockCenteringDecorator({ width: '100%', height: '100vh' }))
-  .add('редактор с данными', () => <DataLayerEditorFilledStory />)
-  .add('редактор пустой', () => <DataLayerEditorEmptyStory />)
-  .add('дашборд с данными из даталэера', () => (
+        <div
+          style={{
+            width: '100%',
+            flexGrow: 1,
+          }}
+        >
+          {currentView === 'data-layer' ? (
+            <DataLayerEditor
+              dataLayerConfig={dataLayerConfig}
+              sourcesList={exampleSourcesList}
+              sourcesData={exampleSourcesData}
+              onChange={setDataLayerConfig}
+            />
+          ) : (
+            <DashboardWithDataLayer
+              dashboardConfig={dashboard}
+              dataLayerConfig={dataLayerConfig}
+              sourcesData={exampleSourcesData}
+              viewMode={currentView === 'result'}
+              onChange={setDashboard}
+            />
+          )}
+        </div>
+      </div>
+    )
+  },
+  { name: 'конструктор дашбордов + редактор даталэера = дашборд с данными' }
+)
+
+export const DashboardWithDataLayerStory = createStory(
+  () => (
     <DashboardWithDataLayer
       dashboardConfig={exampleDashboardConfig}
       dataLayerConfig={exampleDataLayerConfig}
@@ -312,7 +317,17 @@ storiesOf('data-layer', module)
       viewMode
       onChange={() => null}
     />
-  ))
-  .add('конструктор дашбордов + редактор даталэера = дашборд с данными', () => (
-    <DataLayerComboStory />
-  ))
+  ),
+  { name: 'дашборд с данными из даталэера' }
+)
+
+export default createMetadata({
+  title: 'data-layer/Editor',
+  decorators: [blockCenteringDecorator({ width: '100%', height: '100vh' })],
+  includeStories: [
+    'DataLayerEditorFilledStory',
+    'DataLayerEditorEmptyStory',
+    'DataLayerComboStory',
+    'DashboardWithDataLayerStory',
+  ],
+})

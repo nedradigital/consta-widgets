@@ -3,14 +3,13 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { boolean, select } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { BoxItem } from '@/dashboard'
 import { exampleDatasets } from '@/dashboard/mockData'
 import { getUniqueName } from '@/utils/uniq-name-hook'
 import { widgetIdsByType } from '@/utils/widgets-list'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 import { defaultParams as statsWidgetDefaultParams } from '@/widgets/StatsWidget'
 import { defaultParams as textDefaultParams } from '@/widgets/TextWidget'
 
@@ -34,6 +33,9 @@ const initialItems: readonly BoxItem[] = [
   },
 ]
 
+/**
+ * Если перенести внутрь createStory, то тогда перестает изменяться Box
+ */
 const BoxStory = () => {
   const [items, changeItems] = React.useState(initialItems)
 
@@ -67,7 +69,9 @@ const BoxStory = () => {
   )
 }
 
-storiesOf('dashboard/Box', module)
-  .addDecorator(withSmartKnobs())
-  .addDecorator(blockCenteringDecorator({ width: 600 }))
-  .add('interactive', () => <BoxStory />)
+export const Interactive = createStory(() => <BoxStory />)
+
+export default createMetadata({
+  title: 'dashboard/Box',
+  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 600 })],
+})

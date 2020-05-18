@@ -1,8 +1,7 @@
 import { date as knobsDate, object } from '@storybook/addon-knobs'
-import { storiesOf } from '@storybook/react'
 
 import { DateRange } from '@/components/DatePicker'
-import { blockCenteringDecorator } from '@/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { DatePickerWidgetContent, defaultParams } from '.'
 
@@ -12,39 +11,45 @@ const getDateLimitProps = () =>
     maxDate: new Date(knobsDate('maxDate', new Date(2020, 3, 2))),
   } as const)
 
-const DatePickerWidgetSingleStory = () => {
-  const [date, setDate] = React.useState<Date | undefined>()
+export const DatePickerWidgetSingleStory = createStory(
+  () => {
+    const [date, setDate] = React.useState<Date | undefined>()
 
-  return (
-    <DatePickerWidgetContent
-      data={{
-        type: 'date',
-        value: date,
-        onChange: setDate,
-        ...getDateLimitProps(),
-      }}
-      params={object('params', defaultParams)}
-    />
-  )
-}
+    return (
+      <DatePickerWidgetContent
+        data={{
+          type: 'date',
+          value: date,
+          onChange: setDate,
+          ...getDateLimitProps(),
+        }}
+        params={object('params', defaultParams)}
+      />
+    )
+  },
+  { name: 'выбор даты' }
+)
 
-const DatePickerWidgetRangeStory = () => {
-  const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
+export const DatePickerWidgetRangeStory = createStory(
+  () => {
+    const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
 
-  return (
-    <DatePickerWidgetContent
-      data={{
-        type: 'date-range',
-        value: range,
-        onChange: setRange,
-        ...getDateLimitProps(),
-      }}
-      params={object('params', defaultParams)}
-    />
-  )
-}
+    return (
+      <DatePickerWidgetContent
+        data={{
+          type: 'date-range',
+          value: range,
+          onChange: setRange,
+          ...getDateLimitProps(),
+        }}
+        params={object('params', defaultParams)}
+      />
+    )
+  },
+  { name: 'выбор диапазона дат' }
+)
 
-storiesOf('widgets/DatePickerWidget', module)
-  .addDecorator(blockCenteringDecorator())
-  .add('выбор даты', () => <DatePickerWidgetSingleStory />)
-  .add('выбор диапазона дат', () => <DatePickerWidgetRangeStory />)
+export default createMetadata({
+  title: 'widgets/DatePickerWidget',
+  decorators: [blockCenteringDecorator()],
+})
