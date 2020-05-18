@@ -14,9 +14,8 @@
 
   cursor: grab;
 
-  color: var(--color-control-typo-ghost);
   border-radius: 2px;
-  background: currentColor;
+  background: var(--color-control-bg-ghost);
 
   transition: opacity var(--fast-transition);
 
@@ -49,7 +48,7 @@
   &:active {
     cursor: grabbing;
 
-    color: var(--color-control-typo-ghost-hover);
+    background: var(--color-control-bg-ghost-hover);
   }
 }
 
@@ -77,8 +76,6 @@
 
 .buttonGroup {
   display: flex;
-
-  background: var(--color-control-bg-ghost);
 
   :--horizontal & {
     right: 8px;
@@ -113,6 +110,7 @@
   width: var(--button-size);
 
   color: var(--color-control-typo-ghost);
+  background: var(--color-control-bg-ghost);
 
   transition: color var(--fast-transition);
 
@@ -140,16 +138,6 @@
     }
   }
 
-  & + & {
-    :--horizontal & {
-      margin-left: -1px;
-    }
-
-    :--vertical & {
-      margin-bottom: -1px;
-    }
-  }
-
   &:disabled {
     color: var(--color-control-typo-disable);
   }
@@ -159,6 +147,7 @@
 
     &:hover {
       color: var(--color-control-typo-ghost-hover);
+      background: var(--color-control-bg-ghost-hover);
     }
   }
 }

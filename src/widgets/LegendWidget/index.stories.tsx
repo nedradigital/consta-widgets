@@ -10,5 +10,8 @@ import { defaultParams, LegendWidget, LegendWidgetContent } from '.'
 storiesOf('widgets/LegendWidget', module)
   .addDecorator(blockCenteringDecorator())
   .add('interactive', () => (
-    <LegendWidgetContent data={LegendWidget.mockData} params={object('params', defaultParams)} />
+    <LegendWidgetContent
+      data={object('data', LegendWidget.mockData)}
+      params={object('params', defaultParams)}
+    />
   ))

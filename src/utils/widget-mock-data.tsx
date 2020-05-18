@@ -542,37 +542,37 @@ const mockData: DataMap = {
   },
   [DataType.TableLegend]: {
     colorGroups: {
-      first: 'var(--color-bg-alert)',
-      second: 'var(--color-bg-caution)',
-      third: 'var(--color-bg-success)',
-      fourth: 'var(--color-bg-warning)',
-      fifth: 'var(--color-bg-critical)',
+      red: 'var(--color-bg-alert)',
+      blue: 'var(--color-bg-normal)',
+      yellow: 'var(--color-bg-warning)',
+      purple: '#9b51e0',
+      green: 'var(--color-bg-success)',
     },
     list: tableLegendList,
     legendFields: [
       {
         field: 'Приобское',
-        colorGroupName: 'first',
+        colorGroupName: 'red',
         typeLegend: 'dot',
       },
       {
         field: 'Уренгойское газонефтеконденсат­ное',
-        colorGroupName: 'second',
+        colorGroupName: 'blue',
         typeLegend: 'dot',
       },
       {
         field: 'Красноленинская группа',
-        colorGroupName: 'third',
+        colorGroupName: 'yellow',
         typeLegend: 'dot',
       },
       {
         field: 'Великое',
-        colorGroupName: 'fourth',
+        colorGroupName: 'purple',
         typeLegend: 'dot',
       },
       {
         field: 'Русское газонефтяное',
-        colorGroupName: 'fifth',
+        colorGroupName: 'green',
         typeLegend: 'dot',
       },
     ],
@@ -635,31 +635,31 @@ const mockData: DataMap = {
   },
   [DataType.Legend]: {
     colorGroups: {
-      first: 'var(--color-bg-normal)',
-      second: 'var(--color-bg-alert)',
-      third: 'var(--color-bg-warning)',
-      fourth: 'var(--color-bg-success)',
-      fifth: 'var(--color-bg-caution)',
+      red: 'var(--color-bg-alert)',
+      yellow: 'var(--color-bg-warning)',
+      blue: 'var(--color-bg-normal)',
+      purple: '#9b51e0',
+      green: 'var(--color-bg-success)',
     },
     data: [
       {
-        colorGroupName: 'first',
+        colorGroupName: 'red',
         text: 'Красноватый текст',
       },
       {
-        colorGroupName: 'second',
+        colorGroupName: 'yellow',
         text: 'Желтоватый текст',
       },
       {
-        colorGroupName: 'third',
+        colorGroupName: 'blue',
         text: 'Убер длинный и превозмогающий усилия аквамариновый текст',
       },
       {
-        colorGroupName: 'fourth',
+        colorGroupName: 'purple',
         text: 'Пурпурный текст',
       },
       {
-        colorGroupName: 'fifth',
+        colorGroupName: 'green',
         text: 'Зеленый цвет',
       },
     ],

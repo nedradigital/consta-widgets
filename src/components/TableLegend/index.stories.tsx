@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { object } from '@storybook/addon-knobs'
+import { boolean, object } from '@storybook/addon-knobs'
 import { storiesOf } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -110,7 +110,7 @@ storiesOf('components/TableLegend', module)
   .addDecorator(blockCenteringDecorator({ width: '90vw' }))
   .add('обычная', () => (
     <TableLegend
-      isShowLegend={false}
+      isShowLegend={boolean('isShowLegend', false)}
       size="l"
       data={object('data', getWidgetMockData(DataType.TableLegend))}
     />

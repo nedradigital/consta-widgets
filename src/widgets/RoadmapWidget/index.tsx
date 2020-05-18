@@ -39,11 +39,7 @@ const RoadmapBlock: React.FC<{
         {item.title ? (
           <>
             {!isButtonDisabled ? (
-              <IconArrowUp
-                size="s"
-                view="secondary"
-                className={classnames(css.icon, isOpened && css.isOpened)}
-              />
+              <IconArrowUp size="s" className={classnames(css.icon, isOpened && css.isOpened)} />
             ) : null}
             <Text tag="span" size="xl" weight="bold" view="primary">
               {item.title}
