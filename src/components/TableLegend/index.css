@@ -31,6 +31,10 @@
     --row-bg-color: var(--color-bg-stripe);
   }
 
+  &.isInactive {
+    opacity: 0.3;
+  }
+
   &.isActive {
     --row-bg-color: var(--color-control-bg-ghost);
   }
