@@ -5,9 +5,7 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/dashboard'
-import { fontSizeValues } from '@/dashboard/size-constants'
-import { RadarChartParams } from '@/dashboard/widget-params'
+import { ColorGroups, FormatValue } from '@/types'
 import { getFormattedValue } from '@/utils/chart'
 import { deg2rad } from '@/utils/math'
 
@@ -18,7 +16,7 @@ import { RadarChartFigure } from './components/Figure'
 import { RadarChartPoints } from './components/Points'
 import css from './index.css'
 
-export type RadarChartLabelSize = RadarChartParams['labelSize']
+export type RadarChartLabelSize = 's' | 'm'
 
 export type Point = {
   xPercent: number
@@ -137,15 +135,15 @@ const concentricColorsByTicksAmount: { [key: number]: ConcentricColorInfo } = {
 
 const BREAKPOINTS = [
   {
-    fontSize: fontSizeValues.xs,
+    fontSize: 12,
     minRadarSize: 0,
   },
   {
-    fontSize: fontSizeValues.s,
+    fontSize: 14,
     minRadarSize: 151,
   },
   {
-    fontSize: fontSizeValues.m,
+    fontSize: 16,
     minRadarSize: 191,
   },
 ] as const

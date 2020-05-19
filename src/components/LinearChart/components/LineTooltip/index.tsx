@@ -4,7 +4,7 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
-import { ColorGroups, FormatValue } from '@/dashboard'
+import { ColorGroups, FormatValue } from '@/types'
 import { PositionState } from '@/utils/tooltips'
 
 import { HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'

@@ -3,15 +3,14 @@ import React from 'react'
 import { boolean, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { DataType } from '@/dashboard'
-import { BadgeParams, legendParams } from '@/dashboard/widget-params'
-import { getWidgetMockData } from '@/utils/widget-mock-data'
+import { Badge } from '@/components/Badge'
+import { labelTypes as legendTypes } from '@/components/LegendItem'
 import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
-import { BadgeWidgetContent } from '@/widgets/BadgeWidget'
 
 import { TableLegend } from '.'
+import { tableLegendData } from './mockData'
 
-type BadgeProps = React.ComponentProps<typeof BadgeWidgetContent>
+type BadgeProps = React.ComponentProps<typeof Badge>
 
 type RowId = { id: string }
 
@@ -22,23 +21,20 @@ const convertItem = ({ id, ...obj }: ListItem) =>
     (acc, key) => {
       const item = obj[key]
 
-      acc[key] =
-        typeof item !== 'string' && typeof item !== 'number' ? (
-          <BadgeWidgetContent {...item} />
-        ) : (
-          item
-        )
+      acc[key] = typeof item !== 'string' && typeof item !== 'number' ? <Badge {...item} /> : item
 
       return acc
     },
     { id }
   )
 
-const badgeParams: BadgeParams = {
+const badgeParams = {
   view: 'filled',
   isMinified: true,
-  size: 'm',
-}
+  wpSize: 'm',
+  text: '',
+  comment: '',
+} as const
 
 const getList = () => {
   const data: readonly ListItem[] = object('list', [
@@ -47,12 +43,8 @@ const getList = () => {
       field: 'Северный бур',
       sum: 20,
       status: {
-        data: {
-          status: 'normal',
-          text: '',
-          comment: '',
-        },
-        params: badgeParams,
+        ...badgeParams,
+        status: 'normal',
       },
     },
     {
@@ -60,12 +52,8 @@ const getList = () => {
       field: 'Южное месторождение',
       sum: 15,
       status: {
-        data: {
-          status: 'warning',
-          text: '',
-          comment: '',
-        },
-        params: badgeParams,
+        ...badgeParams,
+        status: 'warning',
       },
     },
     {
@@ -73,12 +61,8 @@ const getList = () => {
       field: 'Западный разлом',
       sum: 7,
       status: {
-        data: {
-          status: 'error',
-          text: '',
-          comment: '',
-        },
-        params: badgeParams,
+        ...badgeParams,
+        status: 'error',
       },
     },
   ])
@@ -90,11 +74,7 @@ const decorators = [withSmartKnobs(), blockCenteringDecorator({ width: '90vw' })
 
 export const Interactive = createStory(
   () => (
-    <TableLegend
-      isShowLegend={boolean('isShowLegend', false)}
-      size="l"
-      data={object('data', getWidgetMockData(DataType.TableLegend))}
-    />
+    <TableLegend isShowLegend={boolean('isShowLegend', false)} size="l" data={tableLegendData} />
   ),
   {
     name: 'обычная',
@@ -111,7 +91,7 @@ export const TableLegendWithSelectedRow = createStory(
         isShowLegend={false}
         size="l"
         data={{
-          ...object('data', getWidgetMockData(DataType.TableLegend)),
+          ...tableLegendData,
           activeRow: {
             id: activeRowId,
             onChange: setActiveRowId,
@@ -139,17 +119,17 @@ export const WithTrafficLight = createStory(
           {
             field: 'Северный бур',
             colorGroupName: 'first',
-            typeLegend: legendParams.labelTypes[0],
+            typeLegend: legendTypes[0],
           },
           {
             field: 'Южное месторождение',
             colorGroupName: 'second',
-            typeLegend: legendParams.labelTypes[0],
+            typeLegend: legendTypes[0],
           },
           {
             field: 'Западный разлом',
             colorGroupName: 'third',
-            typeLegend: legendParams.labelTypes[0],
+            typeLegend: legendTypes[0],
           },
         ]),
         columns: object('columns', [

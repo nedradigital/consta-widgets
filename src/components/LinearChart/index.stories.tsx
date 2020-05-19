@@ -157,7 +157,7 @@ export const WithTitle = createStory(
         isHorizontal
         titleData={object('titleData', {
           text: 'LTIF',
-          type: 'heading4',
+          size: 'm',
         })}
       />
     )

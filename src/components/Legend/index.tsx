@@ -2,11 +2,13 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { LegendItem } from '@/components/LegendItem'
-import { ColorGroups } from '@/dashboard'
-import { LegendParams } from '@/dashboard/widget-params'
+import { LabelPosition, LabelType, LegendItem, Size } from '@/components/LegendItem'
+import { ColorGroups } from '@/types'
 
 import css from './index.css'
+
+export const directions = ['column', 'row'] as const
+export type Direction = typeof directions[number]
 
 export type Data = ReadonlyArray<{
   text: string
@@ -16,7 +18,12 @@ export type Data = ReadonlyArray<{
 type Props = {
   colorGroups: ColorGroups
   data: Data
-} & LegendParams
+  direction: Direction
+  labelType: LabelType
+  fontSize: Size
+  labelPosition: LabelPosition
+  lineBold?: boolean
+}
 
 export const Legend: React.FC<Props> = ({
   direction,

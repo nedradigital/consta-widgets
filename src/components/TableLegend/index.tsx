@@ -7,12 +7,12 @@ import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { isNil, orderBy } from 'lodash'
 
+import { FilterTooltip } from '@/components/FilterTooltip'
 import { LegendItem } from '@/components/LegendItem'
+import { LabelType as LegendType, labelTypes as legendTypes } from '@/components/LegendItem'
+import { SelectedOptionsList } from '@/components/SelectedOptionsList'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups } from '@/dashboard'
-import { legendParams, LegendParams, TableLegendParams } from '@/dashboard/widget-params'
-import { FilterTooltip } from '@/ui/FilterTooltip'
-import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
+import { ColorGroups } from '@/types'
 import {
   fieldFiltersPresent,
   FieldSelectedValues,
@@ -29,10 +29,13 @@ import {
 import { Resizer } from './components/Resizer'
 import css from './index.css'
 
+const sizes = ['l', 'm', 's'] as const
+type Size = typeof sizes[number]
+
 type LegendFields = {
   field: string
   colorGroupName: string
-  typeLegend: LegendParams['labelType']
+  typeLegend: LegendType
 }
 
 type Column = CommonTableColumn & {
@@ -59,7 +62,11 @@ const alignClasses = {
 
 type Props = {
   data: Data
-} & TableLegendParams
+  size: Size
+  isShowLegend?: boolean
+  isResizable?: boolean
+  isSortable?: boolean
+}
 
 export const TableLegend: React.FC<Props> = ({
   data,
@@ -236,7 +243,7 @@ export const TableLegend: React.FC<Props> = ({
             <LegendItem
               color={(legend && colorGroups[legend.colorGroupName]) || ''}
               fontSize="s"
-              type={(legend && legend.typeLegend) || legendParams.labelTypes[0]}
+              type={(legend && legend.typeLegend) || legendTypes[0]}
             >
               {cellContent}
             </LegendItem>

@@ -2,13 +2,13 @@ import React from 'react'
 import { uid } from 'react-uid'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { Text } from '@gpn-design/uikit'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
-import { ColorGroups, FormatValue } from '@/dashboard'
-import { LinearChartParams, TextBasicEditModeParams } from '@/dashboard/widget-params'
-import { TextWidgetContent } from '@/widgets/TextWidget'
+import { ColorGroups, FormatValue } from '@/types'
+import { TextSize } from '@/utils/ui-kit'
 
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
@@ -36,7 +36,7 @@ export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
 
 type TitleData = {
   text: string
-  type: TextBasicEditModeParams['type']
+  size: TextSize
 }
 
 type ThresholdLine = {
@@ -58,7 +58,7 @@ export type Line = {
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
-export type Direction = LinearChartParams['direction']
+export type Direction = 'toRight' | 'toLeft'
 
 type Props = {
   direction?: Direction
@@ -228,7 +228,9 @@ export class LinearChart extends React.Component<Props, State> {
         />
         {titleData && (
           <div className={css.title} style={{ paddingLeft: paddingX }}>
-            <TextWidgetContent data={undefined} params={titleData} />
+            <Text tag="div" view="primary" size={titleData.size}>
+              {titleData.text}
+            </Text>
           </div>
         )}
         <div ref={this.ref} className={css.graph}>

@@ -15,17 +15,6 @@ declare module 'storybook-addon-smart-knobs' {
   export const withSmartKnobs: (options?: { ignoreProps?: readonly string[] }) => DecoratorFn
 }
 
-declare module 'react-onclickout' {
-  /* tslint:disable-next-line:ordered-imports */
-  import { ComponentType } from 'react'
-
-  const ClickOutHandler: ComponentType<{
-    onClickOut: () => void
-  }>
-
-  export default ClickOutHandler
-}
-
 // полностью используем декларации d3 для перезаписи существующих
 declare module 'd3' {
   export * from 'd3-array'

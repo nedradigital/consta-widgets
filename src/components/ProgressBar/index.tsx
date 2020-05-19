@@ -5,10 +5,8 @@ import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Legend, Tick } from '@/components/ProgressBar/components/Legend'
-import { ColorGroups } from '@/dashboard'
-import { ProgressBarParams } from '@/dashboard/widget-params'
+import { ColorGroups } from '@/types'
 import { TextSize } from '@/utils/ui-kit'
-import { TextWidgetContent as TextWidget } from '@/widgets/TextWidget'
 
 import { Data as ProgressData, Progress } from './components/Progress'
 import css from './index.css'
@@ -21,7 +19,7 @@ export type Data = ProgressData & {
   tooltip?: React.ReactNode
 }
 
-export type Size = ProgressBarParams['size']
+export type Size = 's' | 'm' | 'l'
 
 type Props = {
   size?: Size
@@ -48,20 +46,11 @@ const summarySizes: Record<Size, TextSize> = {
   l: '2xl',
 }
 
-export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, isCaptionBold }) => {
+export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) => {
   return (
     <div className={css.progressBar}>
       {data.map((dataItem, i) => {
-        const {
-          caption,
-          colorGroupName,
-          tooltip,
-          value,
-          summary,
-          ticks = [],
-          valueMin,
-          valueMax,
-        } = dataItem
+        const { caption, colorGroupName, value, summary, ticks = [], valueMin, valueMax } = dataItem
         const color = colorGroups[colorGroupName]
 
         return (
@@ -69,7 +58,8 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
             {caption && (
               <div className={css.row}>
                 <div className={classnames(css.cell, css.isTitleCell)}>
-                  {caption && (
+                  {/* Подумать как быть с текстовым виджетом в компонентах */}
+                  {/* {caption && (
                     <TextWidget
                       data={{ text: caption, tooltip }}
                       params={{
@@ -78,7 +68,7 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups, is
                         type: isCaptionBold ? 'text3' : 'text2',
                       }}
                     />
-                  )}
+                  )} */}
                 </div>
               </div>
             )}

@@ -5,8 +5,7 @@ import useComponentSize from '@rehooks/component-size'
 import { Axis } from '@/components/BarChartAxis'
 import { Grid } from '@/components/Grid'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups, FormatValue } from '@/dashboard'
-import { BarChartParams, TornadoChartParams } from '@/dashboard/widget-params'
+import { ColorGroups, FormatValue } from '@/types'
 import { scaleLinear } from '@/utils/scale'
 import { getTicks } from '@/utils/ticks'
 
@@ -27,7 +26,15 @@ import {
 } from './helpers'
 import css from './index.css'
 
-export type Size = BarChartParams['size']
+export const sizes = ['s', 'm'] as const
+export type Size = typeof sizes[number]
+
+export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
+export type UnitPosition = typeof unitPositions[number]
+
+type CommonAxisShowPosition = 'both' | 'none'
+export type XAxisShowPosition = 'top' | 'bottom' | CommonAxisShowPosition
+export type YAxisShowPosition = 'left' | 'right' | CommonAxisShowPosition
 
 export type SingleBarChartGroups = ReadonlyArray<{
   groupName: string
@@ -56,7 +63,7 @@ type Props = {
   colorGroups: ColorGroups
   gridTicks: number
   valuesTicks: number
-  unitPosition?: BarChartParams['unitPosition']
+  unitPosition?: UnitPosition
   size?: Size
 } & Data &
   (
@@ -72,12 +79,12 @@ type Props = {
   (
     | {
         isTornado?: false
-        orientation: BarChartParams['orientation']
+        orientation: 'horizontal' | 'vertical'
       }
     | {
         isTornado: true
-        xAxisShowPosition: TornadoChartParams['xAxisShowPosition']
-        yAxisShowPosition: TornadoChartParams['yAxisShowPosition']
+        xAxisShowPosition: XAxisShowPosition
+        yAxisShowPosition: YAxisShowPosition
       }
   )
 

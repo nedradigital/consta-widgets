@@ -1,14 +1,22 @@
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { StatsParams } from '@/dashboard/widget-params'
-import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/ui/Badge'
+import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/components/Badge'
 import { TextSize } from '@/utils/ui-kit'
 
 import css from './index.css'
 
-type Size = StatsParams['size']
-type Layout = StatsParams['layout']
+const sizes = ['2xs', 'xs', 's', 'm', 'l'] as const
+type Size = typeof sizes[number]
+
+const layouts = [
+  'compact-title',
+  'compact-unit',
+  'full',
+  'full-without-title',
+  'full-reversed',
+] as const
+type Layout = typeof layouts[number]
 
 export type Data = {
   value: number

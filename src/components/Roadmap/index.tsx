@@ -4,10 +4,10 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
+import { FilterTooltip } from '@/components/FilterTooltip'
+import { SelectedOptionsList } from '@/components/SelectedOptionsList'
 import { useBaseSize } from '@/contexts'
-import { ColorGroups } from '@/dashboard'
-import { FilterTooltip } from '@/ui/FilterTooltip'
-import { SelectedOptionsList } from '@/ui/SelectedOptionsList'
+import { ColorGroups } from '@/types'
 import {
   fieldFiltersPresent,
   FieldSelectedValues,

@@ -3,10 +3,10 @@ import { useRef } from 'react'
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
+import { UnitPosition } from '@/components/BarChart'
 import { Position, Size, Ticks } from '@/components/Ticks'
 import { useBaseSize } from '@/contexts'
-import { FormatValue } from '@/dashboard'
-import { BarChartParams } from '@/dashboard/widget-params'
+import { FormatValue } from '@/types'
 import { Scaler } from '@/utils/scale'
 
 import css from './index.css'
@@ -25,7 +25,7 @@ type Props = {
   showValueLine?: boolean
   showLabelLine?: boolean
   unit?: string
-  unitPosition?: BarChartParams['unitPosition']
+  unitPosition?: UnitPosition
   size?: Size
   horizontalStyles?: React.CSSProperties
   verticalStyles?: React.CSSProperties

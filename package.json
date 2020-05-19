@@ -1,6 +1,6 @@
 {
-  "name": "@csssr/gpn-dashboard-constructor",
-  "version": "1.1.63",
+  "name": "@csssr/gpn-components",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "author": "CSSSR",
   "license": "UNLICENSED",
@@ -27,7 +27,6 @@
     "unit:watch": "yarn unit --watchAll",
     "test": "npm-run-all --parallel lint checktypes unit",
     "prepublishOnly": "yarn build && node node_modules/@csssr/gpn-configs/scripts/typescript-validations.js",
-    "migration:create": "node scripts/migration/index.js",
     "prepare": "yarn install-peers"
   },
   "browserslist": [
@@ -67,18 +66,13 @@
     "@csssr/gpn-utils": "0.2.10",
     "@rehooks/component-size": "1.0.3",
     "@types/d3": "5.7.2",
-    "@types/react-grid-layout": "0.17.0",
     "@types/resize-observer-browser": "0.1.2",
     "classnames": "2.2.6",
     "d3": "5.12.0",
     "date-fns": "2.9.0",
     "lodash": "4.17.11",
-    "react-animate-height": "2.0.17",
-    "react-collapse": "5.0.1",
     "react-dnd": "9.3.2",
     "react-dnd-html5-backend": "9.3.2",
-    "react-grid-layout": "0.17.1",
-    "react-onclickout": "2.0.8",
     "react-textfit": "1.1.0",
     "react-uid": "2.2.0"
   },

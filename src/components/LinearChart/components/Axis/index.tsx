@@ -3,8 +3,7 @@ import React, { useLayoutEffect } from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { FormatValue } from '@/dashboard'
-import { LinearChartParams } from '@/dashboard/widget-params'
+import { FormatValue } from '@/types'
 
 import { ScaleLinear, TickValues } from '../..'
 
@@ -14,8 +13,8 @@ const TICK_PADDING = 15
 const UNIT_X_OFFSET = 20
 const UNIT_Y_OFFSET = 2
 
-export type XLabelsPosition = LinearChartParams['xLabels']
-export type YLabelsPosition = LinearChartParams['yLabels']
+export type XLabelsPosition = 'top' | 'bottom'
+export type YLabelsPosition = 'left' | 'right'
 
 type GridConfigItem<Position> = {
   labels?: Position

@@ -18,7 +18,7 @@ import {
 import { GinfPrototype as MapGinfPrototypeStory } from './example-data/ginf-prototype'
 
 const MapTsubPrototypeStory = () => {
-  const [selectedObjectId, setSelectedObjectId] = useState()
+  const [selectedObjectId, setSelectedObjectId] = useState<string>()
 
   return (
     <Map

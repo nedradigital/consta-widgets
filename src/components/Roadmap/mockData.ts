@@ -1,6 +1,14 @@
+import { ColorGroups } from '@/types'
 import { Filters } from '@/utils/table'
 
 import { Data } from '.'
+
+export const colorGroups: ColorGroups = {
+  green: 'var(--color-bg-success)',
+  violet: '#A13DFF',
+  blue: 'var(--color-bg-normal)',
+  orange: 'var(--color-bg-warning)',
+}
 
 /* istanbul ignore next */
 export const dataFilters: Filters = [

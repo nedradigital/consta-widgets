@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import { Text } from '@gpn-design/uikit'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/dashboard'
+import { FormatValue } from '@/types'
 import { getFormattedValue } from '@/utils/chart'
 import { TextSize } from '@/utils/ui-kit'
 

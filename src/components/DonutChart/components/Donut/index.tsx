@@ -3,8 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { ColorGroups } from '@/dashboard'
-import { DonutParams } from '@/dashboard/widget-params'
+import { ColorGroups } from '@/types'
 
 import css from './index.css'
 
@@ -17,7 +16,7 @@ export type DataItem = {
 
 export type Data = readonly DataItem[]
 
-export type HalfDonut = DonutParams['halfDonut']
+export type HalfDonut = 'top' | 'left' | 'right' | 'bottom'
 
 type Props = {
   data: Data

@@ -1,11 +1,8 @@
 import React from 'react'
 
 import { object } from '@storybook/addon-knobs'
-import { times } from 'lodash'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { DataType } from '@/dashboard'
-import { getWidgetMockData } from '@/utils/widget-mock-data'
 import {
   blockCenteringDecorator,
   createMetadata,
@@ -15,77 +12,18 @@ import {
 } from '@/utils/Storybook'
 
 import { DonutChart } from '.'
-
-const dataItemWithoutData = {
-  data: {
-    name: 'Неизвестный бур',
-    colorGroupName: 'forth',
-    sections: [{ value: null }, { value: null }, { value: null }],
-  },
-  colorGroup: {
-    forth: 'var(--color-bg-alert)',
-  },
-}
-
-const zeroValue = { value: 0 }
-const sectionWithOnlyZeroData = [...times(3, () => zeroValue)] as const
-
-const dataItemsWithZeroData = [
-  {
-    name: 'Первый нулевой бур',
-    colorGroupName: 'first',
-    sections: sectionWithOnlyZeroData,
-  },
-  {
-    name: 'Второй нулевой бур',
-    colorGroupName: 'second',
-    sections: sectionWithOnlyZeroData,
-  },
-  {
-    name: 'Третий нулевой бур',
-    colorGroupName: 'third',
-    sections: sectionWithOnlyZeroData,
-  },
-] as const
-
-const dataItemsWithZeroAndPositiveData = [
-  {
-    ...dataItemsWithZeroData[0],
-    name: 'Первый околонулевой бур',
-    sections: [zeroValue, { value: 10 }, zeroValue],
-  },
-  dataItemsWithZeroData[1],
-  dataItemsWithZeroData[2],
-] as const
-
-export const progressDonutData = {
-  data: [
-    {
-      name: 'План',
-      colorGroupName: 'plan',
-      sections: [{ value: 3, showValue: 60 }],
-    },
-    {
-      name: 'Факт',
-      colorGroupName: 'fact',
-      sections: [{ value: 1, showValue: 15 }],
-    },
-  ],
-  colorGroups: {
-    plan: 'var(--color-bg-border)',
-    fact: 'var(--color-bg-warning)',
-  },
-}
+import {
+  donutData,
+  donutDataItemsWithZeroAndPositiveData,
+  donutDataItemsWithZeroData,
+  donutDataItemWithoutData,
+  donutProgressData,
+  zeroValue,
+} from './mockData'
 
 export const Interactive = createStory(
   () => {
-    return (
-      <DonutChart
-        data={object('data', getWidgetMockData(DataType.Donut).data)}
-        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
-        formatValueForTooltip={cubeMeterFormatValue}
-      />
-    )
+    return <DonutChart {...donutData} formatValueForTooltip={cubeMeterFormatValue} />
   },
   { name: 'стандартный' }
 )
@@ -101,9 +39,7 @@ export const WithZeroDataInOneGroup = createStory(
             sections: [zeroValue],
           },
         ])}
-        colorGroups={object('colorGroups', {
-          ...getWidgetMockData(DataType.Donut).colorGroups,
-        })}
+        colorGroups={donutData.colorGroups}
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
@@ -115,8 +51,7 @@ export const WithZeroDataInSomeGroups = createStory(
   () => {
     return (
       <DonutChart
-        data={object('data', dataItemsWithZeroAndPositiveData)}
-        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
+        {...donutDataItemsWithZeroAndPositiveData}
         formatValueForTooltip={cubeMeterFormatValue}
       />
     )
@@ -127,11 +62,7 @@ export const WithZeroDataInSomeGroups = createStory(
 export const WithZeroDataInAllGroups = createStory(
   () => {
     return (
-      <DonutChart
-        data={object('data', dataItemsWithZeroData)}
-        colorGroups={object('colorGroups', getWidgetMockData(DataType.Donut).colorGroups)}
-        formatValueForTooltip={cubeMeterFormatValue}
-      />
+      <DonutChart {...donutDataItemsWithZeroData} formatValueForTooltip={cubeMeterFormatValue} />
     )
   },
   { name: 'с нулевыми данными по всем группам' }
@@ -142,12 +73,15 @@ export const WithoutDataForOneGroup = createStory(
     return (
       <DonutChart
         data={object('data', [
-          ...getWidgetMockData(DataType.Donut).data,
-          { ...dataItemWithoutData.data, sections: [{ value: null }, { value: 0 }, { value: 8 }] },
+          ...donutData.data,
+          {
+            ...donutDataItemWithoutData.data,
+            sections: [{ value: null }, { value: 0 }, { value: 8 }],
+          },
         ])}
         colorGroups={object('colorGroups', {
-          ...getWidgetMockData(DataType.Donut).colorGroups,
-          ...dataItemWithoutData.colorGroup,
+          ...donutData.colorGroups,
+          ...donutDataItemWithoutData.colorGroup,
         })}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -160,13 +94,10 @@ export const WithouDataForOneGroupAsWhole = createStory(
   () => {
     return (
       <DonutChart
-        data={object('data', [
-          ...getWidgetMockData(DataType.Donut).data,
-          { ...dataItemWithoutData.data },
-        ])}
+        data={object('data', [...donutData.data, { ...donutDataItemWithoutData.data }])}
         colorGroups={object('colorGroups', {
-          ...getWidgetMockData(DataType.Donut).colorGroups,
-          ...dataItemWithoutData.colorGroup,
+          ...donutData.colorGroups,
+          ...donutDataItemWithoutData.colorGroup,
         })}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -177,13 +108,7 @@ export const WithouDataForOneGroupAsWhole = createStory(
 
 export const LikeProgressBar = createStory(
   () => {
-    return (
-      <DonutChart
-        data={object('data', progressDonutData.data)}
-        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
-        formatValueForTooltip={emptyFormatValue}
-      />
-    )
+    return <DonutChart {...donutProgressData} formatValueForTooltip={emptyFormatValue} />
   },
   { name: 'Как прогресс бар' }
 )
@@ -192,8 +117,7 @@ export const LikeProgressBarWithText = createStory(
   () => {
     return (
       <DonutChart
-        data={object('data', progressDonutData.data)}
-        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        {...donutProgressData}
         formatValueForTooltip={emptyFormatValue}
         textData={object('textData', {
           value: '15%',
@@ -209,10 +133,10 @@ export const LikeProgressBarWithoutFacts = createStory(
     return (
       <DonutChart
         data={object('data', [
-          progressDonutData.data[0],
-          { ...progressDonutData.data[1], sections: [{ value: null }] },
+          donutProgressData.data[0],
+          { ...donutProgressData.data[1], sections: [{ value: null }] },
         ])}
-        colorGroups={progressDonutData.colorGroups}
+        colorGroups={donutProgressData.colorGroups}
         formatValueForTooltip={emptyFormatValue}
       />
     )
@@ -224,8 +148,7 @@ export const HalfDonut = createStory(
   () => {
     return (
       <DonutChart
-        data={object('data', progressDonutData.data)}
-        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        {...donutProgressData}
         formatValueForTooltip={emptyFormatValue}
         halfDonut="right"
         textData={object('textData', {
@@ -245,10 +168,10 @@ export const HalfDonutWithZeroData = createStory(
     return (
       <DonutChart
         data={object('data', [
-          { ...progressDonutData.data[0], sections: [{ ...zeroValue, showValue: 0 }] },
-          { ...progressDonutData.data[1], sections: [{ ...zeroValue, showValue: 0 }] },
+          { ...donutProgressData.data[0], sections: [{ ...zeroValue, showValue: 0 }] },
+          { ...donutProgressData.data[1], sections: [{ ...zeroValue, showValue: 0 }] },
         ])}
-        colorGroups={object('colorGroups', progressDonutData.colorGroups)}
+        colorGroups={donutProgressData.colorGroups}
         formatValueForTooltip={emptyFormatValue}
         halfDonut="right"
         textData={object('textData', {
@@ -268,10 +191,10 @@ export const HalfDonutWithoutFacts = createStory(
     return (
       <DonutChart
         data={object('data', [
-          progressDonutData.data[0],
-          { ...progressDonutData.data[1], sections: [{ value: null }] },
+          donutProgressData.data[0],
+          { ...donutProgressData.data[1], sections: [{ value: null }] },
         ])}
-        colorGroups={progressDonutData.colorGroups}
+        colorGroups={donutProgressData.colorGroups}
         formatValueForTooltip={emptyFormatValue}
         halfDonut="right"
         textData={object('textData', {

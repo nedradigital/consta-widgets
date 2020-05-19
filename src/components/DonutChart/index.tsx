@@ -8,7 +8,7 @@ import { zip } from 'lodash'
 
 import { Tooltip } from '@/components/Tooltip'
 import { TooltipContentForMultipleValues } from '@/components/TooltipContentForMultipleValues'
-import { ColorGroups, FormatValue } from '@/dashboard'
+import { ColorGroups, FormatValue } from '@/types'
 import { getFormattedValue } from '@/utils/chart'
 import { PositionState } from '@/utils/tooltips'
 

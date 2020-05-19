@@ -2,12 +2,18 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { flattenDeep, orderBy, sum } from 'lodash'
 
 import { ShowPositions } from '@/components/BarChartAxis'
-import { FormatValue } from '@/dashboard'
-import { XAxisShowPosition, YAxisShowPosition } from '@/dashboard/widget-params'
+import { FormatValue } from '@/types'
 import { getEveryN } from '@/utils/array'
 import { NumberRange, Scaler } from '@/utils/scale'
 
-import { Column, Groups, SingleBarChartGroups, Size } from './'
+import {
+  Column,
+  Groups,
+  SingleBarChartGroups,
+  Size,
+  XAxisShowPosition,
+  YAxisShowPosition,
+} from './'
 import { ColumnDetail } from './components/Bar'
 
 type DataColumns = ReadonlyArray<{

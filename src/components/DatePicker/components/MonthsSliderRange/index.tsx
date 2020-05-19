@@ -14,7 +14,7 @@ import {
 } from 'date-fns'
 import { groupBy } from 'lodash'
 
-import { ItemTypes } from '@/dashboard/dnd-constants'
+import { ItemTypes } from '@/dnd-constants'
 
 import { DateLimitProps, DateRange, ValueProps } from '../../'
 import { MonthsSliderWrapper } from '../MonthsSliderWrapper'

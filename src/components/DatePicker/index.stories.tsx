@@ -1,11 +1,10 @@
 import { date as knobsDate, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { datePickerParams } from '@/dashboard/widget-params'
 import { isValidDate } from '@/utils/type-guards'
 import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
-import { DatePicker, DateRange } from '.'
+import { DatePicker, DateRange, sizes } from '.'
 import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'
 
 const setInputValue = (value?: string) => {
@@ -22,7 +21,7 @@ const defaultProps = () =>
   ({
     minDate: new Date(knobsDate('minDate', new Date(2019, 0, 1))),
     maxDate: new Date(knobsDate('maxDate', new Date(2020, 3, 2))),
-    size: select('size', datePickerParams.sizes, datePickerParams.sizes[1]),
+    size: select('size', sizes, sizes[1]),
   } as const)
 
 export const DakePickerSingleStory = createStory(

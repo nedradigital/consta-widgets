@@ -3,18 +3,13 @@ import React from 'react'
 import { number, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { DataType } from '@/dashboard'
-import { getWidgetMockData } from '@/utils/widget-mock-data'
 import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Roadmap } from '.'
-import { minimalData, monochromeData } from './mockData'
+import { colorGroups, data, minimalData, monochromeData } from './mockData'
 
 export const Interactive = createStory(() => {
-  const {
-    data: { titles, rows, currentDay, startDate, endDate, filters },
-    colorGroups,
-  } = getWidgetMockData(DataType.Roadmap)[0]
+  const { titles, rows, currentDay, startDate, endDate, filters } = data
 
   return (
     <Roadmap
@@ -31,7 +26,6 @@ export const Interactive = createStory(() => {
 
 export const WithLittleData = createStory(
   () => {
-    const { colorGroups } = getWidgetMockData(DataType.Roadmap)[0]
     const { titles, currentDay, rows, startDate, endDate, filters } = minimalData
 
     return (

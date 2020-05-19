@@ -9,7 +9,6 @@ import { withPropsTable } from 'storybook-addon-react-docgen'
 import stub from './stub.mdx'
 
 import '@gpn-design/uikit/dist/style.css'
-import '@/index.css'
 import './storybook.css'
 
 addDecorator(withPropsTable)

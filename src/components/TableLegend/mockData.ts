@@ -1,6 +1,70 @@
+import { ColorGroups } from '@/types'
 import { Filters, TableRow } from '@/utils/table'
 
-export const filters = [
+import { Data } from './'
+
+const colorGroups: ColorGroups = {
+  red: 'var(--color-bg-alert)',
+  blue: 'var(--color-bg-normal)',
+  yellow: 'var(--color-bg-warning)',
+  purple: '#9b51e0',
+  green: 'var(--color-bg-success)',
+}
+
+export const list: readonly TableRow[] = [
+  {
+    id: 'row1',
+    field: 'Приобское',
+    year: 1982,
+    type: 'Нефтяное',
+    estimatedReserves: 5000,
+    remainingReserves: 1700,
+    production: 33,
+    total: 313,
+  },
+  {
+    id: 'row2',
+    field: 'Уренгойское газонефтеконденсат­ное',
+    year: 2001,
+    type: 'Конденсатное',
+    estimatedReserves: 7540,
+    remainingReserves: 7540,
+    production: 363,
+    total: 88,
+  },
+  {
+    id: 'row3',
+    field: 'Красноленинская группа',
+    year: 1985,
+    type: 'Комбинированное',
+    estimatedReserves: 8766,
+    remainingReserves: 3374,
+    production: 256,
+    total: 434,
+  },
+  {
+    id: 'row4',
+    field: 'Великое',
+    year: 1989,
+    type: 'Конденсатное',
+    estimatedReserves: 1697,
+    remainingReserves: 4818,
+    production: 250,
+    total: 236,
+  },
+  {
+    id: 'row5',
+    field: 'Русское газонефтяное',
+    year: 1997,
+    type: 'Нефтяное',
+    estimatedReserves: 5169,
+    remainingReserves: 3712,
+    production: 292,
+    total: 417,
+  },
+]
+
+export const filters: Filters = [
   {
     id: 'olderThan2018',
     name: 'Старше 2018 года',
@@ -169,57 +233,74 @@ export const filters = [
     filterer: (value: number | string) => Number(value) >= 300,
     field: 'total',
   },
-] as Filters
+]
 
-export const list = [
-  {
-    id: 'row1',
-    field: 'Приобское',
-    year: 1982,
-    type: 'Нефтяное',
-    estimatedReserves: 5000,
-    remainingReserves: 1700,
-    production: 33,
-    total: 313,
-  },
-  {
-    id: 'row2',
-    field: 'Уренгойское газонефтеконденсат­ное',
-    year: 2001,
-    type: 'Конденсатное',
-    estimatedReserves: 7540,
-    remainingReserves: 7540,
-    production: 363,
-    total: 88,
-  },
-  {
-    id: 'row3',
-    field: 'Красноленинская группа',
-    year: 1985,
-    type: 'Комбинированное',
-    estimatedReserves: 8766,
-    remainingReserves: 3374,
-    production: 256,
-    total: 434,
-  },
-  {
-    id: 'row4',
-    field: 'Великое',
-    year: 1989,
-    type: 'Конденсатное',
-    estimatedReserves: 1697,
-    remainingReserves: 4818,
-    production: 250,
-    total: 236,
-  },
-  {
-    id: 'row5',
-    field: 'Русское газонефтяное',
-    year: 1997,
-    type: 'Нефтяное',
-    estimatedReserves: 5169,
-    remainingReserves: 3712,
-    production: 292,
-    total: 417,
-  },
-] as readonly TableRow[]
+export const tableLegendData: Data = {
+  colorGroups,
+  list,
+  legendFields: [
+    {
+      field: 'Приобское',
+      colorGroupName: 'red',
+      typeLegend: 'dot',
+    },
+    {
+      field: 'Уренгойское газонефтеконденсат­ное',
+      colorGroupName: 'blue',
+      typeLegend: 'dot',
+    },
+    {
+      field: 'Красноленинская группа',
+      colorGroupName: 'yellow',
+      typeLegend: 'dot',
+    },
+    {
+      field: 'Великое',
+      colorGroupName: 'purple',
+      typeLegend: 'dot',
+    },
+    {
+      field: 'Русское газонефтяное',
+      colorGroupName: 'green',
+      typeLegend: 'dot',
+    },
+  ],
+  columns: [
+    {
+      title: 'Месторождение',
+      accessor: 'field',
+      align: 'left',
+    },
+    {
+      title: 'Год открытия',
+      accessor: 'year',
+      align: 'center',
+    },
+    {
+      title: 'Тип',
+      accessor: 'type',
+      align: 'center',
+    },
+    {
+      title: 'Предполагаемые полные \nзапасы, млн.т.',
+      accessor: 'estimatedReserves',
+      align: 'right',
+    },
+    {
+      title: 'Остаточные извлекаемые \nзапасы, млн.т.',
+      accessor: 'remainingReserves',
+      align: 'right',
+    },
+    {
+      title: 'Добыча тыс.т/сут.',
+      accessor: 'production',
+      align: 'right',
+    },
+    {
+      title: 'Всего добыто, млн.т.',
+      accessor: 'total',
+      align: 'right',
+    },
+  ],
+  filters,
+}

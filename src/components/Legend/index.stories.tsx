@@ -1,19 +1,49 @@
 import React from 'react'
 
-import { number, object } from '@storybook/addon-knobs'
+import { number } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { DataType } from '@/dashboard'
-import { getWidgetMockData } from '@/utils/widget-mock-data'
+import { ColorGroups } from '@/types'
 import { blockCenteringDecorator, createMetadata, createStory } from '@/utils/Storybook'
 
 import { Legend } from '.'
 
+const colorGroups: ColorGroups = {
+  red: 'var(--color-bg-alert)',
+  yellow: 'var(--color-bg-warning)',
+  blue: 'var(--color-bg-normal)',
+  purple: '#9b51e0',
+  green: 'var(--color-bg-success)',
+}
+
+const data: readonly any[] = [
+  {
+    colorGroupName: 'red',
+    text: 'Красноватый текст',
+  },
+  {
+    colorGroupName: 'yellow',
+    text: 'Желтоватый текст',
+  },
+  {
+    colorGroupName: 'blue',
+    text: 'Убер длинный и превозмогающий усилия аквамариновый текст',
+  },
+  {
+    colorGroupName: 'purple',
+    text: 'Пурпурный текст',
+  },
+  {
+    colorGroupName: 'green',
+    text: 'Зеленый цвет',
+  },
+]
+
 export const Interactive = createStory(() => (
   <div style={{ width: number('wrapper width', 200) }}>
     <Legend
-      data={object('data', getWidgetMockData(DataType.Legend).data)}
-      colorGroups={object('colorGroups', getWidgetMockData(DataType.Legend).colorGroups)}
+      data={data}
+      colorGroups={colorGroups}
       direction="column"
       labelPosition="left"
       labelType="dot"
