@@ -5,7 +5,6 @@ import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
 import { Direction, Tooltip } from '@/components/Tooltip'
-import { ColorGroups } from '@/dashboard'
 import { themeColorLight } from '@/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/utils/time'
 import { Position, useTooltipReposition } from '@/utils/tooltips'
@@ -15,13 +14,15 @@ import { Item } from '../..'
 import css from './index.css'
 
 type Props = {
-  colorGroups: ColorGroups
+  anchorRef: RefObject<HTMLElement>
+  color: string
+  position: Position
   direction?: Exclude<Direction, 'upCenter' | 'downCenter' | 'left' | 'right'>
-  plan: Item
+  plan?: Item
   fact?: Item
   forecast?: Item
-  position: Position
-  anchorRef: RefObject<HTMLElement>
+  title?: string
+  comment?: string
   onRequestReposition: () => void
 }
 
@@ -52,20 +53,31 @@ const DateText: React.FC<{ label: string; startDate: number; endDate: number }> 
 
 const renderDates = ({
   color,
+  title,
   plan,
   fact,
   forecast,
 }: {
   color: string
-  plan: Item
+  title?: string
+  plan?: Item
   fact?: Item
   forecast?: Item
 }) => (
   <>
-    <div className={css.dateBlock}>
-      <span className={classnames(css.circle, css.isPlan)} style={{ background: color }} />
-      <DateText label="План" startDate={plan.startDate} endDate={plan.endDate} />
-    </div>
+    {title && (
+      <div className={css.dateBlock}>
+        <Text tag="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+          {title}
+        </Text>
+      </div>
+    )}
+    {plan && (
+      <div className={css.dateBlock}>
+        <span className={classnames(css.circle, css.isPlan)} style={{ background: color }} />
+        <DateText label="План" startDate={plan.startDate} endDate={plan.endDate} />
+      </div>
+    )}
     {fact && (
       <div className={css.dateBlock}>
         <span className={css.circle} style={{ background: color }} />
@@ -74,7 +86,7 @@ const renderDates = ({
     )}
     {forecast && (
       <div className={css.dateBlock}>
-        <span className={classnames(css.circle, css.isForecast)} style={{ background: color }} />
+        <span className={classnames(css.circle, css.isForecast)} style={{ borderColor: color }} />
         <DateText label="Прогноз" startDate={forecast.startDate} endDate={forecast.endDate} />
       </div>
     )}
@@ -98,13 +110,15 @@ const renderComment = (comment: string) => {
 }
 
 export const RoadmapTooltip: React.FC<Props> = ({
-  fact,
-  plan,
-  forecast,
-  colorGroups,
-  direction = 'upRight',
-  position,
   anchorRef,
+  color,
+  position,
+  direction = 'upRight',
+  fact,
+  forecast,
+  plan,
+  title,
+  comment,
   onRequestReposition,
 }) => {
   const [activeSection, changeActiveSection] = useState<'dates' | 'comment'>('dates')
@@ -117,8 +131,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
 
   const isActiveDates = activeSection === 'dates'
   const isActiveComment = activeSection === 'comment'
-  const { groupName } = plan
-  const comment = fact?.comment || forecast?.comment || CLEAN_COMMENT
   const content = [
     <div
       onClick={stopEventHandler}
@@ -126,8 +138,8 @@ export const RoadmapTooltip: React.FC<Props> = ({
       className={classnames(css.content, isActiveDates && css.dates)}
     >
       {isActiveComment
-        ? renderComment(comment)
-        : renderDates({ color: colorGroups[groupName], fact, plan, forecast })}
+        ? renderComment(comment || CLEAN_COMMENT)
+        : renderDates({ color, title, fact, plan, forecast })}
     </div>,
     <div key="buttons" className={css.buttons}>
       <button
@@ -176,13 +188,14 @@ export const RoadmapTooltip: React.FC<Props> = ({
 
   return (
     <Tooltip
+      anchorRef={anchorRef}
       direction={direction}
-      position={position}
       isVisible
       isContentHoverable
       renderContent={renderContent}
       className={css.tooltip}
       possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
+      position={position}
     />
   )
 }

@@ -1,21 +1,20 @@
 .main {
-  --label-column-width: calc-size(186);
   --separate-line-color: var(--color-bg-border);
 
   display: grid;
+  overflow: hidden;
 
   width: 100%;
-  grid-template-columns: calc(var(--label-column-width) * 2) auto;
   grid-template-areas: 'left calendar';
 }
 
 .subTitleHeightStub {
+  box-sizing: border-box;
+
   border-bottom: 1px solid var(--separate-line-color);
 }
 
 .selectedOptions {
-  padding-left: 0;
-
   border-top: 0;
   border-bottom: 0;
 }
@@ -31,6 +30,8 @@
 }
 
 .calendar {
+  position: relative;
+
   overflow-x: auto;
 
   border-right: 1px solid var(--separate-line-color);
@@ -41,80 +42,55 @@
 .fakeBlock {
   visibility: hidden;
 
-  width: var(--label-column-width);
+  box-sizing: border-box;
+  padding: 0 var(--space-xs);
 }
 
-.table {
-  margin: 0;
-  padding: 0;
+.labelsTable {
+  table-layout: fixed;
 
-  border-spacing: 0;
-  border-collapse: separate;
+  & thead th,
+  & tbody td {
+    padding-right: var(--space-xs);
+    padding-left: var(--space-xs);
+  }
 
-  border: none;
-  background: none;
+  & thead th:first-child,
+  & tbody td:first-child {
+    padding-left: var(--space-m);
+  }
 
-  & td {
-    padding: var(--space-s) 0;
+  & thead th:last-child,
+  & tbody td:last-child {
+    padding-right: var(--space-m);
+  }
 
-    text-align: center;
-    vertical-align: top;
+  & thead th.isSubTitle {
+    padding: 0;
+  }
+}
+
+.calendarTable {
+  position: relative;
+
+  min-width: calc-size(600);
+
+  table-layout: fixed;
+
+  & tbody {
+    background-image: url('./background.svg');
+    background-repeat: repeat;
   }
 
   & th {
-    font-weight: normal;
-
-    width: 50px;
-    padding: var(--space-s) var(--space-m);
-
-    border-bottom: 1px solid var(--separate-line-color);
-
-    &.isSubTitle {
-      padding-top: 0;
-      padding-right: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  & tr:nth-child(even) td {
-    background: var(--color-bg-stripe);
-  }
-
-  &.calendarTable {
-    width: 100%;
-    min-width: calc-size(600);
-
-    table-layout: fixed;
-
-    & tbody {
-      background-image: url('./background.svg');
-      background-repeat: repeat;
-    }
-
-    & th {
-      padding: 0;
-
-      text-align: center;
-    }
-  }
-
-  &.labelsTable {
-    width: 100%;
-
-    table-layout: fixed;
-
-    & tbody td:first-child,
-    & thead th:first-child {
-      padding-left: var(--space-m);
-
-      text-align: left;
-    }
+    padding-right: 0;
+    padding-left: 0;
   }
 }
 
 .iconFilter {
   position: absolute;
-  top: var(--line-height-text-m);
+  top: var(--space-m);
   left: 0;
 
   transform: translate(-100%, -100%);
@@ -125,57 +101,17 @@
   }
 }
 
-.chartLine {
-  --chart-line-height: calc-size(8);
-  --space-between-lines: calc-size(1);
-
-  position: absolute;
-  top: calc(var(--line-height-text-m) / 2);
-
-  height: var(--chart-line-height);
-
-  transform: translateY(var(--space-between-lines));
-
-  &.isInteractive {
-    cursor: pointer;
-  }
-
-  &.isFact {
-    opacity: 1;
-  }
-
-  &.isPlan {
-    opacity: 0.6;
-
-    transform: translateY(calc((var(--chart-line-height) + var(--space-between-lines)) * -1));
-  }
-
-  &.isForecast {
-    opacity: 0.4;
-  }
-
-  &.isActive {
-    opacity: 1;
-  }
-}
-
-.wrapper {
+.groups {
   position: relative;
 
   width: 100%;
-
-  &.hideInactive > .isFact:not(.isActive),
-  &.hideInactive > .isForecast:not(.isActive),
-  &.hideInactive > .isPlan:not(.isActive) {
-    opacity: 0.3;
-  }
 }
 
 .currentDay {
   --current-day-width: 1px;
 
   position: absolute;
-  top: -10px;
+  top: calc(var(--space-s) * -1);
 
   width: var(--current-day-width);
   height: 100%;
@@ -201,15 +137,6 @@
 
 .titleWrapper {
   position: relative;
-
-  display: inline-block;
-}
-
-.monthTitleWrapper {
-  width: 100%;
-  padding: var(--space-s) 0;
-
-  text-align: center;
 }
 
 .periodWrapper {
