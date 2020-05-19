@@ -21,7 +21,7 @@ jobs:
         yarn policies set-version 1.19.1
         yarn
       env:
-        NODE_AUTH_TOKEN: ${{ secrets.GITHUB_REGISTRY_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
     - name: Publish package to registry
       run: npm publish
       env:
