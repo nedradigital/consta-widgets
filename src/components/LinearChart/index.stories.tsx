@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
+import { Text } from '@gpn-design/uikit'
 import { object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -148,6 +149,12 @@ export const WithClickHandler = createStory(
   { name: 'с обработкой клика', decorators }
 )
 
+const ExampleTitle = (
+  <Text tag="div" view="primary" size="m">
+    LTIF
+  </Text>
+)
+
 export const WithTitle = createStory(
   () => {
     return (
@@ -155,10 +162,7 @@ export const WithTitle = createStory(
         {...getCommonProps()}
         colorGroups={object('colorGroups', colorGroups)}
         isHorizontal
-        titleData={object('titleData', {
-          text: 'LTIF',
-          size: 'm',
-        })}
+        title={ExampleTitle}
       />
     )
   },

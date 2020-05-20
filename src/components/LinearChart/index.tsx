@@ -2,13 +2,11 @@ import React from 'react'
 import { uid } from 'react-uid'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Axis, GridConfig } from '@/components/LinearChart/components/Axis'
 import { ColorGroups, FormatValue } from '@/types'
-import { TextSize } from '@/utils/ui-kit'
 
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
@@ -33,11 +31,6 @@ export type Item = { x: number | null; y: number | null }
 export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
-
-type TitleData = {
-  text: string
-  size: TextSize
-}
 
 type ThresholdLine = {
   name?: string
@@ -67,12 +60,12 @@ type Props = {
   threshold?: Threshold
   withZoom?: boolean
   isHorizontal: boolean
-  formatValueForLabel: FormatValue
+  formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
   colorGroups: ColorGroups
   unit?: string
-  titleData?: TitleData
+  title?: React.ReactNode
   onClickHoverLine?: (value: number) => void
 }
 
@@ -183,12 +176,12 @@ export class LinearChart extends React.Component<Props, State> {
         withZoom,
         isHorizontal,
         lines,
-        formatValueForLabel,
+        formatValueForLabel = String,
         formatValueForTooltip,
         formatValueForTooltipTitle,
         colorGroups,
         unit,
-        titleData,
+        title,
         onClickHoverLine,
       },
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
@@ -226,11 +219,9 @@ export class LinearChart extends React.Component<Props, State> {
           formatValueForTooltip={formatValueForTooltip}
           formatValueForTooltipTitle={formatValueForTooltipTitle}
         />
-        {titleData && (
+        {title && (
           <div className={css.title} style={{ paddingLeft: paddingX }}>
-            <Text tag="div" view="primary" size={titleData.size}>
-              {titleData.text}
-            </Text>
+            {title}
           </div>
         )}
         <div ref={this.ref} className={css.graph}>
