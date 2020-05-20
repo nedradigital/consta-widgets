@@ -1,6 +1,6 @@
 ## Задача
-- ссылка на jira: https://jira.csssr.io/browse/__HERE_JIRA_ID__
-- стенд: http://__HERE_BRANCH_NAME__.dashboard-constructor.csssr.cloud
+- ссылка на jira: __HERE_JIRA_ID__
+- стенд: http://__HERE_BRANCH_NAME__.gpn-components.csssr.cloud
 
 ## Чек-лист
 - [ ] Используется calc-size(), где он нужен
