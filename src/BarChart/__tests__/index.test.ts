@@ -5,6 +5,7 @@ import {
   createFormatValue,
   getAxisShowPositions,
   getColumnDetails,
+  getColumnSize,
   getDataColumns,
   getDomain,
   getEveryNTick,
@@ -14,6 +15,7 @@ import {
   getTotalByColumn,
   isLeftTornadoBar,
   scaleBand,
+  toAxisSize,
   transformBarChartGroupsToCommonGroups,
 } from '../helpers'
 
@@ -758,5 +760,39 @@ describe('getAxisShowPositions', () => {
       top: false,
       bottom: true,
     })
+  })
+})
+
+describe('getColumnSize', () => {
+  it('возвращает размер бара, который зависит от размера текста', () => {
+    expect(getColumnSize({ size: 'auto', valueLength: 1, isVertical: true })).toEqual('s')
+    expect(getColumnSize({ size: 'auto', valueLength: 2, isVertical: true })).toEqual('m')
+    expect(getColumnSize({ size: 'auto', valueLength: 3, isVertical: true })).toEqual('l')
+    expect(getColumnSize({ size: 'auto', valueLength: 4, isVertical: true })).toEqual('xl')
+    expect(getColumnSize({ size: 'auto', valueLength: 5, isVertical: true })).toEqual('xxl')
+  })
+
+  it('возвращает размер m для горизонтального графика', () => {
+    expect(getColumnSize({ size: 'auto', valueLength: 5, isVertical: false })).toEqual('m')
+  })
+
+  it('возвращает заданный размер', () => {
+    expect(getColumnSize({ size: 'm', valueLength: 5, isVertical: false })).toEqual('m')
+    expect(getColumnSize({ size: 's', valueLength: 10, isVertical: true })).toEqual('s')
+    expect(getColumnSize({ size: 'l', valueLength: 0, isVertical: false })).toEqual('l')
+    expect(getColumnSize({ size: 'xl', valueLength: 15, isVertical: true })).toEqual('xl')
+  })
+})
+
+describe('toAxisSize', () => {
+  it('возвращает Axis размер', () => {
+    expect(toAxisSize('l')).toEqual('m')
+    expect(toAxisSize('xl')).toEqual('m')
+    expect(toAxisSize('xxl')).toEqual('m')
+  })
+
+  it('возвращает заданный размер', () => {
+    expect(toAxisSize('s')).toEqual('s')
+    expect(toAxisSize('m')).toEqual('m')
   })
 })

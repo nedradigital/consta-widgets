@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
@@ -25,6 +25,7 @@ type Props = {
   showPositions?: ShowPositions
   showValueLine?: boolean
   showLabelLine?: boolean
+  showValues?: boolean
   unit?: string
   unitPosition?: UnitPosition
   size: Size
@@ -32,6 +33,7 @@ type Props = {
   verticalStyles?: React.CSSProperties
   bottomControls?: React.ReactNode
   formatValue?: FormatValue
+  isNegative?: boolean
 }
 
 const unitSize: Record<Size, TextSize> = {
@@ -70,6 +72,8 @@ export const Axis: React.FC<Props> = ({
   horizontalStyles = {},
   verticalStyles = {},
   formatValue,
+  showValues,
+  isNegative,
 }) => {
   const mainRef = useRef<HTMLDivElement>(null)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
@@ -111,6 +115,8 @@ export const Axis: React.FC<Props> = ({
 
   const padding = getCalculatedSizeWithBaseSize(PADDING)
 
+  const classNameIndent = isNegative && showValues && css.showValue
+
   return (
     <div
       ref={mainRef}
@@ -128,10 +134,14 @@ export const Axis: React.FC<Props> = ({
       }}
     >
       {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, size)}
-      <div className={css.topTicks}>{showPositions.top && renderHorizontal('top')}</div>
+      <div className={classnames(css.topTicks, classNameIndent)}>
+        {showPositions.top && renderHorizontal('top')}
+      </div>
       <div className={css.rightTicks}>{showPositions.right && renderVertical('right')}</div>
       <div className={css.graph}>{children}</div>
-      <div className={css.bottomTicks}>{showPositions.bottom && renderHorizontal('bottom')}</div>
+      <div className={classnames(css.bottomTicks, classNameIndent)}>
+        {showPositions.bottom && renderHorizontal('bottom')}
+      </div>
       <div className={css.leftTicks}>{showPositions.left && renderVertical('left')}</div>
       {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, size)}
     </div>

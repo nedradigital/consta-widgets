@@ -9,12 +9,13 @@ import { Axis } from '@/BarChartAxis'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Grid } from '@/Grid'
 
-import { Bar, COLUMN_PADDING, COLUMN_WIDTHS, TooltipData } from './components/Bar'
+import { Bar, COLUMN_PADDING_HORIZONTAL, COLUMN_WIDTHS, TooltipData } from './components/Bar'
 import { TooltipComponent as Tooltip } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
   createFormatValue,
   getAxisShowPositions,
+  getColumnSize,
   getDataColumns,
   getDomain,
   getEveryNTick,
@@ -23,14 +24,15 @@ import {
   GROUP_INNER_PADDING,
   OUTER_PADDING,
   scaleBand,
+  Size,
+  toAxisSize,
 } from './helpers'
 import css from './index.css'
 
-export const sizes = ['s', 'm'] as const
-export type Size = typeof sizes[number]
-
 export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 export type UnitPosition = typeof unitPositions[number]
+export const orientation = ['horizontal', 'vertical'] as const
+export type Orientation = typeof orientation[number]
 
 type CommonAxisShowPosition = 'both' | 'none'
 export type XAxisShowPosition = 'top' | 'bottom' | CommonAxisShowPosition
@@ -79,7 +81,7 @@ type Props = {
   (
     | {
         isTornado?: false
-        orientation: 'horizontal' | 'vertical'
+        orientation: Orientation
       }
     | {
         isTornado: true
@@ -111,35 +113,44 @@ export const BarChart: React.FC<Props> = props => {
   const groupsDomain = getGroupDomain(groups, props.isTornado)
 
   const valuesDomain = getDomain(groups, props.isTornado)
+  const maxValue = valuesDomain[1]
+  const columnSize = getColumnSize({
+    size,
+    valueLength: maxValue.toString().length,
+    isVertical,
+  })
   const isNegative = Math.min(...valuesDomain) < 0
   const paddingCount = isNegative || props.isTornado ? 2 : 1
   const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
-  const paddingInner = getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[size])
+  const paddingInner = getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[columnSize])
   const paddingOuter = getCalculatedSizeWithBaseSize(OUTER_PADDING)
   const padding =
     !isVertical && !props.isMultiBar && props.showValues ? getCalculatedSizeWithBaseSize(50) : 0
 
   const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
   const svgHeight = height ? Math.round(height) : 0
+  const isMultiColumn = groups.some(group => group.values.length > 2)
+  const isVerticalMultiColumn = isVertical ? isMultiColumn : false
+  const showValues = !props.isMultiBar && props.showValues && !isVerticalMultiColumn
 
   const getGroupsSizes = () => {
-    const columnSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
-    const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING[size])
+    const columnWidth = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[columnSize])
+    const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING_HORIZONTAL[columnSize])
 
     return groups.reduce<Record<string, number>>((acc, group) => {
       const { groupName, values } = group
 
       const countColumns = values.length
-      const groupSize = countColumns * columnSize + (countColumns - 1) * columnPadding
+      const groupSize = countColumns * columnWidth + (countColumns - 1) * columnPadding
 
       /**
        * Для торнадо данные приходят в виде 2 баров, но рисуются они на одной оси
        * Поэтому отступа между ними быть не может и размер группы всегда равен размеру бара
        */
       if (props.isTornado) {
-        acc[groupName] = columnSize
+        acc[groupName] = columnWidth
       } else {
-        acc[groupName] = groupSize < columnSize ? columnSize : groupSize
+        acc[groupName] = groupSize < columnWidth ? columnWidth : groupSize
       }
 
       return acc
@@ -157,13 +168,12 @@ export const BarChart: React.FC<Props> = props => {
     domain: valuesDomain,
     range: getRange(isVertical ? svgHeight : svgWidth, isVertical),
   })
-
   const dataColumns = getDataColumns({
     groups,
     categories,
     valuesScale,
     hasRatio: props.isMultiBar ? props.hasRatio : false,
-    maxValue: valuesDomain[1],
+    maxValue,
   })
 
   const getMinSize = () => {
@@ -207,10 +217,12 @@ export const BarChart: React.FC<Props> = props => {
       isHorizontal={!isVertical}
       unit={unit}
       unitPosition={unitPosition}
-      size={size}
+      size={toAxisSize(columnSize)}
       formatValue={formatValue}
       showPositions={axisShowPositions}
       horizontalStyles={commonStyle}
+      showValues={showValues}
+      isNegative={isNegative}
     >
       <div
         ref={ref}
@@ -244,8 +256,8 @@ export const BarChart: React.FC<Props> = props => {
                 onMouseEnter={setTooltipData}
                 parentRef={svgRef}
                 formatValue={formatValueForLabel}
-                size={size}
-                showValues={!props.isMultiBar && props.showValues}
+                size={columnSize}
+                showValues={showValues}
                 isTornado={props.isTornado}
               />
             )
@@ -259,7 +271,7 @@ export const BarChart: React.FC<Props> = props => {
             svgParentRef={svgRef}
             color={colorGroups}
             formatValue={formatValueForLabel}
-            size={size}
+            size={columnSize}
           />
         )}
       </div>

@@ -7,7 +7,7 @@ import { PositionState } from '@/common/utils/tooltips'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Tooltip } from '@/Tooltip'
 
-import { Size } from '../..'
+import { ColumnSize } from '../../helpers'
 import { COLUMN_WIDTHS, TooltipData } from '../Bar'
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   svgParentRef: React.RefObject<SVGGElement>
   color: ColorGroups
   formatValue?: FormatValue
-  size: Size
+  size: ColumnSize
 }
 
 const getOffsetPosition = (parameters: {
@@ -26,7 +26,7 @@ const getOffsetPosition = (parameters: {
   isVertical: boolean
   baseSize: number
   params?: TooltipData['params']
-  size: Size
+  size: ColumnSize
 }): PositionState => {
   const { innerTranslate, svgRef, isVertical, baseSize, params, size } = parameters
 

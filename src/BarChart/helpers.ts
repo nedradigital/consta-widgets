@@ -5,28 +5,29 @@ import { FormatValue } from '@/common/types'
 import { getEveryN } from '@/common/utils/array'
 import { NumberRange, Scaler } from '@/common/utils/scale'
 import { ShowPositions } from '@/BarChartAxis'
+import { Size as TickSize } from '@/Ticks'
 
-import {
-  Column,
-  Groups,
-  SingleBarChartGroups,
-  Size,
-  XAxisShowPosition,
-  YAxisShowPosition,
-} from './'
+import { Column, Groups, SingleBarChartGroups, XAxisShowPosition, YAxisShowPosition } from './'
 import { ColumnDetail } from './components/Bar'
+
+export const barCharSizes = ['s', 'm', 'l', 'xl', 'xxl', 'auto'] as const
+export type Size = typeof barCharSizes[number]
+export type ColumnSize = Exclude<Size, 'auto'>
 
 type DataColumns = ReadonlyArray<{
   groupName: string
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
 }>
 
-export const CHART_MIN_HEIGHT = 220
+export const CHART_MIN_HEIGHT = 153
 const BAR_MIN_SIZE = 5
 
-export const GROUP_INNER_PADDING: Record<Size, number> = {
+export const GROUP_INNER_PADDING: Record<ColumnSize, number> = {
   s: 8,
   m: 18,
+  l: 18,
+  xl: 18,
+  xxl: 18,
 }
 
 export const OUTER_PADDING = 2
@@ -254,6 +255,45 @@ export const scaleBand = ({
 
       return size > step ? size : step
     },
+  }
+}
+
+type GetColumnSizeParams = {
+  size: Size
+  valueLength: number
+  isVertical: boolean
+}
+
+export const toAxisSize = (size: Size): TickSize => {
+  if (size === 's') {
+    return 's'
+  }
+
+  return 'm'
+}
+
+export const getColumnSize = (params: GetColumnSizeParams): ColumnSize => {
+  const { size, valueLength, isVertical } = params
+
+  if (size !== 'auto') {
+    return size
+  }
+
+  if (size === 'auto' && !isVertical) {
+    return 'm'
+  }
+
+  switch (valueLength) {
+    case 1:
+      return 's'
+    case 2:
+      return 'm'
+    case 3:
+      return 'l'
+    case 4:
+      return 'xl'
+    default:
+      return 'xxl'
   }
 }
 

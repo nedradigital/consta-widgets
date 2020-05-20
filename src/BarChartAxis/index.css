@@ -1,5 +1,6 @@
 .main {
   --vertical-margin: var(--space-s);
+  --vertical-margin-showValue: var(--space-m);
   --horizontal-margin: var(--space-m);
 
   display: grid;
@@ -44,6 +45,10 @@
   grid-area: topTicks;
 
   margin-bottom: var(--vertical-margin);
+
+  &.showValue {
+    margin-bottom: var(--vertical-margin-showValue);
+  }
 }
 
 .leftTicks {
@@ -68,6 +73,10 @@
   grid-area: bottomTicks;
 
   margin-top: var(--vertical-margin);
+
+  &.showValue {
+    margin-top: var(--vertical-margin-showValue);
+  }
 }
 
 .bottomUnit {

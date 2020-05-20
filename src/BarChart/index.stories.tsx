@@ -5,7 +5,7 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
-import { BarChart, unitPositions } from '.'
+import { BarChart, orientation, Orientation, unitPositions } from '.'
 import {
   barChartData,
   multiBarChartData,
@@ -15,6 +15,8 @@ import {
 import { transformBarChartGroupsToCommonGroups } from './helpers'
 
 const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+const getOrientation = (defaultValue: Orientation) =>
+  select('orientation', orientation, defaultValue)
 
 const defaultProps = {
   orientation: 'vertical',
@@ -29,9 +31,12 @@ export const SingleColumn = createStory(
       <BarChart
         {...multiBarChartData}
         {...defaultProps}
+        orientation={getOrientation('vertical')}
+        groups={object('groups', multiBarChartData.groups)}
         unitPosition={getUnitPosition()}
         isMultiBar
         hasRatio={boolean('hasRatio', false)}
+        showValues={boolean('showValues', false)}
       />
     )
   },
@@ -44,9 +49,12 @@ export const TwoColumns = createStory(
       <BarChart
         {...multiBarChartDataWithTwoColumnsOnDate}
         {...defaultProps}
+        orientation={getOrientation('vertical')}
+        groups={object('groups', multiBarChartDataWithTwoColumnsOnDate.groups)}
         unitPosition={getUnitPosition()}
         isMultiBar
         hasRatio={boolean('hasRatio', false)}
+        showValues={boolean('showValues', false)}
       />
     )
   },
@@ -60,9 +68,10 @@ export const ThreeColumns = createStory(
         groups={object('data', transformBarChartGroupsToCommonGroups(barChartData.groups))}
         colorGroups={barChartData.colorGroups}
         {...defaultProps}
+        orientation={getOrientation('vertical')}
         unitPosition={getUnitPosition()}
         isMultiBar={false}
-        showValues
+        showValues={boolean('showValues', true)}
       />
     )
   },
@@ -89,6 +98,7 @@ export const WithFormatValue = createStory(
         ])}
         colorGroups={multiBarChartData.colorGroups}
         {...defaultProps}
+        orientation={getOrientation('vertical')}
         unitPosition={getUnitPosition()}
         formatValueForLabel={value => {
           const date = new Date(value)
@@ -97,6 +107,7 @@ export const WithFormatValue = createStory(
             .map(part => String(part).padStart(2, '0'))
             .join(':')
         }}
+        showValues={boolean('showValues', false)}
         isMultiBar
       />
     )
@@ -104,13 +115,44 @@ export const WithFormatValue = createStory(
   { name: 'с форматированием значений' }
 )
 
+export const WithShowValuesOnTopBar = createStory(
+  () => (
+    <BarChart
+      groups={object('groups', [
+        {
+          groupName: 'Q1',
+          values: [{ apples: 100 }],
+        },
+        {
+          groupName: 'Q2',
+          values: [{ apples: 200 }],
+        },
+        {
+          groupName: 'Q3',
+          values: [{ apples: 300 }],
+        },
+      ])}
+      colorGroups={multiBarChartData.colorGroups}
+      {...defaultProps}
+      orientation={getOrientation('vertical')}
+      unitPosition={getUnitPosition()}
+      isMultiBar={false}
+      showValues={boolean('showValues', true)}
+      size="auto"
+    />
+  ),
+  { name: 'с подписью над столбцами' }
+)
+
 export const Minimalistic = createStory(
   () => (
     <BarChart
       {...multiBarChartData}
-      orientation="horizontal"
+      groups={object('groups', multiBarChartData.groups)}
+      orientation={getOrientation('horizontal')}
       gridTicks={0}
       valuesTicks={0}
+      showValues={boolean('showValues', false)}
       isMultiBar
     />
   ),
@@ -146,8 +188,8 @@ export const WithNegativeValues = createStory(
         colorGroups={multiBarChartData.colorGroups}
         {...defaultProps}
         isMultiBar={false}
-        showValues
-        orientation="horizontal"
+        showValues={boolean('showValues', true)}
+        orientation={getOrientation('horizontal')}
       />
     )
   },
@@ -158,11 +200,12 @@ export const Tornado = createStory(
   () => (
     <BarChart
       {...tornadoChartData}
+      groups={object('groups', tornadoChartData.groups)}
       gridTicks={4}
       valuesTicks={1}
       isMultiBar={false}
       size="m"
-      showValues
+      showValues={boolean('showValues', true)}
       isTornado
       xAxisShowPosition="bottom"
       yAxisShowPosition="left"

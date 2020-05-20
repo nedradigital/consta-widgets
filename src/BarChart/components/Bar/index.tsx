@@ -7,8 +7,8 @@ import { ColorGroups, FormatValue } from '@/common/types'
 import { Scaler } from '@/common/utils/scale'
 import { useBaseSize } from '@/BaseSizeContext'
 
-import { Size } from '../..'
-import { isLeftTornadoBar } from '../../helpers'
+import { ColumnSize, isLeftTornadoBar, Size } from '../../helpers'
+import { VerticalValues } from '../VerticalValues'
 
 import css from './index.css'
 
@@ -28,6 +28,12 @@ type Part = {
   isRounded: boolean
   value: number
   backgroundColor: string
+}
+
+type RenderValueProps = {
+  part: Part
+  partIndex: number
+  columnIndex: number
 }
 
 type Parts = readonly Part[]
@@ -55,18 +61,24 @@ type Props = {
   onMouseEnter: MouseAction
   parentRef: React.RefObject<SVGGElement>
   formatValue?: FormatValue
-  size: Size
+  size: ColumnSize
   showValues?: boolean
   isTornado?: boolean
 }
 
-export const COLUMN_WIDTHS: Record<Size, number> = {
+export const COLUMN_WIDTHS: Record<ColumnSize, number> = {
   s: 4,
   m: 12,
+  l: 24,
+  xl: 36,
+  xxl: 42,
 }
-export const COLUMN_PADDING: Record<Size, number> = {
+export const COLUMN_PADDING_HORIZONTAL: Record<ColumnSize, number> = {
   s: 2,
   m: 4,
+  l: 4,
+  xl: 4,
+  xxl: 4,
 }
 
 const getBarClassName = ({
@@ -96,7 +108,7 @@ const getBarClassName = ({
       css.borderRight,
     isRounded && isVertical && isNegative && css.borderBottom,
     isRounded && isVertical && !isNegative && css.borderTop,
-    size === 'm' && css.sizeM
+    size !== 's' && css.sizeM
   )
 }
 
@@ -119,15 +131,16 @@ export const Bar: React.FC<Props> = props => {
     flattenDeep(columnDetails.map(group => group.map(column => column.columnName)))
   )
   const columnDefaultSize = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[size])
-  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING[size])
+  const columnPaddingHorizontal = getCalculatedSizeWithBaseSize(COLUMN_PADDING_HORIZONTAL[size])
   const barSize =
-    columnDefaultSize * uniqueColumnNames.length + columnPadding * (uniqueColumnNames.length - 1)
+    columnDefaultSize * uniqueColumnNames.length +
+    columnPaddingHorizontal * (uniqueColumnNames.length - 1)
   const zeroPoint = Math.ceil(valuesScale.scale(0))
 
   const getTextPositionOnX = (value: number, width: number, index: number) => {
     return value < 0 || (isTornado && isLeftTornadoBar(index))
-      ? zeroPoint - width - columnPadding
-      : zeroPoint + width + columnPadding
+      ? zeroPoint - width - columnPaddingHorizontal
+      : zeroPoint + width + columnPaddingHorizontal
   }
 
   const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth(groupName) : 0
@@ -151,11 +164,11 @@ export const Bar: React.FC<Props> = props => {
     }
 
     if (isTornado && isAxisY) {
-      return (columnDefaultSize + columnPadding) / 2
+      return (columnDefaultSize + columnPaddingHorizontal) / 2
     }
 
     if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
-      return (columnDefaultSize + columnPadding) * index
+      return (columnDefaultSize + columnPaddingHorizontal) * index
     }
 
     if ((part.value > 0 && isAxisX) || (part.value < 0 && isAxisY)) {
@@ -238,26 +251,21 @@ export const Bar: React.FC<Props> = props => {
     )
   }
 
-  const renderValues = ({
-    part,
-    partIndex,
-    columnIndex,
-  }: {
-    part: Part
-    partIndex: number
-    columnIndex: number
-  }) => {
+  const renderHorizontalValues = (
+    { part, partIndex, columnIndex }: RenderValueProps,
+    className: string
+  ) => {
     const { y, columnSize, value } = part
 
     const isNegative = value < 0
     const textPositionX = getTextPositionOnX(value, columnSize, columnIndex)
-    const textPositionY = y + columnPadding + columnDefaultSize / 2
+    const textPositionY = y + columnPaddingHorizontal + columnDefaultSize / 2
     const textAnchor = isNegative || (isTornado && isLeftTornadoBar(columnIndex)) ? 'end' : 'start'
 
     return (
       <text
         key={groupName + partIndex}
-        className={classnames(css.label, size === 's' && css.sizeS, size === 'm' && css.sizeM)}
+        className={className}
         x={textPositionX}
         y={textPositionY}
         textAnchor={textAnchor}
@@ -265,6 +273,26 @@ export const Bar: React.FC<Props> = props => {
         {value}
       </text>
     )
+  }
+
+  const renderValues = (column: RenderValueProps) => {
+    const className = classnames(css.label, size === 's' ? css.sizeS : css.sizeM)
+    if (isVertical) {
+      const { part, partIndex } = column
+      const { columnSize, y, value } = part
+      return (
+        <VerticalValues
+          key={groupName + partIndex}
+          className={className}
+          value={value}
+          columnSize={columnSize}
+          y={y}
+          columnDefaultSize={columnDefaultSize}
+        />
+      )
+    } else {
+      return renderHorizontalValues(column, className)
+    }
   }
 
   return (
@@ -281,7 +309,7 @@ export const Bar: React.FC<Props> = props => {
           )
         )}
       </g>
-      {!isVertical && showValues && (
+      {showValues && (
         <g transform={transform}>
           {columnDetailsData.map((column, columnIndex) =>
             column.parts.map((part, partIndex) => renderValues({ part, partIndex, columnIndex }))
