@@ -15,8 +15,7 @@ export type Data = ProgressData & {
   ticks?: readonly Tick[]
   summary: string | number
   colorGroupName: string
-  caption?: string
-  tooltip?: React.ReactNode
+  caption?: React.ReactNode
 }
 
 export type Size = 's' | 'm' | 'l'
@@ -25,7 +24,6 @@ type Props = {
   size?: Size
   colorGroups: ColorGroups
   data: readonly Data[]
-  isCaptionBold?: boolean
 }
 
 export const getValueRatio = ({
@@ -57,19 +55,7 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) 
           <div className={css.item} key={i}>
             {caption && (
               <div className={css.row}>
-                <div className={classnames(css.cell, css.isTitleCell)}>
-                  {/* Подумать как быть с текстовым виджетом в компонентах */}
-                  {/* {caption && (
-                    <TextWidget
-                      data={{ text: caption, tooltip }}
-                      params={{
-                        text: caption,
-                        croppedLineCount: 1,
-                        type: isCaptionBold ? 'text3' : 'text2',
-                      }}
-                    />
-                  )} */}
-                </div>
+                <div className={classnames(css.cell, css.isTitleCell)}>{caption}</div>
               </div>
             )}
 
