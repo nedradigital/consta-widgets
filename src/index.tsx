@@ -1,3 +1,5 @@
+// Components
+export { Badge } from '@/components/Badge'
 export { BarChart } from '@/components/BarChart'
 export { DatePicker } from '@/components/DatePicker'
 export { DonutChart } from '@/components/DonutChart'
@@ -16,3 +18,6 @@ export { Roadmap } from '@/components/Roadmap'
 export { Stats } from '@/components/Stats'
 export { TableLegend } from '@/components/TableLegend'
 export { Tooltip } from '@/components/Tooltip'
+
+// Contexts
+export { BaseSizeContext, useBaseSize } from './contexts'
