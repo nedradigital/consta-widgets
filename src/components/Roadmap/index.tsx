@@ -204,13 +204,13 @@ export const Roadmap: React.FC<Props> = props => {
   }
 
   const currentDayLineStyle: React.CSSProperties = {
-    top: currentDayOffsetTop,
+    marginTop: currentDayOffsetTop,
     left: getXCoordByDate({
       startDate: currentDay,
       monthWidth,
       graphStartDate: startDate,
     }),
-    height: calendarTbodyHeight,
+    maxHeight: `calc(100% - ${currentDayOffsetTop}px)`,
   }
 
   return (

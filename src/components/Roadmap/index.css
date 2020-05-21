@@ -33,6 +33,7 @@
   position: relative;
 
   overflow-x: auto;
+  overflow-y: hidden;
 
   border-right: 1px solid var(--separate-line-color);
   border-left: 1px solid var(--separate-line-color);
@@ -111,7 +112,7 @@
   --current-day-width: 1px;
 
   position: absolute;
-  top: calc(var(--space-s) * -1);
+  top: 0;
 
   width: var(--current-day-width);
   height: 100%;
