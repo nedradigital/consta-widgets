@@ -132,7 +132,15 @@ export const BarChart: React.FC<Props> = props => {
       const countColumns = values.length
       const groupSize = countColumns * columnSize + (countColumns - 1) * columnPadding
 
-      acc[groupName] = groupSize < columnSize ? columnSize : groupSize
+      /**
+       * Для торнадо данные приходят в виде 2 баров, но рисуются они на одной оси
+       * Поэтому отступа между ними быть не может и размер группы всегда равен размеру бара
+       */
+      if (props.isTornado) {
+        acc[groupName] = columnSize
+      } else {
+        acc[groupName] = groupSize < columnSize ? columnSize : groupSize
+      }
 
       return acc
     }, {})
