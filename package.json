@@ -6,9 +6,7 @@
   "license": "UNLICENSED",
   "types": "lib/index.d.ts",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.css",
-    "lib/**/*.d.ts",
+    "lib",
     "!lib/*.css.d.ts",
     "!lib/**/__tests__",
     "!lib/**/example-data",
