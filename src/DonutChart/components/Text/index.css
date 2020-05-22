@@ -50,8 +50,6 @@
   }
 
   .main.top & {
-    justify-content: flex-start;
-
     padding-top: var(--padding-from-border);
     padding-bottom: var(--donut-width);
   }
@@ -66,8 +64,6 @@
   }
 
   .main.bottom & {
-    justify-content: flex-end;
-
     padding-top: var(--donut-width);
     padding-bottom: var(--padding-from-border);
   }
@@ -83,7 +79,7 @@
 }
 
 .title {
-  line-height: var(--line-height-text-xs);
+  line-height: var(--line-height-text-s);
 
   white-space: nowrap;
 

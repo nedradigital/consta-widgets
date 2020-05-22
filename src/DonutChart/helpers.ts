@@ -9,7 +9,7 @@ export const donutSize: Record<number, number> = {
 }
 
 export const minChartSize: Record<number, number> = {
-  1: 42,
+  1: 50,
   2: 100,
   3: 150,
 }
