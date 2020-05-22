@@ -18,8 +18,8 @@
 
   &.compactUnit {
     grid-template-areas:
-      'number'
-      'unit';
+      'unit'
+      'number';
   }
 
   &.full {
