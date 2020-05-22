@@ -4,135 +4,87 @@ import { AttachedToPosition, Direction } from '@/Tooltip/index'
 
 type Size = Pick<ClientRect, 'width' | 'height'>
 
-const isDirectionUp = (direction: Direction) => {
-  return ['upLeft', 'upCenter', 'upRight'].includes(direction)
-}
+/**
+ * Порядок сторон, куда мы можем развернуть тултип.
+ * Используется первая сторона, в которую смог вписаться тултип.
+ */
+const orderOfDirections: readonly Direction[] = [
+  'downCenter',
+  'upCenter',
 
-const isDirectionDown = (direction: Direction) => {
-  return ['downLeft', 'downCenter', 'downRight'].includes(direction)
-}
+  'downRight',
+  'downLeft',
+  'upRight',
+  'upLeft',
 
-type IsInBorders = {
-  top: boolean
-  bottom: boolean
-  vertical: boolean
-  right: boolean
-  left: boolean
-  horizontal: boolean
-}
+  'left',
+  'right',
+]
 
-export const getIsInBorders = ({
-  position,
-  parentSize,
+const getDirectionAndPosition = ({
+  positionsByDirection,
+  initialDirection,
   tooltipSize,
-  anchorSize = { width: 0, height: 0 },
-  offset = 0,
+  parentSize,
+  bannedDirections,
+  possibleDirections,
 }: {
-  position: Position
-  parentSize: Size
+  positionsByDirection: Record<Direction, Position>
+  initialDirection: Direction
   tooltipSize: Size
-  anchorSize?: Size
-  offset?: number
-}): IsInBorders => {
-  const isInTopBorder = position.y - anchorSize.height <= tooltipSize.height + offset
-  const isInBottomBorder = position.y >= parentSize.height - tooltipSize.height - offset
-  const isInVerticalBorders = isInTopBorder && isInBottomBorder
-  const isInLeftBorder = position.x <= tooltipSize.width + offset
-  const isInRightBorder =
-    position.x + anchorSize.width >= parentSize.width - tooltipSize.width - offset
-  const isInHorizontalBorders = isInLeftBorder && isInRightBorder
+  parentSize: Size
+  possibleDirections: readonly Direction[]
+  bannedDirections: readonly Direction[]
+}) => {
+  const result = orderOfDirections
+    .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
+    .find(dir => {
+      const pos = positionsByDirection[dir]
+      const { width, height } = tooltipSize
+
+      switch (dir) {
+        case 'left': {
+          return pos.x >= 0 && pos.y >= height / 2
+        }
+
+        case 'right': {
+          return pos.x + width <= parentSize.width && pos.y >= height / 2
+        }
+
+        case 'upCenter': {
+          return pos.x >= 0 && pos.x + width <= parentSize.width && pos.y >= 0
+        }
+
+        case 'upLeft': {
+          return pos.x >= 0 && pos.y >= 0
+        }
+
+        case 'upRight': {
+          return pos.x + width <= parentSize.width && pos.y >= 0
+        }
+
+        case 'downCenter': {
+          return (
+            pos.x >= 0 && pos.x + width <= parentSize.width && pos.y + height <= parentSize.height
+          )
+        }
+
+        case 'downLeft': {
+          return pos.x >= 0 && pos.y + height <= parentSize.height
+        }
+
+        case 'downRight': {
+          return pos.x + width <= parentSize.width && pos.y + height <= parentSize.height
+        }
+      }
+    })
+
+  const direction = result || initialDirection
 
   return {
-    top: isInTopBorder,
-    bottom: isInBottomBorder,
-    vertical: isInVerticalBorders,
-    left: isInLeftBorder,
-    right: isInRightBorder,
-    horizontal: isInHorizontalBorders,
+    direction,
+    position: positionsByDirection[direction],
   }
-}
-
-const getDirections = (
-  isInBorders: IsInBorders,
-  initialDirection: Direction
-): readonly Direction[] => {
-  const mutableDirections: Direction[] = []
-
-  switch (true) {
-    case isInBorders.vertical && isInBorders.right: {
-      mutableDirections.push('left')
-    }
-    case isInBorders.vertical && isInBorders.left: {
-      mutableDirections.push('right')
-    }
-    case isInBorders.vertical: {
-      mutableDirections.push(
-        initialDirection.toLocaleLowerCase().includes('left') ? 'left' : 'right'
-      )
-    }
-    case isInBorders.horizontal && isInBorders.bottom: {
-      mutableDirections.push('upCenter')
-    }
-    case isInBorders.horizontal: {
-      mutableDirections.push(initialDirection.includes('up') ? 'upCenter' : 'downCenter')
-    }
-    case isInBorders.top && isInBorders.right: {
-      mutableDirections.push('downLeft')
-    }
-    case isInBorders.top && isInBorders.left: {
-      mutableDirections.push('downRight')
-    }
-    case isInBorders.bottom && isInBorders.right: {
-      mutableDirections.push('upLeft')
-    }
-    case isInBorders.bottom && isInBorders.left: {
-      mutableDirections.push('upRight')
-    }
-    case isInBorders.top: {
-      if (['left', 'upLeft'].includes(initialDirection)) {
-        mutableDirections.push('downLeft')
-      }
-      if (['right', 'upRight'].includes(initialDirection)) {
-        mutableDirections.push('downRight')
-      }
-      if (initialDirection === 'upCenter') {
-        mutableDirections.push('downCenter')
-      }
-      mutableDirections.push(initialDirection)
-    }
-    case isInBorders.right: {
-      if (isDirectionUp(initialDirection)) {
-        mutableDirections.push('upLeft')
-      }
-      if (isDirectionDown(initialDirection)) {
-        mutableDirections.push('downLeft')
-      }
-      mutableDirections.push('left')
-    }
-    case isInBorders.bottom: {
-      if (['left', 'downLeft'].includes(initialDirection)) {
-        mutableDirections.push('upLeft')
-      }
-      if (['right', 'downRight'].includes(initialDirection)) {
-        mutableDirections.push('upRight')
-      }
-      if (initialDirection === 'downCenter') {
-        mutableDirections.push('upCenter')
-      }
-      mutableDirections.push(initialDirection)
-    }
-    case isInBorders.left: {
-      if (isDirectionUp(initialDirection)) {
-        mutableDirections.push('upRight')
-      }
-      if (isDirectionDown(initialDirection)) {
-        mutableDirections.push('downRight')
-      }
-      mutableDirections.push('right')
-    }
-  }
-
-  return mutableDirections
 }
 
 type ComputedPositionAndDirectionProps = {
@@ -180,14 +132,6 @@ export const getComputedPositionAndDirection = (
   const anchorWidth = ('anchorClientRect' in props && props.anchorClientRect.width) || 0
   const anchorHeight = ('anchorClientRect' in props && props.anchorClientRect.height) || 0
 
-  const isInBorders = getIsInBorders({
-    position: initialPosition,
-    parentSize,
-    tooltipSize,
-    offset,
-    anchorSize: { width: anchorWidth, height: anchorHeight },
-  })
-
   const leftPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth))
   const rightPositionX = Math.round(initialPosition.x)
   const centerPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth) / 2)
@@ -230,25 +174,12 @@ export const getComputedPositionAndDirection = (
     },
   }
 
-  const defaultPositionAndDirection = {
-    direction: initialDirection,
-    position: positionsByDirection[initialDirection],
-  }
-
-  if (isInBorders.vertical && isInBorders.horizontal) {
-    return defaultPositionAndDirection
-  }
-
-  const direction = getDirections(isInBorders, initialDirection).find(
-    dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir)
-  )
-
-  if (direction) {
-    return {
-      direction,
-      position: positionsByDirection[direction],
-    }
-  } else {
-    return defaultPositionAndDirection
-  }
+  return getDirectionAndPosition({
+    positionsByDirection,
+    initialDirection,
+    tooltipSize,
+    parentSize,
+    bannedDirections,
+    possibleDirections,
+  })
 }
