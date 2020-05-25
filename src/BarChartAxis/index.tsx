@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import { FormatValue } from '@/common/types'
 import { Scaler } from '@/common/utils/scale'
+import { TextSize } from '@/common/utils/ui-kit'
 import { UnitPosition } from '@/BarChart'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Position, Size, Ticks } from '@/Ticks'
@@ -26,11 +27,16 @@ type Props = {
   showLabelLine?: boolean
   unit?: string
   unitPosition?: UnitPosition
-  size?: Size
+  size: Size
   horizontalStyles?: React.CSSProperties
   verticalStyles?: React.CSSProperties
   bottomControls?: React.ReactNode
   formatValue?: FormatValue
+}
+
+const unitSize: Record<Size, TextSize> = {
+  s: '2xs',
+  m: 'xs',
 }
 
 const defaultShow: ShowPositions = {
@@ -42,8 +48,8 @@ const defaultShow: ShowPositions = {
 
 const PADDING = 6
 
-const renderUnit = (className: string, unit: string) => (
-  <Text tag="div" size="xs" view="secondary" className={className}>
+const renderUnit = (className: string, unit: string, size: Size) => (
+  <Text tag="div" size={unitSize[size]} view="secondary" className={className}>
     {unit}
   </Text>
 )
@@ -121,13 +127,13 @@ export const Axis: React.FC<Props> = ({
         paddingBottom: !showUnitBottom && !showPositions.bottom ? padding : 0,
       }}
     >
-      {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit)}
+      {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, size)}
       <div className={css.topTicks}>{showPositions.top && renderHorizontal('top')}</div>
       <div className={css.rightTicks}>{showPositions.right && renderVertical('right')}</div>
       <div className={css.graph}>{children}</div>
       <div className={css.bottomTicks}>{showPositions.bottom && renderHorizontal('bottom')}</div>
       <div className={css.leftTicks}>{showPositions.left && renderVertical('left')}</div>
-      {unit && showUnitBottom && renderUnit(css.bottomUnit, unit)}
+      {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, size)}
     </div>
   )
 }
