@@ -29,6 +29,9 @@
 
   &:--small {
     font-size: var(--size-text-2xs);
+
+    /* На S размере добавляем единицу для выравнивания текста по вертикали относительно бара */
+    transform: translateY(1px);
   }
 
   &:--medium {
