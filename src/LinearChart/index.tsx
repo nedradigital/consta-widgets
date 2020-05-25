@@ -6,6 +6,7 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/common/types'
+import { getEveryN } from '@/common/utils/array'
 
 import { Axis, GridConfig } from './components/Axis'
 import { HoverLines } from './components/HoverLines'
@@ -444,41 +445,33 @@ export class LinearChart extends React.Component<Props, State> {
 
   getTicks = () => {
     const { isHorizontal, gridConfig } = this.props
-    const { xGuideValue, yGuideValue, xDomain, yDomain } = this.state
+    const { xDomain, yDomain } = this.state
+
+    const mainGridConfig = gridConfig[isHorizontal ? 'x' : 'y']
+    const secondaryGridConfig = gridConfig[isHorizontal ? 'y' : 'x']
+
+    const mainGridTickValues = getMainTickValues({
+      items: this.getAllValues(),
+      domain: isHorizontal ? xDomain : yDomain,
+      ticksCount: mainGridConfig.gridTicks,
+      isHorizontal,
+    })
+
+    const secondaryGridTickValues = getSecondaryTickValues({
+      items: this.getAllValues(),
+      domain: isHorizontal ? yDomain : xDomain,
+      ticksCount: secondaryGridConfig.gridTicks,
+      isHorizontal,
+    })
 
     return {
-      mainLabelTickValues: getMainTickValues({
-        items: this.getAllValues(),
-        domain: isHorizontal ? xDomain : yDomain,
-        gridConfig,
-        tickType: 'labelTicks',
-        guideValue: isHorizontal ? xGuideValue : yGuideValue,
-        isHorizontal,
-      }),
-      mainGridTickValues: getMainTickValues({
-        items: this.getAllValues(),
-        domain: isHorizontal ? xDomain : yDomain,
-        gridConfig,
-        tickType: 'gridTicks',
-        guideValue: isHorizontal ? xGuideValue : yGuideValue,
-        isHorizontal,
-      }),
-      secondaryLabelTickValues: getSecondaryTickValues({
-        items: this.getAllValues(),
-        domain: isHorizontal ? yDomain : xDomain,
-        gridConfig,
-        tickType: 'labelTicks',
-        guideValue: isHorizontal ? yGuideValue : xGuideValue,
-        isHorizontal,
-      }),
-      secondaryGridTickValues: getSecondaryTickValues({
-        items: this.getAllValues(),
-        domain: isHorizontal ? yDomain : xDomain,
-        gridConfig,
-        tickType: 'gridTicks',
-        guideValue: isHorizontal ? yGuideValue : xGuideValue,
-        isHorizontal,
-      }),
+      mainGridTickValues,
+      mainLabelTickValues: getEveryN(mainGridTickValues, mainGridConfig.labelTicks || 0),
+      secondaryGridTickValues,
+      secondaryLabelTickValues: getEveryN(
+        secondaryGridTickValues,
+        secondaryGridConfig.labelTicks || 0
+      ),
     }
   }
 

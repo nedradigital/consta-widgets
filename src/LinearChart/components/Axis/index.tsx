@@ -1,7 +1,9 @@
 import React, { useLayoutEffect } from 'react'
 
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import * as d3 from 'd3'
+import * as _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
 
@@ -58,14 +60,41 @@ type Props = {
 
 const defaultFormatLabel = (v: number) => String(v)
 
+const addGuideToTicks = (ticks: TickValues, guideValue: number | undefined): TickValues =>
+  isNotNil(guideValue) ? _.sortBy(_.uniq([...ticks, guideValue])) : ticks
+
+export const getGridTicksWithGuide = ({
+  isHorizontal,
+  mainTickValues,
+  secondaryTickValues,
+  xGuideValue,
+  yGuideValue,
+}: {
+  isHorizontal: boolean
+  mainTickValues: TickValues
+  secondaryTickValues: TickValues
+  xGuideValue: number | undefined
+  yGuideValue: number | undefined
+}): { x: TickValues; y: TickValues } => {
+  return isHorizontal
+    ? {
+        x: addGuideToTicks(mainTickValues, xGuideValue),
+        y: addGuideToTicks(secondaryTickValues, yGuideValue),
+      }
+    : {
+        x: addGuideToTicks(secondaryTickValues, xGuideValue),
+        y: addGuideToTicks(mainTickValues, yGuideValue),
+      }
+}
+
 export const Axis: React.FC<Props> = ({
   width,
   height,
   lineClipPath,
   scales: { x: scaleX, y: scaleY },
   gridConfig: {
-    x: { labels: xLabelsPos, labelTicks: xLabelTicks, gridTicks: xGridTicks, guide: xGuide },
-    y: { labels: yLabelsPos, labelTicks: yLabelTicks, gridTicks: yGridTicks, guide: yGuide },
+    x: { labels: xLabelsPos, labelTicks: xLabelTicks, guide: xGuide },
+    y: { labels: yLabelsPos, labelTicks: yLabelTicks, guide: yGuide },
   },
   onAxisSizeChange,
   mainLabelTickValues,
@@ -89,8 +118,16 @@ export const Axis: React.FC<Props> = ({
 
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
-  const showXGrid = xGridTicks || xGuide
-  const showYGrid = yGridTicks || yGuide
+
+  const { x: xGridTicks, y: yGridTicks } = getGridTicksWithGuide({
+    isHorizontal,
+    mainTickValues: mainGridTickValues,
+    secondaryTickValues: secondaryGridTickValues,
+    xGuideValue: xGuide ? xGuideValue : undefined,
+    yGuideValue: yGuide ? yGuideValue : undefined,
+  })
+  const showXGrid = Boolean(xGridTicks.length)
+  const showYGrid = Boolean(yGridTicks.length)
 
   const labelsAxis = [
     {
@@ -169,12 +206,12 @@ export const Axis: React.FC<Props> = ({
           .style('transform', labels.transform)
           .call(axis)
           .selectAll('text')
-          .style('text-anchor', (_, index, el) => {
+          .style('text-anchor', (_datum, index, els) => {
             if (['axisBottom', 'axisTop'].includes(labels.direction)) {
               if (index === 0) {
                 return 'start'
               }
-              if (index === el.length - 1) {
+              if (index === els.length - 1) {
                 return 'end'
               }
               return 'middle'
@@ -195,26 +232,16 @@ export const Axis: React.FC<Props> = ({
       .tickSize(-width)
       .tickFormat(() => '')
 
-    const xAxis = xGridTicks
-      ? xGridBase.tickValues([...secondaryGridTickValues])
-      : xGridBase.tickValues([xGuideValue])
-    const yAxis = yGridTicks
-      ? yGridBase.tickValues([...secondaryGridTickValues])
-      : yGridBase.tickValues([yGuideValue])
-
-    const xTicks = !xGridTicks && xGuide ? [xGuideValue] : [...mainGridTickValues]
-    const yTicks = !yGridTicks && yGuide ? [yGuideValue] : [...mainGridTickValues]
-
     const grids = [
       {
         el: xGridRef.current,
-        axis: isHorizontal ? xGridBase.tickValues(xTicks) : xAxis,
+        axis: xGridBase.tickValues([...xGridTicks]),
         withGuide: xGuide,
         guideValue: xGuideValue,
       },
       {
         el: yGridRef.current,
-        axis: isHorizontal ? yAxis : yGridBase.tickValues(yTicks),
+        axis: yGridBase.tickValues([...yGridTicks]),
         withGuide: yGuide,
         guideValue: yGuideValue,
       },

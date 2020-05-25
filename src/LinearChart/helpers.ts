@@ -3,7 +3,6 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Direction, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
-import { GridConfig } from './components/Axis'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
@@ -98,66 +97,51 @@ export const getUniqValues = (
 export const getMainTickValues = ({
   items,
   domain,
-  gridConfig,
-  tickType,
-  guideValue,
+  ticksCount = 0,
   isHorizontal,
 }: {
   items: readonly Item[]
+  ticksCount: number | undefined
   domain: NumberRange
-  gridConfig: GridConfig
-  tickType: 'labelTicks' | 'gridTicks'
-  guideValue: number
-  isHorizontal?: boolean
+  isHorizontal: boolean
 }): TickValues => {
   if (domain === INITIAL_DOMAIN) {
     return []
   }
 
-  const config = gridConfig[isHorizontal ? 'x' : 'y']
   const uniqValues = getUniqValues(items, domain, isHorizontal ? 'x' : 'y')
-  const ticks = config[tickType] || 0
-  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
-  const result =
-    ticks === 0 ? [] : _.chunk(uniqValues, Math.ceil(uniqValues.length / ticks)).map(arr => arr[0])
 
-  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
+  if (ticksCount === 2) {
     return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
   }
 
-  return _.uniq(result.concat(isGuide ? [guideValue] : []))
+  return ticksCount === 0
+    ? []
+    : _.chunk(uniqValues, Math.ceil(uniqValues.length / ticksCount)).map(arr => arr[0])
 }
 
 export const getSecondaryTickValues = ({
   items,
   domain,
-  gridConfig,
-  tickType,
-  guideValue,
+  ticksCount = 0,
   isHorizontal,
 }: {
   items: readonly Item[]
   domain: NumberRange
-  gridConfig: GridConfig
-  tickType: 'labelTicks' | 'gridTicks'
-  guideValue: number
-  isHorizontal?: boolean
+  ticksCount: number | undefined
+  isHorizontal: boolean
 }) => {
   if (domain === INITIAL_DOMAIN) {
     return []
   }
 
-  const config = gridConfig[isHorizontal ? 'y' : 'x']
   const uniqValues = getUniqValues(items, domain, isHorizontal ? 'y' : 'x')
-  const ticks = config[tickType] || 0
-  const isGuide = tickType === 'gridTicks' && config.guide && domain[0] <= guideValue
-  const result = ticks === 0 ? [] : d3.ticks(domain[0], domain[1], ticks)
 
-  if (result.length === 2 || (tickType === 'labelTicks' && [1, 2].includes(ticks))) {
+  if (ticksCount === 2) {
     return _.uniq([uniqValues[0], uniqValues[uniqValues.length - 1]])
   }
 
-  return _.uniq(result.concat(isGuide ? [guideValue] : []))
+  return ticksCount === 0 ? [] : d3.ticks(domain[0], domain[1], ticksCount)
 }
 
 export function flipPointsOnAxes<T extends Item | NotEmptyItem>(
