@@ -3,7 +3,7 @@ import React from 'react'
 import { boolean } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { DEFAULT_COLORS, PyramidChart } from './index'
 

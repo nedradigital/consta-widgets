@@ -3,7 +3,7 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { ImagesList } from '.'
 

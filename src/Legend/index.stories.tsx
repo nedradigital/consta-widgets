@@ -3,8 +3,8 @@ import React from 'react'
 import { number } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 import { ColorGroups } from '@/common/types'
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
 
 import { Legend } from '.'
 

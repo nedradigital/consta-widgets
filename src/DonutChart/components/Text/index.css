@@ -79,7 +79,7 @@
 }
 
 .title {
-  line-height: var(--line-height-text-s);
+  line-height: var(--line-height-text-xs);
 
   white-space: nowrap;
 
@@ -107,7 +107,7 @@
 
 .subvalue {
   font-weight: bold;
-  line-height: var(--line-height-text-s);
+  line-height: var(--line-height-text-xs);
 
   color: var(--color-typo-primary);
 }

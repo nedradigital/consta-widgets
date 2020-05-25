@@ -1,8 +1,8 @@
 import { date as knobsDate, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 import { isValidDate } from '@/common/utils/type-guards'
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
 
 import { DatePicker, DateRange, sizes } from '.'
 import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'

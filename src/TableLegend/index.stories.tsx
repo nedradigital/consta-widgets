@@ -3,7 +3,7 @@ import React from 'react'
 import { boolean, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 import { Badge } from '@/Badge'
 import { labelTypes as legendTypes } from '@/LegendItem'
 

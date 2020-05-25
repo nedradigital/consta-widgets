@@ -3,7 +3,7 @@ import React from 'react'
 import { boolean, object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { BarChart, unitPositions } from '.'
 import {
