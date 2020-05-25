@@ -11,6 +11,7 @@ export const MIN_FONT_SIZE = 20
 export const VALUE_MAX_FONT_SIZE = 96
 export const TITLE_FONT_SIZE_RATIO = 0.4
 export const SUBVALUE_FONT_SIZE_RATIO = 0.5
+export const MARGIN_FROM_LINE = 2
 
 export const getContentBorderRadius = (radius: number, position?: HalfDonut) => {
   if (!position) {
