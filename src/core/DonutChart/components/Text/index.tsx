@@ -22,6 +22,7 @@ import {
   MIN_FONT_SIZE,
   SUBVALUE_FONT_SIZE_RATIO,
   TITLE_FONT_SIZE_RATIO,
+  TITLE_MIN_FONT_SIZE,
 } from './helpers'
 import css from './index.css'
 
@@ -36,20 +37,34 @@ type Props = {
   data: Data
   radius: number
   lineWidth: number
+  titlePosition: 'top' | 'bottom'
+  paddingFromBorder: number
+  showTitle: boolean
+  showSubBlock: boolean
   halfDonut?: HalfDonut
 }
 
-export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut }) => {
+export const DonutText: React.FC<Props> = ({
+  data,
+  radius,
+  lineWidth,
+  titlePosition,
+  paddingFromBorder,
+  showTitle,
+  showSubBlock,
+  halfDonut,
+}) => {
   const [baseFontSize, setBaseFontSize] = React.useState(0)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const isHalfDonutHorizontal = getIsHalfDonutHorizontal(halfDonut)
   const isHalfDonutVertical = getIsHalfDonutVertical(halfDonut)
-  const isSubBlock = isHalfDonutVertical && data.subTitle && data.subValue
   const diameter = radius * 2
   const paddingFromLine = halfDonut ? lineWidth : getCalculatedSizeWithBaseSize(7)
-  const paddingFromBorder = halfDonut ? getCalculatedSizeWithBaseSize(8) : 0
-  const titleFontSize = Math.round(baseFontSize * TITLE_FONT_SIZE_RATIO)
+  const titleFontSize = Math.max(
+    Math.round(baseFontSize * TITLE_FONT_SIZE_RATIO),
+    TITLE_MIN_FONT_SIZE
+  )
   const subValueFontSize = Math.round(baseFontSize * SUBVALUE_FONT_SIZE_RATIO)
   const contentHeight = getContentHeight({
     diameter,
@@ -68,7 +83,7 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
     height: contentHeight,
     ratio: contentHeightValueRatio,
   })
-  const valueMaxWidth = isHalfDonutHorizontal ? `${getValueMaxWidth(diameter)}px` : undefined
+  const valueMaxWidth = `${getValueMaxWidth(diameter)}px`
 
   const contentStyle: React.CSSProperties = {
     maxWidth: (isHalfDonutVertical ? radius : diameter) - MARGIN_FROM_LINE,
@@ -77,7 +92,7 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
   }
 
   const elements = [
-    halfDonut ? (
+    showTitle && data.title ? (
       <div key="title" className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
         {data.title}
       </div>
@@ -106,15 +121,19 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
       }}
     >
       <div className={css.content} style={contentStyle}>
-        {halfDonut === 'bottom' ? [...elements].reverse() : elements}
-        {isSubBlock && (
+        {titlePosition === 'bottom' ? [...elements].reverse() : elements}
+        {showSubBlock && (
           <>
-            <div className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
-              {data.subTitle}
-            </div>
-            <div className={css.subvalue} style={{ fontSize: `${subValueFontSize}px` }}>
-              {data.subValue}
-            </div>
+            {data.subTitle && (
+              <div className={css.title} style={{ fontSize: `${titleFontSize}px` }}>
+                {data.subTitle}
+              </div>
+            )}
+            {data.subValue && (
+              <div className={css.subvalue} style={{ fontSize: `${subValueFontSize}px` }}>
+                {data.subValue}
+              </div>
+            )}
           </>
         )}
       </div>

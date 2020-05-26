@@ -16,7 +16,9 @@ export type DataItem = {
 
 export type Data = readonly DataItem[]
 
-export type HalfDonut = 'top' | 'left' | 'right' | 'bottom'
+export const halvesDonut = ['top', 'left', 'right', 'bottom'] as const
+
+export type HalfDonut = typeof halvesDonut[number]
 
 type Props = {
   data: Data

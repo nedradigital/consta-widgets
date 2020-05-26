@@ -6,6 +6,7 @@ const TEXT_CHORD_ANGLE_IN_RADIANS = deg2rad(35)
 export const MIN_FONT_SIZE = 20
 export const VALUE_MAX_FONT_SIZE = 96
 export const TITLE_FONT_SIZE_RATIO = 0.4
+export const TITLE_MIN_FONT_SIZE = 10
 export const SUBVALUE_FONT_SIZE_RATIO = 0.5
 export const MARGIN_FROM_LINE = 2
 
@@ -66,7 +67,12 @@ export const getValueHeightRatio = ({
 }
 
 export const getValueMaxFontSize = ({ height, ratio }: { height: number; ratio: number }) => {
-  return Math.min(Math.round(height * ratio), VALUE_MAX_FONT_SIZE)
+  /**
+   * В случае, если максимальный размер окажется меньше минимально допустимого, возвращаем минимальный,
+   * т.к. <TextFit /> отдает предпочтение указанному максимальному размеру,
+   * без данного ограничения шрифт может оказаться меньше минимального
+   */
+  return Math.max(Math.min(Math.round(height * ratio), VALUE_MAX_FONT_SIZE), MIN_FONT_SIZE)
 }
 
 /**
