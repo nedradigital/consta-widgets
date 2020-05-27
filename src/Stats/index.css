@@ -1,7 +1,7 @@
 .container {
   display: grid;
 
-  grid-auto-columns: max-content;
+  grid-template-columns: min-content;
 
   justify-items: start;
 
@@ -12,18 +12,17 @@
 
   &.compactTitle {
     grid-template-areas:
-      'title'
-      'number';
+      'title title'
+      'number number';
   }
 
   &.compactUnit {
     grid-template-areas:
-      'unit'
-      'number';
+      'unit unit'
+      'number number';
   }
 
   &.full {
-    grid-template-columns: min-content;
     grid-template-areas:
       'title title'
       'number badge'
