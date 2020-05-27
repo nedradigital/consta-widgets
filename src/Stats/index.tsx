@@ -1,7 +1,7 @@
 import { Text } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { TextSize } from '@/common/utils/ui-kit'
+import { TextProps, TextSize } from '@/common/utils/ui-kit'
 import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/Badge'
 
 import css from './index.css'
@@ -66,6 +66,14 @@ const numberSizes: Record<Size, TextSize> = {
   l: '6xl',
 }
 
+const numberLineHeights: Record<Size, TextProps['lineHeight']> = {
+  '2xs': 's',
+  xs: 's',
+  s: 'xs',
+  m: 'xs',
+  l: 'xs',
+}
+
 const badgeSizes: Record<Size, BadgeSize> = {
   '2xs': 's',
   xs: 's',
@@ -101,11 +109,18 @@ export const Stats: React.FC<Props> = ({
 }) => {
   return (
     <div className={classnames(css.container, sizeClass[size], layoutClass[layout])}>
-      <Text tag="div" size={titleSizes[size]} view="secondary" className={css.title}>
+      <Text tag="div" size={titleSizes[size]} lineHeight="s" view="primary" className={css.title}>
         {title}
       </Text>
 
-      <Text tag="div" view="primary" size={numberSizes[size]} weight="bold" className={css.number}>
+      <Text
+        tag="div"
+        view="primary"
+        size={numberSizes[size]}
+        lineHeight={numberLineHeights[size]}
+        weight="bold"
+        className={css.number}
+      >
         {getNumberSign(value, withSign)}
         {formatValue(value)}
       </Text>
@@ -116,7 +131,7 @@ export const Stats: React.FC<Props> = ({
         </Badge>
       )}
 
-      <Text tag="div" size={unitSizes[size]} view="secondary" className={css.unit}>
+      <Text tag="div" size={unitSizes[size]} lineHeight="s" view="secondary" className={css.unit}>
         {unit}
       </Text>
     </div>
