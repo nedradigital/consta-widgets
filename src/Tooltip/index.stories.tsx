@@ -2,8 +2,8 @@ import { useRef, useState } from 'react'
 
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 
+import { createMetadata, createStory } from '@/common/storybook'
 import { PositionState, useTooltipReposition } from '@/common/utils/tooltips'
-import { createMetadata, createStory } from '@/common/utils/Storybook'
 
 import { directions, Tooltip } from '.'
 

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { action } from '@storybook/addon-actions'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { FilterTooltip } from '.'
 

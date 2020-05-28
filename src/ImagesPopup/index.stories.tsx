@@ -3,7 +3,7 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/utils/Storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { ImagesPopup } from '.'
 

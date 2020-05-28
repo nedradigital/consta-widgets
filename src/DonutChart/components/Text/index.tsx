@@ -1,6 +1,7 @@
 import React from 'react'
 import { Textfit } from 'react-textfit'
 
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/BaseSizeContext'
@@ -14,13 +15,13 @@ import { HalfDonut } from '../Donut'
 import {
   getContentBorderRadius,
   getContentHeight,
+  getValueHeightRatio,
   getValueMaxFontSize,
   getValueMaxWidth,
   MARGIN_FROM_LINE,
   MIN_FONT_SIZE,
   SUBVALUE_FONT_SIZE_RATIO,
   TITLE_FONT_SIZE_RATIO,
-  VALUE_MAX_FONT_SIZE,
 } from './helpers'
 import css from './index.css'
 
@@ -58,12 +59,22 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
     paddingFromBorder,
     paddingFromLine,
   })
+  const contentHeightValueRatio = getValueHeightRatio({
+    isHalfDonutHorizontal,
+    isHalfDonutVertical,
+    titleIsExist: isDefined(data.title),
+  })
   const valueMaxSize = getValueMaxFontSize({
     height: contentHeight,
-    maxFontSize: VALUE_MAX_FONT_SIZE,
-    halfDonut,
+    ratio: contentHeightValueRatio,
   })
-  const valueMaxWidth = getValueMaxWidth(diameter, halfDonut)
+  const valueMaxWidth = isHalfDonutHorizontal ? `${getValueMaxWidth(diameter)}px` : undefined
+
+  const contentStyle: React.CSSProperties = {
+    maxWidth: (isHalfDonutVertical ? radius : diameter) - MARGIN_FROM_LINE,
+    maxHeight: (isHalfDonutHorizontal ? radius : diameter) - MARGIN_FROM_LINE,
+    borderRadius: getContentBorderRadius(radius, halfDonut),
+  }
 
   const elements = [
     halfDonut ? (
@@ -78,19 +89,13 @@ export const DonutText: React.FC<Props> = ({ data, radius, lineWidth, halfDonut 
         mode="single"
         min={MIN_FONT_SIZE}
         max={valueMaxSize}
-        style={{ maxWidth: valueMaxWidth ? `${valueMaxWidth}px` : undefined }}
+        style={{ maxWidth: valueMaxWidth }}
         onReady={setBaseFontSize}
       >
         {data.value}
       </Textfit>
     ) : null,
   ] as const
-
-  const contentStyle: React.CSSProperties = {
-    maxWidth: (isHalfDonutVertical ? radius : diameter) - MARGIN_FROM_LINE,
-    maxHeight: (isHalfDonutHorizontal ? radius : diameter) - MARGIN_FROM_LINE,
-    borderRadius: getContentBorderRadius(radius, halfDonut),
-  }
 
   return (
     <div

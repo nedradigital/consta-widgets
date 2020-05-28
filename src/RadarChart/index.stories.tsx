@@ -3,9 +3,13 @@ import React from 'react'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import {
+  blockCenteringDecorator,
+  createMetadata,
+  createStory,
+  percentFormatValue,
+} from '@/common/storybook'
 import { getFormattedValue } from '@/common/utils/chart'
-import { percentFormatValue } from '@/common/utils/Storybook'
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
 
 import { Figure, RadarChart } from './'
 

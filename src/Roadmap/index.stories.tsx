@@ -3,7 +3,7 @@ import React from 'react'
 import { number, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/utils/Storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { Roadmap } from '.'
 import { colorGroups, data, minimalData, monochromeData } from './data.mock'

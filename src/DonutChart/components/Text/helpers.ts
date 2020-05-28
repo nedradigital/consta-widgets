@@ -1,27 +1,23 @@
 import { deg2rad } from '@/common/utils/math'
-import {
-  isHalfDonutHorizontal as getIsHalfDonutHorizontal,
-  isHalfDonutVertical as getIsHalfDonutVertical,
-} from '@/DonutChart/helpers'
 
 import { HalfDonut } from '../Donut'
 
-const TEXT_CHORD_ANGLE_IN_RADIANS = deg2rad(40)
+const TEXT_CHORD_ANGLE_IN_RADIANS = deg2rad(35)
 export const MIN_FONT_SIZE = 20
 export const VALUE_MAX_FONT_SIZE = 96
 export const TITLE_FONT_SIZE_RATIO = 0.4
 export const SUBVALUE_FONT_SIZE_RATIO = 0.5
 export const MARGIN_FROM_LINE = 2
 
-export const getContentBorderRadius = (radius: number, position?: HalfDonut) => {
-  if (!position) {
+export const getContentBorderRadius = (radius: number, halfDonut?: HalfDonut) => {
+  if (!halfDonut) {
     return `${radius}px`
   }
 
-  const topLeft = ['bottom', 'right'].includes(position) ? radius : 0
-  const topRight = ['bottom', 'left'].includes(position) ? radius : 0
-  const bottomRight = ['top', 'left'].includes(position) ? radius : 0
-  const bottomLeft = ['top', 'right'].includes(position) ? radius : 0
+  const topLeft = ['bottom', 'right'].includes(halfDonut) ? radius : 0
+  const topRight = ['bottom', 'left'].includes(halfDonut) ? radius : 0
+  const bottomRight = ['top', 'left'].includes(halfDonut) ? radius : 0
+  const bottomLeft = ['top', 'right'].includes(halfDonut) ? radius : 0
 
   return `${topLeft}px ${topRight}px ${bottomRight}px ${bottomLeft}px`
 }
@@ -49,27 +45,33 @@ export const getContentHeight = ({
   return height - offset
 }
 
-export const getValueMaxFontSize = ({
-  height,
-  maxFontSize,
-  halfDonut,
+export const getValueHeightRatio = ({
+  isHalfDonutHorizontal,
+  isHalfDonutVertical,
+  titleIsExist,
 }: {
-  height: number
-  maxFontSize: number
-  halfDonut?: HalfDonut
+  isHalfDonutHorizontal: boolean
+  isHalfDonutVertical: boolean
+  titleIsExist: boolean
 }) => {
-  const ratio = getIsHalfDonutVertical(halfDonut) ? 4 : 2
+  if (isHalfDonutHorizontal && !titleIsExist) {
+    return 1
+  }
 
-  return Math.min(Math.round(height / ratio), maxFontSize)
+  if (isHalfDonutVertical) {
+    return 0.25
+  }
+
+  return 0.5
+}
+
+export const getValueMaxFontSize = ({ height, ratio }: { height: number; ratio: number }) => {
+  return Math.min(Math.round(height * ratio), VALUE_MAX_FONT_SIZE)
 }
 
 /**
  * Расчитываем максимальную ширину текста по хорде окружности.
  */
-export const getValueMaxWidth = (diameter: number, position?: HalfDonut) => {
-  if (getIsHalfDonutHorizontal(position)) {
-    return Math.round(diameter * Math.sin(TEXT_CHORD_ANGLE_IN_RADIANS))
-  }
-
-  return undefined
+export const getValueMaxWidth = (diameter: number) => {
+  return Math.round(diameter * Math.sin(TEXT_CHORD_ANGLE_IN_RADIANS))
 }

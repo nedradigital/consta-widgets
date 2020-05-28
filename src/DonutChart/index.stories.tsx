@@ -9,7 +9,8 @@ import {
   createStory,
   cubeMeterFormatValue,
   emptyFormatValue,
-} from '@/common/utils/Storybook'
+  environmentDecorator,
+} from '@/common/storybook'
 
 import { DonutChart } from '.'
 import {
@@ -213,10 +214,12 @@ export default createMetadata({
   title: 'components/DonutChart',
   decorators: [
     withSmartKnobs(),
-    blockCenteringDecorator({
-      backgroundColor: 'var(--color-control-bg-default)',
+    environmentDecorator({
       width: 200,
       height: 200,
+    }),
+    blockCenteringDecorator({
+      backgroundColor: 'var(--color-control-bg-default)',
     }),
   ],
   excludeStories: ['progressDonutData'],
