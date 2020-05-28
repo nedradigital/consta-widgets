@@ -26,10 +26,10 @@ export const getQuarters = ({
     const start = startOfDay(addQuarters(startDate, index))
     const end = endOfDay(endOfQuarter(start))
 
-    if (end < minDate || start > maxDate) {
+    if (start > maxDate || end < minDate) {
       return []
     }
 
-    return [start, end]
+    return [start > minDate ? start : minDate, end < maxDate ? end : maxDate]
   })
 }

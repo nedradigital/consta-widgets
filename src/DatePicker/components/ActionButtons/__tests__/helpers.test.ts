@@ -1,40 +1,51 @@
-import { endOfDay, startOfDay } from 'date-fns'
-
+import { DateRange } from '../../../'
 import { getQuarters } from '../helpers'
 
-const QUARTERS_START_AND_END = [
-  [startOfDay(new Date(2019, 0, 1)), endOfDay(new Date(2019, 2, 31))],
-  [startOfDay(new Date(2019, 3, 1)), endOfDay(new Date(2019, 5, 30))],
-  [startOfDay(new Date(2019, 6, 1)), endOfDay(new Date(2019, 8, 30))],
-  [startOfDay(new Date(2019, 9, 1)), endOfDay(new Date(2019, 11, 31))],
-] as const
+const START_OF_DAY: readonly number[] = [0, 0, 0, 0]
+const END_OF_DAY: readonly number[] = [23, 59, 59, 999]
 
-const date = new Date(2019, 6, 1)
+const QUARTERS_START_AND_END: readonly DateRange[] = [
+  [new Date(2019, 0, 1, ...START_OF_DAY), new Date(2019, 2, 31, ...END_OF_DAY)],
+  [new Date(2019, 3, 1, ...START_OF_DAY), new Date(2019, 5, 30, ...END_OF_DAY)],
+  [new Date(2019, 6, 1, ...START_OF_DAY), new Date(2019, 8, 30, ...END_OF_DAY)],
+  [new Date(2019, 9, 1, ...START_OF_DAY), new Date(2019, 11, 31, ...END_OF_DAY)],
+]
 
 describe('getQuarters', () => {
-  it('возвращает кварталы, которые полностью попадают в разрешённые пределы', () => {
-    const minDate = new Date(2019, 1, 1)
-    const maxDate = new Date(2019, 12, 31)
+  const date = new Date(2019, 0, 1)
 
-    expect(getQuarters({ date, minDate, maxDate })).toEqual(QUARTERS_START_AND_END)
+  it('возвращает полные кварталы для всего года', () => {
+    const quarters = getQuarters({
+      date,
+      minDate: new Date(2019, 0, 1, ...START_OF_DAY),
+      maxDate: new Date(2019, 11, 31, ...END_OF_DAY),
+    })
+
+    expect(quarters).toEqual(QUARTERS_START_AND_END)
   })
 
-  it('возвращает кварталы, которые частично попадают в разрешённые пределы', () => {
-    const minDate = new Date(2019, 2, 31)
-    const maxDate = new Date(2019, 9, 1)
+  it('возвращает неполные кварталы если они частично выходят за минимальную или максимальную даты', () => {
+    const quarters = getQuarters({
+      date,
+      minDate: new Date(2019, 2, 1, ...START_OF_DAY),
+      maxDate: new Date(2019, 11, 1, ...END_OF_DAY),
+    })
 
-    expect(getQuarters({ date, minDate, maxDate })).toEqual(QUARTERS_START_AND_END)
-  })
-
-  it('не возвращает кварталы, которые находятся вне разрешённых пределов', () => {
-    const minDate = new Date(2019, 3, 1)
-    const maxDate = new Date(2019, 8, 30)
-
-    expect(getQuarters({ date, minDate, maxDate })).toEqual([
-      [],
+    expect(quarters).toEqual([
+      [new Date(2019, 2, 1, ...START_OF_DAY), new Date(2019, 2, 31, ...END_OF_DAY)],
       QUARTERS_START_AND_END[1],
       QUARTERS_START_AND_END[2],
-      [],
+      [new Date(2019, 9, 1, ...START_OF_DAY), new Date(2019, 11, 1, ...END_OF_DAY)],
     ])
+  })
+
+  it('возвращает пустые массивы для кварталов которые полностью выходят за минимальную или максимальную даты', () => {
+    const quarters = getQuarters({
+      date,
+      minDate: new Date(2019, 3, 1, ...START_OF_DAY),
+      maxDate: new Date(2019, 8, 30, ...END_OF_DAY),
+    })
+
+    expect(quarters).toEqual([[], QUARTERS_START_AND_END[1], QUARTERS_START_AND_END[2], []])
   })
 })
