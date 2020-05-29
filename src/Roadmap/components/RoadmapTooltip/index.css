@@ -73,6 +73,7 @@
   @mixin button;
 
   display: inline-flex;
+  align-items: center;
 
   width: 26px;
   height: 26px;
