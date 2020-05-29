@@ -3,6 +3,17 @@ import { Text } from '@gpn-design/uikit'
 
 import { ColorGroups } from '@/common/types'
 
+import { Data } from './'
+
+type Item = Omit<Data, 'caption'> & {
+  caption?: string
+}
+
+type MockData = {
+  colorGroups: ColorGroups
+  data: readonly Item[]
+}
+
 const colorGroups: ColorGroups = {
   first: 'var(--color-bg-warning)',
   second: 'var(--color-bg-success)',
@@ -24,7 +35,18 @@ const createCaption = (text: string) => (
   </Text>
 )
 
-export const progressBarData = {
+export const convertItemToDataItem = (item: Item): Data => {
+  if (item.caption) {
+    return {
+      ...item,
+      caption: createCaption(item.caption),
+    }
+  }
+
+  return item
+}
+
+export const progressBarData: MockData = {
   colorGroups,
   data: [
     {
@@ -33,7 +55,7 @@ export const progressBarData = {
       valueMax: 100,
       summary: 50,
       colorGroupName: 'first',
-      caption: createCaption('Стратегия Ступени + УИД'),
+      caption: 'Стратегия Ступени + УИД',
     },
     {
       value: 75,
@@ -50,12 +72,12 @@ export const progressBarData = {
       ticks,
       summary: '30 тысяч',
       colorGroupName: 'third',
-      caption: createCaption('Стратегия Ступени + УИД'),
+      caption: 'Стратегия Ступени + УИД',
     },
   ],
 }
 
-export const progressBarDataWithNullValue = {
+export const progressBarDataWithNullValue: MockData = {
   colorGroups: {
     first: 'var(--color-bg-warning)',
     second: 'var(--color-bg-success)',
@@ -67,7 +89,7 @@ export const progressBarDataWithNullValue = {
       valueMax: 100,
       summary: 70,
       colorGroupName: 'first',
-      caption: createCaption('Стратегия Ступени + УИД'),
+      caption: 'Стратегия Ступени + УИД',
     },
     {
       value: null,

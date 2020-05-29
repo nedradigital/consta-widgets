@@ -1,16 +1,11 @@
 import { useState } from 'react'
 
 import { action } from '@storybook/addon-actions'
+import { object } from '@storybook/addon-knobs'
 
 import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { FilterTooltip } from '.'
-
-const fewOptions = [
-  { value: 'condition1', label: 'Условие 1' },
-  { value: 'condition2', label: 'Условие 2' },
-  { value: 'condition3', label: 'Условие 3' },
-] as const
 
 export const Interactive = createStory(() => {
   const [isOpened, setIsOpened] = useState(true)
@@ -20,10 +15,14 @@ export const Interactive = createStory(() => {
     <FilterTooltip
       field="Тестовый фильтр"
       isOpened={isOpened}
-      values={[]}
-      options={fewOptions}
-      onChange={(...args) => {
-        onSave(...args)
+      values={object('values', ['condition1'])}
+      options={object('options', [
+        { value: 'condition1', label: 'Условие 1' },
+        { value: 'condition2', label: 'Условие 2' },
+        { value: 'condition3', label: 'Условие 3' },
+      ])}
+      onChange={(field, values) => {
+        onSave(field, values)
       }}
       onToggle={() => setIsOpened(!isOpened)}
     />

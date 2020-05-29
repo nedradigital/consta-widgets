@@ -150,11 +150,15 @@ export const WithClickHandler = createStory(
   { name: 'с обработкой клика', decorators }
 )
 
-const ExampleTitle = (
-  <Text tag="div" view="primary" size="m">
-    LTIF
-  </Text>
-)
+const renderTitle = (defaultText: string = '') => {
+  const title = text('title', defaultText)
+
+  return title ? (
+    <Text tag="div" view="primary" size="m">
+      {title}
+    </Text>
+  ) : null
+}
 
 export const WithTitle = createStory(
   () => {
@@ -163,7 +167,7 @@ export const WithTitle = createStory(
         {...getCommonProps()}
         colorGroups={object('colorGroups', colorGroups)}
         isHorizontal
-        title={ExampleTitle}
+        title={renderTitle('LTIF')}
       />
     )
   },
@@ -237,7 +241,10 @@ export const Vertical = createStory(
   },
   {
     name: 'вертикальный',
-    decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 300, height: '80vh' })],
+    decorators: [
+      withSmartKnobs({ ignoreProps: ['title'] }),
+      blockCenteringDecorator({ width: 300, height: '80vh' }),
+    ],
   }
 )
 

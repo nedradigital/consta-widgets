@@ -1,16 +1,37 @@
 import React from 'react'
 
+import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 
 import { ProgressBar } from './'
-import { progressBarData, progressBarDataWithNullValue } from './data.mock'
+import { convertItemToDataItem, progressBarData, progressBarDataWithNullValue } from './data.mock'
 
-export const Interactive = createStory(() => <ProgressBar size="m" {...progressBarData} />)
+export const Interactive = createStory(() => {
+  const data = object('data', progressBarData.data).map(convertItemToDataItem)
+
+  return (
+    <ProgressBar
+      data={data}
+      colorGroups={object('colorGroups', progressBarData.colorGroups)}
+      size="m"
+    />
+  )
+})
 
 export const WithoutData = createStory(
-  () => <ProgressBar size="m" {...progressBarDataWithNullValue} />,
+  () => {
+    const data = object('data', progressBarDataWithNullValue.data).map(convertItemToDataItem)
+
+    return (
+      <ProgressBar
+        data={data}
+        colorGroups={object('colorGroups', progressBarDataWithNullValue.colorGroups)}
+        size="m"
+      />
+    )
+  },
   {
     name: 'без данных',
   }
@@ -18,5 +39,8 @@ export const WithoutData = createStory(
 
 export default createMetadata({
   title: 'components/ProgressBar',
-  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 300, height: 300 })],
+  decorators: [
+    withSmartKnobs({ ignoreProps: ['data'] }),
+    blockCenteringDecorator({ width: 300, height: 300 }),
+  ],
 })

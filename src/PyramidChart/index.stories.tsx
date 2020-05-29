@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { boolean } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
@@ -36,8 +35,8 @@ export const Interactive = createStory(() => (
       },
     ]}
     colors={DEFAULT_COLORS}
-    constraint={boolean('constraint', true)}
     fontSize="m"
+    constraint
   />
 ))
 
