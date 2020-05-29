@@ -103,7 +103,7 @@ export const LineTooltip: React.FC<Props> = ({
   const title = (formatValueForTooltipTitle || formatValueForLabel)(hoveredMainValue)
 
   return (
-    <Tooltip isVisible position={position} direction={isHorizontal ? 'right' : 'upCenter'}>
+    <Tooltip isVisible position={position} direction={isHorizontal ? 'upCenter' : 'right'}>
       <TooltipContentForMultipleValues
         title={title}
         items={[...tooltipItems, ...thresholdItems].map(item => ({

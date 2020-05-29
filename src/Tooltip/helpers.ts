@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 import { Position, PositionState } from '@/common/utils/tooltips'
 import { isDefinedPosition } from '@/common/utils/type-guards'
 import { AttachedToPosition, Direction } from '@/Tooltip/index'
@@ -36,7 +38,7 @@ const getDirectionAndPosition = ({
   possibleDirections: readonly Direction[]
   bannedDirections: readonly Direction[]
 }) => {
-  const result = orderOfDirections
+  const result = _.sortBy(orderOfDirections, dir => (dir === initialDirection ? -1 : 0))
     .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
     .find(dir => {
       const pos = positionsByDirection[dir]
@@ -44,11 +46,15 @@ const getDirectionAndPosition = ({
 
       switch (dir) {
         case 'left': {
-          return pos.x >= 0 && pos.y >= height / 2
+          return pos.x >= 0 && pos.y + height / 2 <= parentSize.height && pos.y - height / 2 >= 0
         }
 
         case 'right': {
-          return pos.x + width <= parentSize.width && pos.y >= height / 2
+          return (
+            pos.x + width <= parentSize.width &&
+            pos.y + height / 2 <= parentSize.height &&
+            pos.y - height / 2 >= 0
+          )
         }
 
         case 'upCenter': {
