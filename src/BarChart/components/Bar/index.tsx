@@ -151,7 +151,7 @@ export const Bar: React.FC<Props> = props => {
     }
 
     if (isTornado && isAxisY) {
-      return columnDefaultSize / 2 + columnPadding
+      return (columnDefaultSize + columnPadding) / 2
     }
 
     if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
