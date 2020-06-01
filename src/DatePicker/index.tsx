@@ -89,7 +89,7 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
   const [startDate, endDate] = value || [undefined, undefined]
 
   return (
-    <div className={css.controls}>
+    <>
       <InputDate {...commonProps} value={startDate} onChange={date => onChange([date, endDate])} />
       <Text tag="span" view="primary" className={css.delimiter}>
         –
@@ -100,7 +100,7 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
         onChange={date => onChange([startDate, date])}
         tooltipContent={tooltipContent}
       />
-    </div>
+    </>
   )
 }
 
@@ -214,7 +214,11 @@ export const DatePicker: React.FC<Props> = props => {
 
   return (
     <div>
-      <div ref={controlsRef} onClick={() => setIsTooltipVisible(!isTooltipVisible)}>
+      <div
+        className={css.controls}
+        ref={controlsRef}
+        onClick={() => setIsTooltipVisible(!isTooltipVisible)}
+      >
         {renderControls()}
       </div>
       <Tooltip
