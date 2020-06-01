@@ -2,7 +2,7 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { DEFAULT_COLORS, PyramidChart } from './index'
 
@@ -42,5 +42,10 @@ export const Interactive = createStory(() => (
 
 export default createMetadata({
   title: 'components/PyramidChart',
-  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: '50vw' })],
+  decorators: [
+    withSmartKnobs(),
+    environmentDecorator({
+      width: '50vw',
+    }),
+  ],
 })

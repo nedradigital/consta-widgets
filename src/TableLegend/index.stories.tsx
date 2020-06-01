@@ -3,7 +3,7 @@ import React from 'react'
 import { boolean, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { TableLegend } from '.'
 import {
@@ -12,7 +12,12 @@ import {
   tableLegendWithTrafficLightData,
 } from './data.mock'
 
-const decorators = [withSmartKnobs(), blockCenteringDecorator({ width: '90vw' })] as const
+const decorators = [
+  withSmartKnobs(),
+  environmentDecorator({
+    width: '90vw',
+  }),
+] as const
 
 export const Interactive = createStory(
   () => (
@@ -67,7 +72,12 @@ export const WithTrafficLight = createStory(
   },
   {
     name: 'со "Светофором"',
-    decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 500 })],
+    decorators: [
+      withSmartKnobs(),
+      environmentDecorator({
+        width: 500,
+      }),
+    ],
   }
 )
 

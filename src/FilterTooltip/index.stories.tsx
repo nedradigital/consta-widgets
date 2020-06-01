@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { action } from '@storybook/addon-actions'
 import { object } from '@storybook/addon-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { FilterTooltip } from '.'
 
@@ -31,5 +31,9 @@ export const Interactive = createStory(() => {
 
 export default createMetadata({
   title: 'components/FilterTooltip',
-  decorators: [blockCenteringDecorator({ position: 'relative' })],
+  decorators: [
+    environmentDecorator({
+      position: 'relative',
+    }),
+  ],
 })

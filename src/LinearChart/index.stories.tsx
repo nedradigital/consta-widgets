@@ -6,7 +6,7 @@ import { Text } from '@gpn-design/uikit'
 import { number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { LinearChart } from '.'
 
@@ -89,7 +89,10 @@ const decorators = [
   withSmartKnobs({
     ignoreProps: IGNORE_PROPS,
   }),
-  blockCenteringDecorator({ width: '60vw', height: '50vh' }),
+  environmentDecorator({
+    width: '60vw',
+    height: '50vh',
+  }),
 ] as const
 
 export const Horizontal = createStory(
@@ -250,7 +253,10 @@ export const Vertical = createStory(
     name: 'вертикальный',
     decorators: [
       withSmartKnobs({ ignoreProps: IGNORE_PROPS }),
-      blockCenteringDecorator({ width: 300, height: '80vh' }),
+      environmentDecorator({
+        width: 300,
+        height: '80vh',
+      }),
     ],
   }
 )

@@ -1,7 +1,7 @@
 import { date as knobsDate, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { isValidDate } from '@/common/utils/type-guards'
 
 import { DatePicker, DateRange, sizes } from '.'
@@ -110,5 +110,5 @@ export const DatePickerRangeThirdPartyInputStory = createStory(
 
 export default createMetadata({
   title: 'components/DatePicker',
-  decorators: [withSmartKnobs({ ignoreProps: ['type'] }), blockCenteringDecorator()],
+  decorators: [withSmartKnobs({ ignoreProps: ['type'] }), environmentDecorator()],
 })
