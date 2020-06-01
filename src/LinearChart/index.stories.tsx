@@ -14,6 +14,8 @@ const MIN = -2
 const MAX = 8
 const COUNT_POINTS = 51
 
+const IGNORE_PROPS = ['title'] as const
+
 const colorGroups = {
   first: 'var(--color-bg-success)',
   second: 'var(--color-bg-normal)',
@@ -84,7 +86,9 @@ const getCommonProps = () => {
 }
 
 const decorators = [
-  withSmartKnobs(),
+  withSmartKnobs({
+    ignoreProps: IGNORE_PROPS,
+  }),
   blockCenteringDecorator({ width: '60vw', height: '50vh' }),
 ] as const
 
@@ -105,7 +109,7 @@ export const WithNullData = createStory(
   () => {
     return (
       <LinearChart
-        colorGroups={colorGroups}
+        colorGroups={object('colorGroups', colorGroups)}
         lines={[
           {
             colorGroupName: 'first',
@@ -187,7 +191,10 @@ export const WithNumbers = createStory(
 
     return (
       <LinearChart
-        colorGroups={{ first: 'var(--color-bg-success)', second: 'var(--color-bg-normal)' }}
+        colorGroups={object('colorGroups', {
+          first: 'var(--color-bg-success)',
+          second: 'var(--color-bg-normal)',
+        })}
         lines={[
           {
             colorGroupName: 'first',
@@ -242,7 +249,7 @@ export const Vertical = createStory(
   {
     name: 'вертикальный',
     decorators: [
-      withSmartKnobs({ ignoreProps: ['title'] }),
+      withSmartKnobs({ ignoreProps: IGNORE_PROPS }),
       blockCenteringDecorator({ width: 300, height: '80vh' }),
     ],
   }

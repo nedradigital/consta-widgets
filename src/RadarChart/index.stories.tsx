@@ -53,7 +53,7 @@ export const TwoFigures = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures}
       ticks={4}
@@ -71,7 +71,7 @@ export const TwoFiguresWithoutData = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={emptyFigures}
       ticks={4}
@@ -89,7 +89,7 @@ export const OneWholeFigure = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={4}
@@ -106,7 +106,7 @@ export const OneRainbowFigure = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={5}
@@ -122,7 +122,7 @@ export const OneRainbowFigureWithoutData = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={[emptyFigures[0]]}
       ticks={5}
