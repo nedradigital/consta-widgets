@@ -125,7 +125,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'right',
-        position: { x: 50, y: 25 },
+        position: { x: 50, y: 0 },
       })
     })
 
@@ -141,7 +141,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'left',
-        position: { x: 350, y: 25 },
+        position: { x: 350, y: 0 },
       })
     })
 
@@ -176,7 +176,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'right',
-        position: { x: 500, y: 500 },
+        position: { x: 500, y: 475 },
       })
     })
   })
@@ -337,7 +337,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'right',
-        position: { x: 105, y: 25 },
+        position: { x: 105, y: 0 },
       })
     })
 
@@ -359,7 +359,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'left',
-        position: { x: 295, y: 25 },
+        position: { x: 295, y: 0 },
       })
     })
 

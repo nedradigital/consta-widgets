@@ -44,44 +44,31 @@ const getDirectionAndPosition = ({
       const pos = positionsByDirection[dir]
       const { width, height } = tooltipSize
 
+      const isFittingDown = pos.y + height <= parentSize.height
+      const isFittingUp = pos.y >= 0
+      const isFittingVerticallyCenter = isFittingUp && isFittingDown
+
+      const isFittingLeft = pos.x >= 0
+      const isFittingRight = pos.x + width <= parentSize.width
+      const isFittingHorizontallyCenter = isFittingLeft && isFittingRight
+
       switch (dir) {
-        case 'left': {
-          return pos.x >= 0 && pos.y + height / 2 <= parentSize.height && pos.y - height / 2 >= 0
-        }
-
-        case 'right': {
-          return (
-            pos.x + width <= parentSize.width &&
-            pos.y + height / 2 <= parentSize.height &&
-            pos.y - height / 2 >= 0
-          )
-        }
-
-        case 'upCenter': {
-          return pos.x >= 0 && pos.x + width <= parentSize.width && pos.y >= 0
-        }
-
-        case 'upLeft': {
-          return pos.x >= 0 && pos.y >= 0
-        }
-
-        case 'upRight': {
-          return pos.x + width <= parentSize.width && pos.y >= 0
-        }
-
-        case 'downCenter': {
-          return (
-            pos.x >= 0 && pos.x + width <= parentSize.width && pos.y + height <= parentSize.height
-          )
-        }
-
-        case 'downLeft': {
-          return pos.x >= 0 && pos.y + height <= parentSize.height
-        }
-
-        case 'downRight': {
-          return pos.x + width <= parentSize.width && pos.y + height <= parentSize.height
-        }
+        case 'left':
+          return isFittingVerticallyCenter && isFittingLeft
+        case 'right':
+          return isFittingVerticallyCenter && isFittingRight
+        case 'upCenter':
+          return isFittingUp && isFittingHorizontallyCenter
+        case 'upLeft':
+          return isFittingUp && isFittingLeft
+        case 'upRight':
+          return isFittingUp && isFittingRight
+        case 'downCenter':
+          return isFittingDown && isFittingHorizontallyCenter
+        case 'downLeft':
+          return isFittingDown && isFittingLeft
+        case 'downRight':
+          return isFittingDown && isFittingRight
       }
     })
 
@@ -143,7 +130,7 @@ export const getComputedPositionAndDirection = (
   const centerPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth) / 2)
   const upPositionY = Math.round(initialPosition.y - anchorHeight - tooltipHeight - offset)
   const downPositionY = Math.round(initialPosition.y + offset)
-  const centerPositionY = Math.round(initialPosition.y - anchorHeight / 2)
+  const centerPositionY = Math.round(initialPosition.y - anchorHeight / 2 - tooltipHeight / 2)
 
   const positionsByDirection: Record<Direction, Position> = {
     upLeft: {

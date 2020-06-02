@@ -18,11 +18,6 @@
   &.isHoverable {
     pointer-events: auto;
   }
-
-  &.right,
-  &.left {
-    transform: translate(0, -50%);
-  }
 }
 
 .tooltip {
