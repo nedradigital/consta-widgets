@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import { FormatValue } from '@/common/types'
 import { Scaler } from '@/common/utils/scale'
 import { TextSize } from '@/common/utils/ui-kit'
-import { UnitPosition } from '@/BarChart'
+import { UnitPosition } from '@/core/BarChart'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Position, Size, Ticks } from '@/Ticks'
 

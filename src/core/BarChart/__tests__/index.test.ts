@@ -2,21 +2,21 @@ import { scaleLinear } from '@/common/utils/scale'
 
 import { Groups } from '../'
 import {
-  createFormatValue,
-  getAxisShowPositions,
+  defaultGetAxisShowPositions,
+  defaultGetGroupsDomain,
+  defaultGetGroupSize,
+  defaultGetValuesDomain,
   getColumnDetails,
   getColumnSize,
   getDataColumns,
-  getDomain,
   getEveryNTick,
   getGraphStepSize,
-  getGroupDomain,
+  getMinChartSize,
   getRange,
   getTotalByColumn,
   isLeftTornadoBar,
   scaleBand,
   toAxisSize,
-  transformBarChartGroupsToCommonGroups,
 } from '../helpers'
 
 const COLOR_GROUPS = {
@@ -296,15 +296,15 @@ describe('getDataColumns', () => {
   })
 })
 
-describe('getDomain', () => {
+describe('defaultGetValuesDomain', () => {
   const MAX_VALUE = 185
   it('возвращает значение для домена', () => {
-    expect(getDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
+    expect(defaultGetValuesDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
   })
 
   it('возвращает значения для домена с отрицательными значениями', () => {
     expect(
-      getDomain([
+      defaultGetValuesDomain([
         {
           groupName: '1',
           values: [{ baton: -100 }, { buhanka: 50 }, { korovay: 100 }],
@@ -634,28 +634,7 @@ describe('getColumnDetails', () => {
   })
 })
 
-describe('transformBarChartGroupsToCommonGroups', () => {
-  it('преобразование групп колонок к общему виду', () => {
-    expect(
-      transformBarChartGroupsToCommonGroups([
-        {
-          groupName: '1',
-          values: [
-            { colorGroupName: 'success', value: 1 },
-            { colorGroupName: 'warning', value: 2 },
-          ],
-        },
-      ])
-    ).toEqual([
-      {
-        groupName: '1',
-        values: [{ success: 1 }, { warning: 2 }],
-      },
-    ])
-  })
-})
-
-describe('getGroupDomain', () => {
+describe('defaultGetGroupsDomain', () => {
   const groups: Groups = [
     {
       groupName: 'группа 1',
@@ -675,11 +654,7 @@ describe('getGroupDomain', () => {
   ]
 
   it('возвращает массив названий групп', () => {
-    expect(getGroupDomain(groups)).toEqual(['группа 1', 'группа 2', 'группа 3'])
-  })
-
-  it('возвращает отсортированный по убыванию значения массив названий групп для торнадо графика', () => {
-    expect(getGroupDomain(groups, true)).toEqual(['группа 3', 'группа 2', 'группа 1'])
+    expect(defaultGetGroupsDomain(groups)).toEqual(['группа 1', 'группа 2', 'группа 3'])
   })
 })
 
@@ -693,94 +668,24 @@ describe('isLeftTornadoBar', () => {
   })
 })
 
-describe('createFormatValue', () => {
-  it('возвращает функцию для форматирования', () => {
-    const formatValue = createFormatValue()
-
-    expect(formatValue).toBeFunction()
-  })
-
-  it('без параметров возвращает принимаемое значение', () => {
-    const formatValue = createFormatValue()
-
-    expect(formatValue(42)).toBe('42')
-    expect(formatValue(-42)).toBe('-42')
-  })
-
-  it('применяет перданную функцию форматирования', () => {
-    const formatValue = createFormatValue({
-      formatValue: value => `Value is ${value}`,
-    })
-
-    expect(formatValue(42)).toBe('Value is 42')
-  })
-
-  it('возвращает значение без знака "-" для торнадочарта', () => {
-    const formatValue = createFormatValue({ isTornado: true })
-
-    expect(formatValue(-42)).toBe('42')
-  })
-
-  it('передает функции форматирования значение без знака "-"  для торнадочарта', () => {
-    const formatValue = createFormatValue({
-      isTornado: true,
-      formatValue: value => `Value is ${value}`,
-    })
-
-    expect(formatValue(42)).toBe('Value is 42')
-  })
-})
-
-describe('getAxisShowPositions', () => {
-  it('возвращает объект с позициями для отображения осей', () => {
-    expect(getAxisShowPositions('top', 'left')).toEqual({
-      left: true,
-      right: false,
-      top: true,
-      bottom: false,
-    })
-
-    expect(getAxisShowPositions('both', 'both')).toEqual({
-      left: true,
-      right: true,
-      top: true,
-      bottom: true,
-    })
-
-    expect(getAxisShowPositions('none', 'both')).toEqual({
-      left: true,
-      right: true,
-      top: false,
-      bottom: false,
-    })
-
-    expect(getAxisShowPositions('bottom', 'both')).toEqual({
-      left: true,
-      right: true,
-      top: false,
-      bottom: true,
-    })
-  })
-})
-
 describe('getColumnSize', () => {
   it('возвращает размер бара, который зависит от размера текста', () => {
-    expect(getColumnSize({ size: 'auto', valueLength: 1, isVertical: true })).toEqual('s')
-    expect(getColumnSize({ size: 'auto', valueLength: 2, isVertical: true })).toEqual('m')
-    expect(getColumnSize({ size: 'auto', valueLength: 3, isVertical: true })).toEqual('l')
-    expect(getColumnSize({ size: 'auto', valueLength: 4, isVertical: true })).toEqual('xl')
-    expect(getColumnSize({ size: 'auto', valueLength: 5, isVertical: true })).toEqual('xxl')
+    expect(getColumnSize({ size: 'auto', valueLength: 1, isHorizontal: false })).toEqual('s')
+    expect(getColumnSize({ size: 'auto', valueLength: 2, isHorizontal: false })).toEqual('m')
+    expect(getColumnSize({ size: 'auto', valueLength: 3, isHorizontal: false })).toEqual('l')
+    expect(getColumnSize({ size: 'auto', valueLength: 4, isHorizontal: false })).toEqual('xl')
+    expect(getColumnSize({ size: 'auto', valueLength: 5, isHorizontal: false })).toEqual('xxl')
   })
 
   it('возвращает размер m для горизонтального графика', () => {
-    expect(getColumnSize({ size: 'auto', valueLength: 5, isVertical: false })).toEqual('m')
+    expect(getColumnSize({ size: 'auto', valueLength: 5, isHorizontal: true })).toEqual('m')
   })
 
   it('возвращает заданный размер', () => {
-    expect(getColumnSize({ size: 'm', valueLength: 5, isVertical: false })).toEqual('m')
-    expect(getColumnSize({ size: 's', valueLength: 10, isVertical: true })).toEqual('s')
-    expect(getColumnSize({ size: 'l', valueLength: 0, isVertical: false })).toEqual('l')
-    expect(getColumnSize({ size: 'xl', valueLength: 15, isVertical: true })).toEqual('xl')
+    expect(getColumnSize({ size: 'm', valueLength: 5, isHorizontal: true })).toEqual('m')
+    expect(getColumnSize({ size: 's', valueLength: 10, isHorizontal: false })).toEqual('s')
+    expect(getColumnSize({ size: 'l', valueLength: 0, isHorizontal: true })).toEqual('l')
+    expect(getColumnSize({ size: 'xl', valueLength: 15, isHorizontal: false })).toEqual('xl')
   })
 })
 
@@ -794,5 +699,123 @@ describe('toAxisSize', () => {
   it('возвращает заданный размер', () => {
     expect(toAxisSize('s')).toEqual('s')
     expect(toAxisSize('m')).toEqual('m')
+  })
+})
+
+describe('getMinChartSize', () => {
+  const groupsSizes: Record<string, number> = {
+    1: 100,
+    2: 100,
+    3: 110,
+  }
+
+  it('получение минимального размера графика', () => {
+    const result = getMinChartSize({
+      groupsSizes,
+      paddingInner: 10,
+      paddingOuter: 10,
+    })
+
+    expect(result).toEqual(350)
+  })
+})
+
+describe('defaultGetGroupSize', () => {
+  it('получение размера группы в которой нет колонок', () => {
+    const result = defaultGetGroupSize({
+      columnPadding: 10,
+      columnWidth: 16,
+      group: {
+        groupName: 'Q1-2016',
+        values: [],
+      },
+    })
+
+    expect(result).toEqual(16)
+  })
+
+  it('получение размера группы с одной колонкой', () => {
+    const result = defaultGetGroupSize({
+      columnPadding: 10,
+      columnWidth: 16,
+      group: {
+        groupName: 'Q1-2016',
+        values: [{ apples: 10 }],
+      },
+    })
+
+    expect(result).toEqual(16)
+  })
+
+  it('получение размера группы с двумя колонками', () => {
+    const result = defaultGetGroupSize({
+      columnPadding: 10,
+      columnWidth: 16,
+      group: {
+        groupName: 'Q1-2016',
+        values: [{ apples: 10 }, { bananas: 4 }],
+      },
+    })
+
+    expect(result).toEqual(42)
+  })
+
+  it('получение размера группы с одной мультиколонкой', () => {
+    const result = defaultGetGroupSize({
+      columnPadding: 10,
+      columnWidth: 16,
+      group: {
+        groupName: 'Q1-2016',
+        values: [{ apples: 10, bananas: 4 }],
+      },
+    })
+
+    expect(result).toEqual(16)
+  })
+})
+
+describe('defaultGetAxisShowPositions', () => {
+  it('получение настроек расположения осей для вертикального графика без отрицательных значений', () => {
+    const result = defaultGetAxisShowPositions({ isHorizontal: false, isNegative: false })
+
+    expect(result).toEqual({
+      top: false,
+      right: false,
+      bottom: true,
+      left: true,
+    })
+  })
+
+  it('получения настроек расположения осей для горизонтального графика без отрицательных значений', () => {
+    const result = defaultGetAxisShowPositions({ isHorizontal: true, isNegative: false })
+
+    expect(result).toEqual({
+      top: false,
+      right: false,
+      bottom: true,
+      left: true,
+    })
+  })
+
+  it('получение настроек расположения осей для вертикального графика с отрицательными значениями', () => {
+    const result = defaultGetAxisShowPositions({ isHorizontal: false, isNegative: true })
+
+    expect(result).toEqual({
+      top: true,
+      right: false,
+      bottom: true,
+      left: true,
+    })
+  })
+
+  it('получение настроек расположения осей для горизонтального графика с отрицательными значениями', () => {
+    const result = defaultGetAxisShowPositions({ isHorizontal: true, isNegative: true })
+
+    expect(result).toEqual({
+      top: false,
+      right: true,
+      bottom: true,
+      left: true,
+    })
   })
 })

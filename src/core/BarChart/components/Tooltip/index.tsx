@@ -12,7 +12,7 @@ import { COLUMN_WIDTHS, TooltipData } from '../Bar'
 
 type Props = {
   data: TooltipData
-  isVertical: boolean
+  isHorizontal: boolean
   isVisible: boolean
   svgParentRef: React.RefObject<SVGGElement>
   color: ColorGroups
@@ -23,12 +23,12 @@ type Props = {
 const getOffsetPosition = (parameters: {
   innerTranslate: number
   svgRef: React.RefObject<SVGGElement>
-  isVertical: boolean
+  isHorizontal: boolean
   baseSize: number
   params?: TooltipData['params']
   size: ColumnSize
 }): PositionState => {
-  const { innerTranslate, svgRef, isVertical, baseSize, params, size } = parameters
+  const { innerTranslate, svgRef, isHorizontal, baseSize, params, size } = parameters
 
   if (!svgRef.current || !params) {
     return undefined
@@ -39,9 +39,9 @@ const getOffsetPosition = (parameters: {
   const columnDefaultSizeHalf = getCalculatedSize(COLUMN_WIDTHS[size], baseSize) / 2
   const columnSizeHalf = columnSize / 2
 
-  const xPosition = isVertical ? x + innerTranslate + columnDefaultSizeHalf : x + columnSizeHalf
+  const xPosition = isHorizontal ? x + columnSizeHalf : x + innerTranslate + columnDefaultSizeHalf
 
-  const yPosition = isVertical ? y + columnSizeHalf : y + innerTranslate + columnDefaultSizeHalf
+  const yPosition = isHorizontal ? y + innerTranslate + columnDefaultSizeHalf : y + columnSizeHalf
 
   return {
     x: xPosition + left,
@@ -67,7 +67,7 @@ const getLayout = ({
 
 export const TooltipComponent: React.FC<Props> = ({
   data,
-  isVertical,
+  isHorizontal,
   isVisible,
   svgParentRef,
   color,
@@ -80,7 +80,7 @@ export const TooltipComponent: React.FC<Props> = ({
   const position = getOffsetPosition({
     innerTranslate,
     svgRef: svgParentRef,
-    isVertical,
+    isHorizontal,
     baseSize,
     params,
     size,
@@ -91,7 +91,7 @@ export const TooltipComponent: React.FC<Props> = ({
     <Tooltip
       isVisible={isVisible}
       position={position}
-      direction={isVertical ? 'left' : 'upCenter'}
+      direction={isHorizontal ? 'upCenter' : 'left'}
       children={layout}
     />
   )

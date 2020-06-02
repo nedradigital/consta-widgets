@@ -1,13 +1,81 @@
 import { ColorGroups } from '@/common/types'
 
-const barChartColorGroups: ColorGroups = {
+const colorGroups: ColorGroups = {
   first: 'var(--color-bg-normal)',
   second: 'var(--color-bg-alert)',
   third: 'var(--color-bg-warning)',
 }
 
-export const barChartData = {
-  colorGroups: barChartColorGroups,
+export const minimalData = {
+  colorGroups: {
+    first: colorGroups.first,
+  },
+  groups: [
+    {
+      groupName: 'март',
+      values: [{ colorGroupName: 'first', value: 410 }],
+    },
+    {
+      groupName: 'апрель',
+      values: [{ colorGroupName: 'first', value: 670 }],
+    },
+    {
+      groupName: 'май',
+      values: [{ colorGroupName: 'first', value: 1200 }],
+    },
+  ],
+  unit: 'тыс. м³',
+}
+
+export const withNegativeValueData = {
+  colorGroups,
+  groups: [
+    {
+      groupName: 'Q1-2016',
+      values: [
+        { colorGroupName: 'first', value: 1000 },
+        { colorGroupName: 'second', value: -100 },
+        { colorGroupName: 'third', value: 50 },
+      ],
+    },
+    {
+      groupName: 'Q2-2016',
+      values: [
+        { colorGroupName: 'first', value: -1000 },
+        { colorGroupName: 'second', value: undefined },
+        { colorGroupName: 'third', value: 127 },
+      ],
+    },
+    {
+      groupName: 'Q3-2016',
+      values: [
+        { colorGroupName: 'first', value: 500 },
+        { colorGroupName: 'second', value: 450 },
+        { colorGroupName: 'third', value: undefined },
+      ],
+    },
+    {
+      groupName: 'Q4-2016',
+      values: [
+        { colorGroupName: 'first', value: undefined },
+        { colorGroupName: 'second', value: -300 },
+        { colorGroupName: 'third', value: -200 },
+      ],
+    },
+    {
+      groupName: 'Q5-2016',
+      values: [
+        { colorGroupName: 'first', value: 10 },
+        { colorGroupName: 'second', value: 20 },
+        { colorGroupName: 'third', value: 50 },
+      ],
+    },
+  ],
+  unit: 'тыс. м³',
+}
+
+export const withThreeColumnsData = {
+  colorGroups,
   groups: [
     {
       groupName: 'март',
@@ -34,87 +102,5 @@ export const barChartData = {
       ],
     },
   ],
-  unit: 'тыс м3',
-}
-
-const multiBarChartColorGroups: ColorGroups = {
-  apples: 'var(--color-bg-normal)',
-  bananas: 'var(--color-bg-alert)',
-  cherries: 'var(--color-bg-warning)',
-}
-
-export const multiBarChartData = {
-  colorGroups: multiBarChartColorGroups,
-  groups: [
-    { groupName: 'Q1-2016', values: [{ apples: 30, bananas: 20, cherries: 23 }] },
-    { groupName: 'Q2-2016', values: [{ apples: 1600, bananas: 40, cherries: 45 }] },
-    { groupName: 'Q3-2016', values: [{ apples: 640, bananas: 960, cherries: 73 }] },
-  ],
-  unit: 'тыс м3',
-}
-
-export const multiBarChartDataWithTwoColumnsOnDate = {
-  colorGroups: {
-    ...multiBarChartColorGroups,
-    melon: 'var(--color-bg-success)',
-  },
-  groups: [
-    {
-      groupName: 'Q1-2016',
-      values: [
-        { apples: 3840, bananas: 1920 },
-        { cherries: 230, melon: 500 },
-      ],
-    },
-    {
-      groupName: 'Q2-2016',
-      values: [
-        { apples: 1600, bananas: 150 },
-        { cherries: 450, melon: 350 },
-      ],
-    },
-    {
-      groupName: 'Q3-2016',
-      values: [
-        { apples: 640, bananas: 960 },
-        { cherries: 730, melon: 120 },
-      ],
-    },
-  ],
-}
-
-const tornadoChartColorGroups: ColorGroups = {
-  first: 'var(--color-bg-normal)',
-  second: 'var(--color-bg-alert)',
-}
-
-export const tornadoChartData = {
-  colorGroups: tornadoChartColorGroups,
-  groups: [
-    {
-      groupName: 'АО Мессояханефтегаз',
-      values: [{ first: 10 }, { second: 6 }],
-    },
-    {
-      groupName: 'ООО ГПН-Оренбург',
-      values: [{ first: 6 }, { second: 3 }],
-    },
-    {
-      groupName: 'ООО ГПН-Заполярьег',
-      values: [{ first: 4 }, { second: 3 }],
-    },
-    {
-      groupName: 'ООО ГПН-Ямал',
-      values: [{ first: 1 }, { second: 2 }],
-    },
-    {
-      groupName: 'ООО ГПН-Восток',
-      values: [{ first: 7 }, { second: 13 }],
-    },
-    {
-      groupName: 'ООО Газпром-инвест',
-      values: [{ first: 4 }, { second: 12 }],
-    },
-  ],
-  unit: 'млн. руб.',
+  unit: 'тыс. м³',
 }

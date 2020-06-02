@@ -53,7 +53,7 @@ type MouseAction = (column?: TooltipData) => void
 type Props = {
   columnDetails: ReadonlyArray<readonly ColumnDetail[]>
   groupName: string
-  isVertical: boolean
+  isHorizontal: boolean
   groupScale: Scaler<string>
   valuesScale: Scaler<number>
   color: ColorGroups
@@ -82,7 +82,7 @@ export const COLUMN_PADDING_HORIZONTAL: Record<ColumnSize, number> = {
 }
 
 const getBarClassName = ({
-  isVertical,
+  isHorizontal,
   isRounded,
   isNegative,
   isTornado,
@@ -90,7 +90,7 @@ const getBarClassName = ({
   index,
 }: {
   isRounded: boolean
-  isVertical: boolean
+  isHorizontal: boolean
   isNegative: boolean
   isTornado: boolean
   size: Size
@@ -99,22 +99,22 @@ const getBarClassName = ({
   return classnames(
     css.bar,
     isRounded &&
-      !isVertical &&
+      isHorizontal &&
       (isNegative || (isTornado && isLeftTornadoBar(index))) &&
       css.borderLeft,
     isRounded &&
-      !isVertical &&
+      isHorizontal &&
       (!isNegative || (isTornado && !isLeftTornadoBar(index))) &&
       css.borderRight,
-    isRounded && isVertical && isNegative && css.borderBottom,
-    isRounded && isVertical && !isNegative && css.borderTop,
+    isRounded && !isHorizontal && isNegative && css.borderBottom,
+    isRounded && !isHorizontal && !isNegative && css.borderTop,
     size !== 's' && css.sizeM
   )
 }
 
 export const Bar: React.FC<Props> = props => {
   const {
-    isVertical,
+    isHorizontal,
     groupScale,
     valuesScale,
     color,
@@ -145,7 +145,7 @@ export const Bar: React.FC<Props> = props => {
 
   const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth(groupName) : 0
   const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
-  const transform = isVertical ? `translate(${translate}, 0)` : `translate(0, ${translate})`
+  const transform = isHorizontal ? `translate(0, ${translate})` : `translate(${translate}, 0)`
 
   const getRectPositionByAxis = ({
     part,
@@ -167,7 +167,7 @@ export const Bar: React.FC<Props> = props => {
       return (columnDefaultSize + columnPaddingHorizontal) / 2
     }
 
-    if ((isVertical && isAxisX) || (!isVertical && isAxisY)) {
+    if ((!isHorizontal && isAxisX) || (isHorizontal && isAxisY)) {
       return (columnDefaultSize + columnPaddingHorizontal) * index
     }
 
@@ -208,7 +208,7 @@ export const Bar: React.FC<Props> = props => {
           x: parts[0].x,
           y: parts[parts.length - 1].y,
         },
-        values: isVertical ? [...tooltipValues].reverse() : tooltipValues,
+        values: isHorizontal ? tooltipValues : [...tooltipValues].reverse(),
       },
     }
   })
@@ -231,14 +231,14 @@ export const Bar: React.FC<Props> = props => {
         key={groupName + partIndex}
         x={x}
         y={y}
-        width={isVertical ? columnDefaultSize : columnSize}
-        height={isVertical ? columnSize : columnDefaultSize}
+        width={isHorizontal ? columnSize : columnDefaultSize}
+        height={isHorizontal ? columnDefaultSize : columnSize}
         onMouseLeave={onMouseLeave}
         onMouseEnter={() => onMouseEnter(tooltipParams)}
       >
         <div
           className={getBarClassName({
-            isVertical,
+            isHorizontal,
             isRounded,
             isNegative: value < 0,
             isTornado,
@@ -277,7 +277,7 @@ export const Bar: React.FC<Props> = props => {
 
   const renderValues = (column: RenderValueProps) => {
     const className = classnames(css.label, size === 's' ? css.sizeS : css.sizeM)
-    if (isVertical) {
+    if (!isHorizontal) {
       const { part, partIndex } = column
       const { columnSize, y, value } = part
       return (
