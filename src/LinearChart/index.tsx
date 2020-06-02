@@ -258,7 +258,6 @@ export class LinearChart extends React.Component<Props, State> {
                 y: scaleY,
               }}
               gridConfig={gridConfig}
-              lineClipPath={lineClipPath}
               onAxisSizeChange={this.onAxisSizeChange}
               mainLabelTickValues={mainLabelTickValues}
               mainGridTickValues={mainGridTickValues}
