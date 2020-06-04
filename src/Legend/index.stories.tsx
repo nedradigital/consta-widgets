@@ -1,10 +1,16 @@
 import React from 'react'
 
-import { number } from '@storybook/addon-knobs'
+import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import {
+  blockCenteringDecorator,
+  createMetadata,
+  createStory,
+  environmentDecorator,
+} from '@/common/storybook'
 import { ColorGroups } from '@/common/types'
+import { labelPositions, labelTypes, sizes } from '@/LegendItem'
 
 import { Legend } from '.'
 
@@ -16,7 +22,7 @@ const colorGroups: ColorGroups = {
   green: 'var(--color-bg-success)',
 }
 
-const data: readonly any[] = [
+const data = [
   {
     colorGroupName: 'red',
     text: 'Красноватый текст',
@@ -37,22 +43,26 @@ const data: readonly any[] = [
     colorGroupName: 'green',
     text: 'Зеленый цвет',
   },
-]
+] as const
 
 export const Interactive = createStory(() => (
-  <div style={{ width: number('wrapper width', 200) }}>
-    <Legend
-      data={data}
-      colorGroups={colorGroups}
-      direction="column"
-      labelPosition="left"
-      labelType="dot"
-      fontSize="s"
-    />
-  </div>
+  <Legend
+    data={object('data', data)}
+    colorGroups={object('colorGroups', colorGroups)}
+    direction="column"
+    labelPosition={select('labelPosition', labelPositions, labelPositions[1])}
+    labelType={select('labelType', labelTypes, labelTypes[0])}
+    fontSize={select('fontSize', sizes, sizes[1])}
+  />
 ))
 
 export default createMetadata({
   title: 'components/Legend',
-  decorators: [withSmartKnobs(), blockCenteringDecorator()],
+  decorators: [
+    withSmartKnobs(),
+    environmentDecorator({
+      width: 200,
+    }),
+    blockCenteringDecorator(),
+  ],
 })

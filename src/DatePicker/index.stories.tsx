@@ -110,5 +110,5 @@ export const DatePickerRangeThirdPartyInputStory = createStory(
 
 export default createMetadata({
   title: 'components/DatePicker',
-  decorators: [withSmartKnobs(), blockCenteringDecorator()],
+  decorators: [withSmartKnobs({ ignoreProps: ['type'] }), blockCenteringDecorator()],
 })

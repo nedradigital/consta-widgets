@@ -14,6 +14,8 @@ const MIN = -2
 const MAX = 8
 const COUNT_POINTS = 51
 
+const IGNORE_PROPS = ['title'] as const
+
 const colorGroups = {
   first: 'var(--color-bg-success)',
   second: 'var(--color-bg-normal)',
@@ -84,7 +86,9 @@ const getCommonProps = () => {
 }
 
 const decorators = [
-  withSmartKnobs(),
+  withSmartKnobs({
+    ignoreProps: IGNORE_PROPS,
+  }),
   blockCenteringDecorator({ width: '60vw', height: '50vh' }),
 ] as const
 
@@ -105,7 +109,7 @@ export const WithNullData = createStory(
   () => {
     return (
       <LinearChart
-        colorGroups={colorGroups}
+        colorGroups={object('colorGroups', colorGroups)}
         lines={[
           {
             colorGroupName: 'first',
@@ -150,11 +154,15 @@ export const WithClickHandler = createStory(
   { name: 'с обработкой клика', decorators }
 )
 
-const ExampleTitle = (
-  <Text tag="div" view="primary" size="m">
-    LTIF
-  </Text>
-)
+const renderTitle = (defaultText: string = '') => {
+  const title = text('title', defaultText)
+
+  return title ? (
+    <Text tag="div" view="primary" size="m">
+      {title}
+    </Text>
+  ) : null
+}
 
 export const WithTitle = createStory(
   () => {
@@ -163,7 +171,7 @@ export const WithTitle = createStory(
         {...getCommonProps()}
         colorGroups={object('colorGroups', colorGroups)}
         isHorizontal
-        title={ExampleTitle}
+        title={renderTitle('LTIF')}
       />
     )
   },
@@ -183,7 +191,10 @@ export const WithNumbers = createStory(
 
     return (
       <LinearChart
-        colorGroups={{ first: 'var(--color-bg-success)', second: 'var(--color-bg-normal)' }}
+        colorGroups={object('colorGroups', {
+          first: 'var(--color-bg-success)',
+          second: 'var(--color-bg-normal)',
+        })}
         lines={[
           {
             colorGroupName: 'first',
@@ -237,7 +248,10 @@ export const Vertical = createStory(
   },
   {
     name: 'вертикальный',
-    decorators: [withSmartKnobs(), blockCenteringDecorator({ width: 300, height: '80vh' })],
+    decorators: [
+      withSmartKnobs({ ignoreProps: IGNORE_PROPS }),
+      blockCenteringDecorator({ width: 300, height: '80vh' }),
+    ],
   }
 )
 

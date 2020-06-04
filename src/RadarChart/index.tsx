@@ -47,7 +47,7 @@ export type Figure = {
 
 export type Data = {
   maxValue: number
-  axesLabels: { [key: string]: string }
+  axesLabels: Record<string, string>
   figures: readonly Figure[]
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue

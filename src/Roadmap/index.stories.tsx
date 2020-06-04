@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { number, object } from '@storybook/addon-knobs'
+import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
@@ -14,11 +14,11 @@ export const Interactive = createStory(() => {
   return (
     <Roadmap
       rows={object('rows', rows)}
-      currentDay={number('currentDay', currentDay)}
       titles={object('titles', titles)}
       colorGroups={object('colorGroups', colorGroups)}
       filters={object('filters', filters)}
       startDate={startDate}
+      currentDay={currentDay}
       endDate={endDate}
     />
   )
@@ -31,11 +31,11 @@ export const WithLittleData = createStory(
     return (
       <Roadmap
         rows={object('rows', rows)}
-        currentDay={number('currentDay', currentDay)}
         titles={object('titles', titles)}
         colorGroups={object('colorGroups', colorGroups)}
         filters={object('filters', filters)}
         startDate={startDate}
+        currentDay={currentDay}
         endDate={endDate}
       />
     )
@@ -50,13 +50,13 @@ export const SingleColor = createStory(
     return (
       <Roadmap
         rows={object('rows', rows)}
-        currentDay={currentDay}
         titles={object('titles', titles)}
         colorGroups={object('colorGroups', {
           green: 'var(--color-bg-success)',
         })}
         filters={object('filters', filters)}
         startDate={startDate}
+        currentDay={currentDay}
         endDate={endDate}
       />
     )

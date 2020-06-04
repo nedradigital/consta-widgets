@@ -1,9 +1,13 @@
 import React from 'react'
 
-import { number } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import {
+  blockCenteringDecorator,
+  createMetadata,
+  createStory,
+  environmentDecorator,
+} from '@/common/storybook'
 
 import { Stats } from './index'
 
@@ -23,28 +27,28 @@ export const Interactive = createStory(() => (
 
 export const WithLineBreak = createStory(
   () => (
-    <div
-      style={{
-        width: number('Ширина контейнера', 200),
+    <Stats
+      title="Сроки срочные сроки срочные сроки срочные"
+      value={217000}
+      badge={{
+        percentage: 2.1,
+        status: 'normal',
       }}
-    >
-      <Stats
-        title="Сроки срочные сроки срочные сроки срочные"
-        value={217000}
-        badge={{
-          percentage: 2.1,
-          status: 'normal',
-        }}
-        unit="суток / час / суток / час / суток / час"
-        size="xs"
-        layout="full"
-      />
-    </div>
+      unit="суток / час / суток / час / суток / час"
+      size="xs"
+      layout="full"
+    />
   ),
   { name: 'с переносом строки' }
 )
 
 export default createMetadata({
   title: 'components/Stats',
-  decorators: [withSmartKnobs(), blockCenteringDecorator()],
+  decorators: [
+    withSmartKnobs(),
+    environmentDecorator({
+      width: 200,
+    }),
+    blockCenteringDecorator(),
+  ],
 })

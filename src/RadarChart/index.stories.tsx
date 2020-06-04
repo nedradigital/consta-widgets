@@ -1,118 +1,47 @@
 import React from 'react'
 
-import { boolean, number, object, text } from '@storybook/addon-knobs'
+import { number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import {
-  blockCenteringDecorator,
-  createMetadata,
-  createStory,
-  percentFormatValue,
-} from '@/common/storybook'
+import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
 import { getFormattedValue } from '@/common/utils/chart'
 
-import { Figure, RadarChart } from './'
+import { RadarChart } from './'
+import { axesLabels, colorGroups, emptyFigures, figures } from './data.mock'
 
-const getColorGroups = () => {
-  return object('colorGroups', {
-    mainCharacter: 'var(--color-bg-success)',
-    partyMember: 'var(--color-bg-normal)',
-  })
+const formattersLabel = ['--', 'Как проценты'] as const
+type FormatterLabelName = typeof formattersLabel[number]
+type FormatterLabelValue = ((value: number | null) => string) | undefined
+
+const formattersLabelList: Record<FormatterLabelName, FormatterLabelValue> = {
+  '--': undefined,
+  'Как проценты': value => getFormattedValue(value, v => `${Math.round(v)}%`),
 }
 
-const axesLabels = {
-  strength: 'Сила сила сила сила сила сила сила сила сила сила сила сила сила',
-  endurance: 'Выносливая выносливость',
-  charisma: 'Харизма',
-  intelligence: 'Гиперинтеллектуальный интеллект',
-  agility: 'Ловкость',
-  persistence: 'Упорство',
-  mobility: 'Мобильность',
-  speed: 'Скорость',
-  profit: 'Прибыльность',
+const formattersTooltip = ['--', 'С единицей измерения'] as const
+type FormatterTooltipName = typeof formattersTooltip[number]
+type FormatterTooltipValue = (() => (value: number | null) => string) | undefined
+
+const formattersTooltipList: Record<FormatterTooltipName, FormatterTooltipValue> = {
+  '--': undefined,
+  'С единицей измерения': () => {
+    const unit = text('unit', ' тыс. м3')
+    return value => getFormattedValue(value, v => `${v}${unit}`)
+  },
 }
 
-const figures: readonly Figure[] = [
-  {
-    colorGroupName: 'mainCharacter',
-    name: 'Северный бур',
-    values: [
-      { axisName: 'strength', value: 10 },
-      { axisName: 'endurance', value: 9 },
-      { axisName: 'charisma', value: 2 },
-      { axisName: 'intelligence', value: 1 },
-      { axisName: 'agility', value: 3 },
-      { axisName: 'persistence', value: 7 },
-      { axisName: 'mobility', value: 5 },
-      { axisName: 'speed', value: 2 },
-      { axisName: 'profit', value: 8 },
-    ],
-  },
-  {
-    colorGroupName: 'partyMember',
-    name: 'Южное месторождение',
-    values: [
-      { axisName: 'strength', value: 2 },
-      { axisName: 'endurance', value: 4 },
-      { axisName: 'charisma', value: 8 },
-      { axisName: 'intelligence', value: 9 },
-      { axisName: 'agility', value: 2 },
-      { axisName: 'persistence', value: 7 },
-      { axisName: 'mobility', value: 1 },
-      { axisName: 'speed', value: 3 },
-      { axisName: 'profit', value: 3 },
-    ],
-  },
-]
+const getColorGroups = () => object('colorGroups', colorGroups)
 
-const emptyFigures: readonly Figure[] = [
-  {
-    colorGroupName: 'mainCharacter',
-    name: 'Северный бур',
-    values: [
-      { axisName: 'strength', value: 5 },
-      { axisName: 'endurance', value: 8 },
-      { axisName: 'charisma', value: 4 },
-      { axisName: 'intelligence', value: 9 },
-      { axisName: 'agility', value: null },
-      { axisName: 'persistence', value: null },
-      { axisName: 'mobility', value: 8 },
-      { axisName: 'speed', value: 4 },
-      { axisName: 'profit', value: 10 },
-    ],
-  },
-  {
-    colorGroupName: 'partyMember',
-    name: 'Южное месторождение',
-    values: [
-      { axisName: 'strength', value: 10 },
-      { axisName: 'endurance', value: 4 },
-      { axisName: 'charisma', value: 8 },
-      { axisName: 'intelligence', value: 9 },
-      { axisName: 'agility', value: 2 },
-      { axisName: 'persistence', value: 6 },
-      { axisName: 'mobility', value: null },
-      { axisName: 'speed', value: 7 },
-      { axisName: 'profit', value: 9 },
-    ],
-  },
-]
-
-const getFormattedValueForLabel = () => {
-  const useFormatPercents = boolean('Форматировать подписи кругов как проценты', false)
-
-  if (useFormatPercents) {
-    return (value: number | null) =>
-      getFormattedValue(value, v => percentFormatValue(Math.round(v)))
-  }
-
-  return undefined
+const getFormattersForLabel = () => {
+  const selected = select('formatValueForLabel', formattersLabel, formattersLabel[0])
+  return formattersLabelList[selected]
 }
 
-const getFormattedValueForTooltip = () => {
-  const unit = text('Юнит для значения в тултипе', ' тыс м3')
+const getFormattersForTooltip = () => {
+  const selected = select('formatValueForTooltip', formattersTooltip, formattersTooltip[0])
+  const formatter = formattersTooltipList[selected]
 
-  return (value: number | null) => getFormattedValue(value, v => `${v}${unit}`)
+  return formatter ? formatter() : undefined
 }
 
 const decorators = [
@@ -124,13 +53,13 @@ export const TwoFigures = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures}
       ticks={4}
       backgroundColor="var(--color-bg-default)"
-      formatValueForLabel={getFormattedValueForLabel()}
-      formatValueForTooltip={getFormattedValueForTooltip()}
+      formatValueForLabel={getFormattersForLabel()}
+      formatValueForTooltip={getFormattersForTooltip()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -142,13 +71,13 @@ export const TwoFiguresWithoutData = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={emptyFigures}
       ticks={4}
       backgroundColor="var(--color-bg-default)"
-      formatValueForLabel={getFormattedValueForLabel()}
-      formatValueForTooltip={getFormattedValueForTooltip()}
+      formatValueForLabel={getFormattersForLabel()}
+      formatValueForTooltip={getFormattersForTooltip()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -160,12 +89,12 @@ export const OneWholeFigure = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={4}
       backgroundColor="var(--color-bg-default)"
-      formatValueForLabel={getFormattedValueForLabel()}
+      formatValueForLabel={getFormattersForLabel()}
       withConcentricColor={false}
       labelSize="s"
     />
@@ -177,7 +106,7 @@ export const OneRainbowFigure = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
       ticks={5}
@@ -193,7 +122,7 @@ export const OneRainbowFigureWithoutData = createStory(
   () => (
     <RadarChart
       colorGroups={getColorGroups()}
-      axesLabels={axesLabels}
+      axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={[emptyFigures[0]]}
       ticks={5}
