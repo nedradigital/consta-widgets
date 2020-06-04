@@ -45,11 +45,11 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           ...initialParams,
-          position: { x: 250, y: 50 },
+          position: { x: 250, y: 0 },
         })
       ).toEqual({
         direction: 'downCenter',
-        position: { x: 200, y: 50 },
+        position: { x: 200, y: 0 },
       })
     })
 
@@ -162,6 +162,23 @@ describe('getComputedPositionAndDirection', () => {
         position: { x: -50, y: 25 },
       })
     })
+
+    it('если тултип может поместиться в любую сторону, то используем сторону из настроек', () => {
+      expect(
+        getComputedPositionAndDirection({
+          ...initialParams,
+          direction: 'right',
+          parentSize: {
+            height: 1000,
+            width: 1000,
+          },
+          position: { x: 500, y: 500 },
+        })
+      ).toEqual({
+        direction: 'right',
+        position: { x: 500, y: 500 },
+      })
+    })
   })
 
   describe('если тултип спозициронирован относительно элемента', () => {
@@ -174,6 +191,10 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
+          tooltipSize: {
+            width: 250,
+            height: 50,
+          },
           anchorClientRect: {
             ...ANCHOR_SIZE,
             top: 100,
@@ -184,7 +205,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'downCenter',
-        position: { x: 200, y: 155 },
+        position: { x: 125, y: 155 },
       })
     })
 
@@ -192,6 +213,10 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
+          tooltipSize: {
+            height: 100,
+            width: 100,
+          },
           anchorClientRect: {
             ...ANCHOR_SIZE,
             top: 450,
@@ -202,7 +227,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'upCenter',
-        position: { x: 400, y: 395 },
+        position: { x: 400, y: 345 },
       })
     })
 
@@ -233,7 +258,7 @@ describe('getComputedPositionAndDirection', () => {
         getComputedPositionAndDirection({
           ...params,
           tooltipSize: {
-            width: 200,
+            width: 500,
             height: 50,
           },
           anchorClientRect: {
@@ -246,7 +271,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'downLeft',
-        position: { x: 300, y: 55 },
+        position: { x: 0, y: 55 },
       })
     })
 
@@ -278,7 +303,7 @@ describe('getComputedPositionAndDirection', () => {
           ...params,
           tooltipSize: {
             width: 200,
-            height: 50,
+            height: 100,
           },
           anchorClientRect: {
             ...ANCHOR_SIZE,
@@ -290,7 +315,7 @@ describe('getComputedPositionAndDirection', () => {
         })
       ).toEqual({
         direction: 'upLeft',
-        position: { x: 300, y: 395 },
+        position: { x: 300, y: 345 },
       })
     })
 
@@ -358,6 +383,29 @@ describe('getComputedPositionAndDirection', () => {
       ).toEqual({
         direction: 'upCenter',
         position: { x: 0, y: -55 },
+      })
+    })
+
+    it('если тултип может поместиться в любую сторону, то используем сторону из настроек', () => {
+      expect(
+        getComputedPositionAndDirection({
+          ...params,
+          direction: 'downRight',
+          parentSize: {
+            height: 1000,
+            width: 1000,
+          },
+          anchorClientRect: {
+            ...ANCHOR_SIZE,
+            top: 400,
+            right: 500,
+            left: 400,
+            bottom: 550,
+          },
+        })
+      ).toEqual({
+        direction: 'downRight',
+        position: { x: 400, y: 555 },
       })
     })
   })
