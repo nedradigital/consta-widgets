@@ -50,8 +50,10 @@ export default createMetadata({
   title: 'components/Map',
   decorators: [
     environmentDecorator({
-      width: '100vw',
-      height: '100vh',
+      style: {
+        width: '100vw',
+        height: '100vh',
+      },
     }),
   ],
 })

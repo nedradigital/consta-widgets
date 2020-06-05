@@ -1,7 +1,7 @@
 import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { unitPositions } from '@/core/BarChart'
 
 import { TornadoChart } from './'
@@ -42,5 +42,8 @@ export const Minimalistic = createStory(
 
 export default createMetadata({
   title: 'components/TornadoChart',
-  decorators: [withSmartKnobs(), blockCenteringDecorator({ width: '60vw', height: '80vh' })],
+  decorators: [
+    withSmartKnobs(),
+    environmentDecorator({ style: { width: '60vw', height: '80vh' } }),
+  ],
 })

@@ -233,9 +233,11 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      backgroundColor: 'var(--color-control-bg-default)',
-      width: 200,
-      height: 200,
+      style: {
+        backgroundColor: 'var(--color-control-bg-default)',
+        width: 200,
+        height: 200,
+      },
     }),
   ],
   excludeStories: ['progressDonutData'],

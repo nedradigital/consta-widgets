@@ -42,7 +42,9 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: 200,
+      style: {
+        width: 200,
+      },
     }),
   ],
 })

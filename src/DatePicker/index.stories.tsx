@@ -1,4 +1,5 @@
 import { date as knobsDate, select } from '@storybook/addon-knobs'
+import { DecoratorFn } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
@@ -6,6 +7,15 @@ import { isValidDate } from '@/common/utils/type-guards'
 
 import { DatePicker, DateRange, sizes } from '.'
 import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'
+
+const DECORATORS: readonly DecoratorFn[] = [
+  withSmartKnobs({ ignoreProps: ['type'] }),
+  environmentDecorator(),
+]
+const DECORATORS_WITHOUT_SCALING: readonly DecoratorFn[] = [
+  withSmartKnobs({ ignoreProps: ['type'] }),
+  environmentDecorator({ scaling: false }),
+]
 
 const setInputValue = (value?: string) => {
   if (!value) {
@@ -30,7 +40,7 @@ export const DakePickerSingleStory = createStory(
 
     return <DatePicker type="date" value={date} onChange={setDate} {...defaultProps()} />
   },
-  { name: 'Выбор даты' }
+  { name: 'Выбор даты', decorators: DECORATORS }
 )
 
 export const DatePickerThirdPartyInputStory = createStory(
@@ -58,7 +68,7 @@ export const DatePickerThirdPartyInputStory = createStory(
       />
     )
   },
-  { name: 'Выбор даты с сторонним инпутом' }
+  { name: 'Выбор даты с сторонним инпутом', decorators: DECORATORS_WITHOUT_SCALING }
 )
 
 export const DatePickerRangeStory = createStory(
@@ -67,7 +77,7 @@ export const DatePickerRangeStory = createStory(
 
     return <DatePicker type="date-range" value={range} onChange={setRange} {...defaultProps()} />
   },
-  { name: 'Выбор диапазона дат' }
+  { name: 'Выбор диапазона дат', decorators: DECORATORS }
 )
 
 export const DatePickerRangeThirdPartyInputStory = createStory(
@@ -105,10 +115,9 @@ export const DatePickerRangeThirdPartyInputStory = createStory(
       />
     )
   },
-  { name: 'Выбор диапазона дат с сторонними инпутами' }
+  { name: 'Выбор диапазона дат с сторонними инпутами', decorators: DECORATORS_WITHOUT_SCALING }
 )
 
 export default createMetadata({
   title: 'components/DatePicker',
-  decorators: [withSmartKnobs({ ignoreProps: ['type'] }), environmentDecorator()],
 })

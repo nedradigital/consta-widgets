@@ -90,8 +90,10 @@ const decorators = [
     ignoreProps: IGNORE_PROPS,
   }),
   environmentDecorator({
-    width: '60vw',
-    height: '50vh',
+    style: {
+      width: '60vw',
+      height: '50vh',
+    },
   }),
 ] as const
 
@@ -254,8 +256,10 @@ export const Vertical = createStory(
     decorators: [
       withSmartKnobs({ ignoreProps: IGNORE_PROPS }),
       environmentDecorator({
-        width: 300,
-        height: '80vh',
+        style: {
+          width: 300,
+          height: '80vh',
+        },
       }),
     ],
   }

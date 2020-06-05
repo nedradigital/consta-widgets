@@ -47,8 +47,10 @@ const getFormattersForTooltip = () => {
 const decorators = [
   withSmartKnobs({ ignoreProps: ['backgroundColor'] }),
   environmentDecorator({
-    width: '80vw',
-    height: '80vh',
+    style: {
+      width: '80vw',
+      height: '80vh',
+    },
   }),
 ] as const
 
@@ -176,8 +178,10 @@ export const FontSizeReduction = createStory(
     name: 'уменьшение размера шрифта',
     decorators: [
       environmentDecorator({
-        width: '100vw',
-        height: '100vh',
+        style: {
+          width: '100vw',
+          height: '100vh',
+        },
       }),
     ],
   }

@@ -22,7 +22,9 @@ export default createMetadata({
   title: 'components/SelectedOptionsList',
   decorators: [
     environmentDecorator({
-      width: 500,
+      style: {
+        width: 500,
+      },
     }),
   ],
 })

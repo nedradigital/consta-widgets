@@ -13,11 +13,14 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: 600,
-      height: 200,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      scaling: false,
+      style: {
+        width: 600,
+        height: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     }),
   ],
 })

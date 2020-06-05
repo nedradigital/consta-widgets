@@ -15,7 +15,9 @@ import {
 const decorators = [
   withSmartKnobs(),
   environmentDecorator({
-    width: '90vw',
+    style: {
+      width: '90vw',
+    },
   }),
 ] as const
 
@@ -75,7 +77,9 @@ export const WithTrafficLight = createStory(
     decorators: [
       withSmartKnobs(),
       environmentDecorator({
-        width: 500,
+        style: {
+          width: 500,
+        },
       }),
     ],
   }

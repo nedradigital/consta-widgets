@@ -22,5 +22,5 @@ export const Interactive = createStory(() => (
 
 export default createMetadata({
   title: 'components/ImagesPopup',
-  decorators: [withSmartKnobs(), environmentDecorator()],
+  decorators: [withSmartKnobs(), environmentDecorator({ scaling: false })],
 })

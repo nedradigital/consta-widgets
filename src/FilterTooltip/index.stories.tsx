@@ -33,7 +33,9 @@ export default createMetadata({
   title: 'components/FilterTooltip',
   decorators: [
     environmentDecorator({
-      position: 'relative',
+      style: {
+        position: 'relative',
+      },
     }),
   ],
 })

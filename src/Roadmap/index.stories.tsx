@@ -69,7 +69,9 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: '80vw',
+      style: {
+        width: '80vw',
+      },
     }),
   ],
 })

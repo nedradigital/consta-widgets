@@ -1,3 +1,4 @@
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { number, text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 
@@ -27,18 +28,29 @@ const getValue = (value?: number | string) => {
   return value
 }
 
-export const environmentDecorator = (style: React.CSSProperties = {}): DecoratorFn => storyFn => {
-  const baseSize = number('base-size', 16, undefined, ENVIRONMENT_GROUP_ID)
+type DecoratorParams = {
+  scaling?: boolean
+  style?: React.CSSProperties
+}
+
+export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
+  const { scaling = true, style = {} } = params
+
+  const baseSize = scaling ? number('base-size', 16, undefined, ENVIRONMENT_GROUP_ID) : undefined
   const width = style.width ? text('width', getValue(style.width), ENVIRONMENT_GROUP_ID) : undefined
   const height = style.height
     ? text('height', getValue(style.height), ENVIRONMENT_GROUP_ID)
     : undefined
 
-  return (
-    <BaseSizeProvider value={baseSize}>
-      <div style={CENTERING_STYLES}>
-        <div style={{ ...style, width, height }}>{storyFn()}</div>
-      </div>
-    </BaseSizeProvider>
+  const content = (
+    <div style={CENTERING_STYLES}>
+      <div style={{ ...style, width, height }}>{storyFn()}</div>
+    </div>
+  )
+
+  return isDefined(baseSize) ? (
+    <BaseSizeProvider value={baseSize}>{content}</BaseSizeProvider>
+  ) : (
+    content
   )
 }
