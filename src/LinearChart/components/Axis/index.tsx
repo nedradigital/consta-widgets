@@ -8,6 +8,7 @@ import * as _ from 'lodash'
 import { FormatValue } from '@/common/types'
 
 import { ScaleLinear, TickValues } from '../..'
+import { isInDomain } from '../../helpers'
 
 import css from './index.css'
 
@@ -41,7 +42,6 @@ enum AxisDirections {
 type Props = {
   width: number
   height: number
-  lineClipPath: string
   scales: {
     [key in 'x' | 'y']: ScaleLinear
   }
@@ -87,14 +87,23 @@ export const getGridTicksWithGuide = ({
       }
 }
 
+const getGuideValue = ({
+  showGuide,
+  value,
+  domain,
+}: {
+  showGuide: boolean | undefined
+  value: number
+  domain: readonly number[]
+}): number | undefined => (showGuide && isInDomain(value, domain) ? value : undefined)
+
 export const Axis: React.FC<Props> = ({
   width,
   height,
-  lineClipPath,
   scales: { x: scaleX, y: scaleY },
   gridConfig: {
-    x: { labels: xLabelsPos, labelTicks: xLabelTicks, guide: xGuide },
-    y: { labels: yLabelsPos, labelTicks: yLabelTicks, guide: yGuide },
+    x: { labels: xLabelsPos, labelTicks: xLabelTicks, guide: showXGuide },
+    y: { labels: yLabelsPos, labelTicks: yLabelTicks, guide: showYGuide },
   },
   onAxisSizeChange,
   mainLabelTickValues,
@@ -123,8 +132,16 @@ export const Axis: React.FC<Props> = ({
     isHorizontal,
     mainTickValues: mainGridTickValues,
     secondaryTickValues: secondaryGridTickValues,
-    xGuideValue: xGuide ? xGuideValue : undefined,
-    yGuideValue: yGuide ? yGuideValue : undefined,
+    xGuideValue: getGuideValue({
+      showGuide: showXGuide,
+      value: xGuideValue,
+      domain: scaleX.domain(),
+    }),
+    yGuideValue: getGuideValue({
+      showGuide: showYGuide,
+      value: yGuideValue,
+      domain: scaleY.domain(),
+    }),
   })
   const showXGrid = Boolean(xGridTicks.length)
   const showYGrid = Boolean(yGridTicks.length)
@@ -236,13 +253,13 @@ export const Axis: React.FC<Props> = ({
       {
         el: xGridRef.current,
         axis: xGridBase.tickValues([...xGridTicks]),
-        withGuide: xGuide,
+        withGuide: showXGuide,
         guideValue: xGuideValue,
       },
       {
         el: yGridRef.current,
         axis: yGridBase.tickValues([...yGridTicks]),
-        withGuide: yGuide,
+        withGuide: showYGuide,
         guideValue: yGuideValue,
       },
     ] as const
@@ -276,10 +293,8 @@ export const Axis: React.FC<Props> = ({
 
   return (
     <g className={css.main}>
-      <g clipPath={lineClipPath}>
-        {showXGrid && <g className={css.grid} ref={xGridRef} />}
-        {showYGrid && <g className={css.grid} ref={yGridRef} />}
-      </g>
+      {showXGrid && <g className={css.grid} ref={xGridRef} />}
+      {showYGrid && <g className={css.grid} ref={yGridRef} />}
 
       {showXLabels && (
         <g>

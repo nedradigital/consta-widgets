@@ -79,18 +79,22 @@ export const calculateSecondaryDomain = (
   ] as NumberRange
 }
 
+export const isInDomain = (value: number, domain: readonly number[]) => {
+  const minInDomain = Math.min(...domain)
+  const maxInDomain = Math.max(...domain)
+
+  return value >= minInDomain && value <= maxInDomain
+}
+
 export const getUniqValues = (
   items: readonly Item[],
   domain: NumberRange,
   type: 'x' | 'y'
 ): readonly number[] => {
-  const minInDomain = Math.min(...domain)
-  const maxInDomain = Math.max(...domain)
-
   return _.sortBy(
     _.uniq(items.map(v => v[type]))
       .filter(isNotNil)
-      .filter(i => i >= minInDomain && i <= maxInDomain)
+      .filter(i => isInDomain(i, domain))
   )
 }
 
