@@ -2,9 +2,10 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Direction } from '@/LinearChart'
+import { Boundary, DirectionX, DirectionY } from '@/LinearChart'
 
 import { HoveredMainValue, Item, itemIsNotEmpty, ScaleLinear } from '../../'
+import { getBoundary } from '../../helpers'
 import { Area } from '../Area'
 import { Line } from '../Line'
 
@@ -16,8 +17,18 @@ type GradientProps =
     }
   | {
       withGradient: true
-      gradientDirection: Direction
+      gradientDirectionX: DirectionX
+      gradientDirectionY: DirectionY
       areaBottom: number
+    }
+
+type BoundariesProps =
+  | {
+      boundaries?: never
+    }
+  | {
+      boundaries: readonly Boundary[]
+      boundariesGradientId: string
     }
 
 type Props = {
@@ -31,11 +42,14 @@ type Props = {
   scaleY: ScaleLinear
   hoveredMainValue: HoveredMainValue
   isHorizontal: boolean
-} & GradientProps
+} & GradientProps &
+  BoundariesProps
 
 const isActiveCircle = (position: Item, isHorizontal: boolean, activeValue?: number) => {
   return (isHorizontal ? position.x : position.y) === activeValue
 }
+
+export const LINE_WIDTH = 2
 
 export const LineWithDots: React.FC<Props> = props => {
   const {
@@ -52,18 +66,26 @@ export const LineWithDots: React.FC<Props> = props => {
   } = props
 
   return (
-    <g style={{ color }} className={css.main}>
+    <g className={css.main}>
       <g clipPath={lineClipPath}>
-        <Line className={css.line} points={values} scaleX={scaleX} scaleY={scaleY} />
+        <Line
+          points={values}
+          scaleX={scaleX}
+          scaleY={scaleY}
+          stroke={props.boundaries ? `url(#${props.boundariesGradientId})` : color}
+          strokeWidth={LINE_WIDTH}
+        />
 
         {props.withGradient && (
           <Area
             values={values.filter(itemIsNotEmpty)}
+            color={color}
             scaleX={scaleX}
             scaleY={scaleY}
             isHorizontal={isHorizontal}
             areaBottom={props.areaBottom}
-            gradientDirection={props.gradientDirection}
+            directionX={props.gradientDirectionX}
+            directionY={props.gradientDirectionY}
           />
         )}
       </g>
@@ -73,6 +95,10 @@ export const LineWithDots: React.FC<Props> = props => {
           const isActive = isActiveCircle(item, isHorizontal, hoveredMainValue)
           const radius = hasDotRadius || isActive || items.length === 1 ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
+          const boundaryColor =
+            props.boundaries &&
+            getBoundary({ boundaries: props.boundaries, item, isHorizontal })?.color
+          const circleColor = boundaryColor || color
 
           return (
             <circle
@@ -84,6 +110,7 @@ export const LineWithDots: React.FC<Props> = props => {
               style={{
                 strokeWidth: radiusCircle,
               }}
+              color={circleColor}
             />
           )
         })}

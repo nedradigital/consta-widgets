@@ -6,7 +6,8 @@ import { ColorGroups, FormatValue } from '@/common/types'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 import { Position, Tooltip } from '@/Tooltip'
 
-import { HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
+import { Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
+import { getBoundary } from '../../helpers'
 import { THRESHOLD_COLOR } from '../Threshold'
 
 type Props = {
@@ -16,6 +17,8 @@ type Props = {
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   colorGroups: ColorGroups
+  colorGroupWithBoundaries?: string
+  boundaries?: readonly Boundary[]
   hoveredMainValue: HoveredMainValue
   threshold?: Threshold
   formatValueForLabel: FormatValue
@@ -37,6 +40,8 @@ export const LineTooltip: React.FC<Props> = ({
   scaleY,
   hoveredMainValue,
   colorGroups,
+  colorGroupWithBoundaries,
+  boundaries,
   threshold,
   formatValueForLabel,
   formatValueForTooltipTitle,
@@ -53,9 +58,17 @@ export const LineTooltip: React.FC<Props> = ({
 
   const tooltipItems: readonly TooltipItem[] = lines.map(line => {
     const item = line.values.find(isItemHovered)
+    const boundaryColor =
+      colorGroupWithBoundaries &&
+      colorGroups[colorGroupWithBoundaries] &&
+      line.colorGroupName === colorGroupWithBoundaries &&
+      boundaries &&
+      item &&
+      getBoundary({ boundaries, item, isHorizontal })?.color
+    const itemColor = boundaryColor || colorGroups[line.colorGroupName]
 
     return {
-      color: colorGroups[line.colorGroupName],
+      color: itemColor,
       name: line.lineName,
       value: getSecondaryValue(item),
     }

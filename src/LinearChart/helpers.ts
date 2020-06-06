@@ -2,7 +2,7 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Direction, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
+import { Boundary, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
@@ -35,10 +35,10 @@ export const getYRange = (height: number) =>
     0,
   ] as NumberRange
 
-export const getXScale = (domain: NumberRange, width: number, direction: Direction = 'toRight') =>
+export const getXScale = (domain: NumberRange, width: number) =>
   d3
     .scaleLinear()
-    .domain(direction === 'toRight' ? [...domain] : [...domain].reverse())
+    .domain([...domain])
     .range(getXRange(width))
 
 export const getYScale = (domain: NumberRange, height: number) =>
@@ -161,4 +161,24 @@ export function flipPointsOnAxes<T extends Item | NotEmptyItem>(
             y: item.x,
           } as T)
       )
+}
+
+export const getBoundary = ({
+  boundaries,
+  item,
+  isHorizontal,
+}: {
+  boundaries: readonly Boundary[]
+  item: Item
+  isHorizontal: boolean
+}) => {
+  const position = isHorizontal ? item.y : item.x
+  if (position === null) {
+    return undefined
+  }
+
+  return boundaries.find(boundary => {
+    const value = _.sortBy(boundary.value)
+    return position >= value[0] && position < value[1]
+  })
 }

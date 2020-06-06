@@ -4,6 +4,7 @@ import { Item, NumberRange } from '../'
 import {
   calculateSecondaryDomain,
   flipPointsOnAxes,
+  getBoundary,
   getIndexWithFallbackToDefault,
   getMainTickValues,
   getSecondaryTickValues,
@@ -509,13 +510,6 @@ describe('getXScale', () => {
     expect(scaler(1)).toEqual(0)
     expect(scaler(2)).toEqual(100)
   })
-
-  it('получение значение позиции точки на оси X в пикселях для построения графика справа налево', () => {
-    const scaler = getXScale(DOMAIN, WIDTH, 'toLeft')
-
-    expect(scaler(1)).toEqual(100)
-    expect(scaler(2)).toEqual(0)
-  })
 })
 
 describe('getYScale', () => {
@@ -599,5 +593,33 @@ describe('getUniqValues', () => {
     it('возвращает уникальные элементы по выборке из домена для Y', () => {
       expect(getUniqValues(ITEMS, [2, 0], 'y')).toEqual([0, 2])
     })
+  })
+})
+
+describe('getBoundary', () => {
+  const boundary = { value: [3, 5] as const, color: 'red' }
+
+  it('возвращает границу по заданным значениям для горизонтального графика', () => {
+    expect(
+      getBoundary({ boundaries: [boundary], item: { x: null, y: 4 }, isHorizontal: true })
+    ).toEqual(boundary)
+  })
+
+  it('возвращает границу по заданным значениям для вертикального графика', () => {
+    expect(
+      getBoundary({ boundaries: [boundary], item: { x: 4, y: null }, isHorizontal: false })
+    ).toEqual(boundary)
+  })
+
+  it('возвращает undefined если граница отсутствует в заданных координатах', () => {
+    expect(
+      getBoundary({ boundaries: [boundary], item: { x: 0, y: 0 }, isHorizontal: true })
+    ).toBeUndefined()
+  })
+
+  it('возвращает undefined если у переданной точки отсутствуют координаты', () => {
+    expect(
+      getBoundary({ boundaries: [boundary], item: { x: null, y: null }, isHorizontal: true })
+    ).toBeUndefined()
   })
 })
