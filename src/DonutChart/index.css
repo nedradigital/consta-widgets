@@ -51,17 +51,17 @@
   box-shadow: inset 0 0 10px 10px var(--color-bg-secondary);
 
   &.halfRight {
-    top: var(--donut-width);
+    top: 50%;
     right: var(--donut-width);
 
-    transform: translateX(calc(50% + var(--donut-width)));
+    transform: translateX(calc(50% + var(--donut-width))) translateY(-50%);
   }
 
   &.halfLeft {
-    top: var(--donut-width);
+    top: 50%;
     left: var(--donut-width);
 
-    transform: translateX(calc(-50% - var(--donut-width)));
+    transform: translateX(calc(-50% - var(--donut-width))) translateY(-50%);
   }
 
   &.halfBottom {

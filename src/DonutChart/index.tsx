@@ -82,7 +82,7 @@ export const DonutChart: React.FC<Props> = ({
   const svgWidth = isHalfDonutVertical ? mainRadius : size
   const svgHeight = isHalfDonutHorizontal ? mainRadius : size
   const viewBox = `${svgOffsetX}, ${svgOffsetY}, ${svgWidth}, ${svgHeight}`
-  const shadowSize = Math.max(width, height) - sizeDonut * 2
+  const shadowSize = Math.max(svgWidth, svgHeight) - sizeDonut * 2
   const isTooltipVisible = Boolean(tooltipData.length)
 
   const linesRadiuses = createArrayOfIndexes(circlesCount).map(index => {
