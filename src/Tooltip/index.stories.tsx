@@ -73,8 +73,15 @@ export const TooltipPositionedByAnchorStory = createStory(
           anchorRef={anchorRef}
           offset={number('offset', 5)}
           withArrow={boolean('withArrow', false)}
+          isContentHoverable
         >
           {text('children', 'Hello, from Portal!')}
+          {boolean('С интерактивным содержимым', false) && (
+            <>
+              <br />
+              <input />
+            </>
+          )}
         </Tooltip>
       </>
     )
