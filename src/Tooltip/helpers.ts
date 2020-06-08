@@ -123,11 +123,11 @@ export const getComputedPositionAndDirection = (
   }
 
   if ('anchorClientRect' in props) {
-    initialPosition.x = props.anchorClientRect.left
-    initialPosition.y = props.anchorClientRect.bottom
+    initialPosition.x = props.anchorClientRect.left + window.scrollX
+    initialPosition.y = props.anchorClientRect.bottom + window.scrollY
   } else if ('position' in props && isDefinedPosition(props.position)) {
-    initialPosition.x = props.position.x
-    initialPosition.y = props.position.y
+    initialPosition.x = props.position.x + window.scrollX
+    initialPosition.y = props.position.y + window.scrollY
   }
 
   if (!isDefinedPosition(initialPosition)) {

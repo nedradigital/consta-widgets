@@ -116,14 +116,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         ...basePositionData,
       })
 
-      if (isDefinedPosition(computedPosition)) {
-        // Корректируем позицию с учётом скролла окна
-        computedPosition.y += window.scrollY
-        computedPosition.x += window.scrollX
-
-        if (!_.isEqual(position, computedPosition)) {
-          setPosition(computedPosition)
-        }
+      if (isDefinedPosition(computedPosition) && !_.isEqual(position, computedPosition)) {
+        setPosition(computedPosition)
       }
 
       if (direction !== computedDirection) {
