@@ -20,6 +20,7 @@ export const Interactive = createStory(
       gridTicks={4}
       valuesTicks={1}
       isHorizontal={false}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с одним столбцом' }
@@ -34,6 +35,7 @@ export const WithTwoColumns = createStory(
       gridTicks={4}
       valuesTicks={1}
       isHorizontal={false}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с двумя столбцами' }
@@ -49,6 +51,7 @@ export const HasRatio = createStory(
       valuesTicks={1}
       isHorizontal={false}
       formatValueForLabel={v => `${v}%`}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'в процентах' }
@@ -63,6 +66,7 @@ export const Minimalistic = createStory(
       gridTicks={0}
       valuesTicks={0}
       isHorizontal={true}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'минималистичный' }

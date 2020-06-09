@@ -29,6 +29,7 @@ type Props = {
   size?: 's' | 'm' | 'auto'
   showValues?: boolean
   isHorizontal?: boolean
+  isXAxisLabelsSlanted?: boolean
   threshold?: Threshold
   formatValueForLabel?: FormatValue
 }

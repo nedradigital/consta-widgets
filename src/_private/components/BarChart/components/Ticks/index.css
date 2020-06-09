@@ -1,9 +1,5 @@
-@custom-selector :--isTop .isTop;
-@custom-selector :--isRight .isRight;
-@custom-selector :--isBottom .isBottom;
-@custom-selector :--isLeft .isLeft;
-@custom-selector :--isHorizontal :--isTop, :--isBottom;
-@custom-selector :--isVertical :--isRight, :--isLeft;
+@custom-selector :--isHorizontal .isTop, .isBottom;
+@custom-selector :--isVertical .isRight, .isLeft;
 
 .group {
   --tick-line-color: var(--color-bg-border);
@@ -39,13 +35,13 @@
     height: 0;
   }
 
-  &:--isRight {
+  &.isRight {
     justify-content: flex-start;
 
     text-align: left;
   }
 
-  &:--isLeft {
+  &.isLeft {
     justify-content: flex-end;
 
     text-align: right;
@@ -65,29 +61,29 @@
     height: 1px;
   }
 
-  :--isTop &,
-  :--isLeft & {
+  .isTop &,
+  .isLeft & {
     order: 1;
   }
 
-  :--isBottom &,
-  :--isRight & {
+  .isBottom &,
+  .isRight & {
     order: -1;
   }
 
-  :--isTop & {
+  .isTop & {
     margin-top: var(--tick-line-margin);
   }
 
-  :--isBottom & {
+  .isBottom & {
     margin-bottom: var(--tick-line-margin);
   }
 
-  :--isRight & {
+  .isRight & {
     margin-right: var(--tick-line-margin);
   }
 
-  :--isLeft & {
+  .isLeft & {
     margin-left: var(--tick-line-margin);
   }
 }
@@ -101,14 +97,18 @@
     padding: var(--space-2xs) 0;
   }
 
-  &:--isLeft {
+  &.isLeft {
     justify-content: flex-end;
 
     max-width: calc-size(160);
   }
 
-  &:--isRight {
+  &.isRight {
     max-width: calc-size(160);
+  }
+
+  &.isXAxisLabelsSlanted {
+    position: relative;
   }
 }
 
@@ -119,5 +119,20 @@
     -webkit-box-orient: vertical;
 
     overflow: hidden;
+  }
+
+  .isXAxisLabelsSlanted.label & {
+    position: absolute;
+    top: 0;
+    right: 50%;
+
+    overflow: hidden;
+
+    height: calc-size(15);
+
+    white-space: pre;
+
+    transform: rotate(-55.81deg);
+    transform-origin: right center;
   }
 }

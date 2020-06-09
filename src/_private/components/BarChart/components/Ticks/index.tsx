@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { RefObject, useLayoutEffect, useState } from 'react'
 
 import { Text, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
-import _ from 'lodash'
+import { times } from 'lodash'
 
 import { Scaler } from '@/_private/utils/scale'
 
+import { cropText, getTextAlign, getTransformTranslate, SLANTED_TEXT_MAX_LENGTH } from './helpers'
 import css from './index.css'
 
 export const sizes = ['s', 'm'] as const
@@ -22,6 +23,7 @@ type Props<T> = {
   showLine?: boolean
   isTicksSnuggleOnEdge?: boolean
   className?: string
+  isXAxisLabelsSlanted?: boolean
   style?: React.CSSProperties
   formatValueForLabel?: (value: T) => string
 } & (
@@ -47,10 +49,9 @@ const positionClasses: Record<Position, string> = {
   left: css.isLeft,
 }
 
-const getTransformTranslate = (x: number, y: number) => `translate(${x}px,${y}px)`
-
 export function Ticks<T>(props: Props<T>) {
   const {
+    isXAxisLabelsSlanted,
     className,
     values,
     scaler,
@@ -65,6 +66,23 @@ export function Ticks<T>(props: Props<T>) {
   const isTop = position === 'top'
   const isBottom = position === 'bottom'
   const isHorizontal = isTop || isBottom
+  const [maxLabelHeight, setMaxLabelHeight] = useState(0)
+
+  const refs: ReadonlyArray<RefObject<HTMLDivElement>> = times(values.length, () =>
+    React.createRef()
+  )
+
+  useLayoutEffect(() => {
+    const refsHeights = refs.map(ref => {
+      if (!ref.current) {
+        return 0
+      }
+      const height = ref.current.getBoundingClientRect().height
+      return Math.round(height)
+    })
+
+    setMaxLabelHeight(Math.max(0, ...refsHeights))
+  }, [refs, values, size, isXAxisLabelsSlanted])
 
   const getBandwidth = (v: T) => {
     return scaler?.bandwidth ? scaler.bandwidth(v) : 0
@@ -102,6 +120,8 @@ export function Ticks<T>(props: Props<T>) {
   const children = values.map((value, idx) => {
     const transform = scaler && tickTransform(value)
     const alignItems = getAlignItems(idx, values.length)
+    const textValue = formatValueForLabel(value)
+    const textAlign = getTextAlign({ isXAxisLabelsSlanted, isHorizontal })
 
     return (
       <div
@@ -109,11 +129,13 @@ export function Ticks<T>(props: Props<T>) {
         className={classnames(
           className,
           positionClasses[position],
-          props.isLabel ? css.label : css.tick
+          props.isLabel ? css.label : css.tick,
+          isXAxisLabelsSlanted && css.isXAxisLabelsSlanted
         )}
         style={{
           transform,
           alignItems,
+          height: isXAxisLabelsSlanted ? maxLabelHeight : undefined,
           gridArea: props.isLabel ? props.getGridAreaName(idx) : '',
         }}
       >
@@ -121,11 +143,15 @@ export function Ticks<T>(props: Props<T>) {
           as="div"
           view="secondary"
           size={textSizes[size]}
-          align={isHorizontal ? 'center' : undefined}
-          className={css.text}
+          align={textAlign}
+          title={textValue}
+          className={classnames(css.text)}
           lineHeight={props.isLabel && props.isDense ? 's' : undefined}
         >
-          {formatValueForLabel(value)}
+          {(isXAxisLabelsSlanted && (
+            <span ref={refs[idx]}>{cropText(textValue, SLANTED_TEXT_MAX_LENGTH)}</span>
+          )) ||
+            textValue}
         </Text>
         {showLine && <span className={css.line} />}
       </div>
