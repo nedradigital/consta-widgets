@@ -22,4 +22,4 @@ export { Tooltip } from './Tooltip'
 export { TornadoChart } from './TornadoChart'
 
 // Contexts
-export { BaseSizeContext, useBaseSize } from './BaseSizeContext'
+export { BaseSizeProvider, useBaseSize } from './BaseSizeContext'

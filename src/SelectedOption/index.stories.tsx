@@ -3,7 +3,7 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { text } from '@storybook/addon-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { SelectedOption } from './'
 
@@ -13,5 +13,5 @@ export const Interactive = createStory(() => (
 
 export default createMetadata({
   title: 'components/SelectedOption',
-  decorators: [blockCenteringDecorator()],
+  decorators: [environmentDecorator()],
 })

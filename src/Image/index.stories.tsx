@@ -1,6 +1,6 @@
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { Image } from '@/Image/index'
 
 export const Interactive = createStory(() => (
@@ -12,12 +12,15 @@ export default createMetadata({
 
   decorators: [
     withSmartKnobs(),
-    blockCenteringDecorator({
-      width: 600,
-      height: 200,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+    environmentDecorator({
+      scaling: false,
+      style: {
+        width: 600,
+        height: 200,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
     }),
   ],
 })

@@ -1,17 +1,17 @@
 import React from 'react'
 
-import { withSmartKnobs } from 'storybook-addon-smart-knobs'
+import { object, text } from '@storybook/addon-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { Tooltip } from '@/Tooltip'
 
 import { TooltipContentForMultipleValues } from '.'
 
 export const Interactive = createStory(() => (
-  <Tooltip isVisible position={{ x: 10, y: 10 }}>
+  <Tooltip isVisible position={{ x: 10, y: 10 }} direction="downRight">
     <TooltipContentForMultipleValues
-      title="Тестовый заголовок"
-      items={[
+      title={text('title', 'Тестовый заголовок')}
+      items={object('items', [
         {
           color: 'var(--color-bg-alert)',
           name: 'Первый длинный заголовок',
@@ -22,19 +22,11 @@ export const Interactive = createStory(() => (
           name: 'Второй длинный заголовок',
           value: '10000000',
         },
-      ]}
+      ])}
     />
   </Tooltip>
 ))
 
 export default createMetadata({
   title: 'components/TooltipContentForMultipleValues',
-
-  decorators: [
-    withSmartKnobs(),
-    blockCenteringDecorator({
-      backgroundColor: 'var(--color-control-bg-default)',
-      width: 250,
-    }),
-  ],
 })

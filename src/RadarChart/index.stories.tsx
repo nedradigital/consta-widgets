@@ -3,7 +3,7 @@ import React from 'react'
 import { number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { getFormattedValue } from '@/common/utils/chart'
 
 import { RadarChart } from './'
@@ -46,7 +46,12 @@ const getFormattersForTooltip = () => {
 
 const decorators = [
   withSmartKnobs({ ignoreProps: ['backgroundColor'] }),
-  blockCenteringDecorator({ width: '80vw', height: '80vh' }),
+  environmentDecorator({
+    style: {
+      width: '80vw',
+      height: '80vh',
+    },
+  }),
 ] as const
 
 export const TwoFigures = createStory(
@@ -171,7 +176,14 @@ export const FontSizeReduction = createStory(
   },
   {
     name: 'уменьшение размера шрифта',
-    decorators: [blockCenteringDecorator({ width: '100vw', height: '100vh' })],
+    decorators: [
+      environmentDecorator({
+        style: {
+          width: '100vw',
+          height: '100vh',
+        },
+      }),
+    ],
   }
 )
 

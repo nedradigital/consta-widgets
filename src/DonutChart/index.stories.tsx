@@ -4,7 +4,6 @@ import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import {
-  blockCenteringDecorator,
   createMetadata,
   createStory,
   cubeMeterFormatValue,
@@ -234,11 +233,11 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: 200,
-      height: 200,
-    }),
-    blockCenteringDecorator({
-      backgroundColor: 'var(--color-control-bg-default)',
+      style: {
+        backgroundColor: 'var(--color-control-bg-default)',
+        width: 200,
+        height: 200,
+      },
     }),
   ],
   excludeStories: ['progressDonutData'],

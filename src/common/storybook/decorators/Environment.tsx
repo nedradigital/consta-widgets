@@ -1,42 +1,56 @@
-import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
-import { number, object } from '@storybook/addon-knobs'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { number, text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 
-import { BaseSizeContext } from '@/BaseSizeContext'
+import { BaseSizeProvider } from '@/BaseSizeContext'
 
 export const ENVIRONMENT_GROUP_ID = 'environment'
 
-type EnvironmentDecoratorParams =
-  | {
-      width?: number
-      height?: number
-    }
-  | undefined
+const CENTERING_STYLES: React.CSSProperties = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  margin: '0 auto',
+  width: '100%',
+  maxWidth: '100%',
+  minHeight: '100vh',
+}
 
-export const environmentDecorator = (
-  params: EnvironmentDecoratorParams
-): DecoratorFn => storyFn => {
-  const mainRef = React.useRef<HTMLDivElement>(null)
+const getValue = (value?: number | string) => {
+  if (!value) {
+    return ''
+  }
 
-  const baseSize = number('base-size', 16, undefined, ENVIRONMENT_GROUP_ID)
-  const width =
-    params && params.width ? object('width', params.width, ENVIRONMENT_GROUP_ID) : undefined
-  const height =
-    params && params.height ? object('height', params.height, ENVIRONMENT_GROUP_ID) : undefined
+  if (typeof value === 'number') {
+    return `${value}px`
+  }
 
-  React.useEffect(() => {
-    if (!mainRef.current) {
-      return
-    }
+  return value
+}
 
-    updateBaseSize(baseSize, mainRef.current)
-  }, [baseSize])
+type DecoratorParams = {
+  scaling?: boolean
+  style?: React.CSSProperties
+}
 
-  return (
-    <BaseSizeContext.Provider value={baseSize}>
-      <div ref={mainRef} style={{ width, height }}>
-        {storyFn()}
-      </div>
-    </BaseSizeContext.Provider>
+export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
+  const { scaling = true, style = {} } = params
+
+  const baseSize = scaling ? number('base-size', 16, undefined, ENVIRONMENT_GROUP_ID) : undefined
+  const width = style.width ? text('width', getValue(style.width), ENVIRONMENT_GROUP_ID) : undefined
+  const height = style.height
+    ? text('height', getValue(style.height), ENVIRONMENT_GROUP_ID)
+    : undefined
+
+  const content = (
+    <div style={CENTERING_STYLES}>
+      <div style={{ ...style, width, height }}>{storyFn()}</div>
+    </div>
+  )
+
+  return isDefined(baseSize) ? (
+    <BaseSizeProvider value={baseSize}>{content}</BaseSizeProvider>
+  ) : (
+    content
   )
 }

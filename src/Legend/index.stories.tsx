@@ -3,12 +3,7 @@ import React from 'react'
 import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import {
-  blockCenteringDecorator,
-  createMetadata,
-  createStory,
-  environmentDecorator,
-} from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { ColorGroups } from '@/common/types'
 import { labelPositions, labelTypes, sizes } from '@/LegendItem'
 
@@ -61,8 +56,9 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: 200,
+      style: {
+        width: 200,
+      },
     }),
-    blockCenteringDecorator(),
   ],
 })

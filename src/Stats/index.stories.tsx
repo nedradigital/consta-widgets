@@ -2,12 +2,7 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import {
-  blockCenteringDecorator,
-  createMetadata,
-  createStory,
-  environmentDecorator,
-} from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { Stats } from './index'
 
@@ -47,8 +42,9 @@ export default createMetadata({
   decorators: [
     withSmartKnobs(),
     environmentDecorator({
-      width: 200,
+      style: {
+        width: 200,
+      },
     }),
-    blockCenteringDecorator(),
   ],
 })

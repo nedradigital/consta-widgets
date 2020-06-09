@@ -3,7 +3,7 @@ import React from 'react'
 import { text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { blockCenteringDecorator, createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { Badge } from '.'
 
@@ -15,5 +15,5 @@ export const Interactive = createStory(() => (
 
 export default createMetadata({
   title: 'components/Badge',
-  decorators: [withSmartKnobs({ ignoreProps: ['withIcon', 'icon'] }), blockCenteringDecorator()],
+  decorators: [withSmartKnobs({ ignoreProps: ['withIcon', 'icon'] }), environmentDecorator()],
 })
