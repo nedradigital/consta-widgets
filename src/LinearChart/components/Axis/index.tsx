@@ -15,6 +15,7 @@ import css from './index.css'
 const TICK_PADDING = 15
 const UNIT_X_OFFSET = 20
 const UNIT_Y_OFFSET = 2
+const UNIT_Y_MARGIN = 8
 
 export type XLabelsPosition = 'top' | 'bottom'
 export type YLabelsPosition = 'left' | 'right'
@@ -118,6 +119,7 @@ export const Axis: React.FC<Props> = ({
 }) => {
   const xLabelsRef = React.createRef<SVGGElement>()
   const yLabelsRef = React.createRef<SVGGElement>()
+  const yUnitRef = React.createRef<SVGTextElement>()
   const yLabelsAndUnitRef = React.createRef<SVGSVGElement>()
   const xGridRef = React.createRef<SVGGElement>()
   const yGridRef = React.createRef<SVGGElement>()
@@ -279,13 +281,16 @@ export const Axis: React.FC<Props> = ({
     const newXAxisHeight = xLabelsRef.current
       ? xLabelsRef.current.getBoundingClientRect().height
       : 0
-    setXAxisHeight(newXAxisHeight)
+    const newYUnitHeight = yUnitRef.current
+      ? yUnitRef.current.getBoundingClientRect().height + UNIT_Y_MARGIN
+      : 0
+    setXAxisHeight(newXAxisHeight + newYUnitHeight)
 
     const newYAxisWidth = yLabelsAndUnitRef.current
       ? yLabelsAndUnitRef.current.getBoundingClientRect().width
       : 0
     setYAxisWidth(newYAxisWidth)
-  }, [xLabelsRef, setXAxisHeight, yLabelsAndUnitRef, setYAxisWidth])
+  }, [xLabelsRef, yUnitRef, setXAxisHeight, yLabelsAndUnitRef, setYAxisWidth])
 
   useLayoutEffect(() => {
     onAxisSizeChange({ xAxisHeight, yAxisWidth })
@@ -301,10 +306,12 @@ export const Axis: React.FC<Props> = ({
           <g ref={xLabelsRef} />
           {!isHorizontal && (
             <text
+              ref={yUnitRef}
               className={classnames(css.labels, css.unit)}
               x="100%"
               y={xOnBottom ? height + xAxisHeight - UNIT_Y_OFFSET : -xAxisHeight + UNIT_Y_OFFSET}
               dominantBaseline={xOnBottom ? 'bottom' : 'hanging'}
+              text-anchor="end"
             >
               {secondaryScaleUnit}
             </text>
