@@ -70,7 +70,7 @@
   },
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
-    "@csssr/gpn-utils": "0.2.10",
+    "@csssr/gpn-utils": "0.2.11",
     "@rehooks/component-size": "1.0.3",
     "@types/d3": "5.7.2",
     "@types/resize-observer-browser": "0.1.2",
@@ -90,7 +90,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "7.3.0",
-    "@csssr/gpn-configs": "0.2.22",
+    "@csssr/gpn-configs": "0.2.23",
     "@mdx-js/loader": "1.5.9",
     "@storybook/addon-actions": "5.3.18",
     "@storybook/addon-docs": "5.3.18",
@@ -126,7 +126,7 @@
     "webpack-merge": "4.2.2"
   },
   "engines": {
-    "node": ">=10",
+    "node": ">=13",
     "yarn": ">=1.19.1"
   }
 }

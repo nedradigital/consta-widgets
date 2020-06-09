@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Use Node.js 10
+      - name: Use Node.js 13
         uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 13
           registry-url: 'https://npm.pkg.github.com'
       - name: Install modules and test
         run: |
