@@ -8,7 +8,6 @@ import { Scaler } from '@/common/utils/scale'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { ColumnSize, isLeftTornadoBar, Size } from '../../helpers'
-import { VerticalValues } from '../VerticalValues'
 
 import css from './index.css'
 
@@ -28,12 +27,6 @@ type Part = {
   isRounded: boolean
   value: number
   backgroundColor: string
-}
-
-type RenderValueProps = {
-  part: Part
-  partIndex: number
-  columnIndex: number
 }
 
 type Parts = readonly Part[]
@@ -112,11 +105,24 @@ const getBarClassName = ({
   )
 }
 
+const getLabelPositionClassName = ({
+  isHorizontal,
+  isNegative,
+}: {
+  isHorizontal: boolean
+  isNegative: boolean
+}) => {
+  if (isHorizontal) {
+    return isNegative ? css.left : css.right
+  }
+
+  return isNegative ? css.bottom : css.top
+}
+
 export const Bar: React.FC<Props> = props => {
   const {
     isHorizontal,
     groupScale,
-    valuesScale,
     color,
     onMouseLeave,
     onMouseEnter,
@@ -135,13 +141,6 @@ export const Bar: React.FC<Props> = props => {
   const barSize =
     columnDefaultSize * uniqueColumnNames.length +
     columnPaddingHorizontal * (uniqueColumnNames.length - 1)
-  const zeroPoint = Math.ceil(valuesScale.scale(0))
-
-  const getTextPositionOnX = (value: number, width: number, index: number) => {
-    return value < 0 || (isTornado && isLeftTornadoBar(index))
-      ? zeroPoint - width - columnPaddingHorizontal
-      : zeroPoint + width + columnPaddingHorizontal
-  }
 
   const groupScaleWidth = groupScale.bandwidth ? groupScale.bandwidth(groupName) : 0
   const translate = (groupScale.scale(groupName) || 0) + groupScaleWidth / 2 - barSize / 2
@@ -225,9 +224,11 @@ export const Bar: React.FC<Props> = props => {
     columnIndex: number
   }) => {
     const { x, y, columnSize, value, backgroundColor, isRounded } = part
+    const isNegative = value < 0 || (isTornado && isLeftTornadoBar(columnIndex))
 
     return (
       <foreignObject
+        className={css.partWrapper}
         key={groupName + partIndex}
         x={x}
         y={y}
@@ -240,81 +241,40 @@ export const Bar: React.FC<Props> = props => {
           className={getBarClassName({
             isHorizontal,
             isRounded,
-            isNegative: value < 0,
+            isNegative,
             isTornado,
             size,
             index: columnIndex,
           })}
           style={{ backgroundColor }}
-        />
+        >
+          {showValues && (
+            <div
+              className={classnames(
+                css.label,
+                size === 's' ? css.sizeS : css.sizeM,
+                getLabelPositionClassName({ isHorizontal, isNegative })
+              )}
+            >
+              {value}
+            </div>
+          )}
+        </div>
       </foreignObject>
     )
   }
 
-  const renderHorizontalValues = (
-    { part, partIndex, columnIndex }: RenderValueProps,
-    className: string
-  ) => {
-    const { y, columnSize, value } = part
-
-    const isNegative = value < 0
-    const textPositionX = getTextPositionOnX(value, columnSize, columnIndex)
-    const textPositionY = y + columnPaddingHorizontal + columnDefaultSize / 2
-    const textAnchor = isNegative || (isTornado && isLeftTornadoBar(columnIndex)) ? 'end' : 'start'
-
-    return (
-      <text
-        key={groupName + partIndex}
-        className={className}
-        x={textPositionX}
-        y={textPositionY}
-        textAnchor={textAnchor}
-      >
-        {value}
-      </text>
-    )
-  }
-
-  const renderValues = (column: RenderValueProps) => {
-    const className = classnames(css.label, size === 's' ? css.sizeS : css.sizeM)
-    if (!isHorizontal) {
-      const { part, partIndex } = column
-      const { columnSize, y, value } = part
-      return (
-        <VerticalValues
-          key={groupName + partIndex}
-          className={className}
-          value={value}
-          columnSize={columnSize}
-          y={y}
-          columnDefaultSize={columnDefaultSize}
-        />
-      )
-    } else {
-      return renderHorizontalValues(column, className)
-    }
-  }
-
   return (
-    <g>
-      <g transform={transform}>
-        {columnDetailsData.map((column, columnIndex) =>
-          column.parts.map((part, partIndex) =>
-            renderContent({
-              tooltipParams: column.tooltipParams,
-              part,
-              partIndex,
-              columnIndex,
-            })
-          )
-        )}
-      </g>
-      {showValues && (
-        <g transform={transform}>
-          {columnDetailsData.map((column, columnIndex) =>
-            column.parts.map((part, partIndex) => renderValues({ part, partIndex, columnIndex }))
-          )}
-        </g>
+    <g transform={transform}>
+      {columnDetailsData.map((column, columnIndex) =>
+        column.parts.map((part, partIndex) =>
+          renderContent({
+            tooltipParams: column.tooltipParams,
+            part,
+            partIndex,
+            columnIndex,
+          })
+        )
       )}
     </g>
   )
