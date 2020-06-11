@@ -1,10 +1,10 @@
 import { useRef } from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { IconFunnel, MultiSelect, Text } from '@gpn-design/uikit'
+import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { themeColorDisplay } from '@/common/utils/theme'
 import { useTooltipReposition } from '@/common/utils/tooltips'
 import { Tooltip } from '@/Tooltip'
 
@@ -13,7 +13,10 @@ import css from './index.css'
 type Values = readonly string[]
 
 type Props = {
-  options: Readonly<React.ComponentProps<typeof MultiSelect>['options']>
+  options: ReadonlyArray<{
+    value: Values[number]
+    label: string
+  }>
   values: Values
   field: string
   isOpened: boolean
@@ -60,27 +63,38 @@ export const FilterTooltip: React.FC<Props> = ({
       <Tooltip
         isContentHoverable
         isVisible={isOpened}
-        className={classnames(css.tooltip, themeColorDisplay)}
+        className={css.tooltip}
         anchorRef={buttonRef}
         possibleDirections={['downRight', 'downLeft']}
         direction="downRight"
         withArrow={false}
         ref={tooltipRef}
       >
-        <Text tag="div" size="xs" view="primary" className={css.title}>
+        <Text as="div" size="xs" view="primary" className={css.title}>
           Фильтровать по условию
         </Text>
-        <MultiSelect
-          name={field}
-          menuRef={menuRef}
-          wpSize="xs"
-          onChange={v => onChange(field, v || [])}
-          onClearValue={() => onChange(field, [])}
-          placeholder="Выберите пункт"
-          options={[...options]}
-          value={values ? [...values] : undefined}
-          isHierarchical={false}
-        />
+        <select
+          className={css.select}
+          value={[...values]}
+          multiple
+          onChange={e => {
+            onChange(
+              field,
+              Array.from(e.target.selectedOptions).map(option => option.value)
+            )
+          }}
+        >
+          {options.map(option => (
+            <option
+              key={option.value}
+              className={css.option}
+              value={option.value}
+              title={option.label}
+            >
+              {option.label}
+            </option>
+          ))}
+        </select>
       </Tooltip>
     </>
   )

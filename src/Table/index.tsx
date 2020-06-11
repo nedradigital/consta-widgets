@@ -1,6 +1,7 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { IconSortDown, IconSortUp } from '@gpn-design/uikit'
+import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
+import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import _ from 'lodash'

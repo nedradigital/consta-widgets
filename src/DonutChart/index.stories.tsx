@@ -201,7 +201,6 @@ export default createMetadata({
     withSmartKnobs(),
     environmentDecorator({
       style: {
-        backgroundColor: 'var(--color-control-bg-default)',
         width: 200,
         height: 200,
       },

@@ -79,37 +79,22 @@
   margin: auto;
 }
 
-.button {
-  @mixin button;
-
+.close {
   position: absolute;
+  top: var(--space-2xl);
+  right: var(--space-2xl);
+}
 
-  width: var(--button-size);
-  height: var(--button-size);
+.toLeft,
+.toRight {
+  position: absolute;
+  top: calc(50% - var(--button-size) / 2);
+}
 
-  cursor: pointer;
+.toLeft {
+  left: 0;
+}
 
-  color: var(--color-control-typo-clear);
-
-  &:hover {
-    color: var(--color-control-typo-clear-hover);
-  }
-
-  &.close {
-    top: var(--space-2xl);
-    right: var(--space-2xl);
-  }
-
-  &.toLeft,
-  &.toRight {
-    top: calc(50% - var(--button-size) / 2);
-  }
-
-  &.toLeft {
-    left: 0;
-  }
-
-  &.toRight {
-    right: 0;
-  }
+.toRight {
+  right: 0;
 }

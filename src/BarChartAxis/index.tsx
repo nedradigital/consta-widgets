@@ -1,11 +1,10 @@
 import React, { useRef } from 'react'
 
-import { Text } from '@gpn-design/uikit'
+import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { FormatValue } from '@/common/types'
 import { Scaler } from '@/common/utils/scale'
-import { TextSize } from '@/common/utils/ui-kit'
 import { UnitPosition } from '@/core/BarChart'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Position, Size, Ticks } from '@/Ticks'
@@ -36,7 +35,7 @@ type Props = {
   isNegative?: boolean
 }
 
-const unitSize: Record<Size, TextSize> = {
+const unitSize: Record<Size, TextPropSize> = {
   s: '2xs',
   m: 'xs',
 }
@@ -51,7 +50,7 @@ const defaultShow: ShowPositions = {
 const PADDING = 6
 
 const renderUnit = (className: string, unit: string, size: Size) => (
-  <Text tag="div" size={unitSize[size]} view="secondary" className={className}>
+  <Text as="div" size={unitSize[size]} view="secondary" className={className}>
     {unit}
   </Text>
 )

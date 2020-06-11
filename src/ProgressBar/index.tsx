@@ -1,11 +1,10 @@
 import React from 'react'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
+import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/common/types'
-import { TextSize } from '@/common/utils/ui-kit'
 import { Legend, Tick } from '@/ProgressBar/components/Legend'
 
 import { Data as ProgressData, Progress } from './components/Progress'
@@ -38,7 +37,7 @@ export const getValueRatio = ({
   return ((value - valueMin) / (valueMax - valueMin)) * 100
 }
 
-const summarySizes: Record<Size, TextSize> = {
+const summarySizes: Record<Size, TextPropSize> = {
   s: 'l',
   m: '2xl',
   l: '2xl',
@@ -64,7 +63,7 @@ export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) 
                 <Progress data={dataItem} color={color} size={size} />
               </div>
               <div className={classnames(css.cell, css.isValueCell)} style={{ color }}>
-                <Text tag="div" size={summarySizes[size]}>
+                <Text as="div" size={summarySizes[size]} className={css.cellText}>
                   {isNotNil(value) ? summary : '–'}
                 </Text>
               </div>

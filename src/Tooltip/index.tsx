@@ -1,13 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
+import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { themeColorLight } from '@/common/utils/theme'
 import { PositionState } from '@/common/utils/tooltips'
 import { isDefinedPosition } from '@/common/utils/type-guards'
+import { PortalWithTheme } from '@/core/PortalWithTheme'
 
 import { getComputedPositionAndDirection } from './helpers'
 import css from './index.css'
@@ -85,6 +85,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   const positionOrAnchorRef = 'position' in props ? props.position : props.anchorRef
 
+  const { theme, themeClassNames } = useTheme()
   const mainRef = React.useRef<HTMLDivElement>(null)
   const [position, setPosition] = React.useState<PositionState>()
   const [direction, setDirection] = React.useState<Direction>(passedDirection)
@@ -174,32 +175,33 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     return null
   }
 
-  return ReactDOM.createPortal(
-    <div
-      ref={mainRef}
-      className={classnames(
-        themeColorLight,
-        css.main,
-        directionClasses[direction],
-        withArrow && css.withArrow,
-        isContentHoverable && css.isHoverable
-      )}
-      style={{
-        top: position.y,
-        left: position.x,
-        ['--arrow-size' as string]: `${ARROW_SIZE}px`,
-      }}
-    >
-      <div ref={ref} className={classnames(css.tooltip, className)}>
-        {'renderContent' in props ? (
-          props.renderContent(direction)
-        ) : (
-          <Text tag="div" size="xs" view="primary">
-            {children}
-          </Text>
+  return (
+    <PortalWithTheme theme={theme} container={window.document.body}>
+      <div
+        ref={mainRef}
+        className={classnames(
+          themeClassNames.color.invert,
+          css.main,
+          directionClasses[direction],
+          withArrow && css.withArrow,
+          isContentHoverable && css.isHoverable
         )}
+        style={{
+          top: position.y,
+          left: position.x,
+          ['--arrow-size' as string]: `${ARROW_SIZE}px`,
+        }}
+      >
+        <div ref={ref} className={classnames(css.tooltip, className)}>
+          {'renderContent' in props ? (
+            props.renderContent(direction)
+          ) : (
+            <Text as="div" size="xs" view="primary">
+              {children}
+            </Text>
+          )}
+        </div>
       </div>
-    </div>,
-    window.document.body
+    </PortalWithTheme>
   )
 })

@@ -1,7 +1,6 @@
-import { Text } from '@gpn-design/uikit'
+import { Text, TextPropLineHeight, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { TextProps, TextSize } from '@/common/utils/ui-kit'
 import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/Badge'
 
 import css from './index.css'
@@ -50,7 +49,7 @@ const layoutClass: Record<Layout, string> = {
   'full-without-title': css.fullWithoutTitle,
 }
 
-const titleSizes: Record<Size, TextSize> = {
+const titleSizes: Record<Size, TextPropSize> = {
   '2xs': 'xs',
   xs: 's',
   s: 'l',
@@ -58,7 +57,7 @@ const titleSizes: Record<Size, TextSize> = {
   l: '2xl',
 }
 
-const numberSizes: Record<Size, TextSize> = {
+const numberSizes: Record<Size, TextPropSize> = {
   '2xs': 'xl',
   xs: '2xl',
   s: '4xl',
@@ -66,7 +65,7 @@ const numberSizes: Record<Size, TextSize> = {
   l: '6xl',
 }
 
-const numberLineHeights: Record<Size, TextProps['lineHeight']> = {
+const numberLineHeights: Record<Size, TextPropLineHeight> = {
   '2xs': 's',
   xs: 's',
   s: 'xs',
@@ -82,7 +81,7 @@ const badgeSizes: Record<Size, BadgeSize> = {
   l: 'l',
 }
 
-const unitSizes: Record<Size, TextSize> = {
+const unitSizes: Record<Size, TextPropSize> = {
   '2xs': 'xs',
   xs: 'xs',
   s: 'l',
@@ -109,12 +108,12 @@ export const Stats: React.FC<Props> = ({
 }) => {
   return (
     <div className={classnames(css.container, sizeClass[size], layoutClass[layout])}>
-      <Text tag="div" size={titleSizes[size]} lineHeight="s" view="primary" className={css.title}>
+      <Text as="div" size={titleSizes[size]} lineHeight="s" view="primary" className={css.title}>
         {title}
       </Text>
 
       <Text
-        tag="div"
+        as="div"
         view="primary"
         size={numberSizes[size]}
         lineHeight={numberLineHeights[size]}
@@ -126,12 +125,16 @@ export const Stats: React.FC<Props> = ({
       </Text>
 
       {badge && (
-        <Badge view="filled" wpSize={badgeSizes[size]} status={badge.status} className={css.badge}>
-          {`${getNumberSign(badge.percentage, withSign)} ${badge.percentage}%`}
-        </Badge>
+        <Badge
+          label={`${getNumberSign(badge.percentage, withSign)} ${badge.percentage}%`}
+          view="filled"
+          size={badgeSizes[size]}
+          status={badge.status}
+          className={css.badge}
+        />
       )}
 
-      <Text tag="div" size={unitSizes[size]} lineHeight="s" view="secondary" className={css.unit}>
+      <Text as="div" size={unitSizes[size]} lineHeight="s" view="secondary" className={css.unit}>
         {unit}
       </Text>
     </div>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 import {
   addMonths,
@@ -163,7 +163,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
               <div className={css.year} key={idxYear}>
                 <Text
                   size="s"
-                  tag="div"
+                  as="div"
                   view={yearNameView}
                   weight="bold"
                   className={classnames(css.yearName, isYearActive && css.isActive)}
@@ -175,7 +175,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
 
                   return (
                     <div key={idxMonth} className={css.tick} onClick={() => onChange(month)}>
-                      <Text tag="div" size="2xs" view="ghost">
+                      <Text as="div" size="2xs" view="ghost">
                         {name}
                       </Text>
                     </div>

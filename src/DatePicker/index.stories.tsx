@@ -1,5 +1,6 @@
 import { date as knobsDate, select } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
+import { addMonths, subYears } from 'date-fns'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
@@ -29,8 +30,8 @@ const setInputValue = (value?: string) => {
 
 const defaultProps = () =>
   ({
-    minDate: new Date(knobsDate('minDate', new Date(2019, 0, 1))),
-    maxDate: new Date(knobsDate('maxDate', new Date(2020, 3, 2))),
+    minDate: new Date(knobsDate('minDate', subYears(new Date(), 1))),
+    maxDate: new Date(knobsDate('maxDate', addMonths(new Date(), 1))),
     size: select('size', sizes, sizes[1]),
   } as const)
 

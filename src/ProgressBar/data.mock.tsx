@@ -1,5 +1,5 @@
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 
 import { ColorGroups } from '@/common/types'
 
@@ -30,7 +30,7 @@ const ticks = createArrayOfIndexes(5).map(index => {
 })
 
 const createCaption = (text: string) => (
-  <Text tag="div" view="secondary" size="xs" lineHeight="s">
+  <Text as="div" view="secondary" size="xs" lineHeight="s">
     {text}
   </Text>
 )

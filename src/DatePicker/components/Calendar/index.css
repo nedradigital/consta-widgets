@@ -92,8 +92,6 @@
   width: 100%;
   height: 100%;
 
-  color: var(--day-text-color);
-
   .cell.isSelectable & {
     cursor: pointer;
   }
@@ -303,4 +301,8 @@
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
   }
+}
+
+.cellContentText {
+  color: var(--day-text-color);
 }

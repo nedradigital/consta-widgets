@@ -1,5 +1,5 @@
-import { IconCalendar, Input } from '@gpn-design/uikit'
-import classnames from 'classnames'
+import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
+import { TextField, TextFieldPropOnChange } from '@gpn-design/uikit/TextField'
 
 import { useTooltipReposition } from '@/common/utils/tooltips'
 import { isValidDate } from '@/common/utils/type-guards'
@@ -68,44 +68,36 @@ export const InputDate: React.FC<Props> = ({
     }
   }
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!isParsedFromInputDateExists(event.target.value)) {
+  const handleChange: TextFieldPropOnChange = ({ value: newValue }) => {
+    if (!newValue || !isParsedFromInputDateExists(newValue)) {
       return onChange(undefined)
     }
 
-    const date = getDateMidnightFromString(event.target.value)
+    const date = getDateMidnightFromString(newValue)
 
     isValidDate(date) && onChange(date)
   }
 
-  const iconSize = ({
-    s: 'xs',
-    m: 's',
-    l: 'm',
-  } as const)[size]
-
   React.useLayoutEffect(checkIsRealDate, [value])
 
   return (
-    <div className={css.main} ref={ref}>
-      <Input
+    <>
+      <TextField
+        ref={ref}
         inputRef={inputRef}
-        className={classnames(
-          css.input,
-          (isInvalid || !isRealDate) && css.isInvalid,
-          { s: css.sizeS, m: css.sizeM, l: css.sizeL }[size]
-        )}
+        className={css.input}
         type="date"
-        wpSize={size}
+        size={size}
         view="default"
         form="default"
+        state={isInvalid || !isRealDate ? 'alert' : undefined}
+        rightSide={IconCalendar}
         value={getInputValue(value)}
         onChange={handleChange}
         // ловим смену даты на onKeyUp, т.к. onChange не срабатывает, если первая введенная дата - невалидная
         onKeyUp={checkIsRealDate}
         onBlur={handleBlur}
       />
-      <IconCalendar size={iconSize} className={css.icon} />
       <Tooltip
         isVisible={isTooltipVisible}
         anchorRef={ref}
@@ -116,6 +108,6 @@ export const InputDate: React.FC<Props> = ({
       >
         {tooltipContent}
       </Tooltip>
-    </div>
+    </>
   )
 }
