@@ -1,7 +1,3 @@
-## Задача
-- ссылка на jira: __HERE_JIRA_ID__
-- стенд: http://__HERE_BRANCH_NAME__.gpn-components.csssr.cloud
-
 ## Чек-лист
 - [ ] Используется calc-size(), где он нужен
 - [ ] Используются размеры/цвета/шрифты/иконки/компоненты из UI-kit
