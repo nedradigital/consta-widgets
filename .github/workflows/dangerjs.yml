@@ -1,0 +1,25 @@
+name: "Danger JS"
+on:
+  pull_request:
+    types: [opened, edited, assigned, unassigned, reopened, synchronize]
+
+jobs:
+  build:
+    name: Install node modules and run dangerjs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Use Node.js 13
+        uses: actions/setup-node@v1
+        with:
+          node-version: '13.x'
+          registry-url: 'https://npm.pkg.github.com'
+      - name: Install modules and run dangerjs
+        run: |
+          yarn policies set-version 1.19.1
+          yarn --frozen-lockfile
+          yarn danger-ci
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
+          DANGER_DISABLE_TRANSPILATION: "true"
