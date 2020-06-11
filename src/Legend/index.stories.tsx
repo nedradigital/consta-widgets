@@ -5,7 +5,7 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { ColorGroups } from '@/common/types'
-import { labelPositions, labelTypes, sizes } from '@/LegendItem'
+import { labelPositions, labelTypes, sizes } from '@/core/LegendItem'
 
 import { Legend } from '.'
 

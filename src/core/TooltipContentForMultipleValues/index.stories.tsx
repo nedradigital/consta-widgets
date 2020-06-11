@@ -28,5 +28,5 @@ export const Interactive = createStory(() => (
 ))
 
 export default createMetadata({
-  title: 'components/TooltipContentForMultipleValues',
+  title: 'core/TooltipContentForMultipleValues',
 })

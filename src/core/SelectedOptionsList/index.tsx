@@ -1,7 +1,7 @@
 import { IconClose } from '@gpn-design/uikit'
 import classnames from 'classnames'
 
-import { SelectedOption } from '@/SelectedOption'
+import { SelectedOption } from '@/core/SelectedOption'
 
 import css from './index.css'
 
