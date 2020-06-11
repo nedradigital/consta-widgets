@@ -5,8 +5,8 @@ import * as _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
+import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 import { Tooltip } from '@/Tooltip'
-import { TooltipContentForMultipleValues } from '@/TooltipContentForMultipleValues'
 
 import { Axis, ExtendedFigure } from '../..'
 

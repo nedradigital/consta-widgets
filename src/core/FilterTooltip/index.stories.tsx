@@ -30,7 +30,7 @@ export const Interactive = createStory(() => {
 })
 
 export default createMetadata({
-  title: 'components/FilterTooltip',
+  title: 'core/FilterTooltip',
   decorators: [
     environmentDecorator({
       style: {

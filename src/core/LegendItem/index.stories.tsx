@@ -14,7 +14,7 @@ export const Interactive = createStory(() => (
 ))
 
 export default createMetadata({
-  title: 'components/LegendItem',
+  title: 'core/LegendItem',
   decorators: [
     withSmartKnobs(),
     environmentDecorator({

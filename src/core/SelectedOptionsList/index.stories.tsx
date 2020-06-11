@@ -5,7 +5,7 @@ import { object } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
-import { SelectedOptionsList } from './'
+import { SelectedOptionsList } from '.'
 
 export const Interactive = createStory(() => (
   <SelectedOptionsList
@@ -19,7 +19,7 @@ export const Interactive = createStory(() => (
 ))
 
 export default createMetadata({
-  title: 'components/SelectedOptionsList',
+  title: 'core/SelectedOptionsList',
   decorators: [
     environmentDecorator({
       style: {

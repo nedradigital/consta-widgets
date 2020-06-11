@@ -20,11 +20,10 @@ import {
   TableRow,
   useSelectedFilters,
 } from '@/common/utils/table'
+import { FilterTooltip } from '@/core/FilterTooltip'
+import { LabelType as LegendType, labelTypes as legendTypes, LegendItem } from '@/core/LegendItem'
+import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'
-import { FilterTooltip } from '@/FilterTooltip'
-import { LegendItem } from '@/LegendItem'
-import { LabelType as LegendType, labelTypes as legendTypes } from '@/LegendItem'
-import { SelectedOptionsList } from '@/SelectedOptionsList'
 
 import { Resizer } from './components/Resizer'
 import css from './index.css'

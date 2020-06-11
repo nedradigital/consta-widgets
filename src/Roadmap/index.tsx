@@ -15,9 +15,9 @@ import {
   useSelectedFilters,
 } from '@/common/utils/table'
 import { Position } from '@/common/utils/tooltips'
+import { FilterTooltip } from '@/core/FilterTooltip'
+import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'
-import { FilterTooltip } from '@/FilterTooltip'
-import { SelectedOptionsList } from '@/SelectedOptionsList'
 
 import { GroupLines } from './components/GroupLines'
 import { RoadmapText } from './components/RoadmapText'

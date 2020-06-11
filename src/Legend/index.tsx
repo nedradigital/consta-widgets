@@ -3,7 +3,7 @@ import React from 'react'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/common/types'
-import { LabelPosition, LabelType, LegendItem, Size } from '@/LegendItem'
+import { LabelPosition, LabelType, LegendItem, Size } from '@/core/LegendItem'
 
 import css from './index.css'
 
