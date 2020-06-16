@@ -1,34 +1,28 @@
 import React, { useRef, useState } from 'react'
 
 import useComponentSize from '@rehooks/component-size'
+import classnames from 'classnames'
 
-import { ColorGroups, FormatValue } from '@/common/types'
-import { scaleLinear } from '@/common/utils/scale'
+import { FormatValue } from '@/common/types'
+import { scaleBand, scaleLinear } from '@/common/utils/scale'
 import { getTicks } from '@/common/utils/ticks'
 import { Grid } from '@/core/Grid'
 import { Axis } from '@/BarChartAxis'
 import { useBaseSize } from '@/BaseSizeContext'
 
-import { Bar, COLUMN_PADDING_HORIZONTAL, COLUMN_WIDTHS, TooltipData } from './components/Bar'
-import { TooltipComponent as Tooltip } from './components/Tooltip'
+import { ColumnItem, Group } from './components/Group'
+import { Tooltip, TooltipData } from './components/Tooltip'
 import {
-  CHART_MIN_HEIGHT,
   defaultGetAxisShowPositions,
-  defaultGetGroupsDomain,
-  defaultGetGroupSize,
-  defaultGetValuesDomain,
   GetAxisShowPositions,
   getColumnSize,
-  getDataColumns,
   getEveryNTick,
-  GetGroupsDomain,
-  GetGroupSize,
-  getMinChartSize,
+  getGroupsDomain,
   getRange,
-  GetValuesDomain,
+  getScaler,
+  getValuesDomain,
   GROUP_INNER_PADDING,
   OUTER_PADDING,
-  scaleBand,
   Size,
   toAxisSize,
 } from './helpers'
@@ -37,113 +31,80 @@ import css from './index.css'
 export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 export type UnitPosition = typeof unitPositions[number]
 
-export type Column = Record<string, number | undefined>
-
 export type Group = {
-  values: readonly Column[]
-  groupName: string
+  name: string
+  columns: ReadonlyArray<ColumnItem | undefined>
+  reversedColumns: ReadonlyArray<ColumnItem | undefined>
 }
 
 export type Groups = readonly Group[]
 
 export type Props = {
-  colorGroups: ColorGroups
   groups: Groups
   gridTicks: number
   valuesTicks: number
   size: Size
-  hasRatio?: boolean
   isHorizontal?: boolean
-  isTornado?: boolean
   showValues?: boolean
   unit?: string
   unitPosition?: UnitPosition
-  getGroupSize?: GetGroupSize
-  getGroupsDomain?: GetGroupsDomain
-  getValuesDomain?: GetValuesDomain
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
 }
 
 export const CoreBarChart: React.FC<Props> = props => {
   const {
-    colorGroups,
     groups,
     gridTicks,
     valuesTicks,
-    hasRatio,
     isHorizontal = false,
-    isTornado,
-    showValues,
+    showValues = false,
     size,
     unit,
     unitPosition = 'none',
-    getGroupSize = defaultGetGroupSize,
-    getGroupsDomain = defaultGetGroupsDomain,
-    getValuesDomain = defaultGetValuesDomain,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel,
   } = props
-  const [tooltipData, setTooltipData] = useState<TooltipData>()
-
   const ref = useRef(null)
   const svgRef = useRef(null)
   const { width, height } = useComponentSize(ref)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
-  const categories = Object.keys(colorGroups)
+  const [tooltipData, setTooltipData] = useState<TooltipData>()
+
+  const showReversed = groups.some(group =>
+    group.reversedColumns.some(column => column && column.sections)
+  )
 
   const groupsDomain = getGroupsDomain(groups)
-  const valuesDomain = getValuesDomain(groups)
+  const valuesDomain = getValuesDomain(groups, showReversed)
   const maxValue = valuesDomain[1]
   const columnSize = getColumnSize({
     size,
     valueLength: maxValue.toString().length,
     isHorizontal,
   })
-  const isNegative = Math.min(...valuesDomain) < 0
-  const paddingCount = isNegative ? 2 : 1
-  const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
-  const paddingInner = getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[columnSize])
-  const paddingOuter = getCalculatedSizeWithBaseSize(OUTER_PADDING)
   const padding = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
-
+  const paddingCount = showReversed ? 2 : 1
   const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
   const svgHeight = height ? Math.round(height) : 0
-
-  const columnPadding = getCalculatedSizeWithBaseSize(COLUMN_PADDING_HORIZONTAL[columnSize])
-  const columnWidth = getCalculatedSizeWithBaseSize(COLUMN_WIDTHS[columnSize])
-  const groupsSizes = groups.reduce<Record<string, number>>((acc, group) => {
-    acc[group.groupName] = getGroupSize({ columnPadding, columnWidth, group })
-    return acc
-  }, {})
+  const scaler = getScaler({ maxValue, showReversed })
   const groupScale = scaleBand({
-    groupsSizes,
     range: getRange(isHorizontal ? svgHeight : svgWidth),
-    groupsNames: groupsDomain,
-    paddingInner,
-    paddingOuter,
+    domain: groupsDomain,
+    paddingInner: getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[columnSize]),
+    paddingOuter: getCalculatedSizeWithBaseSize(OUTER_PADDING),
   })
   const valuesScale = scaleLinear({
     domain: valuesDomain,
     range: getRange(isHorizontal ? svgWidth : svgHeight, !isHorizontal),
   })
-  const dataColumns = getDataColumns({
-    groups,
-    categories,
-    valuesScale,
-    hasRatio,
-    maxValue,
-  })
-  const minSize = getMinChartSize({ groupsSizes, paddingInner, paddingOuter })
   const gridItems = getTicks(valuesDomain, gridTicks)
   const axisValues = getEveryNTick(gridItems, valuesTicks)
-
   const gridXTickValues = isHorizontal ? gridItems : []
   const gridYTickValues = isHorizontal ? [] : gridItems
-
-  const axisShowPositions = getAxisShowPositions({ isHorizontal, isNegative })
+  const axisShowPositions = getAxisShowPositions({ isHorizontal, showReversed })
   const commonStyle = {
-    paddingLeft: isNegative ? padding : 0,
+    paddingLeft: showReversed ? padding : 0,
     paddingRight: padding,
   }
 
@@ -161,17 +122,9 @@ export const CoreBarChart: React.FC<Props> = props => {
       showPositions={axisShowPositions}
       horizontalStyles={commonStyle}
       showValues={showValues}
-      isNegative={isNegative}
+      isNegative={showReversed}
     >
-      <div
-        ref={ref}
-        className={css.main}
-        style={{
-          ...commonStyle,
-          minWidth: isHorizontal ? undefined : minSize,
-          minHeight: isHorizontal ? minSize : chartMinHeight,
-        }}
-      >
+      <div ref={ref} className={css.main} style={commonStyle}>
         <svg className={css.svg} width={svgWidth} height={svgHeight} ref={svgRef}>
           <Grid
             scalerX={valuesScale}
@@ -181,36 +134,27 @@ export const CoreBarChart: React.FC<Props> = props => {
             width={svgWidth}
             height={svgHeight}
           />
-          {dataColumns.map((bar, idx) => {
-            return (
-              <Bar
-                key={idx}
-                groupName={bar.groupName}
-                columnDetails={bar.columnDetails}
-                isHorizontal={isHorizontal}
-                groupScale={groupScale}
-                valuesScale={valuesScale}
-                color={colorGroups}
-                onMouseLeave={() => setTooltipData(undefined)}
-                onMouseEnter={setTooltipData}
-                parentRef={svgRef}
-                formatValue={formatValueForLabel}
-                size={columnSize}
-                showValues={showValues}
-                isTornado={isTornado}
-              />
-            )
-          })}
         </svg>
+        <div className={classnames(css.chart, isHorizontal && css.isHorizontal)}>
+          {groups.map(group => (
+            <Group
+              {...group}
+              key={group.name}
+              size={columnSize}
+              isHorizontal={isHorizontal}
+              isNegative={showReversed}
+              showValues={showValues}
+              scaler={scaler}
+              onMouseEnterColumn={setTooltipData}
+              onMouseLeaveColumn={() => setTooltipData(undefined)}
+            />
+          ))}
+        </div>
         {tooltipData && (
           <Tooltip
             data={tooltipData}
             isHorizontal={isHorizontal}
-            isVisible
-            svgParentRef={svgRef}
-            color={colorGroups}
             formatValue={formatValueForLabel}
-            size={columnSize}
           />
         )}
       </div>

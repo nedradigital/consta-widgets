@@ -1,6 +1,5 @@
-import { Groups } from '@/core/BarChart'
-
-import { getAxisShowPositions, getFormatter, getGroupsDomain, getValuesDomain } from '../helpers'
+import { Group } from '../'
+import { getAxisShowPositions, getFormatter, transformGroupsToCommonGroups } from '../helpers'
 
 describe('getFormatter', () => {
   it('получение фукнции форматирования значения для подписей', () => {
@@ -48,45 +47,53 @@ describe('getAxisShowPositions', () => {
   })
 })
 
-describe('getGroupDomain', () => {
-  const groups: Groups = [
+describe('transformGroupsToCommonGroups', () => {
+  const groups: readonly Group[] = [
     {
-      groupName: 'группа 1',
+      groupName: 'март',
       values: [
-        { value1: 10, value2: 5, value3: 30 },
-        { value1: 5, value2: 0, value3: 10 },
+        {
+          plan: 4,
+        },
+        {
+          fact: 2,
+        },
       ],
     },
     {
-      groupName: 'группа 2',
-      values: [{ value1: 100 }, { value2: undefined }, { value3: 127 }],
-    },
-    {
-      groupName: 'группа 3',
-      values: [{ value1: 300 }, { value2: 12 }, { value3: 22 }],
-    },
-  ]
-
-  it('возвращает отсортированный по убыванию значения массив названий групп для торнадо графика', () => {
-    expect(getGroupsDomain(groups)).toEqual(['группа 3', 'группа 2', 'группа 1'])
-  })
-})
-
-describe('getValuesDomain', () => {
-  const groups: Groups = [
-    {
-      groupName: 'Группа 1',
-      values: [{ left: 100 }, { right: 50 }],
-    },
-    {
-      groupName: 'Группа 2',
-      values: [{ left: 50 }, { right: 200 }],
+      groupName: 'апрель',
+      values: [
+        {
+          plan: undefined,
+        },
+        {
+          fact: 5,
+        },
+      ],
     },
   ]
 
-  it('возвращает значения для домена', () => {
-    const result = getValuesDomain(groups)
+  const colorGroups = {
+    plan: 'red',
+    fact: 'blue',
+  }
 
-    expect(result).toEqual([-200, 200])
+  it('преобразует TornadoChart группы к основным гуппам', () => {
+    const result = transformGroupsToCommonGroups(groups, colorGroups)
+
+    expect(result).toEqual([
+      {
+        name: 'март',
+        total: 6,
+        columns: [{ total: 2, sections: [{ color: 'blue', value: 2 }] }],
+        reversedColumns: [{ total: 4, sections: [{ color: 'red', value: 4 }] }],
+      },
+      {
+        name: 'апрель',
+        total: 5,
+        columns: [{ total: 5, sections: [{ color: 'blue', value: 5 }] }],
+        reversedColumns: [{ total: undefined, sections: [] }],
+      },
+    ])
   })
 })

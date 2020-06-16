@@ -1,14 +1,16 @@
 import { ColorGroups, FormatValue } from '@/common/types'
 import { CoreBarChart, UnitPosition } from '@/core/BarChart'
 
-import { transformGroupsToCoreGroups } from './helpers'
+import { transformGroupsToCommonGroups } from './helpers'
+
+export type Column = {
+  colorGroupName: string
+  value: number | undefined
+}
 
 export type Group = {
   groupName: string
-  values: ReadonlyArray<{
-    colorGroupName: string
-    value: number | undefined
-  }>
+  values: readonly Column[]
 }
 
 type Props = {
@@ -33,7 +35,7 @@ export const BarChart: React.FC<Props> = props => {
   return (
     <CoreBarChart
       {...rest}
-      groups={transformGroupsToCoreGroups(groups)}
+      groups={transformGroupsToCommonGroups(groups, props.colorGroups)}
       showValues={showValues && !isVerticalMultiColumn}
       size={size}
       isHorizontal={isHorizontal}

@@ -5,7 +5,7 @@ import { createMetadata, createStory, environmentDecorator } from '@/common/stor
 import { unitPositions } from '@/core/BarChart'
 
 import { MultiBarChart } from './'
-import { interactiveData, withTwoColumnsData } from './data.mock'
+import { interactiveData, withPercentColumnsData, withTwoColumnsData } from './data.mock'
 
 const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
 
@@ -18,7 +18,6 @@ export const Interactive = createStory(
       unitPosition={getUnitPosition()}
       gridTicks={4}
       valuesTicks={1}
-      hasRatio={false}
       isHorizontal={false}
     />
   ),
@@ -34,11 +33,26 @@ export const WithTwoColumns = createStory(
       unitPosition={getUnitPosition()}
       gridTicks={4}
       valuesTicks={1}
-      hasRatio={false}
       isHorizontal={false}
     />
   ),
   { name: 'с двумя столбцами' }
+)
+
+export const HasRatio = createStory(
+  () => (
+    <MultiBarChart
+      colorGroups={object('colorGroups', withPercentColumnsData.colorGroups)}
+      groups={withPercentColumnsData.groups}
+      unit={withTwoColumnsData.unit}
+      unitPosition={getUnitPosition()}
+      gridTicks={4}
+      valuesTicks={1}
+      isHorizontal={false}
+      formatValueForLabel={v => `${v}%`}
+    />
+  ),
+  { name: 'в процентах' }
 )
 
 export const Minimalistic = createStory(
@@ -50,7 +64,6 @@ export const Minimalistic = createStory(
       unitPosition={getUnitPosition()}
       gridTicks={0}
       valuesTicks={0}
-      hasRatio={false}
       isHorizontal={true}
     />
   ),

@@ -16,6 +16,28 @@ export const interactiveData = {
   unit: 'тыс. м³',
 }
 
+export const withPercentColumnsData = {
+  colorGroups,
+  groups: [
+    {
+      groupName: '1 кв. 2019',
+      values: [{ apples: 27, bananas: 46, cherries: 27 }],
+    },
+    {
+      groupName: '2 кв. 2019',
+      values: [{ apples: 5, bananas: 60, cherries: 35 }],
+    },
+    {
+      groupName: '3 кв. 2019',
+      values: [{ apples: 60, bananas: 5, cherries: 35 }],
+    },
+    {
+      groupName: '4 кв. 2019',
+      values: [{ apples: 20, bananas: 30, cherries: 50 }],
+    },
+  ],
+}
+
 export const withTwoColumnsData = {
   colorGroups: {
     ...colorGroups,
