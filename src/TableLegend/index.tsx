@@ -254,7 +254,7 @@ export const TableLegend: React.FC<Props> = ({
     })
 
   return (
-    <div className={css.main} ref={containerRef}>
+    <div className={classnames(css.main, isResizable && css.isResizable)} ref={containerRef}>
       <table className={classnames(css.table, columnWidths.length && css.isFixed)} ref={tableRef}>
         <thead>
           <tr>{thRender}</tr>
