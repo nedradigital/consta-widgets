@@ -1,4 +1,8 @@
-const { message, danger, fail, warn, markdown } = require('danger')
+/* ⚠️
+* В этом файле можно импортить только из danger и стандартных библиотек ноды,
+* т.к. он выполняется через npx без установки всех пакетов
+* */
+const { danger, fail, warn, markdown } = require('danger')
 
 const isValidCommit = commit => {
   return commit.message.length > 10
@@ -12,7 +16,7 @@ if (danger.github.pr.title.length < 10) {
 }
 
 if (!danger.github.pr.assignee) {
-  const log = danger.github.pr.title.includes('WIP') ? warn : fail
+  const log = danger.github.pr.draft ? warn : fail
 
   log('Должен быть указан автор PR и ревьюеры')
 }

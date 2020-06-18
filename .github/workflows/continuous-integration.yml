@@ -1,24 +1,50 @@
-name: CI
+name: Тесты и деплой
 on:
   push:
-    branches:
-      - master
+    branches: master
   pull_request:
 jobs:
   build:
-    name: Install node modules and run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
-      - name: Use Node.js 13
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
           node-version: 13
           registry-url: 'https://npm.pkg.github.com'
-      - name: Install modules and test
+
+      - name: Установка yarn
+        id: yarn-setup
         run: |
           yarn policies set-version 1.19.1
-          yarn --frozen-lockfile
-          yarn test
+          echo "::set-output name=cache_dir::$(yarn cache dir)"
+      - name: Настройка кэширования yarn
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-setup.outputs.cache_dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+      - name: Установка зависимостей
+        run: yarn --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
+
+      - name: Тесты
+        run: yarn test
+
+      - name: Сборка storybook
+        run: yarn storybook:build
+      - name: Загрузка экшена деплоя
+        uses: actions/checkout@v2
+        with:
+          repository: CSSSR/actions
+          token: ${{ secrets.DOWNLOAD_ACTIONS_TOKEN }}
+          path: .csssr-actions
+      - name: Деплой
+        uses: ./.csssr-actions/deploy-static-site/v1beta1
+        with:
+          project-id: gpn-components
+          files: ./build/storybook
+          auth: ${{ secrets.CDN_UPLOAD_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}

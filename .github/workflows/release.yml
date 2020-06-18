@@ -1,37 +1,45 @@
-name: Release
-
+name: Публикация пакета
 on:
   push:
     tags:
       - 'v*'
-
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout branch
-      uses: actions/checkout@v1
-    - name: Use Node.js 13
-      uses: actions/setup-node@v1
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
       with:
         node-version: 13
         registry-url: 'https://npm.pkg.github.com'
-    - name: Install dependencies
+
+    - name: Установка yarn
+      id: yarn-setup
       run: |
         yarn policies set-version 1.19.1
-        yarn
+        echo "::set-output name=cache_dir::$(yarn cache dir)"
+    - name: Настройка кэширования зависимостей
+      uses: actions/cache@v2
+      with:
+        path: ${{ steps.yarn-setup.outputs.cache_dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - name: Установка зависимостей
+      run: yarn --frozen-lockfile
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
-    - name: Publish package to registry
+
+    - name: Публикация пакета
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    - name: Install github-release-notes and generate changelog
+    - name: Генерация описания для релиза
       run: |
         npx github-release-notes@0.17.1 changelog --generate --override --token=${{ secrets.GITHUB_TOKEN }} --changelog-filename=TEMP_CHANGELOG.md -B
       env:
         CI: true
-    - name: Create and publish realese
+    - name: Оформление релиза
       uses: ncipollo/release-action@v1
       with:
         bodyFile: 'TEMP_CHANGELOG.md'
