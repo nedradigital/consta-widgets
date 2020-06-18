@@ -73,10 +73,14 @@ const getDirectionAndPosition = ({
     })
 
   const direction = result || initialDirection
+  const position = positionsByDirection[direction]
 
   return {
     direction,
-    position: positionsByDirection[direction],
+    position: {
+      x: position.x + window.scrollX,
+      y: position.y + window.scrollY,
+    },
   }
 }
 
@@ -110,11 +114,11 @@ export const getComputedPositionAndDirection = (
   }
 
   if ('anchorClientRect' in props) {
-    initialPosition.x = props.anchorClientRect.left + window.scrollX
-    initialPosition.y = props.anchorClientRect.bottom + window.scrollY
+    initialPosition.x = props.anchorClientRect.left
+    initialPosition.y = props.anchorClientRect.bottom
   } else if ('position' in props && isDefinedPosition(props.position)) {
-    initialPosition.x = props.position.x + window.scrollX
-    initialPosition.y = props.position.y + window.scrollY
+    initialPosition.x = props.position.x
+    initialPosition.y = props.position.y
   }
 
   if (!isDefinedPosition(initialPosition)) {
