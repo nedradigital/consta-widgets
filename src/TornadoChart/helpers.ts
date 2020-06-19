@@ -1,11 +1,10 @@
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
-import { NumberRange } from '@/common/utils/scale'
-import { getTotalByColumn } from '@/core/BarChart/helpers'
 import { ShowPositions } from '@/BarChartAxis'
 
-import { Group, XAxisShowPosition, YAxisShowPosition } from './'
+import { Column, Group, XAxisShowPosition, YAxisShowPosition } from './'
 
 export const getFormatter = (formatter?: FormatValue): FormatValue => value => {
   const positiveValue = Math.abs(value)
@@ -22,15 +21,53 @@ export const getAxisShowPositions = (x: XAxisShowPosition, y: YAxisShowPosition)
   }
 }
 
-export const getGroupsDomain = (groups: readonly Group[]) => {
-  const sumGroupValues = (group: Group) => _.sum(group.values.map(v => _.sum(Object.values(v))))
+const getTransformColumn = (
+  colorGroups: Record<string, string>,
+  filter: (index: number) => boolean
+) => (column: Column, columnIdx: number) => {
+  const total = _.sum(Object.values(column))
+  const sections = Object.entries(column)
+    .map(([key, value]) => {
+      if (value === undefined) {
+        return
+      }
 
-  return _.orderBy(groups, sumGroupValues, 'desc').map(g => g.groupName)
+      return {
+        color: colorGroups[key],
+        value,
+      }
+    })
+    .filter(isDefined)
+
+  return filter(columnIdx)
+    ? {
+        total,
+        sections,
+      }
+    : undefined
 }
 
-export const getValuesDomain = (groups: readonly Group[]): NumberRange => {
-  const numbers = _.flattenDeep(groups.map(g => g.values.map(getTotalByColumn)))
-  const maxNumber = Math.max(...numbers, 0)
+export const transformGroupsToCommonGroups = (
+  groups: readonly Group[],
+  colorGroups: Record<string, string>
+) => {
+  const getColumns = getTransformColumn(colorGroups, i => i % 2 !== 0)
+  const getReversedColumns = getTransformColumn(colorGroups, i => i % 2 === 0)
 
-  return [-maxNumber, maxNumber]
+  return _.orderBy(
+    groups.map(group => {
+      const total = _.sum(group.values.flatMap(column => Object.values(column)))
+      const columns = group.values.map(getColumns).filter(isDefined)
+      const reversedColumns = group.values.map(getReversedColumns).filter(isDefined)
+
+      return {
+        name: group.groupName,
+        total,
+        columns,
+        reversedColumns,
+      }
+    }),
+    g => g.total,
+    'desc'
+  )
 }

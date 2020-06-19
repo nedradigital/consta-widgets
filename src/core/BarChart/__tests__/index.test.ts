@@ -1,318 +1,16 @@
-import { scaleLinear } from '@/common/utils/scale'
-
 import { Groups } from '../'
 import {
   defaultGetAxisShowPositions,
-  defaultGetGroupsDomain,
-  defaultGetGroupSize,
-  defaultGetValuesDomain,
-  getColumnDetails,
   getColumnSize,
-  getDataColumns,
   getEveryNTick,
   getGraphStepSize,
-  getMinChartSize,
+  getGroupsDomain,
   getRange,
+  getScaler,
   getTotalByColumn,
-  isLeftTornadoBar,
-  scaleBand,
+  getValuesDomain,
   toAxisSize,
 } from '../helpers'
-
-const COLOR_GROUPS = {
-  baton: 'black',
-  buhanka: 'white',
-  korovay: 'gray',
-}
-
-const TEST_GROUPS: Groups = [
-  {
-    groupName: 'прошлогодний',
-    values: [
-      { baton: 10, buhanka: 5, korovay: 30 },
-      { baton: 5, buhanka: 0, korovay: 10 },
-      { baton: 100, buhanka: 35, korovay: 50 },
-    ],
-  },
-  {
-    groupName: 'свежий',
-    values: [{ baton: 100 }, { buhanka: undefined }, { korovay: 127 }],
-  },
-]
-
-const TEST_GROUPS_WITH_RATIO: Groups = [
-  {
-    groupName: 'group1',
-    values: [{ baton: 1, buhanka: 1, korovay: 1 }],
-  },
-  {
-    groupName: 'group2',
-    values: [{ baton: 1, buhanka: 1, korovay: 2 }],
-  },
-  {
-    groupName: 'group3',
-    values: [{ baton: 1, buhanka: 1, korovay: 3 }],
-  },
-]
-
-const COLUMNS_DATA = [
-  {
-    groupName: 'прошлогодний',
-    columnDetails: [
-      [
-        {
-          category: 'baton',
-          columnName: '0',
-          positionBegin: 0,
-          positionEnd: 10,
-          value: 10,
-          columnSize: 10,
-        },
-        {
-          category: 'buhanka',
-          columnName: '0',
-          positionBegin: 10,
-          positionEnd: 15,
-          value: 5,
-          columnSize: 5,
-        },
-        {
-          category: 'korovay',
-          columnName: '0',
-          positionBegin: 15,
-          positionEnd: 45,
-          value: 30,
-          columnSize: 30,
-        },
-      ],
-      [
-        {
-          category: 'baton',
-          columnName: '1',
-          positionBegin: 0,
-          positionEnd: 5,
-          value: 5,
-          columnSize: 5,
-        },
-        {
-          category: 'buhanka',
-          columnName: '1',
-          positionBegin: 5,
-          positionEnd: 5,
-          value: 0,
-          columnSize: 0,
-        },
-        {
-          category: 'korovay',
-          columnName: '1',
-          positionBegin: 5,
-          positionEnd: 15,
-          value: 10,
-          columnSize: 10,
-        },
-      ],
-      [
-        {
-          category: 'baton',
-          columnName: '2',
-          positionBegin: 0,
-          positionEnd: 100,
-          value: 100,
-          columnSize: 100,
-        },
-        {
-          category: 'buhanka',
-          columnName: '2',
-          positionBegin: 100,
-          positionEnd: 135,
-          value: 35,
-          columnSize: 35,
-        },
-        {
-          category: 'korovay',
-          columnName: '2',
-          positionBegin: 135,
-          positionEnd: 185,
-          value: 50,
-          columnSize: 50,
-        },
-      ],
-    ],
-  },
-  {
-    groupName: 'свежий',
-    columnDetails: [
-      [
-        {
-          category: 'baton',
-          columnName: '0',
-          positionBegin: 0,
-          positionEnd: 100,
-          value: 100,
-          columnSize: 100,
-        },
-      ],
-      [
-        {
-          category: 'korovay',
-          columnName: '1',
-          positionBegin: 0,
-          positionEnd: 127,
-          value: 127,
-          columnSize: 127,
-        },
-      ],
-    ],
-  },
-] as const
-
-const NORMALIZED_COLUMNS_DATA = [
-  {
-    groupName: 'group1',
-    columnDetails: [
-      [
-        {
-          category: 'baton',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 0,
-          positionEnd: 5,
-          value: 1,
-        },
-        {
-          category: 'buhanka',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 5,
-          positionEnd: 10,
-          value: 1,
-        },
-        {
-          category: 'korovay',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 10,
-          positionEnd: 15,
-          value: 1,
-        },
-      ],
-    ],
-  },
-  {
-    groupName: 'group2',
-    columnDetails: [
-      [
-        {
-          category: 'baton',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 0,
-          positionEnd: 5,
-          value: 1,
-        },
-        {
-          category: 'buhanka',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 5,
-          positionEnd: 10,
-          value: 1,
-        },
-        {
-          category: 'korovay',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 10,
-          positionEnd: 15,
-          value: 2,
-        },
-      ],
-    ],
-  },
-  {
-    groupName: 'group3',
-    columnDetails: [
-      [
-        {
-          category: 'baton',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 0,
-          positionEnd: 5,
-          value: 1,
-        },
-        {
-          category: 'buhanka',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 5,
-          positionEnd: 10,
-          value: 1,
-        },
-        {
-          category: 'korovay',
-          columnName: '0',
-          columnSize: 5,
-          positionBegin: 10,
-          positionEnd: 15,
-          value: 3,
-        },
-      ],
-    ],
-  },
-] as const
-
-const getValuesScale = (maxValue: number) =>
-  scaleLinear({
-    domain: [0, maxValue],
-    range: [0, maxValue],
-  })
-
-describe('getDataColumns', () => {
-  it('возвращает массив с координатами для баров', () => {
-    const MAX_VALUE = 185
-    expect(
-      getDataColumns({
-        groups: TEST_GROUPS,
-        categories: Object.keys(COLOR_GROUPS),
-        hasRatio: false,
-        maxValue: 0,
-        valuesScale: getValuesScale(MAX_VALUE),
-      })
-    ).toEqual(COLUMNS_DATA)
-  })
-
-  it('возвращает массив с координатами для баров, которые растянуты по максимальному значению оси', () => {
-    const MAX_VALUE = 5
-    expect(
-      getDataColumns({
-        groups: TEST_GROUPS_WITH_RATIO,
-        categories: Object.keys(COLOR_GROUPS),
-        hasRatio: true,
-        maxValue: MAX_VALUE,
-        valuesScale: getValuesScale(MAX_VALUE),
-      })
-    ).toEqual(NORMALIZED_COLUMNS_DATA)
-  })
-})
-
-describe('defaultGetValuesDomain', () => {
-  const MAX_VALUE = 185
-  it('возвращает значение для домена', () => {
-    expect(defaultGetValuesDomain(TEST_GROUPS)).toEqual([0, MAX_VALUE])
-  })
-
-  it('возвращает значения для домена с отрицательными значениями', () => {
-    expect(
-      defaultGetValuesDomain([
-        {
-          groupName: '1',
-          values: [{ baton: -100 }, { buhanka: 50 }, { korovay: 100 }],
-        },
-      ])
-    ).toEqual([-100, 100])
-  })
-})
 
 describe('getEveryNTick', () => {
   it('получение каждой засечки', () => {
@@ -350,51 +48,6 @@ describe('getGraphStepSize', () => {
   })
 })
 
-describe('scaleBand', () => {
-  const groupsNames = ['3', 'чет', 'абв', '1', 'где'] as const
-  const groupScale = scaleBand({
-    groupsSizes: groupsNames.reduce((acc, curr) => ({ ...acc, [curr]: 50 }), {}),
-    range: [0, 500],
-    groupsNames,
-  })
-
-  it('возвращает позицию для группы с сохранением её порядка', () => {
-    expect(groupScale.scale(groupsNames[0])).toEqual(0)
-    expect(groupScale.scale(groupsNames[1])).toEqual(100)
-    expect(groupScale.scale(groupsNames[2])).toEqual(200)
-    expect(groupScale.scale(groupsNames[3])).toEqual(300)
-    expect(groupScale.scale(groupsNames[4])).toEqual(400)
-  })
-
-  it('возвращает значение, если не передано имя группы', () => {
-    expect(groupScale.bandwidth!()).toEqual(0)
-  })
-
-  it('возвращает посчитанный размер группы, если передано имя группы', () => {
-    expect(groupScale.bandwidth!(groupsNames[0])).toEqual(100)
-    expect(groupScale.bandwidth!(groupsNames[1])).toEqual(100)
-    expect(groupScale.bandwidth!(groupsNames[2])).toEqual(100)
-    expect(groupScale.bandwidth!(groupsNames[3])).toEqual(100)
-    expect(groupScale.bandwidth!(groupsNames[4])).toEqual(100)
-  })
-
-  it('возвращает минимальный размер группы, если передано имя группы', () => {
-    const groupScaleMinSize = scaleBand({
-      groupsSizes: {
-        1: 50,
-        2: 100,
-        3: 150,
-      },
-      range: [0, 300],
-      groupsNames: ['1', '2', '3'],
-    })
-
-    expect(groupScaleMinSize.bandwidth!('1')).toEqual(50)
-    expect(groupScaleMinSize.bandwidth!('2')).toEqual(100)
-    expect(groupScaleMinSize.bandwidth!('3')).toEqual(150)
-  })
-})
-
 describe('getRange', () => {
   it('возвращает диапазон', () => {
     expect(getRange(100)).toEqual([0, 100])
@@ -407,264 +60,39 @@ describe('getRange', () => {
 
 describe('getTotalByColumn', () => {
   it('возвращает 0 если в колонке нет данных', () => {
-    expect(getTotalByColumn({})).toEqual(0)
+    expect(getTotalByColumn(undefined)).toEqual(0)
   })
 
-  it('возвращает сумму значений всей колонки', () => {
-    expect(getTotalByColumn({ baton: 10, buhanka: 5, korovay: 30 })).toEqual(45)
+  it('возвращает сумму значений секций', () => {
+    expect(getTotalByColumn({ total: 45 })).toEqual(45)
   })
 
-  it('возвращает сумму значений всей колонки, не учитывая пустые значения', () => {
-    expect(getTotalByColumn({ baton: 10, buhanka: undefined, korovay: 30 })).toEqual(40)
-  })
-})
-
-describe('getColumnDetails', () => {
-  const CATEGORIES = ['baton', 'buhanka'] as const
-
-  describe('горизонтальный график', () => {
-    const MAX_VALUE = 185
-    it('получение детальной информации о столбце', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: 10, buhanka: 30 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: getValuesScale(MAX_VALUE),
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 10,
-          positionBegin: 0,
-          positionEnd: 10,
-          value: 10,
-        },
-        {
-          category: 'buhanka',
-          columnName: '1',
-          columnSize: 30,
-          positionBegin: 10,
-          positionEnd: 40,
-          value: 30,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце с отрицательным значением', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: -100 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: getValuesScale(MAX_VALUE),
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 100,
-          positionBegin: 0,
-          positionEnd: 100,
-          value: -100,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце где размер колонки не может быть меньше 5', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: 1 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: getValuesScale(MAX_VALUE),
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 5,
-          positionBegin: 0,
-          positionEnd: 5,
-          value: 1,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце с пропуском значения', () => {
-      expect(
-        getColumnDetails({
-          categories: ['baton', 'buhanka', 'korovay'],
-          column: { baton: 10, buhanka: undefined, korovay: 30 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: getValuesScale(MAX_VALUE),
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 10,
-          positionBegin: 0,
-          positionEnd: 10,
-          value: 10,
-        },
-        {
-          category: 'korovay',
-          columnName: '1',
-          columnSize: 30,
-          positionBegin: 10,
-          positionEnd: 40,
-          value: 30,
-        },
-      ])
-    })
-  })
-
-  describe('вертикальный график', () => {
-    const MAX_VALUE = 185
-    const scaler = scaleLinear({
-      domain: [MAX_VALUE, 0],
-      range: [0, MAX_VALUE],
-    })
-
-    it('получение детальной информации о столбце', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: 10, buhanka: 30 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: scaler,
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 10,
-          positionBegin: 185,
-          positionEnd: 175,
-          value: 10,
-        },
-        {
-          category: 'buhanka',
-          columnName: '1',
-          columnSize: 30,
-          positionBegin: 175,
-          positionEnd: 145,
-          value: 30,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце с отрицательным значением', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: -100 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: scaler,
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 100,
-          positionBegin: 185,
-          positionEnd: 85,
-          value: -100,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце где размер колонки не может быть меньше 5', () => {
-      expect(
-        getColumnDetails({
-          categories: CATEGORIES,
-          column: { baton: 1 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: scaler,
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 5,
-          positionBegin: 185,
-          positionEnd: 180,
-          value: 1,
-        },
-      ])
-    })
-
-    it('получение детальной информации о столбце с пропуском значения', () => {
-      expect(
-        getColumnDetails({
-          categories: ['baton', 'buhanka', 'korovay'],
-          column: { baton: 10, buhanka: undefined, korovay: 30 },
-          columnName: '1',
-          maxValue: MAX_VALUE,
-          valuesScale: scaler,
-        })
-      ).toEqual([
-        {
-          category: 'baton',
-          columnName: '1',
-          columnSize: 10,
-          positionBegin: 185,
-          positionEnd: 175,
-          value: 10,
-        },
-        {
-          category: 'korovay',
-          columnName: '1',
-          columnSize: 30,
-          positionBegin: 175,
-          positionEnd: 145,
-          value: 30,
-        },
-      ])
-    })
+  it('возвращает сумму значений секций с отрицаиельными значениями', () => {
+    expect(getTotalByColumn({ total: -40 })).toEqual(40)
   })
 })
 
 describe('defaultGetGroupsDomain', () => {
   const groups: Groups = [
     {
-      groupName: 'группа 1',
-      values: [
-        { value1: 10, value2: 5, value3: 30 },
-        { value1: 5, value2: 0, value3: 10 },
-      ],
+      name: 'группа 1',
+      columns: [],
+      reversedColumns: [],
     },
     {
-      groupName: 'группа 2',
-      values: [{ value1: 100 }, { value2: undefined }, { value3: 127 }],
+      name: 'группа 2',
+      columns: [],
+      reversedColumns: [],
     },
     {
-      groupName: 'группа 3',
-      values: [{ value1: 300 }, { value2: 12 }, { value3: 22 }],
+      name: 'группа 3',
+      columns: [],
+      reversedColumns: [],
     },
   ]
 
   it('возвращает массив названий групп', () => {
-    expect(defaultGetGroupsDomain(groups)).toEqual(['группа 1', 'группа 2', 'группа 3'])
-  })
-})
-
-describe('isLeftTornadoBar', () => {
-  it('возвращает true, если индекс бара четный', () => {
-    expect(isLeftTornadoBar(0)).toBeTrue()
-  })
-
-  it('возвращает false, если индекс бара нечетный', () => {
-    expect(isLeftTornadoBar(3)).toBeFalse()
+    expect(getGroupsDomain(groups)).toEqual(['группа 1', 'группа 2', 'группа 3'])
   })
 })
 
@@ -702,81 +130,9 @@ describe('toAxisSize', () => {
   })
 })
 
-describe('getMinChartSize', () => {
-  const groupsSizes: Record<string, number> = {
-    1: 100,
-    2: 100,
-    3: 110,
-  }
-
-  it('получение минимального размера графика', () => {
-    const result = getMinChartSize({
-      groupsSizes,
-      paddingInner: 10,
-      paddingOuter: 10,
-    })
-
-    expect(result).toEqual(350)
-  })
-})
-
-describe('defaultGetGroupSize', () => {
-  it('получение размера группы в которой нет колонок', () => {
-    const result = defaultGetGroupSize({
-      columnPadding: 10,
-      columnWidth: 16,
-      group: {
-        groupName: 'Q1-2016',
-        values: [],
-      },
-    })
-
-    expect(result).toEqual(16)
-  })
-
-  it('получение размера группы с одной колонкой', () => {
-    const result = defaultGetGroupSize({
-      columnPadding: 10,
-      columnWidth: 16,
-      group: {
-        groupName: 'Q1-2016',
-        values: [{ apples: 10 }],
-      },
-    })
-
-    expect(result).toEqual(16)
-  })
-
-  it('получение размера группы с двумя колонками', () => {
-    const result = defaultGetGroupSize({
-      columnPadding: 10,
-      columnWidth: 16,
-      group: {
-        groupName: 'Q1-2016',
-        values: [{ apples: 10 }, { bananas: 4 }],
-      },
-    })
-
-    expect(result).toEqual(42)
-  })
-
-  it('получение размера группы с одной мультиколонкой', () => {
-    const result = defaultGetGroupSize({
-      columnPadding: 10,
-      columnWidth: 16,
-      group: {
-        groupName: 'Q1-2016',
-        values: [{ apples: 10, bananas: 4 }],
-      },
-    })
-
-    expect(result).toEqual(16)
-  })
-})
-
 describe('defaultGetAxisShowPositions', () => {
   it('получение настроек расположения осей для вертикального графика без отрицательных значений', () => {
-    const result = defaultGetAxisShowPositions({ isHorizontal: false, isNegative: false })
+    const result = defaultGetAxisShowPositions({ isHorizontal: false, showReversed: false })
 
     expect(result).toEqual({
       top: false,
@@ -787,7 +143,7 @@ describe('defaultGetAxisShowPositions', () => {
   })
 
   it('получения настроек расположения осей для горизонтального графика без отрицательных значений', () => {
-    const result = defaultGetAxisShowPositions({ isHorizontal: true, isNegative: false })
+    const result = defaultGetAxisShowPositions({ isHorizontal: true, showReversed: false })
 
     expect(result).toEqual({
       top: false,
@@ -798,7 +154,7 @@ describe('defaultGetAxisShowPositions', () => {
   })
 
   it('получение настроек расположения осей для вертикального графика с отрицательными значениями', () => {
-    const result = defaultGetAxisShowPositions({ isHorizontal: false, isNegative: true })
+    const result = defaultGetAxisShowPositions({ isHorizontal: false, showReversed: true })
 
     expect(result).toEqual({
       top: true,
@@ -809,7 +165,7 @@ describe('defaultGetAxisShowPositions', () => {
   })
 
   it('получение настроек расположения осей для горизонтального графика с отрицательными значениями', () => {
-    const result = defaultGetAxisShowPositions({ isHorizontal: true, isNegative: true })
+    const result = defaultGetAxisShowPositions({ isHorizontal: true, showReversed: true })
 
     expect(result).toEqual({
       top: false,
@@ -817,5 +173,47 @@ describe('defaultGetAxisShowPositions', () => {
       bottom: true,
       left: true,
     })
+  })
+})
+
+describe('defaultGetValuesDomain', () => {
+  const groups: Groups = [
+    {
+      name: '1',
+      columns: [{ total: 50 }, { total: 45 }],
+      reversedColumns: [{ total: 100 }],
+    },
+  ]
+
+  it('возвращает значение для домена', () => {
+    const result = getValuesDomain(groups, false)
+
+    expect(result).toEqual([0, 100])
+  })
+
+  it('возвращает значения для домена с перевернутыми колонками', () => {
+    const result = getValuesDomain(groups, true)
+
+    expect(result).toEqual([-100, 100])
+  })
+})
+
+describe('getScaler', () => {
+  it('', () => {
+    const scaler = getScaler({ maxValue: 100, showReversed: false })
+
+    expect(scaler(200, 50)).toEqual(100)
+  })
+
+  it('', () => {
+    const scaler = getScaler({ maxValue: 100, showReversed: true })
+
+    expect(scaler(200, 50)).toEqual(50)
+  })
+
+  it('', () => {
+    const scaler = getScaler({ maxValue: 100, showReversed: false })
+
+    expect(scaler(200, 200)).toEqual(200)
   })
 })
