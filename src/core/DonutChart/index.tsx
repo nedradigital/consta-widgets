@@ -8,9 +8,8 @@ import { zip } from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
-import { PositionState } from '@/common/utils/tooltips'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
-import { Tooltip } from '@/Tooltip'
+import { Position, Tooltip } from '@/Tooltip'
 
 import { Data as DonutData, DataItem, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, DonutText } from './components/Text'
@@ -82,7 +81,7 @@ export const CoreDonutChart: React.FC<Props> = ({
   filterTooltipItem = () => true,
 }) => {
   const [tooltipData, changeTooltipData] = useState<TooltipDataState>([])
-  const [mousePosition, changeMousePosition] = useState<PositionState>()
+  const [mousePosition, changeMousePosition] = useState<Position>()
   const ref = useRef(null)
   const { width, height } = useComponentSize(ref)
 

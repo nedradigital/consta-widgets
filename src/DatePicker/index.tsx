@@ -6,7 +6,6 @@ import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit/Text'
 import { endOfDay, format, startOfDay } from 'date-fns'
 
-import { useTooltipReposition } from '@/common/utils/tooltips'
 import { Tooltip } from '@/Tooltip'
 
 import { ActionButtons } from './components/ActionButtons'
@@ -62,8 +61,6 @@ type RangeProps = {
 export type Data = DateLimitProps & (SingleProps | RangeProps)
 
 type Props = DateLimitProps & StyleProps & (SingleProps | RangeProps)
-
-const OFFSET_FROM_CONTROLS = 4
 
 const formatOutOfRangeDate = (date: Date) => format(date, 'dd.MM.yyyy')
 
@@ -158,12 +155,6 @@ export const DatePicker: React.FC<Props> = props => {
     handler: handleApplyDate,
   })
 
-  useTooltipReposition({
-    isVisible: isTooltipVisible,
-    anchorRef: controlsRef,
-    onRequestReposition: handleApplyDate,
-  })
-
   const handleSelectQuarter = (value: DateRange) => {
     setCurrentVisibleDate(getCurrentVisibleDate({ value: [value[0], undefined], minDate, maxDate }))
 
@@ -225,7 +216,7 @@ export const DatePicker: React.FC<Props> = props => {
         anchorRef={controlsRef}
         className={css.tooltip}
         withArrow={false}
-        offset={OFFSET_FROM_CONTROLS}
+        offset={16}
         direction="downRight"
         isContentHoverable
       >

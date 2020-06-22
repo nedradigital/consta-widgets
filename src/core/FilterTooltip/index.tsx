@@ -5,7 +5,6 @@ import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { useTooltipReposition } from '@/common/utils/tooltips'
 import { Tooltip } from '@/Tooltip'
 
 import css from './index.css'
@@ -42,12 +41,6 @@ export const FilterTooltip: React.FC<Props> = ({
     isActive: isOpened,
     ignoreClicksInsideRefs: [buttonRef, tooltipRef, menuRef],
     handler: onToggle,
-  })
-
-  useTooltipReposition({
-    isVisible: isOpened,
-    anchorRef: buttonRef,
-    onRequestReposition: onToggle,
   })
 
   return (

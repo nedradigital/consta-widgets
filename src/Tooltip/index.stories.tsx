@@ -3,13 +3,13 @@ import { useRef, useState } from 'react'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
-import { PositionState, useTooltipReposition } from '@/common/utils/tooltips'
+import { getStoryIds } from '@/common/utils/storybook'
 
-import { directions, Tooltip } from '.'
+import { directions, Position, Tooltip } from '.'
 
 export const TooltipPositionedByCoordsStory = createStory(
   () => {
-    const [position, setPosition] = useState<PositionState>({ x: 10, y: 10 })
+    const [position, setPosition] = useState<Position>(undefined)
 
     const handleMouseMove = (event: React.MouseEvent) => {
       setPosition({ x: event.clientX, y: event.clientY })
@@ -22,7 +22,7 @@ export const TooltipPositionedByCoordsStory = createStory(
           isVisible={true}
           direction={select('direction', directions, 'upCenter')}
           position={position}
-          offset={number('offset', 0)}
+          offset={number('offset', 6)}
           withArrow={boolean('withArrow', true)}
         >
           {text('children', 'Hello, from Portal!')}
@@ -36,7 +36,7 @@ export const TooltipPositionedByCoordsStory = createStory(
 export const TooltipPositionedByAnchorStory = createStory(
   () => {
     const anchorRef = useRef<HTMLButtonElement>(null)
-    const [isTooltipVisible, setIsTooltipVisible] = useState(true)
+    const [isTooltipVisible, setIsTooltipVisible] = useState(false)
 
     const handleClickOnAnchor = () => {
       setIsTooltipVisible(!isTooltipVisible)
@@ -71,7 +71,7 @@ export const TooltipPositionedByAnchorStory = createStory(
           isVisible={isTooltipVisible}
           direction={select('direction', directions, 'left')}
           anchorRef={anchorRef}
-          offset={number('offset', 5)}
+          offset={number('offset', 6)}
           withArrow={boolean('withArrow', false)}
           isContentHoverable
         >
@@ -94,12 +94,6 @@ export const TooltipWithAutoClosingStory = createStory(
     const anchorRef = useRef<HTMLButtonElement>(null)
     const tooltipRef = useRef(null)
     const [isTooltipVisible, setIsTooltipVisible] = useState(true)
-
-    useTooltipReposition({
-      isVisible: isTooltipVisible,
-      anchorRef,
-      onRequestReposition: () => setIsTooltipVisible(false),
-    })
 
     const handleClickOnAnchor = () => {
       setIsTooltipVisible(!isTooltipVisible)
@@ -136,23 +130,86 @@ export const TooltipWithAutoClosingStory = createStory(
           anchorRef={anchorRef}
           isContentHoverable
         >
-          <div
-            style={{
-              height: '2.2em',
-              overflow: 'auto',
-            }}
-          >
-            Попробуй поскроллить или поресайзить окно
-            <br />
-            Скролл внутри тултипа закрывать не должен
-          </div>
+          Проскрольте окно вверх
         </Tooltip>
       </>
     )
   },
-  { name: 'с автозакрытием при скролле и ресайзе окна' }
+  { name: 'обновление позиции при скролле и ресайзе окна' }
+)
+
+/**
+ * Стори для воспроизведения проблемы с бесконечным зацикливанием позиций тултипа:
+ * Когда тултип пытается развернуться в upRight, то по размерам выходит, что он не влезает и его надо развернуть в left
+ * Аналогично когда тултип пытается развернуться в left, то по размерам ему не хватает места и его надо развернуть в upRight
+ */
+export const TooltipBannedPositionsStory = createStory(
+  () => {
+    const anchorRef = useRef<HTMLButtonElement>(null)
+    const [isTooltipVisible, setIsTooltipVisible] = useState(false)
+
+    const handleClickOnAnchor = () => {
+      setIsTooltipVisible(!isTooltipVisible)
+    }
+
+    return (
+      <>
+        <div
+          style={{
+            width: '100%',
+            height: '100vh',
+          }}
+        >
+          <button
+            type="button"
+            style={{
+              width: 100,
+              height: 50,
+              margin: 40,
+              backgroundColor: 'var(--color-bg-alert)',
+              cursor: 'pointer',
+            }}
+            onClick={handleClickOnAnchor}
+            ref={anchorRef}
+          >
+            Кликай сюда
+          </button>
+        </div>
+        <Tooltip
+          isVisible={isTooltipVisible}
+          anchorRef={anchorRef}
+          offset={0}
+          direction="upRight"
+          possibleDirections={['upRight', 'left']}
+          isContentHoverable
+          renderContent={direction => (
+            <div
+              style={
+                direction === 'upRight'
+                  ? {
+                      width: 10,
+                      height: 50,
+                    }
+                  : {
+                      width: 50,
+                      height: 10,
+                    }
+              }
+            >
+              {direction}
+            </div>
+          )}
+        />
+      </>
+    )
+  },
+  { name: 'предотвращение бесконечного цикла смены позиций' }
 )
 
 export default createMetadata({
   title: 'components/Tooltip',
+  excludeStories:
+    process.env.NODE_ENV === 'development'
+      ? undefined
+      : getStoryIds({ TooltipBannedPositionsStory }),
 })

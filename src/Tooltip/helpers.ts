@@ -1,10 +1,10 @@
 import _ from 'lodash'
 
-import { Position, PositionState } from '@/common/utils/tooltips'
-import { isDefinedPosition } from '@/common/utils/type-guards'
-import { AttachedToPosition, Direction } from '@/Tooltip/index'
+import { Direction, Position } from './'
 
 type Size = Pick<ClientRect, 'width' | 'height'>
+
+type PositionsByDirection = Record<Direction, NonNullable<Position>>
 
 /**
  * Порядок сторон, куда мы можем развернуть тултип.
@@ -31,13 +31,16 @@ const getDirectionAndPosition = ({
   bannedDirections,
   possibleDirections,
 }: {
-  positionsByDirection: Record<Direction, Position>
+  positionsByDirection: PositionsByDirection
   initialDirection: Direction
   tooltipSize: Size
   parentSize: Size
   possibleDirections: readonly Direction[]
   bannedDirections: readonly Direction[]
-}) => {
+}): {
+  direction: Direction
+  position: Position
+} => {
   const result = _.sortBy(orderOfDirections, dir => (dir === initialDirection ? -1 : 0))
     .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
     .find(dir => {
@@ -84,59 +87,45 @@ const getDirectionAndPosition = ({
   }
 }
 
-type ComputedPositionAndDirectionProps = {
+type ComputedPositionAndDirectionParams = {
+  position: Position
   tooltipSize: Size
   parentSize: Size
-  offset?: number
+  anchorSize?: Size
+  offset: number
   direction: Direction
   possibleDirections: readonly Direction[]
   bannedDirections: readonly Direction[]
-} & ({ anchorClientRect: ClientRect } | AttachedToPosition)
+}
 
-export const getComputedPositionAndDirection = (
-  props: ComputedPositionAndDirectionProps
-): {
+export const getComputedPositionAndDirection = ({
+  position,
+  tooltipSize,
+  parentSize,
+  anchorSize = { width: 0, height: 0 },
+  offset,
+  direction: initialDirection,
+  possibleDirections,
+  bannedDirections,
+}: ComputedPositionAndDirectionParams): {
   direction: Direction
-  position: NonNullable<PositionState>
+  position: Position
 } => {
-  const {
-    offset = 0,
-    parentSize,
-    direction: initialDirection,
-    tooltipSize,
-    possibleDirections,
-    bannedDirections,
-  } = props
-
-  const initialPosition: NonNullable<PositionState> = {
-    x: undefined,
-    y: undefined,
-  }
-
-  if ('anchorClientRect' in props) {
-    initialPosition.x = props.anchorClientRect.left
-    initialPosition.y = props.anchorClientRect.bottom
-  } else if ('position' in props && isDefinedPosition(props.position)) {
-    initialPosition.x = props.position.x
-    initialPosition.y = props.position.y
-  }
-
-  if (!isDefinedPosition(initialPosition)) {
-    return { direction: initialDirection, position: initialPosition }
+  if (!position) {
+    return { position, direction: initialDirection }
   }
 
   const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
-  const anchorWidth = ('anchorClientRect' in props && props.anchorClientRect.width) || 0
-  const anchorHeight = ('anchorClientRect' in props && props.anchorClientRect.height) || 0
+  const { width: anchorWidth, height: anchorHeight } = anchorSize
 
-  const leftPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth))
-  const rightPositionX = Math.round(initialPosition.x)
-  const centerPositionX = Math.round(initialPosition.x - Math.abs(tooltipWidth - anchorWidth) / 2)
-  const upPositionY = Math.round(initialPosition.y - anchorHeight - tooltipHeight - offset)
-  const downPositionY = Math.round(initialPosition.y + offset)
-  const centerPositionY = Math.round(initialPosition.y - anchorHeight / 2 - tooltipHeight / 2)
+  const leftPositionX = Math.round(position.x - Math.abs(tooltipWidth - anchorWidth))
+  const rightPositionX = Math.round(position.x)
+  const centerPositionX = Math.round(position.x - Math.abs(tooltipWidth - anchorWidth) / 2)
+  const upPositionY = Math.round(position.y - anchorHeight - tooltipHeight - offset)
+  const downPositionY = Math.round(position.y + offset)
+  const centerPositionY = Math.round(position.y - anchorHeight / 2 - tooltipHeight / 2)
 
-  const positionsByDirection: Record<Direction, Position> = {
+  const positionsByDirection: PositionsByDirection = {
     upLeft: {
       x: leftPositionX,
       y: upPositionY,
@@ -150,11 +139,11 @@ export const getComputedPositionAndDirection = (
       y: upPositionY,
     },
     right: {
-      x: Math.round(initialPosition.x + anchorWidth + offset),
+      x: Math.round(position.x + anchorWidth + offset),
       y: centerPositionY,
     },
     left: {
-      x: Math.round(initialPosition.x - tooltipWidth - offset),
+      x: Math.round(position.x - tooltipWidth - offset),
       y: centerPositionY,
     },
     downLeft: {

@@ -1,4 +1,4 @@
-import { Position } from '@/common/utils/tooltips'
+import { Position } from '@/Tooltip'
 
 import { Group } from '../..'
 import { Line } from '../Line'
@@ -12,7 +12,7 @@ type Props = {
   isInactive: boolean
   graphStartDate: number
   withMargin: boolean
-  tooltipPosition?: Position
+  tooltipPosition: Position
   onClick: React.MouseEventHandler<HTMLDivElement>
   onTooltipRequestReposition: () => void
 }
