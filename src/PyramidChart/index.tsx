@@ -131,7 +131,7 @@ export const PyramidChart: React.FC<Props> = ({
                   tag="span"
                   size={fontSize}
                   view="primary"
-                  lineHeight={constraint ? 'xs' : undefined}
+                  lineHeight="xs"
                   className={css.textEllipsis}
                 >
                   {item.text}
