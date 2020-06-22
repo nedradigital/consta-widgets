@@ -8,3 +8,7 @@ export const isValidDate = (date: unknown): date is Date =>
 
 export const isDefinedPosition = (position: PositionState): position is Position =>
   !!position && isDefined(position.x) && isDefined(position.y)
+
+export const isHtmlElement = (target?: EventTarget | Element | null): target is HTMLElement => {
+  return target !== undefined && target instanceof HTMLElement
+}

@@ -1,0 +1,270 @@
+.table {
+  --table-z: 1;
+  --sticky-left-z: calc(var(--table-z) + 1);
+  --sticky-top-z: calc(var(--sticky-left-z) + 1);
+  --sticky-top-and-left-z: calc(var(--sticky-top-z) + 1);
+  --resizer-z: calc(var(--sticky-top-and-left-z) + 1);
+  --resizer-width: 0;
+  --fast-transition: 0.15s ease-out;
+  --shadow-color: rgba(0, 29, 46, 0.4);
+
+  position: relative;
+
+  display: grid;
+  overflow: auto;
+
+  width: 100%;
+  height: 100%;
+
+  &.sizeS {
+    --cell-padding-vertical: var(--space-2xs);
+  }
+
+  &.sizeM {
+    --cell-padding-vertical: var(--space-xs);
+  }
+
+  &.sizeL {
+    --cell-padding-vertical: var(--space-s);
+  }
+
+  &.isResizable {
+    --resizer-width: 5px;
+  }
+}
+
+.row {
+  display: contents;
+
+  &.withContent {
+    display: block;
+
+    grid-column-start: 1;
+    grid-column-end: -1;
+  }
+}
+
+.cell {
+  z-index: var(--table-z);
+
+  box-sizing: border-box;
+
+  color: var(--color-typo-primary);
+  background-color: var(--color-bg-default);
+
+  &.withoutBorder {
+    border: none;
+  }
+
+  &.isResized {
+    @mixin hyphens;
+  }
+
+  &.isClickable {
+    cursor: pointer;
+  }
+
+  &.stickyOnTop,
+  &.stickyOnLeft {
+    position: sticky;
+  }
+
+  &.stickyOnTop {
+    z-index: var(--sticky-top-z);
+    top: 0;
+
+    &.isHeader {
+      border-bottom: 1px solid var(--color-bg-border);
+    }
+
+    &.isResizer {
+      z-index: calc(var(--sticky-top-and-left-z) + 1);
+    }
+  }
+
+  &.stickyOnLeft {
+    z-index: var(--sticky-left-z);
+    left: 0;
+
+    &.isHeader {
+      z-index: var(--sticky-top-and-left-z);
+    }
+
+    &.isResizer {
+      z-index: calc(var(--sticky-top-and-left-z) + 1);
+    }
+  }
+
+  &.isHeader {
+    font-size: var(--size-text-xs);
+    font-weight: bold;
+    line-height: var(--line-height-text-xs);
+
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  &:not(.isHeader) {
+    font-size: var(--size-text-s);
+    line-height: var(--line-height-text-s);
+  }
+}
+
+.wrapper {
+  position: relative;
+
+  height: 100%;
+
+  &:not(.withoutPadding) {
+    box-sizing: border-box;
+    padding-top: var(--cell-padding-vertical);
+    padding-right: calc(var(--space-m) + var(--resizer-width));
+    padding-bottom: var(--cell-padding-vertical);
+    padding-left: var(--space-m);
+  }
+
+  .cell.stickyOnLeft &::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    width: var(--space-s);
+
+    content: '';
+    pointer-events: none;
+
+    opacity: 0;
+    background: linear-gradient(90deg, var(--shadow-color), transparent);
+
+    transition: opacity var(--fast-transition);
+    transform: translateX(100%);
+
+    .showVerticalCellShadow & {
+      opacity: 1;
+    }
+  }
+
+  .row & {
+    height: 100%;
+  }
+
+  .row:nth-child(2n) & {
+    background-color: var(--color-bg-stripe);
+  }
+
+  &.isActive,
+  .row:hover & {
+    background-color: var(--color-control-bg-ghost);
+  }
+
+  &.isDarkned {
+    opacity: 0.3;
+  }
+}
+
+.title {
+  position: relative;
+
+  display: inline-block;
+}
+
+.icon {
+  @mixin button;
+
+  position: absolute;
+  z-index: calc(var(--resizer-z) + 1);
+  top: calc(var(--space-2xs) * -1);
+
+  box-sizing: content-box;
+  width: calc-size(12);
+  height: calc-size(12);
+  padding: var(--space-2xs);
+
+  cursor: pointer;
+
+  color: var(--color-control-typo-clear);
+
+  fill: currentColor;
+
+  &:hover {
+    color: var(--color-control-typo-clear-hover);
+  }
+
+  .cell:not(:hover) & {
+    visibility: hidden;
+  }
+}
+
+.iconFilter {
+  left: 0;
+
+  transform: translateX(-100%);
+
+  .cell.isFilterOpened & {
+    visibility: initial;
+  }
+
+  .cell:hover:not(.isFilterOpened) & {
+    opacity: 1;
+    color: var(--color-control-typo-clear);
+  }
+}
+
+.iconSort {
+  right: 0;
+
+  overflow: visible;
+
+  transform: translateX(100%);
+
+  .cell.isSortingActive & {
+    visibility: initial;
+  }
+}
+
+.selectedFilters {
+  position: sticky;
+  left: 0;
+
+  grid-column: 1 / -1;
+
+  max-width: var(--table-width);
+
+  background-color: var(--color-bg-default);
+}
+
+.headerShadowWrapper {
+  position: sticky;
+  z-index: var(--sticky-top-and-left-z);
+  top: var(--table-header-height);
+  left: 0;
+
+  grid-column: 1 / -1;
+}
+
+.headerShadow {
+  position: relative;
+
+  &::before {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    height: var(--space-s);
+
+    content: '';
+    pointer-events: none;
+
+    opacity: 0;
+    background: linear-gradient(180deg, var(--shadow-color), transparent);
+
+    transition: opacity var(--fast-transition);
+    transform: translateY(100%);
+
+    .showHorizontalCellShadow & {
+      opacity: 1;
+    }
+  }
+}

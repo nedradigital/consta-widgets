@@ -1,6 +1,4 @@
 .main {
-  --fast-transition: 0.15s ease-out;
-
   position: absolute;
   z-index: var(--resizer-z);
   top: 0;
@@ -18,7 +16,7 @@
 
     position: absolute;
     top: 0;
-    right: var(--hover-area-offset);
+    right: 0;
     bottom: 0;
     left: var(--hover-area-offset);
 
@@ -28,5 +26,11 @@
   &:hover,
   &.isDragging {
     background-color: var(--color-bg-link);
+  }
+
+  &:not(.isVisible) {
+    visibility: hidden;
+
+    pointer-events: none;
   }
 }
