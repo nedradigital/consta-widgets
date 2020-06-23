@@ -71,20 +71,12 @@ export const getData = (
     {
       name: title,
       colorGroupName: title,
-      sections: [
-        {
-          value: isValueFull ? 100 : valueRatio % 100,
-        },
-      ],
+      values: [isValueFull ? 100 : valueRatio % 100],
     },
     {
       name: 'empty',
       colorGroupName: 'empty',
-      sections: [
-        {
-          value: isValueFull ? 0 : 100 - (valueRatio % 100),
-        },
-      ],
+      values: [isValueFull ? 0 : 100 - (valueRatio % 100)],
     },
   ]
 

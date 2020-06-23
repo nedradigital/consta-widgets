@@ -40,20 +40,12 @@ describe('getData', () => {
       {
         name: 'title',
         colorGroupName: 'title',
-        sections: [
-          {
-            value: 70,
-          },
-        ],
+        values: [70],
       },
       {
         name: 'empty',
         colorGroupName: 'empty',
-        sections: [
-          {
-            value: 30,
-          },
-        ],
+        values: [30],
       },
     ])
   })
@@ -68,20 +60,12 @@ describe('getData', () => {
       {
         name: 'title',
         colorGroupName: 'title',
-        sections: [
-          {
-            value: 0,
-          },
-        ],
+        values: [0],
       },
       {
         name: 'empty',
         colorGroupName: 'empty',
-        sections: [
-          {
-            value: 100,
-          },
-        ],
+        values: [100],
       },
     ])
   })
@@ -91,20 +75,12 @@ describe('getData', () => {
       {
         name: 'title',
         colorGroupName: 'title',
-        sections: [
-          {
-            value: 100,
-          },
-        ],
+        values: [100],
       },
       {
         name: 'empty',
         colorGroupName: 'empty',
-        sections: [
-          {
-            value: 0,
-          },
-        ],
+        values: [0],
       },
     ])
   })

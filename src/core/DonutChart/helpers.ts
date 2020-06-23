@@ -11,10 +11,7 @@ export const minChartSize: Record<number, number> = {
 export type Data = {
   name: string
   colorGroupName: string
-  sections: ReadonlyArray<{
-    value: number | null
-    showValue?: number
-  }>
+  values: ReadonlyArray<number | null>
 }
 export type GetCirclesCount = (data: readonly Data[]) => number
 
@@ -81,7 +78,7 @@ export const getDonutRadius = (mainRadius: number, index: number, countLines: nu
 }
 
 export const defaultGetCirclesCount: GetCirclesCount = data => {
-  return Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES_TO_RENDER)
+  return Math.min(Math.max(...data.map(i => i.values.length)), MAX_CIRCLES_TO_RENDER)
 }
 
 export const defaultGetMinChartSize: GetMinChartSize = (

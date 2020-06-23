@@ -88,18 +88,12 @@ describe('getDonutRadius', () => {
 
 describe('defaultGetCirclesCount', () => {
   it('возвращает количество линий', () => {
-    expect(
-      defaultGetCirclesCount([
-        { name: '', colorGroupName: '', sections: [{ value: 0 }, { value: 0 }] },
-      ])
-    ).toBe(2)
+    expect(defaultGetCirclesCount([{ name: '', colorGroupName: '', values: [0, 0] }])).toBe(2)
   })
 
   it('возвращает количество линий не больше максимального', () => {
     expect(
-      defaultGetCirclesCount([
-        { name: '', colorGroupName: '', sections: times(10, () => ({ value: 0 })) },
-      ])
+      defaultGetCirclesCount([{ name: '', colorGroupName: '', values: times(10, () => 0) }])
     ).toBe(MAX_CIRCLES_TO_RENDER)
   })
 })

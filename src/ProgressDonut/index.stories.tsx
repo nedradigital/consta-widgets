@@ -3,10 +3,12 @@ import { zipObject } from 'lodash'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
-import { halvesDonut } from '@/core/DonutChart/components/Donut'
+import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
 import { Colors, ProgressDonut } from '@/ProgressDonut'
 
 const halvesDonutList = zipObject(['--', ...halvesDonut], [undefined, ...halvesDonut])
+
+const halfDonutSelect = (value?: HalfDonut) => select('halfDonut', halvesDonutList, value)
 
 const title = 'факт/план ПП'
 
@@ -24,7 +26,7 @@ export const Interactive = createStory(
       title={title}
       data={object('data', data)}
       colors={object('colors', colors)}
-      halfDonut={select('halfDonut', halvesDonutList, undefined)}
+      halfDonut={halfDonutSelect()}
     />
   ),
   { name: 'стандартный' }
@@ -36,7 +38,7 @@ export const WithText = createStory(
       title={title}
       data={object('data', data)}
       colors={object('colors', colors)}
-      halfDonut={select('halfDonut', halvesDonutList, undefined)}
+      halfDonut={halfDonutSelect()}
       showText
     />
   ),
@@ -51,7 +53,7 @@ export const WithTitle = createStory(
       title={title}
       data={object('data', data)}
       colors={object('colors', colors)}
-      halfDonut={select('halfDonut', halvesDonutList, undefined)}
+      halfDonut={halfDonutSelect()}
       showText
       showTitle
     />
@@ -82,6 +84,22 @@ export const WithMoreThan100 = createStory(
     />
   ),
   { name: 'с более 100%' }
+)
+
+export const AsHalfDonut = createStory(
+  () => {
+    return (
+      <ProgressDonut
+        data={object('data', { value: 20, valueMax: 60 })}
+        colors={['var(--color-bg-warning)', 'var(--color-bg-border)']}
+        halfDonut={halfDonutSelect('right')}
+        title="всего"
+        showText
+        showTitle
+      />
+    )
+  },
+  { name: 'как полукруг' }
 )
 
 export default createMetadata({

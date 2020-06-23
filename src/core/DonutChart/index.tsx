@@ -113,11 +113,10 @@ export const CoreDonutChart: React.FC<Props> = ({
 
   const values = zip(
     ...data.map(item =>
-      item.sections.slice(0, circlesCount).map(section => ({
+      item.values.slice(0, circlesCount).map(value => ({
         colorGroupName: item.colorGroupName,
         name: item.name,
-        value: section.value,
-        showValue: section.showValue,
+        value,
       }))
     )
   ) as readonly DonutData[]

@@ -20,7 +20,6 @@ import {
   donutDataItemsWithZeroData,
   donutDataItemWithoutData,
   donutProgressData,
-  zeroValue,
 } from './data.mock'
 
 const halvesDonutList = zipObject(['--', ...halvesDonut], [undefined, ...halvesDonut])
@@ -49,7 +48,7 @@ export const WithZeroDataInOneGroup = createStory(
           {
             name: 'Нулевой бур',
             colorGroupName: 'first',
-            sections: [zeroValue],
+            values: [0],
           },
         ])}
         colorGroups={object('colorGroups', donutData.colorGroups)}
@@ -97,7 +96,7 @@ export const WithoutDataForOneGroup = createStory(
           ...donutData.data,
           {
             ...donutDataItemWithoutData.data,
-            sections: [{ value: null }, { value: 0 }, { value: 8 }],
+            values: [null, 0, 8],
           },
         ])}
         colorGroups={object('colorGroups', {
@@ -146,17 +145,20 @@ export const AsHalfDonut = createStory(
       />
     )
   },
-  { name: 'Как полукруг с текстом' }
+  { name: 'как полукруг с текстом' }
 )
 
 export const AsHalfDonutWithZeroData = createStory(
   () => {
     return (
       <DonutChart
-        data={object('data', [
-          { ...donutProgressData.data[0], sections: [{ ...zeroValue, showValue: 0 }] },
-          { ...donutProgressData.data[1], sections: [{ ...zeroValue, showValue: 0 }] },
-        ])}
+        data={object(
+          'data',
+          donutProgressData.data.map(item => ({
+            ...item,
+            values: [0],
+          }))
+        )}
         colorGroups={object('colorGroups', donutProgressData.colorGroups)}
         formatValueForTooltip={emptyFormatValue}
         halfDonut={halfDonutSelect('right')}
@@ -169,7 +171,7 @@ export const AsHalfDonutWithZeroData = createStory(
       />
     )
   },
-  { name: 'Как полукруг с текстом и нулевыми данными' }
+  { name: 'как полукруг с текстом и нулевыми данными' }
 )
 
 export const AsHalfDonutWithoutFacts = createStory(
@@ -178,21 +180,22 @@ export const AsHalfDonutWithoutFacts = createStory(
       <DonutChart
         data={object('data', [
           donutProgressData.data[0],
-          { ...donutProgressData.data[1], sections: [{ value: null }] },
+          { ...donutProgressData.data[1], values: [null] },
+          donutProgressData.data[2],
         ])}
         colorGroups={object('colorGroups', donutProgressData.colorGroups)}
         formatValueForTooltip={emptyFormatValue}
         halfDonut={halfDonutSelect('right')}
         textData={object('textData', {
           title: 'всего',
-          value: '90',
+          value: '70',
           subTitle: 'МГРП',
           subValue: '20',
         })}
       />
     )
   },
-  { name: 'Как полукруг с текстом без данных по факту' }
+  { name: 'как полукруг с текстом без данных по одной из скважин' }
 )
 
 export default createMetadata({

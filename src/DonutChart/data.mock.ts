@@ -2,9 +2,7 @@ import { times } from 'lodash'
 
 import { ColorGroups } from '@/common/types'
 
-export const zeroValue = { value: 0 }
-
-const sectionWithOnlyZeroData = [...times(3, () => zeroValue)] as const
+const sectionWithOnlyZeroData = [...times(3, () => 0)] as const
 
 const colorGroups: ColorGroups = {
   first: 'var(--color-bg-alert)',
@@ -18,29 +16,29 @@ export const donutData = {
     {
       name: 'Северный бур',
       colorGroupName: 'first',
-      sections: [{ value: 1 }, { value: 2 }, { value: 3 }],
+      values: [1, 2, 3],
     },
     {
       name: 'Южный бур',
       colorGroupName: 'second',
-      sections: [{ value: 4 }, { value: 5 }, { value: 6 }],
+      values: [4, 5, 6],
     },
     {
       name: 'Западный бур',
       colorGroupName: 'third',
-      sections: [{ value: 7 }, { value: 8 }, { value: 9 }],
+      values: [7, 8, 9],
     },
   ],
 }
 
 export const donutDataItemWithoutData = {
   colorGroup: {
-    forth: 'var(--color-bg-alert)',
+    forth: '#9F0CE9',
   },
   data: {
     name: 'Неизвестный бур',
     colorGroupName: 'forth',
-    sections: [{ value: null }, { value: null }, { value: null }],
+    values: [null, null, null],
   },
 }
 
@@ -50,17 +48,17 @@ export const donutDataItemsWithZeroData = {
     {
       name: 'Первый нулевой бур',
       colorGroupName: 'first',
-      sections: sectionWithOnlyZeroData,
+      values: sectionWithOnlyZeroData,
     },
     {
       name: 'Второй нулевой бур',
       colorGroupName: 'second',
-      sections: sectionWithOnlyZeroData,
+      values: sectionWithOnlyZeroData,
     },
     {
       name: 'Третий нулевой бур',
       colorGroupName: 'third',
-      sections: sectionWithOnlyZeroData,
+      values: sectionWithOnlyZeroData,
     },
   ],
 }
@@ -71,30 +69,30 @@ export const donutDataItemsWithZeroAndPositiveData = {
     {
       ...donutDataItemsWithZeroData.data[0],
       name: 'Первый околонулевой бур',
-      sections: [zeroValue, { value: 10 }, zeroValue],
+      values: [0, 0, 0],
     },
     donutDataItemsWithZeroData.data[1],
     donutDataItemsWithZeroData.data[2],
   ],
 }
 
-const donutProgressColorGroups: ColorGroups = {
-  plan: 'var(--color-bg-border)',
-  fact: 'var(--color-bg-warning)',
-}
-
 export const donutProgressData = {
-  colorGroups: donutProgressColorGroups,
+  colorGroups,
   data: [
     {
-      name: 'План',
-      colorGroupName: 'plan',
-      sections: [{ value: 3, showValue: 60 }],
+      name: 'Северный бур',
+      colorGroupName: 'first',
+      values: [60],
     },
     {
-      name: 'Факт',
-      colorGroupName: 'fact',
-      sections: [{ value: 1, showValue: 15 }],
+      name: 'Южный бур',
+      colorGroupName: 'second',
+      values: [20],
+    },
+    {
+      name: 'Западный бур',
+      colorGroupName: 'third',
+      values: [10],
     },
   ],
 }
