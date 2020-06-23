@@ -32,7 +32,9 @@ export const RadarChartAxisName: React.FC<Props> = ({
   fontSize,
 }) => {
   return (
-    <div
+    <Text
+      as="div"
+      view="secondary"
       className={css.axisName}
       style={{
         top: `${yPercent}%`,
@@ -44,9 +46,7 @@ export const RadarChartAxisName: React.FC<Props> = ({
         fontSize: `${fontSize}px`,
       }}
     >
-      <Text as="div" view="secondary">
-        {label}
-      </Text>
-    </div>
+      {label}
+    </Text>
   )
 }

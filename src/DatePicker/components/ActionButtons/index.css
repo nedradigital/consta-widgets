@@ -9,8 +9,6 @@
 }
 
 .button {
-  user-select: none;
-
   & + & {
     margin-left: var(--space-xs);
   }

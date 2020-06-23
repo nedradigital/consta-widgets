@@ -2,6 +2,8 @@
   cursor: pointer;
 
   & > input {
+    cursor: inherit;
+
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button,
     &::-webkit-clear-button,
