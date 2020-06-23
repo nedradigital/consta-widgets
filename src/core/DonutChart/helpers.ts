@@ -2,16 +2,32 @@ import { HalfDonut } from './components/Donut'
 
 export const MAX_CIRCLES_TO_RENDER = 3
 
-export const donutSize: Record<number, number> = {
-  1: 18,
-  2: 14,
-  3: 10,
-}
-
 export const minChartSize: Record<number, number> = {
   1: 50,
   2: 100,
   3: 150,
+}
+
+export type Data = {
+  name: string
+  colorGroupName: string
+  sections: ReadonlyArray<{
+    value: number | null
+    showValue?: number
+  }>
+}
+export type GetCirclesCount = (data: readonly Data[]) => number
+
+export type GetMinChartSize = (
+  circlesCount: number,
+  isExistTextData?: boolean,
+  halfDonut?: HalfDonut
+) => number
+
+export const donutSize: Record<number, number> = {
+  1: 18,
+  2: 14,
+  3: 10,
 }
 
 export const paddingBetweenDonuts: Record<number, number> = {
@@ -26,22 +42,6 @@ export const isHalfDonutHorizontal = (halfDonut?: HalfDonut) => {
 
 export const isHalfDonutVertical = (halfDonut?: HalfDonut) => {
   return halfDonut === 'right' || halfDonut === 'left'
-}
-
-export const getMinChartSize = (
-  countLines: number,
-  isExistTextData?: boolean,
-  halfDonut?: HalfDonut
-) => {
-  if (countLines === 1 && isExistTextData && !halfDonut) {
-    return 96
-  }
-
-  if (countLines === 1 && isExistTextData && halfDonut) {
-    return 170
-  }
-
-  return minChartSize[countLines]
 }
 
 export const getPadding = (countLines: number) => {
@@ -78,4 +78,24 @@ export const getSizeDonut = (
 
 export const getDonutRadius = (mainRadius: number, index: number, countLines: number) => {
   return mainRadius - (getSizeDonut(countLines) + getPadding(countLines)) * index
+}
+
+export const defaultGetCirclesCount: GetCirclesCount = data => {
+  return Math.min(Math.max(...data.map(i => i.sections.length)), MAX_CIRCLES_TO_RENDER)
+}
+
+export const defaultGetMinChartSize: GetMinChartSize = (
+  countLines: number,
+  isExistTextData?: boolean,
+  halfDonut?: HalfDonut
+) => {
+  if (countLines === 1 && isExistTextData && !halfDonut) {
+    return 96
+  }
+
+  if (countLines === 1 && isExistTextData && halfDonut) {
+    return 170
+  }
+
+  return minChartSize[countLines]
 }

@@ -4,6 +4,7 @@ import {
   getValueHeightRatio,
   getValueMaxFontSize,
   getValueMaxWidth,
+  MIN_FONT_SIZE,
   VALUE_MAX_FONT_SIZE,
 } from '../helpers'
 
@@ -149,6 +150,15 @@ describe('getValueMaxFontSize', () => {
     })
 
     expect(size).toEqual(VALUE_MAX_FONT_SIZE)
+  })
+
+  it('получение минимально возможного размера текста', () => {
+    const size = getValueMaxFontSize({
+      height: 100,
+      ratio: 0.1,
+    })
+
+    expect(size).toEqual(MIN_FONT_SIZE)
   })
 })
 
