@@ -4,9 +4,11 @@
   --sticky-top-z: calc(var(--sticky-left-z) + 1);
   --sticky-top-and-left-z: calc(var(--sticky-top-z) + 1);
   --resizer-z: calc(var(--sticky-top-and-left-z) + 1);
-  --resizer-width: 0;
   --fast-transition: 0.15s ease-out;
   --shadow-color: rgba(0, 29, 46, 0.4);
+
+  /* обязательно нужно указывать в пикселях, а 0px линтер автоматически исправляет на 0 */
+  --resizer-width: calc(0 * 1px);
 
   position: relative;
 
@@ -18,14 +20,17 @@
 
   &.sizeS {
     --cell-padding-vertical: var(--space-2xs);
+    --cell-padding-horizontal: var(--space-xs);
   }
 
   &.sizeM {
     --cell-padding-vertical: var(--space-xs);
+    --cell-padding-horizontal: var(--space-s);
   }
 
   &.sizeL {
     --cell-padding-vertical: var(--space-s);
+    --cell-padding-horizontal: var(--space-m);
   }
 
   &.isResizable {
@@ -118,9 +123,9 @@
   &:not(.withoutPadding) {
     box-sizing: border-box;
     padding-top: var(--cell-padding-vertical);
-    padding-right: calc(var(--space-m) + var(--resizer-width));
+    padding-right: calc(var(--cell-padding-horizontal) + var(--resizer-width));
     padding-bottom: var(--cell-padding-vertical);
-    padding-left: var(--space-m);
+    padding-left: var(--cell-padding-horizontal);
   }
 
   .cell.stickyOnLeft &::after {

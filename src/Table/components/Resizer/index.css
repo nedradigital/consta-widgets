@@ -1,4 +1,7 @@
 .main {
+  --inner-line-width: 1px;
+  --fast-transition: 0.15s ease-out;
+
   position: absolute;
   z-index: var(--resizer-z);
   top: 0;
@@ -9,23 +12,28 @@
   cursor: col-resize;
   user-select: none;
 
-  transition: background-color var(--fast-transition);
+  opacity: 0;
+  background-color: var(--color-bg-ghost);
+
+  transition: opacity var(--fast-transition);
 
   &::before {
-    --hover-area-offset: -5px;
-
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
-    left: var(--hover-area-offset);
+    left: calc((var(--resizer-width) - var(--inner-line-width)) / 2);
+
+    width: var(--inner-line-width);
 
     content: '';
+
+    background-color: var(--color-bg-link);
   }
 
   &:hover,
   &.isDragging {
-    background-color: var(--color-bg-link);
+    opacity: 1;
   }
 
   &:not(.isVisible) {
