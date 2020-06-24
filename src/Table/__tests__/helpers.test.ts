@@ -1,4 +1,4 @@
-import { getColumnLeftOffset, getColumnsSize } from '../helpers'
+import { getColumnLeftOffset, getColumnsSize, getNewSorting } from '../helpers'
 
 describe('getColumnsSize', () => {
   it('получение размера колонок', () => {
@@ -47,5 +47,38 @@ describe('getColumnLeftOffset', () => {
     })
 
     expect(result).toEqual(600)
+  })
+})
+
+describe('getNewSorting', () => {
+  it('устанавливает сортировку по полю, если не было сортировки', () => {
+    expect(getNewSorting(null, 'field')).toEqual({
+      by: 'field',
+      order: 'asc',
+    })
+  })
+
+  it('устанавливает сортировку по полю, если было отсортировано по другому полю', () => {
+    const result = getNewSorting({ by: 'anotherField', order: 'asc' }, 'field')
+
+    expect(result).toEqual({
+      by: 'field',
+      order: 'asc',
+    })
+  })
+
+  it('устанавливает сортировку по убыванию, если было отсортировано по возрастанию', () => {
+    const result = getNewSorting({ by: 'field', order: 'asc' }, 'field')
+
+    expect(result).toEqual({
+      by: 'field',
+      order: 'desc',
+    })
+  })
+
+  it('убирает сортировку, если было отсортировано по убыванию', () => {
+    const result = getNewSorting({ by: 'field', order: 'desc' }, 'field')
+
+    expect(result).toEqual(null)
   })
 })

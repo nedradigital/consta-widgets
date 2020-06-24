@@ -1,5 +1,6 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { IconAlignLeft } from '@gpn-design/uikit/IconAlignLeft'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
 import useComponentSize from '@rehooks/component-size'
@@ -7,6 +8,8 @@ import classnames from 'classnames'
 import _ from 'lodash'
 
 import {
+  BasicTableColumn,
+  BasicTableRow,
   fieldFiltersPresent,
   FieldSelectedValues,
   Filters,
@@ -14,6 +17,7 @@ import {
   getOptionsForFilters,
   getSelectedFiltersList,
   isSelectedFiltersPresent,
+  RowField,
   useSelectedFilters,
 } from '@/common/utils/table'
 import { isHtmlElement } from '@/common/utils/type-guards'
@@ -22,7 +26,7 @@ import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { Resizer } from './components/Resizer'
-import { getColumnLeftOffset, getColumnsSize } from './helpers'
+import { getColumnLeftOffset, getColumnsSize, getNewSorting } from './helpers'
 import css from './index.css'
 
 type Align = 'left' | 'center' | 'right'
@@ -33,32 +37,30 @@ type TableCSSCustomProperty = {
   '--table-header-height': string
 }
 
-export type ActiveRow = {
+type ActiveRow = {
   id: string | undefined
   onChange: (id: string | undefined) => void
 }
 
-export type Column = {
-  accessor: string
-  title: React.ReactNode
+type Column<T extends BasicTableRow> = BasicTableColumn<T> & {
   align?: Align
-}
+} & ({ sortable?: false } | { sortable: true; sortByField?: RowField<T> })
 
-export type Row = Record<string, React.ReactNode> & {
-  id: string
-}
-
-type Props = {
-  columns: readonly Column[]
-  rows: readonly Row[]
-  filters?: Filters
+export type Props<T extends BasicTableRow> = {
+  columns: ReadonlyArray<Column<T>>
+  rows: readonly T[]
+  filters?: Filters<T>
   size?: Size
   stickyHeader?: boolean
   stickyColumns?: number
   isResizable?: boolean
-  isSortable?: boolean
   activeRow?: ActiveRow
 }
+
+export type SortingState<T extends BasicTableRow> = {
+  by: RowField<T>
+  order: 'asc' | 'desc'
+} | null
 
 const sizeClasses: Record<Size, string> = {
   s: css.sizeS,
@@ -72,23 +74,24 @@ const headerShadow = (
   </div>
 )
 
-export const Table: React.FC<Props> = ({
+const getColumnSortByField = <T extends BasicTableRow>(column: Column<T>): RowField<T> =>
+  (column.sortable && column.sortByField) || column.accessor
+
+export const Table = <T extends BasicTableRow>({
   columns,
   rows,
   size = 'l',
   filters,
   isResizable = true,
-  isSortable = true,
   stickyHeader = false,
   stickyColumns = 0,
   activeRow,
-}) => {
+}: Props<T>): React.ReactElement => {
   const [resizedColumnWidths, setResizedColumnWidths] = React.useState<
     ReadonlyArray<number | undefined>
   >(columns.map(() => undefined))
   const [initialColumnWidths, setInitialColumnWidths] = React.useState<readonly number[]>([])
-  const [accessor, setAccessor] = React.useState('')
-  const [isOrderByDesc, setOrderByDesc] = React.useState(false)
+  const [sorting, setSorting] = React.useState<SortingState<T>>(null)
   const [visibleFilter, setVisibleFilter] = React.useState<string | null>(null)
   const [tableScroll, setTableScroll] = React.useState({ top: 0, left: 0 })
   const tableRef = React.useRef<HTMLDivElement>(null)
@@ -133,16 +136,19 @@ export const Table: React.FC<Props> = ({
     setInitialColumnWidths(columnsElements.map(el => el.offsetWidth))
   }, [])
 
-  const getSortIcon = (isSortingActive: boolean) => {
+  const isSortedByColumn = (column: Column<T>) => getColumnSortByField(column) === sorting?.by
+
+  const getSortIcon = (column: Column<T>) => {
     const IconSort =
-      (isSortingActive && (isOrderByDesc ? IconSortDown : IconSortUp)) || IconSortDown
+      (isSortedByColumn(column) && (sorting?.order === 'desc' ? IconSortDown : IconSortUp)) ||
+      // todo заменить на соответствующую иконку, когда добавят в ui-kit: https://github.com/gpn-prototypes/ui-kit/issues/212
+      IconAlignLeft
 
     return <IconSort size="xs" />
   }
 
-  const sortBy = (field: string) => {
-    setAccessor(field)
-    setOrderByDesc(accessor === field ? !isOrderByDesc : true)
+  const handleSortClick = (column: Column<T>) => {
+    setSorting(getNewSorting(sorting, getColumnSortByField(column)))
   }
 
   const handleFilterTogglerClick = (id: string) => () => {
@@ -153,7 +159,7 @@ export const Table: React.FC<Props> = ({
     updateSelectedFilters(field, tooltipSelectedFilters)
   }
 
-  const removeSelectedFilter = (tableFilters: Filters) => (filter: string) => {
+  const removeSelectedFilter = (tableFilters: Filters<T>) => (filter: string) => {
     removeOneSelectedFilter(tableFilters, filter)
   }
 
@@ -241,7 +247,7 @@ export const Table: React.FC<Props> = ({
 
     return {
       ...column,
-      isSortingActive: column.accessor === accessor,
+      isSortingActive: isSortedByColumn(column),
       isResized,
       isSticky,
       showResizer,
@@ -250,7 +256,7 @@ export const Table: React.FC<Props> = ({
     }
   })
 
-  const tableData = accessor ? _.orderBy(rows, accessor, isOrderByDesc ? 'desc' : 'asc') : rows
+  const tableData = sorting ? _.orderBy(rows, sorting.by, sorting.order) : rows
   const filteredData =
     !filters || !isSelectedFiltersPresent(selectedFilters)
       ? tableData
@@ -350,13 +356,13 @@ export const Table: React.FC<Props> = ({
                 />
               )}
               {column.title}
-              {isSortable && (
+              {column.sortable && (
                 <button
                   type="button"
                   className={classnames(css.icon, css.iconSort)}
-                  onClick={() => sortBy(column.accessor)}
+                  onClick={() => handleSortClick(column)}
                 >
-                  {getSortIcon(column.isSortingActive)}
+                  {getSortIcon(column)}
                 </button>
               )}
             </div>
