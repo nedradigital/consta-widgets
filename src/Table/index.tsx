@@ -29,7 +29,8 @@ import { Resizer } from './components/Resizer'
 import { getColumnLeftOffset, getColumnsSize, getNewSorting } from './helpers'
 import css from './index.css'
 
-type Align = 'left' | 'center' | 'right'
+type VerticalAlign = 'top' | 'center' | 'bottom'
+type HorizontalAlign = 'left' | 'center' | 'right'
 type Size = 's' | 'm' | 'l'
 
 type TableCSSCustomProperty = {
@@ -43,7 +44,7 @@ type ActiveRow = {
 }
 
 type Column<T extends BasicTableRow> = BasicTableColumn<T> & {
-  align?: Align
+  align?: HorizontalAlign
 } & ({ sortable?: false } | { sortable: true; sortByField?: RowField<T> })
 
 export type Props<T extends BasicTableRow> = {
@@ -55,6 +56,7 @@ export type Props<T extends BasicTableRow> = {
   stickyColumns?: number
   isResizable?: boolean
   activeRow?: ActiveRow
+  verticalAlign?: VerticalAlign
 }
 
 export type SortingState<T extends BasicTableRow> = {
@@ -68,6 +70,18 @@ const sizeClasses: Record<Size, string> = {
   l: css.sizeL,
 }
 
+const verticalCellAlignClasses: Record<VerticalAlign, string> = {
+  top: css.verticalAlignTop,
+  center: css.verticalAlignCenter,
+  bottom: css.verticalAlignBottom,
+}
+
+const horizontalCellAlignClasses: Record<HorizontalAlign, string> = {
+  left: css.horizontalAlignLeft,
+  center: css.horizontalAlignCenter,
+  right: css.horizontalAlignRight,
+}
+
 const headerShadow = (
   <div className={classnames(css.headerShadowWrapper)}>
     <div className={css.headerShadow} />
@@ -76,6 +90,10 @@ const headerShadow = (
 
 const getColumnSortByField = <T extends BasicTableRow>(column: Column<T>): RowField<T> =>
   (column.sortable && column.sortByField) || column.accessor
+
+const getHorizontalAlign = (align: HorizontalAlign = 'left') => {
+  return horizontalCellAlignClasses[align]
+}
 
 export const Table = <T extends BasicTableRow>({
   columns,
@@ -86,6 +104,7 @@ export const Table = <T extends BasicTableRow>({
   stickyHeader = false,
   stickyColumns = 0,
   activeRow,
+  verticalAlign = 'top',
 }: Props<T>): React.ReactElement => {
   const [resizedColumnWidths, setResizedColumnWidths] = React.useState<
     ReadonlyArray<number | undefined>
@@ -337,12 +356,9 @@ export const Table = <T extends BasicTableRow>({
             column.isSticky && css.stickyOnLeft,
             column.isSortingActive && css.isSortingActive
           )}
-          style={{
-            textAlign: column.align,
-            left: getStickyLeftOffset(columnIdx),
-          }}
+          style={{ left: getStickyLeftOffset(columnIdx) }}
         >
-          <div className={classnames(css.wrapper)}>
+          <div className={classnames(css.wrapper, getHorizontalAlign(column.align))}>
             <div className={css.title}>
               {filters && fieldFiltersPresent(filters, column.accessor) && (
                 <FilterTooltip
@@ -394,13 +410,17 @@ export const Table = <T extends BasicTableRow>({
                 isRowsClickable && css.isClickable,
                 column.isResized && css.isResized
               )}
-              style={{
-                textAlign: column.align,
-                left: getStickyLeftOffset(columnIdx),
-              }}
+              style={{ left: getStickyLeftOffset(columnIdx) }}
               onClick={handleSelectRow(row.id)}
             >
-              <div className={classnames(css.wrapper, getRowStatus(row.id))}>
+              <div
+                className={classnames(
+                  css.wrapper,
+                  verticalCellAlignClasses[verticalAlign],
+                  getHorizontalAlign(column.align),
+                  getRowStatus(row.id)
+                )}
+              >
                 {row[column.accessor]}
               </div>
             </div>

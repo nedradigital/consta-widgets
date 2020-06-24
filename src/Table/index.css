@@ -118,7 +118,37 @@
 .wrapper {
   position: relative;
 
+  display: flex;
+
   height: 100%;
+
+  &.verticalAlignTop {
+    align-items: flex-start;
+  }
+
+  &.verticalAlignCenter {
+    align-items: center;
+  }
+
+  &.verticalAlignBottom {
+    align-items: flex-end;
+  }
+
+  &.horizontalAlignLeft {
+    justify-content: flex-start;
+  }
+
+  &.horizontalAlignCenter {
+    justify-content: center;
+
+    text-align: center;
+  }
+
+  &.horizontalAlignRight {
+    justify-content: flex-end;
+
+    text-align: right;
+  }
 
   &:not(.withoutPadding) {
     box-sizing: border-box;
