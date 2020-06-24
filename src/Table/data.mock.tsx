@@ -1,18 +1,8 @@
-import { ColorGroups } from '@/common/types'
 import { Filters, TableRow } from '@/common/utils/table'
+import { LegendItem } from '@/core/LegendItem'
 import { Badge } from '@/Badge'
 
-import { Data } from './'
-
-const colorGroups: ColorGroups = {
-  red: 'var(--color-bg-alert)',
-  blue: 'var(--color-bg-normal)',
-  yellow: 'var(--color-bg-warning)',
-  purple: '#9b51e0',
-  green: 'var(--color-bg-success)',
-}
-
-export const list: readonly TableRow[] = [
+export const rows: readonly TableRow[] = [
   {
     id: 'row1',
     field: 'Приобское',
@@ -236,36 +226,7 @@ export const filters: Filters = [
   },
 ]
 
-export const tableLegendData: Data = {
-  colorGroups,
-  list,
-  legendFields: [
-    {
-      field: 'Приобское',
-      colorGroupName: 'red',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Уренгойское газонефтеконденсат­ное',
-      colorGroupName: 'blue',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Красноленинская группа',
-      colorGroupName: 'yellow',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Великое',
-      colorGroupName: 'purple',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Русское газонефтяное',
-      colorGroupName: 'green',
-      typeLegend: 'dot',
-    },
-  ],
+export const tableLegendData = {
   columns: [
     {
       title: 'Месторождение',
@@ -303,27 +264,9 @@ export const tableLegendData: Data = {
       align: 'right',
     },
   ],
+  rows,
   filters,
-}
-
-type BadgeProps = React.ComponentProps<typeof Badge>
-
-type RowId = { id: string }
-
-type ListItem = Record<string, string | number | BadgeProps> & RowId
-
-export const convertListItemToTableRow = ({ id, ...obj }: ListItem): TableRow => {
-  return Object.keys(obj).reduce<Record<string, React.ReactNode> & RowId>(
-    (acc, key) => {
-      const item = obj[key]
-
-      acc[key] = typeof item !== 'string' && typeof item !== 'number' ? <Badge {...item} /> : item
-
-      return acc
-    },
-    { id }
-  )
-}
+} as const
 
 const badgeParams = {
   view: 'filled',
@@ -333,60 +276,7 @@ const badgeParams = {
   comment: '',
 } as const
 
-export const tableLegendWithTrafficLightData: Omit<Data, 'list'> & {
-  list: ReadonlyArray<Record<string, string | number | BadgeProps> & { id: string }>
-} = {
-  colorGroups: {
-    first: 'var(--color-bg-alert)',
-    second: 'var(--color-bg-caution)',
-    third: 'var(--color-bg-success)',
-  },
-  list: [
-    {
-      id: 'row1',
-      field: 'Северный бур',
-      sum: 20,
-      status: {
-        ...badgeParams,
-        status: 'normal',
-      },
-    },
-    {
-      id: 'row2',
-      field: 'Южное месторождение',
-      sum: 15,
-      status: {
-        ...badgeParams,
-        status: 'warning',
-      },
-    },
-    {
-      id: 'row3',
-      field: 'Западный разлом',
-      sum: 7,
-      status: {
-        ...badgeParams,
-        status: 'error',
-      },
-    },
-  ],
-  legendFields: [
-    {
-      field: 'Северный бур',
-      colorGroupName: 'first',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Южное месторождение',
-      colorGroupName: 'second',
-      typeLegend: 'dot',
-    },
-    {
-      field: 'Западный разлом',
-      colorGroupName: 'third',
-      typeLegend: 'dot',
-    },
-  ],
+export const tableWithTrafficLightData = {
   columns: [
     {
       title: 'Локация',
@@ -402,6 +292,26 @@ export const tableLegendWithTrafficLightData: Omit<Data, 'list'> & {
       title: 'Статус',
       accessor: 'status',
       align: 'center',
+    },
+  ],
+  rows: [
+    {
+      id: 'row1',
+      field: 'Северный бур',
+      sum: 20,
+      status: <Badge {...badgeParams} status="normal" />,
+    },
+    {
+      id: 'row2',
+      field: 'Южное месторождение',
+      sum: 15,
+      status: <Badge {...badgeParams} status="warning" />,
+    },
+    {
+      id: 'row3',
+      field: 'Западный разлом',
+      sum: 7,
+      status: <Badge {...badgeParams} status="error" />,
     },
   ],
   filters: [
@@ -443,4 +353,75 @@ export const tableLegendWithTrafficLightData: Omit<Data, 'list'> & {
       field: 'sum',
     },
   ],
-}
+} as const
+
+export const tableWithLegendData = {
+  columns: [
+    {
+      title: 'Локация',
+      accessor: 'field',
+      align: 'left',
+    },
+    {
+      title: 'Сумма скважин без МГРП',
+      accessor: 'sum',
+      align: 'right',
+    },
+  ],
+  rows: [
+    {
+      id: 'row1',
+      field: <LegendItem color="var(--color-bg-normal)">Северный бур</LegendItem>,
+      sum: 20,
+    },
+    {
+      id: 'row2',
+      field: <LegendItem color="var(--color-bg-warning)">Южное месторождение</LegendItem>,
+      sum: 15,
+    },
+    {
+      id: 'row3',
+      field: <LegendItem color="var(--color-bg-alert)">Западный разлом</LegendItem>,
+      sum: 7,
+    },
+  ],
+  filters: [
+    {
+      id: 'fieldNorthDrill',
+      name: 'Северный бур',
+      filterer: (value: string) => value === 'Северный бур',
+      field: 'field',
+    },
+    {
+      id: 'fieldSouthWell',
+      name: 'Южное месторождение',
+      filterer: (value: string) => value === 'Южное месторождение',
+      field: 'field',
+    },
+    {
+      id: 'fieldWestCrack',
+      name: 'Западный разлом',
+      filterer: (value: string) => value === 'Западный разлом',
+      field: 'field',
+    },
+
+    {
+      id: 'sumLess10',
+      name: 'Менее 10',
+      filterer: (value: number | string) => Number(value) < 10,
+      field: 'sum',
+    },
+    {
+      id: 'sumFrom10To20',
+      name: 'От 10 (вкл.) до 20 (не вкл.)',
+      filterer: (value: number | string) => Number(value) >= 10 && Number(value) < 20,
+      field: 'sum',
+    },
+    {
+      id: 'sum20AndMore',
+      name: '20 и более',
+      filterer: (value: number | string) => Number(value) >= 20,
+      field: 'sum',
+    },
+  ],
+} as const

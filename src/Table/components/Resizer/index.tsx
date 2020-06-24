@@ -4,6 +4,7 @@ import css from './index.css'
 
 type Props = {
   height: number
+  isVisible?: boolean
   onResize: (delta: number) => void
   onDoubleClick: () => void
 }
@@ -17,7 +18,11 @@ export class Resizer extends React.Component<Props, { isDragging: boolean }> {
   render() {
     return (
       <div
-        className={classnames(css.main, this.state.isDragging && css.isDragging)}
+        className={classnames(
+          css.main,
+          this.state.isDragging && css.isDragging,
+          this.props.isVisible && css.isVisible
+        )}
         style={{ height: this.props.height }}
         onMouseDown={this.onMouseDown}
         onDoubleClick={this.props.onDoubleClick}

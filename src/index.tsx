@@ -16,7 +16,7 @@ export { PyramidChart } from './PyramidChart'
 export { RadarChart } from './RadarChart'
 export { Roadmap } from './Roadmap'
 export { Stats } from './Stats'
-export { TableLegend } from './TableLegend'
+export { Table } from './Table'
 export { Tooltip } from './Tooltip'
 export { TornadoChart } from './TornadoChart'
 
