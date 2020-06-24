@@ -1,3 +1,5 @@
+import { updateAt } from '@csssr/gpn-utils/lib/array'
+import { Checkbox } from '@gpn-design/uikit'
 import { DecoratorFn } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -77,6 +79,50 @@ export const WithTrafficLight = createStory(
   {
     name: 'со "Светофором"',
     decorators: WITH_REACT_NODES_DECORATORS,
+  }
+)
+
+export const WithCheckboxHeader = createStory(
+  () => {
+    const ROWS_COUNT = 3
+    const [values, setValues] = React.useState<readonly boolean[]>(
+      new Array(ROWS_COUNT).fill(false)
+    )
+    const toggleRow = (idx: number) => {
+      setValues(updateAt(values, idx, !values[idx]))
+    }
+    const rows = values.map((value, idx) => ({
+      id: `row${idx}}`,
+      checkbox: <Checkbox wpSize="m" value={value} onChange={() => toggleRow(idx)} />,
+      task: `Задача ${idx}`,
+    }))
+    const areAllSelected = values.every(v => v)
+
+    return (
+      <Table
+        rows={rows}
+        columns={[
+          {
+            title: (
+              <Checkbox
+                wpSize="m"
+                value={areAllSelected}
+                onChange={() => setValues(values.map(() => !areAllSelected))}
+              />
+            ),
+            accessor: 'checkbox',
+          },
+          {
+            title: 'Задача',
+            accessor: 'task',
+          },
+        ]}
+      />
+    )
+  },
+  {
+    name: 'с чекбоксом в шапке',
+    decorators: [environmentDecorator()],
   }
 )
 

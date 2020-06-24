@@ -8,7 +8,7 @@ export type TableRow = {
 }
 
 export type TableColumn = {
-  title: string
+  title: React.ReactNode
   accessor: string
 }
 
