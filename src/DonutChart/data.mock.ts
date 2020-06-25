@@ -69,7 +69,7 @@ export const donutDataItemsWithZeroAndPositiveData = {
     {
       ...donutDataItemsWithZeroData.data[0],
       name: 'Первый околонулевой бур',
-      values: [0, 0, 0],
+      values: [0, 10, 0],
     },
     donutDataItemsWithZeroData.data[1],
     donutDataItemsWithZeroData.data[2],
