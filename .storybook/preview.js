@@ -19,8 +19,7 @@ import '@gpn-design/uikit/__internal__/src/components/Theme/_size/Theme_size_gpn
 import '@gpn-design/uikit/__internal__/src/components/Theme/_space/Theme_space_gpnDefault.css'
 import '@gpn-design/uikit/__internal__/src/components/Theme/_gap/Theme_gap_m.css'
 
-import { Theme, presetGpnDisplay } from '@gpn-design/uikit/Theme'
-
+import '@/index.css'
 import './storybook.css'
 
 addDecorator(withPropsTable)
@@ -30,13 +29,6 @@ addDecorator(
     header: false,
   })
 )
-addDecorator(storyFn => {
-  return (
-    <Theme preset={presetGpnDisplay} style={{ background: 'var(--color-bg-default)' }}>
-      {storyFn()}
-    </Theme>
-  )
-})
 
 addParameters({
   docs: {
@@ -48,7 +40,5 @@ addParameters({
     showRoots: true,
   },
 })
-
-updateBaseSize(16, window.document.body)
 
 window.document.documentElement.lang = 'ru'

@@ -49,11 +49,35 @@ optimization: {
 
 ### Настройка скейлинга
 
-Для корректной работы скейлинга компонентов, необходимо настроить базовый размер через CSS Custom Properties:
+Для корректной работы скейлинга компонентов не в порталах необходимо в корневой компонент добавить Provider для управления скейлингом, пример настройки скейлинга компонентов с установкой темы:
+
+```tsx
+import { BaseSizeProvider, themePresetGpnScaling } from '@csssr/gpn-components'
+import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
+
+const themePreset = {
+  ...presetGpnDisplay,
+  ...themePresetGpnScaling,
+}
+
+export const App = () => {
+  return (
+    <BaseSizeProvider value={16}>
+      <Theme className="Theme_gpnScaling" preset={themePreset}>
+        Some components
+      </Theme>
+    </BaseSizeProvider>
+  )
+}
+```
+
+> Компонент `<Theme/>` обязательно должен идти после `<BaseSizeProvider/>`, так как в случае использования скейлинга тема `themePresetGpnScaling` использует значение из `<BaseSizeProvider/>`.
+
+Для корректной работы скейлинга компонентов в порталах и тултипах, необходимо настроить базовый размер через CSS Custom Properties:
 
 ```css
 :root {
-  --dashboard-constructor-base-size: 16;
+  --components-base-size: 16;
 }
 ```
 

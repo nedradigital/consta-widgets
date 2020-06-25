@@ -1,7 +1,9 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
 import { number, text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 
+import { presetGpnScaling } from '@/common/utils/theme'
 import { BaseSizeProvider } from '@/BaseSizeContext'
 
 export const ENVIRONMENT_GROUP_ID = 'environment'
@@ -33,6 +35,11 @@ type DecoratorParams = {
   style?: React.CSSProperties
 }
 
+const themePreset = {
+  ...presetGpnDisplay,
+  ...presetGpnScaling,
+}
+
 export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
   const { scaling = true, style = {} } = params
 
@@ -43,9 +50,15 @@ export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn 
     : undefined
 
   const content = (
-    <div style={CENTERING_STYLES}>
-      <div style={{ ...style, width, height }}>{storyFn()}</div>
-    </div>
+    <Theme
+      className="Theme_gpnScaling"
+      preset={themePreset}
+      style={{ background: 'var(--color-bg-default)' }}
+    >
+      <div style={CENTERING_STYLES}>
+        <div style={{ ...style, width, height }}>{storyFn()}</div>
+      </div>
+    </Theme>
   )
 
   return isDefined(baseSize) ? (
