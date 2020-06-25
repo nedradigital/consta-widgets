@@ -1,7 +1,7 @@
 import { ColorGroups } from '@/common/types'
 import { Filters } from '@/common/utils/table'
 
-import { Data } from '.'
+import { Data, Row } from '.'
 
 export const colorGroups: ColorGroups = {
   green: 'var(--color-bg-success)',
@@ -11,7 +11,7 @@ export const colorGroups: ColorGroups = {
 }
 
 /* istanbul ignore next */
-export const dataFilters: Filters = [
+export const dataFilters: Filters<Row> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -400,7 +400,7 @@ export const data: Data = {
 }
 
 /* istanbul ignore next */
-export const minimalDataFilters: Filters = [
+export const minimalDataFilters: Filters<Row> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -523,7 +523,7 @@ export const minimalData: Data = {
 }
 
 /* istanbul ignore next */
-export const monochromeDataFilters: Filters = [
+export const monochromeDataFilters: Filters<Row> = [
   {
     id: 'clusterKP4',
     name: 'КП4',

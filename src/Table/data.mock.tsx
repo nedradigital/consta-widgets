@@ -1,8 +1,10 @@
-import { Filters, TableRow } from '@/common/utils/table'
+import { Filters } from '@/common/utils/table'
 import { LegendItem } from '@/core/LegendItem'
 import { Badge } from '@/Badge'
 
-export const rows: readonly TableRow[] = [
+import { Props as TableProps } from './'
+
+export const rows = [
   {
     id: 'row1',
     field: 'Приобское',
@@ -53,9 +55,9 @@ export const rows: readonly TableRow[] = [
     production: 292,
     total: 417,
   },
-]
+] as const
 
-export const filters: Filters = [
+export const filters: Filters<typeof rows[number]> = [
   {
     id: 'olderThan2018',
     name: 'Старше 2018 года',
@@ -226,17 +228,19 @@ export const filters: Filters = [
   },
 ]
 
-export const tableLegendData = {
+export const tableData: TableProps<typeof rows[number]> = {
   columns: [
     {
       title: 'Месторождение',
       accessor: 'field',
       align: 'left',
+      sortable: true,
     },
     {
       title: 'Год открытия',
       accessor: 'year',
       align: 'center',
+      sortable: true,
     },
     {
       title: 'Тип',
@@ -247,26 +251,30 @@ export const tableLegendData = {
       title: 'Предполагаемые полные \nзапасы, млн.т.',
       accessor: 'estimatedReserves',
       align: 'right',
+      sortable: true,
     },
     {
       title: 'Остаточные извлекаемые \nзапасы, млн.т.',
       accessor: 'remainingReserves',
       align: 'right',
+      sortable: true,
     },
     {
       title: 'Добыча тыс.т/сут.',
       accessor: 'production',
       align: 'right',
+      sortable: true,
     },
     {
       title: 'Всего добыто, млн.т.',
       accessor: 'total',
       align: 'right',
+      sortable: true,
     },
   ],
   rows,
   filters,
-} as const
+}
 
 const badgeParams: React.ComponentProps<typeof Badge> = {
   view: 'filled',
@@ -274,44 +282,60 @@ const badgeParams: React.ComponentProps<typeof Badge> = {
   size: 'm',
 }
 
-export const tableWithTrafficLightData = {
+const tableWithTrafficLightDataRows = [
+  {
+    id: 'row1',
+    field: 'Северный бур',
+    sum: 20,
+    status: <Badge {...badgeParams} status="normal" />,
+    statusOrder: 1,
+  },
+  {
+    id: 'row2',
+    field: 'Южное месторождение',
+    sum: 15,
+    status: <Badge {...badgeParams} status="warning" />,
+    statusOrder: 2,
+  },
+  {
+    id: 'row3',
+    field: 'Западный разлом',
+    sum: 7,
+    status: <Badge {...badgeParams} status="error" />,
+    statusOrder: 3,
+  },
+  {
+    id: 'row4',
+    field: 'Восточный разлом',
+    sum: 1,
+    status: <Badge {...badgeParams} status="normal" />,
+    statusOrder: 1,
+  },
+] as const
+
+export const tableWithTrafficLightData: TableProps<typeof tableWithTrafficLightDataRows[number]> = {
   columns: [
     {
       title: 'Локация',
       accessor: 'field',
       align: 'left',
+      sortable: true,
     },
     {
       title: 'Сумма скважин без МГРП',
       accessor: 'sum',
       align: 'right',
+      sortable: true,
     },
     {
       title: 'Статус',
       accessor: 'status',
       align: 'center',
+      sortable: true,
+      sortByField: 'statusOrder',
     },
   ],
-  rows: [
-    {
-      id: 'row1',
-      field: 'Северный бур',
-      sum: 20,
-      status: <Badge {...badgeParams} status="normal" />,
-    },
-    {
-      id: 'row2',
-      field: 'Южное месторождение',
-      sum: 15,
-      status: <Badge {...badgeParams} status="warning" />,
-    },
-    {
-      id: 'row3',
-      field: 'Западный разлом',
-      sum: 7,
-      status: <Badge {...badgeParams} status="error" />,
-    },
-  ],
+  rows: tableWithTrafficLightDataRows,
   filters: [
     {
       id: 'fieldNorthDrill',
@@ -351,9 +375,27 @@ export const tableWithTrafficLightData = {
       field: 'sum',
     },
   ],
-} as const
+}
 
-export const tableWithLegendData = {
+const tableWithLegendRows = [
+  {
+    id: 'row1',
+    field: <LegendItem color="var(--color-bg-normal)">Северный бур</LegendItem>,
+    sum: 20,
+  },
+  {
+    id: 'row2',
+    field: <LegendItem color="var(--color-bg-warning)">Южное месторождение</LegendItem>,
+    sum: 15,
+  },
+  {
+    id: 'row3',
+    field: <LegendItem color="var(--color-bg-alert)">Западный разлом</LegendItem>,
+    sum: 7,
+  },
+] as const
+
+export const tableWithLegendData: TableProps<typeof tableWithLegendRows[number]> = {
   columns: [
     {
       title: 'Локация',
@@ -364,25 +406,10 @@ export const tableWithLegendData = {
       title: 'Сумма скважин без МГРП',
       accessor: 'sum',
       align: 'right',
+      sortable: true,
     },
   ],
-  rows: [
-    {
-      id: 'row1',
-      field: <LegendItem color="var(--color-bg-normal)">Северный бур</LegendItem>,
-      sum: 20,
-    },
-    {
-      id: 'row2',
-      field: <LegendItem color="var(--color-bg-warning)">Южное месторождение</LegendItem>,
-      sum: 15,
-    },
-    {
-      id: 'row3',
-      field: <LegendItem color="var(--color-bg-alert)">Западный разлом</LegendItem>,
-      sum: 7,
-    },
-  ],
+  rows: tableWithLegendRows,
   filters: [
     {
       id: 'fieldNorthDrill',
@@ -422,4 +449,4 @@ export const tableWithLegendData = {
       field: 'sum',
     },
   ],
-} as const
+}

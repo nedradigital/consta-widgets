@@ -6,6 +6,8 @@ import classnames from 'classnames'
 
 import { ColorGroups } from '@/common/types'
 import {
+  BasicTableColumn,
+  BasicTableRow,
   fieldFiltersPresent,
   FieldSelectedValues,
   Filters,
@@ -53,25 +55,22 @@ export type Group = {
 
 export type TextAlign = 'left' | 'center' | 'right'
 
-export type Title = {
-  title: string
-  accessor: string
-  align?: TextAlign
-}
-
-export type Row = {
-  id: string
+export type Row = BasicTableRow & {
   columns: Record<string, React.ReactNode>
   groups: readonly Group[]
 }
 
+export type Column = BasicTableColumn<Row> & {
+  align?: TextAlign
+}
+
 export type Data = {
-  titles: readonly Title[]
+  titles: readonly Column[]
   rows: readonly Row[]
   currentDay: number
   startDate: number
   endDate: number
-  filters?: Filters
+  filters?: Filters<Row>
 }
 
 type Props = Data & {
@@ -168,7 +167,7 @@ export const Roadmap: React.FC<Props> = props => {
     updateSelectedFilters(field, tooltipSelectedFilters)
   }
 
-  const removeSelectedFilter = (tableFilters: Filters) => (filter: string) => {
+  const removeSelectedFilter = (tableFilters: Filters<Row>) => (filter: string) => {
     removeOneSelectedFilter(tableFilters, filter)
   }
   const resetSelectedFilters = () => {

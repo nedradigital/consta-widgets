@@ -6,7 +6,7 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { Table } from './'
-import { tableLegendData, tableWithLegendData, tableWithTrafficLightData } from './data.mock'
+import { tableData, tableWithLegendData, tableWithTrafficLightData } from './data.mock'
 
 type Decorators = readonly DecoratorFn[]
 
@@ -35,7 +35,7 @@ const WITH_REACT_NODES_DECORATORS: Decorators = [
   }),
 ]
 
-export const Interactive = createStory(() => <Table {...tableLegendData} />, {
+export const Interactive = createStory(() => <Table {...tableData} />, {
   name: 'обычная',
   decorators: FIXED_WIDTH_DECORATORS,
 })
@@ -44,23 +44,20 @@ export const WithActiveRow = createStory(
   () => {
     const [activeRow, setActiveRow] = React.useState<string>()
 
-    return <Table {...tableLegendData} activeRow={{ id: activeRow, onChange: setActiveRow }} />
+    return <Table {...tableData} activeRow={{ id: activeRow, onChange: setActiveRow }} />
   },
   { name: 'с выбором строки', decorators: FIXED_WIDTH_DECORATORS }
 )
 
-export const WithStickyHeader = createStory(() => <Table {...tableLegendData} stickyHeader />, {
+export const WithStickyHeader = createStory(() => <Table {...tableData} stickyHeader />, {
   name: 'с зафиксированным заголовком',
   decorators: STICKY_DECORATORS,
 })
 
-export const WithStickyColumn = createStory(
-  () => <Table {...tableLegendData} stickyColumns={1} />,
-  {
-    name: 'с зафиксированной колонкой',
-    decorators: STICKY_DECORATORS,
-  }
-)
+export const WithStickyColumn = createStory(() => <Table {...tableData} stickyColumns={1} />, {
+  name: 'с зафиксированной колонкой',
+  decorators: STICKY_DECORATORS,
+})
 
 export const WithLegend = createStory(
   () => {

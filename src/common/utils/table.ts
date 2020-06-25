@@ -2,24 +2,24 @@ import React, { useState } from 'react'
 
 import { compact, xor } from 'lodash'
 
-export type TableRow = {
+export type BasicTableRow = {
   [key: string]: React.ReactNode
   id: string
 }
 
-export type TableColumn = {
+export type RowField<T extends BasicTableRow> = Exclude<keyof T, symbol | number>
+
+export type BasicTableColumn<T extends BasicTableRow> = {
   title: React.ReactNode
-  accessor: string
+  accessor: RowField<T>
 }
 
-type Filter = {
+export type Filters<T extends BasicTableRow> = ReadonlyArray<{
   id: string
   name: string
+  field: RowField<T>
   filterer: (value: any) => boolean
-  field: string
-}
-
-export type Filters = readonly Filter[]
+}>
 
 export type FieldSelectedValues = readonly string[]
 
@@ -30,13 +30,18 @@ type SelectedFiltersList = ReadonlyArray<{
   name: string
 }>
 
-export const getOptionsForFilters = (filters: Filters, field: string) => {
+export const getOptionsForFilters = <T extends BasicTableRow>(
+  filters: Filters<T>,
+  field: RowField<T>
+) => {
   return filters
     .filter(({ field: filterField }) => filterField === field)
     .map(({ id, name }) => ({ value: id, label: name }))
 }
 
-export const getSelectedFiltersInitialState = (filters?: Filters) => {
+export const getSelectedFiltersInitialState = <T extends BasicTableRow>(
+  filters?: Filters<T>
+): SelectedFilters => {
   if (!filters) {
     return {}
   }
@@ -50,7 +55,10 @@ export const getSelectedFiltersInitialState = (filters?: Filters) => {
   }, {})
 }
 
-export const fieldFiltersPresent = (tableFilters: Filters, field: string) => {
+export const fieldFiltersPresent = <T extends BasicTableRow>(
+  tableFilters: Filters<T>,
+  field: RowField<T>
+) => {
   return tableFilters.some(({ field: filterField }) => filterField === field)
 }
 
@@ -58,14 +66,14 @@ export const isSelectedFiltersPresent = (selectedFilters: SelectedFilters) => {
   return Object.values(selectedFilters).some(filterGroup => filterGroup.length > 0)
 }
 
-export const getSelectedFiltersList = ({
+export const getSelectedFiltersList = <T extends BasicTableRow>({
   filters,
   selectedFilters,
   columns,
 }: {
-  filters: Filters
+  filters: Filters<T>
   selectedFilters: SelectedFilters
-  columns: readonly TableColumn[]
+  columns: ReadonlyArray<BasicTableColumn<T>>
 }): SelectedFiltersList => {
   return columns.reduce<SelectedFiltersList>((acc, cur) => {
     const currentFieldFilters = selectedFilters[cur.accessor] || []
@@ -90,13 +98,13 @@ export const getSelectedFiltersList = ({
   }, [])
 }
 
-export const filterTableData = <T extends TableRow>({
+export const filterTableData = <T extends BasicTableRow>({
   data,
   filters,
   selectedFilters,
 }: {
   data: readonly T[]
-  filters: Filters
+  filters: Filters<T>
   selectedFilters: SelectedFilters
 }) => {
   const mutableFilteredData = []
@@ -140,7 +148,7 @@ export const filterTableData = <T extends TableRow>({
 }
 
 /* istanbul ignore next */
-export const useSelectedFilters = (filters?: Filters) => {
+export const useSelectedFilters = <T extends BasicTableRow>(filters?: Filters<T>) => {
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>(
     getSelectedFiltersInitialState(filters)
   )
@@ -152,7 +160,7 @@ export const useSelectedFilters = (filters?: Filters) => {
     })
   }
 
-  const removeOneSelectedFilter = (availableFilters: Filters, filter: string) => {
+  const removeOneSelectedFilter = (availableFilters: Filters<T>, filter: string) => {
     const filterToDelete = availableFilters.find(({ id }) => id === filter)
 
     if (filterToDelete) {
@@ -163,7 +171,7 @@ export const useSelectedFilters = (filters?: Filters) => {
     }
   }
 
-  const removeAllSelectedFilters = (availableFilters: Filters) => {
+  const removeAllSelectedFilters = (availableFilters: Filters<T>) => {
     setSelectedFilters(getSelectedFiltersInitialState(availableFilters))
   }
 

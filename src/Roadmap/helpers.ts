@@ -3,7 +3,7 @@ import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
 import { Filters, SelectedFilters } from '@/common/utils/table'
 import { getDayMonthYearFromTimestamp } from '@/common/utils/time'
 
-import { MonthItem, Row, TextAlign, Title } from '.'
+import { Column, MonthItem, Row, TextAlign } from '.'
 
 export const TABLE_COLUMN_WIDTH = 186
 export const TABLE_FAKE_COLUMN_WIDTH = 178
@@ -48,7 +48,7 @@ export const filterRoadmapData = ({
   selectedFilters,
 }: {
   rows: readonly Row[]
-  filters: Filters
+  filters: Filters<Row>
   selectedFilters: SelectedFilters
 }) => {
   const filterColumn = ([key, value]: readonly [string, React.ReactNode]) => {
@@ -77,8 +77,8 @@ export const filterRoadmapData = ({
   return rows.filter(filterRow)
 }
 
-export const getAlignForColumns = (titles: readonly Title[]) => {
-  return titles.reduce<Record<string, TextAlign>>((acc, item) => {
+export const getAlignForColumns = (columns: readonly Column[]) => {
+  return columns.reduce<Record<string, TextAlign>>((acc, item) => {
     acc[item.accessor] = item.align || 'left'
     return acc
   }, {})
