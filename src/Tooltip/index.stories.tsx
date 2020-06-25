@@ -12,12 +12,12 @@ export const TooltipPositionedByCoordsStory = createStory(
     const [position, setPosition] = useState<PositionState>({ x: 10, y: 10 })
 
     const handleMouseMove = (event: React.MouseEvent) => {
-      setPosition({ x: event.pageX, y: event.pageY })
+      setPosition({ x: event.clientX, y: event.clientY })
     }
 
     return (
       <>
-        <div style={{ width: '100%', height: '100vh' }} onMouseMove={handleMouseMove} />
+        <div style={{ width: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
         <Tooltip
           isVisible={true}
           direction={select('direction', directions, 'upCenter')}

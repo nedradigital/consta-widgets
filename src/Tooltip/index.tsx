@@ -12,7 +12,6 @@ import { isDefinedPosition } from '@/common/utils/type-guards'
 import { getComputedPositionAndDirection } from './helpers'
 import css from './index.css'
 
-const TOOLTIP_PARENT_ELEMENT = window.document.body
 const ARROW_SIZE = 6
 const ARROW_SIZE_OFFSET = ARROW_SIZE * 2
 
@@ -108,7 +107,11 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         direction: computedDirection,
       } = getComputedPositionAndDirection({
         tooltipSize: mainRef.current.getBoundingClientRect(),
-        parentSize: TOOLTIP_PARENT_ELEMENT.getBoundingClientRect(),
+        parentSize: {
+          // Размер вьюпорта без скроллбаров
+          width: document.documentElement.clientWidth,
+          height: document.documentElement.clientHeight,
+        },
         offset: offset + ARROW_SIZE_OFFSET,
         direction: passedDirection,
         possibleDirections,
@@ -197,6 +200,6 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         )}
       </div>
     </div>,
-    TOOLTIP_PARENT_ELEMENT
+    window.document.body
   )
 })
