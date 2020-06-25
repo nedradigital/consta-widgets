@@ -1,5 +1,5 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
-import { Checkbox } from '@gpn-design/uikit'
+import { Checkbox } from '@gpn-design/uikit/Checkbox'
 import { DecoratorFn } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -93,7 +93,7 @@ export const WithCheckboxHeader = createStory(
     }
     const rows = values.map((value, idx) => ({
       id: `row${idx}}`,
-      checkbox: <Checkbox wpSize="m" value={value} onChange={() => toggleRow(idx)} />,
+      checkbox: <Checkbox size="m" checked={value} onChange={() => toggleRow(idx)} />,
       task: `Задача ${idx}`,
     }))
     const areAllSelected = values.every(v => v)
@@ -105,8 +105,8 @@ export const WithCheckboxHeader = createStory(
           {
             title: (
               <Checkbox
-                wpSize="m"
-                value={areAllSelected}
+                size="m"
+                checked={areAllSelected}
                 onChange={() => setValues(values.map(() => !areAllSelected))}
               />
             ),
