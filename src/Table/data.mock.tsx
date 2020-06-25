@@ -268,13 +268,11 @@ export const tableLegendData = {
   filters,
 } as const
 
-const badgeParams = {
+const badgeParams: React.ComponentProps<typeof Badge> = {
   view: 'filled',
-  isMinified: true,
-  wpSize: 'm',
-  text: '',
-  comment: '',
-} as const
+  minified: true,
+  size: 'm',
+}
 
 export const tableWithTrafficLightData = {
   columns: [

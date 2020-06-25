@@ -2,7 +2,7 @@ import React from 'react'
 
 import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import { number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -163,7 +163,7 @@ const renderTitle = (defaultText: string = '') => {
   const title = text('title', defaultText)
 
   return title ? (
-    <Text tag="div" view="primary" size="m">
+    <Text as="div" view="primary" size="m">
       {title}
     </Text>
   ) : null

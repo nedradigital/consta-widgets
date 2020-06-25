@@ -1,4 +1,4 @@
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import { addMonths, endOfMonth, startOfMonth, subMonths } from 'date-fns'
 
 import { DateLimitProps } from '../../'
@@ -48,7 +48,14 @@ export const MonthsSliderSingle: React.FC<Props> = ({
       onMoveNext={handleMoveNext}
       isMoveNextDisabled={!isMoveNextAllowed}
     >
-      <Text className={css.title} tag="div" size="m" transform="uppercase" weight="bold">
+      <Text
+        className={css.title}
+        as="div"
+        size="m"
+        transform="uppercase"
+        weight="bold"
+        view="primary"
+      >
         {getTitle(currentVisibleDate)}
       </Text>
     </MonthsSliderWrapper>

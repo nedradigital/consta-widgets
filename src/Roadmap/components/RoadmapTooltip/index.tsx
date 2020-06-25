@@ -1,10 +1,11 @@
 import React, { RefObject, useState } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
-import { IconCalendar, IconChat, Text } from '@gpn-design/uikit'
+import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
+import { IconChat } from '@gpn-design/uikit/IconChat'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { themeColorLight } from '@/common/utils/theme'
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
 import { Position, useTooltipReposition } from '@/common/utils/tooltips'
 import { Direction, Tooltip } from '@/Tooltip'
@@ -41,11 +42,11 @@ const DateText: React.FC<{ label: string; startDate: number; endDate: number }> 
   endDate,
 }) => (
   <>
-    <Text tag="span" size="xs" view="primary">
+    <Text as="span" size="xs" view="primary">
       <span className={css.label}>{label}: </span>
       {formatDate(startDate)} – {formatDate(endDate)}{' '}
     </Text>
-    <Text tag="span" size="xs" view="primary" weight="bold">
+    <Text as="span" size="xs" view="primary" weight="bold">
       ({getDayText(startDate, endDate)})
     </Text>
   </>
@@ -67,7 +68,7 @@ const renderDates = ({
   <>
     {title && (
       <div className={css.dateBlock}>
-        <Text tag="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+        <Text as="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
           {title}
         </Text>
       </div>
@@ -98,10 +99,10 @@ const renderComment = (comment: string) => {
 
   return (
     <>
-      <Text tag="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
+      <Text as="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
         Комментарий:
       </Text>
-      <Text tag="span" size="xs" view="primary">
+      <Text as="span" size="xs" view="primary">
         {text}
         {comment.length > MAX_LENGTH_COMMENT ? '...' : ''}
       </Text>
@@ -168,7 +169,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
   const renderContent = (contentDirection: Direction) => (
     <div
       className={classnames(
-        themeColorLight,
         css.main,
         {
           left: '',

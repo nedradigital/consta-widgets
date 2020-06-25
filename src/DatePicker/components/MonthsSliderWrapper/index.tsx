@@ -1,4 +1,6 @@
-import { Button, IconBackward, IconForward } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit/Button'
+import { IconBackward } from '@gpn-design/uikit/IconBackward'
+import { IconForward } from '@gpn-design/uikit/IconForward'
 
 import css from './index.css'
 
@@ -15,19 +17,17 @@ const MovePeriodButton: React.FC<{
   onClick: () => void
   disabled: boolean
 }> = ({ direction, onClick, disabled }) => {
-  const Icon = direction === 'backward' ? IconBackward : IconForward
-
   return (
     <Button
       className={css.button}
-      wpSize="m"
+      size="m"
       view="clear"
-      iconOnly
+      onlyIcon
+      iconLeft={direction === 'backward' ? IconBackward : IconForward}
+      iconSize="m"
       disabled={disabled}
       onClick={onClick}
-    >
-      <Icon size="m" />
-    </Button>
+    />
   )
 }
 

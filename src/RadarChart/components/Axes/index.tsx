@@ -1,11 +1,10 @@
 import React, { Fragment } from 'react'
 
-import { Text } from '@gpn-design/uikit'
+import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
-import { TextSize } from '@/common/utils/ui-kit'
 
 import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 
@@ -23,7 +22,7 @@ type Props = {
   onChangeActiveAxis: (axis?: Axis) => void
 }
 
-export const labelTextSizes: Record<RadarChartLabelSize, TextSize> = {
+export const labelTextSizes: Record<RadarChartLabelSize, TextPropSize> = {
   s: '2xs',
   m: 'xs',
 }
@@ -75,7 +74,7 @@ export const RadarChartAxes: React.FC<Props> = ({
             <foreignObject x="50%" y={`${50 - 100 * circle.r}%`}>
               <div key={idx} className={css.label} style={{ backgroundColor }}>
                 <Text
-                  tag="div"
+                  as="div"
                   size={labelTextSizes[labelSize]}
                   weight={labelSize === 'm' ? 'bold' : undefined}
                   view="secondary"

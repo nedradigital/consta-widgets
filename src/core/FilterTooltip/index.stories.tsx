@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { action } from '@storybook/addon-actions'
 import { object } from '@storybook/addon-knobs'
 
@@ -8,23 +6,23 @@ import { createMetadata, createStory, environmentDecorator } from '@/common/stor
 import { FilterTooltip } from '.'
 
 export const Interactive = createStory(() => {
-  const [isOpened, setIsOpened] = useState(true)
-  const onSave = action('onSave')
+  const [values, setValues] = React.useState<readonly string[]>(['condition1'])
 
   return (
     <FilterTooltip
       field="Тестовый фильтр"
-      isOpened={isOpened}
-      values={object('values', ['condition1'])}
+      isOpened
+      values={values}
       options={object('options', [
         { value: 'condition1', label: 'Условие 1' },
         { value: 'condition2', label: 'Условие 2' },
-        { value: 'condition3', label: 'Условие 3' },
+        { value: 'condition3', label: 'Очень длинное условие 3, которое не влезет во всю ширину' },
       ])}
-      onChange={(field, values) => {
-        onSave(field, values)
+      onChange={(field, newValues) => {
+        action('onSave')(field, newValues)
+        setValues(newValues)
       }}
-      onToggle={() => setIsOpened(!isOpened)}
+      onToggle={() => null}
     />
   )
 })

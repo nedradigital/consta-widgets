@@ -1,4 +1,4 @@
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/BaseSizeContext'
@@ -70,7 +70,7 @@ export const LegendItem: React.FC<Props> = ({
         />
       </div>
       <Text
-        tag="span"
+        as="span"
         size={fontSize}
         view="primary"
         className={classnames(css.text, shouldCropText && css.isSeparating)}

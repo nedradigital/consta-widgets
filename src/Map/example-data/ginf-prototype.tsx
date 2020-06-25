@@ -1,4 +1,4 @@
-import { ChoiceGroup } from '@gpn-design/uikit'
+import { ChoiceGroup } from '@gpn-design/uikit/ChoiceGroup'
 import { noop } from 'lodash'
 
 import { GeoPoint, Map } from '../'
@@ -82,38 +82,37 @@ const dataByPoints = {
   },
 }
 
-const pointsTypes = {
-  eu: {
+type PointsType = {
+  name: string
+  points: readonly GeoPoint[]
+}
+const pointsTypes: readonly PointsType[] = [
+  {
     name: 'Евразия',
     points: pointsEurope,
   },
-  sa: {
+  {
     name: 'Южная Америка',
     points: pointsSouthAmerica,
   },
-} as const
-type PointsType = keyof typeof pointsTypes
+]
 
 export const GinfPrototype = () => {
-  const [pointsType, setPointsType] = React.useState<PointsType>('eu')
-  const items = Object.keys(pointsTypes).map(type => ({
-    value: type,
-    label: pointsTypes[type as PointsType].name,
-  }))
-  const { points } = pointsTypes[pointsType]
+  const [pointsType, setPointsType] = React.useState(pointsTypes[0])
 
   return (
     <div className={css.ginfWrapper}>
       <ChoiceGroup
         className={css.ginfSwitcher}
-        items={items}
-        wpSize="m"
-        isMultiple={false}
-        value={pointsType}
-        onChange={newVal => newVal && setPointsType(newVal as PointsType)}
+        size="m"
+        items={[...pointsTypes]}
+        getItemKey={item => item.name}
+        getItemLabel={item => item.name}
+        value={[pointsType]}
+        onChange={({ value }) => value && setPointsType(value[0])}
       />
       <Map
-        points={points}
+        points={pointsType.points}
         padding={[50, 160]}
         selectedObjectId={undefined}
         onSelectedObjectIdChange={noop}

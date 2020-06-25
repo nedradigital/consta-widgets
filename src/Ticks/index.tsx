@@ -1,8 +1,7 @@
-import { Text } from '@gpn-design/uikit'
+import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { Scaler } from '@/common/utils/scale'
-import { TextSize } from '@/common/utils/ui-kit'
 
 import css from './index.css'
 
@@ -24,7 +23,7 @@ type Props<T> = {
   formatValueForLabel?: (value: T) => string
 }
 
-const textSizes: Record<Size, TextSize> = {
+const textSizes: Record<Size, TextPropSize> = {
   s: '2xs',
   m: 'xs',
 }
@@ -103,7 +102,7 @@ export function Ticks<T>(props: Props<T>) {
               }}
             >
               <Text
-                tag="div"
+                as="div"
                 view="secondary"
                 size={textSizes[size]}
                 align={isHorizontal ? 'center' : undefined}

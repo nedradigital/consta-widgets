@@ -1,10 +1,14 @@
 import { useEffect, useLayoutEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
 
-import { IconArrowLeft, IconArrowRight, IconClose } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit/Button'
+import { IconArrowLeft } from '@gpn-design/uikit/IconArrowLeft'
+import { IconArrowRight } from '@gpn-design/uikit/IconArrowRight'
+import { IconClose } from '@gpn-design/uikit/IconClose'
+import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
+import { PortalWithTheme } from '@/core/PortalWithTheme'
 import { Image } from '@/Image'
 import { ImageItem, ImagesList } from '@/ImagesList'
 
@@ -20,6 +24,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
   const isVisible = openOnImage !== undefined
   const [currentImageIdx, setCurrentImageIdx] = useState(openOnImage || 0)
   const [isOpening, setIsOpening] = useState(false)
+  const { theme } = useTheme()
 
   useEffect(() => {
     // Чтобы выключить анимации в момент открытия
@@ -60,53 +65,66 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
     }
   }
 
-  return ReactDOM.createPortal(
-    <div
-      className={classnames(css.main, isVisible && css.isVisible, isOpening && css.isOpening)}
-      tabIndex={-1}
-      onKeyDown={handleKeyPress}
-    >
-      <div className={css.content}>
-        <div
-          className={css.items}
-          style={{
-            transform: `translateX(${-1 * currentImageIdx * 100}%)`,
-          }}
-        >
-          {images.map((image, idx) => (
-            <div
-              key={idx}
-              className={css.item}
-              style={{
-                left: `${idx * 100}%`,
-              }}
-            >
-              <Image src={image.large} />
-            </div>
-          ))}
+  return (
+    <PortalWithTheme theme={theme}>
+      <div
+        className={classnames(css.main, isVisible && css.isVisible, isOpening && css.isOpening)}
+        tabIndex={-1}
+        onKeyDown={handleKeyPress}
+      >
+        <div className={css.content}>
+          <div
+            className={css.items}
+            style={{
+              transform: `translateX(${-1 * currentImageIdx * 100}%)`,
+            }}
+          >
+            {images.map((image, idx) => (
+              <div
+                key={idx}
+                className={css.item}
+                style={{
+                  left: `${idx * 100}%`,
+                }}
+              >
+                <Image src={image.large} />
+              </div>
+            ))}
+          </div>
+          <div className={css.preview}>
+            <ImagesList images={images} activeItem={currentImageIdx} onClick={setCurrentImageIdx} />
+          </div>
+          {currentImageIdx > 0 && (
+            <Button
+              className={css.toLeft}
+              view="clear"
+              onlyIcon
+              iconLeft={IconArrowLeft}
+              iconSize="m"
+              onClick={goLeft}
+            />
+          )}
+          {currentImageIdx < images.length - 1 && (
+            <Button
+              className={css.toRight}
+              view="clear"
+              onlyIcon
+              iconLeft={IconArrowRight}
+              iconSize="m"
+              disabled={currentImageIdx === images.length - 1}
+              onClick={goRight}
+            />
+          )}
+          <Button
+            className={css.close}
+            view="clear"
+            onlyIcon
+            iconLeft={IconClose}
+            iconSize="m"
+            onClick={onRequestClose}
+          />
         </div>
-        <div className={css.preview}>
-          <ImagesList images={images} activeItem={currentImageIdx} onClick={setCurrentImageIdx} />
-        </div>
-        {currentImageIdx > 0 && (
-          <button type="button" className={classnames(css.button, css.toLeft)} onClick={goLeft}>
-            <IconArrowLeft size="m" />
-          </button>
-        )}
-        {currentImageIdx < images.length - 1 && (
-          <button type="button" className={classnames(css.button, css.toRight)} onClick={goRight}>
-            <IconArrowRight size="m" />
-          </button>
-        )}
-        <button
-          type="button"
-          className={classnames(css.button, css.close)}
-          onClick={onRequestClose}
-        >
-          <IconClose size="m" />
-        </button>
       </div>
-    </div>,
-    window.document.body
+    </PortalWithTheme>
   )
 }

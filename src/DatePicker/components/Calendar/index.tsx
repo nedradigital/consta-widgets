@@ -1,5 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 import {
   addDays,
@@ -141,7 +141,7 @@ const getMonthWeeks = (date: Date) => {
 const weekDays = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'].map((dayName, idx) => (
   <div key={idx} className={classnames(css.cell, css.isWeekDay)}>
     <div className={css.cellContent}>
-      <Text tag="span" size="2xs" transform="uppercase" view="ghost" spacing="xs">
+      <Text as="span" size="2xs" transform="uppercase" view="ghost" spacing="xs">
         {dayName}
       </Text>
     </div>
@@ -231,7 +231,7 @@ export const Calendar: React.FC<Props> = ({
         onClick={() => handleSelectDate(date)}
       >
         <div className={css.cellContent}>
-          <Text tag="span" size="s">
+          <Text as="span" size="s" className={css.cellContentText}>
             {date.getDate()}
           </Text>
         </div>
@@ -249,7 +249,7 @@ export const Calendar: React.FC<Props> = ({
           <div key={idx} className={css.month}>
             {isDateRange(value) && (
               <Text
-                tag="div"
+                as="div"
                 size="s"
                 weight="bold"
                 transform="uppercase"

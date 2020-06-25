@@ -49,3 +49,7 @@
     }
   }
 }
+
+.cellText {
+  color: inherit;
+}

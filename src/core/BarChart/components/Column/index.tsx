@@ -1,5 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { Size } from '../../helpers'
@@ -96,7 +96,7 @@ export const Column: React.FC<Props> = ({
       onMouseLeave={onMouseLeaveColumn}
     >
       {showValues && sections.length > 0 && (
-        <Text tag="div" view="primary" className={css.label} size="xs">
+        <Text as="div" view="primary" className={css.label} size="xs">
           {total}
         </Text>
       )}

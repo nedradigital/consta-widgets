@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { getValueRatio } from '../../'
@@ -25,7 +25,7 @@ const Marking: React.FC<{ className?: string; style?: React.CSSProperties }> = (
 }) => (
   <div className={classnames(css.marking, className)} style={style}>
     <div className={css.markingIcon} />
-    <Text tag="div" size="xs" view="secondary">
+    <Text as="div" size="xs" view="secondary">
       {children}
     </Text>
   </div>

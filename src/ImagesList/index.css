@@ -60,17 +60,9 @@
       content: '';
 
       border-radius: inherit;
-      background: var(--color-control-bg-border-checked);
+      background: var(--color-control-bg-border-focus);
     }
   }
-}
-
-.toLeft {
-  margin-right: var(--space-s);
-}
-
-.toRight {
-  margin-left: var(--space-s);
 }
 
 .image {
@@ -86,4 +78,12 @@
 
 .button {
   flex-shrink: 0;
+}
+
+.toLeft {
+  margin-right: var(--space-s);
+}
+
+.toRight {
+  margin-left: var(--space-s);
 }

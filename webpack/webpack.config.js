@@ -38,10 +38,10 @@ const libConfig = {
     isProduction && new CleanWebpackPlugin(),
     process.env.ANALYZE && new BundleAnalyzerPlugin()
   ].filter(Boolean),
-  externals: {
+  externals: [{
     react: 'react',
     'react-dom': 'react-dom',
-  }
+  }, /@gpn-design\/uikit/]
 }
 
 module.exports = withCustomRules(

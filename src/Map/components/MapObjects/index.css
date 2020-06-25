@@ -9,7 +9,7 @@
 
   &.isHovered,
   &.isSelected {
-    fill: var(--color-control-bg-default-hover);
+    fill: #153d54;
   }
 
   &.russia {

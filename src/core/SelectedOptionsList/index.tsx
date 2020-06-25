@@ -1,4 +1,4 @@
-import { IconClose } from '@gpn-design/uikit'
+import { IconClose } from '@gpn-design/uikit/IconClose'
 import classnames from 'classnames'
 
 import { SelectedOption } from '@/core/SelectedOption'

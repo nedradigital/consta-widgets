@@ -1,6 +1,5 @@
 import React from 'react'
 
-import { text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
@@ -8,9 +7,7 @@ import { createMetadata, createStory, environmentDecorator } from '@/common/stor
 import { Badge } from '.'
 
 export const Interactive = createStory(() => (
-  <Badge wpSize="s" view="filled" status="normal">
-    {text('children', '+4.8%')}
-  </Badge>
+  <Badge label="+4.8%" size="s" view="filled" status="normal" />
 ))
 
 export default createMetadata({

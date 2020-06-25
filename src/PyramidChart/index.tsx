@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 
 import { useBaseSize } from '@/BaseSizeContext'
 
@@ -122,13 +122,13 @@ export const PyramidChart: React.FC<Props> = ({
           {items.map((item, index) => (
             <tr key={index}>
               <td style={{ width: pyramidWidthHalf }}>
-                <Text tag="div" size="2xl" weight="bold" spacing="xs" view="primary" align="right">
+                <Text as="div" size="2xl" weight="bold" spacing="xs" view="primary" align="right">
                   {item.value}
                 </Text>
               </td>
               <td>
                 <Text
-                  tag="span"
+                  as="span"
                   size={fontSize}
                   view="primary"
                   lineHeight={constraint ? 'xs' : undefined}

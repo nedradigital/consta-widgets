@@ -9,33 +9,11 @@ body {
 
   margin: 0;
   padding: 0;
-
-  background-color: var(--color-bg-default);
-}
-
-:global(.sbdocs-preview) {
-  background-color: var(--color-bg-default);
 }
 
 :global(.sbdocs-wrapper) {
   min-height: 100vh;
   box-sizing: border-box;
-}
-
-::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
-
-  background-color: rgba(246, 251, 253, 0.06);
-}
-
-::-webkit-scrollbar-corner {
-  display: none;
-}
-
-::-webkit-scrollbar-thumb {
-  border-radius: var(--control-radius);
-  background-color: rgba(246, 251, 253, 0.24);
 }
 
 /* Стили якорей */

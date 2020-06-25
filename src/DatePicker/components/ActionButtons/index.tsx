@@ -1,4 +1,4 @@
-import { Button } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit/Button'
 
 import { DateLimitProps, DateRange } from '../../'
 
@@ -30,19 +30,16 @@ export const ActionButtons: React.FC<Props> = ({
           quarters.map((quarter, idx) => (
             <Button
               key={idx}
+              label={`${idx + 1} кв. ${currentYear}`}
               className={css.button}
-              wpSize="xs"
+              size="xs"
               view="ghost"
               disabled={!quarter.length}
               onClick={() => onSelect(quarter)}
-            >
-              {idx + 1} кв. {currentYear}
-            </Button>
+            />
           ))}
       </div>
-      <Button wpSize="xs" view="primary" onClick={onApply}>
-        Выбрать
-      </Button>
+      <Button label="Выбрать" size="xs" view="primary" onClick={onApply} />
     </div>
   )
 }

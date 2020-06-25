@@ -3,11 +3,9 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
-import { Text } from '@gpn-design/uikit'
-import classnames from 'classnames'
+import { Text } from '@gpn-design/uikit/Text'
 import { endOfDay, format, startOfDay } from 'date-fns'
 
-import { themeColorLight } from '@/common/utils/theme'
 import { useTooltipReposition } from '@/common/utils/tooltips'
 import { Tooltip } from '@/Tooltip'
 
@@ -73,7 +71,7 @@ const DateOutOfRangeTooptipContent: React.FC<DateLimitProps> = ({ minDate, maxDa
   return (
     <div className={css.warningTooltip}>
       <IconWarning className={css.iconWarning} />
-      <Text tag="div" size="xs" view="primary" lineHeight="m">
+      <Text as="div" size="xs" view="primary" lineHeight="m">
         Укажите дату в промежутке {formatOutOfRangeDate(minDate)} - {formatOutOfRangeDate(maxDate)}
       </Text>
     </div>
@@ -91,7 +89,7 @@ const defaultRenderRangeControls: RenderControls<DateRange> = props => {
   return (
     <>
       <InputDate {...commonProps} value={startDate} onChange={date => onChange([date, endDate])} />
-      <Text tag="span" view="primary" className={css.delimiter}>
+      <Text as="span" view="primary" className={css.delimiter}>
         –
       </Text>
       <InputDate
@@ -225,7 +223,7 @@ export const DatePicker: React.FC<Props> = props => {
         isVisible={isTooltipVisible}
         ref={tooltipRef}
         anchorRef={controlsRef}
-        className={classnames(themeColorLight, css.tooltip)}
+        className={css.tooltip}
         withArrow={false}
         offset={OFFSET_FROM_CONTROLS}
         direction="downRight"

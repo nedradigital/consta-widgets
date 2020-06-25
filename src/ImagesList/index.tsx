@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
-import { Button, IconArrowLeft, IconArrowRight } from '@gpn-design/uikit'
+import { Button } from '@gpn-design/uikit/Button'
+import { IconArrowLeft } from '@gpn-design/uikit/IconArrowLeft'
+import { IconArrowRight } from '@gpn-design/uikit/IconArrowRight'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import * as _ from 'lodash'
@@ -47,14 +49,14 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, onClick }) => 
     <div className={css.main}>
       {offset > 0 && (
         <Button
-          wpSize="s"
-          iconOnly
+          size="s"
+          onlyIcon
+          iconLeft={IconArrowLeft}
+          iconSize="s"
           className={classnames(css.button, css.toLeft)}
           onClick={handleMove('left')}
           view="ghost"
-        >
-          <IconArrowLeft size="s" />
-        </Button>
+        />
       )}
       <div className={css.wrapper} ref={wrapperRef}>
         <div
@@ -78,14 +80,14 @@ export const ImagesList: React.FC<Props> = ({ images, activeItem, onClick }) => 
       </div>
       {offset + wrapperWidth < scrollWidth && (
         <Button
-          wpSize="s"
-          iconOnly
+          size="s"
+          onlyIcon
+          iconLeft={IconArrowRight}
+          iconSize="s"
           className={classnames(css.button, css.toRight)}
           onClick={handleMove('right')}
           view="ghost"
-        >
-          <IconArrowRight size="s" />
-        </Button>
+        />
       )}
     </div>
   )

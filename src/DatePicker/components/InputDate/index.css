@@ -1,69 +1,26 @@
-@custom-selector :--input .input;
-@custom-selector :--icon .icon;
-
-.main {
-  position: relative;
-
-  display: inline-block;
-}
-
-:--input {
-  font-size: var(--size-text-s);
-
-  max-width: calc-size(155);
-
+.input {
   cursor: pointer;
 
-  &::-webkit-inner-spin-button,
-  &::-webkit-outer-spin-button,
-  &::-webkit-clear-button,
-  &::-webkit-calendar-picker-indicator {
-    -webkit-appearance: none;
+  & > input {
+    cursor: inherit;
 
-    display: none;
-  }
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button,
+    &::-webkit-clear-button,
+    &::-webkit-calendar-picker-indicator {
+      -webkit-appearance: none;
 
-  &::-webkit-datetime-edit-day-field,
-  &::-webkit-datetime-edit-month-field,
-  &::-webkit-datetime-edit-year-field {
-    color: inherit;
-  }
+      display: none;
+    }
 
-  &.sizeS {
-    min-width: calc-size(119);
-  }
-
-  &.sizeM {
-    min-width: calc-size(129);
-  }
-
-  &.sizeL {
-    min-width: calc-size(155);
-  }
-
-  &.isInvalid {
-    border: 1px solid var(--color-bg-alert);
+    &::-webkit-datetime-edit-day-field,
+    &::-webkit-datetime-edit-month-field,
+    &::-webkit-datetime-edit-year-field {
+      color: inherit;
+    }
   }
 }
 
 .tooltip {
   max-width: 196px;
-}
-
-:--icon {
-  position: absolute;
-  top: 50%;
-  right: var(--space-s);
-
-  pointer-events: none;
-
-  color: var(--color-control-typo-clear);
-
-  transform: translateY(-50%);
-
-  fill: currentColor;
-
-  :--input:hover + & {
-    color: var(--color-control-typo-clear-hover);
-  }
 }

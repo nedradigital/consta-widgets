@@ -1,4 +1,4 @@
-import { Text } from '@gpn-design/uikit'
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { TextAlign } from '../../'
@@ -7,7 +7,7 @@ import css from './index.css'
 
 type Props = {
   children: React.ReactNode
-  tag: string
+  tag: React.ElementType
   align?: TextAlign
   className?: string
   type?: 'default' | 'header' | 'period'
@@ -38,7 +38,7 @@ export const RoadmapText: React.FC<Props> = ({
 }) => {
   const preset = presets[type]
   return (
-    <Text tag={tag} className={classnames(css[align], className)} view="primary" {...preset}>
+    <Text as={tag} className={classnames(css[align], className)} view="primary" {...preset}>
       {children}
     </Text>
   )
