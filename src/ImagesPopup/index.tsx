@@ -97,6 +97,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
           {currentImageIdx > 0 && (
             <Button
               className={css.toLeft}
+              size="s"
               view="clear"
               onlyIcon
               iconLeft={IconArrowLeft}
@@ -107,6 +108,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
           {currentImageIdx < images.length - 1 && (
             <Button
               className={css.toRight}
+              size="s"
               view="clear"
               onlyIcon
               iconLeft={IconArrowRight}
@@ -117,10 +119,10 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
           )}
           <Button
             className={css.close}
+            size="l"
             view="clear"
             onlyIcon
             iconLeft={IconClose}
-            iconSize="m"
             onClick={onRequestClose}
           />
         </div>

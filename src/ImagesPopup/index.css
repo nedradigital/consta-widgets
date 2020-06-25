@@ -2,7 +2,7 @@
 @custom-selector :--isHidden :not(.isVisible);
 
 :--main {
-  --button-size: 48px;
+  --button-margin: var(--space-s);
   --show-transition: 0.15s ease-out;
 
   position: fixed;
@@ -88,13 +88,15 @@
 .toLeft,
 .toRight {
   position: absolute;
-  top: calc(50% - var(--button-size) / 2);
+  top: 50%;
+
+  transform: translateY(-50%);
 }
 
 .toLeft {
-  left: 0;
+  left: var(--button-margin);
 }
 
 .toRight {
-  right: 0;
+  right: var(--button-margin);
 }
