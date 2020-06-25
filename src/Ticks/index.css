@@ -12,6 +12,8 @@
 
   display: flex;
 
+  box-sizing: border-box;
+
   &:--isHorizontal {
     width: 100%;
   }
