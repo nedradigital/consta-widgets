@@ -39,7 +39,7 @@ export type ActiveRow = {
 
 export type Column = {
   accessor: string
-  title: string
+  title: React.ReactNode
   align?: Align
 }
 
