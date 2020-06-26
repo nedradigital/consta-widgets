@@ -3,6 +3,7 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { IconAlignLeft } from '@gpn-design/uikit/IconAlignLeft'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
+import { Text } from '@gpn-design/uikit/Text'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import _ from 'lodash'
@@ -60,6 +61,7 @@ export type Props<T extends BasicTableRow> = {
   isZebraStriped?: boolean
   borderBetweenRows?: boolean
   borderBetweenColumns?: boolean
+  emptyRowsPlaceholder?: React.ReactNode
 }
 
 export type SortingState<T extends BasicTableRow> = {
@@ -84,6 +86,12 @@ const horizontalCellAlignClasses: Record<HorizontalAlign, string> = {
   center: css.horizontalAlignCenter,
   right: css.horizontalAlignRight,
 }
+
+const defaultEmptyRowsPlaceholder = (
+  <Text as="span" view="primary" size="s" lineHeight="s">
+    Нет данных
+  </Text>
+)
 
 const headerShadow = (
   <div className={classnames(css.headerShadowWrapper)}>
@@ -111,6 +119,7 @@ export const Table = <T extends BasicTableRow>({
   isZebraStriped = false,
   borderBetweenRows = false,
   borderBetweenColumns = false,
+  emptyRowsPlaceholder = defaultEmptyRowsPlaceholder,
 }: Props<T>): React.ReactElement => {
   const [resizedColumnWidths, setResizedColumnWidths] = React.useState<
     ReadonlyArray<number | undefined>
@@ -409,34 +418,42 @@ export const Table = <T extends BasicTableRow>({
           />
         </div>
       )}
-      {filteredData.map(row => (
-        <div key={row.id} className={css.cellsRow}>
-          {columnsWithMetaData.map((column, columnIdx) => (
-            <div
-              key={column.accessor}
-              className={classnames(
-                css.cell,
-                column.isSticky && css.stickyOnLeft,
-                isRowsClickable && css.isClickable,
-                column.isResized && css.isResized
-              )}
-              style={{ left: getStickyLeftOffset(columnIdx) }}
-              onClick={handleSelectRow(row.id)}
-            >
+      {filteredData.length > 0 ? (
+        filteredData.map(row => (
+          <div key={row.id} className={css.cellsRow}>
+            {columnsWithMetaData.map((column, columnIdx) => (
               <div
+                key={column.accessor}
                 className={classnames(
-                  css.wrapper,
-                  verticalCellAlignClasses[verticalAlign],
-                  getHorizontalAlign(column.align),
-                  getRowStatus(row.id)
+                  css.cell,
+                  column.isSticky && css.stickyOnLeft,
+                  isRowsClickable && css.isClickable,
+                  column.isResized && css.isResized
                 )}
+                style={{ left: getStickyLeftOffset(columnIdx) }}
+                onClick={handleSelectRow(row.id)}
               >
-                {row[column.accessor]}
+                <div
+                  className={classnames(
+                    css.wrapper,
+                    verticalCellAlignClasses[verticalAlign],
+                    getHorizontalAlign(column.align),
+                    getRowStatus(row.id)
+                  )}
+                >
+                  {row[column.accessor]}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        ))
+      ) : (
+        <div className={css.rowWithoutCells}>
+          <div className={classnames(css.wrapper, css.horizontalAlignCenter)}>
+            {emptyRowsPlaceholder}
+          </div>
         </div>
-      ))}
+      )}
     </div>
   )
 }
