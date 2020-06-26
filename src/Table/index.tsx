@@ -57,6 +57,9 @@ export type Props<T extends BasicTableRow> = {
   isResizable?: boolean
   activeRow?: ActiveRow
   verticalAlign?: VerticalAlign
+  isZebraStriped?: boolean
+  borderBetweenRows?: boolean
+  borderBetweenColumns?: boolean
 }
 
 export type SortingState<T extends BasicTableRow> = {
@@ -105,6 +108,9 @@ export const Table = <T extends BasicTableRow>({
   stickyColumns = 0,
   activeRow,
   verticalAlign = 'top',
+  isZebraStriped = false,
+  borderBetweenRows = false,
+  borderBetweenColumns = false,
 }: Props<T>): React.ReactElement => {
   const [resizedColumnWidths, setResizedColumnWidths] = React.useState<
     ReadonlyArray<number | undefined>
@@ -301,7 +307,10 @@ export const Table = <T extends BasicTableRow>({
         sizeClasses[size],
         isResizable && css.isResizable,
         showVerticalCellShadow && css.showVerticalCellShadow,
-        showHorizontalCellShadow && stickyHeader && css.showHorizontalCellShadow
+        showHorizontalCellShadow && stickyHeader && css.showHorizontalCellShadow,
+        isZebraStriped && css.isZebraStriped,
+        borderBetweenRows && css.borderBetweenRows,
+        borderBetweenColumns && css.borderBetweenColumns
       )}
       style={tableStyle}
       onScroll={handleScroll}
@@ -391,8 +400,9 @@ export const Table = <T extends BasicTableRow>({
       */}
       {headerShadow}
       {filters && isSelectedFiltersPresent(selectedFilters) && (
-        <div className={css.selectedFilters}>
+        <div className={classnames(css.rowWithoutCells)}>
           <SelectedOptionsList
+            className={css.selectedFilters}
             values={getSelectedFiltersList({ filters, selectedFilters, columns })}
             onRemove={removeSelectedFilter(filters)}
             onReset={resetSelectedFilters}
@@ -400,7 +410,7 @@ export const Table = <T extends BasicTableRow>({
         </div>
       )}
       {filteredData.map(row => (
-        <div key={row.id} className={css.row}>
+        <div key={row.id} className={css.cellsRow}>
           {columnsWithMetaData.map((column, columnIdx) => (
             <div
               key={column.accessor}
