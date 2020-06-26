@@ -24,6 +24,7 @@
     border-radius: 3px 0 0 3px;
   }
 
+  &.sizeXS,
   &.sizeS {
     --chart-line-size: calc-size(4);
   }

@@ -2,11 +2,17 @@
 @custom-selector :--row .row;
 
 .progressBar {
+  --column-gap: var(--space-s);
+
   display: grid;
   align-items: center;
 
   grid-template-columns: 1fr auto;
-  grid-column-gap: var(--space-s);
+  grid-column-gap: var(--column-gap);
+
+  &.sizeXS {
+    --column-gap: var(--space-xs);
+  }
 }
 
 :--item {
@@ -32,7 +38,13 @@
   }
 
   &.isProgressCell {
-    min-width: calc-size(160);
+    --progress-min-width: calc-size(160);
+
+    min-width: var(--progress-min-width);
+
+    .sizeXS & {
+      --progress-min-width: calc-size(100);
+    }
   }
 
   &.isValueCell {

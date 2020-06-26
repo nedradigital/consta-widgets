@@ -17,7 +17,7 @@ export type Data = ProgressData & {
   caption?: React.ReactNode
 }
 
-export type Size = 's' | 'm' | 'l'
+export type Size = 'xs' | 's' | 'm' | 'l'
 
 type Props = {
   size?: Size
@@ -38,6 +38,7 @@ export const getValueRatio = ({
 }
 
 const summarySizes: Record<Size, TextPropSize> = {
+  xs: 's',
   s: 'l',
   m: '2xl',
   l: '2xl',
@@ -45,7 +46,7 @@ const summarySizes: Record<Size, TextPropSize> = {
 
 export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) => {
   return (
-    <div className={css.progressBar}>
+    <div className={classnames(css.progressBar, size === 'xs' && css.sizeXS)}>
       {data.map((dataItem, i) => {
         const { caption, colorGroupName, value, summary, ticks = [], valueMin, valueMax } = dataItem
         const color = colorGroups[colorGroupName]

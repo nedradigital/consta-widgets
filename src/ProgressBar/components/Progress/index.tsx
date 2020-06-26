@@ -19,7 +19,12 @@ export type Props = {
   color: string
 }
 
-const sizeClasses: Record<Size, string> = { s: css.sizeS, m: css.sizeM, l: css.sizeL }
+const sizeClasses: Record<Size, string> = {
+  xs: css.sizeXS,
+  s: css.sizeS,
+  m: css.sizeM,
+  l: css.sizeL,
+}
 
 export const Progress: React.FC<Props> = ({ data: { value, valueMin, valueMax }, color, size }) => {
   const isWithData = isNotNil(value)
