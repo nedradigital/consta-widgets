@@ -388,6 +388,54 @@ describe('getComputedPositionAndDirection', () => {
         position: { x: 400, y: 555 },
       })
     })
+
+    it('вычисляем позицию для тултипа вверх по центру, когда якорь шире тултипа', () => {
+      expect(
+        getComputedPositionAndDirection({
+          ...params,
+          direction: 'upCenter',
+          tooltipSize: {
+            height: 100,
+            width: 100,
+          },
+          position: {
+            x: 300,
+            y: 500,
+          },
+          anchorSize: {
+            width: 200,
+            height: 50,
+          },
+        })
+      ).toEqual({
+        direction: 'upCenter',
+        position: { x: 350, y: 345 },
+      })
+    })
+
+    it('вычисляем позицию для тултипа сверху по правому краю, когда якорь шире тултипа', () => {
+      expect(
+        getComputedPositionAndDirection({
+          ...params,
+          direction: 'upLeft',
+          tooltipSize: {
+            width: 100,
+            height: 100,
+          },
+          position: {
+            x: 300,
+            y: 500,
+          },
+          anchorSize: {
+            width: 200,
+            height: 50,
+          },
+        })
+      ).toEqual({
+        direction: 'upLeft',
+        position: { x: 400, y: 345 },
+      })
+    })
   })
 
   describe('если список разрешенных сторон состоит не из всех возможных вариантов', () => {
