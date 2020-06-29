@@ -30,6 +30,7 @@ type Props = {
   isReversed?: boolean
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
+  onChangeLabelSize?: (size: number) => void
 }
 
 const sizeClasses: Record<ColumnSize, string> = {
@@ -49,7 +50,10 @@ export const Column: React.FC<Props> = ({
   sections = [],
   onMouseEnterColumn,
   onMouseLeaveColumn,
+  onChangeLabelSize,
 }) => {
+  const textRef = React.useRef<HTMLElement>(null)
+
   const renderSection = (item: SectionItem | undefined, index: number) => {
     if (!item || item.length === undefined) {
       return null
@@ -84,6 +88,12 @@ export const Column: React.FC<Props> = ({
     onMouseEnterColumn({ x, y, sections: selectedSections })
   }
 
+  React.useLayoutEffect(() => {
+    if (textRef.current) {
+      onChangeLabelSize && onChangeLabelSize(textRef.current.getBoundingClientRect().height)
+    }
+  }, [textRef, onChangeLabelSize])
+
   return (
     <div
       className={classnames(
@@ -96,7 +106,7 @@ export const Column: React.FC<Props> = ({
       onMouseLeave={onMouseLeaveColumn}
     >
       {showValues && sections.length > 0 && (
-        <Text as="div" view="primary" className={css.label} size="xs">
+        <Text innerRef={textRef} as="div" view="primary" className={css.label} size="xs">
           {total}
         </Text>
       )}
