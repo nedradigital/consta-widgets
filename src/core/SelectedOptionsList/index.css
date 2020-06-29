@@ -3,6 +3,7 @@
 
   display: flex;
 
+  box-sizing: border-box;
   max-height: calc-size(64);
   padding-right: var(--space-xs);
   padding-left: var(--space-m);
