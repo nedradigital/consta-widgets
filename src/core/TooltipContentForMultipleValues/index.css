@@ -25,3 +25,9 @@
   width: 100%;
   grid-template-columns: 1fr auto;
 }
+
+.legendItem {
+  &.isSingleColumn {
+    grid-column: 2 span;
+  }
+}

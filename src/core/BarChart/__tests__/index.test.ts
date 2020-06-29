@@ -100,9 +100,9 @@ describe('getColumnSize', () => {
   it('возвращает размер бара, который зависит от размера текста', () => {
     expect(getColumnSize({ size: 'auto', valueLength: 1, isHorizontal: false })).toEqual('s')
     expect(getColumnSize({ size: 'auto', valueLength: 2, isHorizontal: false })).toEqual('m')
-    expect(getColumnSize({ size: 'auto', valueLength: 3, isHorizontal: false })).toEqual('l')
-    expect(getColumnSize({ size: 'auto', valueLength: 4, isHorizontal: false })).toEqual('xl')
-    expect(getColumnSize({ size: 'auto', valueLength: 5, isHorizontal: false })).toEqual('xxl')
+    expect(getColumnSize({ size: 'auto', valueLength: 3, isHorizontal: false })).toEqual('xl')
+    expect(getColumnSize({ size: 'auto', valueLength: 4, isHorizontal: false })).toEqual('2xl')
+    expect(getColumnSize({ size: 'auto', valueLength: 5, isHorizontal: false })).toEqual('3xl')
   })
 
   it('возвращает размер m для горизонтального графика', () => {
@@ -121,7 +121,7 @@ describe('toAxisSize', () => {
   it('возвращает Axis размер', () => {
     expect(toAxisSize('l')).toEqual('m')
     expect(toAxisSize('xl')).toEqual('m')
-    expect(toAxisSize('xxl')).toEqual('m')
+    expect(toAxisSize('2xl')).toEqual('m')
   })
 
   it('возвращает заданный размер', () => {

@@ -39,6 +39,8 @@ export type Group = {
 
 export type Groups = readonly Group[]
 
+export type OnMouseHoverColumn = (groupName: string) => void
+
 export type Props = {
   groups: Groups
   gridTicks: number
@@ -48,8 +50,13 @@ export type Props = {
   showValues?: boolean
   unit?: string
   unitPosition?: UnitPosition
+  isDense?: boolean
+  activeSectionIndex?: number
+  activeGroup?: string
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
+  onMouseEnterColumn?: OnMouseHoverColumn
+  onMouseLeaveColumn?: OnMouseHoverColumn
 }
 
 export const CoreBarChart: React.FC<Props> = props => {
@@ -62,8 +69,13 @@ export const CoreBarChart: React.FC<Props> = props => {
     size,
     unit,
     unitPosition = 'none',
+    isDense,
+    activeSectionIndex,
+    activeGroup,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel,
+    onMouseEnterColumn,
+    onMouseLeaveColumn,
   } = props
   const ref = useRef(null)
   const svgRef = useRef(null)
@@ -94,7 +106,7 @@ export const CoreBarChart: React.FC<Props> = props => {
   const groupScale = scaleBand({
     range: getRange(isHorizontal ? svgHeight : svgWidth),
     domain: groupsDomain,
-    paddingInner: getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[columnSize]),
+    paddingInner: isDense ? 0 : getCalculatedSizeWithBaseSize(GROUP_INNER_PADDING[columnSize]),
     paddingOuter: getCalculatedSizeWithBaseSize(OUTER_PADDING),
   })
   const valuesScale = scaleLinear({
@@ -113,6 +125,18 @@ export const CoreBarChart: React.FC<Props> = props => {
   const verticalStyles = {
     paddingTop,
     paddingBottom,
+  }
+
+  const handleMouseEnterColumn = (groupName: string, params: TooltipData) => {
+    setTooltipData(params)
+
+    onMouseEnterColumn && onMouseEnterColumn(groupName)
+  }
+
+  const handleMouseLeaveColumn = (groupName: string) => {
+    setTooltipData(undefined)
+
+    onMouseLeaveColumn && onMouseLeaveColumn(groupName)
   }
 
   return (
@@ -153,14 +177,19 @@ export const CoreBarChart: React.FC<Props> = props => {
             <Group
               {...group}
               key={group.name}
+              group={group.name}
               size={columnSize}
               isHorizontal={isHorizontal}
               isNegative={showReversed}
               showValues={showValues}
+              isDense={isDense}
+              activeGroup={activeGroup}
+              activeSectionIndex={activeSectionIndex}
               scaler={scaler}
-              onMouseEnterColumn={setTooltipData}
-              onMouseLeaveColumn={() => setTooltipData(undefined)}
+              formatValueForLabel={formatValueForLabel}
               onChangeLabelSize={idx === 0 ? changeLabelSize : undefined}
+              onMouseEnterColumn={params => handleMouseEnterColumn(group.name, params)}
+              onMouseLeaveColumn={() => handleMouseLeaveColumn(group.name)}
             />
           ))}
         </div>

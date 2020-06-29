@@ -1,8 +1,9 @@
 import * as React from 'react'
 
-import { Text } from '@gpn-design/uikit/Text'
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
 import { FormatValue } from '@/common/types'
+import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 import { Tooltip as BaseTooltip } from '@/Tooltip'
 
 import { SectionItem } from '../Column'
@@ -19,6 +20,10 @@ type Props = {
   formatValue?: FormatValue
 }
 
+const sectionHasValue = (
+  section: SectionItem
+): section is SectionItem & { value: NonNullable<SectionItem['value']> } => isDefined(section.value)
+
 export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = String }) => {
   return (
     <BaseTooltip
@@ -27,13 +32,12 @@ export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = Str
       direction={isHorizontal ? 'upCenter' : 'leftCenter'}
       isInteractive={false}
     >
-      {data.sections.map(section =>
-        section.value ? (
-          <Text key={section.color} size="xs" style={{ color: section.color }}>
-            {formatValue(section.value)}
-          </Text>
-        ) : null
-      )}
+      <TooltipContentForMultipleValues
+        items={data.sections.filter(sectionHasValue).map(section => ({
+          value: formatValue(section.value),
+          color: section.color,
+        }))}
+      />
     </BaseTooltip>
   )
 }

@@ -8,7 +8,7 @@ import { Size as TickSize } from '@/Ticks'
 import { Group, Groups } from './'
 import { ColumnItem } from './components/Group'
 
-export const barCharSizes = ['s', 'm', 'l', 'xl', 'xxl', 'auto'] as const
+export const barCharSizes = ['s', 'm', 'l', 'xl', '2xl', '3xl', 'auto'] as const
 export type Size = typeof barCharSizes[number]
 export type ColumnSize = Exclude<Size, 'auto'>
 
@@ -31,7 +31,8 @@ export const GROUP_INNER_PADDING: Record<ColumnSize, number> = {
   m: 18,
   l: 18,
   xl: 18,
-  xxl: 18,
+  '2xl': 18,
+  '3xl': 18,
 }
 
 export const OUTER_PADDING = 2
@@ -131,11 +132,11 @@ export const getColumnSize = (params: GetColumnSizeParams): ColumnSize => {
     case 2:
       return 'm'
     case 3:
-      return 'l'
-    case 4:
       return 'xl'
+    case 4:
+      return '2xl'
     default:
-      return 'xxl'
+      return '3xl'
   }
 }
 
