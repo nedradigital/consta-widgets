@@ -169,8 +169,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
           isContentHoverable && css.isHoverable
         )}
         style={{
-          top: position?.y,
-          left: position?.x,
+          top: position?.y || 0,
+          left: position?.x || 0,
+          visibility: position ? undefined : 'hidden',
           ['--arrow-size' as string]: `${ARROW_SIZE}px`,
         }}
       >
