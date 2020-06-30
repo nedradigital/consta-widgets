@@ -71,7 +71,7 @@
   },
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
-    "@csssr/gpn-utils": "0.2.11",
+    "@csssr/gpn-utils": "0.2.12",
     "@rehooks/component-size": "1.0.3",
     "@types/d3": "5.7.2",
     "@types/resize-observer-browser": "0.1.2",

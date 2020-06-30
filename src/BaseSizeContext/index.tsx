@@ -1,10 +1,14 @@
 import React from 'react'
 
-import { getCalculatedSize, updateBaseSize } from '@csssr/gpn-utils/lib/css'
+import { BASE_SIZE_PROPERTY_NAME, getCalculatedSize } from '@csssr/gpn-utils/lib/css'
 
 import css from './index.css'
 
 const BaseSizeContext = React.createContext(16)
+
+export const updateBaseSize = (size: number, element: HTMLElement | SVGElement) => {
+  element.style.setProperty(BASE_SIZE_PROPERTY_NAME, `${size}`)
+}
 
 export const BaseSizeProvider: React.FC<{ value: number }> = ({ value, children }) => {
   const ref = React.useRef<HTMLDivElement>(null)
