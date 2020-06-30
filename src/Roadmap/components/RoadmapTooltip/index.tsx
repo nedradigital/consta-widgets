@@ -7,8 +7,7 @@ import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
-import { Position, useTooltipReposition } from '@/common/utils/tooltips'
-import { Direction, Tooltip } from '@/Tooltip'
+import { Direction, Position, Tooltip, useTooltipReposition } from '@/Tooltip'
 
 import { Item } from '../..'
 
@@ -18,7 +17,6 @@ type Props = {
   anchorRef: RefObject<HTMLElement>
   color: string
   position: Position
-  direction?: Exclude<Direction, 'upCenter' | 'downCenter' | 'left' | 'right'>
   plan?: Item
   fact?: Item
   forecast?: Item
@@ -114,7 +112,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
   anchorRef,
   color,
   position,
-  direction = 'upRight',
   fact,
   forecast,
   plan,
@@ -125,8 +122,8 @@ export const RoadmapTooltip: React.FC<Props> = ({
   const [activeSection, changeActiveSection] = useState<'dates' | 'comment'>('dates')
 
   useTooltipReposition({
-    isVisible: true,
-    anchorRef,
+    isActive: true,
+    scrollAnchorRef: anchorRef,
     onRequestReposition,
   })
 
@@ -188,8 +185,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
 
   return (
     <Tooltip
-      anchorRef={anchorRef}
-      direction={direction}
+      direction="upRight"
       isVisible
       isContentHoverable
       renderContent={renderContent}

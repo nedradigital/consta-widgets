@@ -1,31 +1,33 @@
-import React, { RefObject } from 'react'
+import React from 'react'
 
-import { getAllParents } from './dom'
+const getAllParents = (element: HTMLElement): readonly Node[] => {
+  const mutableParents: Node[] = []
+  let currentNode: Node | null = element
 
-export type Position = {
-  x: number
-  y: number
+  while (currentNode) {
+    currentNode !== element && mutableParents.push(currentNode)
+    currentNode = currentNode.parentNode
+  }
+
+  return mutableParents
 }
 
-export type PositionState = Position | Partial<Position> | undefined
-
-/* istanbul ignore next */
 /** Запрос репозиции тултипа при ресайзе окна и скролле */
 export const useTooltipReposition = ({
-  isVisible,
-  anchorRef,
+  isActive,
+  scrollAnchorRef,
   onRequestReposition,
 }: {
-  isVisible: boolean
+  isActive: boolean
   /** При скролле родителей этого элемента будет запрашиваться репозиция тултипа */
-  anchorRef: RefObject<HTMLElement | null>
+  scrollAnchorRef: React.RefObject<HTMLElement | null>
   onRequestReposition: () => void
 }) => {
   React.useEffect(() => {
-    if (isVisible) {
+    if (isActive) {
       window.addEventListener('resize', onRequestReposition)
 
-      const allParents = anchorRef.current ? getAllParents(anchorRef.current) : []
+      const allParents = scrollAnchorRef?.current ? getAllParents(scrollAnchorRef.current) : []
       allParents.forEach(parentEl => parentEl.addEventListener('scroll', onRequestReposition))
 
       return () => {
@@ -34,5 +36,5 @@ export const useTooltipReposition = ({
         allParents.forEach(parentEl => parentEl.removeEventListener('scroll', onRequestReposition))
       }
     }
-  }, [isVisible, anchorRef, onRequestReposition])
+  }, [isActive, scrollAnchorRef, onRequestReposition])
 }

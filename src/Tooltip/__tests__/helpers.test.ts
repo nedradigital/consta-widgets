@@ -28,16 +28,16 @@ const initialParams = {
 
 describe('getComputedPositionAndDirection', () => {
   describe('если тултип спозициронирован относительно координат', () => {
-    it('возвращаем неопределенную позицию, если данные для позиции не полные', () => {
+    it('возвращаем неопределенную позицию, если данные для позиции отсутствуют', () => {
       expect(
         getComputedPositionAndDirection({
           ...initialParams,
           direction: 'right',
-          position: { x: 250, y: undefined },
+          position: undefined,
         })
       ).toEqual({
         direction: 'right',
-        position: { x: undefined, y: undefined },
+        position: undefined,
       })
     })
 
@@ -195,13 +195,11 @@ describe('getComputedPositionAndDirection', () => {
             width: 250,
             height: 50,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 100,
-            right: 300,
-            left: 200,
-            bottom: 150,
+          position: {
+            x: 200,
+            y: 150,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'downCenter',
@@ -217,13 +215,11 @@ describe('getComputedPositionAndDirection', () => {
             height: 100,
             width: 100,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 450,
-            right: 500,
-            left: 400,
-            bottom: 500,
+          position: {
+            x: 400,
+            y: 500,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'upCenter',
@@ -239,13 +235,11 @@ describe('getComputedPositionAndDirection', () => {
             width: 200,
             height: 50,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 0,
-            right: 100,
-            left: 0,
-            bottom: 50,
+          position: {
+            x: 0,
+            y: 50,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'downRight',
@@ -261,13 +255,11 @@ describe('getComputedPositionAndDirection', () => {
             width: 500,
             height: 50,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 0,
-            right: 500,
-            left: 400,
-            bottom: 50,
+          position: {
+            x: 400,
+            y: 50,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'downLeft',
@@ -283,13 +275,11 @@ describe('getComputedPositionAndDirection', () => {
             width: 200,
             height: 50,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 450,
-            right: 100,
-            left: 0,
-            bottom: 500,
+          position: {
+            x: 0,
+            y: 500,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'upRight',
@@ -305,13 +295,11 @@ describe('getComputedPositionAndDirection', () => {
             width: 200,
             height: 100,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 450,
-            right: 500,
-            left: 400,
-            bottom: 500,
+          position: {
+            x: 400,
+            y: 500,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'upLeft',
@@ -327,13 +315,11 @@ describe('getComputedPositionAndDirection', () => {
             height: 50,
             width: 500,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 0,
-            right: 100,
-            left: 0,
-            bottom: 50,
+          position: {
+            x: 0,
+            y: 50,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'right',
@@ -349,13 +335,11 @@ describe('getComputedPositionAndDirection', () => {
             height: 50,
             width: 500,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 0,
-            right: 500,
-            left: 400,
-            bottom: 50,
+          position: {
+            x: 400,
+            y: 50,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'left',
@@ -372,13 +356,11 @@ describe('getComputedPositionAndDirection', () => {
             height: 50,
             width: 100,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 0,
-            right: 100,
-            left: 0,
-            bottom: 50,
+          position: {
+            x: 0,
+            y: 50,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'upCenter',
@@ -395,13 +377,11 @@ describe('getComputedPositionAndDirection', () => {
             height: 1000,
             width: 1000,
           },
-          anchorClientRect: {
-            ...ANCHOR_SIZE,
-            top: 400,
-            right: 500,
-            left: 400,
-            bottom: 550,
+          position: {
+            x: 400,
+            y: 550,
           },
+          anchorSize: ANCHOR_SIZE,
         })
       ).toEqual({
         direction: 'downRight',
@@ -418,6 +398,7 @@ describe('getComputedPositionAndDirection', () => {
           tooltipSize: { width: 100, height: 50 },
           direction: 'downCenter',
           position: { x: 25, y: 500 },
+          offset: 0,
           possibleDirections: ['downCenter', 'downLeft', 'downRight'],
           bannedDirections: [],
         })
@@ -436,6 +417,7 @@ describe('getComputedPositionAndDirection', () => {
           tooltipSize: { width: 100, height: 50 },
           direction: 'upCenter',
           position: { x: 25, y: 500 },
+          offset: 0,
           possibleDirections: directions,
           bannedDirections: ['downCenter'],
         })
@@ -452,6 +434,7 @@ describe('getComputedPositionAndDirection', () => {
           tooltipSize: { width: 100, height: 50 },
           direction: 'downCenter',
           position: { x: 25, y: 500 },
+          offset: 0,
           possibleDirections: directions,
           bannedDirections: directions,
         })

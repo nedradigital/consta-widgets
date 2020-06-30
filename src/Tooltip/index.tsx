@@ -2,18 +2,18 @@ import React from 'react'
 
 import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
+import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
-import * as _ from 'lodash'
 
-import { PositionState } from '@/common/utils/tooltips'
-import { isDefinedPosition } from '@/common/utils/type-guards'
 import { PortalWithTheme } from '@/core/PortalWithTheme'
 
 import { getComputedPositionAndDirection } from './helpers'
 import css from './index.css'
+import { useTooltipReposition } from './use-tooltip-reposition'
+
+export { useTooltipReposition }
 
 const ARROW_SIZE = 6
-const ARROW_SIZE_OFFSET = ARROW_SIZE * 2
 
 export const directions = [
   'upLeft',
@@ -28,12 +28,16 @@ export const directions = [
 
 export type Direction = typeof directions[number]
 
+export type Position = { x: number; y: number } | undefined
+
 type AttachedToAnchor = {
   anchorRef: React.RefObject<HTMLElement>
+  position?: never
 }
 
 export type AttachedToPosition = {
-  position: PositionState
+  anchorRef?: never
+  position: Position
 }
 
 export type PositioningProps = AttachedToAnchor | AttachedToPosition
@@ -67,10 +71,6 @@ const directionClasses: Record<Direction, string> = {
   downRight: css.downRight,
 }
 
-const isAnchorRef = (
-  p: AttachedToAnchor['anchorRef'] | AttachedToPosition['position']
-): p is AttachedToAnchor['anchorRef'] => Boolean(p && 'current' in p)
-
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
     children,
@@ -78,100 +78,82 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     direction: passedDirection = 'upCenter',
     className,
     isContentHoverable,
-    offset = 0,
+    offset = 6,
     withArrow = true,
     possibleDirections = directions,
   } = props
-
-  const positionOrAnchorRef = 'position' in props ? props.position : props.anchorRef
-
-  const { theme, themeClassNames } = useTheme()
+  const passedPosition = 'position' in props ? props.position : undefined
+  const anchorRef = 'anchorRef' in props ? props.anchorRef : undefined
   const mainRef = React.useRef<HTMLDivElement>(null)
-  const [position, setPosition] = React.useState<PositionState>()
-  const [direction, setDirection] = React.useState<Direction>(passedDirection)
+  const { theme, themeClassNames } = useTheme()
+  const [anchorClientRect, setAnchorClientRect] = React.useState<DOMRect | undefined>()
+  const { width, height } = useComponentSize(mainRef)
+  const previousDirectionRef = React.useRef<Direction | null>(null)
+  const { current: previousDirection } = previousDirectionRef
   const [bannedDirections, setBannedDirections] = React.useState<readonly Direction[]>([])
 
-  const calculateLayout = React.useCallback(() => {
-    if (mainRef.current && isDefinedPosition(position)) {
-      let basePositionData
+  const resetBannedDirections = () => {
+    setBannedDirections(state => (state.length ? [] : state))
+    previousDirectionRef.current = null
+  }
 
-      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
-        basePositionData = { anchorClientRect: positionOrAnchorRef.current.getBoundingClientRect() }
-      } else if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
-        basePositionData = { position: positionOrAnchorRef }
-      } else {
-        return
-      }
-
-      const {
-        position: computedPosition,
-        direction: computedDirection,
-      } = getComputedPositionAndDirection({
-        tooltipSize: mainRef.current.getBoundingClientRect(),
-        parentSize: {
-          // Размер вьюпорта без скроллбаров
-          width: document.documentElement.clientWidth,
-          height: document.documentElement.clientHeight,
-        },
-        offset: offset + ARROW_SIZE_OFFSET,
-        direction: passedDirection,
-        possibleDirections,
-        bannedDirections,
-        ...basePositionData,
-      })
-
-      if (isDefinedPosition(computedPosition) && !_.isEqual(position, computedPosition)) {
-        setPosition(computedPosition)
-      }
-
-      if (direction !== computedDirection) {
-        if (isAnchorRef(positionOrAnchorRef)) {
-          /**
-           * Может возникнуть ситуация, когда перерасчет тултипа всегда будет выдавать 2 направления
-           * и бесконечно зацикливать себя, отчего будет падать всё приложение. Для избежания таких кейсов
-           * мы запоминаем стороны, которые не подошли, что бы не возвращаться к ним и предотвратить бесконечный ререндер.
-           * При закрытии тултипа эти стороны сбрасываются.
-           */
-          setBannedDirections([...bannedDirections, direction])
-        }
-
-        setDirection(computedDirection)
-      }
-    }
-  }, [
-    position,
-    direction,
-    mainRef,
-    offset,
-    possibleDirections,
-    passedDirection,
-    positionOrAnchorRef,
-    bannedDirections,
-  ])
+  const updateAnchorClientRect = React.useCallback(
+    () => setAnchorClientRect(anchorRef?.current?.getBoundingClientRect()),
+    [anchorRef]
+  )
 
   React.useLayoutEffect(() => {
-    if (isVisible && !mainRef.current && !isDefinedPosition(position)) {
-      if (isAnchorRef(positionOrAnchorRef) && positionOrAnchorRef.current) {
-        const { left, top } = positionOrAnchorRef.current.getBoundingClientRect()
-
-        return setPosition({ x: left, y: top })
-      }
-
-      if (!isAnchorRef(positionOrAnchorRef) && isDefinedPosition(positionOrAnchorRef)) {
-        return setPosition({ x: positionOrAnchorRef.x, y: positionOrAnchorRef.y })
-      }
-
-      return
+    if (isVisible) {
+      updateAnchorClientRect()
     }
+  }, [updateAnchorClientRect, isVisible])
 
-    if (mainRef.current && isDefinedPosition(position)) {
-      calculateLayout()
+  useTooltipReposition({
+    isActive: isVisible,
+    scrollAnchorRef: anchorRef || { current: null },
+    onRequestReposition: () => {
+      resetBannedDirections()
+      updateAnchorClientRect()
+    },
+  })
+
+  const { position, direction } = getComputedPositionAndDirection({
+    tooltipSize: { width, height },
+    parentSize: {
+      // Размер вьюпорта без скроллбаров
+      width: document.documentElement.clientWidth,
+      height: document.documentElement.clientHeight,
+    },
+    offset: offset + (withArrow ? ARROW_SIZE : 0),
+    direction: passedDirection,
+    possibleDirections,
+    bannedDirections,
+    position: anchorClientRect
+      ? { x: anchorClientRect.left, y: anchorClientRect.bottom }
+      : passedPosition,
+    anchorSize: anchorClientRect
+      ? { width: anchorClientRect.width, height: anchorClientRect.height }
+      : undefined,
+  })
+
+  /**
+   * Может возникнуть ситуация, когда перерасчет тултипа всегда будет выдавать 2 направления
+   * и бесконечно зацикливать себя. Для избежания таких кейсов мы запоминаем стороны,
+   * которые не подошли, чтобы не возвращаться к ним и предотвратить бесконечный ререндер.
+   * См. TooltipBannedPositionsStory
+   */
+  if (previousDirection !== direction) {
+    if (previousDirection && !bannedDirections.includes(previousDirection)) {
+      setBannedDirections([...bannedDirections, previousDirection])
     }
+    previousDirectionRef.current = direction
+  }
 
-    setBannedDirections(state => (!isVisible && bannedDirections.length ? [] : state))
-  }, [positionOrAnchorRef, isVisible, mainRef, position, calculateLayout, bannedDirections])
+  // Сбрасываем при любом изменении пропсов, чтобы заново начать перебор направлений
+  // Главное не сбрасывать при изменении размеров тултипа, т.к. именно оно может вызвать бесконечный перебор
+  React.useLayoutEffect(resetBannedDirections, [props])
 
-  if (!isVisible || !isDefinedPosition(position)) {
+  if (!isVisible) {
     return null
   }
 
@@ -187,8 +169,9 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
           isContentHoverable && css.isHoverable
         )}
         style={{
-          top: position.y,
-          left: position.x,
+          top: position?.y || 0,
+          left: position?.x || 0,
+          visibility: position ? undefined : 'hidden',
           ['--arrow-size' as string]: `${ARROW_SIZE}px`,
         }}
       >

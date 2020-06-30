@@ -16,10 +16,10 @@ import {
   isSelectedFiltersPresent,
   useSelectedFilters,
 } from '@/common/utils/table'
-import { Position } from '@/common/utils/tooltips'
 import { FilterTooltip } from '@/core/FilterTooltip'
 import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'
+import { Position } from '@/Tooltip'
 
 import { GroupLines } from './components/GroupLines'
 import { RoadmapText } from './components/RoadmapText'
@@ -80,7 +80,7 @@ type Props = Data & {
 type ActiveRowState = {
   id?: string
   groupIndex?: number
-  position?: Position
+  position: Position
 }
 
 export type MonthItem = {

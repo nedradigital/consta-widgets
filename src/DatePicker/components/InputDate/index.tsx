@@ -1,7 +1,6 @@
 import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
 import { TextField, TextFieldPropOnChange } from '@gpn-design/uikit/TextField'
 
-import { useTooltipReposition } from '@/common/utils/tooltips'
 import { isValidDate } from '@/common/utils/type-guards'
 import { Tooltip } from '@/Tooltip'
 
@@ -32,21 +31,9 @@ export const InputDate: React.FC<Props> = ({
   onChange,
   isCalendarOpened,
 }) => {
-  const [isTooltipVisible, setIsTooltipVisible] = React.useState<boolean>(!!tooltipContent)
   const [isRealDate, setIsRealDate] = React.useState(true)
   const ref = React.useRef<HTMLDivElement>(null)
   const inputRef = React.useRef<HTMLInputElement>(null)
-
-  // Переоткрываем тултип ошибки , если до этого он закрылся во время скролла или ресайза
-  React.useEffect(() => {
-    setIsTooltipVisible(!!tooltipContent)
-  }, [tooltipContent])
-
-  useTooltipReposition({
-    isVisible: isTooltipVisible,
-    anchorRef: ref,
-    onRequestReposition: () => setIsTooltipVisible(false),
-  })
 
   const checkIsRealDate = () => {
     if (inputRef.current) {
@@ -99,10 +86,9 @@ export const InputDate: React.FC<Props> = ({
         onBlur={handleBlur}
       />
       <Tooltip
-        isVisible={isTooltipVisible}
+        isVisible={!!tooltipContent}
         anchorRef={ref}
         direction="right"
-        offset={1}
         isContentHoverable
         className={css.tooltip}
       >
