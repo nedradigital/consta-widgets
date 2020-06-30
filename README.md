@@ -21,13 +21,33 @@ $ yarn add @csssr/gpn-components
 
 Для работы пакета необходимо установить библиотеку [`@gpn-design/uikit`](https://www.npmjs.com/package/@gpn-design/uikit) и [настроить тему](https://gpn-prototypes.github.io/ui-kit/?path=/docsx/ui-kit-theme--documentation).
 
-### Использование компонентов
+### Подключение стилей
 
 После установки пакета необходимо подключить стили для компонентов:
 
 ```js
 import '@csssr/gpn-components/lib/index.css'
 ```
+
+### Настройка порядка стилей
+
+Для правильного отображения стилей важно, чтобы стили `@gpn-design/uikit` были подключены раньше стилей компонентов. Для этого в настройках webpack нужно вынести стили uikit-а в отдельный файл и удостовериться, что он подключается раньше остальных css-файлов. Пример настройки webpack:
+```js
+optimization: {
+  splitChunks: {
+    cacheGroups: {
+      uikit: {
+        name: 'uikit',
+          test: /node_modules\/@gpn-design\/uikit\/.*\.css$/,
+          chunks: 'all',
+          enforce: true,
+      },
+    },
+  },
+},
+```
+
+### Настройка скейлинга
 
 Для корректной работы скейлинга компонентов, необходимо настроить базовый размер через CSS Custom Properties:
 
@@ -36,6 +56,8 @@ import '@csssr/gpn-components/lib/index.css'
   --dashboard-constructor-base-size: 16;
 }
 ```
+
+### Использование компонентов
 
 Пример импорта компонента:
 
