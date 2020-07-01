@@ -1,31 +1,15 @@
 .button {
-  @mixin button;
-
-  box-sizing: content-box;
-  width: calc-size(12);
-  height: calc-size(12);
-  padding: var(--space-2xs);
-
-  cursor: pointer;
-
   opacity: 0;
-  color: var(--color-control-typo-clear);
 
   transition: opacity var(--show-transition);
 
   &:hover {
     opacity: 1 !important;
-    color: var(--color-control-typo-clear-hover) !important;
   }
 
   &.isOpened {
     opacity: 1;
-    color: var(--color-control-typo-clear-hover);
   }
-}
-
-.iconFilter {
-  display: block;
 }
 
 .tooltip {

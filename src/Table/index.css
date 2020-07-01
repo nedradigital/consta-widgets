@@ -58,149 +58,21 @@
   display: contents;
 }
 
-.cell {
-  z-index: var(--table-z);
+.headerRow {
+  display: contents;
+}
 
-  box-sizing: border-box;
-
-  color: var(--color-typo-primary);
-  background-color: var(--color-bg-default);
-
-  &.withoutBorder {
-    border: none;
+.headerCell {
+  & + & {
+    border-left: 1px solid transparent;
   }
 
-  &.isResized {
-    @mixin hyphens;
-  }
-
-  &.isClickable {
-    cursor: pointer;
-  }
-
-  &.stickyOnTop,
-  &.stickyOnLeft {
-    position: sticky;
-  }
-
-  &.stickyOnTop {
-    z-index: var(--sticky-top-z);
-    top: 0;
-
-    &.isHeader {
-      border-bottom: 1px solid var(--color-bg-border);
-    }
-
-    &.isResizer {
-      z-index: calc(var(--sticky-top-and-left-z) + 1);
-    }
-  }
-
-  &.stickyOnLeft {
-    z-index: var(--sticky-left-z);
-    left: 0;
-
-    &.isHeader {
-      z-index: var(--sticky-top-and-left-z);
-    }
-
-    &.isResizer {
-      z-index: calc(var(--sticky-top-and-left-z) + 1);
-    }
-  }
-
-  &.isHeader {
-    font-size: var(--size-text-xs);
-    font-weight: bold;
-    line-height: var(--line-height-text-xs);
-
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  &:not(.isHeader) {
-    font-size: var(--size-text-s);
-    line-height: var(--line-height-text-s);
-  }
-
-  .borderBetweenRows .cellsRow + .cellsRow & {
-    border-top: var(--table-border);
-  }
-
-  .borderBetweenColumns .cellsRow & + & {
-    border-left: var(--table-border);
+  .headerRow:hover & {
+    border-left-color: var(--color-bg-border);
   }
 }
 
-.wrapper {
-  position: relative;
-
-  display: flex;
-
-  height: 100%;
-
-  &.verticalAlignTop {
-    align-items: flex-start;
-  }
-
-  &.verticalAlignCenter {
-    align-items: center;
-  }
-
-  &.verticalAlignBottom {
-    align-items: flex-end;
-  }
-
-  &.horizontalAlignLeft {
-    justify-content: flex-start;
-  }
-
-  &.horizontalAlignCenter {
-    justify-content: center;
-
-    text-align: center;
-  }
-
-  &.horizontalAlignRight {
-    justify-content: flex-end;
-
-    text-align: right;
-  }
-
-  &:not(.withoutPadding) {
-    box-sizing: border-box;
-    padding-top: var(--cell-padding-vertical);
-    padding-right: calc(var(--cell-padding-horizontal) + var(--resizer-width));
-    padding-bottom: var(--cell-padding-vertical);
-    padding-left: var(--cell-padding-horizontal);
-  }
-
-  .cell.stickyOnLeft &::after {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-
-    width: var(--space-s);
-
-    content: '';
-    pointer-events: none;
-
-    opacity: 0;
-    background: linear-gradient(90deg, var(--shadow-color), transparent);
-
-    transition: opacity var(--fast-transition);
-    transform: translateX(100%);
-
-    .showVerticalCellShadow & {
-      opacity: 1;
-    }
-  }
-
-  .cellsRow & {
-    height: 100%;
-  }
-
+.contentCell {
   .isZebraStriped .cellsRow:nth-child(even) & {
     background-color: var(--color-bg-stripe);
   }
@@ -222,57 +94,42 @@
   display: inline-block;
 }
 
-.icon {
-  @mixin button;
+.buttons {
+  --half-cell-padding-horizontal: calc(var(--cell-padding-horizontal) * 0.5);
 
   position: absolute;
-  z-index: calc(var(--resizer-z) + 1);
-  top: calc(var(--space-2xs) * -1);
+  top: 50%;
+  right: calc(var(--half-cell-padding-horizontal) + var(--resizer-width));
 
-  box-sizing: content-box;
-  width: calc-size(12);
-  height: calc-size(12);
-  padding: var(--space-2xs);
+  display: flex;
 
-  cursor: pointer;
-
-  color: var(--color-control-typo-clear);
-
-  fill: currentColor;
-
-  &:hover {
-    color: var(--color-control-typo-clear-hover);
-  }
-
-  .cell:not(:hover) & {
-    visibility: hidden;
-  }
+  transform: translateY(-50%);
 }
 
-.iconFilter {
-  left: 0;
+.icon {
+  opacity: 0;
 
-  transform: translateX(-100%);
+  transition: opacity 0.3s;
 
-  .cell.isFilterOpened & {
-    visibility: initial;
+  .headerRow:hover & {
+    opacity: 0.4;
   }
 
-  .cell:hover:not(.isFilterOpened) & {
+  .headerCell:hover & {
     opacity: 1;
-    color: var(--color-control-typo-clear);
   }
 }
 
 .iconSort {
-  right: 0;
+  .buttons.isSortingActive & {
+    opacity: 1;
+  }
+}
 
-  overflow: visible;
-
-  transform: translateX(100%);
-
-  .cell.isSortingActive & {
-    visibility: initial;
+.iconFilter {
+  .buttons:hover:not(.isFilterOpened) &,
+  .buttons.isFilterActive & {
+    opacity: 1;
   }
 }
 
@@ -313,4 +170,15 @@
       opacity: 1;
     }
   }
+}
+
+.emptyCell {
+  display: flex;
+  justify-content: center;
+
+  height: 100%;
+  padding-top: var(--cell-padding-vertical);
+  padding-bottom: var(--cell-padding-vertical);
+
+  text-align: center;
 }

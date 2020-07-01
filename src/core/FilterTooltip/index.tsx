@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
+import { Button } from '@gpn-design/uikit/Button'
 import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
@@ -45,14 +46,16 @@ export const FilterTooltip: React.FC<Props> = ({
 
   return (
     <>
-      <button
-        type="button"
-        ref={buttonRef}
-        className={classnames(css.button, isOpened && css.isOpened, className)}
+      <Button
+        innerRef={buttonRef}
+        size="xs"
+        iconSize="xs"
+        view="clear"
+        onlyIcon
         onClick={onToggle}
-      >
-        <IconFunnel size="xs" className={css.iconFilter} />
-      </button>
+        className={classnames(css.button, isOpened && css.isOpened, className)}
+        iconLeft={IconFunnel}
+      />
       <Tooltip
         isContentHoverable
         isVisible={isOpened}

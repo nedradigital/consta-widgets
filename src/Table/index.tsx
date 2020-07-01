@@ -1,5 +1,6 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { Button } from '@gpn-design/uikit/Button'
 import { IconAlignLeft } from '@gpn-design/uikit/IconAlignLeft'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
@@ -26,12 +27,11 @@ import { FilterTooltip } from '@/core/FilterTooltip'
 import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'
 
+import { Cell, HorizontalAlign, VerticalAlign } from './components/Cell'
 import { Resizer } from './components/Resizer'
 import { getColumnLeftOffset, getColumnsSize, getNewSorting } from './helpers'
 import css from './index.css'
 
-type VerticalAlign = 'top' | 'center' | 'bottom'
-type HorizontalAlign = 'left' | 'center' | 'right'
 type Size = 's' | 'm' | 'l'
 
 type TableCSSCustomProperty = {
@@ -75,24 +75,6 @@ const sizeClasses: Record<Size, string> = {
   l: css.sizeL,
 }
 
-const verticalCellAlignClasses: Record<VerticalAlign, string> = {
-  top: css.verticalAlignTop,
-  center: css.verticalAlignCenter,
-  bottom: css.verticalAlignBottom,
-}
-
-const horizontalCellAlignClasses: Record<HorizontalAlign, string> = {
-  left: css.horizontalAlignLeft,
-  center: css.horizontalAlignCenter,
-  right: css.horizontalAlignRight,
-}
-
-const defaultEmptyRowsPlaceholder = (
-  <Text as="span" view="primary" size="s" lineHeight="s">
-    Нет данных
-  </Text>
-)
-
 const headerShadow = (
   <div className={classnames(css.headerShadowWrapper)}>
     <div className={css.headerShadow} />
@@ -102,9 +84,11 @@ const headerShadow = (
 const getColumnSortByField = <T extends BasicTableRow>(column: Column<T>): RowField<T> =>
   (column.sortable && column.sortByField) || column.accessor
 
-const getHorizontalAlign = (align: HorizontalAlign = 'left') => {
-  return horizontalCellAlignClasses[align]
-}
+const defaultEmptyRowsPlaceholder = (
+  <Text as="span" view="primary" size="s" lineHeight="s">
+    Нет данных
+  </Text>
+)
 
 export const Table = <T extends BasicTableRow>({
   columns,
@@ -173,12 +157,11 @@ export const Table = <T extends BasicTableRow>({
   const isSortedByColumn = (column: Column<T>) => getColumnSortByField(column) === sorting?.by
 
   const getSortIcon = (column: Column<T>) => {
-    const IconSort =
+    return (
       (isSortedByColumn(column) && (sorting?.order === 'desc' ? IconSortDown : IconSortUp)) ||
       // todo заменить на соответствующую иконку, когда добавят в ui-kit: https://github.com/gpn-prototypes/ui-kit/issues/212
       IconAlignLeft
-
-    return <IconSort size="xs" />
+    )
   }
 
   const handleSortClick = (column: Column<T>) => {
@@ -278,10 +261,13 @@ export const Table = <T extends BasicTableRow>({
     const showResizer =
       stickyColumns > columnIndex ||
       stickyColumnsWidth + tableScroll.left < columnLeftOffset + columnWidth
+    const isFilterActive = selectedFilters[column.accessor].length > 0
 
     return {
       ...column,
+      filterable: filters && fieldFiltersPresent(filters, column.accessor),
       isSortingActive: isSortedByColumn(column),
+      isFilterActive,
       isResized,
       isSticky,
       showResizer,
@@ -315,11 +301,8 @@ export const Table = <T extends BasicTableRow>({
         css.table,
         sizeClasses[size],
         isResizable && css.isResizable,
-        showVerticalCellShadow && css.showVerticalCellShadow,
         showHorizontalCellShadow && stickyHeader && css.showHorizontalCellShadow,
-        isZebraStriped && css.isZebraStriped,
-        borderBetweenRows && css.borderBetweenRows,
-        borderBetweenColumns && css.borderBetweenColumns
+        isZebraStriped && css.isZebraStriped
       )}
       style={tableStyle}
       onScroll={handleScroll}
@@ -336,49 +319,58 @@ export const Table = <T extends BasicTableRow>({
         таблицу по высоте, поэтому от этого способа отказались.
       */}
       {columnsWithMetaData.map((column, columnIdx) => (
-        <div
+        <Cell
+          type="resizer"
           key={columnIdx}
           ref={ref => (columnsRefs.current[columnIdx] = ref)}
-          className={classnames(
-            css.cell,
-            css.isResizer,
-            css.withoutBorder,
-            css.stickyOnTop,
-            column.isSticky && css.stickyOnLeft
-          )}
           style={{
             left: getStickyLeftOffset(columnIdx),
           }}
+          column={column}
+          showVerticalShadow={showVerticalCellShadow}
         >
-          <div className={classnames(css.wrapper, css.withoutPadding)}>
-            {isResizable && (
-              <Resizer
-                height={tableHeight}
-                isVisible={column.showResizer}
-                onResize={delta => handleColumnResize(columnIdx, delta)}
-                onDoubleClick={() => updateColumnWidth(columnIdx, initialColumnWidths[columnIdx])}
-              />
-            )}
-          </div>
-        </div>
-      ))}
-      {columnsWithMetaData.map((column, columnIdx) => (
-        <div
-          key={column.accessor}
-          ref={columnIdx === 0 ? firstHeaderColumnRef : undefined}
-          className={classnames(
-            css.cell,
-            css.isHeader,
-            stickyHeader && css.stickyOnTop,
-            column.isResized && css.isResized,
-            column.isSticky && css.stickyOnLeft,
-            column.isSortingActive && css.isSortingActive
+          {isResizable && (
+            <Resizer
+              height={tableHeight}
+              isVisible={column.showResizer}
+              onResize={delta => handleColumnResize(columnIdx, delta)}
+              onDoubleClick={() => updateColumnWidth(columnIdx, initialColumnWidths[columnIdx])}
+            />
           )}
-          style={{ left: getStickyLeftOffset(columnIdx) }}
-        >
-          <div className={classnames(css.wrapper, getHorizontalAlign(column.align))}>
-            <div className={css.title}>
-              {filters && fieldFiltersPresent(filters, column.accessor) && (
+        </Cell>
+      ))}
+      <div className={css.headerRow}>
+        {columnsWithMetaData.map((column, columnIdx) => (
+          <Cell
+            type="header"
+            key={column.accessor}
+            ref={columnIdx === 0 ? firstHeaderColumnRef : undefined}
+            style={{ left: getStickyLeftOffset(columnIdx) }}
+            isSticky={stickyHeader}
+            column={column}
+            className={css.headerCell}
+            showVerticalShadow={showVerticalCellShadow}
+          >
+            <div className={css.title}>{column.title}</div>
+            <div
+              className={classnames(
+                css.buttons,
+                column.isSortingActive && css.isSortingActive,
+                column.isFilterActive && css.isFilterActive
+              )}
+            >
+              {column.sortable && (
+                <Button
+                  size="xs"
+                  iconSize="xs"
+                  view="clear"
+                  onlyIcon
+                  onClick={() => handleSortClick(column)}
+                  iconLeft={getSortIcon(column)}
+                  className={classnames(css.icon, css.iconSort, css.isSortingActive)}
+                />
+              )}
+              {filters && column.filterable && (
                 <FilterTooltip
                   field={column.accessor}
                   isOpened={visibleFilter === column.accessor}
@@ -389,20 +381,10 @@ export const Table = <T extends BasicTableRow>({
                   className={classnames(css.icon, css.iconFilter)}
                 />
               )}
-              {column.title}
-              {column.sortable && (
-                <button
-                  type="button"
-                  className={classnames(css.icon, css.iconSort)}
-                  onClick={() => handleSortClick(column)}
-                >
-                  {getSortIcon(column)}
-                </button>
-              )}
             </div>
-          </div>
-        </div>
-      ))}
+          </Cell>
+        ))}
+      </div>
       {/*
         Рендерим тень заголовка отдельно чтобы избежать возможных наложений
         теней для ячеек заголовка и ячеек прикрепленных слева.
@@ -419,39 +401,30 @@ export const Table = <T extends BasicTableRow>({
         </div>
       )}
       {filteredData.length > 0 ? (
-        filteredData.map(row => (
+        filteredData.map((row, rowIdx) => (
           <div key={row.id} className={css.cellsRow}>
             {columnsWithMetaData.map((column, columnIdx) => (
-              <div
+              <Cell
+                type="content"
                 key={column.accessor}
-                className={classnames(
-                  css.cell,
-                  column.isSticky && css.stickyOnLeft,
-                  isRowsClickable && css.isClickable,
-                  column.isResized && css.isResized
-                )}
                 style={{ left: getStickyLeftOffset(columnIdx) }}
+                wrapperClassName={classnames(css.contentCell, getRowStatus(row.id))}
                 onClick={handleSelectRow(row.id)}
+                column={column}
+                verticalAlign={verticalAlign}
+                isClickable={!!isRowsClickable}
+                showVerticalShadow={showVerticalCellShadow}
+                isBorderTop={rowIdx > 0 && borderBetweenRows}
+                isBorderLeft={columnIdx > 0 && borderBetweenColumns}
               >
-                <div
-                  className={classnames(
-                    css.wrapper,
-                    verticalCellAlignClasses[verticalAlign],
-                    getHorizontalAlign(column.align),
-                    getRowStatus(row.id)
-                  )}
-                >
-                  {row[column.accessor]}
-                </div>
-              </div>
+                {row[column.accessor]}
+              </Cell>
             ))}
           </div>
         ))
       ) : (
         <div className={css.rowWithoutCells}>
-          <div className={classnames(css.wrapper, css.horizontalAlignCenter)}>
-            {emptyRowsPlaceholder}
-          </div>
+          <div className={classnames(css.emptyCell)}>{emptyRowsPlaceholder}</div>
         </div>
       )}
     </div>
