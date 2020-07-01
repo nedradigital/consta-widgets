@@ -70,6 +70,7 @@ export const CoreBarChart: React.FC<Props> = props => {
   const { width, height } = useComponentSize(ref)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const [tooltipData, setTooltipData] = useState<TooltipData>()
+  const [labelSize, changeLabelSize] = useState<number>(0)
 
   const showReversed = groups.some(group =>
     group.reversedColumns.some(column => column && column.sections)
@@ -85,8 +86,10 @@ export const CoreBarChart: React.FC<Props> = props => {
   })
   const padding = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
   const paddingCount = showReversed ? 2 : 1
+  const paddingTop = !isHorizontal && showValues ? labelSize : 0
+  const paddingBottom = showReversed ? paddingTop : 0
   const svgWidth = width ? Math.round(width - padding * paddingCount) : 0
-  const svgHeight = height ? Math.round(height) : 0
+  const svgHeight = height ? Math.round(height - (paddingTop + paddingBottom)) : 0
   const scaler = getScaler({ maxValue, showReversed })
   const groupScale = scaleBand({
     range: getRange(isHorizontal ? svgHeight : svgWidth),
@@ -103,9 +106,13 @@ export const CoreBarChart: React.FC<Props> = props => {
   const gridXTickValues = isHorizontal ? gridItems : []
   const gridYTickValues = isHorizontal ? [] : gridItems
   const axisShowPositions = getAxisShowPositions({ isHorizontal, showReversed })
-  const commonStyle = {
+  const horizontalStyles = {
     paddingLeft: showReversed ? padding : 0,
     paddingRight: padding,
+  }
+  const verticalStyles = {
+    paddingTop,
+    paddingBottom,
   }
 
   return (
@@ -120,11 +127,17 @@ export const CoreBarChart: React.FC<Props> = props => {
       size={toAxisSize(columnSize)}
       formatValue={formatValueForLabel}
       showPositions={axisShowPositions}
-      horizontalStyles={commonStyle}
-      showValues={showValues}
-      isNegative={showReversed}
+      horizontalStyles={horizontalStyles}
+      verticalStyles={verticalStyles}
     >
-      <div ref={ref} className={css.main} style={commonStyle}>
+      <div
+        ref={ref}
+        className={css.main}
+        style={{
+          ...horizontalStyles,
+          ...verticalStyles,
+        }}
+      >
         <svg className={css.svg} width={svgWidth} height={svgHeight} ref={svgRef}>
           <Grid
             scalerX={valuesScale}
@@ -136,7 +149,7 @@ export const CoreBarChart: React.FC<Props> = props => {
           />
         </svg>
         <div className={classnames(css.chart, isHorizontal && css.isHorizontal)}>
-          {groups.map(group => (
+          {groups.map((group, idx) => (
             <Group
               {...group}
               key={group.name}
@@ -147,6 +160,7 @@ export const CoreBarChart: React.FC<Props> = props => {
               scaler={scaler}
               onMouseEnterColumn={setTooltipData}
               onMouseLeaveColumn={() => setTooltipData(undefined)}
+              onChangeLabelSize={idx === 0 ? changeLabelSize : undefined}
             />
           ))}
         </div>

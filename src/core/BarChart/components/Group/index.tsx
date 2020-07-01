@@ -22,6 +22,7 @@ type Props = {
   scaler: (size: number, value: number) => number
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
+  onChangeLabelSize?: (siez: number) => void
 }
 
 const sizeClasses: Record<ColumnSize, string> = {
@@ -42,6 +43,7 @@ export const Group: React.FC<Props> = ({
   scaler,
   onMouseEnterColumn,
   onMouseLeaveColumn,
+  onChangeLabelSize,
 }) => {
   const columnsRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(columnsRef)
@@ -69,6 +71,7 @@ export const Group: React.FC<Props> = ({
         showValues={showValues}
         onMouseEnterColumn={onMouseEnterColumn}
         onMouseLeaveColumn={onMouseLeaveColumn}
+        onChangeLabelSize={index === 0 ? onChangeLabelSize : undefined}
       />
     )
   }
