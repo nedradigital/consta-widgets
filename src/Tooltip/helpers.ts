@@ -49,30 +49,11 @@ const getDirectionAndPosition = ({
 
       const isFittingDown = pos.y + height <= parentSize.height
       const isFittingUp = pos.y >= 0
-      const isFittingVerticallyCenter = isFittingUp && isFittingDown
 
       const isFittingLeft = pos.x >= 0
       const isFittingRight = pos.x + width <= parentSize.width
-      const isFittingHorizontallyCenter = isFittingLeft && isFittingRight
 
-      switch (dir) {
-        case 'left':
-          return isFittingVerticallyCenter && isFittingLeft
-        case 'right':
-          return isFittingVerticallyCenter && isFittingRight
-        case 'upCenter':
-          return isFittingUp && isFittingHorizontallyCenter
-        case 'upLeft':
-          return isFittingUp && isFittingLeft
-        case 'upRight':
-          return isFittingUp && isFittingRight
-        case 'downCenter':
-          return isFittingDown && isFittingHorizontallyCenter
-        case 'downLeft':
-          return isFittingDown && isFittingLeft
-        case 'downRight':
-          return isFittingDown && isFittingRight
-      }
+      return isFittingUp && isFittingDown && isFittingLeft && isFittingRight
     })
 
   const direction = result || initialDirection
@@ -118,9 +99,9 @@ export const getComputedPositionAndDirection = ({
   const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
   const { width: anchorWidth, height: anchorHeight } = anchorSize
 
-  const leftPositionX = Math.round(position.x - Math.abs(tooltipWidth - anchorWidth))
+  const leftPositionX = Math.round(position.x + anchorWidth - tooltipWidth)
   const rightPositionX = Math.round(position.x)
-  const centerPositionX = Math.round(position.x - Math.abs(tooltipWidth - anchorWidth) / 2)
+  const centerPositionX = Math.round(position.x + anchorWidth / 2 - tooltipWidth / 2)
   const upPositionY = Math.round(position.y - anchorHeight - tooltipHeight - offset)
   const downPositionY = Math.round(position.y + offset)
   const centerPositionY = Math.round(position.y - anchorHeight / 2 - tooltipHeight / 2)

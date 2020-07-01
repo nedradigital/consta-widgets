@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 
+import { Button } from '@gpn-design/uikit/Button'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
@@ -53,19 +54,12 @@ export const TooltipPositionedByAnchorStory = createStory(
             justifyContent: 'center',
           }}
         >
-          <button
+          <Button
+            label="Кликай сюда"
             type="button"
-            style={{
-              width: 100,
-              height: 50,
-              backgroundColor: 'var(--color-bg-alert)',
-              cursor: 'pointer',
-            }}
             onClick={handleClickOnAnchor}
-            ref={anchorRef}
-          >
-            Кликай сюда
-          </button>
+            innerRef={anchorRef}
+          />
         </div>
         <Tooltip
           isVisible={isTooltipVisible}
