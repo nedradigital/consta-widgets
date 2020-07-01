@@ -2068,10 +2068,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@csssr/gpn-configs@0.2.23":
-  version "0.2.23"
-  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.23/08682c9caf8a6a1c4bf2cc6c19e6add5d30ce4390042a9954f39285724c5e695#d0433a8b61beb3c5af08b8beae8bfd8931ade12b"
-  integrity sha512-5XYYj+khI9weYkjDcjsrSi+622kFQ5NW9y2Zgilwso76ygWyAMHv1GCjIcdppB3Hu25T5pSN8md2BVGjfRvS6w==
+"@csssr/gpn-configs@0.2.24":
+  version "0.2.24"
+  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.24/cfda54d48d4923806671d752765425ee5a84295de5b91ffc2ded83a098e21744#de1c35adebc95ec60b42dcd04cb421c16c62b3d8"
+  integrity sha512-dvTkhUGZ4iT2pH7lDK5n5Z0Qp8TjkLC5heMrXb0UgB+CKwtFrNGpHtdOCd8e0hZIUOVdo8f8TNToe2F1fW/owg==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
