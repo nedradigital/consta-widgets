@@ -14,16 +14,28 @@ import { useTooltipReposition } from './use-tooltip-reposition'
 export { useTooltipReposition }
 
 const ARROW_SIZE = 6
+const ARROW_OFFSET = 8
 
+/**
+ * Стороны упорядочены по приоритету:
+ * Используется первая сторона, в которую смог вписаться тултип.
+ */
 export const directions = [
-  'upLeft',
-  'upCenter',
-  'upRight',
-  'left',
-  'right',
-  'downLeft',
   'downCenter',
+  'upCenter',
+
   'downRight',
+  'downLeft',
+  'upRight',
+  'upLeft',
+
+  'leftUp',
+  'leftCenter',
+  'leftDown',
+
+  'rightUp',
+  'rightCenter',
+  'rightDown',
 ] as const
 
 export type Direction = typeof directions[number]
@@ -59,17 +71,6 @@ type Props = {
         renderContent: (direction: Direction) => React.ReactNode
       }
   )
-
-const directionClasses: Record<Direction, string> = {
-  upLeft: css.upLeft,
-  upCenter: css.upCenter,
-  upRight: css.upRight,
-  left: css.left,
-  right: css.right,
-  downLeft: css.downLeft,
-  downCenter: css.downCenter,
-  downRight: css.downRight,
-}
 
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
@@ -119,17 +120,18 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
 
   const { position, direction } = getComputedPositionAndDirection({
     tooltipSize: { width, height },
-    parentSize: {
+    viewportSize: {
       // Размер вьюпорта без скроллбаров
       width: document.documentElement.clientWidth,
       height: document.documentElement.clientHeight,
     },
     offset: offset + (withArrow ? ARROW_SIZE : 0),
+    arrowOffset: withArrow ? ARROW_OFFSET + ARROW_SIZE : 0,
     direction: passedDirection,
     possibleDirections,
     bannedDirections,
     position: anchorClientRect
-      ? { x: anchorClientRect.left, y: anchorClientRect.bottom }
+      ? { x: anchorClientRect.left, y: anchorClientRect.top }
       : passedPosition,
     anchorSize: anchorClientRect
       ? { width: anchorClientRect.width, height: anchorClientRect.height }
@@ -164,18 +166,19 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         className={classnames(
           themeClassNames.color.invert,
           css.main,
-          directionClasses[direction],
-          withArrow && css.withArrow,
+          css[direction],
           isContentHoverable && css.isHoverable
         )}
         style={{
-          top: position?.y || 0,
-          left: position?.x || 0,
+          top: (position?.y || 0) + window.scrollY,
+          left: (position?.x || 0) + window.screenX,
           visibility: position ? undefined : 'hidden',
           ['--arrow-size' as string]: `${ARROW_SIZE}px`,
+          ['--arrow-offset' as string]: `${ARROW_OFFSET}px`,
         }}
       >
         <div ref={ref} className={classnames(css.tooltip, className)}>
+          {withArrow && <div className={css.arrow} />}
           {'renderContent' in props ? (
             props.renderContent(direction)
           ) : (

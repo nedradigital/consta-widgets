@@ -108,6 +108,19 @@ const renderComment = (comment: string) => {
   )
 }
 
+const getDirectionClassname = (direction: Direction): string | undefined => {
+  switch (direction) {
+    case 'upLeft':
+      return css.upLeft
+    case 'upRight':
+      return css.upRight
+    case 'downLeft':
+      return css.downLeft
+    case 'downRight':
+      return css.downRight
+  }
+}
+
 export const RoadmapTooltip: React.FC<Props> = ({
   anchorRef,
   color,
@@ -163,24 +176,8 @@ export const RoadmapTooltip: React.FC<Props> = ({
     </div>,
   ] as const
 
-  const renderContent = (contentDirection: Direction) => (
-    <div
-      className={classnames(
-        css.main,
-        {
-          left: '',
-          right: '',
-          upLeft: css.upLeft,
-          upCenter: '',
-          upRight: css.upRight,
-          downLeft: css.downLeft,
-          downCenter: '',
-          downRight: css.downRight,
-        }[contentDirection]
-      )}
-    >
-      {content}
-    </div>
+  const renderContent = (direction: Direction) => (
+    <div className={classnames(css.main, getDirectionClassname(direction))}>{content}</div>
   )
 
   return (

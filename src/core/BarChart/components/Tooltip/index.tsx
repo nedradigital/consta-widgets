@@ -22,7 +22,7 @@ export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = Str
     <BaseTooltip
       isVisible={true}
       position={{ x: data.x, y: data.y }}
-      direction={isHorizontal ? 'upCenter' : 'left'}
+      direction={isHorizontal ? 'upCenter' : 'leftCenter'}
       offset={0}
     >
       {data.sections.map(section =>

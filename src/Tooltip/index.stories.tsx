@@ -63,7 +63,7 @@ export const TooltipPositionedByAnchorStory = createStory(
         </div>
         <Tooltip
           isVisible={isTooltipVisible}
-          direction={select('direction', directions, 'left')}
+          direction={select('direction', directions, 'leftCenter')}
           anchorRef={anchorRef}
           offset={number('offset', 6)}
           withArrow={boolean('withArrow', false)}
@@ -72,6 +72,11 @@ export const TooltipPositionedByAnchorStory = createStory(
           {text('children', 'Hello, from Portal!')}
           {boolean('С интерактивным содержимым', false) && (
             <>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
               <br />
               <input />
             </>
@@ -174,7 +179,7 @@ export const TooltipBannedPositionsStory = createStory(
           anchorRef={anchorRef}
           offset={0}
           direction="upRight"
-          possibleDirections={['upRight', 'left']}
+          possibleDirections={['upRight', 'leftCenter']}
           isContentHoverable
           renderContent={direction => (
             <div

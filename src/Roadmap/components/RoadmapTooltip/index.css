@@ -52,19 +52,13 @@
     var(--border-bottom-right-radius) var(--border-bottom-left-radius);
   background: var(--color-bg-default);
 
-  :--isTopLeft & {
+  :--isTop & {
     --border-bottom-left-radius: var(--control-radius);
-  }
-
-  :--isTopRight & {
     --border-bottom-right-radius: var(--control-radius);
   }
 
-  :--isBottomLeft & {
+  :--isBottom & {
     --border-top-left-radius: var(--control-radius);
-  }
-
-  :--isBottomRight & {
     --border-top-right-radius: var(--control-radius);
   }
 }
