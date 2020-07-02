@@ -8,10 +8,8 @@
 }
 
 .tooltip {
-  --tooltip-vertical-padding: var(--space-l);
-  --tooltip-horizontal-padding: var(--space-l);
-
-  max-width: none;
+  max-width: none !important;
+  padding: var(--space-l);
 }
 
 .warningTooltip {

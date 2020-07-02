@@ -1,13 +1,12 @@
-import React, { RefObject, useState } from 'react'
+import React, { RefObject } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
-import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
-import { IconChat } from '@gpn-design/uikit/IconChat'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
-import { Direction, Position, Tooltip, useTooltipReposition } from '@/Tooltip'
+import { Position, Tooltip, useTooltipReposition } from '@/Tooltip'
 
 import { Item } from '../..'
 
@@ -22,14 +21,10 @@ type Props = {
   forecast?: Item
   title?: string
   comment?: string
-  onRequestReposition: () => void
+  onRequestClose: () => void
 }
 
 const MAX_LENGTH_COMMENT = 280
-const CLEAN_COMMENT = 'Комментария нет'
-
-const stopEventHandler = (event: React.MouseEvent<HTMLElement, MouseEvent>) =>
-  event.stopPropagation()
 
 const getDayText = (start: number, end: number) =>
   getDayPlural(daysDiff(getStartOfDay(start), getEndOfDay(end)))
@@ -50,19 +45,13 @@ const DateText: React.FC<{ label: string; startDate: number; endDate: number }> 
   </>
 )
 
-const renderDates = ({
-  color,
-  title,
-  plan,
-  fact,
-  forecast,
-}: {
+const Dates: React.FC<{
   color: string
   title?: string
   plan?: Item
   fact?: Item
   forecast?: Item
-}) => (
+}> = ({ color, title, plan, fact, forecast }) => (
   <>
     {title && (
       <div className={css.dateBlock}>
@@ -92,11 +81,15 @@ const renderDates = ({
   </>
 )
 
-const renderComment = (comment: string) => {
+const Comment: React.FC<{ comment?: string }> = ({ comment }) => {
+  if (!comment) {
+    return null
+  }
+
   const text = comment.substr(0, MAX_LENGTH_COMMENT)
 
   return (
-    <>
+    <div className={css.comment}>
       <Text as="div" size="xs" transform="uppercase" weight="bold" spacing="xs" view="primary">
         Комментарий:
       </Text>
@@ -104,21 +97,8 @@ const renderComment = (comment: string) => {
         {text}
         {comment.length > MAX_LENGTH_COMMENT ? '...' : ''}
       </Text>
-    </>
+    </div>
   )
-}
-
-const getDirectionClassname = (direction: Direction): string | undefined => {
-  switch (direction) {
-    case 'upLeft':
-      return css.upLeft
-    case 'upRight':
-      return css.upRight
-    case 'downLeft':
-      return css.downLeft
-    case 'downRight':
-      return css.downRight
-  }
 }
 
 export const RoadmapTooltip: React.FC<Props> = ({
@@ -130,65 +110,34 @@ export const RoadmapTooltip: React.FC<Props> = ({
   plan,
   title,
   comment,
-  onRequestReposition,
+  onRequestClose,
 }) => {
-  const [activeSection, changeActiveSection] = useState<'dates' | 'comment'>('dates')
+  const ref = React.useRef(null)
 
   useTooltipReposition({
     isActive: true,
     scrollAnchorRef: anchorRef,
-    onRequestReposition,
+    onRequestReposition: onRequestClose,
   })
 
-  const isActiveDates = activeSection === 'dates'
-  const isActiveComment = activeSection === 'comment'
-  const content = [
-    <div
-      onClick={stopEventHandler}
-      key="content"
-      className={classnames(css.content, isActiveDates && css.dates)}
-    >
-      {isActiveComment
-        ? renderComment(comment || CLEAN_COMMENT)
-        : renderDates({ color, title, fact, plan, forecast })}
-    </div>,
-    <div key="buttons" className={css.buttons}>
-      <button
-        type="button"
-        className={classnames(css.button, css.dates, isActiveDates && css.active)}
-        onClick={event => {
-          stopEventHandler(event)
-          changeActiveSection('dates')
-        }}
-      >
-        <IconCalendar size="s" view="primary" className={css.icon} />
-      </button>
-      <button
-        type="button"
-        className={classnames(css.button, css.comment, isActiveComment && css.active)}
-        onClick={event => {
-          stopEventHandler(event)
-          changeActiveSection('comment')
-        }}
-      >
-        <IconChat size="s" view="primary" className={css.icon} />
-      </button>
-    </div>,
-  ] as const
-
-  const renderContent = (direction: Direction) => (
-    <div className={classnames(css.main, getDirectionClassname(direction))}>{content}</div>
-  )
+  useClickOutside({
+    isActive: true,
+    handler: onRequestClose,
+    ignoreClicksInsideRefs: [ref],
+  })
 
   return (
     <Tooltip
+      ref={ref}
       direction="upRight"
       isVisible
+      size="l"
       isContentHoverable
-      renderContent={renderContent}
-      className={css.tooltip}
       possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
       position={position}
-    />
+    >
+      <Dates color={color} title={title} fact={fact} plan={plan} forecast={forecast} />
+      <Comment comment={comment} />
+    </Tooltip>
   )
 }

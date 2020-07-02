@@ -2,12 +2,13 @@ import { useRef, useState } from 'react'
 
 import { Badge } from '@gpn-design/uikit/Badge'
 import { Button } from '@gpn-design/uikit/Button'
+import { Text } from '@gpn-design/uikit/Text'
 import { boolean, number, optionsKnob, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { getStoryIds } from '@/common/utils/storybook'
 
-import { directions, Position, Tooltip } from '.'
+import { directions, Position, sizes, Tooltip } from '.'
 
 export const TooltipPositionedByCoordsStory = createStory(
   () => {
@@ -22,12 +23,18 @@ export const TooltipPositionedByCoordsStory = createStory(
         <div style={{ minWidth: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
         <Tooltip
           isVisible={true}
+          size={select('size', sizes, 's')}
           direction={select('direction', directions, 'upCenter')}
           position={position}
           offset={number('offset', 6)}
           withArrow={boolean('withArrow', true)}
         >
-          {text('children', 'Hello, from Portal!')}
+          <Text size="xs">
+            {text(
+              'children',
+              'Hello, from Portal! Hello, from Portal! Hello, from Portal! Hello, from Portal!'
+            )}
+          </Text>
         </Tooltip>
       </>
     )
@@ -70,13 +77,14 @@ export const TooltipPositionedByAnchorStory = createStory(
         {anchor}
         <Tooltip
           isVisible={isTooltipVisible}
+          size={select('size', sizes, 's')}
           direction={select('direction', directions, 'leftCenter')}
           anchorRef={anchorRef}
           offset={number('offset', 6)}
           withArrow={boolean('withArrow', false)}
           isContentHoverable
         >
-          {text('children', 'Hello, from Portal!')}
+          <Text size="xs">{text('children', 'Hello, from Portal!')}</Text>
           {boolean('С интерактивным содержимым', false) && (
             <>
               <br />
@@ -95,7 +103,7 @@ export const TooltipPositionedByAnchorStory = createStory(
   { name: 'с позиционированием по якорю' }
 )
 
-export const TooltipWithAutoClosingStory = createStory(
+export const TooltipWithRepositionStory = createStory(
   () => {
     const anchorRef = useRef<HTMLButtonElement>(null)
     const tooltipRef = useRef(null)
@@ -132,11 +140,12 @@ export const TooltipWithAutoClosingStory = createStory(
         </div>
         <Tooltip
           ref={tooltipRef}
+          size="m"
           isVisible={isTooltipVisible}
           anchorRef={anchorRef}
           isContentHoverable
         >
-          Проскрольте окно вверх
+          <Text size="xs">Проскрольте окно вверх</Text>
         </Tooltip>
       </>
     )
@@ -184,11 +193,13 @@ export const TooltipBannedPositionsStory = createStory(
         <Tooltip
           isVisible={isTooltipVisible}
           anchorRef={anchorRef}
+          size="l"
           offset={0}
           direction="upRight"
           possibleDirections={['upRight', 'leftCenter']}
           isContentHoverable
-          renderContent={direction => (
+        >
+          {direction => (
             <div
               style={
                 direction === 'upRight'
@@ -205,7 +216,7 @@ export const TooltipBannedPositionsStory = createStory(
               {direction}
             </div>
           )}
-        />
+        </Tooltip>
       </>
     )
   },

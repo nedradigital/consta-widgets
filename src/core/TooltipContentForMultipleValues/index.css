@@ -11,7 +11,7 @@
 
 .divider {
   height: 1px;
-  margin: var(--space-xs) calc(-1 * var(--tooltip-horizontal-padding));
+  margin: var(--space-xs) calc(-1 * var(--space-xs));
 
   background-color: var(--color-bg-border);
 }

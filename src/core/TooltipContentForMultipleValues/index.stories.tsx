@@ -8,7 +8,7 @@ import { Tooltip } from '@/Tooltip'
 import { TooltipContentForMultipleValues } from '.'
 
 export const Interactive = createStory(() => (
-  <Tooltip isVisible position={{ x: 10, y: 10 }} direction="downRight">
+  <Tooltip isVisible size="l" position={{ x: 30, y: 10 }} direction="downRight" isContentHoverable>
     <TooltipContentForMultipleValues
       title={text('title', 'Тестовый заголовок')}
       items={object('items', [

@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+import { Text } from '@gpn-design/uikit/Text'
+
 import { FormatValue } from '@/common/types'
 import { Tooltip as BaseTooltip } from '@/Tooltip'
 
@@ -21,15 +23,16 @@ export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = Str
   return (
     <BaseTooltip
       isVisible={true}
+      size="s"
       position={{ x: data.x, y: data.y }}
       direction={isHorizontal ? 'upCenter' : 'leftCenter'}
       offset={0}
     >
       {data.sections.map(section =>
         section.value ? (
-          <div key={section.color} style={{ color: section.color }}>
+          <Text key={section.color} size="xs" style={{ color: section.color }}>
             {formatValue(section.value)}
-          </div>
+          </Text>
         ) : null
       )}
     </BaseTooltip>

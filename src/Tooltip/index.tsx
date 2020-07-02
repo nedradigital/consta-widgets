@@ -1,9 +1,9 @@
 import React from 'react'
 
-import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
+import * as _ from 'lodash'
 
 import { PortalWithTheme } from '@/core/PortalWithTheme'
 
@@ -38,6 +38,16 @@ export const directions = [
   'rightDown',
 ] as const
 
+export const sizes = ['s', 'm', 'l'] as const
+
+type Size = typeof sizes[number]
+
+const sizeClasses: Record<Size, string> = {
+  s: css.sizeS,
+  m: css.sizeM,
+  l: css.sizeL,
+}
+
 export type Direction = typeof directions[number]
 
 export type Position = { x: number; y: number } | undefined
@@ -56,28 +66,23 @@ export type PositioningProps = AttachedToAnchor | AttachedToPosition
 
 type Props = {
   isVisible: boolean
+  size: Size
   direction?: Direction
-  className?: string
+  contentClassName?: string
   isContentHoverable?: boolean
   offset?: number
   withArrow?: boolean
   possibleDirections?: readonly Direction[]
-} & PositioningProps &
-  (
-    | {
-        children: React.ReactNode
-      }
-    | {
-        renderContent: (direction: Direction) => React.ReactNode
-      }
-  )
+  children: React.ReactNode | ((direction: Direction) => React.ReactNode)
+} & PositioningProps
 
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const {
     children,
     isVisible,
     direction: passedDirection = 'upCenter',
-    className,
+    size,
+    contentClassName,
     isContentHoverable,
     offset = 6,
     withArrow = true,
@@ -158,6 +163,8 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     return null
   }
 
+  const content = _.isFunction(children) ? children(direction) : children
+
   return (
     <PortalWithTheme theme={theme} container={window.document.body}>
       <div
@@ -176,15 +183,10 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
           ['--arrow-offset' as string]: `${ARROW_OFFSET}px`,
         }}
       >
-        <div ref={ref} className={classnames(css.tooltip, className)}>
-          {withArrow && <div className={css.arrow} />}
-          {'renderContent' in props ? (
-            props.renderContent(direction)
-          ) : (
-            <Text as="div" size="xs" view="primary">
-              {children}
-            </Text>
-          )}
+        <div className={css.background} />
+        {withArrow && <div className={css.arrow} />}
+        <div ref={ref} className={classnames(css.content, sizeClasses[size], contentClassName)}>
+          {content}
         </div>
       </div>
     </PortalWithTheme>

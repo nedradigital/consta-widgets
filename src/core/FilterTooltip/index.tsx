@@ -59,7 +59,7 @@ export const FilterTooltip: React.FC<Props> = ({
       <Tooltip
         isContentHoverable
         isVisible={isOpened}
-        className={css.tooltip}
+        size="m"
         anchorRef={buttonRef}
         possibleDirections={['downRight', 'downLeft']}
         direction="downRight"
