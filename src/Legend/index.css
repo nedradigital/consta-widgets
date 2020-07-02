@@ -1,7 +1,8 @@
 .main {
-  --vertical-margin: var(--space-xs);
+  --item-padding-x: calc(var(--space-s) / 2);
+  --item-padding-y: calc(var(--space-xs) / 2);
 
-  margin-top: calc(-1 * var(--vertical-margin));
+  margin: calc(-1 * var(--item-padding-y)) calc(-1 * var(--item-padding-x));
 
   &.column {
     display: flex;
@@ -10,9 +11,11 @@
 }
 
 .item {
-  margin-top: var(--vertical-margin);
-}
+  padding: var(--item-padding-y) var(--item-padding-x);
 
-.row .item {
-  margin-right: var(--space-s);
+  border-radius: var(--space-3xs);
+
+  .isHoverable &:hover {
+    background: var(--color-bg-ghost);
+  }
 }
