@@ -89,6 +89,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
   const { theme, themeClassNames } = useTheme()
   const [anchorClientRect, setAnchorClientRect] = React.useState<DOMRect | undefined>()
   const { width, height } = useComponentSize(mainRef)
+  const anchorSize = useComponentSize(anchorRef || { current: null })
   const previousDirectionRef = React.useRef<Direction | null>(null)
   const { current: previousDirection } = previousDirectionRef
   const [bannedDirections, setBannedDirections] = React.useState<readonly Direction[]>([])
@@ -107,7 +108,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     if (isVisible) {
       updateAnchorClientRect()
     }
-  }, [updateAnchorClientRect, isVisible])
+  }, [updateAnchorClientRect, isVisible, anchorSize])
 
   useTooltipReposition({
     isActive: isVisible,
@@ -133,9 +134,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     position: anchorClientRect
       ? { x: anchorClientRect.left, y: anchorClientRect.top }
       : passedPosition,
-    anchorSize: anchorClientRect
-      ? { width: anchorClientRect.width, height: anchorClientRect.height }
-      : undefined,
+    anchorSize,
   })
 
   /**
@@ -171,7 +170,7 @@ export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
         )}
         style={{
           top: (position?.y || 0) + window.scrollY,
-          left: (position?.x || 0) + window.screenX,
+          left: (position?.x || 0) + window.scrollX,
           visibility: position ? undefined : 'hidden',
           ['--arrow-size' as string]: `${ARROW_SIZE}px`,
           ['--arrow-offset' as string]: `${ARROW_OFFSET}px`,

@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react'
 
+import { Badge } from '@gpn-design/uikit/Badge'
 import { Button } from '@gpn-design/uikit/Button'
-import { boolean, number, select, text } from '@storybook/addon-knobs'
+import { boolean, number, optionsKnob, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
 import { getStoryIds } from '@/common/utils/storybook'
@@ -42,6 +43,27 @@ export const TooltipPositionedByAnchorStory = createStory(
     const handleClickOnAnchor = () => {
       setIsTooltipVisible(!isTooltipVisible)
     }
+    const anchorType = optionsKnob('Тип якоря', { Кнопка: 'button', Бэдж: 'badge ' }, 'button', {
+      display: 'inline-radio',
+    })
+    const anchor =
+      anchorType === 'button' ? (
+        <Button
+          label={text('Текст в кнопке', 'Кликай сюда')}
+          type="button"
+          onClick={handleClickOnAnchor}
+          innerRef={anchorRef}
+        />
+      ) : (
+        <Badge
+          minified
+          size={select('Размер бэджа', ['s', 'm', 'l'], 's')}
+          onClick={handleClickOnAnchor}
+          innerRef={anchorRef}
+        />
+      )
+
+    React.useEffect(() => setIsTooltipVisible(false), [anchorType])
 
     return (
       <>
@@ -54,12 +76,7 @@ export const TooltipPositionedByAnchorStory = createStory(
             justifyContent: 'center',
           }}
         >
-          <Button
-            label="Кликай сюда"
-            type="button"
-            onClick={handleClickOnAnchor}
-            innerRef={anchorRef}
-          />
+          {anchor}
         </div>
         <Tooltip
           isVisible={isTooltipVisible}
