@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react'
 
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { FormatValue } from '@/common/types'
 import { scaleBand, scaleLinear } from '@/common/utils/scale'
 import { getTicks } from '@/common/utils/ticks'
+import { useComponentSize } from '@/common/utils/use-component-size'
 import { Grid } from '@/core/Grid'
 import { Axis } from '@/BarChartAxis'
 import { useBaseSize } from '@/BaseSizeContext'

@@ -2,12 +2,12 @@ import React, { useRef, useState } from 'react'
 
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import { zip } from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
+import { useComponentSize } from '@/common/utils/use-component-size'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 import { Position, Tooltip } from '@/Tooltip'
 

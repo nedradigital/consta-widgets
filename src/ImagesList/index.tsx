@@ -3,9 +3,10 @@ import { useLayoutEffect, useRef, useState } from 'react'
 import { Button } from '@gpn-design/uikit/Button'
 import { IconArrowLeft } from '@gpn-design/uikit/IconArrowLeft'
 import { IconArrowRight } from '@gpn-design/uikit/IconArrowRight'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import * as _ from 'lodash'
+
+import { useComponentSize } from '@/common/utils/use-component-size'
 
 import css from './index.css'
 

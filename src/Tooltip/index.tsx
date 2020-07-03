@@ -2,9 +2,9 @@ import React from 'react'
 
 import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
+import { useComponentSize } from '@/common/utils/use-component-size'
 import { PortalWithTheme } from '@/core/PortalWithTheme'
 
 import { getComputedPositionAndDirection } from './helpers'
