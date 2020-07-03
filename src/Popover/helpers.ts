@@ -10,19 +10,19 @@ const getPosition = (x: number, y: number): NonNullable<Position> => ({
 })
 
 export const getPositionsByDirection = ({
-  tooltipSize,
+  contentSize,
   anchorSize,
   position: { x, y },
   offset,
   arrowOffset = 0,
 }: {
-  tooltipSize: Size
+  contentSize: Size
   anchorSize: Size
   position: NonNullable<Position>
   offset: number
   arrowOffset?: number
 }): PositionsByDirection => {
-  const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
+  const { width: contentWidth, height: contentHeight } = contentSize
   const { width: anchorWidth, height: anchorHeight } = anchorSize
   const anchorCenter = {
     x: x + anchorWidth / 2,
@@ -30,18 +30,18 @@ export const getPositionsByDirection = ({
   }
 
   const xForRightDirections = x + anchorWidth + offset
-  const xForLeftDirections = x - tooltipWidth - offset
+  const xForLeftDirections = x - contentWidth - offset
   const xForVerticalDirections = {
     right: anchorCenter.x - arrowOffset,
-    center: anchorCenter.x - tooltipWidth / 2,
-    left: anchorCenter.x - tooltipWidth + arrowOffset,
+    center: anchorCenter.x - contentWidth / 2,
+    left: anchorCenter.x - contentWidth + arrowOffset,
   }
 
   const yForDownDirections = y + anchorHeight + offset
-  const yForUpDirections = y - tooltipHeight - offset
+  const yForUpDirections = y - contentHeight - offset
   const yForHorizontalDirections = {
-    up: anchorCenter.y - tooltipHeight + arrowOffset,
-    center: anchorCenter.y - tooltipHeight / 2,
+    up: anchorCenter.y - contentHeight + arrowOffset,
+    center: anchorCenter.y - contentHeight / 2,
     down: anchorCenter.y - arrowOffset,
   }
 
@@ -65,9 +65,9 @@ export const getPositionsByDirection = ({
 }
 
 type ComputedPositionAndDirectionParams = {
-  // Координата точки, к которой крепится тултип. Для якоря — координата левой верхней точки якоря
+  // Координата точки, к которой крепится поповер. Для якоря — координата левой верхней точки якоря
   position: Position
-  tooltipSize: Size
+  contentSize: Size
   viewportSize: Size
   anchorSize?: Size
   offset: number
@@ -79,7 +79,7 @@ type ComputedPositionAndDirectionParams = {
 
 export const getComputedPositionAndDirection = ({
   position: initialPosition,
-  tooltipSize,
+  contentSize,
   viewportSize,
   anchorSize = { width: 0, height: 0 },
   offset,
@@ -96,7 +96,7 @@ export const getComputedPositionAndDirection = ({
   }
 
   const positionsByDirection = getPositionsByDirection({
-    tooltipSize,
+    contentSize,
     anchorSize,
     position: initialPosition,
     offset,
@@ -109,7 +109,7 @@ export const getComputedPositionAndDirection = ({
       .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
       .find(dir => {
         const pos = positionsByDirection[dir]
-        const { width, height } = tooltipSize
+        const { width, height } = contentSize
 
         const isFittingDown = pos.y + height <= viewportSize.height
         const isFittingUp = pos.y >= 0

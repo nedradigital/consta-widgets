@@ -122,20 +122,22 @@ export const CoreDonutChart: React.FC<Props> = ({
 
   const isTextVisible = values.length === 1 && showText
 
-  const handleMouseOver = (d: DonutData) => {
-    changeTooltipData(
-      d.filter(filterTooltipItem).map(item => {
-        const itemValue = isDefined(item.showValue) ? item.showValue : item.value
-        const formattedValue = getFormattedValue(itemValue, formatValueForTooltip)
+  const handleMouseOver = showTooltip
+    ? (d: DonutData) => {
+        changeTooltipData(
+          d.filter(filterTooltipItem).map(item => {
+            const itemValue = isDefined(item.showValue) ? item.showValue : item.value
+            const formattedValue = getFormattedValue(itemValue, formatValueForTooltip)
 
-        return {
-          value: formattedValue,
-          color: colorGroups[item.colorGroupName],
-          name: item.name,
-        }
-      })
-    )
-  }
+            return {
+              value: formattedValue,
+              color: colorGroups[item.colorGroupName],
+              name: item.name,
+            }
+          })
+        )
+      }
+    : () => null
 
   const handleMouseOut = () => {
     changeTooltipData([])
@@ -166,8 +168,8 @@ export const CoreDonutChart: React.FC<Props> = ({
           }}
         />
       )}
-      {showTooltip && (
-        <Tooltip isVisible={isTooltipVisible} size="m" position={mousePosition}>
+      {isTooltipVisible && (
+        <Tooltip size="m" position={mousePosition} isInteractive={false}>
           <TooltipContentForMultipleValues items={tooltipData} />
         </Tooltip>
       )}

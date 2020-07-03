@@ -1,6 +1,5 @@
-import { getComputedPositionAndDirection, getPositionsByDirection } from '@/Tooltip/helpers'
-
 import { directions } from '../'
+import { getComputedPositionAndDirection, getPositionsByDirection } from '../helpers'
 
 const PARENT_SIZE = {
   width: 500,
@@ -18,7 +17,7 @@ const ELEMENT_SIZE = {
 }
 
 const defaultParams: Parameters<typeof getComputedPositionAndDirection>[0] = {
-  tooltipSize: ELEMENT_SIZE,
+  contentSize: ELEMENT_SIZE,
   viewportSize: PARENT_SIZE,
   possibleDirections: directions,
   bannedDirections: [],
@@ -30,7 +29,7 @@ const defaultParams: Parameters<typeof getComputedPositionAndDirection>[0] = {
 describe('getPositionsByDirection', () => {
   it('возвращает позиции по направлениям без сдвигов и якоря', () => {
     const result = getPositionsByDirection({
-      tooltipSize: { width: 100, height: 50 },
+      contentSize: { width: 100, height: 50 },
       anchorSize: { width: 0, height: 0 },
       position: { x: 0, y: 0 },
       offset: 0,
@@ -56,7 +55,7 @@ describe('getPositionsByDirection', () => {
 
   it('возвращает позиции по направлениям со сдвигом', () => {
     const result = getPositionsByDirection({
-      tooltipSize: { width: 100, height: 50 },
+      contentSize: { width: 100, height: 50 },
       anchorSize: { width: 0, height: 0 },
       position: { x: 0, y: 0 },
       offset: 5,
@@ -82,7 +81,7 @@ describe('getPositionsByDirection', () => {
 
   it('возвращает позиции по направлениям относительно якоря', () => {
     const result = getPositionsByDirection({
-      tooltipSize: { width: 100, height: 50 },
+      contentSize: { width: 100, height: 50 },
       anchorSize: { width: 20, height: 20 },
       position: { x: 300, y: 500 },
       offset: 0,
@@ -106,9 +105,9 @@ describe('getPositionsByDirection', () => {
     expect(result).toEqual(expected)
   })
 
-  it('возвращает позиции по направлениям относительно якоря, когда якорь шире тултипа', () => {
+  it('возвращает позиции по направлениям относительно якоря, когда якорь шире контента', () => {
     const result = getPositionsByDirection({
-      tooltipSize: { width: 100, height: 50 },
+      contentSize: { width: 100, height: 50 },
       anchorSize: { width: 200, height: 200 },
       position: { x: 300, y: 500 },
       offset: 0,
@@ -134,7 +133,7 @@ describe('getPositionsByDirection', () => {
 
   it('возвращает позиции по направлениям относительно якоря со сдвигом стрелки', () => {
     const result = getPositionsByDirection({
-      tooltipSize: { width: 100, height: 50 },
+      contentSize: { width: 100, height: 50 },
       anchorSize: { width: 20, height: 20 },
       position: { x: 300, y: 500 },
       offset: 0,
@@ -161,7 +160,7 @@ describe('getPositionsByDirection', () => {
 })
 
 describe('getComputedPositionAndDirection', () => {
-  describe('если тултип спозициронирован относительно координат', () => {
+  describe('если поповер спозициронирован относительно координат', () => {
     it('возвращаем неопределенную позицию, если данные для позиции отсутствуют', () => {
       expect(
         getComputedPositionAndDirection({
@@ -175,7 +174,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вниз по центру', () => {
+    it('отображаем поповер вниз по центру', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -187,7 +186,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вверх по центру', () => {
+    it('отображаем поповер вверх по центру', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -199,7 +198,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип снизу по левому краю', () => {
+    it('отображаем поповер снизу по левому краю', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -211,7 +210,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип снизу по правому краю', () => {
+    it('отображаем поповер снизу по правому краю', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -223,7 +222,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип сверху по левому краю', () => {
+    it('отображаем поповер сверху по левому краю', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -235,7 +234,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип сверху по правому краю', () => {
+    it('отображаем поповер сверху по правому краю', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -247,7 +246,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип справа', () => {
+    it('отображаем поповер справа', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -263,7 +262,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип слева', () => {
+    it('отображаем поповер слева', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -279,7 +278,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('если тултип никуда не помещается, то используем первоначальные настройки', () => {
+    it('если поповер никуда не помещается, то используем первоначальные настройки', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -289,7 +288,7 @@ describe('getComputedPositionAndDirection', () => {
             width: 100,
           },
           position: { x: 50, y: 25 },
-          tooltipSize: { width: 200, height: 300 },
+          contentSize: { width: 200, height: 300 },
         })
       ).toEqual({
         direction: 'downCenter',
@@ -297,7 +296,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('если тултип может поместиться в любую сторону, то используем сторону из настроек', () => {
+    it('если поповер может поместиться в любую сторону, то используем сторону из настроек', () => {
       expect(
         getComputedPositionAndDirection({
           ...defaultParams,
@@ -315,17 +314,17 @@ describe('getComputedPositionAndDirection', () => {
     })
   })
 
-  describe('если тултип спозициронирован относительно элемента', () => {
+  describe('если поповер спозициронирован относительно элемента', () => {
     const params = {
       ...defaultParams,
       offset: 5,
     } as const
 
-    it('отображаем тултип вниз по центру', () => {
+    it('отображаем поповер вниз по центру', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             width: 250,
             height: 50,
           },
@@ -341,11 +340,11 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вверх по центру', () => {
+    it('отображаем поповер вверх по центру', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             height: 100,
             width: 100,
           },
@@ -361,11 +360,11 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вниз вправо', () => {
+    it('отображаем поповер вниз вправо', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             width: 200,
             height: 50,
           },
@@ -381,11 +380,11 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вниз влево', () => {
+    it('отображаем поповер вниз влево', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             width: 500,
             height: 50,
           },
@@ -401,11 +400,11 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вверх вправо', () => {
+    it('отображаем поповер вверх вправо', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             width: 200,
             height: 50,
           },
@@ -421,11 +420,11 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип вверх влево', () => {
+    it('отображаем поповер вверх влево', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
-          tooltipSize: {
+          contentSize: {
             width: 200,
             height: 100,
           },
@@ -441,7 +440,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип справа', () => {
+    it('отображаем поповер справа', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
@@ -461,7 +460,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('отображаем тултип слева', () => {
+    it('отображаем поповер слева', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
@@ -481,7 +480,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('если тултип никуда не помещается, то используем первоначальные настройки', () => {
+    it('если поповер никуда не помещается, то используем первоначальные настройки', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
@@ -502,7 +501,7 @@ describe('getComputedPositionAndDirection', () => {
       })
     })
 
-    it('если тултип может поместиться в любую сторону, то используем сторону из настроек', () => {
+    it('если поповер может поместиться в любую сторону, то используем сторону из настроек', () => {
       expect(
         getComputedPositionAndDirection({
           ...params,
@@ -529,7 +528,7 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           viewportSize: { width: 50, height: 500 },
-          tooltipSize: { width: 100, height: 50 },
+          contentSize: { width: 100, height: 50 },
           direction: 'downCenter',
           position: { x: 25, y: 500 },
           offset: 0,
@@ -548,7 +547,7 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           viewportSize: { width: 50, height: 500 },
-          tooltipSize: { width: 100, height: 50 },
+          contentSize: { width: 100, height: 50 },
           direction: 'upCenter',
           position: { x: 25, y: 500 },
           offset: 0,
@@ -565,7 +564,7 @@ describe('getComputedPositionAndDirection', () => {
       expect(
         getComputedPositionAndDirection({
           viewportSize: { width: 50, height: 500 },
-          tooltipSize: { width: 100, height: 50 },
+          contentSize: { width: 100, height: 50 },
           direction: 'downCenter',
           position: { x: 25, y: 500 },
           offset: 0,

@@ -6,7 +6,7 @@ import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { Tooltip } from '@/Tooltip'
+import { Popover } from '@/Popover'
 
 import css from './index.css'
 
@@ -35,12 +35,12 @@ export const FilterTooltip: React.FC<Props> = ({
   onToggle,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const tooltipRef = useRef<HTMLDivElement>(null)
+  const popoverContentRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
 
   useClickOutside({
     isActive: isOpened,
-    ignoreClicksInsideRefs: [buttonRef, tooltipRef, menuRef],
+    ignoreClicksInsideRefs: [buttonRef, popoverContentRef, menuRef],
     handler: onToggle,
   })
 
@@ -56,41 +56,43 @@ export const FilterTooltip: React.FC<Props> = ({
         className={classnames(css.button, isOpened && css.isOpened, className)}
         iconLeft={IconFunnel}
       />
-      <Tooltip
-        isContentHoverable
-        isVisible={isOpened}
-        size="m"
-        anchorRef={buttonRef}
-        possibleDirections={['downRight', 'downLeft']}
-        direction="downRight"
-        ref={tooltipRef}
-      >
-        <Text as="div" size="xs" view="primary" className={css.title}>
-          Фильтровать по условию
-        </Text>
-        <select
-          className={css.select}
-          value={[...values]}
-          multiple
-          onChange={e => {
-            onChange(
-              field,
-              Array.from(e.target.selectedOptions).map(option => option.value)
-            )
-          }}
+      {isOpened && (
+        <Popover
+          anchorRef={buttonRef}
+          possibleDirections={['downRight', 'downLeft']}
+          direction="downRight"
+          offset={4}
+          arrowOffset={12}
         >
-          {options.map(option => (
-            <option
-              key={option.value}
-              className={css.option}
-              value={option.value}
-              title={option.label}
+          <div className={css.popoverContent} ref={popoverContentRef}>
+            <Text as="div" size="xs" view="primary" className={css.title}>
+              Фильтровать по условию
+            </Text>
+            <select
+              className={css.select}
+              value={[...values]}
+              multiple
+              onChange={e => {
+                onChange(
+                  field,
+                  Array.from(e.target.selectedOptions).map(option => option.value)
+                )
+              }}
             >
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </Tooltip>
+              {options.map(option => (
+                <option
+                  key={option.value}
+                  className={css.option}
+                  value={option.value}
+                  title={option.label}
+                >
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </Popover>
+      )}
     </>
   )
 }

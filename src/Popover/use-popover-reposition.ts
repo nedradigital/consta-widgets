@@ -12,14 +12,14 @@ const getAllParents = (element: HTMLElement): readonly Node[] => {
   return mutableParents
 }
 
-/** Запрос репозиции тултипа при ресайзе окна и скролле */
-export const useTooltipReposition = ({
+/** Запрос репозиции поповера при ресайзе окна и скролле */
+export const usePopoverReposition = ({
   isActive,
   scrollAnchorRef,
   onRequestReposition,
 }: {
   isActive: boolean
-  /** При скролле родителей этого элемента будет запрашиваться репозиция тултипа */
+  /** При скролле родителей этого элемента будет запрашиваться репозиция поповера */
   scrollAnchorRef: React.RefObject<HTMLElement | null>
   onRequestReposition: () => void
 }) => {
