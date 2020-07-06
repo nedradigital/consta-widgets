@@ -30,3 +30,6 @@ export const MapHelpers = {
   getGeoObjectName,
   ruNames,
 }
+
+// Utils
+export { presetGpnScaling as themePresetGpnScaling } from './common/utils/theme'
