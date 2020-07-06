@@ -27,7 +27,8 @@ module.exports = {
     let postcssLoaderConfig
     config.module.rules.forEach(rule => {
       postcssLoaderConfig =
-        postcssLoaderConfig || rule.use.find(loader => loader.loader === 'postcss-loader')
+        postcssLoaderConfig ||
+        rule.use.find(loader => loader && loader.loader && loader.loader.includes('postcss-loader'))
     })
 
     if (postcssLoaderConfig) {

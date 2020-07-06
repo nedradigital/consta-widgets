@@ -1,3 +1,5 @@
+import { getGeoObjectName, ruNames } from '@/common/utils/geo-names'
+
 // Components
 export { Badge } from './Badge'
 export { BarChart } from './BarChart'
@@ -22,3 +24,9 @@ export { TornadoChart } from './TornadoChart'
 
 // Contexts
 export { BaseSizeProvider, useBaseSize } from './BaseSizeContext'
+
+// Helpers
+export const MapHelpers = {
+  getGeoObjectName,
+  ruNames,
+}
