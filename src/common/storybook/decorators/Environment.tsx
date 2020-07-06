@@ -1,3 +1,4 @@
+import { DEFAULT_BASE_SIZE } from '@csssr/gpn-utils/lib/css'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
 import { number, text } from '@storybook/addon-knobs'
@@ -43,7 +44,9 @@ const themePreset = {
 export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
   const { scaling = true, style = {} } = params
 
-  const baseSize = scaling ? number('base-size', 16, undefined, ENVIRONMENT_GROUP_ID) : undefined
+  const baseSize = scaling
+    ? number('base-size', DEFAULT_BASE_SIZE, undefined, ENVIRONMENT_GROUP_ID)
+    : undefined
   const width = style.width ? text('width', getValue(style.width), ENVIRONMENT_GROUP_ID) : undefined
   const height = style.height
     ? text('height', getValue(style.height), ENVIRONMENT_GROUP_ID)
