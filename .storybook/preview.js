@@ -1,10 +1,10 @@
-import { updateBaseSize } from '@csssr/gpn-utils/lib/css'
 import { DocsContainer } from '@storybook/addon-docs/blocks'
 import { withKnobs } from '@storybook/addon-knobs'
 import { withInfo } from '@storybook/addon-info'
 import { addDecorator, addParameters } from '@storybook/react'
 import { themes } from '@storybook/theming'
 import { withPropsTable } from 'storybook-addon-react-docgen'
+import { updateBaseSize } from '@/BaseSizeContext'
 
 import stub from './stub.mdx'
 
