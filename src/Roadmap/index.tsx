@@ -3,7 +3,6 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
-import { ColorGroups } from '@/common/types'
 import {
   BasicTableColumn,
   BasicTableRow,
@@ -45,7 +44,7 @@ export type Item = {
 }
 
 export type Group = {
-  groupName: string
+  color: string
   title?: string
   plan?: Item
   fact?: Item
@@ -64,17 +63,13 @@ export type Column = BasicTableColumn<Row> & {
   align?: TextAlign
 }
 
-export type Data = {
+export type Props = {
   titles: readonly Column[]
   rows: readonly Row[]
   currentDay: number
   startDate: number
   endDate: number
   filters?: Filters<Row>
-}
-
-type Props = Data & {
-  colorGroups: ColorGroups
 }
 
 type ActiveRowState = {
@@ -90,7 +85,7 @@ export type MonthItem = {
 }
 
 export const Roadmap: React.FC<Props> = props => {
-  const { currentDay, rows, colorGroups, titles, startDate, endDate, filters } = props
+  const { currentDay, rows, titles, startDate, endDate, filters } = props
 
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const [shadow, changeShadowMode] = useState(false)
@@ -305,7 +300,6 @@ export const Roadmap: React.FC<Props> = props => {
                       <RoadmapText tag="span">{getLongestTextFromColumns(columns)}</RoadmapText>
                     </div>
                     {groups.map((group, groupIndex) => {
-                      const color = colorGroups[group.groupName]
                       const withMargin = groupIndex !== 0
 
                       const isActive = activeRow.id === id && activeRow.groupIndex === groupIndex
@@ -316,7 +310,6 @@ export const Roadmap: React.FC<Props> = props => {
                       return (
                         <GroupLines
                           key={`${id}-${groupIndex}`}
-                          color={color}
                           graphStartDate={startDate}
                           group={group}
                           monthWidth={monthWidth}

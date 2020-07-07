@@ -16,7 +16,7 @@ const COUNT_POINTS = 51
 
 const IGNORE_PROPS = ['title'] as const
 
-const colorGroups = {
+const colors = {
   first: 'var(--color-bg-success)',
   second: 'var(--color-bg-normal)',
 }
@@ -50,16 +50,16 @@ const getCommonProps = () => {
   return {
     lines: [
       {
-        colorGroupName: 'first',
         values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map(valueMapper),
         dots: true,
         lineName: 'Северный бур',
         withGradient: true,
+        color: colors.first,
       },
       {
-        colorGroupName: 'second',
         values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map(valueMapper),
         lineName: 'Южное месторождение',
+        color: colors.second,
       },
     ],
     threshold: object('threshold', {
@@ -99,13 +99,7 @@ const decorators = [
 
 export const Horizontal = createStory(
   () => {
-    return (
-      <LinearChart
-        {...getCommonProps()}
-        colorGroups={object('colorGroups', colorGroups)}
-        isHorizontal
-      />
-    )
+    return <LinearChart {...getCommonProps()} isHorizontal />
   },
   { name: 'горизонтальный', decorators }
 )
@@ -114,10 +108,8 @@ export const WithNullData = createStory(
   () => {
     return (
       <LinearChart
-        colorGroups={object('colorGroups', colorGroups)}
         lines={[
           {
-            colorGroupName: 'first',
             values: [
               { x: 0, y: null },
               { x: 1, y: 1 },
@@ -133,6 +125,7 @@ export const WithNullData = createStory(
             dots: true,
             lineName: 'Северный бур',
             withGradient: true,
+            color: colors.first,
           },
         ]}
         gridConfig={getGridConfig()}
@@ -150,7 +143,6 @@ export const WithClickHandler = createStory(
     return (
       <LinearChart
         {...getCommonProps()}
-        colorGroups={object('colorGroups', colorGroups)}
         isHorizontal
         onClickHoverLine={value => alert(new Date(value))}
       />
@@ -171,14 +163,7 @@ const renderTitle = (defaultText: string = '') => {
 
 export const WithTitle = createStory(
   () => {
-    return (
-      <LinearChart
-        {...getCommonProps()}
-        colorGroups={object('colorGroups', colorGroups)}
-        isHorizontal
-        title={renderTitle('LTIF')}
-      />
-    )
+    return <LinearChart {...getCommonProps()} isHorizontal title={renderTitle('LTIF')} />
   },
   { name: 'с заголовком', decorators }
 )
@@ -196,20 +181,15 @@ export const WithNumbers = createStory(
 
     return (
       <LinearChart
-        colorGroups={object('colorGroups', {
-          first: 'var(--color-bg-success)',
-          second: 'var(--color-bg-normal)',
-        })}
         lines={[
           {
-            colorGroupName: 'first',
             values,
             dots: true,
             lineName: 'Северный бур',
             withGradient: true,
+            color: colors.first,
           },
           {
-            colorGroupName: 'second',
             values: [
               { x: 0, y: -2 },
               { x: 1, y: 4 },
@@ -217,6 +197,7 @@ export const WithNumbers = createStory(
               { x: 3, y: 5 },
             ],
             lineName: 'Южное месторождение',
+            color: colors.second,
           },
         ]}
         gridConfig={getGridConfig()}
@@ -243,13 +224,7 @@ export const WithNumbers = createStory(
 
 export const Vertical = createStory(
   () => {
-    return (
-      <LinearChart
-        {...getCommonProps()}
-        colorGroups={object('colorGroups', colorGroups)}
-        isHorizontal={false}
-      />
-    )
+    return <LinearChart {...getCommonProps()} isHorizontal={false} />
   },
   {
     name: 'вертикальный',
@@ -269,13 +244,8 @@ export const WithBoundaries = createStory(
   () => {
     return (
       <LinearChart
-        colorGroups={object('colorGroups', {
-          first: 'var(--color-bg-success)',
-          second: 'var(--color-bg-border)',
-        })}
         lines={[
           {
-            colorGroupName: 'first',
             values: [
               { x: 0, y: null },
               { x: 1, y: 50 },
@@ -288,9 +258,10 @@ export const WithBoundaries = createStory(
             ],
             dots: true,
             lineName: 'Северный бур',
+            color: 'var(--color-bg-success)',
+            withBoundaries: true,
           },
           {
-            colorGroupName: 'second',
             values: [
               { x: 0, y: null },
               { x: 1, y: -10 },
@@ -303,12 +274,12 @@ export const WithBoundaries = createStory(
             ],
             dots: true,
             lineName: 'Южное месторождение',
+            color: 'var(--color-bg-border)',
           },
         ]}
         gridConfig={getGridConfig()}
         isHorizontal
         background="linear-gradient(to right, #f54d4d48, transparent)"
-        colorGroupWithBoundaries={text('colorGroupWithBoundaries', 'first')}
         showBoundariesOnAxis={boolean('showBoundariesOnAxis', true)}
         boundaries={[
           {

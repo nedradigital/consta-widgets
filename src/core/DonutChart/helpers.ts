@@ -10,7 +10,7 @@ export const minChartSize: Record<number, number> = {
 
 export type Data = {
   name: string
-  colorGroupName: string
+  color: string
   values: ReadonlyArray<number | null>
 }
 export type GetCirclesCount = (data: readonly Data[]) => number

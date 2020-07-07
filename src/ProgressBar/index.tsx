@@ -4,7 +4,6 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { ColorGroups } from '@/common/types'
 import { Legend, Tick } from '@/ProgressBar/components/Legend'
 
 import { Data as ProgressData, Progress } from './components/Progress'
@@ -13,7 +12,7 @@ import css from './index.css'
 export type Data = ProgressData & {
   ticks?: readonly Tick[]
   summary: string | number
-  colorGroupName: string
+  color: string
   caption?: React.ReactNode
 }
 
@@ -21,7 +20,6 @@ export type Size = 'xs' | 's' | 'm' | 'l'
 
 type Props = {
   size?: Size
-  colorGroups: ColorGroups
   data: readonly Data[]
 }
 
@@ -44,12 +42,11 @@ const summarySizes: Record<Size, TextPropSize> = {
   l: '2xl',
 }
 
-export const ProgressBar: React.FC<Props> = ({ size = 'm', data, colorGroups }) => {
+export const ProgressBar: React.FC<Props> = ({ size = 'm', data }) => {
   return (
     <div className={classnames(css.progressBar, size === 'xs' && css.sizeXS)}>
       {data.map((dataItem, i) => {
-        const { caption, colorGroupName, value, summary, ticks = [], valueMin, valueMax } = dataItem
-        const color = colorGroups[colorGroupName]
+        const { caption, color, value, summary, ticks = [], valueMin, valueMax } = dataItem
 
         return (
           <div className={css.item} key={i}>

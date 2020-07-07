@@ -1,5 +1,3 @@
-import { ColorGroups } from '@/common/types'
-
 import { Figure } from './'
 
 export const axesLabels = {
@@ -14,14 +12,14 @@ export const axesLabels = {
   profit: 'Прибыльность',
 }
 
-export const colorGroups: ColorGroups = {
+const colors = {
   mainCharacter: 'var(--color-bg-success)',
   partyMember: 'var(--color-bg-normal)',
 }
 
 export const emptyFigures: readonly Figure[] = [
   {
-    colorGroupName: 'mainCharacter',
+    color: colors.mainCharacter,
     name: 'Северный бур',
     values: [
       { axisName: 'strength', value: 5 },
@@ -36,7 +34,7 @@ export const emptyFigures: readonly Figure[] = [
     ],
   },
   {
-    colorGroupName: 'partyMember',
+    color: colors.partyMember,
     name: 'Южное месторождение',
     values: [
       { axisName: 'strength', value: 10 },
@@ -54,7 +52,7 @@ export const emptyFigures: readonly Figure[] = [
 
 export const figures: readonly Figure[] = [
   {
-    colorGroupName: 'mainCharacter',
+    color: colors.mainCharacter,
     name: 'Северный бур',
     values: [
       { axisName: 'strength', value: 10 },
@@ -69,7 +67,7 @@ export const figures: readonly Figure[] = [
     ],
   },
   {
-    colorGroupName: 'partyMember',
+    color: colors.partyMember,
     name: 'Южное месторождение',
     values: [
       { axisName: 'strength', value: 2 },

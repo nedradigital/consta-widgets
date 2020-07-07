@@ -6,7 +6,7 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 
 import { Roadmap } from '.'
-import { colorGroups, data, minimalData, monochromeData } from './data.mock'
+import { data, minimalData, monochromeData } from './data.mock'
 
 export const Interactive = createStory(() => {
   const { titles, rows, currentDay, startDate, endDate, filters } = data
@@ -15,7 +15,6 @@ export const Interactive = createStory(() => {
     <Roadmap
       rows={object('rows', rows)}
       titles={object('titles', titles)}
-      colorGroups={object('colorGroups', colorGroups)}
       filters={object('filters', filters)}
       startDate={startDate}
       currentDay={currentDay}
@@ -32,7 +31,6 @@ export const WithLittleData = createStory(
       <Roadmap
         rows={object('rows', rows)}
         titles={object('titles', titles)}
-        colorGroups={object('colorGroups', colorGroups)}
         filters={object('filters', filters)}
         startDate={startDate}
         currentDay={currentDay}
@@ -51,9 +49,6 @@ export const SingleColor = createStory(
       <Roadmap
         rows={object('rows', rows)}
         titles={object('titles', titles)}
-        colorGroups={object('colorGroups', {
-          green: 'var(--color-bg-success)',
-        })}
         filters={object('filters', filters)}
         startDate={startDate}
         currentDay={currentDay}

@@ -5,35 +5,16 @@ describe('transformGroupsToCommonGroups', () => {
   const groups: readonly Group[] = [
     {
       groupName: 'март',
-      values: [
-        {
-          plan: 4,
-        },
-        {
-          fact: 2,
-        },
-      ],
+      values: [[{ value: 4, color: 'red' }], [{ value: 2, color: 'blue' }]],
     },
     {
       groupName: 'апрель',
-      values: [
-        {
-          plan: undefined,
-        },
-        {
-          fact: 5,
-        },
-      ],
+      values: [[{ value: undefined, color: 'red' }], [{ value: 5, color: 'blue' }]],
     },
   ]
 
-  const colorGroups = {
-    plan: 'red',
-    fact: 'blue',
-  }
-
   it('преобразует MultiBarChart группы к основным гуппам', () => {
-    const result = transformGroupsToCommonGroups(groups, colorGroups)
+    const result = transformGroupsToCommonGroups(groups)
 
     expect(result).toEqual([
       {

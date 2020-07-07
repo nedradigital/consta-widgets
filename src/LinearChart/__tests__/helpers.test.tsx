@@ -5,6 +5,7 @@ import {
   calculateSecondaryDomain,
   flipPointsOnAxes,
   getBoundary,
+  getColorFromFirstLineWithBoundaries,
   getIndexWithFallbackToDefault,
   getMainTickValues,
   getSecondaryTickValues,
@@ -621,5 +622,31 @@ describe('getBoundary', () => {
     expect(
       getBoundary({ boundaries: [boundary], item: { x: null, y: null }, isHorizontal: true })
     ).toBeUndefined()
+  })
+})
+
+describe('getColorFromFirstLineWithBoundaries', () => {
+  it('получение цвета, если список линий пустой', () => {
+    const result = getColorFromFirstLineWithBoundaries([])
+
+    expect(result).toBe('transparent')
+  })
+
+  it('получение цвета первой линии с границами', () => {
+    const result = getColorFromFirstLineWithBoundaries([
+      {
+        color: 'red',
+        lineName: 'first',
+        values: [],
+      },
+      {
+        color: 'blue',
+        lineName: 'second',
+        values: [],
+        withBoundaries: true,
+      },
+    ])
+
+    expect(result).toBe('blue')
   })
 })

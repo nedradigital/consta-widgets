@@ -4,7 +4,7 @@ import { isHalfDonutHorizontal } from '@/core/DonutChart/helpers'
 import { useBaseSize } from '@/BaseSizeContext'
 import { getValueRatio } from '@/ProgressBar'
 
-import { DEFAULT_DATA, getColorGroups, getData, getMinChartSize, getTextData } from './helpers'
+import { DEFAULT_DATA, getData, getMinChartSize, getTextData } from './helpers'
 
 export type Data = {
   value?: number
@@ -37,13 +37,12 @@ export const ProgressDonut: React.FC<Props> = ({
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const data = { ...DEFAULT_DATA, ...rest.data }
   const donutTextData = getTextData(title, rest.data)
-  const donutColorGroups = getColorGroups(colors, title, data)
   const { value, valueMin, valueMax } = data
   const tooltipValue = Math.round(getValueRatio({ value, valueMin, valueMax })) + '%'
 
   return (
     <CoreDonutChart
-      data={getData(title, data, halfDonut)}
+      data={getData({ title, data, halfDonut, colors })}
       textData={donutTextData}
       textPaddingFromBorder={
         isHalfDonutHorizontal(halfDonut) ? getCalculatedSizeWithBaseSize(8) : 0
@@ -51,9 +50,8 @@ export const ProgressDonut: React.FC<Props> = ({
       titlePosition={halfDonut === 'top' ? 'top' : 'bottom'}
       getCirclesCount={() => PROGRESS_DONUT_CIRCLES_COUNT}
       getMinChartSize={() => getMinChartSize(halfDonut, showText, showTitle)}
-      filterTooltipItem={itemData => itemData.colorGroupName === title}
+      filterTooltipItem={itemData => itemData.name === title}
       formatValueForTooltip={() => tooltipValue}
-      colorGroups={donutColorGroups}
       halfDonut={halfDonut}
       showShadow={showText && showTitle}
       showText={showText}

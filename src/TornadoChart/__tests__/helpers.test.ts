@@ -51,35 +51,18 @@ describe('transformGroupsToCommonGroups', () => {
   const groups: readonly Group[] = [
     {
       groupName: 'март',
-      values: [
-        {
-          plan: 4,
-        },
-        {
-          fact: 2,
-        },
-      ],
+      values: [4, 2],
     },
     {
       groupName: 'апрель',
-      values: [
-        {
-          plan: undefined,
-        },
-        {
-          fact: 5,
-        },
-      ],
+      values: [undefined, 5],
     },
   ]
 
-  const colorGroups = {
-    plan: 'red',
-    fact: 'blue',
-  }
+  const colors = ['red', 'blue'] as const
 
   it('преобразует TornadoChart группы к основным гуппам', () => {
-    const result = transformGroupsToCommonGroups(groups, colorGroups)
+    const result = transformGroupsToCommonGroups(groups, colors)
 
     expect(result).toEqual([
       {
@@ -92,7 +75,7 @@ describe('transformGroupsToCommonGroups', () => {
         name: 'апрель',
         total: 5,
         columns: [{ total: 5, sections: [{ color: 'blue', value: 5 }] }],
-        reversedColumns: [{ total: undefined, sections: [] }],
+        reversedColumns: [{ total: 0, sections: [] }],
       },
     ])
   })

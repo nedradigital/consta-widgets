@@ -2,7 +2,7 @@ import React from 'react'
 
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 import { Position, Tooltip } from '@/Tooltip'
 
@@ -16,8 +16,6 @@ type Props = {
   anchorEl: Element | null
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  colorGroups: ColorGroups
-  colorGroupWithBoundaries?: string
   boundaries?: readonly Boundary[]
   hoveredMainValue: HoveredMainValue
   threshold?: Threshold
@@ -39,8 +37,6 @@ export const LineTooltip: React.FC<Props> = ({
   scaleX,
   scaleY,
   hoveredMainValue,
-  colorGroups,
-  colorGroupWithBoundaries,
   boundaries,
   threshold,
   formatValueForLabel,
@@ -61,19 +57,15 @@ export const LineTooltip: React.FC<Props> = ({
     const secondaryValue = getSecondaryValue(item)
 
     const getItemColor = () => {
-      const lineColor = colorGroups[line.colorGroupName]
-      const isLineWithBoundaries =
-        colorGroupWithBoundaries &&
-        colorGroups[colorGroupWithBoundaries] &&
-        line.colorGroupName === colorGroupWithBoundaries
-      const boundaryColor =
-        (boundaries && item && getBoundary({ boundaries, item, isHorizontal })?.color) ?? lineColor
+      if (line.withBoundaries) {
+        const boundaryColor =
+          (boundaries && item && getBoundary({ boundaries, item, isHorizontal })?.color) ??
+          line.color
 
-      if (isLineWithBoundaries) {
         return isNotNil(secondaryValue) ? boundaryColor : undefined
       }
 
-      return lineColor
+      return line.color
     }
     return {
       color: getItemColor(),

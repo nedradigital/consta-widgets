@@ -41,7 +41,7 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
           title={axis.label}
           items={extendedFigures.map((f, idx) => ({
             name: f.name,
-            color: f.color.lineColor,
+            color: f.color,
             value: values[idx],
           }))}
         />

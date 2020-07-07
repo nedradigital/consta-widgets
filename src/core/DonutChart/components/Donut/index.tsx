@@ -3,13 +3,11 @@ import React from 'react'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 
-import { ColorGroups } from '@/common/types'
-
 import css from './index.css'
 
 export type DataItem = {
   value: number
-  colorGroupName: string
+  color: string
   name: string
   showValue?: number
 }
@@ -22,7 +20,6 @@ export type HalfDonut = typeof halvesDonut[number]
 
 type Props = {
   data: Data
-  colorGroups: ColorGroups
   innerRadius: number
   outerRadius: number
   handleMouseOver: (data: Data) => void
@@ -74,12 +71,11 @@ const getAnglesByHalfDonut = (halfDonut?: HalfDonut) => {
   }
 }
 
-const isEmpty = (pieData: ReadonlyArray<Omit<DataItem, 'colorGroupName' | 'name'>>) => {
+const isEmpty = (pieData: ReadonlyArray<Omit<DataItem, 'color' | 'name'>>) => {
   return pieData.map(pieDatum => pieDatum.value).every(value => value === 0)
 }
 
 export const Donut: React.FC<Props> = ({
-  colorGroups,
   data,
   innerRadius,
   outerRadius,
@@ -137,11 +133,7 @@ export const Donut: React.FC<Props> = ({
         />
       ) : (
         pieData.map((pieDatum, idx) => (
-          <path
-            key={idx}
-            d={arc(pieDatum) || undefined}
-            fill={colorGroups[pieDatum.data.colorGroupName]}
-          />
+          <path key={idx} d={arc(pieDatum) || undefined} fill={pieDatum.data.color} />
         ))
       )}
     </g>

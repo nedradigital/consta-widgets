@@ -1,4 +1,4 @@
-import { object, select } from '@storybook/addon-knobs'
+import { select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
@@ -12,7 +12,6 @@ const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
 export const Interactive = createStory(
   () => (
     <MultiBarChart
-      colorGroups={object('colorGroups', interactiveData.colorGroups)}
       groups={interactiveData.groups}
       unit={interactiveData.unit}
       unitPosition={getUnitPosition()}
@@ -27,7 +26,6 @@ export const Interactive = createStory(
 export const WithTwoColumns = createStory(
   () => (
     <MultiBarChart
-      colorGroups={object('colorGroups', withTwoColumnsData.colorGroups)}
       groups={withTwoColumnsData.groups}
       unit={withTwoColumnsData.unit}
       unitPosition={getUnitPosition()}
@@ -42,7 +40,6 @@ export const WithTwoColumns = createStory(
 export const HasRatio = createStory(
   () => (
     <MultiBarChart
-      colorGroups={object('colorGroups', withPercentColumnsData.colorGroups)}
       groups={withPercentColumnsData.groups}
       unit={withTwoColumnsData.unit}
       unitPosition={getUnitPosition()}
@@ -58,7 +55,6 @@ export const HasRatio = createStory(
 export const Minimalistic = createStory(
   () => (
     <MultiBarChart
-      colorGroups={object('colorGroups', interactiveData.colorGroups)}
       groups={interactiveData.groups}
       unit={interactiveData.unit}
       unitPosition={getUnitPosition()}

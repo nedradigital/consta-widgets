@@ -1,29 +1,29 @@
 import {
   DEFAULT_EMPTY_COLOR,
-  getColorGroups,
+  getColors,
   getData,
   getMinChartSize,
   getTextData,
   getValuePercent,
 } from '../helpers'
 
-describe('getColorGroups', () => {
+describe('getColors', () => {
   it('возвращает группу цветов для значения меньше 100', () => {
-    expect(getColorGroups(['blue', 'red'], 'title', { value: 20 })).toEqual({
+    expect(getColors(['blue', 'red'], 'title', { value: 20 })).toEqual({
       title: 'blue',
       empty: DEFAULT_EMPTY_COLOR,
     })
   })
 
   it('возвращает группу с цветами при значении больше 100', () => {
-    expect(getColorGroups(['blue', 'red'], 'title', { value: 120 })).toEqual({
+    expect(getColors(['blue', 'red'], 'title', { value: 120 })).toEqual({
       title: 'red',
       empty: 'blue',
     })
   })
 
   it('возвращает группу с цветами при значении больше 100 и количестве цветов больше 2-х', () => {
-    expect(getColorGroups(['blue', 'red', 'green'], 'title', { value: 201 })).toEqual({
+    expect(getColors(['blue', 'red', 'green'], 'title', { value: 201 })).toEqual({
       title: 'green',
       empty: 'red',
     })
@@ -31,55 +31,77 @@ describe('getColorGroups', () => {
 })
 
 describe('getData', () => {
+  const colors = ['blue', 'red'] as const
+
   it('возвращает данные для пончика', () => {
     expect(
-      getData('title', {
-        value: 70,
+      getData({
+        title: 'title',
+        data: {
+          value: 70,
+        },
+        colors,
       })
     ).toEqual([
       {
         name: 'title',
-        colorGroupName: 'title',
+        color: 'blue',
         values: [70],
       },
       {
         name: 'empty',
-        colorGroupName: 'empty',
+        color: DEFAULT_EMPTY_COLOR,
         values: [30],
       },
     ])
   })
 
   it('для пончика обрезанного сверху или справа возвращает данные в обратном порядке', () => {
-    expect(getData('', { value: 10 }, 'top')[0].name).toBe('empty')
-    expect(getData('', { value: 10 }, 'right')[0].name).toBe('empty')
+    expect(getData({ title: '', data: { value: 10 }, halfDonut: 'top', colors })[0].name).toBe(
+      'empty'
+    )
+    expect(getData({ title: '', data: { value: 10 }, halfDonut: 'right', colors })[0].name).toBe(
+      'empty'
+    )
   })
 
   it('возвращает данные для пустого пончика при отсутствии значения', () => {
-    expect(getData('title', {})).toEqual([
+    expect(
+      getData({
+        title: 'title',
+        data: {},
+        colors,
+      })
+    ).toEqual([
       {
         name: 'title',
-        colorGroupName: 'title',
+        color: colors[0],
         values: [0],
       },
       {
         name: 'empty',
-        colorGroupName: 'empty',
+        color: DEFAULT_EMPTY_COLOR,
         values: [100],
       },
     ])
   })
 
   it('возвращает данные для заполненного пончика при значении кратном 100', () => {
-    expect(getData('title', { value: 300 })).toEqual([
+    expect(
+      getData({
+        title: 'title',
+        data: { value: 300 },
+        colors,
+      })
+    ).toEqual([
       {
         name: 'title',
-        colorGroupName: 'title',
+        color: colors[0],
         values: [100],
       },
       {
         name: 'empty',
-        colorGroupName: 'empty',
+        color: colors[1],
         values: [0],
       },
     ])
