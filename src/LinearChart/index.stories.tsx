@@ -6,7 +6,7 @@ import { Text } from '@gpn-design/uikit/Text'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { LinearChart } from '.'
 
@@ -89,19 +89,26 @@ const decorators = [
   withSmartKnobs({
     ignoreProps: IGNORE_PROPS,
   }),
-  environmentDecorator({
+] as const
+
+const parameters = {
+  environment: {
     style: {
       width: '60vw',
       height: '50vh',
     },
-  }),
-] as const
+  },
+} as const
 
 export const Horizontal = createStory(
   () => {
     return <LinearChart {...getCommonProps()} isHorizontal />
   },
-  { name: 'горизонтальный', decorators }
+  {
+    name: 'горизонтальный',
+    decorators,
+    parameters,
+  }
 )
 
 export const WithNullData = createStory(
@@ -135,7 +142,11 @@ export const WithNullData = createStory(
       />
     )
   },
-  { name: 'с пропусками', decorators }
+  {
+    name: 'с пропусками',
+    decorators,
+    parameters,
+  }
 )
 
 export const WithClickHandler = createStory(
@@ -148,7 +159,11 @@ export const WithClickHandler = createStory(
       />
     )
   },
-  { name: 'с обработкой клика', decorators }
+  {
+    name: 'с обработкой клика',
+    decorators,
+    parameters,
+  }
 )
 
 const renderTitle = (defaultText: string = '') => {
@@ -165,7 +180,11 @@ export const WithTitle = createStory(
   () => {
     return <LinearChart {...getCommonProps()} isHorizontal title={renderTitle('LTIF')} />
   },
-  { name: 'с заголовком', decorators }
+  {
+    name: 'с заголовком',
+    decorators,
+    parameters,
+  }
 )
 
 export const WithNumbers = createStory(
@@ -219,7 +238,7 @@ export const WithNumbers = createStory(
       />
     )
   },
-  { name: 'с числами по x', decorators }
+  { name: 'с числами по x', decorators, parameters }
 )
 
 export const Vertical = createStory(
@@ -228,15 +247,15 @@ export const Vertical = createStory(
   },
   {
     name: 'вертикальный',
-    decorators: [
-      withSmartKnobs({ ignoreProps: IGNORE_PROPS }),
-      environmentDecorator({
+    decorators: [withSmartKnobs({ ignoreProps: IGNORE_PROPS })],
+    parameters: {
+      environment: {
         style: {
           width: 300,
           height: '80vh',
         },
-      }),
-    ],
+      },
+    },
   }
 )
 

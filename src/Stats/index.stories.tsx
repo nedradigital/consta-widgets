@@ -2,7 +2,7 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { Stats } from './index'
 
@@ -39,12 +39,12 @@ export const WithLineBreak = createStory(
 
 export default createMetadata({
   title: 'components/Stats',
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  parameters: {
+    environment: {
       style: {
         width: 200,
       },
-    }),
-  ],
+    },
+  },
 })

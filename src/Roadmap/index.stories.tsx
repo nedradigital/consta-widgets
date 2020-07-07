@@ -3,7 +3,7 @@ import React from 'react'
 import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { Roadmap } from '.'
 import { data, minimalData, monochromeData } from './data.mock'
@@ -61,12 +61,12 @@ export const SingleColor = createStory(
 
 export default createMetadata({
   title: 'components/Roadmap',
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  parameters: {
+    environment: {
       style: {
         width: '80vw',
       },
-    }),
-  ],
+    },
+  },
 })

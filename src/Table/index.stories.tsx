@@ -4,7 +4,7 @@ import { select } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { sizes, Table } from './'
 import { tableData, tableWithLegendData, tableWithTrafficLightData } from './data.mock'
@@ -12,35 +12,33 @@ import { tableData, tableWithLegendData, tableWithTrafficLightData } from './dat
 type Decorators = readonly DecoratorFn[]
 
 const DEFAULT_DECORATORS: Decorators = [withSmartKnobs({ ignoreProps: ['size'] })]
-const FIXED_WIDTH_DECORATORS: Decorators = [
-  ...DEFAULT_DECORATORS,
-  environmentDecorator({
+const FIXED_WIDTH_PARAMETERS = {
+  environment: {
     style: { width: '90vw' },
-  }),
-]
-const STICKY_DECORATORS: Decorators = [
-  ...DEFAULT_DECORATORS,
-  environmentDecorator({
+  },
+} as const
+const STICKY_PARAMETERS = {
+  environment: {
     style: {
       width: '500px',
       height: '250px',
     },
-  }),
-]
-const WITH_REACT_NODES_DECORATORS: Decorators = [
-  withSmartKnobs({ ignoreProps: ['rows'] }),
-  environmentDecorator({
+  },
+}
+const WITH_REACT_NODES_PARAMETERS = {
+  environment: {
     style: {
       width: 500,
     },
-  }),
-]
+  },
+} as const
 
 const getSizeKnob = () => select('size', sizes, 'l')
 
 export const Interactive = createStory(() => <Table {...tableData} size={getSizeKnob()} />, {
   name: 'обычная',
-  decorators: FIXED_WIDTH_DECORATORS,
+  decorators: DEFAULT_DECORATORS,
+  parameters: FIXED_WIDTH_PARAMETERS,
 })
 
 const WithActiveRowContent = () => {
@@ -57,14 +55,16 @@ const WithActiveRowContent = () => {
 
 export const WithActiveRow = createStory(() => <WithActiveRowContent />, {
   name: 'с выбором строки',
-  decorators: FIXED_WIDTH_DECORATORS,
+  decorators: DEFAULT_DECORATORS,
+  parameters: FIXED_WIDTH_PARAMETERS,
 })
 
 export const WithStickyHeader = createStory(
   () => <Table {...tableData} size={getSizeKnob()} stickyHeader />,
   {
     name: 'с зафиксированным заголовком',
-    decorators: STICKY_DECORATORS,
+    decorators: DEFAULT_DECORATORS,
+    parameters: STICKY_PARAMETERS,
   }
 )
 
@@ -72,7 +72,8 @@ export const WithStickyColumn = createStory(
   () => <Table {...tableData} size={getSizeKnob()} stickyColumns={1} />,
   {
     name: 'с зафиксированной колонкой',
-    decorators: STICKY_DECORATORS,
+    decorators: DEFAULT_DECORATORS,
+    parameters: STICKY_PARAMETERS,
   }
 )
 
@@ -82,7 +83,8 @@ export const WithLegend = createStory(
   },
   {
     name: 'с легендой',
-    decorators: WITH_REACT_NODES_DECORATORS,
+    decorators: DEFAULT_DECORATORS,
+    parameters: WITH_REACT_NODES_PARAMETERS,
   }
 )
 
@@ -92,7 +94,8 @@ export const WithTrafficLight = createStory(
   },
   {
     name: 'со "Светофором"',
-    decorators: WITH_REACT_NODES_DECORATORS,
+    decorators: DEFAULT_DECORATORS,
+    parameters: WITH_REACT_NODES_PARAMETERS,
   }
 )
 
@@ -136,7 +139,7 @@ const WithCheckboxHeaderContent = () => {
 
 export const WithCheckboxHeader = createStory(() => <WithCheckboxHeaderContent />, {
   name: 'с чекбоксом в шапке',
-  decorators: WITH_REACT_NODES_DECORATORS,
+  parameters: WITH_REACT_NODES_PARAMETERS,
 })
 
 export default createMetadata({

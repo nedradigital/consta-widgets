@@ -94,12 +94,20 @@ declare module '@storybook/addon-docs/blocks' {
 declare module '@storybook/types' {
   import { DecoratorFn } from '@storybook/react'
 
+  export type EnvironmentDecoratorParams = {
+    scaling?: boolean
+    style?: React.CSSProperties
+  }
+
   export type CSFStory = {
     (): JSX.Element
     story?: {
       name?: string
       decorators?: readonly DecoratorFn[]
-      parameters?: { [name: string]: unknown }
+      parameters?: {
+        [name: string]: unknown
+        environment?: EnvironmentDecoratorParams
+      }
     }
   }
 
@@ -112,6 +120,7 @@ declare module '@storybook/types' {
       docs?: {
         page: (props: any) => JSX.Element
       }
+      environment?: EnvironmentDecoratorParams
     }
   }
 }

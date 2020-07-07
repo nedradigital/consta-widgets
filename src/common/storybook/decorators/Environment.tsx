@@ -1,10 +1,10 @@
 import { DEFAULT_BASE_SIZE } from '@csssr/gpn-utils/lib/css'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
 import { number, text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
+import { EnvironmentDecoratorParams } from '@storybook/types'
+import { withThemes } from 'storybook-addon-themes'
 
-import { presetGpnScaling } from '@/common/utils/theme'
 import { BaseSizeProvider } from '@/BaseSizeContext'
 
 export const ENVIRONMENT_GROUP_ID = 'environment'
@@ -31,18 +31,9 @@ const getValue = (value?: number | string) => {
   return value
 }
 
-type DecoratorParams = {
-  scaling?: boolean
-  style?: React.CSSProperties
-}
-
-const themePreset = {
-  ...presetGpnDisplay,
-  ...presetGpnScaling,
-}
-
-export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
-  const { scaling = true, style } = params
+export const environmentDecorator = (): DecoratorFn => (storyFn, context) => {
+  const { scaling = true, style } = (context.parameters.environment ||
+    {}) as EnvironmentDecoratorParams
 
   const baseSize = scaling
     ? number('base-size', DEFAULT_BASE_SIZE, undefined, ENVIRONMENT_GROUP_ID)
@@ -66,16 +57,17 @@ export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn 
       <>{children}</>
     )
 
-  const content = (
-    <Theme
-      className="Theme_gpnScaling"
-      preset={themePreset}
-      style={{ background: 'var(--color-bg-default)' }}
-    >
+  /**
+   * Используем декоратор withThemes тут, потому что он должен быть между
+   * BaseSizeProvider и контентом для корректной работы тем из ui-kit
+   */
+  const content = withThemes(
+    () => (
       <div style={CENTERING_STYLES}>
         <Wrapper>{storyFn()}</Wrapper>
       </div>
-    </Theme>
+    ),
+    context
   )
 
   return isDefined(baseSize) ? (

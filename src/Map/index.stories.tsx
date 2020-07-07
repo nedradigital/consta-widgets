@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { boolean, object } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { Map } from '.'
 import {
@@ -48,12 +48,12 @@ export const ExampleForInfopanels = createStory(() => <MapGinfPrototypeStory />,
 
 export default createMetadata({
   title: 'components/Map',
-  decorators: [
-    environmentDecorator({
+  parameters: {
+    environment: {
       style: {
         width: '100vw',
         height: '100vh',
       },
-    }),
-  ],
+    },
+  },
 })

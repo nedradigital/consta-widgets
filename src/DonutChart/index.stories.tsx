@@ -9,7 +9,6 @@ import {
   createStory,
   cubeMeterFormatValue,
   emptyFormatValue,
-  environmentDecorator,
 } from '@/common/storybook'
 import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
 
@@ -185,14 +184,14 @@ export const AsHalfDonutWithoutFacts = createStory(
 
 export default createMetadata({
   title: 'components/DonutChart',
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  excludeStories: ['progressDonutData'],
+  parameters: {
+    environment: {
       style: {
         width: 200,
         height: 200,
       },
-    }),
-  ],
-  excludeStories: ['progressDonutData'],
+    },
+  },
 })

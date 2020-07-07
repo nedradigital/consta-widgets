@@ -12,6 +12,7 @@ module.exports = {
     '@storybook/addon-actions',
     'storybook-addon-react-docgen',
     '@storybook/addon-docs/register',
+    'storybook-addon-themes'
   ],
   stories: async () => {
     const isDevelop = process.env.NODE_ENV === 'development'
