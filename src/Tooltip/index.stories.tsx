@@ -4,7 +4,7 @@ import { Badge } from '@gpn-design/uikit/Badge'
 import { Button } from '@gpn-design/uikit/Button'
 import { boolean, number, optionsKnob, select, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { getStoryIds } from '@/common/utils/storybook'
 
 import { directions, Position, Tooltip } from '.'
@@ -19,7 +19,7 @@ export const TooltipPositionedByCoordsStory = createStory(
 
     return (
       <>
-        <div style={{ width: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
+        <div style={{ minWidth: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
         <Tooltip
           isVisible={true}
           direction={select('direction', directions, 'upCenter')}
@@ -67,17 +67,7 @@ export const TooltipPositionedByAnchorStory = createStory(
 
     return (
       <>
-        <div
-          style={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          {anchor}
-        </div>
+        {anchor}
         <Tooltip
           isVisible={isTooltipVisible}
           direction={select('direction', directions, 'leftCenter')}
@@ -224,6 +214,7 @@ export const TooltipBannedPositionsStory = createStory(
 
 export default createMetadata({
   title: 'components/Tooltip',
+  decorators: [environmentDecorator()],
   excludeStories:
     process.env.NODE_ENV === 'development'
       ? undefined

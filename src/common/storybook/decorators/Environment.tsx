@@ -42,15 +42,29 @@ const themePreset = {
 }
 
 export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn => storyFn => {
-  const { scaling = true, style = {} } = params
+  const { scaling = true, style } = params
 
   const baseSize = scaling
     ? number('base-size', DEFAULT_BASE_SIZE, undefined, ENVIRONMENT_GROUP_ID)
     : undefined
-  const width = style.width ? text('width', getValue(style.width), ENVIRONMENT_GROUP_ID) : undefined
-  const height = style.height
-    ? text('height', getValue(style.height), ENVIRONMENT_GROUP_ID)
-    : undefined
+  const Wrapper: React.FC = ({ children }) =>
+    style ? (
+      <div
+        style={{
+          ...style,
+          width: style.width
+            ? text('width', getValue(style.width), ENVIRONMENT_GROUP_ID)
+            : undefined,
+          height: style.height
+            ? text('height', getValue(style.height), ENVIRONMENT_GROUP_ID)
+            : undefined,
+        }}
+      >
+        {children}
+      </div>
+    ) : (
+      <>{children}</>
+    )
 
   const content = (
     <Theme
@@ -59,7 +73,7 @@ export const environmentDecorator = (params: DecoratorParams = {}): DecoratorFn 
       style={{ background: 'var(--color-bg-default)' }}
     >
       <div style={CENTERING_STYLES}>
-        <div style={{ ...style, width, height }}>{storyFn()}</div>
+        <Wrapper>{storyFn()}</Wrapper>
       </div>
     </Theme>
   )
