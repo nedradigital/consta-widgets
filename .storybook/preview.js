@@ -4,7 +4,6 @@ import { withInfo } from '@storybook/addon-info'
 import { addDecorator, addParameters } from '@storybook/react'
 import { themes } from '@storybook/theming'
 import { withPropsTable } from 'storybook-addon-react-docgen'
-import { updateBaseSize } from '@/BaseSizeContext'
 
 import stub from './stub.mdx'
 
