@@ -27,7 +27,7 @@ type Props = {
 }
 
 type TooltipItem = {
-  color: string
+  color?: string
   name: string
   value: number | null | undefined
 }
@@ -58,19 +58,27 @@ export const LineTooltip: React.FC<Props> = ({
 
   const tooltipItems: readonly TooltipItem[] = lines.map(line => {
     const item = line.values.find(isItemHovered)
-    const boundaryColor =
-      colorGroupWithBoundaries &&
-      colorGroups[colorGroupWithBoundaries] &&
-      line.colorGroupName === colorGroupWithBoundaries &&
-      boundaries &&
-      item &&
-      getBoundary({ boundaries, item, isHorizontal })?.color
-    const itemColor = boundaryColor || colorGroups[line.colorGroupName]
+    const secondaryValue = getSecondaryValue(item)
 
+    const getItemColor = () => {
+      const lineColor = colorGroups[line.colorGroupName]
+      const isLineWithBoundaries =
+        colorGroupWithBoundaries &&
+        colorGroups[colorGroupWithBoundaries] &&
+        line.colorGroupName === colorGroupWithBoundaries
+      const boundaryColor =
+        (boundaries && item && getBoundary({ boundaries, item, isHorizontal })?.color) ?? lineColor
+
+      if (isLineWithBoundaries) {
+        return isNotNil(secondaryValue) ? boundaryColor : undefined
+      }
+
+      return lineColor
+    }
     return {
-      color: itemColor,
+      color: getItemColor(),
       name: line.lineName,
-      value: getSecondaryValue(item),
+      value: secondaryValue,
     }
   })
 
