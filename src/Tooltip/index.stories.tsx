@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react'
 
+import { Badge } from '@gpn-design/uikit/Badge'
 import { Button } from '@gpn-design/uikit/Button'
-import { boolean, number, select, text } from '@storybook/addon-knobs'
+import { boolean, number, optionsKnob, select, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { getStoryIds } from '@/common/utils/storybook'
 
 import { directions, Position, Tooltip } from '.'
@@ -18,7 +19,7 @@ export const TooltipPositionedByCoordsStory = createStory(
 
     return (
       <>
-        <div style={{ width: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
+        <div style={{ minWidth: '200%', height: '200vh' }} onMouseMove={handleMouseMove} />
         <Tooltip
           isVisible={true}
           direction={select('direction', directions, 'upCenter')}
@@ -42,28 +43,34 @@ export const TooltipPositionedByAnchorStory = createStory(
     const handleClickOnAnchor = () => {
       setIsTooltipVisible(!isTooltipVisible)
     }
+    const anchorType = optionsKnob('Тип якоря', { Кнопка: 'button', Бэдж: 'badge ' }, 'button', {
+      display: 'inline-radio',
+    })
+    const anchor =
+      anchorType === 'button' ? (
+        <Button
+          label={text('Текст в кнопке', 'Кликай сюда')}
+          type="button"
+          onClick={handleClickOnAnchor}
+          innerRef={anchorRef}
+        />
+      ) : (
+        <Badge
+          minified
+          size={select('Размер бэджа', ['s', 'm', 'l'], 's')}
+          onClick={handleClickOnAnchor}
+          innerRef={anchorRef}
+        />
+      )
+
+    React.useEffect(() => setIsTooltipVisible(false), [anchorType])
 
     return (
       <>
-        <div
-          style={{
-            width: '100%',
-            height: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Button
-            label="Кликай сюда"
-            type="button"
-            onClick={handleClickOnAnchor}
-            innerRef={anchorRef}
-          />
-        </div>
+        {anchor}
         <Tooltip
           isVisible={isTooltipVisible}
-          direction={select('direction', directions, 'left')}
+          direction={select('direction', directions, 'leftCenter')}
           anchorRef={anchorRef}
           offset={number('offset', 6)}
           withArrow={boolean('withArrow', false)}
@@ -72,6 +79,11 @@ export const TooltipPositionedByAnchorStory = createStory(
           {text('children', 'Hello, from Portal!')}
           {boolean('С интерактивным содержимым', false) && (
             <>
+              <br />
+              <br />
+              <br />
+              <br />
+              <br />
               <br />
               <input />
             </>
@@ -174,7 +186,7 @@ export const TooltipBannedPositionsStory = createStory(
           anchorRef={anchorRef}
           offset={0}
           direction="upRight"
-          possibleDirections={['upRight', 'left']}
+          possibleDirections={['upRight', 'leftCenter']}
           isContentHoverable
           renderContent={direction => (
             <div
@@ -202,6 +214,7 @@ export const TooltipBannedPositionsStory = createStory(
 
 export default createMetadata({
   title: 'components/Tooltip',
+  decorators: [environmentDecorator()],
   excludeStories:
     process.env.NODE_ENV === 'development'
       ? undefined

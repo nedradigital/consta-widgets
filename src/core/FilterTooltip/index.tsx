@@ -63,7 +63,6 @@ export const FilterTooltip: React.FC<Props> = ({
         anchorRef={buttonRef}
         possibleDirections={['downRight', 'downLeft']}
         direction="downRight"
-        withArrow={false}
         ref={tooltipRef}
       >
         <Text as="div" size="xs" view="primary" className={css.title}>

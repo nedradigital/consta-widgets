@@ -217,8 +217,9 @@ export const DatePicker: React.FC<Props> = props => {
         className={css.tooltip}
         withArrow={false}
         offset={16}
-        direction="downRight"
+        direction="downCenter"
         isContentHoverable
+        possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}
       >
         {props.type === 'date' ? (
           <MonthsSliderSingle {...monthsPanelCommonProps} />

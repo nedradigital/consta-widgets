@@ -88,7 +88,7 @@ export const InputDate: React.FC<Props> = ({
       <Tooltip
         isVisible={!!tooltipContent}
         anchorRef={ref}
-        direction="right"
+        direction="rightCenter"
         isContentHoverable
         className={css.tooltip}
       >

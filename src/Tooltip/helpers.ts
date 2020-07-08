@@ -1,90 +1,91 @@
 import _ from 'lodash'
 
-import { Direction, Position } from './'
+import { Direction, directions, Position } from './'
 
 type Size = Pick<ClientRect, 'width' | 'height'>
 
 type PositionsByDirection = Record<Direction, NonNullable<Position>>
 
-/**
- * Порядок сторон, куда мы можем развернуть тултип.
- * Используется первая сторона, в которую смог вписаться тултип.
- */
-const orderOfDirections: readonly Direction[] = [
-  'downCenter',
-  'upCenter',
+const getPosition = (x: number, y: number): NonNullable<Position> => ({
+  x: Math.round(x),
+  y: Math.round(y),
+})
 
-  'downRight',
-  'downLeft',
-  'upRight',
-  'upLeft',
-
-  'left',
-  'right',
-]
-
-const getDirectionAndPosition = ({
-  positionsByDirection,
-  initialDirection,
+export const getPositionsByDirection = ({
   tooltipSize,
-  parentSize,
-  bannedDirections,
-  possibleDirections,
+  anchorSize,
+  position: { x, y },
+  offset,
+  arrowOffset = 0,
 }: {
-  positionsByDirection: PositionsByDirection
-  initialDirection: Direction
   tooltipSize: Size
-  parentSize: Size
-  possibleDirections: readonly Direction[]
-  bannedDirections: readonly Direction[]
-}): {
-  direction: Direction
-  position: Position
-} => {
-  const result = _.sortBy(orderOfDirections, dir => (dir === initialDirection ? -1 : 0))
-    .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
-    .find(dir => {
-      const pos = positionsByDirection[dir]
-      const { width, height } = tooltipSize
+  anchorSize: Size
+  position: NonNullable<Position>
+  offset: number
+  arrowOffset?: number
+}): PositionsByDirection => {
+  const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
+  const { width: anchorWidth, height: anchorHeight } = anchorSize
+  const anchorCenter = {
+    x: x + anchorWidth / 2,
+    y: y + anchorHeight / 2,
+  }
 
-      const isFittingDown = pos.y + height <= parentSize.height
-      const isFittingUp = pos.y >= 0
+  const xForRightDirections = x + anchorWidth + offset
+  const xForLeftDirections = x - tooltipWidth - offset
+  const xForVerticalDirections = {
+    right: anchorCenter.x - arrowOffset,
+    center: anchorCenter.x - tooltipWidth / 2,
+    left: anchorCenter.x - tooltipWidth + arrowOffset,
+  }
 
-      const isFittingLeft = pos.x >= 0
-      const isFittingRight = pos.x + width <= parentSize.width
-
-      return isFittingUp && isFittingDown && isFittingLeft && isFittingRight
-    })
-
-  const direction = result || initialDirection
-  const position = positionsByDirection[direction]
+  const yForDownDirections = y + anchorHeight + offset
+  const yForUpDirections = y - tooltipHeight - offset
+  const yForHorizontalDirections = {
+    up: anchorCenter.y - tooltipHeight + arrowOffset,
+    center: anchorCenter.y - tooltipHeight / 2,
+    down: anchorCenter.y - arrowOffset,
+  }
 
   return {
-    direction,
-    position: {
-      x: position.x + window.scrollX,
-      y: position.y + window.scrollY,
-    },
+    upLeft: getPosition(xForVerticalDirections.left, yForUpDirections),
+    upCenter: getPosition(xForVerticalDirections.center, yForUpDirections),
+    upRight: getPosition(xForVerticalDirections.right, yForUpDirections),
+
+    downLeft: getPosition(xForVerticalDirections.left, yForDownDirections),
+    downCenter: getPosition(xForVerticalDirections.center, yForDownDirections),
+    downRight: getPosition(xForVerticalDirections.right, yForDownDirections),
+
+    rightUp: getPosition(xForRightDirections, yForHorizontalDirections.up),
+    rightCenter: getPosition(xForRightDirections, yForHorizontalDirections.center),
+    rightDown: getPosition(xForRightDirections, yForHorizontalDirections.down),
+
+    leftUp: getPosition(xForLeftDirections, yForHorizontalDirections.up),
+    leftCenter: getPosition(xForLeftDirections, yForHorizontalDirections.center),
+    leftDown: getPosition(xForLeftDirections, yForHorizontalDirections.down),
   }
 }
 
 type ComputedPositionAndDirectionParams = {
+  // Координата точки, к которой крепится тултип. Для якоря — координата левой верхней точки якоря
   position: Position
   tooltipSize: Size
-  parentSize: Size
+  viewportSize: Size
   anchorSize?: Size
   offset: number
+  arrowOffset?: number
   direction: Direction
   possibleDirections: readonly Direction[]
   bannedDirections: readonly Direction[]
 }
 
 export const getComputedPositionAndDirection = ({
-  position,
+  position: initialPosition,
   tooltipSize,
-  parentSize,
+  viewportSize,
   anchorSize = { width: 0, height: 0 },
   offset,
+  arrowOffset,
   direction: initialDirection,
   possibleDirections,
   bannedDirections,
@@ -92,61 +93,36 @@ export const getComputedPositionAndDirection = ({
   direction: Direction
   position: Position
 } => {
-  if (!position) {
-    return { position, direction: initialDirection }
+  if (!initialPosition) {
+    return { position: initialPosition, direction: initialDirection }
   }
 
-  const { width: tooltipWidth, height: tooltipHeight } = tooltipSize
-  const { width: anchorWidth, height: anchorHeight } = anchorSize
-
-  const leftPositionX = Math.round(position.x + anchorWidth - tooltipWidth)
-  const rightPositionX = Math.round(position.x)
-  const centerPositionX = Math.round(position.x + anchorWidth / 2 - tooltipWidth / 2)
-  const upPositionY = Math.round(position.y - anchorHeight - tooltipHeight - offset)
-  const downPositionY = Math.round(position.y + offset)
-  const centerPositionY = Math.round(position.y - anchorHeight / 2 - tooltipHeight / 2)
-
-  const positionsByDirection: PositionsByDirection = {
-    upLeft: {
-      x: leftPositionX,
-      y: upPositionY,
-    },
-    upCenter: {
-      x: centerPositionX,
-      y: upPositionY,
-    },
-    upRight: {
-      x: rightPositionX,
-      y: upPositionY,
-    },
-    right: {
-      x: Math.round(position.x + anchorWidth + offset),
-      y: centerPositionY,
-    },
-    left: {
-      x: Math.round(position.x - tooltipWidth - offset),
-      y: centerPositionY,
-    },
-    downLeft: {
-      x: leftPositionX,
-      y: downPositionY,
-    },
-    downCenter: {
-      x: centerPositionX,
-      y: downPositionY,
-    },
-    downRight: {
-      x: rightPositionX,
-      y: downPositionY,
-    },
-  }
-
-  return getDirectionAndPosition({
-    positionsByDirection,
-    initialDirection,
+  const positionsByDirection = getPositionsByDirection({
     tooltipSize,
-    parentSize,
-    bannedDirections,
-    possibleDirections,
+    anchorSize,
+    position: initialPosition,
+    offset,
+    arrowOffset,
   })
+
+  const direction =
+    _.sortBy(directions, dir => (dir === initialDirection ? -1 : 0))
+      .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
+      .find(dir => {
+        const pos = positionsByDirection[dir]
+        const { width, height } = tooltipSize
+
+        const isFittingDown = pos.y + height <= viewportSize.height
+        const isFittingUp = pos.y >= 0
+
+        const isFittingLeft = pos.x >= 0
+        const isFittingRight = pos.x + width <= viewportSize.width
+
+        return isFittingUp && isFittingDown && isFittingLeft && isFittingRight
+      }) || initialDirection
+
+  return {
+    direction,
+    position: positionsByDirection[direction],
+  }
 }

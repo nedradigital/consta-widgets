@@ -1,13 +1,12 @@
-@custom-selector :--withArrow .withArrow;
-@custom-selector :--upDirection .upLeft, .upCenter, .upRight;
-@custom-selector :--downDirection .downLeft, .downCenter, .downRight;
-
 .main {
   --tooltip-negative-arrow-offset: calc(-2 * var(--arrow-size));
-  --arrow-side-size: calc(var(--arrow-size) / 2);
   --tooltip-vertical-padding: var(--space-xs);
   --tooltip-horizontal-padding: var(--space-xs);
   --tooltip-bg-color: var(--color-bg-default);
+
+  /* Задаются через js */
+  --arrow-size: 0;
+  --arrow-offset: 0;
 
   position: absolute;
 
@@ -21,122 +20,98 @@
 }
 
 .tooltip {
-  --border-top-left-radius: var(--control-radius);
-  --border-top-right-radius: var(--control-radius);
-  --border-bottom-left-radius: var(--control-radius);
-  --border-bottom-right-radius: var(--control-radius);
-
   position: relative;
 
   box-sizing: border-box;
   max-width: 400px;
   padding: var(--tooltip-vertical-padding) var(--tooltip-horizontal-padding);
 
-  border-radius: var(--border-top-left-radius) var(--border-top-right-radius)
-    var(--border-bottom-right-radius) var(--border-bottom-left-radius);
+  border-radius: var(--control-radius);
   background-color: var(--tooltip-bg-color);
+}
 
-  &::after {
-    position: absolute;
+.arrow {
+  position: absolute;
 
-    content: '';
+  border: var(--arrow-size) solid transparent;
 
-    border: var(--arrow-size) solid transparent;
-  }
-
-  .upLeft:--withArrow & {
-    --border-bottom-right-radius: 0;
-
-    &::after {
-      right: 0;
-      bottom: 0;
-
-      border-width: var(--arrow-side-size);
-      border-top-color: var(--tooltip-bg-color);
-      border-right-color: var(--tooltip-bg-color);
-
-      transform: translateY(100%);
-    }
-  }
-
-  .upCenter:--withArrow &::after {
-    bottom: var(--tooltip-negative-arrow-offset);
-    left: 50%;
+  :matches(.upLeft, .upCenter, .upRight) & {
+    bottom: 0;
 
     border-top-color: var(--tooltip-bg-color);
 
-    transform: translate(-50%, 0);
+    transform: translateY(100%);
   }
 
-  .upRight:--withArrow & {
-    --border-bottom-left-radius: 0;
-
-    &::after {
-      bottom: 0;
-      left: 0;
-
-      border-width: var(--arrow-side-size);
-      border-top-color: var(--tooltip-bg-color);
-      border-left-color: var(--tooltip-bg-color);
-
-      transform: translateY(100%);
-    }
+  .upLeft & {
+    right: var(--arrow-offset);
   }
 
-  .right:--withArrow &::after {
-    top: 50%;
-    left: var(--tooltip-negative-arrow-offset);
-
-    border-right-color: var(--tooltip-bg-color);
-
-    transform: translate(0, -50%);
+  .upCenter & {
+    left: calc(50% - var(--arrow-size));
   }
 
-  .downLeft:--withArrow & {
-    --border-top-right-radius: 0;
-
-    &::after {
-      top: 0;
-      right: 0;
-
-      border-width: var(--arrow-side-size);
-      border-right-color: var(--tooltip-bg-color);
-      border-bottom-color: var(--tooltip-bg-color);
-
-      transform: translateY(-100%);
-    }
+  .upRight & {
+    left: var(--arrow-offset);
   }
 
-  .downCenter:--withArrow &::after {
-    top: var(--tooltip-negative-arrow-offset);
-    left: 50%;
+  :matches(.downLeft, .downCenter, .downRight) & {
+    top: 0;
 
     border-bottom-color: var(--tooltip-bg-color);
 
-    transform: translate(-50%, 0);
+    transform: translateY(-100%);
   }
 
-  .downRight:--withArrow & {
-    --border-top-left-radius: 0;
-
-    &::after {
-      top: 0;
-      left: 0;
-
-      border-width: var(--arrow-side-size);
-      border-bottom-color: var(--tooltip-bg-color);
-      border-left-color: var(--tooltip-bg-color);
-
-      transform: translateY(-100%);
-    }
+  .downLeft & {
+    right: var(--arrow-offset);
   }
 
-  .left:--withArrow &::after {
-    top: 50%;
-    right: var(--tooltip-negative-arrow-offset);
+  .downCenter & {
+    left: calc(50% - var(--arrow-size));
+  }
+
+  .downRight & {
+    left: var(--arrow-offset);
+  }
+
+  :matches(.rightUp, .rightCenter, .rightDown) & {
+    left: 0;
+
+    border-right-color: var(--tooltip-bg-color);
+
+    transform: translateX(-100%);
+  }
+
+  .rightUp & {
+    bottom: var(--arrow-offset);
+  }
+
+  .rightCenter & {
+    top: calc(50% - var(--arrow-size));
+  }
+
+  .rightDown & {
+    top: var(--arrow-offset);
+  }
+
+  :matches(.leftUp, .leftCenter, .leftDown) & {
+    right: 0;
 
     border-left-color: var(--tooltip-bg-color);
 
-    transform: translate(0, -50%);
+    transform: translateX(100%);
+  }
+
+  .leftUp & {
+    bottom: var(--arrow-offset);
+  }
+
+  .leftCenter & {
+    top: calc(50% - var(--arrow-size));
+  }
+
+  .leftDown & {
+    top: var(--arrow-offset);
   }
 }
