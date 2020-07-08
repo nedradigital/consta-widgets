@@ -190,6 +190,7 @@ export const CoreBarChart: React.FC<Props> = props => {
               onChangeLabelSize={idx === 0 ? changeLabelSize : undefined}
               onMouseEnterColumn={params => handleMouseEnterColumn(group.name, params)}
               onMouseLeaveColumn={() => handleMouseLeaveColumn(group.name)}
+              maxValue={maxValue}
             />
           ))}
         </div>

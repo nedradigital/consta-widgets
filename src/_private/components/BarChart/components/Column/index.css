@@ -40,20 +40,93 @@
   }
 
   &.isHorizontal {
+    width: 100%;
     height: var(--column-size);
 
     & + & {
       margin-top: var(--column-padding);
     }
+
+    &.isReversed {
+      flex-direction: row-reverse;
+    }
   }
 
   &:not(.isHorizontal) {
+
     flex-direction: column-reverse;
 
     width: var(--column-size);
+    height: 100%;
 
     & + & {
       margin-left: var(--column-padding);
     }
+  }
+}
+
+.interactiveBlock {
+  --position-top: 0;
+  --position-right: 0;
+  --position-bottom: 0;
+  --position-left: 0;
+
+  position: absolute;
+  top: var(--position-top);
+  right: var(--position-right);
+  bottom: var(--position-bottom);
+  left: var(--position-left);
+
+  .column.isHorizontal & {
+    --position-right: 'auto';
+  }
+
+  .column.isHorizontal.isReversed & {
+    --position-right: 0;
+    --position-left: 'auto';
+  }
+
+  .column:not(.isHorizontal) & {
+    --position-top: 'auto';
+  }
+}
+
+.label {
+  position: absolute;
+
+  :--horizontal-column:not(.isReversed) & {
+    top: 50%;
+    right: 0;
+
+    padding-left: var(--space-2xs);
+
+    transform: translate(100%, -50%);
+  }
+
+  :--horizontal-column.isReversed & {
+    top: 50%;
+    left: 0;
+
+    padding-right: var(--space-2xs);
+
+    transform: translate(-100%, -50%);
+  }
+
+  :--vertical-column:not(.isReversed) & {
+    top: 0;
+    left: 50%;
+
+    padding-bottom: var(--space-2xs);
+
+    transform: translate(-50%, -100%);
+  }
+
+  :--vertical-column.isReversed & {
+    bottom: 0;
+    left: 50%;
+
+    padding-top: var(--space-2xs);
+
+    transform: translate(-50%, 100%);
   }
 }

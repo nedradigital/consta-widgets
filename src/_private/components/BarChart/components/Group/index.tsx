@@ -18,6 +18,7 @@ type Props = {
   group: string
   columns: ReadonlyArray<ColumnItem | undefined>
   reversedColumns: ReadonlyArray<ColumnItem | undefined>
+  maxValue: number
   isHorizontal: boolean
   isNegative: boolean
   size: ColumnSize
@@ -45,6 +46,7 @@ export const Group: React.FC<Props> = ({
   columns,
   group,
   reversedColumns,
+  maxValue,
   isHorizontal,
   isNegative,
   size,
@@ -71,6 +73,7 @@ export const Group: React.FC<Props> = ({
       size: scalerSize,
       sections: column.sections,
       scaler,
+      maxValue,
     })
 
     return (
