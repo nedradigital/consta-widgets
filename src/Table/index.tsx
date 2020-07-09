@@ -362,7 +362,7 @@ export const Table = <T extends BasicTableRow>({
               {column.sortable && (
                 <Button
                   size="xs"
-                  iconSize="xs"
+                  iconSize="s"
                   view="clear"
                   onlyIcon
                   onClick={() => handleSortClick(column)}
