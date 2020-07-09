@@ -1,5 +1,6 @@
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
+
+import { useComponentSize } from '@/common/utils/use-component-size'
 
 import { Column, ColumnSize, OnMouseEnterColumn, SectionItem } from '../Column'
 

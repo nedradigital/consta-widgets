@@ -2,12 +2,12 @@ import * as React from 'react'
 import { useUID } from 'react-uid'
 
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import useComponentSize from '@rehooks/component-size'
 import * as _ from 'lodash'
 
 import { ColorGroups, FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
 import { deg2rad } from '@/common/utils/math'
+import { useComponentSize } from '@/common/utils/use-component-size'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'

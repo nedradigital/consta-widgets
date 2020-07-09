@@ -1,7 +1,6 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 
 import { ColorGroups } from '@/common/types'
@@ -16,6 +15,7 @@ import {
   isSelectedFiltersPresent,
   useSelectedFilters,
 } from '@/common/utils/table'
+import { useComponentSize } from '@/common/utils/use-component-size'
 import { FilterTooltip } from '@/core/FilterTooltip'
 import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'

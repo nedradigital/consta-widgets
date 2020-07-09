@@ -5,9 +5,10 @@ import russiaLow from '@amcharts/amcharts4-geodata/russiaCrimeaLow'
 import worldHigh from '@amcharts/amcharts4-geodata/worldHigh'
 import worldLow from '@amcharts/amcharts4-geodata/worldLow'
 import worldUltra from '@amcharts/amcharts4-geodata/worldUltra'
-import useComponentSize from '@rehooks/component-size'
 import * as d3 from 'd3'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
+
+import { useComponentSize } from '@/common/utils/use-component-size'
 
 import { MapObjects } from './components/MapObjects'
 import { MapPoints } from './components/MapPoints'

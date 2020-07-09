@@ -5,7 +5,6 @@ import { IconAlignLeft } from '@gpn-design/uikit/IconAlignLeft'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
 import { Text } from '@gpn-design/uikit/Text'
-import useComponentSize from '@rehooks/component-size'
 import classnames from 'classnames'
 import _ from 'lodash'
 
@@ -23,6 +22,7 @@ import {
   useSelectedFilters,
 } from '@/common/utils/table'
 import { isHtmlElement } from '@/common/utils/type-guards'
+import { useComponentSize } from '@/common/utils/use-component-size'
 import { FilterTooltip } from '@/core/FilterTooltip'
 import { SelectedOptionsList } from '@/core/SelectedOptionsList'
 import { useBaseSize } from '@/BaseSizeContext'

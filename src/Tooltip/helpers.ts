@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { Direction, directions, Position } from './'
 
 type Size = Pick<ClientRect, 'width' | 'height'>
@@ -106,7 +104,8 @@ export const getComputedPositionAndDirection = ({
   })
 
   const direction =
-    _.sortBy(directions, dir => (dir === initialDirection ? -1 : 0))
+    [...directions]
+      .sort(dir => (dir === initialDirection ? -1 : 0))
       .filter(dir => possibleDirections.includes(dir) && !bannedDirections.includes(dir))
       .find(dir => {
         const pos = positionsByDirection[dir]
