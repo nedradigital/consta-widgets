@@ -1,17 +1,17 @@
 import classnames from 'classnames'
 
+import { TableColumn, TableRow } from '../../'
+
 import css from './index.css'
 
 export type VerticalAlign = 'top' | 'center' | 'bottom'
 export type HorizontalAlign = 'left' | 'center' | 'right'
 
 type Props = {
-  column: {
+  column: TableColumn<TableRow> & {
     isSticky?: boolean
     isResized?: boolean
-    sortable?: boolean
     filterable?: boolean
-    align?: HorizontalAlign
   }
   onClick?: () => void
   style?: React.CSSProperties
@@ -83,7 +83,11 @@ const getCellClasses = (props: Props) => {
 
 const getWrapperClasses = (props: Props) => {
   const { column, wrapperClassName } = props
-  const common = classnames(css.wrapper, wrapperClassName)
+  const common = classnames(
+    css.wrapper,
+    wrapperClassName,
+    column.withoutPadding && css.withoutPadding
+  )
 
   if (props.type === 'header') {
     return classnames(common, css.verticalAlignCenter, getHorizontalAlign(column.align))

@@ -1,8 +1,7 @@
-import { Filters } from '@/common/utils/table'
 import { LegendItem } from '@/core/LegendItem'
 import { Badge } from '@/Badge'
 
-import { Props as TableProps } from './'
+import { Filters, Props as TableProps } from './'
 
 export const rows = [
   {

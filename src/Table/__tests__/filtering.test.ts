@@ -5,7 +5,7 @@ import {
   getSelectedFiltersInitialState,
   getSelectedFiltersList,
   isSelectedFiltersPresent,
-} from '../table'
+} from '../filtering'
 
 const COUNT_FILTERS = [
   {

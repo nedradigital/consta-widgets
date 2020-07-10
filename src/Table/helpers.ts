@@ -1,10 +1,8 @@
 import _ from 'lodash'
 
-import { BasicTableRow, RowField } from '@/common/utils/table'
+import { ColumnWidth, RowField, SortingState, TableRow } from './'
 
-import { SortingState } from './'
-
-export const getColumnsSize = (sizes: ReadonlyArray<number | undefined>) => {
+export const getColumnsSize = (sizes: readonly ColumnWidth[]) => {
   return sizes.map(s => (s ? `${s}px` : 'minmax(min-content, 1fr)')).join(' ')
 }
 
@@ -24,7 +22,7 @@ export const getColumnLeftOffset = ({
   return _.sum(selectedColumns)
 }
 
-export const getNewSorting = <T extends BasicTableRow>(
+export const getNewSorting = <T extends TableRow>(
   currentSorting: SortingState<T>,
   newField: RowField<T>
 ): SortingState<T> => {

@@ -1,5 +1,5 @@
 .cell {
-  --buttons-wrapper-size: 0;
+  --buttons-wrapper-size: calc(0 * 1px);
 
   z-index: var(--table-z);
 
@@ -86,7 +86,16 @@
 
   display: flex;
 
+  box-sizing: border-box;
   height: 100%;
+  padding: var(--cell-padding-vertical) var(--cell-padding-horizontal);
+  padding-right: calc(
+    var(--cell-padding-horizontal) + var(--resizer-width) + var(--buttons-wrapper-size)
+  );
+
+  &.withoutPadding {
+    padding: 0;
+  }
 
   &.verticalAlignTop {
     align-items: flex-start;
@@ -114,16 +123,6 @@
     justify-content: flex-end;
 
     text-align: right;
-  }
-
-  &:not(.withoutPadding) {
-    box-sizing: border-box;
-    padding-top: var(--cell-padding-vertical);
-    padding-right: calc(
-      var(--cell-padding-horizontal) + var(--resizer-width) + var(--buttons-wrapper-size)
-    );
-    padding-bottom: var(--cell-padding-vertical);
-    padding-left: var(--cell-padding-horizontal);
   }
 
   .cell.stickyOnLeft &::after {

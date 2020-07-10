@@ -1,111 +1,33 @@
 .main {
-  --separate-line-color: var(--color-bg-border);
+  position: relative;
 
-  display: grid;
-  overflow: hidden;
+  &::after {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
 
-  width: 100%;
-  grid-template-areas: 'left calendar';
+    width: 1px;
+
+    content: '';
+
+    background: var(--color-bg-border);
+  }
 }
 
-.subTitleHeightStub {
+.linesCell {
   box-sizing: border-box;
-
-  border-bottom: 1px solid var(--separate-line-color);
-}
-
-.selectedOptions {
-  border-top: 0;
-  border-bottom: 0;
-}
-
-.left {
-  grid-area: left;
-
-  z-index: 1;
-
-  &.shadow {
-    box-shadow: 5px 0 14px rgba(var(--color-nums-shadow), 0.4);
-  }
-}
-
-.calendar {
-  position: relative;
-
-  overflow-x: auto;
-  overflow-y: hidden;
-
-  border-right: 1px solid var(--separate-line-color);
-  border-left: 1px solid var(--separate-line-color);
-  grid-area: calendar;
-}
-
-.fakeBlock {
-  visibility: hidden;
-
-  box-sizing: border-box;
-  padding: 0 var(--space-xs);
-}
-
-.labelsTable {
-  table-layout: fixed;
-
-  & thead th,
-  & tbody td {
-    padding-right: var(--space-xs);
-    padding-left: var(--space-xs);
-  }
-
-  & thead th:first-child,
-  & tbody td:first-child {
-    padding-left: var(--space-m);
-  }
-
-  & thead th:last-child,
-  & tbody td:last-child {
-    padding-right: var(--space-m);
-  }
-
-  & thead th.isSubTitle {
-    padding: 0;
-  }
-}
-
-.calendarTable {
-  position: relative;
-
-  min-width: calc-size(600);
-
-  table-layout: fixed;
-
-  & tbody {
-    background-image: url('./background.svg');
-    background-repeat: repeat;
-  }
-
-  & th {
-    padding-right: 0;
-    padding-left: 0;
-  }
-}
-
-.iconFilter {
-  position: absolute;
-  top: 0;
-  right: 0;
-
-  transform: translate(100%, -25%);
-
-  .cell:hover:not(.isFilterOpened) & {
-    opacity: 1;
-    color: var(--color-control-typo-clear);
-  }
-}
-
-.groups {
-  position: relative;
-
   width: 100%;
+  height: 100%;
+  padding-top: var(--cell-padding-vertical);
+
+  background-image: url('./background.svg');
+  background-repeat: repeat;
+}
+
+.linesWrapper {
+  position: relative;
 }
 
 .currentDay {
@@ -113,13 +35,13 @@
 
   position: absolute;
   top: 0;
+  bottom: 0;
 
   width: var(--current-day-width);
-  height: 100%;
 
   background: var(--color-bg-link);
 
-  &::after {
+  &.withCircle::after {
     position: absolute;
     top: 0;
     left: 0;
@@ -134,35 +56,4 @@
 
     transform: translateX(calc(var(--current-day-width) / 2)) translate(-50%, -50%);
   }
-}
-
-.titleWrapper {
-  position: relative;
-}
-
-.periodWrapper {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -1px;
-
-  width: 1px;
-
-  text-align: center;
-
-  background: var(--separate-line-color);
-}
-
-.periodText {
-  font-size: calc-size(8);
-
-  position: absolute;
-  top: 0;
-  left: 1px;
-
-  padding: 0 var(--space-2xs);
-
-  white-space: nowrap;
-
-  background: var(--color-control-bg-ghost);
 }

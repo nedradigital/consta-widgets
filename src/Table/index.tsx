@@ -8,9 +8,15 @@ import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 import _ from 'lodash'
 
+import { isHtmlElement } from '@/common/utils/type-guards'
+import { useComponentSize } from '@/common/utils/use-component-size'
+import { useBaseSize } from '@/BaseSizeContext'
+
+import { Cell, HorizontalAlign, VerticalAlign } from './components/Cell'
+import { FilterTooltip } from './components/FilterTooltip'
+import { Resizer } from './components/Resizer'
+import { SelectedOptionsList } from './components/SelectedOptionsList'
 import {
-  BasicTableColumn,
-  BasicTableRow,
   fieldFiltersPresent,
   FieldSelectedValues,
   Filters,
@@ -18,19 +24,12 @@ import {
   getOptionsForFilters,
   getSelectedFiltersList,
   isSelectedFiltersPresent,
-  RowField,
   useSelectedFilters,
-} from '@/common/utils/table'
-import { isHtmlElement } from '@/common/utils/type-guards'
-import { useComponentSize } from '@/common/utils/use-component-size'
-import { FilterTooltip } from '@/core/FilterTooltip'
-import { SelectedOptionsList } from '@/core/SelectedOptionsList'
-import { useBaseSize } from '@/BaseSizeContext'
-
-import { Cell, HorizontalAlign, VerticalAlign } from './components/Cell'
-import { Resizer } from './components/Resizer'
+} from './filtering'
 import { getColumnLeftOffset, getColumnsSize, getNewSorting } from './helpers'
 import css from './index.css'
+
+export { Filters }
 
 type Size = 's' | 'm' | 'l'
 
@@ -44,12 +43,25 @@ type ActiveRow = {
   onChange: (id: string | undefined) => void
 }
 
-type Column<T extends BasicTableRow> = BasicTableColumn<T> & {
+export type TableRow = {
+  [key: string]: React.ReactNode
+  id: string
+}
+
+export type RowField<T extends TableRow> = Exclude<keyof T, symbol | number>
+
+export type ColumnWidth = number | undefined
+
+export type TableColumn<T extends TableRow> = {
+  title: React.ReactNode
+  accessor: RowField<T>
   align?: HorizontalAlign
+  withoutPadding?: boolean
+  width?: ColumnWidth
 } & ({ sortable?: false } | { sortable: true; sortByField?: RowField<T> })
 
-export type Props<T extends BasicTableRow> = {
-  columns: ReadonlyArray<Column<T>>
+export type Props<T extends TableRow> = {
+  columns: ReadonlyArray<TableColumn<T>>
   rows: readonly T[]
   filters?: Filters<T>
   size?: Size
@@ -64,7 +76,7 @@ export type Props<T extends BasicTableRow> = {
   emptyRowsPlaceholder?: React.ReactNode
 }
 
-export type SortingState<T extends BasicTableRow> = {
+export type SortingState<T extends TableRow> = {
   by: RowField<T>
   order: 'asc' | 'desc'
 } | null
@@ -81,7 +93,7 @@ const headerShadow = (
   </div>
 )
 
-const getColumnSortByField = <T extends BasicTableRow>(column: Column<T>): RowField<T> =>
+const getColumnSortByField = <T extends TableRow>(column: TableColumn<T>): RowField<T> =>
   (column.sortable && column.sortByField) || column.accessor
 
 const defaultEmptyRowsPlaceholder = (
@@ -90,12 +102,12 @@ const defaultEmptyRowsPlaceholder = (
   </Text>
 )
 
-export const Table = <T extends BasicTableRow>({
+export const Table = <T extends TableRow>({
   columns,
   rows,
   size = 'l',
   filters,
-  isResizable = true,
+  isResizable = false,
   stickyHeader = false,
   stickyColumns = 0,
   activeRow,
@@ -105,9 +117,9 @@ export const Table = <T extends BasicTableRow>({
   borderBetweenColumns = false,
   emptyRowsPlaceholder = defaultEmptyRowsPlaceholder,
 }: Props<T>): React.ReactElement => {
-  const [resizedColumnWidths, setResizedColumnWidths] = React.useState<
-    ReadonlyArray<number | undefined>
-  >(columns.map(() => undefined))
+  const [resizedColumnWidths, setResizedColumnWidths] = React.useState<readonly ColumnWidth[]>(
+    columns.map(column => column.width)
+  )
   const [initialColumnWidths, setInitialColumnWidths] = React.useState<readonly number[]>([])
   const [sorting, setSorting] = React.useState<SortingState<T>>(null)
   const [visibleFilter, setVisibleFilter] = React.useState<string | null>(null)
@@ -154,9 +166,9 @@ export const Table = <T extends BasicTableRow>({
     setInitialColumnWidths(columnsElements.map(el => el.getBoundingClientRect().width))
   }, [])
 
-  const isSortedByColumn = (column: Column<T>) => getColumnSortByField(column) === sorting?.by
+  const isSortedByColumn = (column: TableColumn<T>) => getColumnSortByField(column) === sorting?.by
 
-  const getSortIcon = (column: Column<T>) => {
+  const getSortIcon = (column: TableColumn<T>) => {
     return (
       (isSortedByColumn(column) && (sorting?.order === 'desc' ? IconSortDown : IconSortUp)) ||
       // todo заменить на соответствующую иконку, когда добавят в ui-kit: https://github.com/gpn-prototypes/ui-kit/issues/212
@@ -164,7 +176,7 @@ export const Table = <T extends BasicTableRow>({
     )
   }
 
-  const handleSortClick = (column: Column<T>) => {
+  const handleSortClick = (column: TableColumn<T>) => {
     setSorting(getNewSorting(sorting, getColumnSortByField(column)))
   }
 
@@ -261,7 +273,7 @@ export const Table = <T extends BasicTableRow>({
     const showResizer =
       stickyColumns > columnIndex ||
       stickyColumnsWidth + tableScroll.left < columnLeftOffset + columnWidth
-    const isFilterActive = selectedFilters[column.accessor].length > 0
+    const isFilterActive = (selectedFilters[column.accessor] || []).length > 0
 
     return {
       ...column,
@@ -351,7 +363,7 @@ export const Table = <T extends BasicTableRow>({
             className={css.headerCell}
             showVerticalShadow={showVerticalCellShadow}
           >
-            <div className={css.title}>{column.title}</div>
+            {column.title}
             <div
               className={classnames(
                 css.buttons,
@@ -375,7 +387,7 @@ export const Table = <T extends BasicTableRow>({
                   field={column.accessor}
                   isOpened={visibleFilter === column.accessor}
                   options={getOptionsForFilters(filters, column.accessor)}
-                  values={selectedFilters[column.accessor]}
+                  values={selectedFilters[column.accessor] || []}
                   onChange={handleTooltipSave}
                   onToggle={handleFilterTogglerClick(column.accessor)}
                   className={classnames(css.icon, css.iconFilter)}
@@ -393,7 +405,6 @@ export const Table = <T extends BasicTableRow>({
       {filters && isSelectedFiltersPresent(selectedFilters) && (
         <div className={classnames(css.rowWithoutCells)}>
           <SelectedOptionsList
-            className={css.selectedFilters}
             values={getSelectedFiltersList({ filters, selectedFilters, columns })}
             onRemove={removeSelectedFilter(filters)}
             onReset={resetSelectedFilters}

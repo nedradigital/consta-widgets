@@ -1,9 +1,9 @@
-import { Filters } from '@/common/utils/table'
+import { Filters } from '@/Table'
 
-import { Props as Data, Row } from '.'
+import { Props as Data, RoadmapRow } from '.'
 
 /* istanbul ignore next */
-export const dataFilters: Filters<Row> = [
+export const dataFilters: Filters<RoadmapRow> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -70,24 +70,24 @@ export const data: Data = {
   startDate: Date.UTC(2019, 0, 1),
   currentDay: Date.UTC(2019, 6, 10),
   endDate: Date.UTC(2020, 11, 31),
-  titles: [
+  columns: [
     {
       title: 'МЕСТА УСТАНОВКИ',
       accessor: 'installationPlaces',
+      width: 210,
     },
     {
       title: 'КОМПЛЕКС',
       accessor: 'complex',
       align: 'center',
+      width: 164,
     },
   ],
   rows: [
     {
       id: 'row1',
-      columns: {
-        installationPlaces: '1. Ямбургское НГКМ',
-        complex: 'МУПН 1500',
-      },
+      installationPlaces: '1. Ямбургское НГКМ',
+      complex: 'МУПН 1500',
       groups: [
         {
           plan: {
@@ -146,10 +146,8 @@ export const data: Data = {
     },
     {
       id: 'row2',
-      columns: {
-        installationPlaces: '2. Место установки 2',
-        complex: 'ZHQ-342-23',
-      },
+      installationPlaces: '2. Место установки 2',
+      complex: 'ZHQ-342-23',
       groups: [
         {
           plan: {
@@ -207,10 +205,8 @@ export const data: Data = {
     },
     {
       id: 'row3',
-      columns: {
-        installationPlaces: '3. Место установки 3',
-        complex: 'МУПН 1300',
-      },
+      installationPlaces: '3. Место установки 3',
+      complex: 'МУПН 1300',
       groups: [
         {
           plan: {
@@ -267,10 +263,8 @@ export const data: Data = {
     },
     {
       id: 'row4',
-      columns: {
-        installationPlaces: '4. Место установки установок',
-        complex: 'МУПН 1600',
-      },
+      installationPlaces: '4. Место установки установок',
+      complex: 'МУПН 1600',
       groups: [
         {
           plan: {
@@ -328,10 +322,8 @@ export const data: Data = {
     },
     {
       id: 'row5',
-      columns: {
-        installationPlaces: '5. Станция бурения в океане',
-        complex: 'МУПН 1700',
-      },
+      installationPlaces: '5. Станция бурения в океане',
+      complex: 'МУПН 1700',
       groups: [
         {
           plan: {
@@ -392,7 +384,7 @@ export const data: Data = {
 }
 
 /* istanbul ignore next */
-export const minimalDataFilters: Filters<Row> = [
+export const minimalDataFilters: Filters<RoadmapRow> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -423,24 +415,24 @@ export const minimalData: Data = {
   startDate: Date.UTC(2019, 0, 1),
   currentDay: Date.UTC(2019, 6, 10),
   endDate: Date.UTC(2019, 6, 10),
-  titles: [
+  columns: [
     {
       title: 'МЕСТА УСТАНОВКИ',
       accessor: 'installationPlaces',
+      width: 210,
     },
     {
       title: 'КОМПЛЕКС',
       accessor: 'complex',
       align: 'center',
+      width: 164,
     },
   ],
   rows: [
     {
       id: 'row1',
-      columns: {
-        installationPlaces: '1. Ямбургское НГКМ',
-        complex: 'МУПН 1500',
-      },
+      installationPlaces: '1. Ямбургское НГКМ',
+      complex: 'МУПН 1500',
       groups: [
         {
           plan: {
@@ -479,10 +471,8 @@ export const minimalData: Data = {
     },
     {
       id: 'row2',
-      columns: {
-        installationPlaces: '2. Место установки 2',
-        complex: 'ZHQ-342-23',
-      },
+      installationPlaces: '2. Место установки 2',
+      complex: 'ZHQ-342-23',
       groups: [
         {
           plan: {
@@ -515,7 +505,7 @@ export const minimalData: Data = {
 }
 
 /* istanbul ignore next */
-export const monochromeDataFilters: Filters<Row> = [
+export const monochromeDataFilters: Filters<RoadmapRow> = [
   {
     id: 'clusterKP4',
     name: 'КП4',
@@ -546,19 +536,18 @@ export const monochromeData: Data = {
   startDate: Date.UTC(2019, 0, 1),
   currentDay: Date.UTC(2019, 6, 6),
   endDate: Date.UTC(2019, 11, 31),
-  titles: [
+  columns: [
     {
       title: 'Куст',
       accessor: 'cluster',
       align: 'center',
+      width: 164,
     },
   ],
   rows: [
     {
       id: 'row1',
-      columns: {
-        cluster: 'КП4',
-      },
+      cluster: 'КП4',
       groups: [
         {
           plan: {
@@ -640,9 +629,7 @@ export const monochromeData: Data = {
     },
     {
       id: 'row2',
-      columns: {
-        cluster: 'КП6',
-      },
+      cluster: 'КП6',
       groups: [
         {
           plan: {
@@ -724,9 +711,7 @@ export const monochromeData: Data = {
     },
     {
       id: 'row3',
-      columns: {
-        cluster: 'КП7',
-      },
+      cluster: 'КП7',
       groups: [
         {
           plan: {
@@ -784,9 +769,7 @@ export const monochromeData: Data = {
     },
     {
       id: 'row4',
-      columns: {
-        cluster: 'КП8',
-      },
+      cluster: 'КП8',
       groups: [
         {
           plan: {

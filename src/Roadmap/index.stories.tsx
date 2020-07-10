@@ -9,12 +9,12 @@ import { Roadmap } from '.'
 import { data, minimalData, monochromeData } from './data.mock'
 
 export const Interactive = createStory(() => {
-  const { titles, rows, currentDay, startDate, endDate, filters } = data
+  const { columns, rows, currentDay, startDate, endDate, filters } = data
 
   return (
     <Roadmap
       rows={object('rows', rows)}
-      titles={object('titles', titles)}
+      columns={object('columns', columns)}
       filters={object('filters', filters)}
       startDate={startDate}
       currentDay={currentDay}
@@ -25,12 +25,12 @@ export const Interactive = createStory(() => {
 
 export const WithLittleData = createStory(
   () => {
-    const { titles, currentDay, rows, startDate, endDate, filters } = minimalData
+    const { columns, currentDay, rows, startDate, endDate, filters } = minimalData
 
     return (
       <Roadmap
         rows={object('rows', rows)}
-        titles={object('titles', titles)}
+        columns={object('columns', columns)}
         filters={object('filters', filters)}
         startDate={startDate}
         currentDay={currentDay}
@@ -43,12 +43,12 @@ export const WithLittleData = createStory(
 
 export const SingleColor = createStory(
   () => {
-    const { titles, currentDay, rows, startDate, endDate, filters } = monochromeData
+    const { columns, currentDay, rows, startDate, endDate, filters } = monochromeData
 
     return (
       <Roadmap
         rows={object('rows', rows)}
-        titles={object('titles', titles)}
+        columns={object('columns', columns)}
         filters={object('filters', filters)}
         startDate={startDate}
         currentDay={currentDay}

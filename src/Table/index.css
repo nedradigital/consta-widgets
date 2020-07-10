@@ -62,10 +62,10 @@
   display: contents;
 }
 
-.headerCell:not(:first-child) {
+.headerCell {
   position: relative;
 
-  &::after {
+  &:not(:first-child)::after {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -100,12 +100,6 @@
   &.isDarkned {
     opacity: 0.3;
   }
-}
-
-.title {
-  position: relative;
-
-  display: inline-block;
 }
 
 .buttons {
@@ -145,10 +139,6 @@
   .buttons.isFilterActive & {
     opacity: 1;
   }
-}
-
-.selectedFilters {
-  border-top: 0;
 }
 
 .headerShadowWrapper {
