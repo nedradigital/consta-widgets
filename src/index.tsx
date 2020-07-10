@@ -1,4 +1,5 @@
-import { getGeoObjectName, ruNames } from '@/common/utils/geo-names'
+import { getGeoObjectName, ruNames } from './common/utils/geo-names'
+import './index.css'
 
 // Components
 export { Badge } from './Badge'
