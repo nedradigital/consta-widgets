@@ -167,7 +167,7 @@ export const CoreDonutChart: React.FC<Props> = ({
         />
       )}
       {showTooltip && (
-        <Tooltip isVisible={isTooltipVisible} position={mousePosition}>
+        <Tooltip isVisible={isTooltipVisible} size="m" position={mousePosition}>
           <TooltipContentForMultipleValues items={tooltipData} />
         </Tooltip>
       )}

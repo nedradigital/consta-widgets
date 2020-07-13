@@ -12,17 +12,8 @@
   }
 }
 
-.tooltip {
-  width: calc-size(312);
-  padding: var(--space-s);
-
-  background-color: var(--color-bg-secondary);
-  box-shadow: 0 2px 4px rgba(var(--color-nums-shadow), 0.3);
-
-  transform: translateY(4px);
-}
-
 .title {
+  margin-top: var(--space-2xs);
   margin-bottom: var(--space-xs);
 }
 

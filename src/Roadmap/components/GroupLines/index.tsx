@@ -14,7 +14,7 @@ type Props = {
   withMargin: boolean
   tooltipPosition: Position
   onClick: React.MouseEventHandler<HTMLDivElement>
-  onTooltipRequestReposition: () => void
+  onTooltipRequestClose: () => void
 }
 
 export const GroupLines: React.FC<Props> = ({
@@ -27,7 +27,7 @@ export const GroupLines: React.FC<Props> = ({
   withMargin,
   tooltipPosition,
   onClick,
-  onTooltipRequestReposition,
+  onTooltipRequestClose,
 }) => {
   const interactiveLineRef = React.useRef<HTMLDivElement>(null)
 
@@ -95,7 +95,7 @@ export const GroupLines: React.FC<Props> = ({
           forecast={forecast}
           plan={plan}
           position={tooltipPosition}
-          onRequestReposition={onTooltipRequestReposition}
+          onRequestClose={onTooltipRequestClose}
         />
       )}
     </>

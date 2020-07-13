@@ -212,11 +212,12 @@ export const DatePicker: React.FC<Props> = props => {
       </div>
       <Tooltip
         isVisible={isTooltipVisible}
+        size="l"
         ref={tooltipRef}
         anchorRef={controlsRef}
-        className={css.tooltip}
+        contentClassName={css.tooltip}
         withArrow={false}
-        offset={16}
+        offset={4}
         direction="downCenter"
         isContentHoverable
         possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}

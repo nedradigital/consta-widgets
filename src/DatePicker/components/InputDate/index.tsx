@@ -85,13 +85,7 @@ export const InputDate: React.FC<Props> = ({
         onKeyUp={checkIsRealDate}
         onBlur={handleBlur}
       />
-      <Tooltip
-        isVisible={!!tooltipContent}
-        anchorRef={ref}
-        direction="rightCenter"
-        isContentHoverable
-        className={css.tooltip}
-      >
+      <Tooltip size="m" isVisible={!!tooltipContent} anchorRef={ref} direction="rightCenter">
         {tooltipContent}
       </Tooltip>
     </>

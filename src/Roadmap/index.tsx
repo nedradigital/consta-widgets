@@ -180,14 +180,12 @@ export const Roadmap: React.FC<Props> = props => {
     if (calendarRef.current) {
       const element = calendarRef.current
       element.addEventListener('scroll', scrollHandler)
-      window.addEventListener('click', resetActiveLine)
 
       return () => {
-        window.removeEventListener('click', resetActiveLine)
         element.removeEventListener('scroll', scrollHandler)
       }
     }
-  }, [calendarRef, resetActiveLine, scrollHandler])
+  }, [calendarRef, scrollHandler])
 
   useLayoutEffect(() => {
     if (calendarRef.current) {
@@ -327,7 +325,7 @@ export const Roadmap: React.FC<Props> = props => {
                           withMargin={withMargin}
                           tooltipPosition={activeRow.position}
                           onClick={event => handleClick({ event, id, groupIndex })}
-                          onTooltipRequestReposition={resetActiveLine}
+                          onTooltipRequestClose={resetActiveLine}
                         />
                       )
                     })}
