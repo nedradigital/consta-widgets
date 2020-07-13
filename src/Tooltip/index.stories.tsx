@@ -93,7 +93,7 @@ export const TooltipPositionedByAnchorStory = createStory(
               <br />
               <br />
               <br />
-              <input />
+              <input style={{ width: '100%', boxSizing: 'border-box' }} />
             </>
           )}
         </Tooltip>
