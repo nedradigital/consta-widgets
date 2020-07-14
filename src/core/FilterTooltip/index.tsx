@@ -49,7 +49,7 @@ export const FilterTooltip: React.FC<Props> = ({
       <Button
         innerRef={buttonRef}
         size="xs"
-        iconSize="xs"
+        iconSize="s"
         view="clear"
         onlyIcon
         onClick={onToggle}
