@@ -1,12 +1,11 @@
-.selectedFilters {
+.main {
   --filters-border: 1px solid var(--color-bg-border);
 
   display: flex;
+  align-items: center;
 
   box-sizing: border-box;
-  max-height: calc-size(64);
-  padding-right: var(--space-xs);
-  padding-left: var(--space-m);
+  padding-right: var(--space-s);
 
   border-top: var(--filters-border);
   border-bottom: var(--filters-border);
@@ -14,36 +13,23 @@
 
 .options {
   display: flex;
-  overflow-y: auto;
   flex: 1;
   flex-wrap: wrap;
 
-  padding-top: var(--space-2xs);
+  padding: 0 var(--cell-padding-horizontal);
 }
 
-.buttonCross {
-  @mixin button;
-
-  width: 18px;
-  height: 18px;
-  margin: var(--space-2xs);
-
-  cursor: pointer;
-
-  color: var(--color-control-typo-clear);
-
-  &:hover {
-    color: var(--color-control-typo-clear-hover);
-  }
-}
-
-.icon {
-  display: block;
-
-  margin: 0 auto;
-}
-
-.selectedOptionWrapper {
+.option {
+  margin: var(--space-2xs) 0;
   margin-right: var(--space-2xs);
-  margin-bottom: var(--space-2xs);
+}
+
+.clear {
+  opacity: 0;
+
+  transition: opacity 0.15s ease-out;
+
+  .main:hover & {
+    opacity: 1;
+  }
 }

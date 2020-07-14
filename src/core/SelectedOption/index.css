@@ -15,8 +15,8 @@
   overflow: hidden;
 
   margin-top: 0;
+  margin-right: var(--space-xs);
   margin-bottom: 0;
-  padding-right: var(--space-s);
 
   text-overflow: ellipsis;
 
@@ -26,12 +26,26 @@
 .buttonCross {
   @mixin button;
 
+  position: relative;
+
   cursor: pointer;
 
   color: var(--color-control-typo-clear);
 
   &:hover {
     color: var(--color-control-typo-clear-hover);
+  }
+
+  &::before {
+    --click-offset: calc(-1 * var(--space-2xs));
+
+    position: absolute;
+    top: var(--click-offset);
+    right: var(--click-offset);
+    bottom: var(--click-offset);
+    left: var(--click-offset);
+
+    content: '';
   }
 }
 
