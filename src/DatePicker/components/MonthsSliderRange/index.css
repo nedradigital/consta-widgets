@@ -11,7 +11,7 @@
 
   width: calc(var(--tick-width) * 13 + var(--space-to-show-year));
   height: var(--height);
-  margin: 0 auto;
+  margin: 0 var(--space-xs);
 
   border-radius: var(--control-radius);
   background-color: var(--color-control-bg-ghost);
