@@ -41,6 +41,7 @@ optimization: {
           test: /node_modules\/@gpn-design\/uikit\/.*\.css$/,
           chunks: 'all',
           enforce: true,
+          priority: 1
       },
     },
   },
