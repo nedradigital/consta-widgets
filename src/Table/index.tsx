@@ -31,7 +31,8 @@ import css from './index.css'
 
 export { Filters }
 
-type Size = 's' | 'm' | 'l'
+export const sizes = ['s', 'm', 'l'] as const
+type Size = typeof sizes[number]
 
 type TableCSSCustomProperty = {
   '--table-width': string
