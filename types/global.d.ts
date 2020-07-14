@@ -1,8 +1,9 @@
 import R from 'react'
+import T from 'react-test-renderer'
 
-import 'jest-enzyme'
 import 'jest-extended'
 
 declare global {
   const React: typeof R
+  const TestRenderer: typeof T
 }
