@@ -31,35 +31,31 @@ type Props = {
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
   onChangeLabelSize?: (size: number) => void
+  className?: string
+  style?: React.CSSProperties
 }
 
-const sizeClasses: Record<ColumnSize, string> = {
-  s: css.sizeS,
-  m: css.sizeM,
-  l: css.sizeL,
-  xl: css.sizeXL,
-  '2xl': css.size2XL,
-  '3xl': css.size3XL,
-}
-
-export const Group: React.FC<Props> = ({
-  columns,
-  group,
-  reversedColumns,
-  maxValue,
-  isHorizontal,
-  isNegative,
-  size,
-  isDense,
-  activeGroup,
-  activeSectionIndex,
-  showValues,
-  scaler,
-  formatValueForLabel,
-  onMouseEnterColumn,
-  onMouseLeaveColumn,
-  onChangeLabelSize,
-}) => {
+export const Group = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const {
+    columns,
+    group,
+    reversedColumns,
+    maxValue,
+    isHorizontal,
+    isNegative,
+    size,
+    isDense,
+    activeGroup,
+    activeSectionIndex,
+    showValues,
+    scaler,
+    formatValueForLabel,
+    onMouseEnterColumn,
+    onMouseLeaveColumn,
+    onChangeLabelSize,
+    className,
+    style,
+  } = props
   const columnsRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(columnsRef)
   const scalerSize = isHorizontal ? width : height
@@ -99,12 +95,9 @@ export const Group: React.FC<Props> = ({
 
   return (
     <div
-      className={classnames(
-        css.group,
-        isHorizontal && css.isHorizontal,
-        isDense && css.isDense,
-        sizeClasses[size]
-      )}
+      className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
+      style={style}
+      ref={ref}
     >
       <div ref={columnsRef} className={css.columns}>
         <div className={css.wrapper}>
@@ -118,4 +111,4 @@ export const Group: React.FC<Props> = ({
       </div>
     </div>
   )
-}
+})

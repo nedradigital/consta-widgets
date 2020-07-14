@@ -9,6 +9,7 @@
   --round-radius: calc-size(2);
 
   position: relative;
+
   flex-shrink: 1;
 
   width: 100%;

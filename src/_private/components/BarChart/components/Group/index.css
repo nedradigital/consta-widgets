@@ -2,68 +2,18 @@
 @custom-selector :--vertical-group .group:not(.isHorizontal);
 
 .group {
-  --group-outer-padding: var(--space-3xs);
-
   display: flex;
   flex-grow: 1;
-
-  &.sizeS {
-    --group-inner-padding: var(--space-2xs);
-  }
-
-  &.sizeM {
-    --group-inner-padding: var(--space-xs);
-  }
-
-  &.sizeL {
-    --group-inner-padding: var(--space-xs);
-  }
-
-  &.sizeXL {
-    --group-inner-padding: var(--space-xs);
-  }
-
-  &.size2XL {
-    --group-inner-padding: var(--space-xs);
-  }
-
-  &.size3XL {
-    --group-inner-padding: var(--space-xs);
-  }
 
   &:not(.isHorizontal) {
     flex-direction: column;
 
-    padding: 0 var(--group-inner-padding);
-
     text-align: center;
-
-    &:first-child {
-      padding-left: var(--group-outer-padding);
-    }
-
-    &:last-child {
-      padding-right: var(--group-outer-padding);
-    }
   }
 
   &.isHorizontal {
     align-items: center;
     flex-direction: row-reverse;
-
-    padding: var(--group-inner-padding) 0;
-
-    &:first-child {
-      padding-top: var(--group-outer-padding);
-    }
-
-    &:last-child {
-      padding-bottom: var(--group-outer-padding);
-    }
-  }
-
-  &.isDense {
-    padding: 0;
   }
 }
 

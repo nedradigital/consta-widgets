@@ -2,15 +2,17 @@ import { sum } from 'lodash'
 
 import { getEveryN } from '@/_private/utils/array'
 import { NumberRange } from '@/_private/utils/scale'
-import { ShowPositions } from '@/BarChartAxis'
-import { Size as TickSize } from '@/Ticks'
 
 import { Group, Groups } from './'
 import { ColumnItem } from './components/Group'
+import { Position, Size as TickSize } from './components/Ticks'
 
 export const barCharSizes = ['s', 'm', 'l', 'xl', '2xl', '3xl', 'auto'] as const
 export type Size = typeof barCharSizes[number]
 export type ColumnSize = Exclude<Size, 'auto'>
+export type ShowPositions = {
+  [key in Position]: boolean
+}
 
 export type GetGroupSize = (params: {
   columnPadding: number
@@ -162,3 +164,45 @@ export const getScaler = ({
   const length = maxLength * percent
   return length > maxLength ? maxLength : length
 }
+
+const getAreaNames = (count: number, handler: (i: number) => string) =>
+  [...Array(count).keys()].map(handler).join(' ')
+
+export const getGridSettings = ({
+  isHorizontal,
+  countGroups,
+  showReversed,
+  showUnitBottom,
+  showUnitLeft,
+}: {
+  isHorizontal: boolean
+  countGroups: number
+  showReversed: boolean
+  showUnitBottom: boolean
+  showUnitLeft: boolean
+}): React.CSSProperties =>
+  isHorizontal
+    ? {
+        gridTemplateRows: `${showUnitLeft ? 'auto ' : ''}${getAreaNames(
+          countGroups,
+          () => '1fr'
+        )} auto${showUnitBottom ? ' auto' : ''}`,
+        gridTemplateColumns: `auto 1fr${showReversed ? ' auto' : ''}`,
+        gridTemplateAreas:
+          (showUnitLeft ? `"topLeft topLeft${showReversed ? ' topLeft' : ''}" ` : '') +
+          getAreaNames(
+            countGroups,
+            index => `"labelLeft${index} group${index}${showReversed ? ` labelRight${index}` : ''}"`
+          ) +
+          ` "bottomLeft bottomTicks${showReversed ? ' bottomRight' : ''}" ` +
+          `${showUnitBottom ? `"bottomLeft bottomUnit${showReversed ? ' bottomUnit' : ''}"` : ''}`,
+      }
+    : {
+        gridTemplateRows: `auto 1fr auto${showUnitBottom ? ' auto' : ''}`,
+        gridTemplateColumns: `auto ${getAreaNames(countGroups, () => '1fr')}`,
+        gridTemplateAreas:
+          `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}" ` +
+          `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}" ` +
+          `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}" ` +
+          (showUnitBottom ? `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"` : ''),
+      }
