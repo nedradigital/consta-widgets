@@ -151,7 +151,7 @@ export const Table = <T extends BasicTableRow>({
       return
     }
 
-    setInitialColumnWidths(columnsElements.map(el => el.offsetWidth))
+    setInitialColumnWidths(columnsElements.map(el => el.getBoundingClientRect().width))
   }, [])
 
   const isSortedByColumn = (column: Column<T>) => getColumnSortByField(column) === sorting?.by
