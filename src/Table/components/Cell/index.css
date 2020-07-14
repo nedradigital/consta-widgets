@@ -22,7 +22,7 @@
 
   &.isSortable,
   &.isFilterable {
-    --buttons-wrapper-size: var(--space-2xl);
+    --buttons-wrapper-size: var(--space-xl);
   }
 
   &.isSortable.isFilterable {
