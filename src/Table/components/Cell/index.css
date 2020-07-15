@@ -1,5 +1,5 @@
 .cell {
-  --buttons-wrapper-size: calc(0 * 1px);
+  --buttons-wrapper-size: 0px;
 
   z-index: var(--table-z);
 

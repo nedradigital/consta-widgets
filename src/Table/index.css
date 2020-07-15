@@ -7,9 +7,7 @@
   --fast-transition: 0.15s ease-out;
   --shadow-color: rgba(0, 29, 46, 0.4);
   --table-border: 1px solid var(--color-bg-border);
-
-  /* обязательно нужно указывать в пикселях, а 0px линтер автоматически исправляет на 0 */
-  --resizer-width: calc(0 * 1px);
+  --resizer-width: 0px;
 
   position: relative;
 
