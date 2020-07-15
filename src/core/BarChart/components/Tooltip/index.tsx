@@ -22,11 +22,10 @@ type Props = {
 export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = String }) => {
   return (
     <BaseTooltip
-      isVisible={true}
       size="s"
       position={{ x: data.x, y: data.y }}
       direction={isHorizontal ? 'upCenter' : 'leftCenter'}
-      offset={0}
+      isInteractive={false}
     >
       {data.sections.map(section =>
         section.value ? (

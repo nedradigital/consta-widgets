@@ -66,7 +66,7 @@ export const ImagesPopup: React.FC<Props> = ({ images, openOnImage, onRequestClo
   }
 
   return (
-    <PortalWithTheme theme={theme}>
+    <PortalWithTheme preset={theme}>
       <div
         className={classnames(css.main, isVisible && css.isVisible, isOpening && css.isOpening)}
         tabIndex={-1}

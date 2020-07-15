@@ -6,7 +6,8 @@ import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
-import { Position, Tooltip, useTooltipReposition } from '@/Tooltip'
+import { usePopoverReposition } from '@/Popover'
+import { Position, Tooltip } from '@/Tooltip'
 
 import { Item } from '../..'
 
@@ -114,7 +115,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
 }) => {
   const ref = React.useRef(null)
 
-  useTooltipReposition({
+  usePopoverReposition({
     isActive: true,
     scrollAnchorRef: anchorRef,
     onRequestReposition: onRequestClose,
@@ -130,9 +131,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
     <Tooltip
       ref={ref}
       direction="upRight"
-      isVisible
       size="l"
-      isContentHoverable
       possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
       position={position}
     >

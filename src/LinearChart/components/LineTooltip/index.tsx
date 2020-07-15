@@ -103,10 +103,10 @@ export const LineTooltip: React.FC<Props> = ({
 
   return (
     <Tooltip
-      isVisible
       size="l"
       position={position}
       direction={isHorizontal ? 'upCenter' : 'rightCenter'}
+      isInteractive={false}
     >
       <TooltipContentForMultipleValues
         title={title}

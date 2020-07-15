@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import { Theme, ThemePreset } from '@gpn-design/uikit/Theme'
+import { Theme, ThemeProps } from '@gpn-design/uikit/Theme'
 
 export const PortalWithTheme: React.FC<{
-  theme: ThemePreset
   container?: Element
-}> = ({ children, theme, container = window.document.body }) =>
-  ReactDOM.createPortal(<Theme preset={theme}>{children}</Theme>, container)
+} & ThemeProps> = ({ children, container = window.document.body, ...rest }) =>
+  ReactDOM.createPortal(<Theme {...rest}>{children}</Theme>, container)

@@ -4,9 +4,11 @@ import HTML5Backend from 'react-dnd-html5-backend'
 
 import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit/Text'
+import { useTheme } from '@gpn-design/uikit/Theme'
+import classnames from 'classnames'
 import { endOfDay, format, startOfDay } from 'date-fns'
 
-import { Tooltip } from '@/Tooltip'
+import { Popover } from '@/Popover'
 
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'
@@ -125,6 +127,8 @@ export const DatePicker: React.FC<Props> = props => {
   const [currentVisibleDate, setCurrentVisibleDate] = useState<Date>(
     getCurrentVisibleDate({ value: props.value, minDate, maxDate })
   )
+  const { themeClassNames } = useTheme()
+
   const baseCommonProps = {
     currentVisibleDate,
     minDate,
@@ -210,36 +214,34 @@ export const DatePicker: React.FC<Props> = props => {
       >
         {renderControls()}
       </div>
-      <Tooltip
-        isVisible={isTooltipVisible}
-        size="l"
-        ref={tooltipRef}
-        anchorRef={controlsRef}
-        contentClassName={css.tooltip}
-        withArrow={false}
-        offset={4}
-        direction="downCenter"
-        isContentHoverable
-        possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}
-      >
-        {props.type === 'date' ? (
-          <MonthsSliderSingle {...monthsPanelCommonProps} />
-        ) : (
-          <DndProvider backend={HTML5Backend}>
-            <MonthsSliderRange
-              {...monthsPanelCommonProps}
-              value={isDateRange(props.value) ? props.value : undefined}
+      {isTooltipVisible && (
+        <Popover
+          anchorRef={controlsRef}
+          offset={4}
+          direction="downCenter"
+          possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}
+        >
+          <div className={classnames(themeClassNames.color.invert, css.tooltip)} ref={tooltipRef}>
+            {props.type === 'date' ? (
+              <MonthsSliderSingle {...monthsPanelCommonProps} />
+            ) : (
+              <DndProvider backend={HTML5Backend}>
+                <MonthsSliderRange
+                  {...monthsPanelCommonProps}
+                  value={isDateRange(props.value) ? props.value : undefined}
+                />
+              </DndProvider>
+            )}
+            <Calendar {...baseCommonProps} value={props.value} onSelect={handleSelectDate} />
+            <ActionButtons
+              {...baseCommonProps}
+              showQuartersSelector={props.type === 'date-range'}
+              onApply={handleApplyDate}
+              onSelect={handleSelectQuarter}
             />
-          </DndProvider>
-        )}
-        <Calendar {...baseCommonProps} value={props.value} onSelect={handleSelectDate} />
-        <ActionButtons
-          {...baseCommonProps}
-          showQuartersSelector={props.type === 'date-range'}
-          onApply={handleApplyDate}
-          onSelect={handleSelectQuarter}
-        />
-      </Tooltip>
+          </div>
+        </Popover>
+      )}
     </div>
   )
 }
