@@ -4,38 +4,29 @@ import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
-import { ColorGroups } from '@/common/types'
 import { labelPositions, labelTypes, sizes } from '@/core/LegendItem'
 
 import { Legend } from '.'
 
-const colorGroups: ColorGroups = {
-  red: 'var(--color-bg-alert)',
-  yellow: 'var(--color-bg-warning)',
-  blue: 'var(--color-bg-normal)',
-  purple: '#9b51e0',
-  green: 'var(--color-bg-success)',
-}
-
 const data = [
   {
-    colorGroupName: 'red',
+    color: 'var(--color-bg-alert)',
     text: 'Красноватый текст',
   },
   {
-    colorGroupName: 'yellow',
+    color: 'var(--color-bg-warning)',
     text: 'Желтоватый текст',
   },
   {
-    colorGroupName: 'blue',
+    color: 'var(--color-bg-normal)',
     text: 'Убер длинный и превозмогающий усилия аквамариновый текст',
   },
   {
-    colorGroupName: 'purple',
+    color: '#9b51e0',
     text: 'Пурпурный текст',
   },
   {
-    colorGroupName: 'green',
+    color: 'var(--color-bg-success)',
     text: 'Зеленый цвет',
   },
 ] as const
@@ -43,7 +34,6 @@ const data = [
 export const Interactive = createStory(() => (
   <Legend
     data={object('data', data)}
-    colorGroups={object('colorGroups', colorGroups)}
     direction="column"
     labelPosition={select('labelPosition', labelPositions, labelPositions[1])}
     labelType={select('labelType', labelTypes, labelTypes[0])}

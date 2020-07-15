@@ -12,7 +12,7 @@ const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
 export const WithThreeColumns = createStory(
   () => (
     <BarChart
-      colorGroups={object('colorGroups', withThreeColumnsData.colorGroups)}
+      colors={object('colors', withThreeColumnsData.colors)}
       unit={withThreeColumnsData.unit}
       unitPosition={getUnitPosition()}
       size="m"
@@ -27,7 +27,7 @@ export const WithThreeColumns = createStory(
 export const WithNegativeValue = createStory(
   () => (
     <BarChart
-      colorGroups={object('colorGroups', withNegativeValueData.colorGroups)}
+      colors={object('colors', withNegativeValueData.colors)}
       unit={withNegativeValueData.unit}
       unitPosition={getUnitPosition()}
       size="m"
@@ -44,7 +44,7 @@ export const WithNegativeValue = createStory(
 export const WithShowValuesOnTopBar = createStory(
   () => (
     <BarChart
-      colorGroups={object('colorGroups', minimalData.colorGroups)}
+      colors={object('colors', minimalData.colors)}
       unit={minimalData.unit}
       unitPosition={getUnitPosition()}
       size="auto"
@@ -61,7 +61,7 @@ export const WithShowValuesOnTopBar = createStory(
 export const Minimalistic = createStory(
   () => (
     <BarChart
-      colorGroups={object('colorGroups', minimalData.colorGroups)}
+      colors={object('colors', minimalData.colors)}
       unit={minimalData.unit}
       unitPosition={getUnitPosition()}
       size="m"

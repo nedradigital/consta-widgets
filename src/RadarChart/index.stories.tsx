@@ -7,7 +7,7 @@ import { createMetadata, createStory, environmentDecorator } from '@/common/stor
 import { getFormattedValue } from '@/common/utils/chart'
 
 import { RadarChart } from './'
-import { axesLabels, colorGroups, emptyFigures, figures } from './data.mock'
+import { axesLabels, emptyFigures, figures } from './data.mock'
 
 const formattersLabel = ['--', 'Как проценты'] as const
 type FormatterLabelName = typeof formattersLabel[number]
@@ -29,8 +29,6 @@ const formattersTooltipList: Record<FormatterTooltipName, FormatterTooltipValue>
     return value => getFormattedValue(value, v => `${v}${unit}`)
   },
 }
-
-const getColorGroups = () => object('colorGroups', colorGroups)
 
 const getFormattersForLabel = () => {
   const selected = select('formatValueForLabel', formattersLabel, formattersLabel[0])
@@ -57,7 +55,6 @@ const decorators = [
 export const TwoFigures = createStory(
   () => (
     <RadarChart
-      colorGroups={getColorGroups()}
       axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures}
@@ -75,7 +72,6 @@ export const TwoFigures = createStory(
 export const TwoFiguresWithoutData = createStory(
   () => (
     <RadarChart
-      colorGroups={getColorGroups()}
       axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={emptyFigures}
@@ -93,7 +89,6 @@ export const TwoFiguresWithoutData = createStory(
 export const OneWholeFigure = createStory(
   () => (
     <RadarChart
-      colorGroups={getColorGroups()}
       axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
@@ -110,7 +105,6 @@ export const OneWholeFigure = createStory(
 export const OneRainbowFigure = createStory(
   () => (
     <RadarChart
-      colorGroups={getColorGroups()}
       axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={figures.slice(0, 1)}
@@ -126,7 +120,6 @@ export const OneRainbowFigure = createStory(
 export const OneRainbowFigureWithoutData = createStory(
   () => (
     <RadarChart
-      colorGroups={getColorGroups()}
       axesLabels={object('axesLabels', axesLabels)}
       maxValue={10}
       figures={[emptyFigures[0]]}
@@ -142,7 +135,6 @@ export const OneRainbowFigureWithoutData = createStory(
 export const FontSizeReduction = createStory(
   () => {
     const commonProps = {
-      colorGroups: {},
       axesLabels,
       maxValue: 10,
       figures,

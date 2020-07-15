@@ -1,70 +1,62 @@
 import { times } from 'lodash'
 
-import { ColorGroups } from '@/common/types'
-
 const sectionWithOnlyZeroData = [...times(3, () => 0)] as const
 
-const colorGroups: ColorGroups = {
+const colors = {
   first: 'var(--color-bg-alert)',
   second: 'var(--color-bg-caution)',
   third: 'var(--color-bg-normal)',
 }
 
 export const donutData = {
-  colorGroups,
   data: [
     {
       name: 'Северный бур',
-      colorGroupName: 'first',
+      color: colors.first,
       values: [1, 2, 3],
     },
     {
       name: 'Южный бур',
-      colorGroupName: 'second',
+      color: colors.second,
       values: [4, 5, 6],
     },
     {
       name: 'Западный бур',
-      colorGroupName: 'third',
+      color: colors.third,
       values: [7, 8, 9],
     },
   ],
 }
 
 export const donutDataItemWithoutData = {
-  colorGroup: {
-    forth: '#9F0CE9',
-  },
   data: {
     name: 'Неизвестный бур',
-    colorGroupName: 'forth',
+    color: '#9F0CE9',
     values: [null, null, null],
   },
 }
 
 export const donutDataItemsWithZeroData = {
-  colorGroups,
   data: [
     {
       name: 'Первый нулевой бур',
-      colorGroupName: 'first',
+      color: colors.first,
       values: sectionWithOnlyZeroData,
     },
     {
       name: 'Второй нулевой бур',
-      colorGroupName: 'second',
+      color: colors.second,
       values: sectionWithOnlyZeroData,
     },
     {
       name: 'Третий нулевой бур',
-      colorGroupName: 'third',
+      color: colors.third,
       values: sectionWithOnlyZeroData,
     },
   ],
 }
 
 export const donutDataItemsWithZeroAndPositiveData = {
-  colorGroups,
   data: [
     {
       ...donutDataItemsWithZeroData.data[0],
@@ -77,21 +69,20 @@ export const donutDataItemsWithZeroAndPositiveData = {
 }
 
 export const donutProgressData = {
-  colorGroups,
   data: [
     {
       name: 'Северный бур',
-      colorGroupName: 'first',
+      color: colors.first,
       values: [60],
     },
     {
       name: 'Южный бур',
-      colorGroupName: 'second',
+      color: colors.second,
       values: [20],
     },
     {
       name: 'Западный бур',
-      colorGroupName: 'third',
+      color: colors.third,
       values: [10],
     },
   ],

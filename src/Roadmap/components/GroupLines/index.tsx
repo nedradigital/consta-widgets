@@ -5,7 +5,6 @@ import { Line } from '../Line'
 import { RoadmapTooltip } from '../RoadmapTooltip'
 
 type Props = {
-  color: string
   group: Group
   monthWidth: number
   isActive: boolean
@@ -18,7 +17,6 @@ type Props = {
 }
 
 export const GroupLines: React.FC<Props> = ({
-  color,
   group,
   monthWidth,
   isActive,
@@ -31,7 +29,7 @@ export const GroupLines: React.FC<Props> = ({
 }) => {
   const interactiveLineRef = React.useRef<HTMLDivElement>(null)
 
-  const { plan, fact, forecast, title, comment } = group
+  const { plan, fact, forecast, title, comment, color } = group
 
   const interactiveLineStartDate = fact?.startDate || forecast?.startDate
   const interactiveLineEndDate = forecast?.endDate || fact?.endDate

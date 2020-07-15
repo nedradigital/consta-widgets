@@ -2,7 +2,7 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Boundary, Item, itemIsNotEmpty, NotEmptyItem, NumberRange, TickValues } from './'
+import { Boundary, Item, itemIsNotEmpty, Line, NotEmptyItem, NumberRange, TickValues } from './'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
@@ -181,4 +181,13 @@ export const getBoundary = ({
     const value = _.sortBy(boundary.value)
     return position >= value[0] && position < value[1]
   })
+}
+
+export const getColorFromFirstLineWithBoundaries = (lines: readonly Line[]) => {
+  const line = lines.find(l => l.withBoundaries)
+  if (!line) {
+    return 'transparent'
+  }
+
+  return line.color
 }

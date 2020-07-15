@@ -1,4 +1,4 @@
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { CoreBarChart, UnitPosition } from '@/core/BarChart'
 
 import { getAxisShowPositions, getFormatter, transformGroupsToCommonGroups } from './helpers'
@@ -7,16 +7,16 @@ type CommonAxisShowPosition = 'both' | 'none'
 export type XAxisShowPosition = 'top' | 'bottom' | CommonAxisShowPosition
 export type YAxisShowPosition = 'left' | 'right' | CommonAxisShowPosition
 
-export type Column = Record<string, number | undefined>
+export type Column = number | undefined
 
 export type Group = {
   groupName: string
-  values: readonly Column[]
+  values: readonly [Column, Column]
 }
 
 type Props = {
   groups: readonly Group[]
-  colorGroups: ColorGroups
+  colors: readonly [string, string]
   gridTicks: number
   valuesTicks: number
   size: 's' | 'm'
@@ -31,7 +31,7 @@ type Props = {
 export const TornadoChart: React.FC<Props> = props => {
   const {
     groups,
-    colorGroups,
+    colors,
     size = 'm',
     formatValueForLabel,
     xAxisShowPosition,
@@ -44,7 +44,7 @@ export const TornadoChart: React.FC<Props> = props => {
   return (
     <CoreBarChart
       {...rest}
-      groups={transformGroupsToCommonGroups(groups, colorGroups)}
+      groups={transformGroupsToCommonGroups(groups, colors)}
       isHorizontal={true}
       size={size}
       formatValueForLabel={getFormatter(formatValueForLabel)}

@@ -1,6 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
-import { ColorGroups } from '@/common/types'
 import { HalfDonut } from '@/core/DonutChart/components/Donut'
 import { Data as DonutChartData } from '@/core/DonutChart/helpers'
 import { isHalfDonutVertical } from '@/core/DonutChart/helpers'
@@ -18,7 +17,7 @@ export const DEFAULT_DATA = {
 
 const getColorIndex = (valueRatio: number) => Math.floor(Math.max(0, valueRatio - 1) / 100)
 
-export const getColorGroups = (colors: Colors, title: string, data: Data): ColorGroups => {
+export const getColors = (colors: Colors, title: string, data: Data) => {
   const { value, valueMin, valueMax } = { ...DEFAULT_DATA, ...data }
   const valueRatio = Math.round(getValueRatio({ value, valueMin, valueMax }))
   const colorIndex = getColorIndex(valueRatio)
@@ -58,24 +57,31 @@ export const getTextData = (title: string, data: Data = {}) => {
   }
 }
 
-export const getData = (
-  title: string,
-  data: Data,
+export const getData = ({
+  title,
+  data,
+  halfDonut,
+  colors,
+}: {
+  title: string
+  data: Data
   halfDonut?: HalfDonut
-): readonly DonutChartData[] => {
+  colors: Colors
+}): readonly DonutChartData[] => {
   const { value, valueMin, valueMax } = { ...DEFAULT_DATA, ...data }
   const valueRatio = getValueRatio({ value, valueMin, valueMax })
   const isValueFull = valueRatio >= 100 && valueRatio % 100 === 0
+  const donutColors = getColors(colors, title, data)
 
   const donutChartData: readonly DonutChartData[] = [
     {
       name: title,
-      colorGroupName: title,
+      color: donutColors[title],
       values: [isValueFull ? 100 : valueRatio % 100],
     },
     {
       name: 'empty',
-      colorGroupName: 'empty',
+      color: donutColors.empty,
       values: [isValueFull ? 0 : 100 - (valueRatio % 100)],
     },
   ]

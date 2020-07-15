@@ -5,7 +5,7 @@ import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import { zip } from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
 import { useComponentSize } from '@/common/utils/use-component-size'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
@@ -40,7 +40,6 @@ type TooltipDataState = ReadonlyArray<{
 
 export type Props = {
   data: readonly Data[]
-  colorGroups: ColorGroups
   textData?: TextData
   titlePosition: 'top' | 'bottom'
   showShadow: boolean
@@ -66,7 +65,6 @@ const halfDonutClasses: Record<NonNullable<HalfDonut>, string> = {
 export const CoreDonutChart: React.FC<Props> = ({
   data = [],
   textData,
-  colorGroups,
   titlePosition,
   showShadow,
   showTooltip,
@@ -113,7 +111,7 @@ export const CoreDonutChart: React.FC<Props> = ({
   const values = zip(
     ...data.map(item =>
       item.values.slice(0, circlesCount).map(value => ({
-        colorGroupName: item.colorGroupName,
+        color: item.color,
         name: item.name,
         value,
       }))
@@ -131,7 +129,7 @@ export const CoreDonutChart: React.FC<Props> = ({
 
             return {
               value: formattedValue,
-              color: colorGroups[item.colorGroupName],
+              color: item.color,
               name: item.name,
             }
           })
@@ -196,7 +194,6 @@ export const CoreDonutChart: React.FC<Props> = ({
           return (
             <Donut
               key={index}
-              colorGroups={colorGroups}
               data={d.filter(isDefined)}
               innerRadius={innerRadius}
               outerRadius={outerRadius}

@@ -31,7 +31,6 @@ export const Interactive = createStory(
     return (
       <DonutChart
         data={object('data', donutData.data)}
-        colorGroups={object('colorGroups', donutData.colorGroups)}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -47,11 +46,10 @@ export const WithZeroDataInOneGroup = createStory(
         data={object('data', [
           {
             name: 'Нулевой бур',
-            colorGroupName: 'first',
+            color: 'var(--color-bg-alert)',
             values: [0],
           },
         ])}
-        colorGroups={object('colorGroups', donutData.colorGroups)}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -65,7 +63,6 @@ export const WithZeroDataInSomeGroups = createStory(
     return (
       <DonutChart
         data={object('data', donutDataItemsWithZeroAndPositiveData.data)}
-        colorGroups={object('colorGroups', donutDataItemsWithZeroAndPositiveData.colorGroups)}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -79,7 +76,6 @@ export const WithZeroDataInAllGroups = createStory(
     return (
       <DonutChart
         data={object('data', donutDataItemsWithZeroData.data)}
-        colorGroups={object('colorGroups', donutDataItemsWithZeroData.colorGroups)}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -99,10 +95,6 @@ export const WithoutDataForOneGroup = createStory(
             values: [null, 0, 8],
           },
         ])}
-        colorGroups={object('colorGroups', {
-          ...donutData.colorGroups,
-          ...donutDataItemWithoutData.colorGroup,
-        })}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -116,10 +108,6 @@ export const WithouDataForOneGroupAsWhole = createStory(
     return (
       <DonutChart
         data={object('data', [...donutData.data, { ...donutDataItemWithoutData.data }])}
-        colorGroups={object('colorGroups', {
-          ...donutData.colorGroups,
-          ...donutDataItemWithoutData.colorGroup,
-        })}
         halfDonut={halfDonutSelect()}
         formatValueForTooltip={cubeMeterFormatValue}
       />
@@ -133,7 +121,6 @@ export const AsHalfDonut = createStory(
     return (
       <DonutChart
         data={object('data', donutProgressData.data)}
-        colorGroups={object('colorGroups', donutProgressData.colorGroups)}
         formatValueForTooltip={emptyFormatValue}
         halfDonut={halfDonutSelect('right')}
         textData={object('textData', {
@@ -159,7 +146,6 @@ export const AsHalfDonutWithZeroData = createStory(
             values: [0],
           }))
         )}
-        colorGroups={object('colorGroups', donutProgressData.colorGroups)}
         formatValueForTooltip={emptyFormatValue}
         halfDonut={halfDonutSelect('right')}
         textData={object('textData', {
@@ -183,7 +169,6 @@ export const AsHalfDonutWithoutFacts = createStory(
           { ...donutProgressData.data[1], values: [null] },
           donutProgressData.data[2],
         ])}
-        colorGroups={object('colorGroups', donutProgressData.colorGroups)}
         formatValueForTooltip={emptyFormatValue}
         halfDonut={halfDonutSelect('right')}
         textData={object('textData', {

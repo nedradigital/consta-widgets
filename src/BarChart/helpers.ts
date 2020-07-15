@@ -1,17 +1,17 @@
 import { Column, Group } from './'
 
-const getTransformColumn = (
-  colorGroups: Record<string, string>,
-  filter: (value: number) => boolean
-) => (column: Column) => {
-  if (column.value === undefined) {
+const getTransformColumn = (colors: readonly string[], filter: (value: number) => boolean) => (
+  column: Column,
+  index: number
+) => {
+  if (column === undefined) {
     return
   }
 
-  return filter(column.value)
+  return filter(column)
     ? {
-        total: column.value,
-        sections: [{ color: colorGroups[column.colorGroupName], value: column.value }],
+        total: column,
+        sections: [{ color: colors[index], value: column }],
       }
     : {
         total: 0,
@@ -21,10 +21,10 @@ const getTransformColumn = (
 
 export const transformGroupsToCommonGroups = (
   groups: readonly Group[],
-  colorGroups: Record<string, string>
+  colors: readonly string[]
 ) => {
-  const getColumns = getTransformColumn(colorGroups, v => v >= 0)
-  const getReversedColumns = getTransformColumn(colorGroups, v => v < 0)
+  const getColumns = getTransformColumn(colors, v => v >= 0)
+  const getReversedColumns = getTransformColumn(colors, v => v < 0)
 
   return groups.map(group => {
     return {

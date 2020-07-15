@@ -1,4 +1,4 @@
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { CoreDonutChart } from '@/core/DonutChart'
 import { HalfDonut } from '@/core/DonutChart/components/Donut'
 import { Data as DonutTextData } from '@/core/DonutChart/components/Text'
@@ -7,7 +7,6 @@ import { useBaseSize } from '@/BaseSizeContext'
 
 type Props = {
   data: readonly DonutData[]
-  colorGroups: ColorGroups
   textData?: DonutTextData
   halfDonut?: HalfDonut
   formatValueForTooltip: FormatValue

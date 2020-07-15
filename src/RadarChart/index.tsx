@@ -4,7 +4,7 @@ import { useUID } from 'react-uid'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as _ from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
 import { deg2rad } from '@/common/utils/math'
 import { useComponentSize } from '@/common/utils/use-component-size'
@@ -40,7 +40,7 @@ export type FigureValue = {
 }
 
 export type Figure = {
-  colorGroupName: string
+  color: string
   name: string
   values: readonly FigureValue[]
 }
@@ -55,7 +55,6 @@ export type Data = {
 
 type Props = {
   ticks: number
-  colorGroups: ColorGroups
   figures: readonly Figure[]
   backgroundColor: string
   withConcentricColor: boolean
@@ -70,10 +69,7 @@ export type Axis = {
 
 export type ExtendedFigure = Figure & {
   points: readonly Point[]
-  color: {
-    lineColor: string
-    withFill: boolean
-  }
+  isFilled: boolean
 }
 
 export const pointIsNotEmpty = (point: Point): point is NotEmptyPoint =>
@@ -180,7 +176,6 @@ const getCurrentSizes = (width: number, height: number) => {
 export const RadarChart: React.FC<Props> = ({
   ticks: originalTicks,
   maxValue,
-  colorGroups,
   axesLabels,
   figures: originalFigures,
   backgroundColor,
@@ -241,18 +236,18 @@ export const RadarChart: React.FC<Props> = ({
 
     const color = concentricColors
       ? {
-          lineColor: `url(#${gradientId})`,
-          withFill: false,
+          color: `url(#${gradientId})`,
+          isFilled: false,
         }
       : {
-          lineColor: colorGroups[figure.colorGroupName],
-          withFill: true,
+          color: figure.color,
+          isFilled: true,
         }
 
     return {
       ...figure,
+      ...color,
       points,
-      color,
     }
   })
 
@@ -291,14 +286,20 @@ export const RadarChart: React.FC<Props> = ({
             />
 
             {extendedFigures.map((f, idx) => (
-              <RadarChartFigure key={idx} size={radarSize} points={f.points} {...f.color} />
+              <RadarChartFigure
+                key={idx}
+                size={radarSize}
+                points={f.points}
+                lineColor={f.color}
+                withFill={f.isFilled}
+              />
             ))}
 
             {extendedFigures.map((f, idx) => (
               <RadarChartPoints
                 key={idx}
                 points={f.points}
-                lineColor={f.color.lineColor}
+                lineColor={f.color}
                 activeAxis={activeAxis ? activeAxis.name : ''}
                 backgroundColor={backgroundColor}
               />

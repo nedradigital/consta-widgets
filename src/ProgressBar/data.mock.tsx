@@ -1,8 +1,6 @@
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { Text } from '@gpn-design/uikit/Text'
 
-import { ColorGroups } from '@/common/types'
-
 import { Data } from './'
 
 type Item = Omit<Data, 'caption'> & {
@@ -10,11 +8,10 @@ type Item = Omit<Data, 'caption'> & {
 }
 
 type MockData = {
-  colorGroups: ColorGroups
   data: readonly Item[]
 }
 
-const colorGroups: ColorGroups = {
+const colors = {
   first: 'var(--color-bg-warning)',
   second: 'var(--color-bg-success)',
   third: 'var(--color-bg-normal)',
@@ -47,14 +44,13 @@ export const convertItemToDataItem = (item: Item): Data => {
 }
 
 export const progressBarData: MockData = {
-  colorGroups,
   data: [
     {
       value: 50,
       valueMin: 0,
       valueMax: 100,
       summary: 50,
-      colorGroupName: 'first',
+      color: colors.first,
       caption: 'Стратегия Ступени + УИД',
     },
     {
@@ -63,7 +59,7 @@ export const progressBarData: MockData = {
       valueMax: 100,
       ticks,
       summary: 75,
-      colorGroupName: 'second',
+      color: colors.second,
     },
     {
       value: 30,
@@ -71,24 +67,20 @@ export const progressBarData: MockData = {
       valueMax: 100,
       ticks,
       summary: '30 тысяч',
-      colorGroupName: 'third',
+      color: colors.third,
       caption: 'Стратегия Ступени + УИД',
     },
   ],
 }
 
 export const progressBarDataWithNullValue: MockData = {
-  colorGroups: {
-    first: 'var(--color-bg-warning)',
-    second: 'var(--color-bg-success)',
-  },
   data: [
     {
       value: null,
       valueMin: 0,
       valueMax: 100,
       summary: 70,
-      colorGroupName: 'first',
+      color: colors.first,
       caption: 'Стратегия Ступени + УИД',
     },
     {
@@ -96,7 +88,7 @@ export const progressBarDataWithNullValue: MockData = {
       valueMin: 0,
       valueMax: 100,
       summary: 10,
-      colorGroupName: 'second',
+      color: colors.second,
       ticks,
     },
   ],

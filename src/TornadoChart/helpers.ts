@@ -22,26 +22,21 @@ export const getAxisShowPositions = (x: XAxisShowPosition, y: YAxisShowPosition)
 }
 
 const getTransformColumn = (
-  colorGroups: Record<string, string>,
+  colors: readonly [string, string],
   filter: (index: number) => boolean
 ) => (column: Column, columnIdx: number) => {
-  const total = _.sum(Object.values(column))
-  const sections = Object.entries(column)
-    .map(([key, value]) => {
-      if (value === undefined) {
-        return
-      }
-
-      return {
-        color: colorGroups[key],
-        value,
-      }
-    })
-    .filter(isDefined)
+  const sections = column
+    ? [
+        {
+          color: colors[columnIdx],
+          value: column,
+        },
+      ]
+    : []
 
   return filter(columnIdx)
     ? {
-        total,
+        total: column || 0,
         sections,
       }
     : undefined
@@ -49,14 +44,14 @@ const getTransformColumn = (
 
 export const transformGroupsToCommonGroups = (
   groups: readonly Group[],
-  colorGroups: Record<string, string>
+  colors: readonly [string, string]
 ) => {
-  const getColumns = getTransformColumn(colorGroups, i => i % 2 !== 0)
-  const getReversedColumns = getTransformColumn(colorGroups, i => i % 2 === 0)
+  const getColumns = getTransformColumn(colors, i => i % 2 !== 0)
+  const getReversedColumns = getTransformColumn(colors, i => i % 2 === 0)
 
   return _.orderBy(
     groups.map(group => {
-      const total = _.sum(group.values.flatMap(column => Object.values(column)))
+      const total = _.sum(group.values.flatMap(column => column))
       const columns = group.values.map(getColumns).filter(isDefined)
       const reversedColumns = group.values.map(getReversedColumns).filter(isDefined)
 

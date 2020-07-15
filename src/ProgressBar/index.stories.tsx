@@ -11,26 +11,14 @@ import { convertItemToDataItem, progressBarData, progressBarDataWithNullValue } 
 export const Interactive = createStory(() => {
   const data = object('data', progressBarData.data).map(convertItemToDataItem)
 
-  return (
-    <ProgressBar
-      data={data}
-      colorGroups={object('colorGroups', progressBarData.colorGroups)}
-      size="m"
-    />
-  )
+  return <ProgressBar data={data} size="m" />
 })
 
 export const WithoutData = createStory(
   () => {
     const data = object('data', progressBarDataWithNullValue.data).map(convertItemToDataItem)
 
-    return (
-      <ProgressBar
-        data={data}
-        colorGroups={object('colorGroups', progressBarDataWithNullValue.colorGroups)}
-        size="m"
-      />
-    )
+    return <ProgressBar data={data} size="m" />
   },
   {
     name: 'без данных',

@@ -5,7 +5,7 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { ColorGroups, FormatValue } from '@/common/types'
+import { FormatValue } from '@/common/types'
 import { getEveryN } from '@/common/utils/array'
 
 import { Axis, GridConfig } from './components/Axis'
@@ -19,6 +19,7 @@ import { Zoom } from './components/Zoom'
 import {
   calculateSecondaryDomain,
   flipPointsOnAxes,
+  getColorFromFirstLineWithBoundaries,
   getMainTickValues,
   getSecondaryTickValues,
   getXRange,
@@ -56,11 +57,12 @@ export type Boundary = {
 }
 
 export type Line = {
-  colorGroupName: string
   values: readonly Item[]
   dots?: boolean
   withGradient?: boolean
+  withBoundaries?: boolean
   lineName: string
+  color: string
 }
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
@@ -79,7 +81,6 @@ type Props = {
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
-  colorGroups: ColorGroups
   unit?: string
   title?: React.ReactNode
   onClickHoverLine?: (value: number) => void
@@ -90,7 +91,6 @@ type Props = {
     }
   | {
       boundaries: readonly Boundary[]
-      colorGroupWithBoundaries: string
       showBoundariesOnAxis: boolean
     }
 )
@@ -214,7 +214,6 @@ export class LinearChart extends React.Component<Props, State> {
       formatValueForLabel = String,
       formatValueForTooltip,
       formatValueForTooltipTitle,
-      colorGroups,
       unit,
       title,
       onClickHoverLine,
@@ -246,8 +245,6 @@ export class LinearChart extends React.Component<Props, State> {
           isHorizontal={isHorizontal}
           scaleX={scaleX}
           scaleY={scaleY}
-          colorGroups={colorGroups}
-          colorGroupWithBoundaries={props.boundaries ? props.colorGroupWithBoundaries : undefined}
           hoveredMainValue={hoveredMainValue}
           anchorEl={this.svgWrapperRef.current}
           threshold={threshold}
@@ -288,7 +285,7 @@ export class LinearChart extends React.Component<Props, State> {
               {props.boundaries && (
                 <BoundariesGradient
                   id={boundariesGradientId}
-                  color={colorGroups[props.colorGroupWithBoundaries]}
+                  color={getColorFromFirstLineWithBoundaries(lines)}
                   boundaries={props.boundaries}
                   svgWidth={svgWidth}
                   svgHeight={svgHeight}
@@ -358,7 +355,7 @@ export class LinearChart extends React.Component<Props, State> {
                   } as const)
 
               const boundariesProps =
-                props.boundaries && line.colorGroupName === props.colorGroupWithBoundaries
+                props.boundaries && line.withBoundaries
                   ? {
                       boundaries: props.boundaries,
                       boundariesGradientId,
@@ -367,9 +364,9 @@ export class LinearChart extends React.Component<Props, State> {
 
               return (
                 <LineWithDots
-                  key={line.colorGroupName}
+                  key={line.lineName}
                   values={[...line.values]}
-                  color={colorGroups[line.colorGroupName]}
+                  color={line.color}
                   hasDotRadius={line.dots}
                   defaultDotRadius={dotRadius}
                   scaleX={scaleX}

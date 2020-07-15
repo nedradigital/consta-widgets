@@ -11,7 +11,7 @@ const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
 
 export const Interactive = createStory(() => (
   <TornadoChart
-    colorGroups={object('colorGroups', interactiveData.colorGroups)}
+    colors={object('colors', interactiveData.colors)}
     groups={interactiveData.groups}
     unit={interactiveData.unit}
     unitPosition={getUnitPosition()}
@@ -26,7 +26,7 @@ export const Interactive = createStory(() => (
 export const Minimalistic = createStory(
   () => (
     <TornadoChart
-      colorGroups={object('colorGroups', interactiveData.colorGroups)}
+      colors={object('colors', interactiveData.colors)}
       groups={interactiveData.groups}
       unit={interactiveData.unit}
       unitPosition={getUnitPosition()}

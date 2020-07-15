@@ -1,14 +1,6 @@
-import { ColorGroups } from '@/common/types'
 import { Filters } from '@/common/utils/table'
 
-import { Data, Row } from '.'
-
-export const colorGroups: ColorGroups = {
-  green: 'var(--color-bg-success)',
-  violet: '#A13DFF',
-  blue: 'var(--color-bg-normal)',
-  orange: 'var(--color-bg-warning)',
-}
+import { Props as Data, Row } from '.'
 
 /* istanbul ignore next */
 export const dataFilters: Filters<Row> = [
@@ -108,7 +100,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -120,7 +112,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 4, 12),
           },
           comment: 'Какой-то комментарий',
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -136,7 +128,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 9, 15),
           },
           comment: 'Какой-то комментарий для синего факта',
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
         {
           plan: {
@@ -148,7 +140,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 11, 31),
           },
           comment: 'Какой-то комментарий для оранжевого прогноза',
-          groupName: 'orange',
+          color: 'var(--color-bg-warning)',
         },
       ],
     },
@@ -168,7 +160,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 0, 1),
             endDate: Date.UTC(2019, 1, 20),
           },
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -181,7 +173,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -198,7 +190,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
         {
           plan: {
@@ -209,7 +201,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 8, 18),
             endDate: Date.UTC(2019, 11, 31),
           },
-          groupName: 'orange',
+          color: 'var(--color-bg-warning)',
         },
       ],
     },
@@ -230,7 +222,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 3, 27),
           },
           comment: 'Какой-то комментарий',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -242,7 +234,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 4, 12),
           },
           comment: 'Какой-то комментарий',
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -258,7 +250,7 @@ export const data: Data = {
             endDate: Date.UTC(2019, 7, 1),
           },
           comment: 'Какой-то комментарий',
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
         {
           plan: {
@@ -269,7 +261,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 7, 1),
             endDate: Date.UTC(2019, 11, 31),
           },
-          groupName: 'orange',
+          color: 'var(--color-bg-warning)',
         },
       ],
     },
@@ -289,7 +281,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 0, 29),
             endDate: Date.UTC(2019, 2, 29),
           },
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -302,7 +294,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -319,7 +311,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
         {
           plan: {
@@ -330,7 +322,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 9, 15),
             endDate: Date.UTC(2019, 11, 31),
           },
-          groupName: 'orange',
+          color: 'var(--color-bg-warning)',
         },
       ],
     },
@@ -352,7 +344,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -363,7 +355,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 1, 25),
             endDate: Date.UTC(2019, 3, 27),
           },
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -380,7 +372,7 @@ export const data: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
         {
           plan: {
@@ -391,7 +383,7 @@ export const data: Data = {
             startDate: Date.UTC(2019, 7, 31),
             endDate: Date.UTC(2020, 11, 15),
           },
-          groupName: 'orange',
+          color: 'var(--color-bg-warning)',
         },
       ],
     },
@@ -459,7 +451,7 @@ export const minimalData: Data = {
             startDate: Date.UTC(2019, 0, 19),
             endDate: Date.UTC(2019, 2, 27),
           },
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -470,7 +462,7 @@ export const minimalData: Data = {
             startDate: Date.UTC(2019, 2, 27),
             endDate: Date.UTC(2019, 4, 12),
           },
-          groupName: 'violet',
+          color: '#A13DFF',
         },
         {
           plan: {
@@ -481,7 +473,7 @@ export const minimalData: Data = {
             startDate: Date.UTC(2019, 4, 12),
             endDate: Date.UTC(2019, 6, 10),
           },
-          groupName: 'blue',
+          color: 'var(--color-bg-normal)',
         },
       ],
     },
@@ -501,7 +493,7 @@ export const minimalData: Data = {
             startDate: Date.UTC(2019, 0, 1),
             endDate: Date.UTC(2019, 1, 20),
           },
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -514,7 +506,7 @@ export const minimalData: Data = {
           },
           comment:
             'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
-          groupName: 'violet',
+          color: '#A13DFF',
         },
       ],
     },
@@ -578,7 +570,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 2, 10),
           },
           title: 'Скважина: 1',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -590,7 +582,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 4, 10),
           },
           title: 'Скважина: 2',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -602,7 +594,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 5, 27),
           },
           title: 'Скважина: 3',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -618,7 +610,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 7, 5),
           },
           title: 'Скважина: 4',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -630,7 +622,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 8, 15),
           },
           title: 'Скважина: 5',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -642,7 +634,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 10, 10),
           },
           title: 'Скважина: 6',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
       ],
     },
@@ -662,7 +654,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 2, 28),
           },
           title: 'Скважина: 7',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -674,7 +666,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 5, 1),
           },
           title: 'Скважина: 8',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -690,7 +682,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 7, 2),
           },
           title: 'Скважина: 9',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -702,7 +694,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 8, 12),
           },
           title: 'Скважина: 10',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -714,7 +706,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 9, 18),
           },
           title: 'Скважина: 11',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -726,7 +718,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 11, 10),
           },
           title: 'Скважина: 12',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
       ],
     },
@@ -746,7 +738,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 5, 25),
           },
           title: 'Скважина: 13',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -762,7 +754,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 7, 9),
           },
           title: 'Скважина: 14',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -774,7 +766,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 9, 12),
           },
           title: 'Скважина: 15',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -786,7 +778,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 10, 30),
           },
           title: 'Скважина: 16',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
       ],
     },
@@ -806,7 +798,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 4, 31),
           },
           title: 'Скважина: 17',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -822,7 +814,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 7, 9),
           },
           title: 'Скважина: 18',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -834,7 +826,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 8, 15),
           },
           title: 'Скважина: 19',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
         {
           plan: {
@@ -846,7 +838,7 @@ export const monochromeData: Data = {
             endDate: Date.UTC(2019, 10, 3),
           },
           title: 'Скважина: 20',
-          groupName: 'green',
+          color: 'var(--color-bg-success)',
         },
       ],
     },

@@ -2,7 +2,6 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { ColorGroups } from '@/common/types'
 import { LabelPosition, LabelType, LegendItem, Size } from '@/core/LegendItem'
 
 import css from './index.css'
@@ -12,11 +11,10 @@ export type Direction = typeof directions[number]
 
 export type Data = ReadonlyArray<{
   text: string
-  colorGroupName: string
+  color: string
 }>
 
 type Props = {
-  colorGroups: ColorGroups
   data: Data
   direction: Direction
   labelType: LabelType
@@ -32,13 +30,12 @@ export const Legend: React.FC<Props> = ({
   labelPosition,
   lineBold,
   fontSize,
-  colorGroups,
 }) => {
   return (
     <div className={classnames(css.main, css[direction])}>
       {data.map(item => (
         <LegendItem
-          color={colorGroups[item.colorGroupName]}
+          color={item.color}
           key={item.text}
           className={css.item}
           fontSize={fontSize}
