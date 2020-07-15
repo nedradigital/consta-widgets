@@ -11,7 +11,7 @@ type Props = {
   items: ReadonlyArray<{
     name: string
     value: string
-    color: string
+    color?: string
   }>
 }
 

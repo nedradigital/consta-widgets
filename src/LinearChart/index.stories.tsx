@@ -3,7 +3,7 @@ import React from 'react'
 import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Text } from '@gpn-design/uikit/Text'
-import { number, object, text } from '@storybook/addon-knobs'
+import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
@@ -263,6 +263,79 @@ export const Vertical = createStory(
       }),
     ],
   }
+)
+
+export const WithBoundaries = createStory(
+  () => {
+    return (
+      <LinearChart
+        colorGroups={object('colorGroups', {
+          first: 'var(--color-bg-success)',
+          second: 'var(--color-bg-border)',
+        })}
+        lines={[
+          {
+            colorGroupName: 'first',
+            values: [
+              { x: 0, y: null },
+              { x: 1, y: 50 },
+              { x: 2, y: -45 },
+              { x: 3, y: 35 },
+              { x: 4, y: 35 },
+              { x: 5, y: -10 },
+              { x: 6, y: 10 },
+              { x: 7, y: null },
+            ],
+            dots: true,
+            lineName: 'Северный бур',
+          },
+          {
+            colorGroupName: 'second',
+            values: [
+              { x: 0, y: null },
+              { x: 1, y: -10 },
+              { x: 2, y: 30 },
+              { x: 3, y: 5 },
+              { x: 4, y: 25 },
+              { x: 5, y: -30 },
+              { x: 6, y: 25 },
+              { x: 7, y: null },
+            ],
+            dots: true,
+            lineName: 'Южное месторождение',
+          },
+        ]}
+        gridConfig={getGridConfig()}
+        isHorizontal
+        background="linear-gradient(to right, #f54d4d48, transparent)"
+        colorGroupWithBoundaries={text('colorGroupWithBoundaries', 'first')}
+        showBoundariesOnAxis={boolean('showBoundariesOnAxis', true)}
+        boundaries={[
+          {
+            value: [-25, -35],
+            color: 'var(--color-bg-caution)',
+          },
+          {
+            value: [-35, -51],
+            color: 'var(--color-bg-alert)',
+          },
+          {
+            value: [35, 51],
+            color: 'var(--color-bg-alert)',
+          },
+          {
+            value: [25, 35],
+            color: 'var(--color-bg-caution)',
+          },
+          {
+            value: [25, -25],
+            color: 'var(--color-bg-success)',
+          },
+        ]}
+      />
+    )
+  },
+  { name: 'с лимитами', decorators }
 )
 
 export default createMetadata({

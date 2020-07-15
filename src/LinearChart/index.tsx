@@ -9,6 +9,8 @@ import { ColorGroups, FormatValue } from '@/common/types'
 import { getEveryN } from '@/common/utils/array'
 
 import { Axis, GridConfig } from './components/Axis'
+import { BoundariesAxisLine } from './components/BoundariesAxisLine'
+import { BoundariesGradient } from './components/BoundariesGradient'
 import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
 import { LineWithDots } from './components/LineWithDots'
@@ -33,6 +35,12 @@ export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
 
+export const DEFAULT_DIRECTION_X: DirectionX = 'toRight'
+
+export const getDefaultDirectionY = (isHorizontal: boolean): DirectionY => {
+  return isHorizontal ? 'toTop' : 'toBottom'
+}
+
 type ThresholdLine = {
   name?: string
   values: readonly NotEmptyItem[]
@@ -40,6 +48,11 @@ type ThresholdLine = {
 export type Threshold = {
   max: ThresholdLine
   min?: ThresholdLine
+}
+
+export type Boundary = {
+  color: string
+  value: readonly [number, number]
 }
 
 export type Line = {
@@ -52,10 +65,12 @@ export type Line = {
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
-export type Direction = 'toRight' | 'toLeft'
+export type DirectionX = 'toRight' | 'toLeft'
+export type DirectionY = 'toTop' | 'toBottom'
 
 type Props = {
-  direction?: Direction
+  directionX?: DirectionX
+  directionY?: DirectionY
   lines: readonly Line[]
   gridConfig: GridConfig
   threshold?: Threshold
@@ -68,7 +83,17 @@ type Props = {
   unit?: string
   title?: React.ReactNode
   onClickHoverLine?: (value: number) => void
-}
+  background?: string
+} & (
+  | {
+      boundaries?: never
+    }
+  | {
+      boundaries: readonly Boundary[]
+      colorGroupWithBoundaries: string
+      showBoundariesOnAxis: boolean
+    }
+)
 
 export type HoveredMainValue = number | undefined
 
@@ -120,6 +145,7 @@ export class LinearChart extends React.Component<Props, State> {
   uid = uid(this)
   lineClipId = `line_clipPath_${this.uid}`
   dotsClipId = `dots_clipPath_${this.uid}`
+  boundariesGradientId = `boundaries_gradient_${this.uid}`
 
   state: State = {
     xDomain: INITIAL_DOMAIN,
@@ -149,13 +175,15 @@ export class LinearChart extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const {
-      props: { lines, threshold, isHorizontal },
+      props: { lines, threshold, isHorizontal, directionX, directionY },
     } = this
 
     if (
       lines !== prevProps.lines ||
       isHorizontal !== prevProps.isHorizontal ||
-      threshold !== prevProps.threshold
+      threshold !== prevProps.threshold ||
+      directionX !== prevProps.directionX ||
+      directionY !== prevProps.directionY
     ) {
       this.updateDomains()
     }
@@ -167,26 +195,32 @@ export class LinearChart extends React.Component<Props, State> {
 
   render() {
     const {
-      props: {
-        gridConfig,
-        gridConfig: {
-          x: { labels: xLabelsPos },
-          y: { labels: yLabelsPos },
-        },
-        direction = 'toRight',
-        withZoom,
-        isHorizontal,
-        lines,
-        formatValueForLabel = String,
-        formatValueForTooltip,
-        formatValueForTooltipTitle,
-        colorGroups,
-        unit,
-        title,
-        onClickHoverLine,
-      },
+      props,
       state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
+      boundariesGradientId,
     } = this
+
+    const {
+      gridConfig,
+      gridConfig: {
+        x: { labels: xLabelsPos },
+        y: { labels: yLabelsPos },
+      },
+      directionX = DEFAULT_DIRECTION_X,
+      directionY = getDefaultDirectionY(props.isHorizontal),
+      withZoom,
+      isHorizontal,
+      lines,
+      formatValueForLabel = String,
+      formatValueForTooltip,
+      formatValueForTooltipTitle,
+      colorGroups,
+      unit,
+      title,
+      onClickHoverLine,
+      background,
+    } = props
+
     const { svgWidth, svgHeight } = this.getSvgSize()
     const { main: mainAxis } = this.getAxis()
     const {
@@ -199,7 +233,7 @@ export class LinearChart extends React.Component<Props, State> {
 
     const lineClipPath = `url(#${this.lineClipId})`
     const dotsClipPath = `url(#${this.dotsClipId})`
-    const scaleX = getXScale(xDomain, svgWidth, direction)
+    const scaleX = getXScale(xDomain, svgWidth)
     const scaleY = getYScale(yDomain, svgHeight)
     const dotRadius = DOT_SIZE / 2
     const xOnBottom = xLabelsPos === 'bottom'
@@ -213,9 +247,11 @@ export class LinearChart extends React.Component<Props, State> {
           scaleX={scaleX}
           scaleY={scaleY}
           colorGroups={colorGroups}
+          colorGroupWithBoundaries={props.boundaries ? props.colorGroupWithBoundaries : undefined}
           hoveredMainValue={hoveredMainValue}
           anchorEl={this.svgWrapperRef.current}
           threshold={threshold}
+          boundaries={props.boundaries}
           formatValueForLabel={formatValueForLabel}
           formatValueForTooltip={formatValueForTooltip}
           formatValueForTooltipTitle={formatValueForTooltipTitle}
@@ -234,6 +270,7 @@ export class LinearChart extends React.Component<Props, State> {
             style={{
               ...(xOnBottom ? { top: 0 } : { bottom: 0 }),
               ...(yOnLeft ? { right: 0 } : { left: 0 }),
+              background,
             }}
           >
             <defs>
@@ -248,8 +285,21 @@ export class LinearChart extends React.Component<Props, State> {
                   y={-1 * dotRadius}
                 />
               </clipPath>
+              {props.boundaries && (
+                <BoundariesGradient
+                  id={boundariesGradientId}
+                  color={colorGroups[props.colorGroupWithBoundaries]}
+                  boundaries={props.boundaries}
+                  svgWidth={svgWidth}
+                  svgHeight={svgHeight}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  isHorizontal={isHorizontal}
+                  directionX={directionX}
+                  directionY={directionY}
+                />
+              )}
             </defs>
-
             <Axis
               width={svgWidth}
               height={svgHeight}
@@ -297,12 +347,23 @@ export class LinearChart extends React.Component<Props, State> {
               const gradientProps = line.withGradient
                 ? ({
                     withGradient: true,
-                    areaBottom: isHorizontal ? yDomain[0] : xDomain[0],
-                    gradientDirection: direction,
+                    areaBottom: isHorizontal
+                      ? yDomain[directionY === 'toTop' ? 0 : 1]
+                      : xDomain[directionX === 'toRight' ? 0 : 1],
+                    gradientDirectionX: directionX,
+                    gradientDirectionY: directionY,
                   } as const)
                 : ({
                     withGradient: false,
                   } as const)
+
+              const boundariesProps =
+                props.boundaries && line.colorGroupName === props.colorGroupWithBoundaries
+                  ? {
+                      boundaries: props.boundaries,
+                      boundariesGradientId,
+                    }
+                  : {}
 
               return (
                 <LineWithDots
@@ -318,9 +379,18 @@ export class LinearChart extends React.Component<Props, State> {
                   hoveredMainValue={hoveredMainValue}
                   isHorizontal={isHorizontal}
                   {...gradientProps}
+                  {...boundariesProps}
                 />
               )
             })}
+            {props.boundaries && props.showBoundariesOnAxis && (
+              <BoundariesAxisLine
+                isHorizontal={isHorizontal}
+                xLabelsPos={xLabelsPos}
+                yLabelsPos={yLabelsPos}
+                boundariesGradientId={boundariesGradientId}
+              />
+            )}
           </svg>
 
           {withZoom && (
@@ -349,10 +419,14 @@ export class LinearChart extends React.Component<Props, State> {
         x: { withPaddings },
       },
       isHorizontal,
+      directionX = DEFAULT_DIRECTION_X,
     } = this.props
     const { zoom } = this.state
     const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const domain = d3.extent(items, v => v.x) as NumberRange
+    const initialDomain = d3.extent(items, v => v.x)
+    const domain = (directionX === 'toRight'
+      ? initialDomain
+      : [...initialDomain].reverse()) as NumberRange
 
     return padDomain({
       domain,
@@ -368,14 +442,14 @@ export class LinearChart extends React.Component<Props, State> {
         y: { withPaddings },
       },
       isHorizontal,
+      directionY = getDefaultDirectionY(this.props.isHorizontal),
     } = this.props
     const { zoom } = this.state
     const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
     const initialDomain = d3.extent(items, v => v.y)
-    const domain = (isHorizontal
+    const domain = (directionY === 'toTop'
       ? initialDomain
-      : // Чтобы 0 был сверху
-        [...initialDomain].reverse()) as NumberRange
+      : [...initialDomain].reverse()) as NumberRange
 
     return padDomain({
       domain,

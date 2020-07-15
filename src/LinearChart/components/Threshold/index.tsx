@@ -65,6 +65,7 @@ export const Threshold: React.FC<Props> = ({
       scaleY={scaleY}
       shapeRendering={isStraightLine(points, isHorizontal) ? 'crispEdges' : undefined}
       transform={`translate(${isHorizontal ? '0, 0.5' : '0.5, 0'})`}
+      stroke={THRESHOLD_COLOR}
     />
   )
 

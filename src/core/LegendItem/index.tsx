@@ -16,7 +16,7 @@ export type LabelPosition = typeof labelPositions[number]
 
 type Props = {
   children: React.ReactNode
-  color: string
+  color?: string
   type?: LabelType
   fontSize?: Size
   position?: LabelPosition
@@ -52,8 +52,9 @@ export const LegendItem: React.FC<Props> = ({
 
   return (
     <div className={classnames(css.main, sizeClass[fontSize], positionClass, className)}>
-      <div className={css.signWrapper}>
-        {/*
+      {color && (
+        <div className={css.signWrapper}>
+          {/*
           Эта дополнительная вложенность необходима чтобы получить возможность
           применить vertical-align к вложенному элементу, так как vertical-align
           не может примениться к элементу у которого родитель flex или inline-flex.
@@ -64,11 +65,12 @@ export const LegendItem: React.FC<Props> = ({
           - `align-items: baseline` из-за невозможности применить отрицательный
             сдвиг используя margin, который необходим для размеров `s` и `xs`.
         */}
-        <div
-          className={classnames(css.sign, css[type], lineBold && css.isBold)}
-          style={{ background: color, ...dotStyle }}
-        />
-      </div>
+          <div
+            className={classnames(css.sign, css[type], lineBold && css.isBold)}
+            style={{ background: color, ...dotStyle }}
+          />
+        </div>
+      )}
       <Text
         as="span"
         size={fontSize}

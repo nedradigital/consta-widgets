@@ -2,10 +2,6 @@
   pointer-events: none;
 }
 
-.line {
-  stroke-width: 2px;
-}
-
 .circle {
   fill: currentColor;
 
