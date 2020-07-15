@@ -2,7 +2,6 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
-import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
@@ -122,7 +121,6 @@ export const DatePicker: React.FC<Props> = props => {
   const maxDate = endOfDay(sourceMaxDate)
 
   const controlsRef = useRef<HTMLDivElement>(null)
-  const tooltipRef = useRef<HTMLDivElement>(null)
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
   const [currentVisibleDate, setCurrentVisibleDate] = useState<Date>(
     getCurrentVisibleDate({ value: props.value, minDate, maxDate })
@@ -152,12 +150,6 @@ export const DatePicker: React.FC<Props> = props => {
       return props.onChange(value)
     }
   }
-
-  useClickOutside({
-    isActive: isTooltipVisible,
-    ignoreClicksInsideRefs: [controlsRef, tooltipRef],
-    handler: handleApplyDate,
-  })
 
   const handleSelectQuarter = (value: DateRange) => {
     setCurrentVisibleDate(getCurrentVisibleDate({ value: [value[0], undefined], minDate, maxDate }))
@@ -220,8 +212,9 @@ export const DatePicker: React.FC<Props> = props => {
           offset={4}
           direction="downCenter"
           possibleDirections={['upCenter', 'leftCenter', 'rightCenter', 'downCenter']}
+          onClickOutside={handleApplyDate}
         >
-          <div className={classnames(themeClassNames.color.invert, css.tooltip)} ref={tooltipRef}>
+          <div className={classnames(themeClassNames.color.invert, css.tooltip)}>
             {props.type === 'date' ? (
               <MonthsSliderSingle {...monthsPanelCommonProps} />
             ) : (
