@@ -35,87 +35,95 @@ const defaultProps = () =>
     size: select('size', sizes, sizes[1]),
   } as const)
 
-export const DakePickerSingleStory = createStory(
-  () => {
-    const [date, setDate] = React.useState<Date | undefined>()
+const DakePickerSingleStoryContent = () => {
+  const [date, setDate] = React.useState<Date | undefined>()
 
-    return <DatePicker type="date" value={date} onChange={setDate} {...defaultProps()} />
-  },
-  { name: 'Выбор даты', decorators: DECORATORS }
-)
+  return <DatePicker type="date" value={date} onChange={setDate} {...defaultProps()} />
+}
+
+export const DakePickerSingleStory = createStory(() => <DakePickerSingleStoryContent />, {
+  name: 'Выбор даты',
+  decorators: DECORATORS,
+})
+
+const DatePickerThirdPartyInputStoryContent = () => {
+  const [date, setDate] = React.useState<Date | undefined>(new Date(2019, 3, 1))
+
+  return (
+    <DatePicker
+      type="date"
+      value={date}
+      onChange={setDate}
+      {...defaultProps()}
+      renderControls={({ size, value, onChange }) => {
+        return (
+          <input
+            type="date"
+            value={getInputValue(value)}
+            onChange={event => {
+              onChange(setInputValue(event.target.value))
+            }}
+            className={size}
+          />
+        )
+      }}
+    />
+  )
+}
 
 export const DatePickerThirdPartyInputStory = createStory(
-  () => {
-    const [date, setDate] = React.useState<Date | undefined>(new Date(2019, 3, 1))
-
-    return (
-      <DatePicker
-        type="date"
-        value={date}
-        onChange={setDate}
-        {...defaultProps()}
-        renderControls={({ size, value, onChange }) => {
-          return (
-            <input
-              type="date"
-              value={getInputValue(value)}
-              onChange={event => {
-                onChange(setInputValue(event.target.value))
-              }}
-              className={size}
-            />
-          )
-        }}
-      />
-    )
-  },
+  () => <DatePickerThirdPartyInputStoryContent />,
   { name: 'Выбор даты с сторонним инпутом', decorators: DECORATORS_WITHOUT_SCALING }
 )
 
-export const DatePickerRangeStory = createStory(
-  () => {
-    const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
+const DatePickerRangeStoryContent = () => {
+  const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
 
-    return <DatePicker type="date-range" value={range} onChange={setRange} {...defaultProps()} />
-  },
-  { name: 'Выбор диапазона дат', decorators: DECORATORS }
-)
+  return <DatePicker type="date-range" value={range} onChange={setRange} {...defaultProps()} />
+}
+
+export const DatePickerRangeStory = createStory(() => <DatePickerRangeStoryContent />, {
+  name: 'Выбор диапазона дат',
+  decorators: DECORATORS,
+})
+
+const DatePickerRangeThirdPartyInputStoryContent = () => {
+  const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
+
+  return (
+    <DatePicker
+      type="date-range"
+      value={range}
+      onChange={setRange}
+      {...defaultProps()}
+      renderControls={({ size, value, onChange }) => {
+        return (
+          <>
+            <input
+              type="date"
+              value={value && getInputValue(value[0])}
+              onChange={event => {
+                onChange([setInputValue(event.target.value), (value && value[1]) || undefined])
+              }}
+              className={size}
+            />
+            <input
+              type="date"
+              value={value && getInputValue(value[1])}
+              onChange={event => {
+                onChange([(value && value[0]) || undefined, setInputValue(event.target.value)])
+              }}
+              className={size}
+            />
+          </>
+        )
+      }}
+    />
+  )
+}
 
 export const DatePickerRangeThirdPartyInputStory = createStory(
-  () => {
-    const [range, setRange] = React.useState<DateRange | undefined>([undefined, undefined])
-
-    return (
-      <DatePicker
-        type="date-range"
-        value={range}
-        onChange={setRange}
-        {...defaultProps()}
-        renderControls={({ size, value, onChange }) => {
-          return (
-            <>
-              <input
-                type="date"
-                value={value && getInputValue(value[0])}
-                onChange={event => {
-                  onChange([setInputValue(event.target.value), (value && value[1]) || undefined])
-                }}
-                className={size}
-              />
-              <input
-                type="date"
-                value={value && getInputValue(value[1])}
-                onChange={event => {
-                  onChange([(value && value[0]) || undefined, setInputValue(event.target.value)])
-                }}
-                className={size}
-              />
-            </>
-          )
-        }}
-      />
-    )
-  },
+  () => <DatePickerRangeThirdPartyInputStoryContent />,
   { name: 'Выбор диапазона дат с сторонними инпутами', decorators: DECORATORS_WITHOUT_SCALING }
 )
 

@@ -40,14 +40,16 @@ export const Interactive = createStory(() => <Table {...tableData} />, {
   decorators: FIXED_WIDTH_DECORATORS,
 })
 
-export const WithActiveRow = createStory(
-  () => {
-    const [activeRow, setActiveRow] = React.useState<string>()
+const WithActiveRowContent = () => {
+  const [activeRow, setActiveRow] = React.useState<string>()
 
-    return <Table {...tableData} activeRow={{ id: activeRow, onChange: setActiveRow }} />
-  },
-  { name: 'с выбором строки', decorators: FIXED_WIDTH_DECORATORS }
-)
+  return <Table {...tableData} activeRow={{ id: activeRow, onChange: setActiveRow }} />
+}
+
+export const WithActiveRow = createStory(() => <WithActiveRowContent />, {
+  name: 'с выбором строки',
+  decorators: FIXED_WIDTH_DECORATORS,
+})
 
 export const WithStickyHeader = createStory(() => <Table {...tableData} stickyHeader />, {
   name: 'с зафиксированным заголовком',
@@ -79,49 +81,46 @@ export const WithTrafficLight = createStory(
   }
 )
 
-export const WithCheckboxHeader = createStory(
-  () => {
-    const ROWS_COUNT = 3
-    const [values, setValues] = React.useState<readonly boolean[]>(
-      new Array(ROWS_COUNT).fill(false)
-    )
-    const toggleRow = (idx: number) => {
-      setValues(updateAt(values, idx, !values[idx]))
-    }
-    const rows = values.map((value, idx) => ({
-      id: `row${idx}}`,
-      checkbox: <Checkbox size="m" checked={value} onChange={() => toggleRow(idx)} />,
-      task: `Задача ${idx}`,
-    }))
-    const areAllSelected = values.every(v => v)
-
-    return (
-      <Table
-        rows={rows}
-        columns={[
-          {
-            title: (
-              <Checkbox
-                size="m"
-                checked={areAllSelected}
-                onChange={() => setValues(values.map(() => !areAllSelected))}
-              />
-            ),
-            accessor: 'checkbox',
-          },
-          {
-            title: 'Задача',
-            accessor: 'task',
-          },
-        ]}
-      />
-    )
-  },
-  {
-    name: 'с чекбоксом в шапке',
-    decorators: [environmentDecorator()],
+const WithCheckboxHeaderContent = () => {
+  const ROWS_COUNT = 3
+  const [values, setValues] = React.useState<readonly boolean[]>(new Array(ROWS_COUNT).fill(false))
+  const toggleRow = (idx: number) => {
+    setValues(updateAt(values, idx, !values[idx]))
   }
-)
+  const rows = values.map((value, idx) => ({
+    id: `row${idx}}`,
+    checkbox: <Checkbox size="m" checked={value} onChange={() => toggleRow(idx)} />,
+    task: `Задача ${idx}`,
+  }))
+  const areAllSelected = values.every(v => v)
+
+  return (
+    <Table
+      rows={rows}
+      columns={[
+        {
+          title: (
+            <Checkbox
+              size="m"
+              checked={areAllSelected}
+              onChange={() => setValues(values.map(() => !areAllSelected))}
+            />
+          ),
+          accessor: 'checkbox',
+        },
+        {
+          title: 'Задача',
+          accessor: 'task',
+        },
+      ]}
+    />
+  )
+}
+
+export const WithCheckboxHeader = createStory(() => <WithCheckboxHeaderContent />, {
+  name: 'с чекбоксом в шапке',
+  decorators: [environmentDecorator()],
+})
 
 export default createMetadata({
   title: 'components/Table',
