@@ -5,7 +5,7 @@ import { createMetadata, createStory, environmentDecorator } from '@/common/stor
 
 import { FilterTooltip } from '.'
 
-export const Interactive = createStory(() => {
+const InteractiveStoryContent = () => {
   const [values, setValues] = React.useState<readonly string[]>(['condition1'])
 
   return (
@@ -25,7 +25,9 @@ export const Interactive = createStory(() => {
       onToggle={() => null}
     />
   )
-})
+}
+
+export const Interactive = createStory(() => <InteractiveStoryContent />)
 
 export default createMetadata({
   title: 'core/FilterTooltip',
