@@ -62,13 +62,27 @@
   display: contents;
 }
 
-.headerCell {
-  & + & {
-    border-left: 1px solid transparent;
-  }
+.headerCell:not(:first-child) {
+  position: relative;
 
-  .headerRow:hover & {
-    border-left-color: var(--color-bg-border);
+  &::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+
+    width: 1px;
+
+    content: '';
+
+    opacity: 0;
+    background: var(--color-bg-border);
+
+    transition: opacity var(--fast-transition);
+
+    .headerRow:hover & {
+      opacity: 1;
+    }
   }
 }
 
@@ -109,7 +123,7 @@
 .icon {
   opacity: 0;
 
-  transition: opacity 0.3s;
+  transition: opacity var(--fast-transition);
 
   .headerRow:hover & {
     opacity: 0.4;
