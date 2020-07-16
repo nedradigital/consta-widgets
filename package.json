@@ -90,7 +90,7 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "7.3.0",
-    "@csssr/gpn-configs": "0.2.24",
+    "@csssr/gpn-configs": "0.2.25",
     "@mdx-js/loader": "1.5.9",
     "@storybook/addon-actions": "5.3.18",
     "@storybook/addon-docs": "5.3.18",
