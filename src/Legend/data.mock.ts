@@ -51,7 +51,7 @@ export const withChart = {
     },
     lines: [
       {
-        colorGroupName: 'first',
+        color: 'var(--color-bg-success)',
         values: [
           { x: 0, y: -1 },
           { x: 1, y: 3 },
@@ -63,7 +63,7 @@ export const withChart = {
         withGradient: true,
       },
       {
-        colorGroupName: 'second',
+        color: 'var(--color-bg-normal)',
         values: [
           { x: 0, y: -2 },
           { x: 1, y: 4 },

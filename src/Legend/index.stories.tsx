@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { action } from '@storybook/addon-actions'
-import { object, select } from '@storybook/addon-knobs'
+import { boolean, object, select } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
 import { labelPositions, labelTypes, sizes } from '@/core/LegendItem'
@@ -16,6 +16,7 @@ const getCommonProps = () =>
     labelPosition: select('labelPosition', labelPositions, labelPositions[1]),
     labelType: select('labelType', labelTypes, labelTypes[0]),
     fontSize: select('fontSize', sizes, sizes[1]),
+    lineBold: boolean('lineBold', false),
   } as const)
 
 export const Interactive = createStory(
@@ -35,7 +36,7 @@ export const WithChart = createStory(
   () => (
     <>
       <div style={{ height: 200, marginBottom: 'var(--space-m)' }}>
-        <LinearChart {...withChart.linearChartProps} colorGroups={withChart.colorGroups} />
+        <LinearChart {...withChart.linearChartProps} />
       </div>
       <div style={{ display: 'inline-block' }}>
         <Legend
