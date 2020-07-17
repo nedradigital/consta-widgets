@@ -37,7 +37,7 @@ export const TooltipPositionedByCoordsStory = createStory(
 )
 
 const TooltipPositionedByAnchorStoryContent = () => {
-  const anchorRef = useRef<HTMLButtonElement>(null)
+  const anchorRef = useRef(null)
   const [isTooltipVisible, setIsTooltipVisible] = useState(false)
 
   const handleClickOnAnchor = () => {
@@ -52,14 +52,14 @@ const TooltipPositionedByAnchorStoryContent = () => {
         label={text('Текст в кнопке', 'Кликай сюда')}
         type="button"
         onClick={handleClickOnAnchor}
-        innerRef={anchorRef}
+        ref={anchorRef}
       />
     ) : (
       <Badge
         minified
         size={select('Размер бэджа', ['s', 'm', 'l'], 's')}
         onClick={handleClickOnAnchor}
-        innerRef={anchorRef}
+        ref={anchorRef}
       />
     )
 

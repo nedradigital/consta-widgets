@@ -52,7 +52,7 @@ export const Column: React.FC<Props> = ({
   onMouseLeaveColumn,
   onChangeLabelSize,
 }) => {
-  const textRef = React.useRef<HTMLElement>(null)
+  const textRef = React.useRef<HTMLDivElement>(null)
 
   const renderSection = (item: SectionItem | undefined, index: number) => {
     if (!item || item.length === undefined) {
@@ -106,7 +106,7 @@ export const Column: React.FC<Props> = ({
       onMouseLeave={onMouseLeaveColumn}
     >
       {showValues && sections.length > 0 && (
-        <Text innerRef={textRef} as="div" view="primary" className={css.label} size="xs">
+        <Text ref={textRef} as="div" view="primary" className={css.label} size="xs">
           {total}
         </Text>
       )}

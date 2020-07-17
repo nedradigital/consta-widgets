@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
+import { IconWarning } from '@gpn-design/uikit/IconWarning'
 import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
@@ -15,8 +16,6 @@ import { InputDate } from './components/InputDate'
 import { MonthsSliderRange } from './components/MonthsSliderRange'
 import { MonthsSliderSingle } from './components/MonthsSliderSingle'
 import { getCurrentVisibleDate, isDateIsInvalid, isDateRange } from './helpers'
-// TODO: использовать иконку из UI-кита https://jira.csssr.io/browse/GDC-36
-import { ReactComponent as IconWarning } from './images/icon_warning.svg'
 import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
@@ -68,7 +67,7 @@ const formatOutOfRangeDate = (date: Date) => format(date, 'dd.MM.yyyy')
 const DateOutOfRangeTooptipContent: React.FC<DateLimitProps> = ({ minDate, maxDate }) => {
   return (
     <div className={css.warningTooltip}>
-      <IconWarning className={css.iconWarning} />
+      <IconWarning size="xs" view="alert" className={css.iconWarning} />
       <Text as="div" size="xs" view="primary" lineHeight="m">
         Укажите дату в промежутке {formatOutOfRangeDate(minDate)} - {formatOutOfRangeDate(maxDate)}
       </Text>

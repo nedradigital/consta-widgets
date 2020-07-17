@@ -1,9 +1,9 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Button } from '@gpn-design/uikit/Button'
-import { IconAlignLeft } from '@gpn-design/uikit/IconAlignLeft'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
+import { IconUnsort } from '@gpn-design/uikit/IconUnsort'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 import _ from 'lodash'
@@ -172,8 +172,7 @@ export const Table = <T extends TableRow>({
   const getSortIcon = (column: TableColumn<T>) => {
     return (
       (isSortedByColumn(column) && (sorting?.order === 'desc' ? IconSortDown : IconSortUp)) ||
-      // todo заменить на соответствующую иконку, когда добавят в ui-kit: https://github.com/gpn-prototypes/ui-kit/issues/212
-      IconAlignLeft
+      IconUnsort
     )
   }
 
