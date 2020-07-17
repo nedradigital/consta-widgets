@@ -1,14 +1,10 @@
 import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
 
-import { Filters, SelectedFilters } from '@/common/utils/table'
 import { getDayMonthYearFromTimestamp } from '@/common/utils/time'
 
-import { Column, MonthItem, Row, TextAlign } from '.'
+import { MonthItem } from '.'
 
-export const TABLE_COLUMN_WIDTH = 186
-export const TABLE_FAKE_COLUMN_WIDTH = 178
 export const MARGIN_BETWEEN_BARS = 1
-export const FACT_BLOCK_SIZE = 8
 
 export const MONTH_NAMES = [
   'янв',
@@ -40,79 +36,6 @@ export const PERIODS = {
   дек: 'IV',
 } as const
 
-export const PERIOD_POSITIONS: readonly number[] = [0, 3, 6, 9]
-
-export const filterRoadmapData = ({
-  rows,
-  filters,
-  selectedFilters,
-}: {
-  rows: readonly Row[]
-  filters: Filters<Row>
-  selectedFilters: SelectedFilters
-}) => {
-  const filterColumn = ([key, value]: readonly [string, React.ReactNode]) => {
-    const columnSelectedFilters = selectedFilters[key] || []
-    if (columnSelectedFilters.length === 0) {
-      return true
-    }
-
-    const columnFilters = filters.filter(filter => columnSelectedFilters.includes(filter.id))
-    if (columnFilters.length === 0) {
-      return false
-    }
-
-    // Если передали React компонент, то пропускаем проверку контента.
-    if (typeof value !== 'string' && typeof value !== 'number') {
-      return false
-    }
-
-    return columnFilters.some(filter => filter.filterer(value))
-  }
-
-  const filterRow = (row: Row) => {
-    return Object.entries(row.columns).every(filterColumn)
-  }
-
-  return rows.filter(filterRow)
-}
-
-export const getAlignForColumns = (columns: readonly Column[]) => {
-  return columns.reduce<Record<string, TextAlign>>((acc, item) => {
-    acc[item.accessor] = item.align || 'left'
-    return acc
-  }, {})
-}
-
-export const getColumnCount = (rows: ReadonlyArray<Pick<Row, 'columns'>>) => {
-  return rows.reduce((acc, row) => {
-    const keys = Object.keys(row.columns)
-
-    if (keys.length > acc) {
-      return keys.length
-    }
-
-    return acc
-  }, 0)
-}
-
-export const getGridTemplateColumns = (
-  size: number,
-  count: number
-): React.CSSProperties['gridTemplateColumns'] => {
-  return `${size * count}px auto`
-}
-
-export const getLongestTextFromColumns = (columns: Record<string, React.ReactNode>) => {
-  return Object.values(columns).reduce<string>((acc, value) => {
-    if (typeof value === 'string' && value.length > acc.length) {
-      return value
-    }
-
-    return acc
-  }, '')
-}
-
 export const getMonths = (startDate: number, endDate: number): readonly MonthItem[] => {
   const [, startMonth, startYear] = getDayMonthYearFromTimestamp(startDate)
   const countMonths = differenceInCalendarMonths(endDate, startDate) + 1
@@ -127,7 +50,7 @@ export const getMonths = (startDate: number, endDate: number): readonly MonthIte
     }
 
     const value = MONTH_NAMES[monthCounter]
-    const isPeriod = i === 0 || PERIOD_POSITIONS.includes(monthCounter)
+    const isPeriod = i === 0 || monthCounter % 3 === 0
 
     mutableMonths.push({
       value,

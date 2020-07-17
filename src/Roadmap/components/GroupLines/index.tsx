@@ -8,7 +8,7 @@ type Props = {
   group: Group
   monthWidth: number
   isActive: boolean
-  isInactive: boolean
+  isAnyRowActive: boolean
   graphStartDate: number
   withMargin: boolean
   tooltipPosition: Position
@@ -20,7 +20,7 @@ export const GroupLines: React.FC<Props> = ({
   group,
   monthWidth,
   isActive,
-  isInactive,
+  isAnyRowActive,
   graphStartDate,
   withMargin,
   tooltipPosition,
@@ -29,6 +29,7 @@ export const GroupLines: React.FC<Props> = ({
 }) => {
   const interactiveLineRef = React.useRef<HTMLDivElement>(null)
 
+  const isInactive = isAnyRowActive && !isActive
   const { plan, fact, forecast, title, comment, color } = group
 
   const interactiveLineStartDate = fact?.startDate || forecast?.startDate
@@ -48,7 +49,7 @@ export const GroupLines: React.FC<Props> = ({
           startDate={plan.startDate}
           endDate={plan.endDate}
           view="plan"
-          isInactive={isActive || isInactive}
+          isInactive={isAnyRowActive}
           {...defaultProps}
         />
       )}
