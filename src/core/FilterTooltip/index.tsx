@@ -1,6 +1,5 @@
 import { useRef } from 'react'
 
-import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Button } from '@gpn-design/uikit/Button'
 import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
 import { Text } from '@gpn-design/uikit/Text'
@@ -35,14 +34,6 @@ export const FilterTooltip: React.FC<Props> = ({
   onToggle,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const popoverContentRef = useRef<HTMLDivElement>(null)
-  const menuRef = useRef<HTMLDivElement>(null)
-
-  useClickOutside({
-    isActive: isOpened,
-    ignoreClicksInsideRefs: [buttonRef, popoverContentRef, menuRef],
-    handler: onToggle,
-  })
 
   return (
     <>
@@ -63,8 +54,9 @@ export const FilterTooltip: React.FC<Props> = ({
           direction="downRight"
           offset={4}
           arrowOffset={12}
+          onClickOutside={onToggle}
         >
-          <div className={css.popoverContent} ref={popoverContentRef}>
+          <div className={css.popoverContent}>
             <Text as="div" size="xs" view="primary" className={css.title}>
               Фильтровать по условию
             </Text>

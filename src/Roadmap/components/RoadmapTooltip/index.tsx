@@ -1,7 +1,6 @@
 import React, { RefObject } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
-import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
@@ -121,12 +120,6 @@ export const RoadmapTooltip: React.FC<Props> = ({
     onRequestReposition: onRequestClose,
   })
 
-  useClickOutside({
-    isActive: true,
-    handler: onRequestClose,
-    ignoreClicksInsideRefs: [ref],
-  })
-
   return (
     <Tooltip
       ref={ref}
@@ -134,6 +127,7 @@ export const RoadmapTooltip: React.FC<Props> = ({
       size="l"
       possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
       position={position}
+      onClickOutside={onRequestClose}
     >
       <Dates color={color} title={title} fact={fact} plan={plan} forecast={forecast} />
       <Comment comment={comment} />

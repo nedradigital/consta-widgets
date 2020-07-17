@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { useClickOutside } from '@csssr/gpn-utils/lib/use-click-outside'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import * as _ from 'lodash'
 
@@ -54,6 +56,7 @@ export type Props = {
   possibleDirections?: readonly Direction[]
   isInteractive?: boolean
   children: React.ReactNode | ((direction: Direction) => React.ReactNode)
+  onClickOutside?: (event: MouseEvent) => void
 } & PositioningProps
 
 export const Popover: React.FC<Props> = props => {
@@ -64,6 +67,7 @@ export const Popover: React.FC<Props> = props => {
     arrowOffset,
     possibleDirections = directions,
     isInteractive = true,
+    onClickOutside,
   } = props
   const passedPosition = 'position' in props ? props.position : undefined
   const anchorRef = 'anchorRef' in props ? props.anchorRef : undefined
@@ -93,6 +97,12 @@ export const Popover: React.FC<Props> = props => {
       resetBannedDirections()
       updateAnchorClientRect()
     },
+  })
+
+  useClickOutside({
+    isActive: !!onClickOutside,
+    ignoreClicksInsideRefs: [ref, anchorRef].filter(isDefined),
+    handler: event => onClickOutside && onClickOutside(event),
   })
 
   const { position, direction } = getComputedPositionAndDirection({

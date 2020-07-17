@@ -25,7 +25,7 @@ const sizeClasses: Record<Size, string> = {
 type Props = {
   size: Size
   children: React.ReactNode
-} & Pick<PopoverProps, 'direction' | 'possibleDirections' | 'isInteractive'> &
+} & Pick<PopoverProps, 'direction' | 'possibleDirections' | 'isInteractive' | 'onClickOutside'> &
   PositioningProps
 
 export const Tooltip = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
