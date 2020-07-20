@@ -107,6 +107,7 @@
     "babel-loader": "8.0.6",
     "clean-webpack-plugin": "3.0.0",
     "danger": "10.2.0",
+    "eslint-plugin-todo-plz": "1.1.0",
     "fast-glob": "3.2.2",
     "husky": "3.0.0",
     "install-peers-cli": "https://github.com/evless/install-peers-cli#fix-yarn-policies",

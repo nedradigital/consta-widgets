@@ -7802,6 +7802,11 @@ eslint-plugin-react@7.19.0:
     string.prototype.matchall "^4.0.2"
     xregexp "^4.3.0"
 
+eslint-plugin-todo-plz@1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-todo-plz/-/eslint-plugin-todo-plz-1.1.0.tgz#e2d83ab6d865427eba9bf1c1563858c9d521048d"
+  integrity sha512-yTF4YRO4FBI13OM6C/uYs7252iflQYDJ/E/inOl3OrzCYiv67FV6eEAxIMla7WroaPARionT1qFpqlECRLcvEQ==
+
 eslint-plugin-unicorn@12.1.0:
   version "12.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-unicorn/-/eslint-plugin-unicorn-12.1.0.tgz#6ebff6c90ecf4df7ce1615e18928d10bb50c2ff5"

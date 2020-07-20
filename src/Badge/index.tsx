@@ -16,8 +16,7 @@ const sizeClasses: Record<Size, string> = {
   l: css.sizeL,
 }
 
-// Обёртка над китовым виджетом, чтобы добавить поддержку скейлинга
-// Избавимся в https://jira.csssr.io/browse/GDC-274
+// TODO (GDC-274): Обёртка над китовым виджетом, чтобы добавить поддержку скейлинга
 export const Badge: React.FC<BadgeProps & { children?: never }> = props => (
   <UikitBadge
     {...props}
