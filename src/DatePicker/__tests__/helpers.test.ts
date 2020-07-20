@@ -3,6 +3,7 @@ import MockDate from 'mockdate'
 import {
   getCurrentVisibleDate,
   getMonthTitle,
+  isDateFullyEntered,
   isDateIsInvalid,
   isDateRange,
   isOnlyOneDateInRange,
@@ -60,22 +61,22 @@ describe('getCurrentVisibleDate', () => {
       ).toEqual(currentDate)
     })
 
-    it('возвращает текущую дату, если её месяц частично входит в минимальные границы', () => {
+    it('возвращает минимальную дату, если текущая выходит за минимальную границу', () => {
       expect(
         getCurrentVisibleDate({
           minDate: new Date(2020, 4, 16),
           maxDate: new Date(2020, 5, 14),
         })
-      ).toEqual(currentDate)
+      ).toEqual(new Date(2020, 4, 16))
     })
 
-    it('возвращает текущую дату, если её месяц частично входит в максимальные границы', () => {
+    it('возвращает максимальную дату, если текущая выходит за максимальную границу', () => {
       expect(
         getCurrentVisibleDate({
           minDate: new Date(2020, 2, 16),
           maxDate: new Date(2020, 4, 14),
         })
-      ).toEqual(currentDate)
+      ).toEqual(new Date(2020, 4, 14))
     })
 
     it('возвращает минимальную дату, если месяц текущей заканчивается ранее минимальной', () => {
@@ -162,24 +163,24 @@ describe('getCurrentVisibleDate', () => {
           ).toEqual(currentDate)
         })
 
-        it('возвращает текущую дату, если она частично входит в минимальные границы', () => {
+        it('возвращает минимальную дату, если текущая выходит за минимальную границу', () => {
           expect(
             getCurrentVisibleDate({
               minDate: new Date(2020, 4, 16),
               maxDate,
               value: [undefined, undefined],
             })
-          ).toEqual(currentDate)
+          ).toEqual(new Date(2020, 4, 16))
         })
 
-        it('возвращает текущую дату, если она частично входит в максимальные границы', () => {
+        it('возвращает максимальную дату, если текущая выходит за максимальную границу', () => {
           expect(
             getCurrentVisibleDate({
               minDate,
               maxDate: new Date(2020, 4, 14),
               value: [undefined, undefined],
             })
-          ).toEqual(currentDate)
+          ).toEqual(new Date(2020, 4, 14))
         })
 
         it('возвращает минимальную дату, если месяц текущей заканчивается ранее минимальной', () => {
@@ -297,5 +298,53 @@ describe('isOnlyOneDateInRange', () => {
 
   it('возвращает true, если в интервале указана только вторая дата', () => {
     expect(isOnlyOneDateInRange([undefined, new Date()])).toBeTrue()
+  })
+})
+
+describe('isFullyEnteredDate', () => {
+  it('возвращает false, если дата введена не полностью', () => {
+    const result = isDateFullyEntered(new Date('0002-01-01'))
+
+    expect(result).toBe(false)
+  })
+
+  it('возвращает true, если дата введена полностью', () => {
+    const result = isDateFullyEntered(new Date('2020-01-01'))
+
+    expect(result).toBe(true)
+  })
+
+  it('возвращает false, если диапазон дат не заполнен', () => {
+    const result = isDateFullyEntered([undefined, undefined])
+
+    expect(result).toBe(false)
+  })
+
+  it('возвращает false, если не полностью заполнена только одна дата из диапазона', () => {
+    const firstDate = isDateFullyEntered([new Date('0002-01-01'), undefined])
+    expect(firstDate).toBe(false)
+
+    const lastDate = isDateFullyEntered([undefined, new Date('0002-01-01')])
+    expect(lastDate).toBe(false)
+  })
+
+  it('возвращает true, если полностью заполнена только одна дата из диапазона', () => {
+    const firstDate = isDateFullyEntered([new Date('2020-01-01'), undefined])
+    expect(firstDate).toBe(true)
+
+    const lastDate = isDateFullyEntered([undefined, new Date('2020-01-01')])
+    expect(lastDate).toBe(true)
+  })
+
+  it('возвращает false, если не полностью заполнена любая дата из диапазона', () => {
+    const result = isDateFullyEntered([new Date('2020-01-01'), new Date('2020-01-01')])
+
+    expect(result).toBe(true)
+  })
+
+  it('возвращает true, если полностью заполнены все даты из диапазон', () => {
+    const result = isDateFullyEntered([new Date('2020-01-01'), new Date('2020-01-01')])
+
+    expect(result).toBe(true)
   })
 })

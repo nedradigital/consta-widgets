@@ -15,7 +15,7 @@ import { Calendar } from './components/Calendar'
 import { InputDate } from './components/InputDate'
 import { MonthsSliderRange } from './components/MonthsSliderRange'
 import { MonthsSliderSingle } from './components/MonthsSliderSingle'
-import { getCurrentVisibleDate, isDateIsInvalid, isDateRange } from './helpers'
+import { getCurrentVisibleDate, isDateFullyEntered, isDateIsInvalid, isDateRange } from './helpers'
 import css from './index.css'
 
 export type DateRange = readonly [Date?, Date?]
@@ -157,10 +157,15 @@ export const DatePicker: React.FC<Props> = props => {
   }
 
   useLayoutEffect(() => {
-    if (!isTooltipVisible) {
-      setCurrentVisibleDate(getCurrentVisibleDate({ value: props.value, minDate, maxDate }))
+    if (!props.value || !isDateFullyEntered(props.value)) {
+      return
     }
 
+    const newVisibleDate = getCurrentVisibleDate({ value: props.value, minDate, maxDate })
+
+    if (currentVisibleDate !== newVisibleDate) {
+      setCurrentVisibleDate(newVisibleDate)
+    }
     // отключаем проверку, чтобы избежать неявных эффектов, вызванных изменением всех props
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.value, props.type, props.minDate, props.maxDate, isTooltipVisible])

@@ -120,9 +120,13 @@ export const MonthsSliderRange: React.FC<Props> = ({
 
     setOffsetRatio(Math.floor(tickIdx / 12))
 
-    // Отключаем проверку, т.к. нужное положение выставляется только при первом отображении линейки
+    /**
+     * Отключаем проверку, так как положение расчитывается при первой отрисовке
+     * и при смене текущей отображаемой даты, а отслеживание массива месяцев не
+     * требуется потому что меняется на каждую отрисовку.
+     */
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref.current])
+  }, [ref.current, currentVisibleDate])
 
   const handleMovePrev = () => {
     offsetRatio > 0 && setOffsetRatio(offsetRatio - 1)
