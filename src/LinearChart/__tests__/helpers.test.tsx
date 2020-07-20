@@ -15,6 +15,7 @@ import {
   getYRange,
   getYScale,
   INITIAL_DOMAIN,
+  invertDomain,
   padDomain,
 } from '../helpers'
 
@@ -58,35 +59,77 @@ const verticalLines: ReadonlyArray<readonly Item[]> = [
 
 // Заменяем методы из LinearChart на более простую реализацию чтобы в расчетах не использовались константные отступы.
 const getXDomain = (items: readonly Item[]) => d3.extent(items, v => v.x) as NumberRange
+const getInvertedXDomain = (items: readonly Item[]) => invertDomain(getXDomain(items))
 const getYDomain = (items: readonly Item[]) => d3.extent(items, v => v.y) as NumberRange
+const getInvertedYDomain = (items: readonly Item[]) => invertDomain(getYDomain(items))
 
 describe('calculateSecondaryDomain', () => {
   describe('горизонтальный график', () => {
     it('рассчитывает второстепенный домен для одной линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, horizontalLine, v => v.x, getYDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 2,
+        mainDomainMax: 6,
+        linesValues: horizontalLine,
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([0, 9])
     })
 
     it('рассчитывает второстепенный домен для нескольких линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, horizontalLines, v => v.x, getYDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 2,
+        mainDomainMax: 6,
+        linesValues: horizontalLines,
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([-4, 10])
     })
 
+    it('рассчитывает перевёрнутый второстепенный домен для нескольких линии', () => {
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 2,
+        mainDomainMax: 6,
+        linesValues: horizontalLines,
+        getValue: v => v.x,
+        getDomain: getInvertedYDomain,
+        isInverted: true,
+      })
+      expect(domain).toEqual([10, -4])
+    })
+
     it('рассчитывает второстепенный домен в максимальном левом положении', () => {
-      const domain = calculateSecondaryDomain(1, 2, horizontalLine, v => v.x, getYDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 1,
+        mainDomainMax: 2,
+        linesValues: horizontalLine,
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([6, 9])
     })
 
     it('рассчитывает второстепенный домен в максимальном правом положении', () => {
-      const domain = calculateSecondaryDomain(6, 7, horizontalLine, v => v.x, getYDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 6,
+        mainDomainMax: 7,
+        linesValues: horizontalLine,
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([0, 3])
     })
 
     it('рассчитывает второстепенный домен, когда есть пропуски в середине', () => {
-      const domain = calculateSecondaryDomain(
-        1,
-        2,
-        [
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 1,
+        mainDomainMax: 2,
+        linesValues: [
           [
             { x: -1, y: -1 },
             { x: 0, y: 0 },
@@ -96,17 +139,18 @@ describe('calculateSecondaryDomain', () => {
             { x: 4, y: 4 },
           ],
         ],
-        v => v.x,
-        getYDomain
-      )
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([0, 3])
     })
 
     it('рассчитывает второстепенный домен, когда есть пропуски в начале', () => {
-      const domain = calculateSecondaryDomain(
-        0,
-        3,
-        [
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 0,
+        mainDomainMax: 3,
+        linesValues: [
           [
             { x: 0, y: null },
             { x: 1, y: null },
@@ -114,39 +158,67 @@ describe('calculateSecondaryDomain', () => {
             { x: 3, y: 3 },
           ],
         ],
-        v => v.x,
-        getYDomain
-      )
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([2, 3])
     })
 
     it('возвращает нулевой домен, если все значения — пропуски', () => {
-      const domain = calculateSecondaryDomain(
-        1,
-        2,
-        [
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 1,
+        mainDomainMax: 2,
+        linesValues: [
           [
             { x: 0, y: null },
             { x: 1, y: null },
             { x: 2, y: null },
           ],
         ],
-        v => v.x,
-        getYDomain
-      )
+        getValue: v => v.x,
+        getDomain: getYDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([0, 0])
     })
   })
 
   describe('вертикальный график', () => {
     it('рассчитывает второстепенный домен для одной линии', () => {
-      const domain = calculateSecondaryDomain(1.5, 7.5, verticalLine, v => v.y, getXDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 1.5,
+        mainDomainMax: 7.5,
+        linesValues: verticalLine,
+        getValue: v => v.y,
+        getDomain: getXDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([0, 9])
     })
 
     it('рассчитывает второстепенный домен для нескольких линии', () => {
-      const domain = calculateSecondaryDomain(2, 6, verticalLines, v => v.y, getXDomain)
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 2,
+        mainDomainMax: 6,
+        linesValues: verticalLines,
+        getValue: v => v.y,
+        getDomain: getXDomain,
+        isInverted: false,
+      })
       expect(domain).toEqual([-4, 10])
+    })
+
+    it('рассчитывает перевёрнутый второстепенный домен для нескольких линии', () => {
+      const domain = calculateSecondaryDomain({
+        mainDomainMin: 2,
+        mainDomainMax: 6,
+        linesValues: verticalLines,
+        getValue: v => v.y,
+        getDomain: getInvertedXDomain,
+        isInverted: true,
+      })
+      expect(domain).toEqual([10, -4])
     })
   })
 })
