@@ -24,6 +24,8 @@ type Props = {
   className?: string
   /** Обрезать текст, если он больше 2 строк */
   shouldCropText?: boolean
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
 const DOT_SIZE = 12
@@ -43,6 +45,8 @@ export const LegendItem: React.FC<Props> = ({
   lineBold,
   className,
   shouldCropText,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
@@ -51,7 +55,11 @@ export const LegendItem: React.FC<Props> = ({
   const dotStyle = type === 'dot' ? { width: dotSize, height: dotSize } : {}
 
   return (
-    <div className={classnames(css.main, sizeClass[fontSize], positionClass, className)}>
+    <div
+      className={classnames(css.main, sizeClass[fontSize], positionClass, className)}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       {color && (
         <div className={css.signWrapper}>
           {/*
