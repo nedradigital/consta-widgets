@@ -13,12 +13,15 @@ import { Filters } from './filtering'
 type Decorators = readonly DecoratorFn[]
 
 const DEFAULT_DECORATORS: Decorators = [withSmartKnobs({ ignoreProps: ['size'] })]
-const FIXED_WIDTH_PARAMETERS = {
+const DEFAULT_PARAMETERS = {
   environment: {
-    style: { width: '90vw' },
+    style: {
+      width: '90vw',
+      height: '400px',
+    },
   },
 } as const
-const STICKY_PARAMETERS = {
+const FIXED_CONTAINER_SIZE_PARAMETERS = {
   environment: {
     style: {
       width: '500px',
@@ -26,13 +29,6 @@ const STICKY_PARAMETERS = {
     },
   },
 }
-const WITH_REACT_NODES_PARAMETERS = {
-  environment: {
-    style: {
-      width: 500,
-    },
-  },
-} as const
 
 const getSizeKnob = () => select('size', sizes, 'l')
 const getFiltersKnob = <T extends TableRow>(filters?: Filters<T>) => {
@@ -53,7 +49,7 @@ const getTableProps = <T extends TableRow>(tableDataProps: Props<T>) => {
 export const Interactive = createStory(() => <Table {...getTableProps(tableData)} />, {
   name: 'обычная',
   decorators: DEFAULT_DECORATORS,
-  parameters: FIXED_WIDTH_PARAMETERS,
+  parameters: DEFAULT_PARAMETERS,
 })
 
 const WithActiveRowContent = () => {
@@ -66,8 +62,7 @@ const WithActiveRowContent = () => {
 
 export const WithActiveRow = createStory(() => <WithActiveRowContent />, {
   name: 'с выбором строки',
-  decorators: DEFAULT_DECORATORS,
-  parameters: FIXED_WIDTH_PARAMETERS,
+  parameters: DEFAULT_PARAMETERS,
 })
 
 export const WithStickyHeader = createStory(
@@ -75,7 +70,7 @@ export const WithStickyHeader = createStory(
   {
     name: 'с зафиксированным заголовком',
     decorators: DEFAULT_DECORATORS,
-    parameters: STICKY_PARAMETERS,
+    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
 
@@ -84,7 +79,7 @@ export const WithStickyColumn = createStory(
   {
     name: 'с зафиксированной колонкой',
     decorators: DEFAULT_DECORATORS,
-    parameters: STICKY_PARAMETERS,
+    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
 
@@ -95,7 +90,7 @@ export const WithLegend = createStory(
   {
     name: 'с легендой',
     decorators: DEFAULT_DECORATORS,
-    parameters: WITH_REACT_NODES_PARAMETERS,
+    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
 
@@ -106,7 +101,7 @@ export const WithTrafficLight = createStory(
   {
     name: 'со "Светофором"',
     decorators: DEFAULT_DECORATORS,
-    parameters: WITH_REACT_NODES_PARAMETERS,
+    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
 
@@ -116,8 +111,9 @@ const WithCheckboxHeaderContent = () => {
   const toggleRow = (idx: number) => {
     setValues(updateAt(values, idx, !values[idx]))
   }
+
   const rows = values.map((value, idx) => ({
-    id: `row${idx}}`,
+    id: `row${idx}`,
     checkbox: <Checkbox size="m" checked={value} onChange={() => toggleRow(idx)} />,
     task: `Задача ${idx}`,
   }))
@@ -150,7 +146,7 @@ const WithCheckboxHeaderContent = () => {
 
 export const WithCheckboxHeader = createStory(() => <WithCheckboxHeaderContent />, {
   name: 'с чекбоксом в шапке',
-  parameters: WITH_REACT_NODES_PARAMETERS,
+  parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
 })
 
 export default createMetadata({
