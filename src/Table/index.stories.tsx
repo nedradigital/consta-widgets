@@ -27,7 +27,7 @@ const STICKY_DECORATORS: Decorators = [
   }),
 ]
 const WITH_REACT_NODES_DECORATORS: Decorators = [
-  ...DEFAULT_DECORATORS,
+  withSmartKnobs({ ignoreProps: ['rows'] }),
   environmentDecorator({
     style: {
       width: 500,
@@ -107,6 +107,7 @@ const WithCheckboxHeaderContent = () => {
             />
           ),
           accessor: 'checkbox',
+          width: 60,
         },
         {
           title: 'Задача',
@@ -119,7 +120,7 @@ const WithCheckboxHeaderContent = () => {
 
 export const WithCheckboxHeader = createStory(() => <WithCheckboxHeaderContent />, {
   name: 'с чекбоксом в шапке',
-  decorators: [environmentDecorator()],
+  decorators: WITH_REACT_NODES_DECORATORS,
 })
 
 export default createMetadata({
