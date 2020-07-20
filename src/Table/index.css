@@ -17,8 +17,6 @@
   width: 100%;
   height: 100%;
 
-  border-bottom: var(--table-border);
-
   &.sizeS {
     --cell-padding-vertical: var(--space-2xs);
     --cell-padding-horizontal: var(--space-xs);
@@ -36,6 +34,10 @@
 
   &.isResizable {
     --resizer-width: 5px;
+  }
+
+  &.withBorderBottom {
+    border-bottom: var(--table-border);
   }
 }
 

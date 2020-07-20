@@ -315,7 +315,8 @@ export const Table = <T extends TableRow>({
         sizeClasses[size],
         isResizable && css.isResizable,
         showHorizontalCellShadow && stickyHeader && css.showHorizontalCellShadow,
-        isZebraStriped && css.isZebraStriped
+        isZebraStriped && css.isZebraStriped,
+        !filteredData.length && css.withBorderBottom
       )}
       style={tableStyle}
       onScroll={handleScroll}
