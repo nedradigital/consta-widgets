@@ -2,7 +2,7 @@ import { object, select } from '@storybook/addon-knobs'
 import { zipObject } from 'lodash'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
 import { Colors, ProgressDonut } from '@/ProgressDonut'
 
@@ -105,14 +105,14 @@ export const AsHalfDonut = createStory(
 export default createMetadata({
   title: 'components/ProgressDonut',
 
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  parameters: {
+    environment: {
       style: {
         backgroundColor: 'var(--color-control-bg-default)',
         width: 200,
         height: 200,
       },
-    }),
-  ],
+    },
+  },
 })

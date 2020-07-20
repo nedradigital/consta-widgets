@@ -3,7 +3,7 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { boolean, object, select } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { labelPositions, labelTypes, sizes } from '@/core/LegendItem'
 import { LinearChart } from '@/LinearChart'
 
@@ -22,13 +22,13 @@ const getCommonProps = () =>
 export const Interactive = createStory(
   () => <Legend {...getCommonProps()} data={object('data', interactiveData)} />,
   {
-    decorators: [
-      environmentDecorator({
+    parameters: {
+      environment: {
         style: {
           width: 200,
         },
-      }),
-    ],
+      },
+    },
   }
 )
 
@@ -50,13 +50,13 @@ export const WithChart = createStory(
   ),
   {
     name: 'с графиком',
-    decorators: [
-      environmentDecorator({
+    parameters: {
+      environment: {
         style: {
           width: 400,
         },
-      }),
-    ],
+      },
+    },
   }
 )
 

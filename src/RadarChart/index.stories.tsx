@@ -3,7 +3,7 @@ import React from 'react'
 import { number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { getFormattedValue } from '@/common/utils/chart'
 
 import { RadarChart } from './'
@@ -42,15 +42,16 @@ const getFormattersForTooltip = () => {
   return formatter ? formatter() : undefined
 }
 
-const decorators = [
-  withSmartKnobs({ ignoreProps: ['backgroundColor'] }),
-  environmentDecorator({
+const decorators = [withSmartKnobs({ ignoreProps: ['backgroundColor'] })] as const
+
+const parameters = {
+  environment: {
     style: {
       width: '80vw',
       height: '80vh',
     },
-  }),
-] as const
+  },
+} as const
 
 export const TwoFigures = createStory(
   () => (
@@ -66,7 +67,7 @@ export const TwoFigures = createStory(
       labelSize="s"
     />
   ),
-  { name: '2 фигуры', decorators }
+  { name: '2 фигуры', decorators, parameters }
 )
 
 export const TwoFiguresWithoutData = createStory(
@@ -83,7 +84,7 @@ export const TwoFiguresWithoutData = createStory(
       labelSize="s"
     />
   ),
-  { name: '2 фигуры сплошные без данных по одной и двум осям', decorators }
+  { name: '2 фигуры сплошные без данных по одной и двум осям', decorators, parameters }
 )
 
 export const OneWholeFigure = createStory(
@@ -99,7 +100,7 @@ export const OneWholeFigure = createStory(
       labelSize="s"
     />
   ),
-  { name: '1 фигура сплошная', decorators }
+  { name: '1 фигура сплошная', decorators, parameters }
 )
 
 export const OneRainbowFigure = createStory(
@@ -114,7 +115,7 @@ export const OneRainbowFigure = createStory(
       labelSize="s"
     />
   ),
-  { name: '1 фигура радугой', decorators }
+  { name: '1 фигура радугой', decorators, parameters }
 )
 
 export const OneRainbowFigureWithoutData = createStory(
@@ -129,7 +130,7 @@ export const OneRainbowFigureWithoutData = createStory(
       labelSize="s"
     />
   ),
-  { name: '1 фигура радугой без данных по двум осям', decorators }
+  { name: '1 фигура радугой без данных по двум осям', decorators, parameters }
 )
 
 export const FontSizeReduction = createStory(
@@ -168,14 +169,14 @@ export const FontSizeReduction = createStory(
   },
   {
     name: 'уменьшение размера шрифта',
-    decorators: [
-      environmentDecorator({
+    parameters: {
+      environment: {
         style: {
           width: '100vw',
           height: '100vh',
         },
-      }),
-    ],
+      },
+    },
   }
 )
 

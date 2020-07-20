@@ -5,7 +5,7 @@ import { Button } from '@gpn-design/uikit/Button'
 import { Text } from '@gpn-design/uikit/Text'
 import { optionsKnob, select, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { directions } from '@/Popover'
 
 import { Position, sizes, Tooltip } from '.'
@@ -82,5 +82,4 @@ export const TooltipPositionedByAnchorStory = createStory(
 
 export default createMetadata({
   title: 'components/Tooltip',
-  decorators: [environmentDecorator()],
 })

@@ -5,6 +5,8 @@ import { addDecorator, addParameters } from '@storybook/react'
 import { themes } from '@storybook/theming'
 import { withPropsTable } from 'storybook-addon-react-docgen'
 
+import { environmentDecorator, listOfThemes, ThemeDecorator } from '@/common/storybook'
+
 import stub from './stub.mdx'
 
 import '@gpn-design/uikit/__internal__/src/utils/whitepaper/whitepaper.css'
@@ -23,6 +25,7 @@ import './storybook.css'
 
 addDecorator(withPropsTable)
 addDecorator(withKnobs)
+addDecorator(environmentDecorator())
 addDecorator(
   withInfo({
     header: false,
@@ -30,6 +33,10 @@ addDecorator(
 )
 
 addParameters({
+  themes: {
+    list: listOfThemes,
+    Decorator: ThemeDecorator,
+  },
   docs: {
     container: DocsContainer,
     page: stub,

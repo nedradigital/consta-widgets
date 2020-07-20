@@ -3,7 +3,7 @@ import React from 'react'
 import { action } from '@storybook/addon-actions'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { ImagesList } from '.'
 
@@ -21,12 +21,12 @@ export const Interactive = createStory(() => (
 
 export default createMetadata({
   title: 'components/ImagesList',
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  parameters: {
+    environment: {
       style: {
         width: '20vw',
       },
-    }),
-  ],
+    },
+  },
 })

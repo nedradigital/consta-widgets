@@ -3,19 +3,15 @@ import { DecoratorFn } from '@storybook/react'
 import { addMonths, subYears } from 'date-fns'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { isValidDate } from '@/common/utils/type-guards'
 
 import { DatePicker, DateRange, sizes } from '.'
 import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'
 
-const DECORATORS: readonly DecoratorFn[] = [
-  withSmartKnobs({ ignoreProps: ['type'] }),
-  environmentDecorator(),
-]
+const DECORATORS: readonly DecoratorFn[] = [withSmartKnobs({ ignoreProps: ['type'] })]
 const DECORATORS_WITHOUT_SCALING: readonly DecoratorFn[] = [
   withSmartKnobs({ ignoreProps: ['type'] }),
-  environmentDecorator({ scaling: false }),
 ]
 
 const setInputValue = (value?: string) => {
@@ -124,7 +120,11 @@ const DatePickerRangeThirdPartyInputStoryContent = () => {
 
 export const DatePickerRangeThirdPartyInputStory = createStory(
   () => <DatePickerRangeThirdPartyInputStoryContent />,
-  { name: 'Выбор диапазона дат с сторонними инпутами', decorators: DECORATORS_WITHOUT_SCALING }
+  {
+    name: 'Выбор диапазона дат с сторонними инпутами',
+    decorators: DECORATORS_WITHOUT_SCALING,
+    parameters: { environment: { scaling: false } },
+  }
 )
 
 export default createMetadata({

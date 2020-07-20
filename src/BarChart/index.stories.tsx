@@ -1,7 +1,7 @@
 import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 import { unitPositions } from '@/core/BarChart'
 
 import { BarChart } from './'
@@ -77,13 +77,13 @@ export const Minimalistic = createStory(
 
 export default createMetadata({
   title: 'components/BarChart',
-  decorators: [
-    withSmartKnobs(),
-    environmentDecorator({
+  decorators: [withSmartKnobs()],
+  parameters: {
+    environment: {
       style: {
         width: '60vw',
         height: '80vh',
       },
-    }),
-  ],
+    },
+  },
 })

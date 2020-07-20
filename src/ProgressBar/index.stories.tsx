@@ -3,7 +3,7 @@ import React from 'react'
 import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory } from '@/common/storybook'
 
 import { ProgressBar } from './'
 import { convertItemToDataItem, progressBarData, progressBarDataWithNullValue } from './data.mock'
@@ -27,13 +27,13 @@ export const WithoutData = createStory(
 
 export default createMetadata({
   title: 'components/ProgressBar',
-  decorators: [
-    withSmartKnobs({ ignoreProps: ['data'] }),
-    environmentDecorator({
+  decorators: [withSmartKnobs({ ignoreProps: ['data'] })],
+  parameters: {
+    environment: {
       style: {
         width: 300,
         height: 300,
       },
-    }),
-  ],
+    },
+  },
 })
