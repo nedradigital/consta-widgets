@@ -13,6 +13,7 @@
 
   display: grid;
   overflow: auto;
+  grid-template-rows: repeat(auto-fill, minmax(0, max-content));
 
   width: 100%;
   height: 100%;
