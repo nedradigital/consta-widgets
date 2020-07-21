@@ -4,7 +4,8 @@ import { TableColumn, TableRow } from '../../'
 
 import css from './index.css'
 
-export type VerticalAlign = 'top' | 'center' | 'bottom'
+export const verticalAligns = ['top', 'center', 'bottom'] as const
+export type VerticalAlign = typeof verticalAligns[number]
 export type HorizontalAlign = 'left' | 'center' | 'right'
 
 type Props = {

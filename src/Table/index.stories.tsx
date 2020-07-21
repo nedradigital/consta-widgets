@@ -1,18 +1,14 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { Checkbox } from '@gpn-design/uikit/Checkbox'
-import { boolean, select } from '@storybook/addon-knobs'
-import { DecoratorFn } from '@storybook/react'
-import { withSmartKnobs } from 'storybook-addon-smart-knobs'
+import { boolean, number, object, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
 
 import { Props, sizes, Table, TableRow } from './'
+import { verticalAligns } from './components/Cell'
 import { tableData, tableWithLegendData, tableWithTrafficLightData } from './data.mock'
 import { Filters } from './filtering'
 
-type Decorators = readonly DecoratorFn[]
-
-const DEFAULT_DECORATORS: Decorators = [withSmartKnobs({ ignoreProps: ['size'] })]
 const DEFAULT_PARAMETERS = {
   environment: {
     style: {
@@ -30,34 +26,54 @@ const FIXED_CONTAINER_SIZE_PARAMETERS = {
   },
 }
 
+const defaultProps = {
+  columns: tableData.columns,
+  rows: tableData.rows,
+  filters: tableData.filters,
+  borderBetweenColumns: false,
+  borderBetweenRows: false,
+  isResizable: false,
+  isZebraStriped: false,
+  stickyColumns: 0,
+  stickyHeader: false,
+  verticalAlign: 'top',
+} as const
+
 const getSizeKnob = () => select('size', sizes, 'l')
-const getFiltersKnob = <T extends TableRow>(filters?: Filters<T>) => {
+const getFiltersKnob = (filters?: Filters<TableRow>) => {
   const isFilterable = boolean('filterable', true)
 
   return isFilterable ? filters : undefined
 }
-const getTableProps = <T extends TableRow>(tableDataProps: Props<T>) => {
-  const { filters, ...restTableData } = tableDataProps
+
+const getKnobs = (replacedProps?: Partial<Props<TableRow>>): Props<TableRow> => {
+  const props = { ...defaultProps, ...replacedProps }
 
   return {
-    ...restTableData,
-    filters: getFiltersKnob(filters),
+    columns: object('columns', props.columns),
+    rows: object('rows', props.rows),
+    filters: getFiltersKnob(props.filters),
     size: getSizeKnob(),
+    borderBetweenColumns: boolean('borderBetweenColumns', props.borderBetweenColumns),
+    borderBetweenRows: boolean('borderBetweenRows', props.borderBetweenRows),
+    isResizable: boolean('isResizable', props.isResizable),
+    isZebraStriped: boolean('isZebraStriped', props.isZebraStriped),
+    stickyColumns: number('stickyColumns', props.stickyColumns),
+    stickyHeader: boolean('stickyHeader', props.stickyHeader),
+    emptyRowsPlaceholder: text('emptyRowsPlaceholder', '') || undefined,
+    verticalAlign: select('verticalAlign', verticalAligns, props.verticalAlign),
   }
 }
 
-export const Interactive = createStory(() => <Table {...getTableProps(tableData)} />, {
+export const Interactive = createStory(() => <Table {...getKnobs()} />, {
   name: 'обычная',
-  decorators: DEFAULT_DECORATORS,
   parameters: DEFAULT_PARAMETERS,
 })
 
 const WithActiveRowContent = () => {
   const [activeRow, setActiveRow] = React.useState<string>()
 
-  return (
-    <Table {...getTableProps(tableData)} activeRow={{ id: activeRow, onChange: setActiveRow }} />
-  )
+  return <Table {...getKnobs()} activeRow={{ id: activeRow, onChange: setActiveRow }} />
 }
 
 export const WithActiveRow = createStory(() => <WithActiveRowContent />, {
@@ -65,42 +81,32 @@ export const WithActiveRow = createStory(() => <WithActiveRowContent />, {
   parameters: DEFAULT_PARAMETERS,
 })
 
-export const WithStickyHeader = createStory(
-  () => <Table {...getTableProps(tableData)} stickyHeader />,
-  {
-    name: 'с зафиксированным заголовком',
-    decorators: DEFAULT_DECORATORS,
-    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
-  }
-)
+export const WithStickyHeader = createStory(() => <Table {...getKnobs({ stickyHeader: true })} />, {
+  name: 'с зафиксированным заголовком',
+  parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
+})
 
-export const WithStickyColumn = createStory(
-  () => <Table {...getTableProps(tableData)} stickyColumns={1} />,
-  {
-    name: 'с зафиксированной колонкой',
-    decorators: DEFAULT_DECORATORS,
-    parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
-  }
-)
+export const WithStickyColumn = createStory(() => <Table {...getKnobs({ stickyColumns: 1 })} />, {
+  name: 'с зафиксированной колонкой',
+  parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
+})
 
 export const WithLegend = createStory(
   () => {
-    return <Table {...getTableProps(tableWithLegendData)} />
+    return <Table {...getKnobs(tableWithLegendData)} />
   },
   {
     name: 'с легендой',
-    decorators: DEFAULT_DECORATORS,
     parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
 
 export const WithTrafficLight = createStory(
   () => {
-    return <Table {...getTableProps(tableWithTrafficLightData)} />
+    return <Table {...getKnobs(tableWithTrafficLightData)} />
   },
   {
     name: 'со "Светофором"',
-    decorators: DEFAULT_DECORATORS,
     parameters: FIXED_CONTAINER_SIZE_PARAMETERS,
   }
 )
