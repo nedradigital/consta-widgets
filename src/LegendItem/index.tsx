@@ -1,3 +1,4 @@
+import { IconWarning } from '@gpn-design/uikit/IconWarning'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
@@ -5,7 +6,7 @@ import { useBaseSize } from '@/BaseSizeContext'
 
 import css from './index.css'
 
-export const labelTypes = ['dot', 'line'] as const
+export const labelTypes = ['dot', 'line', 'warning'] as const
 export type LabelType = typeof labelTypes[number]
 
 export const sizes = ['xs', 's', 'm'] as const
@@ -50,7 +51,7 @@ export const LegendItem: React.FC<Props> = ({
 }) => {
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
-  const positionClass = type === 'dot' ? css.left : css[position]
+  const positionClass = ['dot', 'warning'].includes(type) ? css.left : css[position]
   const dotSize = getCalculatedSizeWithBaseSize(DOT_SIZE)
   const dotStyle = type === 'dot' ? { width: dotSize, height: dotSize } : {}
 
@@ -73,10 +74,18 @@ export const LegendItem: React.FC<Props> = ({
           - `align-items: baseline` из-за невозможности применить отрицательный
             сдвиг используя margin, который необходим для размеров `s` и `xs`.
         */}
-          <div
-            className={classnames(css.sign, css[type], lineBold && css.isBold)}
-            style={{ background: color, ...dotStyle }}
-          />
+          {type === 'warning' ? (
+            <IconWarning
+              className={classnames(css.sign, css.icon)}
+              size={fontSize}
+              style={{ color }}
+            />
+          ) : (
+            <div
+              className={classnames(css.sign, css[type], lineBold && css.isBold)}
+              style={{ background: color, ...dotStyle }}
+            />
+          )}
         </div>
       )}
       <Text

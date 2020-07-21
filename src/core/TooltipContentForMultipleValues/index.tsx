@@ -2,7 +2,10 @@ import React from 'react'
 
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
+import _ from 'lodash'
 
+import { FormatValue } from '@/common/types'
+import { getFormattedValue } from '@/common/utils/chart'
 import { LegendItem } from '@/LegendItem'
 
 import css from './index.css'
@@ -10,13 +13,18 @@ import css from './index.css'
 type Props = {
   title?: string
   items: ReadonlyArray<{
-    value: string
     name?: string
+    value: number | null
     color?: string
   }>
+  formatValueForTooltip?: FormatValue
 }
 
-export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items }) => {
+export const TooltipContentForMultipleValues: React.FC<Props> = ({
+  title,
+  items,
+  formatValueForTooltip,
+}) => {
   return (
     <div className={css.container}>
       {title && (
@@ -29,22 +37,22 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
       )}
 
       <div className={css.content}>
-        {items.map(({ name, color, value }, idx) => (
-          <React.Fragment key={idx}>
-            <LegendItem
-              color={color}
-              fontSize="xs"
-              className={classnames(css.legendItem, !name && css.isSingleColumn)}
-            >
-              {name ?? value}
-            </LegendItem>
-            {name && (
+        {items.map(({ name, color, value }, idx) => {
+          const formattedValue = getFormattedValue(value, formatValueForTooltip)
+
+          return (
+            <React.Fragment key={idx}>
+              <LegendItem type={_.isNumber(value) ? 'dot' : 'warning'} color={color} fontSize="xs" className={classnames(css.legendItem, !name && css.isSingleColumn)}>
+                {name}
+              </LegendItem>
+              {name && (
               <Text as="span" size="xs" weight="bold" view="primary">
-                {value}
+                {formattedValue}
               </Text>
             )}
-          </React.Fragment>
-        ))}
+            </React.Fragment>
+          )
+        })}
       </div>
     </div>
   )

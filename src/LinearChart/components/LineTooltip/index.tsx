@@ -28,7 +28,7 @@ type Props = {
 type TooltipItem = {
   color?: string
   name: string
-  value: number | null | undefined
+  value: number | null
 }
 
 export const LineTooltip: React.FC<Props> = ({
@@ -51,7 +51,7 @@ export const LineTooltip: React.FC<Props> = ({
   const mainValueKey = isHorizontal ? 'x' : 'y'
   const secondaryValueKey = isHorizontal ? 'y' : 'x'
   const isItemHovered = (item: Item) => item[mainValueKey] === hoveredMainValue
-  const getSecondaryValue = (item?: Item) => (item ? item[secondaryValueKey] : undefined)
+  const getSecondaryValue = (item?: Item) => (item ? item[secondaryValueKey] : null)
 
   const tooltipItems: readonly TooltipItem[] = lines.map(line => {
     const item = line.values.find(isItemHovered)
@@ -127,8 +127,9 @@ export const LineTooltip: React.FC<Props> = ({
         items={[...tooltipItems, ...thresholdItems].map(item => ({
           color: item.color,
           name: item.name,
-          value: isNotNil(item.value) ? formatValueForTooltip(item.value) : '—',
+          value: item.value,
         }))}
+        formatValueForTooltip={formatValueForTooltip}
       />
     </Tooltip>
   )
