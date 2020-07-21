@@ -1,4 +1,4 @@
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
 import { Column, Group } from './'
@@ -7,7 +7,7 @@ const getTransformColumn = (filter: (value: number) => boolean) => (column: Colu
   const total = _.sum(column.map(item => item.value))
   const sections = column
     .map(({ value, color }) => {
-      if (value === undefined || !filter(value)) {
+      if (!isNotNil(value) || !filter(value)) {
         return
       }
 
