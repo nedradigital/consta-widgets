@@ -2,7 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { LabelPosition, LabelType, LegendItem, Size } from '@/core/LegendItem'
+import { LabelPosition, LabelType, LegendItem, Size } from '@/LegendItem'
 
 import css from './index.css'
 

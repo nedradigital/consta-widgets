@@ -4,7 +4,7 @@ import { action } from '@storybook/addon-actions'
 import { boolean, object, select } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
-import { labelPositions, labelTypes, sizes } from '@/core/LegendItem'
+import { labelPositions, labelTypes, sizes } from '@/LegendItem'
 import { LinearChart } from '@/LinearChart'
 
 import { directions, Legend } from '.'

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Text } from '@gpn-design/uikit/Text'
 
-import { LegendItem } from '@/core/LegendItem'
+import { LegendItem } from '@/LegendItem'
 
 import css from './index.css'
 
