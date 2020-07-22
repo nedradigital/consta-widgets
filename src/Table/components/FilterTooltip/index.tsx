@@ -38,7 +38,7 @@ export const FilterTooltip: React.FC<Props> = ({
   return (
     <>
       <Button
-        innerRef={buttonRef}
+        ref={buttonRef}
         size="xs"
         iconSize="s"
         view="clear"

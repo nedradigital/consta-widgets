@@ -12,10 +12,8 @@
 
   border-radius: 8px;
   background: var(--color-bg-default);
-  box-shadow:
-    0 2px 2px rgba(var(--color-nums-shadow), 0.07),
-    0 4px 4px rgba(var(--color-nums-shadow), 0.07),
-    0 8px 8px rgba(var(--color-nums-shadow), 0.07),
+  box-shadow: 0 2px 2px rgba(var(--color-nums-shadow), 0.07),
+    0 4px 4px rgba(var(--color-nums-shadow), 0.07), 0 8px 8px rgba(var(--color-nums-shadow), 0.07),
     0 12px 16px rgba(var(--color-nums-shadow), 0.07),
     0 16px 32px rgba(var(--color-nums-shadow), 0.07);
 }
@@ -30,10 +28,7 @@
 
   flex-shrink: 0;
 
-  width: calc-size(12);
   margin-right: var(--space-xs);
-
-  color: var(--color-bg-alert);
 
   transform: translateY(-50%);
 }

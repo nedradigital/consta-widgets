@@ -75,12 +75,7 @@ const PopoverPositionedByAnchorStoryContent = () => {
           justifyContent: 'center',
         }}
       >
-        <Button
-          label="Кликай сюда"
-          type="button"
-          onClick={handleClickOnAnchor}
-          innerRef={anchorRef}
-        />
+        <Button label="Кликай сюда" type="button" onClick={handleClickOnAnchor} ref={anchorRef} />
       </div>
       {isPopoverVisible && (
         <Popover {...commonKnobs} anchorRef={anchorRef}>
@@ -124,7 +119,7 @@ export const PopoverWithRepositionStory = createStory(
             justifyContent: 'center',
           }}
         >
-          <Button label="Кнопка-якорь" type="button" innerRef={anchorRef} />
+          <Button label="Кнопка-якорь" type="button" ref={anchorRef} />
         </div>
         <Popover anchorRef={anchorRef}>
           <PopoverContent>

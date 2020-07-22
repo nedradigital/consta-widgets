@@ -1,9 +1,11 @@
 import React from 'react'
 
-import { Badge as UikitBadge, BadgeProps } from '@gpn-design/uikit/Badge'
+import { Badge as UikitBadge } from '@gpn-design/uikit/Badge'
 import classnames from 'classnames'
 
 import css from './index.css'
+
+type BadgeProps = React.ComponentProps<typeof UikitBadge>
 
 export type Status = BadgeProps['status']
 export type Size = NonNullable<BadgeProps['size']>
