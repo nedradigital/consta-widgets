@@ -1,5 +1,5 @@
-import { LegendItem } from '@/core/LegendItem'
 import { Badge } from '@/Badge'
+import { LegendItem } from '@/LegendItem'
 
 import { Filters, Props as TableProps } from './'
 
