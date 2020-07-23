@@ -1,5 +1,5 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { endOfMonth, format, isWithinInterval, startOfMonth } from 'date-fns'
+import { format, isWithinInterval } from 'date-fns'
 import ruLocale from 'date-fns/locale/ru'
 
 import { DateLimitProps, DateRange, ValueProps } from './'
@@ -17,15 +17,14 @@ export const getCurrentVisibleDate = ({
   minDate,
   maxDate,
 }: ValueProps<Date | DateRange> & DateLimitProps): Date => {
-  const currentDate = new Date()
-  const selectedDate = isDateRange(value) ? value[1] || value[0] : value
+  const selectedDate = (isDateRange(value) ? value[1] || value[0] : value) || new Date()
 
-  if (!selectedDate) {
-    if (endOfMonth(currentDate) >= minDate && startOfMonth(currentDate) <= maxDate) {
-      return currentDate
-    }
+  if (selectedDate > maxDate) {
+    return maxDate
+  }
 
-    return endOfMonth(currentDate) < minDate ? minDate : maxDate
+  if (selectedDate < minDate) {
+    return minDate
   }
 
   return selectedDate
@@ -65,4 +64,25 @@ export const isDateIsInvalid = ({
 
 export const isOnlyOneDateInRange = (range: DateRange) => {
   return Boolean((range[0] && !range[1]) || (!range[0] && range[1]))
+}
+
+export const isDateFullyEntered = (value: Date | DateRange) => {
+  if (!isDateRange(value)) {
+    return isDateFromInputIsFullyEntered(value)
+  }
+
+  if (value[0] && !value[1]) {
+    return isDateFromInputIsFullyEntered(value[0])
+  }
+
+  if (value[1] && !value[0]) {
+    return isDateFromInputIsFullyEntered(value[1])
+  }
+
+  return (
+    !!value[0] &&
+    isDateFromInputIsFullyEntered(value[0]) &&
+    !!value[1] &&
+    isDateFromInputIsFullyEntered(value[1])
+  )
 }
