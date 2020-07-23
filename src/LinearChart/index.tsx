@@ -68,8 +68,10 @@ export type Line = {
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
-export type DirectionX = 'toRight' | 'toLeft'
-export type DirectionY = 'toTop' | 'toBottom'
+export const directionsX = ['toRight', 'toLeft'] as const
+export type DirectionX = typeof directionsX[number]
+export const directionsY = ['toTop', 'toBottom'] as const
+export type DirectionY = typeof directionsY[number]
 
 type Props = {
   directionX?: DirectionX

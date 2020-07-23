@@ -4,8 +4,7 @@ import { Button } from '@gpn-design/uikit/Button'
 import { Text } from '@gpn-design/uikit/Text'
 import { boolean, number, select, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
-import { getStoryIds } from '@/common/utils/storybook'
+import { createMetadata, createStory, environmentDecorator, getStoryIds } from '@/common/storybook'
 
 import { directions, Popover, Position } from '.'
 

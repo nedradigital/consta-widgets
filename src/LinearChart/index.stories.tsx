@@ -6,15 +6,15 @@ import { Text } from '@gpn-design/uikit/Text'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
 
-import { LinearChart } from '.'
+import { directionsX, directionsY, LinearChart } from '.'
 
 const MIN = -2
 const MAX = 8
 const COUNT_POINTS = 51
 
-const IGNORE_PROPS = ['title'] as const
+const IGNORE_PROPS = ['title', 'directionX', 'directionY'] as const
 
 const colors = {
   first: 'var(--color-bg-success)',
@@ -39,6 +39,11 @@ const getGridConfig = () =>
     },
   } as const)
 
+const getDirectionKnobs = () => ({
+  directionX: optionalSelect('directionX', directionsX),
+  directionY: optionalSelect('directionY', directionsY),
+})
+
 const getCommonProps = () => {
   const now = Date.now()
   const unit = text('unit', 'тыс м3')
@@ -48,6 +53,7 @@ const getCommonProps = () => {
   })
 
   return {
+    ...getDirectionKnobs(),
     lines: [
       {
         values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map(valueMapper),
@@ -200,6 +206,7 @@ export const WithNumbers = createStory(
 
     return (
       <LinearChart
+        {...getDirectionKnobs()}
         lines={[
           {
             values,
@@ -263,6 +270,7 @@ export const WithBoundaries = createStory(
   () => {
     return (
       <LinearChart
+        {...getDirectionKnobs()}
         lines={[
           {
             values: [
