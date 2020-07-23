@@ -296,12 +296,6 @@ export const Table = <T extends TableRow>({
 
   const tableStyle: React.CSSProperties & TableCSSCustomProperty = {
     gridTemplateColumns: getColumnsSize(resizedColumnWidths),
-    /*
-      Эта настройка необходима чтобы строки таблицы не растягивались на все
-      доступное для таблицы пространство, а занимали необходимое количество
-      места в зависимости от контента.
-    */
-    gridTemplateRows: `max-content repeat(${rows.length}, max-content)`,
     '--table-width': `${tableWidth}px`,
     '--table-header-height': `${tableHeaderHeight}px`,
   }
