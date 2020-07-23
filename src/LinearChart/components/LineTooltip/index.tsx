@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { Position } from '@gpn-design/uikit/Popover'
+import { Tooltip } from '@gpn-design/uikit/Tooltip'
 
 import { FormatValue } from '@/common/types'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
-import { Position, Tooltip } from '@/Tooltip'
 
 import { Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
 import { getBoundary } from '../../helpers'

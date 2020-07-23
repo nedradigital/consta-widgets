@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
+import { Position } from '@gpn-design/uikit/Popover'
 import classnames from 'classnames'
 
-import { useComponentSize } from '@/common/utils/use-component-size'
 import { MonthsTitles } from '@/Roadmap/components/MonthsTitles'
 import { Filters, Table, TableColumn, TableRow } from '@/Table'
-import { Position } from '@/Tooltip'
 
 import { GroupLines } from './components/GroupLines'
 import { getXCoordByDate, MONTH_NAMES } from './helpers'

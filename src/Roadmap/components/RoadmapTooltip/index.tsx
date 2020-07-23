@@ -1,12 +1,12 @@
 import React, { RefObject } from 'react'
 
 import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
+import { Position, usePopoverReposition } from '@gpn-design/uikit/Popover'
 import { Text } from '@gpn-design/uikit/Text'
+import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import classnames from 'classnames'
 
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
-import { usePopoverReposition } from '@/Popover'
-import { Position, Tooltip } from '@/Tooltip'
 
 import { Item } from '../..'
 

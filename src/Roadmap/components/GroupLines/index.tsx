@@ -1,4 +1,4 @@
-import { Position } from '@/Tooltip'
+import { Position } from '@gpn-design/uikit/Popover'
 
 import { Group } from '../..'
 import { Line } from '../Line'

@@ -3,12 +3,11 @@ import { DndProvider } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 
 import { IconWarning } from '@gpn-design/uikit/IconWarning'
+import { Popover } from '@gpn-design/uikit/Popover'
 import { Text } from '@gpn-design/uikit/Text'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
 import { endOfDay, format, startOfDay } from 'date-fns'
-
-import { Popover } from '@/Popover'
 
 import { ActionButtons } from './components/ActionButtons'
 import { Calendar } from './components/Calendar'

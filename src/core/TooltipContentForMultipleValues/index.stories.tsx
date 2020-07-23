@@ -1,9 +1,9 @@
 import React from 'react'
 
+import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import { object, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
-import { Tooltip } from '@/Tooltip'
 
 import { TooltipContentForMultipleValues } from '.'
 

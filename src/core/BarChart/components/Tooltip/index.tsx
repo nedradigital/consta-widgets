@@ -1,10 +1,10 @@
 import * as React from 'react'
 
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { Tooltip as BaseTooltip } from '@gpn-design/uikit/Tooltip'
 
 import { FormatValue } from '@/common/types'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
-import { Tooltip as BaseTooltip } from '@/Tooltip'
 
 import { SectionItem } from '../Column'
 
