@@ -1,4 +1,4 @@
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import { isNumber } from 'lodash'
 
@@ -79,11 +79,11 @@ export const Column: React.FC<Props> = ({
       (!activeGroup && !isNumber(activeSectionIndex))
 
     const getLabel = () => {
-      if (isColumnLabel) {
+      if (isColumnLabel && isNotNil(total)) {
         return formatValueForLabel(total)
       }
 
-      if (isSectionLabel && item.value) {
+      if (isSectionLabel && isNotNil(item.value)) {
         return formatValueForLabel(item.value)
       }
     }

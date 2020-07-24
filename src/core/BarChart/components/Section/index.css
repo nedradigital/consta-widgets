@@ -38,6 +38,7 @@
 
 .label {
   position: absolute;
+  z-index: 1;
 
   :--horizontal-section:--straight & {
     top: 50%;

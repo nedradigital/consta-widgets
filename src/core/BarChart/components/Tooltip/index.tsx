@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
 import { FormatValue } from '@/common/types'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
@@ -22,7 +22,7 @@ type Props = {
 
 const sectionHasValue = (
   section: SectionItem
-): section is SectionItem & { value: NonNullable<SectionItem['value']> } => isDefined(section.value)
+): section is SectionItem & { value: NonNullable<SectionItem['value']> } => isNotNil(section.value)
 
 export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = String }) => {
   return (
