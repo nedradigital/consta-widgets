@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { Text } from '@gpn-design/uikit/Text'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
@@ -35,7 +36,7 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
   return (
     <Tooltip size="l" position={{ x, y }} isInteractive={false}>
       {extendedFigures.length === 1 ? (
-        values[0]
+        <Text size="xs">{values[0]}</Text>
       ) : (
         <TooltipContentForMultipleValues
           title={axis.label}
