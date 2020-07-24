@@ -55,6 +55,7 @@ export const MonthsSliderSingle: React.FC<Props> = ({
         transform="uppercase"
         weight="bold"
         view="primary"
+        spacing="xs"
       >
         {getTitle(currentVisibleDate)}
       </Text>
