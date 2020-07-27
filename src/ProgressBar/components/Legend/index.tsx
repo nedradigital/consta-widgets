@@ -25,7 +25,7 @@ const Marking: React.FC<{ className?: string; style?: React.CSSProperties }> = (
 }) => (
   <div className={classnames(css.marking, className)} style={style}>
     <div className={css.markingIcon} />
-    <Text as="div" size="xs" view="secondary">
+    <Text className={css.markingText} as="div" size="xs" view="secondary">
       {children}
     </Text>
   </div>
