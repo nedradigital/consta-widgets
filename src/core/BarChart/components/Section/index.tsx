@@ -38,7 +38,7 @@ export const Section: React.FC<Props> = ({
       background: color,
     }}
   >
-    {label && (
+    {(label || labelRef) && (
       <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">
         {label}
       </Text>

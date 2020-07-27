@@ -29,7 +29,7 @@ type Props = {
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
-  onChangeLabelSize?: (siez: number) => void
+  onChangeLabelSize?: (size: number) => void
 }
 
 const sizeClasses: Record<ColumnSize, string> = {
