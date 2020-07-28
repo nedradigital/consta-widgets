@@ -66,6 +66,7 @@ export default createMetadata({
     environment: {
       style: {
         width: '80vw',
+        height: '80vh',
       },
     },
   },
