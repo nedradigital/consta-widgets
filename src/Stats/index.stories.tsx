@@ -1,19 +1,24 @@
 import React from 'react'
 
+import { boolean, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory } from '@/common/storybook'
 
-import { Stats } from './index'
+import { Data, Stats } from './index'
+
+const getBadgeKnob = (badge: Data['badge']) => {
+  return boolean('отобразить бейдж', true) ? object('badge', badge) : undefined
+}
 
 export const Interactive = createStory(() => (
   <Stats
     title="Сроки"
     value={217}
-    badge={{
+    badge={getBadgeKnob({
       percentage: 2.1,
       status: 'normal',
-    }}
+    })}
     unit="суток"
     size="xs"
     layout="full"
@@ -25,10 +30,10 @@ export const WithLineBreak = createStory(
     <Stats
       title="Сроки срочные сроки срочные сроки срочные"
       value={217000}
-      badge={{
+      badge={getBadgeKnob({
         percentage: 2.1,
         status: 'normal',
-      }}
+      })}
       unit="суток / час / суток / час / суток / час"
       size="xs"
       layout="full"
@@ -39,7 +44,7 @@ export const WithLineBreak = createStory(
 
 export default createMetadata({
   title: 'components/Stats',
-  decorators: [withSmartKnobs()],
+  decorators: [withSmartKnobs({ ignoreProps: ['badge'] })],
   parameters: {
     environment: {
       style: {
