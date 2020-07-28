@@ -246,11 +246,11 @@
     border-radius: 50%;
   }
 
-  :--isRange:--isSelected &:hover {
+  :--isRange:--isSelected:not(:--isDisabled) &:hover {
     --day-text-color: var(--color-text-hovered);
   }
 
-  :--isRange:--isSelected &:hover::after {
+  :--isRange:--isSelected:not(:--isDisabled) &:hover::after {
     --day-bg-color: var(--color-bg-hovered);
   }
 

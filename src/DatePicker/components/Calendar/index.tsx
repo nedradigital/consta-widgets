@@ -87,14 +87,7 @@ export const isValueSelected = ({
   if (isDateRange(value)) {
     if (value[0] && value[1]) {
       const { start, end } = getStartAndEndDate(value[0], value[1])
-      return (
-        // при вводе с клавиатуры год может начинаться с 0, что крашит date-fns
-        start.valueOf() >= minDate.valueOf() &&
-        start.valueOf() <= end.valueOf() &&
-        end.valueOf() >= start.valueOf() &&
-        end.valueOf() <= maxDate.valueOf() &&
-        isWithinInterval(date, { start, end })
-      )
+      return isWithinInterval(date, { start, end })
     }
 
     return isDateSelected({ date, value: value[0] || value[1], minDate, maxDate })

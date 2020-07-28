@@ -19,12 +19,7 @@ import { DndItemTypes } from '@/common/constants'
 import { DateLimitProps, DateRange, ValueProps } from '../../'
 import { MonthsSliderWrapper } from '../MonthsSliderWrapper'
 
-import {
-  getBaseDate,
-  getMonths,
-  getSelectedBlockStyles,
-  isSelectedWithinAllowedLimits,
-} from './helpers'
+import { getBaseDate, getMonths, getSelectedBlockStyles } from './helpers'
 import css from './index.css'
 
 type Props = {
@@ -156,9 +151,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
           <TickSelector
             offsetLeft={differenceInCalendarMonths(currentVisibleDate, startOfYear(minDate))}
           />
-          {getBaseDate(value) && isSelectedWithinAllowedLimits({ value, minDate, maxDate }) && (
-            <div className={css.selected} style={selectedBlockStyles} />
-          )}
+          {getBaseDate(value) && <div className={css.selected} style={selectedBlockStyles} />}
           {Object.entries(monthsGroupedByYear).map(([year, yearMonths], idxYear) => {
             const isYearActive = idxYear === offsetRatio
             const yearNameView = isYearActive ? 'primary' : 'ghost'
