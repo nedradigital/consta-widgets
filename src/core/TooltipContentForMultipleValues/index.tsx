@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Text } from '@gpn-design/uikit/Text'
+import classnames from 'classnames'
 
 import { LegendItem } from '@/LegendItem'
 
@@ -9,8 +10,8 @@ import css from './index.css'
 type Props = {
   title?: string
   items: ReadonlyArray<{
-    name: string
     value: string
+    name?: string
     color?: string
   }>
 }
@@ -30,12 +31,18 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({ title, items 
       <div className={css.content}>
         {items.map(({ name, color, value }, idx) => (
           <React.Fragment key={idx}>
-            <LegendItem color={color} fontSize="xs">
-              {name}
+            <LegendItem
+              color={color}
+              fontSize="xs"
+              className={classnames(css.legendItem, !name && css.isSingleColumn)}
+            >
+              {name ?? value}
             </LegendItem>
-            <Text as="div" size="xs" weight="bold" view="primary">
-              {value}
-            </Text>
+            {name && (
+              <Text as="span" size="xs" weight="bold" view="primary">
+                {value}
+              </Text>
+            )}
           </React.Fragment>
         ))}
       </div>

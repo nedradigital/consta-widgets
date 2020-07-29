@@ -20,16 +20,21 @@
   }
 
   &.sizeL {
-    --column-size: calc-size(24);
+    --column-size: calc-size(16);
     --column-padding: var(--space-2xs);
   }
 
   &.sizeXL {
+    --column-size: calc-size(24);
+    --column-padding: var(--space-2xs);
+  }
+
+  &.size2XL {
     --column-size: calc-size(36);
     --column-padding: var(--space-2xs);
   }
 
-  &.sizeXXL {
+  &.size3XL {
     --column-size: calc-size(42);
     --column-padding: var(--space-2xs);
   }
@@ -50,45 +55,5 @@
     & + & {
       margin-left: var(--column-padding);
     }
-  }
-}
-
-.label {
-  position: absolute;
-
-  :--horizontal-column:not(.isReversed) & {
-    top: 50%;
-    right: 0;
-
-    padding-left: var(--space-2xs);
-
-    transform: translate(100%, -50%);
-  }
-
-  :--horizontal-column.isReversed & {
-    top: 50%;
-    left: 0;
-
-    padding-right: var(--space-2xs);
-
-    transform: translate(-100%, -50%);
-  }
-
-  :--vertical-column:not(.isReversed) & {
-    top: 0;
-    left: 50%;
-
-    padding-bottom: var(--space-2xs);
-
-    transform: translate(-50%, -100%);
-  }
-
-  :--vertical-column.isReversed & {
-    bottom: 0;
-    left: 50%;
-
-    padding-top: var(--space-2xs);
-
-    transform: translate(-50%, 100%);
   }
 }

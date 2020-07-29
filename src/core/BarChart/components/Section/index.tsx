@@ -1,3 +1,4 @@
+import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
 import { getSize } from './helpers'
@@ -9,6 +10,9 @@ type Props = {
   isHorizontal: boolean
   isReversed: boolean
   isRounded: boolean
+  isActive: boolean
+  label?: string
+  labelRef?: React.Ref<HTMLDivElement>
 }
 
 export const Section: React.FC<Props> = ({
@@ -17,17 +21,27 @@ export const Section: React.FC<Props> = ({
   isHorizontal,
   isReversed,
   isRounded,
+  isActive,
+  label,
+  labelRef,
 }) => (
   <div
     className={classnames(
       css.section,
       isHorizontal && css.isHorizontal,
       isReversed && css.isReversed,
-      isRounded && css.isRounded
+      isRounded && css.isRounded,
+      isActive && css.isActive
     )}
     style={{
       ...getSize(length, isHorizontal),
-      backgroundColor: color,
+      background: color,
     }}
-  />
+  >
+    {(label || labelRef) && (
+      <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">
+        {label}
+      </Text>
+    )}
+  </div>
 )

@@ -23,6 +23,7 @@ export { Stats } from './Stats'
 export { Table } from './Table'
 export { Tooltip } from './Tooltip'
 export { TornadoChart } from './TornadoChart'
+export { SludgeChart } from './SludgeChart'
 
 // Contexts
 export { BaseSizeProvider, useBaseSize } from './BaseSizeContext'

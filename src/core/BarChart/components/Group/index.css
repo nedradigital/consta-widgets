@@ -23,7 +23,11 @@
     --group-inner-padding: var(--space-xs);
   }
 
-  &.sizeXXL {
+  &.size2XL {
+    --group-inner-padding: var(--space-xs);
+  }
+
+  &.size3XL {
     --group-inner-padding: var(--space-xs);
   }
 
@@ -56,6 +60,10 @@
     &:last-child {
       padding-bottom: var(--group-outer-padding);
     }
+  }
+
+  &.isDense {
+    padding: 0;
   }
 }
 
