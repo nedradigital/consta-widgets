@@ -27,6 +27,8 @@ export const padDomain = ({
   return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
 }
 
+export const invertDomain = ([start, end]: NumberRange): NumberRange => [end, start]
+
 export const getXRange = (width: number) => [0, width] as NumberRange
 export const getYRange = (height: number) =>
   [
@@ -47,13 +49,21 @@ export const getYScale = (domain: NumberRange, height: number) =>
     .domain([...domain])
     .range(getYRange(height))
 
-export const calculateSecondaryDomain = (
-  mainDomainMin: number,
-  mainDomainMax: number,
-  linesValues: ReadonlyArray<readonly Item[]>,
-  getValue: (v: NotEmptyItem) => number,
+export const calculateSecondaryDomain = ({
+  mainDomainMin,
+  mainDomainMax,
+  linesValues,
+  getValue,
+  getDomain,
+  isInverted,
+}: {
+  mainDomainMin: number
+  mainDomainMax: number
+  linesValues: ReadonlyArray<readonly Item[]>
+  getValue: (v: NotEmptyItem) => number
   getDomain: (items: readonly NotEmptyItem[]) => NumberRange
-) => {
+  isInverted: boolean
+}): NumberRange => {
   const lineDomains = linesValues.map(values => {
     const zoomRangeIndexes = _.sortBy([
       getIndexWithFallbackToDefault(
@@ -73,10 +83,8 @@ export const calculateSecondaryDomain = (
     return valuesInZoomRange.length ? getDomain(valuesInZoomRange) : [0, 0]
   })
 
-  return [
-    Math.min(...lineDomains.map(d => d[0])),
-    Math.max(...lineDomains.map(d => d[1])),
-  ] as NumberRange
+  const domain = d3.extent(lineDomains.flat(), v => v) as NumberRange
+  return isInverted ? invertDomain(domain) : domain
 }
 
 export const isInDomain = (value: number, domain: readonly number[]) => {

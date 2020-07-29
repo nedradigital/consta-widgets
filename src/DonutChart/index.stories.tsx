@@ -1,7 +1,6 @@
 import React from 'react'
 
-import { object, select } from '@storybook/addon-knobs'
-import { zipObject } from 'lodash'
+import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import {
@@ -9,6 +8,7 @@ import {
   createStory,
   cubeMeterFormatValue,
   emptyFormatValue,
+  optionalSelect,
 } from '@/common/storybook'
 import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
 
@@ -21,9 +21,7 @@ import {
   donutProgressData,
 } from './data.mock'
 
-const halvesDonutList = zipObject(['--', ...halvesDonut], [undefined, ...halvesDonut])
-
-const halfDonutSelect = (value?: HalfDonut) => select('halfDonut', halvesDonutList, value)
+const halfDonutSelect = (value?: HalfDonut) => optionalSelect('halfDonut', halvesDonut, value)
 
 export const Interactive = createStory(
   () => {

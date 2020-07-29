@@ -1,14 +1,11 @@
-import { object, select } from '@storybook/addon-knobs'
-import { zipObject } from 'lodash'
+import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
 import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
 import { Colors, ProgressDonut } from '@/ProgressDonut'
 
-const halvesDonutList = zipObject(['--', ...halvesDonut], [undefined, ...halvesDonut])
-
-const halfDonutSelect = (value?: HalfDonut) => select('halfDonut', halvesDonutList, value)
+const halfDonutSelect = (value?: HalfDonut) => optionalSelect('halfDonut', halvesDonut, value)
 
 const title = 'факт/план ПП'
 

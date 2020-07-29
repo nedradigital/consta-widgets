@@ -5,6 +5,7 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Line, NumberRange, TRANSITION_DURATIONS } from '../../'
+import { invertDomain } from '../../helpers'
 import { XLabelsPosition, YLabelsPosition } from '../Axis'
 
 import css from './index.css'
@@ -46,9 +47,11 @@ export const Zoom: React.FC<Props> = ({
   const dragHandleRef = React.createRef<HTMLDivElement>()
   const previousDragPositionRef = useRef(0)
 
-  const [domainStart, domainEnd] = _.sortBy(domain)
+  const sortDomain = (d: NumberRange) => (isHorizontal ? d : invertDomain(d))
+
+  const [domainStart, domainEnd] = sortDomain(domain)
   const domainSize = domainEnd - domainStart
-  const [originalDomainStart, originalDomainEnd] = _.sortBy(originalDomain)
+  const [originalDomainStart, originalDomainEnd] = sortDomain(originalDomain)
   const originalDomainSize = originalDomainEnd - originalDomainStart
 
   const dragHandleSize = (domainSize / originalDomainSize) * 100

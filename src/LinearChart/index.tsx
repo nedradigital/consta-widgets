@@ -27,6 +27,7 @@ import {
   getYRange,
   getYScale,
   INITIAL_DOMAIN,
+  invertDomain,
   padDomain,
 } from './helpers'
 import css from './index.css'
@@ -36,9 +37,9 @@ export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
 
-export const DEFAULT_DIRECTION_X: DirectionX = 'toRight'
+const DEFAULT_DIRECTION_X: DirectionX = 'toRight'
 
-export const getDefaultDirectionY = (isHorizontal: boolean): DirectionY => {
+const getDefaultDirectionY = (isHorizontal: boolean): DirectionY => {
   return isHorizontal ? 'toTop' : 'toBottom'
 }
 
@@ -67,8 +68,10 @@ export type Line = {
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
-export type DirectionX = 'toRight' | 'toLeft'
-export type DirectionY = 'toTop' | 'toBottom'
+export const directionsX = ['toRight', 'toLeft'] as const
+export type DirectionX = typeof directionsX[number]
+export const directionsY = ['toTop', 'toBottom'] as const
+export type DirectionY = typeof directionsY[number]
 
 type Props = {
   directionX?: DirectionX
@@ -221,7 +224,7 @@ export class LinearChart extends React.Component<Props, State> {
     } = props
 
     const { svgWidth, svgHeight } = this.getSvgSize()
-    const { main: mainAxis } = this.getAxis()
+    const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
     const {
       mainLabelTickValues,
       mainGridTickValues,
@@ -344,9 +347,7 @@ export class LinearChart extends React.Component<Props, State> {
               const gradientProps = line.withGradient
                 ? ({
                     withGradient: true,
-                    areaBottom: isHorizontal
-                      ? yDomain[directionY === 'toTop' ? 0 : 1]
-                      : xDomain[directionX === 'toRight' ? 0 : 1],
+                    areaBottom: secondaryAxis.currentDomain[secondaryAxis.isInverted ? 1 : 0],
                     gradientDirectionX: directionX,
                     gradientDirectionY: directionY,
                   } as const)
@@ -410,20 +411,21 @@ export class LinearChart extends React.Component<Props, State> {
     )
   }
 
+  isXInverted = () => (this.props.directionX || DEFAULT_DIRECTION_X) === 'toLeft'
+  isYInverted = () =>
+    (this.props.directionY || getDefaultDirectionY(this.props.isHorizontal)) === 'toBottom'
+
   getXDomain = (items: readonly Item[]): NumberRange => {
     const {
       gridConfig: {
         x: { withPaddings },
       },
       isHorizontal,
-      directionX = DEFAULT_DIRECTION_X,
     } = this.props
     const { zoom } = this.state
     const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const initialDomain = d3.extent(items, v => v.x)
-    const domain = (directionX === 'toRight'
-      ? initialDomain
-      : [...initialDomain].reverse()) as NumberRange
+    const initialDomain = d3.extent(items, v => v.x) as NumberRange
+    const domain = this.isXInverted() ? invertDomain(initialDomain) : initialDomain
 
     return padDomain({
       domain,
@@ -439,14 +441,11 @@ export class LinearChart extends React.Component<Props, State> {
         y: { withPaddings },
       },
       isHorizontal,
-      directionY = getDefaultDirectionY(this.props.isHorizontal),
     } = this.props
     const { zoom } = this.state
     const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const initialDomain = d3.extent(items, v => v.y)
-    const domain = (directionY === 'toTop'
-      ? initialDomain
-      : [...initialDomain].reverse()) as NumberRange
+    const initialDomain = d3.extent(items, v => v.y) as NumberRange
+    const domain = this.isYInverted() ? invertDomain(initialDomain) : initialDomain
 
     return padDomain({
       domain,
@@ -631,6 +630,7 @@ export class LinearChart extends React.Component<Props, State> {
             currentDomain: yDomain,
             getDomain: this.getYDomain,
             setDomain: setYDomain,
+            isInverted: this.isYInverted(),
           },
         }
       : {
@@ -647,6 +647,7 @@ export class LinearChart extends React.Component<Props, State> {
             currentDomain: xDomain,
             getDomain: this.getXDomain,
             setDomain: setXDomain,
+            isInverted: this.isXInverted(),
           },
         }
   }
@@ -655,7 +656,7 @@ export class LinearChart extends React.Component<Props, State> {
     const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
     const newZoom: number = d3.event.transform.k
 
-    this.setState({ zoom: newZoom })
+    this.setState(state => (state.zoom !== newZoom ? { zoom: newZoom } : null))
 
     const originalMainDomain = mainAxis.getDomain(this.getAllValues())
     const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
@@ -667,13 +668,6 @@ export class LinearChart extends React.Component<Props, State> {
     }
 
     /**
-     * Значения в домене не всегда идут от меньшего к большему: у вертикального
-     * графика домен перевёрнут, чтобы 0 был наверху графика.
-     */
-    const domainMin = Math.min(...newMainDomain)
-    const domainMax = Math.max(...newMainDomain)
-
-    /**
      * Включаем в расчет домена значения из линий порогов только если зум
      * возвращается к стандартному значению.
      */
@@ -682,13 +676,14 @@ export class LinearChart extends React.Component<Props, State> {
       ...(newZoom === 1 ? this.getThresholdLines() : []),
     ].filter(item => item.length)
 
-    const newSecondaryDomain = calculateSecondaryDomain(
-      domainMin,
-      domainMax,
-      secondaryDomainValues,
-      mainAxis.getValue,
-      secondaryAxis.getDomain
-    )
+    const newSecondaryDomain = calculateSecondaryDomain({
+      mainDomainMin: Math.min(...newMainDomain),
+      mainDomainMax: Math.max(...newMainDomain),
+      linesValues: secondaryDomainValues,
+      getValue: mainAxis.getValue,
+      getDomain: secondaryAxis.getDomain,
+      isInverted: secondaryAxis.isInverted,
+    })
 
     if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
       this.targetSecondaryDomain = newSecondaryDomain

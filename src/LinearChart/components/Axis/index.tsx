@@ -311,7 +311,7 @@ export const Axis: React.FC<Props> = ({
               x="100%"
               y={xOnBottom ? height + xAxisHeight - UNIT_Y_OFFSET : -xAxisHeight + UNIT_Y_OFFSET}
               dominantBaseline={xOnBottom ? 'bottom' : 'hanging'}
-              text-anchor="end"
+              textAnchor="end"
             >
               {secondaryScaleUnit}
             </text>

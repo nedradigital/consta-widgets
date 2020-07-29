@@ -1,8 +1,8 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { Checkbox } from '@gpn-design/uikit/Checkbox'
-import { boolean, number, object, select, text } from '@storybook/addon-knobs'
+import { boolean, number, object, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
 
 import { Props, sizes, Table, TableRow } from './'
 import { verticalAligns } from './components/Cell'
@@ -36,10 +36,10 @@ const defaultProps = {
   isZebraStriped: false,
   stickyColumns: 0,
   stickyHeader: false,
-  verticalAlign: 'top',
+  verticalAlign: undefined,
 } as const
 
-const getSizeKnob = () => select('size', sizes, 'l')
+const getSizeKnob = () => optionalSelect('size', sizes)
 const getFiltersKnob = (filters?: Filters<TableRow>) => {
   const isFilterable = boolean('filterable', true)
 
@@ -61,7 +61,7 @@ const getKnobs = (replacedProps?: Partial<Props<TableRow>>): Props<TableRow> => 
     stickyColumns: number('stickyColumns', props.stickyColumns),
     stickyHeader: boolean('stickyHeader', props.stickyHeader),
     emptyRowsPlaceholder: text('emptyRowsPlaceholder', '') || undefined,
-    verticalAlign: select('verticalAlign', verticalAligns, props.verticalAlign),
+    verticalAlign: optionalSelect('verticalAlign', verticalAligns, props.verticalAlign),
   }
 }
 
