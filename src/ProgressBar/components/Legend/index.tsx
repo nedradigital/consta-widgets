@@ -60,7 +60,9 @@ export const Legend: React.FC<Props> = ({ ticks, valueMin, valueMax }) => {
         </Marking>
       ))}
       {/* Чтобы у элемента была фактическая высота */}
-      <Marking className={css.isHidden}>{ticksWithRatio[0].label}</Marking>
+      <Marking className={css.isHidden}>
+        {(ticksWithRatio.find(item => item.label !== '') || {}).label}
+      </Marking>
     </div>
   )
 }
