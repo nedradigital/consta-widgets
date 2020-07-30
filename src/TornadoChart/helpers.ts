@@ -1,4 +1,4 @@
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
@@ -25,7 +25,7 @@ const getTransformColumn = (
   colors: readonly [string, string],
   filter: (index: number) => boolean
 ) => (column: Column, columnIdx: number) => {
-  const sections = column
+  const sections = isNotNil(column)
     ? [
         {
           color: colors[columnIdx],

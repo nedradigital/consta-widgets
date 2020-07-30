@@ -1,10 +1,12 @@
+import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+
 import { Column, Group } from './'
 
 const getTransformColumn = (colors: readonly string[], filter: (value: number) => boolean) => (
   column: Column,
   index: number
 ) => {
-  if (column === undefined) {
+  if (!isNotNil(column)) {
     return
   }
 
