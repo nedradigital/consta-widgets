@@ -3,6 +3,7 @@ import * as d3 from 'd3'
 import * as _ from 'lodash'
 
 import { Boundary, Item, itemIsNotEmpty, Line, NotEmptyItem, NumberRange, TickValues } from './'
+import { ZoomState } from './components/Zoom'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
 
@@ -13,21 +14,30 @@ export const padDomain = ({
   domain,
   paddingStart,
   paddingEnd,
-  zoom,
+  zoomScale,
 }: {
   domain: NumberRange
   paddingStart: number
   paddingEnd: number
-  zoom: number
+  zoomScale: number
 }): NumberRange => {
   const [start, end] = domain
   const diff = domain[1] - domain[0]
   const delta = diff === 0 ? domain[0] : diff
 
-  return [start - paddingStart * delta * (1 / zoom), end + paddingEnd * delta * (1 / zoom)]
+  return [
+    start - paddingStart * delta * (1 / zoomScale),
+    end + paddingEnd * delta * (1 / zoomScale),
+  ]
 }
 
 export const invertDomain = ([start, end]: NumberRange): NumberRange => [end, start]
+
+export const zoomDomain = (domain: NumberRange, zoom: ZoomState): NumberRange => {
+  const [domainStart, domainEnd] = domain
+  const domainDelta = domainEnd - domainStart
+  return [domainStart + domainDelta * zoom[0], domainStart + domainDelta * zoom[1]]
+}
 
 export const getXRange = (width: number) => [0, width] as NumberRange
 export const getYRange = (height: number) =>

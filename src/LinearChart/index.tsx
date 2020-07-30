@@ -15,20 +15,19 @@ import { HoverLines } from './components/HoverLines'
 import { LineTooltip } from './components/LineTooltip'
 import { LineWithDots } from './components/LineWithDots'
 import { Threshold } from './components/Threshold'
-import { Zoom } from './components/Zoom'
+import { defaultZoom, getZoomScale, isDefaultZoom, Zoom, ZoomState } from './components/Zoom'
 import {
   calculateSecondaryDomain,
   flipPointsOnAxes,
   getColorFromFirstLineWithBoundaries,
   getMainTickValues,
   getSecondaryTickValues,
-  getXRange,
   getXScale,
-  getYRange,
   getYScale,
   INITIAL_DOMAIN,
   invertDomain,
   padDomain,
+  zoomDomain,
 } from './helpers'
 import css from './index.css'
 
@@ -107,7 +106,7 @@ type State = {
   height: number
   paddingX: number
   paddingY: number
-  zoom: number
+  zoom: ZoomState
   xGuideValue: number
   yGuideValue: number
   hoveredMainValue: HoveredMainValue
@@ -157,7 +156,7 @@ export class LinearChart extends React.Component<Props, State> {
     height: 0,
     paddingX: 0,
     paddingY: 0,
-    zoom: 1,
+    zoom: defaultZoom,
     xGuideValue: 0,
     yGuideValue: 0,
     hoveredMainValue: undefined,
@@ -224,7 +223,7 @@ export class LinearChart extends React.Component<Props, State> {
     } = props
 
     const { svgWidth, svgHeight } = this.getSvgSize()
-    const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
+    const { secondary: secondaryAxis } = this.getAxis()
     const {
       mainLabelTickValues,
       mainGridTickValues,
@@ -393,17 +392,13 @@ export class LinearChart extends React.Component<Props, State> {
 
           {withZoom && (
             <Zoom
+              value={this.state.zoom}
+              onChange={this.onZoom}
               isHorizontal={isHorizontal}
-              xRange={getXRange(svgWidth)}
-              yRange={getYRange(svgHeight)}
               paddingX={paddingX}
               paddingY={paddingY}
               xLabelsPos={xLabelsPos}
               yLabelsPos={yLabelsPos}
-              domain={mainAxis.currentDomain}
-              originalDomain={mainAxis.getDomain(this.getAllValues())}
-              onZoom={this.onZoom}
-              lines={lines}
             />
           )}
         </div>
@@ -424,15 +419,19 @@ export class LinearChart extends React.Component<Props, State> {
     } = this.props
     const { zoom } = this.state
     const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const initialDomain = d3.extent(items, v => v.x) as NumberRange
-    const domain = this.isXInverted() ? invertDomain(initialDomain) : initialDomain
 
-    return padDomain({
-      domain,
-      paddingStart: withPaddings ? left : 0,
-      paddingEnd: withPaddings ? right : 0,
-      zoom,
-    })
+    return _.flow(
+      () => d3.extent(items, v => v.x) as NumberRange,
+      domain => (this.isXInverted() ? invertDomain(domain) : domain),
+      domain => (isHorizontal ? zoomDomain(domain, zoom) : domain),
+      domain =>
+        padDomain({
+          domain,
+          paddingStart: withPaddings ? left : 0,
+          paddingEnd: withPaddings ? right : 0,
+          zoomScale: getZoomScale(zoom),
+        })
+    )()
   }
 
   getYDomain = (items: readonly Item[]): NumberRange => {
@@ -444,15 +443,19 @@ export class LinearChart extends React.Component<Props, State> {
     } = this.props
     const { zoom } = this.state
     const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
-    const initialDomain = d3.extent(items, v => v.y) as NumberRange
-    const domain = this.isYInverted() ? invertDomain(initialDomain) : initialDomain
 
-    return padDomain({
-      domain,
-      paddingStart: withPaddings ? bottom : 0,
-      paddingEnd: withPaddings ? top : 0,
-      zoom,
-    })
+    return _.flow(
+      () => d3.extent(items, v => v.y) as NumberRange,
+      domain => (this.isYInverted() ? invertDomain(domain) : domain),
+      domain => (isHorizontal ? domain : zoomDomain(domain, zoom)),
+      domain =>
+        padDomain({
+          domain,
+          paddingStart: withPaddings ? bottom : 0,
+          paddingEnd: withPaddings ? top : 0,
+          zoomScale: getZoomScale(zoom),
+        })
+    )()
   }
 
   getThresholdLines = () => {
@@ -552,7 +555,7 @@ export class LinearChart extends React.Component<Props, State> {
      * отрисовке или при изменениях данных с учетом того что зум равняется 1.
      */
     const linesValues = this.getAllValues()
-    const thresholdValues = zoom === 1 ? this.getAllThresholdValues() : []
+    const thresholdValues = isDefaultZoom(zoom) ? this.getAllThresholdValues() : []
     const values: readonly Item[] = [...linesValues, ...thresholdValues]
 
     const xDomain = this.getXDomain(values)
@@ -611,7 +614,6 @@ export class LinearChart extends React.Component<Props, State> {
       state: { xDomain, yDomain },
       props: { isHorizontal },
     } = this
-    const { svgWidth, svgHeight } = this.getSvgSize()
     const setXDomain = (domain: NumberRange) => this.setState({ xDomain: domain })
     const setYDomain = (domain: NumberRange) => this.setState({ yDomain: domain })
 
@@ -621,10 +623,7 @@ export class LinearChart extends React.Component<Props, State> {
             currentDomain: xDomain,
             getDomain: this.getXDomain,
             setDomain: setXDomain,
-            getScale: getXScale,
-            rescale: 'rescaleX',
             getValue: (v: NotEmptyItem) => v.x,
-            size: svgWidth,
           },
           secondary: {
             currentDomain: yDomain,
@@ -638,10 +637,7 @@ export class LinearChart extends React.Component<Props, State> {
             currentDomain: yDomain,
             getDomain: this.getYDomain,
             setDomain: setYDomain,
-            getScale: getYScale,
-            rescale: 'rescaleY',
             getValue: (v: NotEmptyItem) => v.y,
-            size: svgHeight,
           },
           secondary: {
             currentDomain: xDomain,
@@ -652,54 +648,49 @@ export class LinearChart extends React.Component<Props, State> {
         }
   }
 
-  onZoom = () => {
-    const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
-    const newZoom: number = d3.event.transform.k
+  onZoom = (newZoom: ZoomState) => {
+    this.setState({ zoom: newZoom }, () => {
+      const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
+      const newMainDomain = mainAxis.getDomain(this.getAllValues())
 
-    this.setState(state => (state.zoom !== newZoom ? { zoom: newZoom } : null))
+      if (!_.isEqual(mainAxis.currentDomain, newMainDomain)) {
+        mainAxis.setDomain(newMainDomain)
+      }
 
-    const originalMainDomain = mainAxis.getDomain(this.getAllValues())
-    const originalMainScale = mainAxis.getScale(originalMainDomain, mainAxis.size)
-    const newMainScale = d3.event.transform[mainAxis.rescale](originalMainScale)
-    const newMainDomain: NumberRange = newMainScale.domain()
+      /**
+       * Включаем в расчет домена значения из линий порогов только если зум
+       * возвращается к стандартному значению.
+       */
+      const secondaryDomainValues = [
+        ...this.getLines().map(item => item.values),
+        ...(isDefaultZoom(newZoom) ? this.getThresholdLines() : []),
+      ].filter(item => item.length)
 
-    if (!_.isEqual(mainAxis.currentDomain, newMainDomain)) {
-      mainAxis.setDomain(newMainDomain)
-    }
+      const newSecondaryDomain = calculateSecondaryDomain({
+        mainDomainMin: Math.min(...newMainDomain),
+        mainDomainMax: Math.max(...newMainDomain),
+        linesValues: secondaryDomainValues,
+        getValue: mainAxis.getValue,
+        getDomain: secondaryAxis.getDomain,
+        isInverted: secondaryAxis.isInverted,
+      })
 
-    /**
-     * Включаем в расчет домена значения из линий порогов только если зум
-     * возвращается к стандартному значению.
-     */
-    const secondaryDomainValues = [
-      ...this.getLines().map(item => item.values),
-      ...(newZoom === 1 ? this.getThresholdLines() : []),
-    ].filter(item => item.length)
+      if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
+        this.targetSecondaryDomain = newSecondaryDomain
 
-    const newSecondaryDomain = calculateSecondaryDomain({
-      mainDomainMin: Math.min(...newMainDomain),
-      mainDomainMax: Math.max(...newMainDomain),
-      linesValues: secondaryDomainValues,
-      getValue: mainAxis.getValue,
-      getDomain: secondaryAxis.getDomain,
-      isInverted: secondaryAxis.isInverted,
+        d3.select(this.secondaryDomainTransitionEl)
+          .transition()
+          .duration(TRANSITION_DURATIONS.ZOOM)
+          .tween('secondaryDomainTween', () => {
+            const i = d3.interpolateArray([...secondaryAxis.currentDomain], [...newSecondaryDomain])
+
+            return (t: number) => {
+              // убеждаемся, что setDomain получит на входе массив с нужной длиной
+              secondaryAxis.setDomain([i(t)[0], i(t)[1]] as NumberRange)
+            }
+          })
+      }
     })
-
-    if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
-      this.targetSecondaryDomain = newSecondaryDomain
-
-      d3.select(this.secondaryDomainTransitionEl)
-        .transition()
-        .duration(TRANSITION_DURATIONS.ZOOM)
-        .tween('secondaryDomainTween', () => {
-          const i = d3.interpolateArray([...secondaryAxis.currentDomain], [...newSecondaryDomain])
-
-          return (t: number) => {
-            // убеждаемся, что setDomain получит на входе массив с нужной длиной
-            secondaryAxis.setDomain([i(t)[0], i(t)[1]] as NumberRange)
-          }
-        })
-    }
   }
 
   setHoveredMainValue = (newValue: HoveredMainValue) =>

@@ -9,7 +9,7 @@
   z-index: 2;
 }
 
-.dragHandle {
+.zoomBar {
   position: absolute;
 
   cursor: grab;
@@ -52,6 +52,10 @@
   }
 }
 
+.buttonsFieldset {
+  display: contents;
+}
+
 .buttons {
   position: absolute;
 
@@ -76,11 +80,6 @@
 
 .buttonGroup {
   display: flex;
-
-  :--horizontal & {
-    right: 8px;
-    bottom: 0;
-  }
 
   :--vertical & {
     flex-direction: column-reverse;
