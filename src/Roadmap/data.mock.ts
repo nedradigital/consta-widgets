@@ -1,9 +1,9 @@
-import { Filters } from '@/Table'
+import { TableFilters } from '@gpn-design/uikit/Table'
 
 import { Props as Data, RoadmapRow } from '.'
 
 /* istanbul ignore next */
-export const dataFilters: Filters<RoadmapRow> = [
+export const dataFilters: TableFilters<RoadmapRow> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -384,7 +384,7 @@ export const data: Data = {
 }
 
 /* istanbul ignore next */
-export const minimalDataFilters: Filters<RoadmapRow> = [
+export const minimalDataFilters: TableFilters<RoadmapRow> = [
   {
     id: 'yamburghNGKM',
     name: 'Ямбургское НГКМ',
@@ -505,7 +505,7 @@ export const minimalData: Data = {
 }
 
 /* istanbul ignore next */
-export const monochromeDataFilters: Filters<RoadmapRow> = [
+export const monochromeDataFilters: TableFilters<RoadmapRow> = [
   {
     id: 'clusterKP4',
     name: 'КП4',

@@ -55,7 +55,7 @@
     ]
   },
   "peerDependencies": {
-    "@gpn-design/uikit": "1.5.0",
+    "@gpn-design/uikit": "1.7.1",
     "react": "16.8.6",
     "react-dom": "16.8.6"
   },

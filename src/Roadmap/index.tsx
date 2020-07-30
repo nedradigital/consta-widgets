@@ -3,10 +3,10 @@ import React, { useCallback, useState } from 'react'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import { Position } from '@gpn-design/uikit/Popover'
+import { Table, TableColumn, TableFilters, TableRow } from '@gpn-design/uikit/Table'
 import classnames from 'classnames'
 
 import { MonthsTitles } from '@/Roadmap/components/MonthsTitles'
-import { Filters, Table, TableColumn, TableRow } from '@/Table'
 
 import { GroupLines } from './components/GroupLines'
 import { getXCoordByDate, MONTH_NAMES } from './helpers'
@@ -36,7 +36,7 @@ export type Props = {
   currentDay: number
   startDate: number
   endDate: number
-  filters?: Filters<TableRow>
+  filters?: TableFilters<TableRow>
 }
 
 type ActiveRowState = {
@@ -99,7 +99,7 @@ export const Roadmap: React.FC<Props> = ({
     }
   }
 
-  const tableColumns: typeof columns = [
+  const mutableTableColumns: Array<TableColumn<TableRow>> = [
     ...columns,
     {
       title: <MonthsTitles startDate={startDate} endDate={endDate} firstMonthRef={firstMonthRef} />,
@@ -148,7 +148,7 @@ export const Roadmap: React.FC<Props> = ({
   return (
     <div className={css.main}>
       <Table<TableRow>
-        columns={tableColumns}
+        columns={mutableTableColumns}
         rows={tableRows}
         filters={filters}
         stickyColumns={columns.length}
