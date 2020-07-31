@@ -42,14 +42,19 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({
 
           return (
             <React.Fragment key={idx}>
-              <LegendItem type={_.isNumber(value) ? 'dot' : 'warning'} color={color} fontSize="xs" className={classnames(css.legendItem, !name && css.isSingleColumn)}>
+              <LegendItem
+                type={_.isNumber(value) ? 'dot' : 'warning'}
+                color={color}
+                fontSize="xs"
+                className={classnames(css.legendItem, !name && css.isSingleColumn)}
+              >
                 {name}
               </LegendItem>
               {name && (
-              <Text as="span" size="xs" weight="bold" view="primary">
-                {formattedValue}
-              </Text>
-            )}
+                <Text as="span" size="xs" weight="bold" view="primary">
+                  {formattedValue}
+                </Text>
+              )}
             </React.Fragment>
           )
         })}

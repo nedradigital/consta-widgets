@@ -6,6 +6,6 @@ describe('getFormattedValue', () => {
   })
 
   it('возвращает заглушку при отсутствии данных', () => {
-    expect(getFormattedValue(null)).toEqual('—')
+    expect(getFormattedValue(null)).toEqual('Нет данных')
   })
 })

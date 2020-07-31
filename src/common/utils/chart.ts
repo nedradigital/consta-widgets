@@ -4,7 +4,7 @@ import { FormatValue } from '@/common/types'
 
 export const getFormattedValue = (v: number | null, formatter: FormatValue = String) => {
   if (!isNotNil(v)) {
-    return '—'
+    return 'Нет данных'
   }
 
   return formatter(v)
