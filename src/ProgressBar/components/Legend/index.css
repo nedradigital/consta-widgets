@@ -12,24 +12,10 @@
   position: absolute;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   flex-direction: column;
 
   white-space: nowrap;
-
-  transform: translateX(-50%);
-
-  &.alignLeft {
-    align-items: flex-start;
-
-    transform: translateX(0);
-  }
-
-  &.alignRight {
-    align-items: flex-end;
-
-    transform: translateX(-100%);
-  }
 
   &.isHidden {
     position: relative;
@@ -43,4 +29,16 @@
   height: calc-size(4);
 
   background-color: var(--color-bg-border);
+}
+
+.markingText {
+  transform: translateX(-50%);
+
+  .marking.alignLeft & {
+    transform: translateX(0);
+  }
+
+  .marking.alignRight & {
+    transform: translateX(-100%);
+  }
 }
