@@ -1,127 +1,90 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React from 'react'
 
 import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Line, NumberRange, TRANSITION_DURATIONS } from '../../'
-import { invertDomain } from '../../helpers'
+import { useComponentSize } from '@/common/utils/use-component-size'
+
+import { TRANSITION_DURATIONS } from '../../'
 import { XLabelsPosition, YLabelsPosition } from '../Axis'
 
+import { scaleZoom, translateZoom } from './helpers'
 import css from './index.css'
+
+/** Точки начала и конца видимой области, каждая от 0 до 1 */
+export type ZoomState = readonly [number, number]
+export const defaultZoom: ZoomState = [0, 1]
+export const isDefaultZoom = (zoom: ZoomState): boolean => _.isEqual(zoom, defaultZoom)
+export const getZoomScale = ([start, end]: ZoomState): number => 1 / (end - start)
 
 type Props = {
   isHorizontal: boolean
-  xRange: NumberRange
-  yRange: NumberRange
   xLabelsPos?: XLabelsPosition
   yLabelsPos?: YLabelsPosition
   paddingX: number
   paddingY: number
-  domain: NumberRange
-  originalDomain: NumberRange
-  onZoom: () => void
-  lines: readonly Line[]
+  value: ZoomState
+  onChange: (newValue: ZoomState) => void
 }
 
-const ZOOM_STEP = 2
-const MIN_ZOOM = 1
-const MAX_ZOOM = ZOOM_STEP ** 3
+const ZOOM_SCALE_STEP = 2
+const MIN_ZOOM_SCALE = 1
+const MAX_ZOOM_SCALE = ZOOM_SCALE_STEP ** 3
 
 export const Zoom: React.FC<Props> = ({
   isHorizontal,
-  xRange,
-  yRange,
   xLabelsPos,
   yLabelsPos,
   paddingX,
   paddingY,
-  domain,
-  originalDomain,
-  onZoom,
-  lines,
+  value,
+  onChange,
 }) => {
-  const zoomRef = useRef({} as Element) // Фэйковый элемент для анимации зума
-  const [zoom, setZoom] = useState(1)
-  const zoomBehaviorRef = React.useRef<d3.ZoomBehavior<Element, unknown>>()
-  const dragHandleRef = React.createRef<HTMLDivElement>()
-  const previousDragPositionRef = useRef(0)
+  const [isDragging, setDragging] = React.useState(false)
+  const [isZooming, setIsZooming] = React.useState(false)
+  const ref = React.useRef(null)
+  const zoomTransitionRef = React.useRef({} as Element)
+  const { width, height } = useComponentSize(ref)
+  const [start, end] = value
+  const zoomScale = getZoomScale(value)
 
-  const sortDomain = (d: NumberRange) => (isHorizontal ? d : invertDomain(d))
+  const changeZoomScale = (newZoomScale: number) => {
+    const newZoom = scaleZoom(value, Math.round(newZoomScale))
 
-  const [domainStart, domainEnd] = sortDomain(domain)
-  const domainSize = domainEnd - domainStart
-  const [originalDomainStart, originalDomainEnd] = sortDomain(originalDomain)
-  const originalDomainSize = originalDomainEnd - originalDomainStart
-
-  const dragHandleSize = (domainSize / originalDomainSize) * 100
-  const dragHandlePos = ((domainStart - originalDomainStart) / originalDomainSize) * 100
-
-  const changeZoom = (modifier: number) => {
-    setZoom(prevZoom => _.clamp(prevZoom * modifier, MIN_ZOOM, MAX_ZOOM))
-  }
-
-  useLayoutEffect(() => {
-    const [xRangeStart, xRangeEnd] = _.sortBy(xRange)
-    const [yRangeStart, yRangeEnd] = _.sortBy(yRange)
-    const zoomExtent: readonly [NumberRange, NumberRange] = [
-      [xRangeStart, yRangeStart],
-      [xRangeEnd, yRangeEnd],
-    ]
-    zoomBehaviorRef.current = d3
-      .zoom()
-      .scaleExtent([MIN_ZOOM, MAX_ZOOM])
-      .extent([
-        [zoomExtent[0][0], zoomExtent[0][1]],
-        [zoomExtent[1][0], zoomExtent[1][1]],
-      ])
-      .translateExtent([
-        [zoomExtent[0][0], zoomExtent[0][1]],
-        [zoomExtent[1][0], zoomExtent[1][1]],
-      ])
-      .on('zoom', onZoom)
-  })
-
-  useLayoutEffect(() => {
-    // При изменении данных в реальном времени нам нужно заново отзумить значения
-    // Поэтому мы возвращаем изум в исходные положение
-    // А потом возвращаем к предыдущему значению зума
-    Promise.resolve()
-      .then(() => setZoom(1))
-      .then(() => setZoom(zoom))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lines])
-
-  useLayoutEffect(() => {
-    d3.select(zoomRef.current)
+    // Анимация зума
+    d3.select(zoomTransitionRef.current)
       .transition()
       .duration(TRANSITION_DURATIONS.ZOOM)
-      .call(zoomBehaviorRef.current!.scaleTo, zoom)
-  }, [zoom])
-
-  useLayoutEffect(() => {
-    setZoom(1)
-  }, [isHorizontal])
-
-  // Drag
-  useLayoutEffect(() => {
-    const getDragPosition = () => d3.event[isHorizontal ? 'x' : 'y']
-    const drag = d3
-      .drag()
-      .on('start', () => {
-        previousDragPositionRef.current = getDragPosition()
+      .tween('zoom', () => {
+        const i = d3.interpolateArray([...value], [...newZoom])
+        return (t: number) => {
+          onChange([i(t)[0], i(t)[1]])
+        }
       })
-      .on('drag', () => {
-        const currentDragPosition = getDragPosition()
-        const dragDelta = previousDragPositionRef.current - currentDragPosition
-        previousDragPositionRef.current = currentDragPosition
-        const deltaCoords = isHorizontal ? [dragDelta, 0] : [0, dragDelta]
-        d3.select(zoomRef.current).call(zoomBehaviorRef.current!.translateBy, ...deltaCoords)
-      })
-    d3.select(dragHandleRef.current as Element).call(drag)
-  }, [dragHandleRef, isHorizontal])
+      .on('start', () => setIsZooming(true))
+      .on('end', () => setIsZooming(false))
+  }
+  const handleZoomIn = () => changeZoomScale(zoomScale / ZOOM_SCALE_STEP)
+  const handleZoomOut = () => changeZoomScale(zoomScale * ZOOM_SCALE_STEP)
 
-  // Zoom bar position
+  const handleDragStart = (e: React.PointerEvent) => {
+    e.currentTarget.setPointerCapture(e.pointerId)
+    setDragging(true)
+  }
+  const handleDragStop = (e: React.PointerEvent) => {
+    e.currentTarget.releasePointerCapture(e.pointerId)
+    setDragging(false)
+  }
+  const handleDragMove = (e: React.PointerEvent) => {
+    const movement = isHorizontal ? e.movementX : -1 * e.movementY
+    const size = isHorizontal ? width : height
+    if (movement) {
+      onChange(translateZoom(value, movement / size))
+    }
+  }
+
+  // Позиция и размеры скроллбара
   const xOnBottom = xLabelsPos === 'bottom'
   const yOnLeft = yLabelsPos === 'left'
   const style = isHorizontal
@@ -135,58 +98,63 @@ export const Zoom: React.FC<Props> = ({
         ...(yOnLeft ? { left: 0 } : { right: 0 }),
         width: paddingX,
       }
-  const handleStyle = isHorizontal
+  const zoomBarStyle = isHorizontal
     ? {
-        left: `${dragHandlePos}%`,
+        left: `${start * 100}%`,
+        right: `${(1 - end) * 100}%`,
         [xOnBottom ? 'top' : 'bottom']: 'var(--axis-tick-offset)',
-        width: `${dragHandleSize}%`,
       }
     : {
-        top: `${dragHandlePos}%`,
+        top: `${(1 - end) * 100}%`,
+        bottom: `${start * 100}%`,
         [yOnLeft ? 'right' : 'left']: 'var(--axis-tick-offset)',
-        height: `${dragHandleSize}%`,
       }
 
   return (
     <div
       className={classnames(css.zoom, isHorizontal ? css.isHorizontal : css.isVertical)}
       style={style}
+      ref={ref}
     >
       <div
-        className={classnames(css.dragHandle, dragHandleSize >= 100 && css.isHidden)}
-        ref={dragHandleRef}
-        style={handleStyle}
+        className={classnames(css.zoomBar, isDefaultZoom(value) && css.isHidden)}
+        style={zoomBarStyle}
+        onPointerDown={handleDragStart}
+        onPointerMove={isDragging ? handleDragMove : undefined}
+        onPointerUp={handleDragStop}
       />
-      <div className={css.buttons}>
-        <div className={css.buttonGroup}>
-          <button
-            type="button"
-            className={classnames(css.button, css.resetButton)}
-            onClick={() => setZoom(1)}
-            disabled={zoom === 1}
-          >
-            [ ]
-          </button>
+      <fieldset className={css.buttonsFieldset} disabled={isZooming}>
+        <div className={css.buttons}>
+          <div className={css.buttonGroup}>
+            <button
+              type="button"
+              className={classnames(css.button, css.resetButton)}
+              onClick={() => changeZoomScale(1)}
+              disabled={zoomScale === 1}
+            >
+              [ ]
+            </button>
+          </div>
+          <div className={css.buttonGroup}>
+            <button
+              type="button"
+              className={css.button}
+              onClick={handleZoomIn}
+              disabled={zoomScale <= MIN_ZOOM_SCALE}
+            >
+              −
+            </button>
+            <button
+              type="button"
+              className={css.button}
+              onClick={handleZoomOut}
+              disabled={zoomScale >= MAX_ZOOM_SCALE}
+            >
+              +
+            </button>
+          </div>
         </div>
-        <div className={css.buttonGroup}>
-          <button
-            type="button"
-            className={css.button}
-            onClick={() => changeZoom(1 / ZOOM_STEP)}
-            disabled={zoom <= MIN_ZOOM}
-          >
-            −
-          </button>
-          <button
-            type="button"
-            className={css.button}
-            onClick={() => changeZoom(ZOOM_STEP)}
-            disabled={zoom >= MAX_ZOOM}
-          >
-            +
-          </button>
-        </div>
-      </div>
+      </fieldset>
     </div>
   )
 }

@@ -17,6 +17,7 @@ import {
   INITIAL_DOMAIN,
   invertDomain,
   padDomain,
+  zoomDomain,
 } from '../helpers'
 
 const horizontalLine: ReadonlyArray<readonly Item[]> = [
@@ -505,7 +506,7 @@ describe('padDomain', () => {
       domain: [0, 10],
       paddingStart: padding,
       paddingEnd: padding,
-      zoom: 1,
+      zoomScale: 1,
     })
     expect(paddedDomain).toEqual([-1, 11])
   })
@@ -515,7 +516,7 @@ describe('padDomain', () => {
       domain: [-10, 10],
       paddingStart: padding,
       paddingEnd: padding,
-      zoom: 2,
+      zoomScale: 2,
     })
     expect(paddedDomain).toEqual([-11, 11])
   })
@@ -525,7 +526,7 @@ describe('padDomain', () => {
       domain: [40, 100],
       paddingStart: padding,
       paddingEnd: padding,
-      zoom: 4,
+      zoomScale: 4,
     })
     expect(paddedDomain).toEqual([38.5, 101.5])
   })
@@ -535,7 +536,7 @@ describe('padDomain', () => {
       domain: [-50, 50],
       paddingStart: padding,
       paddingEnd: padding,
-      zoom: 8,
+      zoomScale: 8,
     })
     expect(paddedDomain).toEqual([-51.25, 51.25])
   })
@@ -545,9 +546,37 @@ describe('padDomain', () => {
       domain: [10, 10],
       paddingStart: padding,
       paddingEnd: padding,
-      zoom: 1,
+      zoomScale: 1,
     })
     expect(paddedDomain).toEqual([9, 11])
+  })
+})
+
+describe('zoomDomain', () => {
+  it('возвращает тот же домен при зуме x1', () => {
+    expect(zoomDomain([-10, 10], [0, 1])).toEqual([-10, 10])
+  })
+
+  it('возвращает домен при зуме x2 по центру', () => {
+    expect(zoomDomain([-10, 10], [0.25, 0.75])).toEqual([-5, 5])
+  })
+
+  it('возвращает домен при зуме x2 со сдвигом в крайнее положение', () => {
+    expect(zoomDomain([-10, 10], [0, 0.5])).toEqual([-10, 0])
+    expect(zoomDomain([-10, 10], [0.5, 1])).toEqual([0, 10])
+  })
+
+  it('возвращает домен при зуме x10 со сдвигом', () => {
+    expect(zoomDomain([-10, 10], [0.1, 0.2])).toEqual([-8, -6])
+  })
+
+  it('возвращает инвертированный домен при зуме x2', () => {
+    expect(zoomDomain([10, 0], [0.25, 0.75])).toEqual([7.5, 2.5])
+  })
+
+  it('возвращает инвертированный домен при зуме x2 со сдвигом в крайнее положение', () => {
+    expect(zoomDomain([10, 0], [0, 0.5])).toEqual([10, 5])
+    expect(zoomDomain([10, 0], [0.5, 1])).toEqual([5, 0])
   })
 })
 
