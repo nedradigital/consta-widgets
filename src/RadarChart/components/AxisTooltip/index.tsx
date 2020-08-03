@@ -2,12 +2,12 @@ import React from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { Text } from '@gpn-design/uikit/Text'
+import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
-import { Tooltip } from '@/Tooltip'
 
 import { Axis, ExtendedFigure } from '../..'
 

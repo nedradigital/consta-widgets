@@ -2,14 +2,15 @@ import React, { useRef, useState } from 'react'
 
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
+import { Position } from '@gpn-design/uikit/Popover'
+import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import classnames from 'classnames'
 import { zip } from 'lodash'
 
 import { FormatValue } from '@/common/types'
 import { getFormattedValue } from '@/common/utils/chart'
-import { useComponentSize } from '@/common/utils/use-component-size'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
-import { Position, Tooltip } from '@/Tooltip'
 
 import { Data as DonutData, DataItem, Donut, HalfDonut } from './components/Donut'
 import { Data as TextData, DonutText } from './components/Text'

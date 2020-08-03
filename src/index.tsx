@@ -21,7 +21,6 @@ export { RadarChart } from './RadarChart'
 export { Roadmap } from './Roadmap'
 export { Stats } from './Stats'
 export { Table } from './Table'
-export { Tooltip } from './Tooltip'
 export { TornadoChart } from './TornadoChart'
 export { SludgeChart } from './SludgeChart'
 

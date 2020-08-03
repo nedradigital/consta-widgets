@@ -1,5 +1,6 @@
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import { Button } from '@gpn-design/uikit/Button'
 import { IconSortDown } from '@gpn-design/uikit/IconSortDown'
 import { IconSortUp } from '@gpn-design/uikit/IconSortUp'
@@ -9,7 +10,6 @@ import classnames from 'classnames'
 import _ from 'lodash'
 
 import { isHtmlElement } from '@/common/utils/type-guards'
-import { useComponentSize } from '@/common/utils/use-component-size'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { Cell, HorizontalAlign, VerticalAlign } from './components/Cell'

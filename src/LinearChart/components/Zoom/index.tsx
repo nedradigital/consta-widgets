@@ -1,10 +1,9 @@
 import React from 'react'
 
+import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
-
-import { useComponentSize } from '@/common/utils/use-component-size'
 
 import { TRANSITION_DURATIONS } from '../../'
 import { XLabelsPosition, YLabelsPosition } from '../Axis'

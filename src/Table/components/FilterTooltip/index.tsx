@@ -2,10 +2,9 @@ import { useRef } from 'react'
 
 import { Button } from '@gpn-design/uikit/Button'
 import { IconFunnel } from '@gpn-design/uikit/IconFunnel'
+import { Popover } from '@gpn-design/uikit/Popover'
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
-
-import { Popover } from '@/Popover'
 
 import css from './index.css'
 

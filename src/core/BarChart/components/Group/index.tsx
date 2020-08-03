@@ -1,7 +1,7 @@
+import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import classnames from 'classnames'
 
 import { FormatValue } from '@/common/types'
-import { useComponentSize } from '@/common/utils/use-component-size'
 
 import { Column, ColumnSize, OnMouseEnterColumn, SectionItem } from '../Column'
 
