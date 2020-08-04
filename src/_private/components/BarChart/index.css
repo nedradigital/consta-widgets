@@ -1,6 +1,6 @@
 .main {
   --grid-row-gap: var(--space-xs);
-  --grid-column-gap: var(--space-xs);
+  --grid-column-gap: var(--space-m);
 
   position: relative;
 
@@ -14,7 +14,7 @@
 
   &.sizeS {
     --grid-row-gap: var(--space-2xs);
-    --grid-column-gap: var(--space-2xs);
+    --grid-column-gap: var(--space-xs);
   }
 
   &.isHorizontal {

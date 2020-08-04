@@ -15,6 +15,7 @@ import { ColumnItem, Group } from './components/Group'
 import { Position, Size as TicksSize, Ticks } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
 import {
+  CHART_MIN_HEIGHT,
   defaultGetAxisShowPositions,
   GetAxisShowPositions,
   getColumnSize,
@@ -114,6 +115,7 @@ export const CoreBarChart: React.FC<Props> = props => {
     valueLength: maxValue.toString().length,
     isHorizontal,
   })
+  const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
   const padding = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
   const paddingCount = showReversed ? 2 : 1
   const paddingTop = !isHorizontal && showValues ? labelSize : 0
@@ -184,9 +186,17 @@ export const CoreBarChart: React.FC<Props> = props => {
     groupsRef,
   ])
 
-  const getStyles = (position: Position) => {
+  const getTicksStyles = (position: Position) => {
     return position === 'top' || position === 'bottom' ? horizontalStyles : verticalStyles
   }
+
+  const getGroupStyles = (index: number, isFirst: boolean, isLast: boolean) => ({
+    gridArea: `group${index}`,
+    ...horizontalStyles,
+    ...verticalStyles,
+    ...(!isHorizontal && isFirst ? { paddingLeft: 'var(--group-outer-padding)' } : {}),
+    ...(!isHorizontal && isLast ? { paddingRight: 'var(--group-outer-padding)' } : {}),
+  })
 
   const renderValues = (position: Position) => (
     <div
@@ -203,7 +213,7 @@ export const CoreBarChart: React.FC<Props> = props => {
         size={toAxisSize(columnSize)}
         showLine
         formatValueForLabel={formatValueForLabel}
-        style={getStyles(position)}
+        style={getTicksStyles(position)}
       />
     </div>
   )
@@ -215,7 +225,7 @@ export const CoreBarChart: React.FC<Props> = props => {
       position={position}
       size={toAxisSize(columnSize)}
       showLine
-      style={getStyles(position)}
+      style={getTicksStyles(position)}
       isDense={isDense}
       gridAreaName={`label${_.startCase(position)}`}
     />
@@ -242,13 +252,16 @@ export const CoreBarChart: React.FC<Props> = props => {
             m: '',
           }[toAxisSize(columnSize)]
       )}
-      style={getGridSettings({
-        isHorizontal,
-        countGroups: groups.length,
-        showReversed,
-        showUnitBottom,
-        showUnitLeft,
-      })}
+      style={{
+        ...getGridSettings({
+          isHorizontal,
+          countGroups: groups.length,
+          showReversed,
+          showUnitBottom,
+          showUnitLeft,
+        }),
+        minHeight: !isHorizontal ? chartMinHeight : undefined,
+      }}
     >
       <svg className={css.svg} ref={svgRef} style={gridStyle}>
         <Grid
@@ -283,7 +296,7 @@ export const CoreBarChart: React.FC<Props> = props => {
             activeSectionIndex={activeSectionIndex}
             onChangeLabelSize={idx === 0 ? changeLabelSize : undefined}
             maxValue={maxValue}
-            style={{ gridArea: `group${idx}`, ...horizontalStyles, ...verticalStyles }}
+            style={getGroupStyles(idx, firstGroup, lastGroup)}
             formatValueForLabel={formatValueForLabel}
             onMouseEnterColumn={params => handleMouseEnterColumn(group.name, params)}
             onMouseLeaveColumn={() => handleMouseLeaveColumn(group.name)}

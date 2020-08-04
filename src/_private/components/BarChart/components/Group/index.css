@@ -2,6 +2,9 @@
 @custom-selector :--vertical-group .group:not(.isHorizontal);
 
 .group {
+  /* Используется в отступе для первой и последней группы */
+  --group-outer-padding: var(--space-3xs);
+
   display: flex;
   flex-grow: 1;
 
