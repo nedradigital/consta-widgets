@@ -48,7 +48,7 @@ export const TooltipContentForMultipleValues: React.FC<Props> = ({
                 fontSize="xs"
                 className={classnames(css.legendItem, !name && css.isSingleColumn)}
               >
-                {name}
+                {name ?? formattedValue}
               </LegendItem>
               {name && (
                 <Text as="span" size="xs" weight="bold" view="primary">
