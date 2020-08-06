@@ -9,7 +9,8 @@ type Props = {
   data: readonly DonutData[]
   textData?: DonutTextData
   halfDonut?: HalfDonut
-  formatValueForTooltip: FormatValue
+  valueSize?: number
+  formatValueForTooltip?: FormatValue
 }
 
 export const DonutChart: React.FC<Props> = ({ halfDonut, ...rest }) => {

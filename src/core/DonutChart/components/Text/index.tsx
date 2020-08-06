@@ -1,7 +1,7 @@
 import React from 'react'
 import { Textfit } from 'react-textfit'
 
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/BaseSizeContext'
@@ -42,6 +42,7 @@ type Props = {
   showTitle: boolean
   showSubBlock: boolean
   halfDonut?: HalfDonut
+  valueSize?: number
 }
 
 export const DonutText: React.FC<Props> = ({
@@ -53,6 +54,7 @@ export const DonutText: React.FC<Props> = ({
   showTitle,
   showSubBlock,
   halfDonut,
+  valueSize,
 }) => {
   const [baseFontSize, setBaseFontSize] = React.useState(0)
   const { getCalculatedSizeWithBaseSize } = useBaseSize()
@@ -79,10 +81,13 @@ export const DonutText: React.FC<Props> = ({
     isHalfDonutVertical,
     titleIsExist: isDefined(data.title),
   })
-  const valueMaxSize = getValueMaxFontSize({
-    height: contentHeight,
-    ratio: contentHeightValueRatio,
-  })
+  const valueMaxSize = isNotNil(valueSize)
+    ? valueSize
+    : getValueMaxFontSize({
+        height: contentHeight,
+        ratio: contentHeightValueRatio,
+      })
+  const valueMinSize = isNotNil(valueSize) ? valueSize : MIN_FONT_SIZE
   const valueMaxWidth = `${getValueMaxWidth(diameter)}px`
 
   const contentStyle: React.CSSProperties = {
@@ -102,7 +107,7 @@ export const DonutText: React.FC<Props> = ({
         key="value"
         className={css.value}
         mode="single"
-        min={MIN_FONT_SIZE}
+        min={valueMinSize}
         max={valueMaxSize}
         style={{ maxWidth: valueMaxWidth }}
         onReady={setBaseFontSize}

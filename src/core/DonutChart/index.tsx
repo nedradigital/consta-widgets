@@ -50,6 +50,7 @@ export type Props = {
   showSubBlock: boolean
   textPaddingFromBorder: number
   halfDonut?: HalfDonut
+  valueSize?: number
   getCirclesCount?: GetCirclesCount
   getMinChartSize?: GetMinChartSize
   formatValueForTooltip?: FormatValue
@@ -73,9 +74,10 @@ export const CoreDonutChart: React.FC<Props> = ({
   showTitle,
   showSubBlock,
   textPaddingFromBorder,
+  halfDonut,
+  valueSize,
   getCirclesCount = defaultGetCirclesCount,
   getMinChartSize = defaultGetMinChartSize,
-  halfDonut,
   formatValueForTooltip,
   filterTooltipItem = () => true,
 }) => {
@@ -179,6 +181,7 @@ export const CoreDonutChart: React.FC<Props> = ({
           halfDonut={halfDonut}
           lineWidth={sizeDonut}
           titlePosition={titlePosition}
+          valueSize={valueSize}
           paddingFromBorder={textPaddingFromBorder}
           showTitle={showTitle}
           showSubBlock={showSubBlock}

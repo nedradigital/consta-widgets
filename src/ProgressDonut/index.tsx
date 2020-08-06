@@ -21,6 +21,7 @@ type Props = {
   colors: Colors
   showText?: boolean
   showTitle?: boolean
+  valueSize?: number
   halfDonut?: HalfDonut
 }
 
@@ -42,6 +43,7 @@ export const ProgressDonut: React.FC<Props> = ({
 
   return (
     <CoreDonutChart
+      {...rest}
       data={getData({ title, data, halfDonut, colors })}
       textData={donutTextData}
       textPaddingFromBorder={
