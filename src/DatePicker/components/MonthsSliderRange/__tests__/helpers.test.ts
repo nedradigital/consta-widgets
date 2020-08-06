@@ -4,7 +4,6 @@ import {
   getMonths,
   getSelectedBlockStyles,
   getSelectedDayWidth,
-  isSelectedWithinAllowedLimits,
 } from '../helpers'
 
 const TICK_WIDTH = 20
@@ -152,72 +151,6 @@ describe('getSelectedDayWidth', () => {
 
   it('возвращает 1 для результатов вычислений менее 1', () => {
     expect(getSelectedDayWidth(new Date(2020, 0, 1), 10)).toEqual(1)
-  })
-})
-
-describe('isSelectedWithinAllowedLimits', () => {
-  it('определяет, что переданный полный диапазон входит в разрешенные пределы', () => {
-    const firstDate = new Date(2020, 1, 15)
-    const secondDate = new Date(2020, 3, 15)
-
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: [firstDate, secondDate],
-        minDate: firstDate,
-        maxDate: secondDate,
-      })
-    ).toBe(true)
-  })
-
-  it('определяет, что переданный полный диапазон не входит в разрешенные пределы', () => {
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: [new Date(2020, 2, 14), new Date(2020, 3, 16)],
-        minDate: new Date(2020, 2, 15),
-        maxDate: new Date(2020, 3, 15),
-      })
-    ).toBe(false)
-  })
-
-  it('определяет, что переданный неполный диапазон входит в разрешенные пределы', () => {
-    const firstDate = new Date(2020, 1, 15)
-    const secondDate = new Date(2020, 3, 15)
-
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: [firstDate, undefined],
-        minDate: firstDate,
-        maxDate: secondDate,
-      })
-    ).toBe(true)
-
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: [undefined, secondDate],
-        minDate: firstDate,
-        maxDate: secondDate,
-      })
-    ).toBe(true)
-  })
-
-  it('определяет, если передан диапазон без дат', () => {
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: [undefined, undefined],
-        minDate: new Date(2020, 2, 15),
-        maxDate: new Date(2020, 3, 15),
-      })
-    ).toBe(false)
-  })
-
-  it('определяет, если диапазон не передан', () => {
-    expect(
-      isSelectedWithinAllowedLimits({
-        value: undefined,
-        minDate: new Date(2020, 2, 15),
-        maxDate: new Date(2020, 3, 15),
-      })
-    ).toBe(false)
   })
 })
 

@@ -62,44 +62,22 @@ export const isDateHighlighted = ({
 const isDateSelected = ({
   date,
   value,
-  minDate,
-  maxDate,
 }: {
   date: Date
-} & ValueProps<Date> &
-  DateLimitProps) => {
-  return value
-    ? isWithinInterval(date, { start: minDate, end: maxDate }) && isSameDay(value, date)
-    : false
+} & ValueProps<Date>) => {
+  return value ? isSameDay(value, date) : false
 }
 
-export const isValueSelected = ({
-  date,
-  value,
-  minDate,
-  maxDate,
-}: {
-  date: Date
-  value?: Date | DateRange
-  minDate: Date
-  maxDate: Date
-}) => {
+export const isValueSelected = ({ date, value }: { date: Date; value?: Date | DateRange }) => {
   if (isDateRange(value)) {
     if (value[0] && value[1]) {
       const { start, end } = getStartAndEndDate(value[0], value[1])
-      return (
-        // при вводе с клавиатуры год может начинаться с 0, что крашит date-fns
-        start.valueOf() >= minDate.valueOf() &&
-        start.valueOf() <= end.valueOf() &&
-        end.valueOf() >= start.valueOf() &&
-        end.valueOf() <= maxDate.valueOf() &&
-        isWithinInterval(date, { start, end })
-      )
+      return isWithinInterval(date, { start, end })
     }
 
-    return isDateSelected({ date, value: value[0] || value[1], minDate, maxDate })
+    return isDateSelected({ date, value: value[0] || value[1] })
   } else {
-    return isDateSelected({ date, value, minDate, maxDate })
+    return isDateSelected({ date, value })
   }
 }
 
@@ -203,7 +181,7 @@ export const Calendar: React.FC<Props> = ({
     const isDateToday = isToday(date)
     const isDisabled = !isWithinInterval(date, { start: minDate, end: maxDate })
     const isHighlighted = isDateHighlighted({ date, value, hoveredDate })
-    const isSelected = isValueSelected({ date, value, minDate, maxDate })
+    const isSelected = isValueSelected({ date, value })
     const isSelectedBackwards = isValueSelectedBackwards({ value, hoveredDate })
     const [firstDate, lastDate] = isDateRange(value) ? _.sortBy(value) : [undefined, undefined]
     const isFirstDate = isDateRange(value) && firstDate ? isSameDay(firstDate, date) : false

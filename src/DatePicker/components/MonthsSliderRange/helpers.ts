@@ -1,4 +1,4 @@
-import { addMonths, differenceInCalendarMonths, getDaysInMonth, isWithinInterval } from 'date-fns'
+import { addMonths, differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
 import { times } from 'lodash'
 
 import { DateLimitProps, DateRange, ValueProps } from '../../'
@@ -32,22 +32,6 @@ export const getDateOffsetOnTimeline = ({
 
 export const getSelectedDayWidth = (date: Date, tickWidth: number) => {
   return Math.max(Math.round(tickWidth / getDaysInMonth(date)), 1)
-}
-
-export const isSelectedWithinAllowedLimits = ({
-  value = [],
-  minDate,
-  maxDate,
-}: ValueProps<DateRange> & DateLimitProps) => {
-  const [startDate, endDate] = value
-
-  if (startDate && endDate) {
-    return startDate.valueOf() >= minDate.valueOf() && endDate.valueOf() <= maxDate.valueOf()
-  }
-
-  const baseDate = getBaseDate(value)
-
-  return baseDate ? isWithinInterval(baseDate, { start: minDate, end: maxDate }) : false
 }
 
 export const getSelectedBlockStyles = ({

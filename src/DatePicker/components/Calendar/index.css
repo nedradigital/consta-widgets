@@ -144,14 +144,6 @@
     --day-bg-color: var(--color-bg-selected-primary);
   }
 
-  :--isSingleDate:--isSelected &:hover {
-    --day-text-color: var(--color-text-hovered);
-  }
-
-  :--isSingleDate:--isSelected &:hover::before {
-    --day-bg-color: var(--color-bg-hovered);
-  }
-
   :--isSingleDate:not(:--isDisabled) &:hover {
     --day-text-color: var(--color-text-hovered);
   }
@@ -194,16 +186,6 @@
     background-color: var(--day-bg-color);
   }
 
-  :--isRange:not(:--isDisabled) &:hover {
-    --day-text-color: var(--color-text-hovered);
-  }
-
-  :--isRange:not(:--isDisabled) &:hover::after {
-    --day-bg-color: var(--color-bg-hovered);
-
-    border-radius: 50%;
-  }
-
   :--isRange:--isSelected:--isFirstDate:not(:--isOnlyOneValue) &::before,
   :--isRange:--isSelected:--isLastDate:not(:--isOnlyOneValue) &::before {
     --day-bg-color: var(--color-bg-selected-secondary);
@@ -244,14 +226,6 @@
     right: 0;
 
     border-radius: 50%;
-  }
-
-  :--isRange:--isSelected &:hover {
-    --day-text-color: var(--color-text-hovered);
-  }
-
-  :--isRange:--isSelected &:hover::after {
-    --day-bg-color: var(--color-bg-hovered);
   }
 
   :--isRange:--isHighlighted &::before {
@@ -300,6 +274,16 @@
 
     border-top-left-radius: 50%;
     border-bottom-left-radius: 50%;
+  }
+
+  :--isRange:not(:--isDisabled) &:hover {
+    --day-text-color: var(--color-text-hovered);
+  }
+
+  :--isRange:not(:--isDisabled) &:hover::after {
+    --day-bg-color: var(--color-bg-hovered);
+
+    border-radius: 50%;
   }
 }
 
