@@ -34,9 +34,10 @@ export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = Str
     >
       <TooltipContentForMultipleValues
         items={data.sections.filter(sectionHasValue).map(section => ({
-          value: formatValue(section.value),
+          value: section.value,
           color: section.color,
         }))}
+        formatValueForTooltip={formatValue}
       />
     </BaseTooltip>
   )

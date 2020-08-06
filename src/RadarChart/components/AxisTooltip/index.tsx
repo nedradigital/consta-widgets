@@ -22,7 +22,6 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
   const pointsOnAxis = extendedFigures
     .map(f => f.points.find(p => p.axisName === axis.name))
     .filter(isDefined)
-  const values = pointsOnAxis.map(point => getFormattedValue(point.originalValue, formatValue))
   const itemWithMaxValue = _.maxBy(pointsOnAxis, item => item.originalValue || 0)
 
   if (!itemWithMaxValue) {
@@ -36,15 +35,16 @@ export const AxisTooltip: React.FC<Props> = ({ extendedFigures, axis, formatValu
   return (
     <Tooltip size="l" position={{ x, y }} isInteractive={false}>
       {extendedFigures.length === 1 ? (
-        <Text size="xs">{values[0]}</Text>
+        <Text size="xs">{getFormattedValue(pointsOnAxis[0].originalValue, formatValue)}</Text>
       ) : (
         <TooltipContentForMultipleValues
           title={axis.label}
           items={extendedFigures.map((f, idx) => ({
             name: f.name,
             color: f.color,
-            value: values[idx],
+            value: pointsOnAxis[idx].originalValue,
           }))}
+          formatValueForTooltip={formatValue}
         />
       )}
     </Tooltip>

@@ -9,7 +9,6 @@ import classnames from 'classnames'
 import { zip } from 'lodash'
 
 import { FormatValue } from '@/common/types'
-import { getFormattedValue } from '@/common/utils/chart'
 import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
 
 import { Data as DonutData, DataItem, Donut, HalfDonut } from './components/Donut'
@@ -34,7 +33,7 @@ type LineRadius = {
 }
 
 type TooltipDataState = ReadonlyArray<{
-  value: string
+  value: number
   color: string
   name: string
 }>
@@ -128,10 +127,9 @@ export const CoreDonutChart: React.FC<Props> = ({
         changeTooltipData(
           d.filter(filterTooltipItem).map(item => {
             const itemValue = isDefined(item.showValue) ? item.showValue : item.value
-            const formattedValue = getFormattedValue(itemValue, formatValueForTooltip)
 
             return {
-              value: formattedValue,
+              value: itemValue,
               color: item.color,
               name: item.name,
             }
@@ -171,7 +169,10 @@ export const CoreDonutChart: React.FC<Props> = ({
       )}
       {isTooltipVisible && (
         <Tooltip size="m" position={mousePosition} isInteractive={false}>
-          <TooltipContentForMultipleValues items={tooltipData} />
+          <TooltipContentForMultipleValues
+            items={tooltipData}
+            formatValueForTooltip={formatValueForTooltip}
+          />
         </Tooltip>
       )}
       {isTextVisible && textData && (

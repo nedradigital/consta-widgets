@@ -31,6 +31,17 @@
   }
 }
 
+.icon {
+  margin-bottom: calc-size(-3);
+
+  vertical-align: baseline;
+
+  :--extra-small &,
+  :--small & {
+    margin-bottom: calc-size(-1);
+  }
+}
+
 .dot {
   vertical-align: baseline;
 

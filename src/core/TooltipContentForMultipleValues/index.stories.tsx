@@ -15,12 +15,12 @@ export const Interactive = createStory(() => (
         {
           color: 'var(--color-bg-alert)',
           name: 'Первый длинный заголовок',
-          value: '10',
+          value: 10,
         },
         {
           color: 'var(--color-bg-normal)',
           name: 'Второй длинный заголовок',
-          value: '10000000',
+          value: 10000000,
         },
       ])}
     />
