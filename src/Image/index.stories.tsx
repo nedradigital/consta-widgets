@@ -1,7 +1,7 @@
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
-import { Image } from '@/Image/index'
+import { createMetadata, createStory } from '@/_private/storybook'
+import { Image } from '@/Image'
 
 export const Interactive = createStory(() => (
   <Image src="https://images.pexels.com/photos/414612/pexels-photo-414612.jpeg" />

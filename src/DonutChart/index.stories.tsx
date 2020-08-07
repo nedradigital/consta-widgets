@@ -3,14 +3,14 @@ import React from 'react'
 import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
+import { HalfDonut, halvesDonut } from '@/_private/components/DonutChart/components/Donut'
 import {
   createMetadata,
   createStory,
   cubeMeterFormatValue,
   emptyFormatValue,
   optionalSelect,
-} from '@/common/storybook'
-import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
+} from '@/_private/storybook'
 
 import { DonutChart } from '.'
 import {

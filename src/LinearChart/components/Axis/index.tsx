@@ -5,7 +5,7 @@ import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/common/types'
+import { FormatValue } from '@/_private/types'
 
 import { ScaleLinear, TickValues } from '../..'
 import { isInDomain } from '../../helpers'

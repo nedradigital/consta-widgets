@@ -29,9 +29,10 @@ jobs:
       run: yarn --frozen-lockfile
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
-
+    - name: Сборка пакета
+      run: yarn build
     - name: Публикация пакета
-      run: npm publish
+      run: npm publish lib
       env:
         NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Генерация описания для релиза

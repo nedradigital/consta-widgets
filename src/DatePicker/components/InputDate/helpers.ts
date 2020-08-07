@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 
-import { isValidDate } from '@/common/utils/type-guards'
+import { isValidDate } from '@/_private/utils/type-guards'
 
 export const getInputValue = (value?: Date) => {
   return value && isValidDate(value) ? format(value, 'yyyy-MM-dd') : ''

@@ -6,7 +6,7 @@ import { Text } from '@gpn-design/uikit/Text'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
+import { createMetadata, createStory, optionalSelect } from '@/_private/storybook'
 
 import { directionsX, directionsY, LinearChart } from '.'
 

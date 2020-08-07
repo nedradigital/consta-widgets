@@ -2,9 +2,9 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 
-import { DEFAULT_COLORS, PyramidChart } from './index'
+import { DEFAULT_COLORS, PyramidChart } from './'
 
 export const Interactive = createStory(() => (
   <PyramidChart

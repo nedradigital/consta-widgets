@@ -3,8 +3,8 @@ import { DecoratorFn } from '@storybook/react'
 import { addMonths, subYears } from 'date-fns'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
-import { isValidDate } from '@/common/utils/type-guards'
+import { createMetadata, createStory } from '@/_private/storybook'
+import { isValidDate } from '@/_private/utils/type-guards'
 
 import { DatePicker, DateRange, sizes } from '.'
 import { getDateMidnightFromString, getInputValue } from './components/InputDate/helpers'

@@ -15,6 +15,8 @@ import { featureToObject, getFeatureToZoomOn, getVisibleObjects } from './helper
 import css from './index.css'
 import { useZoom } from './use-zoom'
 
+export * from './geo-names'
+
 export type ExtendedFeatureOrCollection = ExtendedFeature | ExtendedFeatureCollection
 
 export type GeoObjectLocation = {

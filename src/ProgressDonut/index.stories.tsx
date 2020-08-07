@@ -1,8 +1,8 @@
 import { object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
-import { HalfDonut, halvesDonut } from '@/core/DonutChart/components/Donut'
+import { HalfDonut, halvesDonut } from '@/_private/components/DonutChart/components/Donut'
+import { createMetadata, createStory, optionalSelect } from '@/_private/storybook'
 import { Colors, ProgressDonut } from '@/ProgressDonut'
 
 const halfDonutSelect = (value?: HalfDonut) => optionalSelect('halfDonut', halvesDonut, value)

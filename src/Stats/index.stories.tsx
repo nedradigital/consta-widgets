@@ -3,9 +3,9 @@ import React from 'react'
 import { boolean, object } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 
-import { Data, Stats } from './index'
+import { Data, Stats } from './'
 
 const getBadgeKnob = (badge: Data['badge']) => {
   return boolean('отобразить бейдж', true) ? object('badge', badge) : undefined

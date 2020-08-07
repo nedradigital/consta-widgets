@@ -3,8 +3,8 @@ import React from 'react'
 import { number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
-import { getFormattedValue } from '@/common/utils/chart'
+import { createMetadata, createStory } from '@/_private/storybook'
+import { getFormattedValue } from '@/_private/utils/chart'
 
 import { RadarChart } from './'
 import { axesLabels, emptyFigures, figures } from './data.mock'

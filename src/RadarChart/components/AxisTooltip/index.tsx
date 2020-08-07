@@ -5,9 +5,9 @@ import { Text } from '@gpn-design/uikit/Text'
 import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/common/types'
-import { getFormattedValue } from '@/common/utils/chart'
-import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
+import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
+import { FormatValue } from '@/_private/types'
+import { getFormattedValue } from '@/_private/utils/chart'
 
 import { Axis, ExtendedFigure } from '../..'
 

@@ -14,8 +14,6 @@ import {
 } from 'date-fns'
 import { groupBy } from 'lodash'
 
-import { DndItemTypes } from '@/common/constants'
-
 import { DateLimitProps, DateRange, ValueProps } from '../../'
 import { MonthsSliderWrapper } from '../MonthsSliderWrapper'
 
@@ -31,13 +29,14 @@ type Props = {
 const MOVE_STEP = 12
 const TICK_WIDTH = 32
 const MONTHS_AMOUNT_IN_RANGE = 2
+const DND_DATE_RANGE_TYPE = 'Date-range'
 
 const TickSelector: React.FC<{
   offsetLeft: number
 }> = ({ offsetLeft }) => {
   const [isDragging, setIsDragging] = useState(false)
   const [, dragRef] = useDrag({
-    item: { type: DndItemTypes.DATE_RAGE },
+    item: { type: DND_DATE_RANGE_TYPE },
   })
 
   const handleMouseDown = () => {
@@ -72,7 +71,7 @@ export const MonthsSliderRange: React.FC<Props> = ({
   const [offsetRatio, setOffsetRatio] = useState(0)
 
   const [, dropRef] = useDrop({
-    accept: DndItemTypes.DATE_RAGE,
+    accept: DND_DATE_RANGE_TYPE,
     drop: (_, monitor) => {
       const monitorCoords = monitor.getDifferenceFromInitialOffset()
 

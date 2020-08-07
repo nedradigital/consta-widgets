@@ -2,7 +2,7 @@ import { action } from '@storybook/addon-actions'
 import { object, select } from '@storybook/addon-knobs'
 import { zipObject } from 'lodash'
 
-import { createMetadata, createStory, environmentDecorator } from '@/common/storybook'
+import { createMetadata, createStory, environmentDecorator } from '@/_private/storybook'
 import { Group } from '@/MultiBarChart'
 
 import { SludgeChart } from '.'

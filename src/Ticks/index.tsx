@@ -1,7 +1,7 @@
 import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { Scaler } from '@/common/utils/scale'
+import { Scaler } from '@/_private/utils/scale'
 
 import css from './index.css'
 

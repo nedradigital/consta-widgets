@@ -8,12 +8,11 @@ import * as d3 from 'd3'
 import { Point, Polygon } from 'geojson'
 import { uniq } from 'lodash'
 
-import { getGeoObjectName } from '@/common/utils/geo-names'
-
 import {
   ConnectionPoint,
   GeoObjectLocation,
   GeoPoint,
+  getGeoObjectName,
   RenderConnectionLine,
   RenderConnectionPoint,
   RenderObjectPoint,

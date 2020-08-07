@@ -5,7 +5,7 @@ import { addDecorator, addParameters } from '@storybook/react'
 import { themes } from '@storybook/theming'
 import { withPropsTable } from 'storybook-addon-react-docgen'
 
-import { environmentDecorator, listOfThemes, ThemeDecorator } from '@/common/storybook'
+import { environmentDecorator, listOfThemes, ThemeDecorator } from '@/_private/storybook'
 
 import stub from './stub.mdx'
 
@@ -20,7 +20,6 @@ import '@gpn-design/uikit/__internal__/src/components/Theme/_size/Theme_size_gpn
 import '@gpn-design/uikit/__internal__/src/components/Theme/_space/Theme_space_gpnDefault.css'
 import '@gpn-design/uikit/__internal__/src/components/Theme/_gap/Theme_gap_m.css'
 
-import '@/index.css'
 import './storybook.css'
 
 addDecorator(withPropsTable)

@@ -5,9 +5,9 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/common/types'
-import { getFormattedValue } from '@/common/utils/chart'
-import { deg2rad } from '@/common/utils/math'
+import { FormatValue } from '@/_private/types'
+import { getFormattedValue } from '@/_private/utils/chart'
+import { deg2rad } from '@/_private/utils/math'
 
 import { RadarChartAxes } from './components/Axes'
 import { RadarChartAxisName } from './components/AxisName'

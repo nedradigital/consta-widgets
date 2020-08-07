@@ -1,7 +1,7 @@
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { getSolidSegments } from '@/common/utils/line'
+import { getSolidSegments } from '@/_private/utils/line'
 import { NotEmptyPoint, pointIsNotEmpty } from '@/RadarChart'
 
 import { Point } from '../../'

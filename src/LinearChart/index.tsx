@@ -5,8 +5,8 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/common/types'
-import { getEveryN } from '@/common/utils/array'
+import { FormatValue } from '@/_private/types'
+import { getEveryN } from '@/_private/utils/array'
 
 import { Axis, GridConfig } from './components/Axis'
 import { BoundariesAxisLine } from './components/BoundariesAxisLine'
