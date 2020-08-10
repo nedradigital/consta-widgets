@@ -2,7 +2,7 @@ import React from 'react'
 
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 
 import { Badge } from '.'
 

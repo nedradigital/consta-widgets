@@ -2,7 +2,7 @@ import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
 import { TextField, TextFieldPropOnChange } from '@gpn-design/uikit/TextField'
 import { Tooltip } from '@gpn-design/uikit/Tooltip'
 
-import { isValidDate } from '@/common/utils/type-guards'
+import { isValidDate } from '@/_private/utils/type-guards'
 
 import { Size } from '../../'
 

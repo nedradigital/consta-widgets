@@ -1,4 +1,4 @@
-import { Group as CoreGroup } from '@/core/BarChart'
+import { Group as CoreGroup } from '@/_private/components/BarChart'
 
 import { Group } from '../'
 import { transformGroupsToCommonGroups } from '../helpers'

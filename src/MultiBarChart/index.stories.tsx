@@ -1,8 +1,8 @@
 import { select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
-import { unitPositions } from '@/core/BarChart'
+import { unitPositions } from '@/_private/components/BarChart'
+import { createMetadata, createStory } from '@/_private/storybook'
 
 import { MultiBarChart } from './'
 import { interactiveData, withPercentColumnsData, withTwoColumnsData } from './data.mock'

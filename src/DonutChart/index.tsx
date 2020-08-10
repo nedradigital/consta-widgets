@@ -1,8 +1,8 @@
-import { FormatValue } from '@/common/types'
-import { CoreDonutChart } from '@/core/DonutChart'
-import { HalfDonut } from '@/core/DonutChart/components/Donut'
-import { Data as DonutTextData } from '@/core/DonutChart/components/Text'
-import { Data as DonutData, isHalfDonutVertical } from '@/core/DonutChart/helpers'
+import { CoreDonutChart } from '@/_private/components/DonutChart'
+import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
+import { Data as DonutTextData } from '@/_private/components/DonutChart/components/Text'
+import { Data as DonutData, isHalfDonutVertical } from '@/_private/components/DonutChart/helpers'
+import { FormatValue } from '@/_private/types'
 import { useBaseSize } from '@/BaseSizeContext'
 
 type Props = {

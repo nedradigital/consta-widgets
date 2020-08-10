@@ -1,5 +1,5 @@
-import { FormatValue } from '@/common/types'
-import { CoreBarChart, UnitPosition } from '@/core/BarChart'
+import { CoreBarChart, UnitPosition } from '@/_private/components/BarChart'
+import { FormatValue } from '@/_private/types'
 
 import { getAxisShowPositions, getFormatter, transformGroupsToCommonGroups } from './helpers'
 

@@ -3,9 +3,9 @@ import React, { useRef } from 'react'
 import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 
-import { FormatValue } from '@/common/types'
-import { Scaler } from '@/common/utils/scale'
-import { UnitPosition } from '@/core/BarChart'
+import { UnitPosition } from '@/_private/components/BarChart'
+import { FormatValue } from '@/_private/types'
+import { Scaler } from '@/_private/utils/scale'
 import { useBaseSize } from '@/BaseSizeContext'
 import { Position, Size, Ticks } from '@/Ticks'
 

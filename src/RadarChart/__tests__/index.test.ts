@@ -1,6 +1,6 @@
 import * as _ from 'lodash'
 
-import { deg2rad } from '@/common/utils/math'
+import { deg2rad } from '@/_private/utils/math'
 
 import { angleToCoord, sortFigureValues } from '../'
 

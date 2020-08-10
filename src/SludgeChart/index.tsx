@@ -1,5 +1,5 @@
-import { FormatValue } from '@/common/types'
-import { CoreBarChart, OnMouseHoverColumn } from '@/core/BarChart'
+import { CoreBarChart, OnMouseHoverColumn } from '@/_private/components/BarChart'
+import { FormatValue } from '@/_private/types'
 import { Group } from '@/MultiBarChart'
 import { transformGroupsToCommonGroups } from '@/MultiBarChart/helpers'
 

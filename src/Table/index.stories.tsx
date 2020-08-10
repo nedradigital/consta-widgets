@@ -2,7 +2,7 @@ import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { Checkbox } from '@gpn-design/uikit/Checkbox'
 import { boolean, number, object, text } from '@storybook/addon-knobs'
 
-import { createMetadata, createStory, optionalSelect } from '@/common/storybook'
+import { createMetadata, createStory, optionalSelect } from '@/_private/storybook'
 
 import { Props, sizes, Table, TableRow } from './'
 import { verticalAligns } from './components/Cell'

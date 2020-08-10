@@ -1,8 +1,8 @@
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 
-import { HalfDonut } from '@/core/DonutChart/components/Donut'
-import { Data as DonutChartData } from '@/core/DonutChart/helpers'
-import { isHalfDonutVertical } from '@/core/DonutChart/helpers'
+import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
+import { Data as DonutChartData } from '@/_private/components/DonutChart/helpers'
+import { isHalfDonutVertical } from '@/_private/components/DonutChart/helpers'
 import { getValueRatio } from '@/ProgressBar'
 
 import { Colors, Data } from '.'

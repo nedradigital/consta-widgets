@@ -4,8 +4,8 @@ import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Position } from '@gpn-design/uikit/Popover'
 import { Tooltip } from '@gpn-design/uikit/Tooltip'
 
-import { FormatValue } from '@/common/types'
-import { TooltipContentForMultipleValues } from '@/core/TooltipContentForMultipleValues'
+import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
+import { FormatValue } from '@/_private/types'
 
 import { Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
 import { getBoundary } from '../../helpers'

@@ -4,11 +4,11 @@ import { Button } from '@gpn-design/uikit/Button'
 import { IconArrowLeft } from '@gpn-design/uikit/IconArrowLeft'
 import { IconArrowRight } from '@gpn-design/uikit/IconArrowRight'
 import { IconClose } from '@gpn-design/uikit/IconClose'
+import { PortalWithTheme } from '@gpn-design/uikit/PortalWithTheme'
 import { useTheme } from '@gpn-design/uikit/Theme'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 
-import { PortalWithTheme } from '@/core/PortalWithTheme'
 import { Image } from '@/Image'
 import { ImageItem, ImagesList } from '@/ImagesList'
 

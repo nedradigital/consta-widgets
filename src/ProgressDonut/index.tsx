@@ -1,6 +1,6 @@
-import { CoreDonutChart } from '@/core/DonutChart'
-import { HalfDonut } from '@/core/DonutChart/components/Donut'
-import { isHalfDonutHorizontal } from '@/core/DonutChart/helpers'
+import { CoreDonutChart } from '@/_private/components/DonutChart'
+import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
+import { isHalfDonutHorizontal } from '@/_private/components/DonutChart/helpers'
 import { useBaseSize } from '@/BaseSizeContext'
 import { getValueRatio } from '@/ProgressBar'
 

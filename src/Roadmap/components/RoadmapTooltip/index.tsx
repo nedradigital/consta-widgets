@@ -6,7 +6,7 @@ import { Text } from '@gpn-design/uikit/Text'
 import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import classnames from 'classnames'
 
-import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/common/utils/time'
+import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/_private/utils/time'
 
 import { Item } from '../..'
 

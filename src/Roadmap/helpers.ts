@@ -1,6 +1,6 @@
 import { differenceInCalendarMonths, getDaysInMonth } from 'date-fns'
 
-import { getDayMonthYearFromTimestamp } from '@/common/utils/time'
+import { getDayMonthYearFromTimestamp } from '@/_private/utils/time'
 
 import { MonthItem } from '.'
 

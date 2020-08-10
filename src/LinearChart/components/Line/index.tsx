@@ -2,7 +2,7 @@ import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { getSolidSegments } from '@/common/utils/line'
+import { getSolidSegments } from '@/_private/utils/line'
 
 import { Item, itemIsNotEmpty, NotEmptyItem, ScaleLinear } from '../../'
 

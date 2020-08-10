@@ -21,44 +21,18 @@ $ yarn add @csssr/gpn-components
 
 Для работы пакета необходимо установить библиотеку [`@gpn-design/uikit`](https://www.npmjs.com/package/@gpn-design/uikit) и [настроить тему](https://gpn-prototypes.github.io/ui-kit/?path=/docsx/ui-kit-theme--documentation).
 
-### Подключение стилей
-
-После установки пакета необходимо подключить стили для компонентов:
-
-```js
-import '@csssr/gpn-components/lib/index.css'
-```
-
-### Настройка порядка стилей
-
-Для правильного отображения стилей важно, чтобы стили `@gpn-design/uikit` были подключены раньше стилей компонентов. Для этого в настройках webpack нужно вынести стили uikit-а в отдельный файл и удостовериться, что он подключается раньше остальных css-файлов. Пример настройки webpack:
-```js
-optimization: {
-  splitChunks: {
-    cacheGroups: {
-      uikit: {
-        name: 'uikit',
-          test: /node_modules\/@gpn-design\/uikit\/.*\.css$/,
-          chunks: 'all',
-          enforce: true,
-          priority: 1
-      },
-    },
-  },
-},
-```
-
 ### Настройка скейлинга
 
 Для корректной работы скейлинга компонентов не в порталах необходимо в корневой компонент добавить Provider для управления скейлингом, пример настройки скейлинга компонентов с установкой темы:
 
 ```tsx
-import { BaseSizeProvider, themePresetGpnScaling } from '@csssr/gpn-components'
+import { presetGpnScaling } from '@csssr/gpn-components/theme'
+import { BaseSizeProvider } from '@csssr/gpn-components/BaseSizeContext'
 import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
 
 const themePreset = {
   ...presetGpnDisplay,
-  ...themePresetGpnScaling,
+  ...presetGpnScaling,
 }
 
 export const App = () => {
@@ -79,13 +53,7 @@ export const App = () => {
 Пример импорта компонента:
 
 ```js
-import { BarChart } from '@csssr/gpn-components'
-```
-
-Кроме кода компонентов, пакет предоставляет декларации типов для TypeScript. Пример импорта типа из компонента:
-
-```ts
-import { Data } from '@csssr/gpn-components/lib/BarChart'
+import { BarChart } from '@csssr/gpn-components/Barchart'
 ```
 
 ## Разработка

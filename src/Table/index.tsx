@@ -9,7 +9,7 @@ import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 import _ from 'lodash'
 
-import { isHtmlElement } from '@/common/utils/type-guards'
+import { isHtmlElement } from '@/_private/utils/type-guards'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { Cell, HorizontalAlign, VerticalAlign } from './components/Cell'

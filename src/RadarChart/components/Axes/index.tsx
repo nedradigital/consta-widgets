@@ -3,8 +3,8 @@ import React, { Fragment } from 'react'
 import { Text, TextPropSize } from '@gpn-design/uikit/Text'
 import * as _ from 'lodash'
 
-import { FormatValue } from '@/common/types'
-import { getFormattedValue } from '@/common/utils/chart'
+import { FormatValue } from '@/_private/types'
+import { getFormattedValue } from '@/_private/utils/chart'
 
 import { angleToCoord, Axis, RadarChartLabelSize } from '../../'
 

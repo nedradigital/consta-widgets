@@ -3,7 +3,7 @@ import React from 'react'
 import { text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory } from '@/common/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 
 import { LegendItem } from '.'
 
