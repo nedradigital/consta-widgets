@@ -3,12 +3,12 @@ import React from 'react'
 import { getArrayWithRandomInt } from '@csssr/gpn-utils/lib/array'
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { Text } from '@gpn-design/uikit/Text'
-import { boolean, number, object, text } from '@storybook/addon-knobs'
+import { boolean, number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory, optionalSelect } from '@/_private/storybook'
 
-import { directionsX, directionsY, LinearChart } from '.'
+import { axes, directionsX, directionsY, LinearChart } from '.'
 
 const MIN = -2
 const MAX = 8
@@ -308,6 +308,7 @@ export const WithBoundaries = createStory(
         isHorizontal
         background="linear-gradient(to right, #f54d4d48, transparent)"
         showBoundariesOnAxis={boolean('showBoundariesOnAxis', true)}
+        boundariesAxis={select('boundariesAxis', axes, 'y')}
         boundaries={[
           {
             value: [-25, -35],

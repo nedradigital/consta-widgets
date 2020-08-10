@@ -7,7 +7,7 @@ import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'
 
-import { Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
+import { Axis, Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
 import { getBoundary } from '../../helpers'
 import { THRESHOLD_COLOR } from '../Threshold'
 
@@ -17,13 +17,20 @@ type Props = {
   anchorEl: Element | null
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  boundaries?: readonly Boundary[]
   hoveredMainValue: HoveredMainValue
   threshold?: Threshold
   formatValueForLabel: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
-}
+} & (
+  | {
+      boundaries?: never
+    }
+  | {
+      boundaries: readonly Boundary[]
+      boundariesAxis: Axis
+    }
+)
 
 type TooltipItem = {
   color?: string
@@ -31,19 +38,19 @@ type TooltipItem = {
   value: number | null
 }
 
-export const LineTooltip: React.FC<Props> = ({
-  lines,
-  anchorEl,
-  isHorizontal,
-  scaleX,
-  scaleY,
-  hoveredMainValue,
-  boundaries,
-  threshold,
-  formatValueForLabel,
-  formatValueForTooltipTitle,
-  formatValueForTooltip = String,
-}) => {
+export const LineTooltip: React.FC<Props> = props => {
+  const {
+    lines,
+    anchorEl,
+    isHorizontal,
+    scaleX,
+    scaleY,
+    hoveredMainValue,
+    threshold,
+    formatValueForLabel,
+    formatValueForTooltipTitle,
+    formatValueForTooltip = String,
+  } = props
   if (!anchorEl || !isNotNil(hoveredMainValue)) {
     return null
   }
@@ -60,7 +67,14 @@ export const LineTooltip: React.FC<Props> = ({
     const getItemColor = () => {
       if (line.withBoundaries) {
         const boundaryColor =
-          (boundaries && item && getBoundary({ boundaries, item, isHorizontal })?.color) ??
+          (props.boundaries &&
+            item &&
+            getBoundary({
+              axis: props.boundariesAxis,
+              boundaries: props.boundaries,
+              item,
+              isHorizontal,
+            })?.color) ??
           line.color
 
         return isNotNil(secondaryValue) ? boundaryColor : undefined

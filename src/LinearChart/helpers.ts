@@ -2,7 +2,16 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Boundary, Item, itemIsNotEmpty, Line, NotEmptyItem, NumberRange, TickValues } from './'
+import {
+  Axis,
+  Boundary,
+  Item,
+  itemIsNotEmpty,
+  Line,
+  NotEmptyItem,
+  NumberRange,
+  TickValues,
+} from './'
 import { ZoomState } from './components/Zoom'
 
 export const INITIAL_DOMAIN = [Number.MIN_VALUE, Number.MAX_VALUE] as const
@@ -180,17 +189,22 @@ export function flipPointsOnAxes<T extends Item | NotEmptyItem>(
           } as T)
       )
 }
+export const isBoundariesHorizontal = (axis: Axis, isHorizontal: boolean) =>
+  (axis === 'x' && isHorizontal) || (axis === 'y' && !isHorizontal)
 
 export const getBoundary = ({
   boundaries,
   item,
+  axis,
   isHorizontal,
 }: {
   boundaries: readonly Boundary[]
   item: Item
+  axis: Axis
   isHorizontal: boolean
 }) => {
-  const position = isHorizontal ? item.y : item.x
+  const position = isBoundariesHorizontal(axis, isHorizontal) ? item.x : item.y
+
   if (position === null) {
     return undefined
   }

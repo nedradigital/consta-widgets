@@ -701,27 +701,64 @@ describe('getUniqValues', () => {
 describe('getBoundary', () => {
   const boundary = { value: [3, 5] as const, color: 'red' }
 
-  it('возвращает границу по заданным значениям для горизонтального графика', () => {
+  it('возвращает границу для оси X по заданным значениям для горизонтального графика', () => {
     expect(
-      getBoundary({ boundaries: [boundary], item: { x: null, y: 4 }, isHorizontal: true })
+      getBoundary({
+        boundaries: [boundary],
+        item: { x: 4, y: null },
+        isHorizontal: true,
+        axis: 'x',
+      })
     ).toEqual(boundary)
   })
 
-  it('возвращает границу по заданным значениям для вертикального графика', () => {
+  it('возвращает границу для оси Y по заданным значениям для горизонтального графика', () => {
     expect(
-      getBoundary({ boundaries: [boundary], item: { x: 4, y: null }, isHorizontal: false })
+      getBoundary({
+        boundaries: [boundary],
+        item: { x: null, y: 4 },
+        isHorizontal: true,
+        axis: 'y',
+      })
+    ).toEqual(boundary)
+  })
+
+  it('возвращает границу для оси X по заданным значениям для вертикального графика', () => {
+    expect(
+      getBoundary({
+        boundaries: [boundary],
+        item: { x: null, y: 4 },
+        isHorizontal: false,
+        axis: 'x',
+      })
+    ).toEqual(boundary)
+  })
+
+  it('возвращает границу для оси Y по заданным значениям для вертикального графика', () => {
+    expect(
+      getBoundary({
+        boundaries: [boundary],
+        item: { x: 4, y: null },
+        isHorizontal: false,
+        axis: 'y',
+      })
     ).toEqual(boundary)
   })
 
   it('возвращает undefined если граница отсутствует в заданных координатах', () => {
     expect(
-      getBoundary({ boundaries: [boundary], item: { x: 0, y: 0 }, isHorizontal: true })
+      getBoundary({ boundaries: [boundary], item: { x: 0, y: 0 }, isHorizontal: true, axis: 'y' })
     ).toBeUndefined()
   })
 
   it('возвращает undefined если у переданной точки отсутствуют координаты', () => {
     expect(
-      getBoundary({ boundaries: [boundary], item: { x: null, y: null }, isHorizontal: true })
+      getBoundary({
+        boundaries: [boundary],
+        item: { x: null, y: null },
+        isHorizontal: true,
+        axis: 'y',
+      })
     ).toBeUndefined()
   })
 })
