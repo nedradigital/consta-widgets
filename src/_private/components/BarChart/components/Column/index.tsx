@@ -37,15 +37,6 @@ type Props = {
   onChangeLabelSize?: (size: number) => void
 }
 
-const sizeClasses: Record<ColumnSize, string> = {
-  s: css.sizeS,
-  m: css.sizeM,
-  l: css.sizeL,
-  xl: css.sizeXL,
-  '2xl': css.size2XL,
-  '3xl': css.size3XL,
-}
-
 export const Column: React.FC<Props> = ({
   group,
   total,
@@ -146,8 +137,7 @@ export const Column: React.FC<Props> = ({
       className={classnames(
         css.column,
         isHorizontal && css.isHorizontal,
-        isReversed && css.isReversed,
-        sizeClasses[size]
+        isReversed && css.isReversed
       )}
       onMouseLeave={onMouseLeaveColumn}
     >

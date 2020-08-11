@@ -11,6 +11,7 @@ import { scaleLinear } from '@/_private/utils/scale'
 import { getTicks } from '@/_private/utils/ticks'
 import { useBaseSize } from '@/BaseSizeContext'
 
+import { ColumnSize } from './components/Column'
 import { ColumnItem, Group } from './components/Group'
 import { Position, Size as TicksSize, Ticks } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
@@ -66,6 +67,15 @@ const unitSize: Record<TicksSize, TextPropSize> = {
   m: 'xs',
 }
 
+const columnSizeClasses: Record<ColumnSize, string> = {
+  s: css.columnSizeS,
+  m: css.columnSizeM,
+  l: css.columnSizeL,
+  xl: css.columnSizeXL,
+  '2xl': css.columnSize2XL,
+  '3xl': css.columnSize3XL,
+}
+
 const renderUnit = (className: string, unit: string, size: TicksSize) => (
   <Text as="div" size={unitSize[size]} view="secondary" className={className}>
     {unit}
@@ -110,6 +120,7 @@ export const CoreBarChart: React.FC<Props> = props => {
   const groupsDomain = getGroupsDomain(groups)
   const valuesDomain = getValuesDomain(groups, showReversed)
   const maxValue = valuesDomain[1]
+  const maxColumn = Math.max(...groups.map(group => group.columns.length))
   const columnSize = getColumnSize({
     size,
     valueLength: maxValue.toString().length,
@@ -156,7 +167,8 @@ export const CoreBarChart: React.FC<Props> = props => {
 
   useLayoutEffect(() => {
     const firstGroup = groupsRef.current[0].current
-    const lastGroup = groupsRef.current[1].current
+    // Если группа всего одна, то считаем её как первую и как последнюю
+    const lastGroup = groupsRef.current[1].current || groupsRef.current[0].current
 
     if (ref && ref.current && firstGroup && lastGroup) {
       const left =
@@ -196,6 +208,9 @@ export const CoreBarChart: React.FC<Props> = props => {
     ...verticalStyles,
     ...(!isHorizontal && isFirst ? { paddingLeft: 'var(--group-outer-padding)' } : {}),
     ...(!isHorizontal && isLast ? { paddingRight: 'var(--group-outer-padding)' } : {}),
+    ...(isHorizontal && isFirst ? { paddingTop: 'var(--group-outer-padding)' } : {}),
+    ...(isHorizontal && isLast ? { paddingBottom: 'var(--group-outer-padding)' } : {}),
+    minHeight: !isHorizontal ? chartMinHeight : undefined,
   })
 
   const renderValues = (position: Position) => (
@@ -248,9 +263,10 @@ export const CoreBarChart: React.FC<Props> = props => {
         isDense && css.isDense,
         size &&
           {
-            s: css.sizeS,
-            m: '',
-          }[toAxisSize(columnSize)]
+            s: css.asixSizeS,
+            m: css.asixSizeM,
+          }[toAxisSize(columnSize)],
+        columnSizeClasses[columnSize]
       )}
       style={{
         ...getGridSettings({
@@ -259,8 +275,8 @@ export const CoreBarChart: React.FC<Props> = props => {
           showReversed,
           showUnitBottom,
           showUnitLeft,
+          maxColumn,
         }),
-        minHeight: !isHorizontal ? chartMinHeight : undefined,
       }}
     >
       <svg className={css.svg} ref={svgRef} style={gridStyle}>
@@ -283,7 +299,7 @@ export const CoreBarChart: React.FC<Props> = props => {
         return (
           <Group
             {...group}
-            ref={firstGroup || lastGroup ? groupsRef.current[lastGroup ? 1 : 0] : undefined}
+            ref={firstGroup || lastGroup ? groupsRef.current[firstGroup ? 0 : 1] : undefined}
             key={group.name}
             group={group.name}
             size={columnSize}

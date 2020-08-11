@@ -223,6 +223,7 @@ describe('getGridSettings', () => {
         showReversed: false,
         showUnitBottom: false,
         showUnitLeft: false,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
@@ -243,6 +244,7 @@ describe('getGridSettings', () => {
         showReversed: true,
         showUnitBottom: false,
         showUnitLeft: false,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
@@ -263,6 +265,7 @@ describe('getGridSettings', () => {
         showReversed: false,
         showUnitBottom: true,
         showUnitLeft: true,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
@@ -285,6 +288,7 @@ describe('getGridSettings', () => {
         showReversed: true,
         showUnitBottom: true,
         showUnitLeft: true,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
@@ -309,11 +313,14 @@ describe('getGridSettings', () => {
         showReversed: false,
         showUnitBottom: false,
         showUnitLeft: false,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
         gridTemplateRows: 'auto 1fr auto',
-        gridTemplateColumns: 'auto 1fr 1fr 1fr',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +
@@ -328,11 +335,14 @@ describe('getGridSettings', () => {
         showReversed: true,
         showUnitBottom: false,
         showUnitLeft: false,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
         gridTemplateRows: 'auto 1fr auto',
-        gridTemplateColumns: 'auto 1fr 1fr 1fr',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +
@@ -347,11 +357,14 @@ describe('getGridSettings', () => {
         showReversed: false,
         showUnitBottom: true,
         showUnitLeft: true,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
         gridTemplateRows: 'auto 1fr auto auto',
-        gridTemplateColumns: 'auto 1fr 1fr 1fr',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +
@@ -367,11 +380,14 @@ describe('getGridSettings', () => {
         showReversed: false,
         showUnitBottom: true,
         showUnitLeft: true,
+        maxColumn: 3,
       })
 
       expect(result).toEqual({
         gridTemplateRows: 'auto 1fr auto auto',
-        gridTemplateColumns: 'auto 1fr 1fr 1fr',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +

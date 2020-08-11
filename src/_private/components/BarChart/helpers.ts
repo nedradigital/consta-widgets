@@ -174,12 +174,14 @@ export const getGridSettings = ({
   showReversed,
   showUnitBottom,
   showUnitLeft,
+  maxColumn,
 }: {
   isHorizontal: boolean
   countGroups: number
   showReversed: boolean
   showUnitBottom: boolean
   showUnitLeft: boolean
+  maxColumn: number
 }): React.CSSProperties =>
   isHorizontal
     ? {
@@ -199,7 +201,11 @@ export const getGridSettings = ({
       }
     : {
         gridTemplateRows: `auto 1fr auto${showUnitBottom ? ' auto' : ''}`,
-        gridTemplateColumns: `auto ${getAreaNames(countGroups, () => '1fr')}`,
+        gridTemplateColumns: `auto ${getAreaNames(
+          countGroups,
+          () =>
+            `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn})), 1fr)`
+        )}`,
         gridTemplateAreas:
           `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}" ` +
           `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}" ` +
