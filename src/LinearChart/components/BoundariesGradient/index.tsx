@@ -2,7 +2,7 @@ import { sortBy } from 'lodash'
 
 import { Boundary, DirectionX, DirectionY, ScaleLinear } from '@/LinearChart'
 
-import { getOffsets } from './helpers'
+import { getBoundaries, getOffsets } from './helpers'
 
 type Props = {
   id: string
@@ -31,14 +31,20 @@ export const BoundariesGradient: React.FC<Props> = ({
 }) => {
   const scale = isHorizontal ? scaleY : scaleX
   const chartSize = isHorizontal ? svgHeight : svgWidth
+  const domain = isHorizontal ? scaleY.domain() : scaleX.domain()
   const direction = isHorizontal
     ? { x1: '0%', x2: '0%', y1: '0%', y2: '100%' }
     : { x1: '0%', x2: '100%', y1: '0%', y2: '0%' }
 
   return (
     <linearGradient id={id} gradientUnits="userSpaceOnUse" {...direction}>
+      <stop offset="0%" stopColor={color} />
       {sortBy(
-        boundaries.map(boundary => ({
+        getBoundaries({
+          boundaries,
+          domain: [domain[0], domain[1]],
+          color,
+        }).map(boundary => ({
           offsets: getOffsets({
             values: boundary.value,
             scale,
@@ -55,13 +61,12 @@ export const BoundariesGradient: React.FC<Props> = ({
         .map(({ offsets, boundaryColor }, index) => {
           return (
             <React.Fragment key={index}>
-              <stop offset={offsets[0]} stopColor={color} />
-              <stop offset={offsets[0]} stopColor={boundaryColor} />
-              <stop offset={offsets[1]} stopColor={boundaryColor} />
-              <stop offset={offsets[1]} stopColor={color} />
+              <stop offset={`${offsets[0]}%`} stopColor={boundaryColor} />
+              <stop offset={`${offsets[1]}%`} stopColor={boundaryColor} />
             </React.Fragment>
           )
         })}
+      <stop offset="100%" stopColor={color} />
     </linearGradient>
   )
 }

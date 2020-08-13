@@ -333,7 +333,7 @@ export const WithBoundaries = createStory(
       />
     )
   },
-  { name: 'с лимитами', decorators }
+  { name: 'с лимитами', decorators, parameters }
 )
 
 export default createMetadata({

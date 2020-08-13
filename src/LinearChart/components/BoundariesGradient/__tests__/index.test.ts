@@ -1,6 +1,65 @@
 import { ScaleLinear } from '@/LinearChart'
 
-import { getOffsets } from '../helpers'
+import { getBoundaries, getOffsets } from '../helpers'
+
+describe('getBoundaries', () => {
+  it('возвращает первоначальный массив границ', () => {
+    const boundaries = [
+      {
+        color: 'red',
+        value: [10, 15],
+      },
+      {
+        color: 'yellow',
+        value: [0, 10],
+      },
+    ] as const
+
+    const result = getBoundaries({
+      boundaries,
+      domain: [0, 15],
+      color: 'green',
+    })
+
+    expect(result).toEqual(boundaries)
+  })
+
+  it('возвращает обновленный массив границ с границей для оставшегося пространства', () => {
+    const result = getBoundaries({
+      boundaries: [
+        {
+          color: 'red',
+          value: [10, 15],
+        },
+        {
+          color: 'yellow',
+          value: [5, 10],
+        },
+      ],
+      domain: [0, 20],
+      color: 'green',
+    })
+
+    expect(result).toEqual([
+      {
+        color: 'red',
+        value: [10, 15],
+      },
+      {
+        color: 'yellow',
+        value: [5, 10],
+      },
+      {
+        color: 'green',
+        value: [0, 5],
+      },
+      {
+        color: 'green',
+        value: [15, 20],
+      },
+    ])
+  })
+})
 
 describe('getOffsets', () => {
   const defaultParams = {
@@ -9,7 +68,7 @@ describe('getOffsets', () => {
     chartSize: 100,
   } as const
 
-  it('возвращает отсортированный массив смещений для градиента горизонтального графика', () => {
+  it('возвращает отсортированный массив смещений в процентах для градиента горизонтального графика', () => {
     const isHorizontal = true
 
     expect(
@@ -19,7 +78,7 @@ describe('getOffsets', () => {
         directionY: 'toBottom',
         isHorizontal,
       })
-    ).toEqual([0.03, 0.18])
+    ).toEqual([6, 19])
     expect(
       getOffsets({
         ...defaultParams,
@@ -27,7 +86,7 @@ describe('getOffsets', () => {
         directionY: 'toBottom',
         isHorizontal,
       })
-    ).toEqual([0.03, 0.18])
+    ).toEqual([6, 19])
 
     expect(
       getOffsets({
@@ -36,7 +95,7 @@ describe('getOffsets', () => {
         directionY: 'toTop',
         isHorizontal,
       })
-    ).toEqual([0.07, 0.22])
+    ).toEqual([4, 21])
 
     expect(
       getOffsets({
@@ -45,7 +104,7 @@ describe('getOffsets', () => {
         directionY: 'toTop',
         isHorizontal,
       })
-    ).toEqual([0.07, 0.22])
+    ).toEqual([4, 21])
   })
 
   it('возвращает отсортированный массив смещений для градиента вертикального графика', () => {
@@ -58,7 +117,7 @@ describe('getOffsets', () => {
         directionY: 'toBottom',
         isHorizontal,
       })
-    ).toEqual([0.01, 0.16])
+    ).toEqual([6, 19])
     expect(
       getOffsets({
         ...defaultParams,
@@ -66,7 +125,7 @@ describe('getOffsets', () => {
         directionY: 'toBottom',
         isHorizontal,
       })
-    ).toEqual([0.09, 0.24])
+    ).toEqual([4, 21])
 
     expect(
       getOffsets({
@@ -75,7 +134,7 @@ describe('getOffsets', () => {
         directionY: 'toTop',
         isHorizontal,
       })
-    ).toEqual([0.01, 0.16])
+    ).toEqual([6, 19])
 
     expect(
       getOffsets({
@@ -84,6 +143,6 @@ describe('getOffsets', () => {
         directionY: 'toTop',
         isHorizontal,
       })
-    ).toEqual([0.09, 0.24])
+    ).toEqual([4, 21])
   })
 })
