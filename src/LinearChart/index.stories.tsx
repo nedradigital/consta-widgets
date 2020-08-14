@@ -275,6 +275,21 @@ export const WithBoundaries = createStory(
           {
             values: [
               { x: 0, y: null },
+              { x: 1, y: -10 },
+              { x: 2, y: 30 },
+              { x: 3, y: 5 },
+              { x: 4, y: 25 },
+              { x: 5, y: -30 },
+              { x: 6, y: 25 },
+              { x: 7, y: null },
+            ],
+            dots: true,
+            lineName: 'Южное месторождение',
+            color: '#3B4D5B',
+          },
+          {
+            values: [
+              { x: 0, y: null },
               { x: 1, y: 50 },
               { x: 2, y: -45 },
               { x: 3, y: 35 },
@@ -287,21 +302,6 @@ export const WithBoundaries = createStory(
             lineName: 'Северный бур',
             color: 'var(--color-bg-success)',
             withBoundaries: true,
-          },
-          {
-            values: [
-              { x: 0, y: null },
-              { x: 1, y: -10 },
-              { x: 2, y: 30 },
-              { x: 3, y: 5 },
-              { x: 4, y: 25 },
-              { x: 5, y: -30 },
-              { x: 6, y: 25 },
-              { x: 7, y: null },
-            ],
-            dots: true,
-            lineName: 'Южное месторождение',
-            color: 'var(--color-bg-border)',
           },
         ]}
         gridConfig={getGridConfig()}
