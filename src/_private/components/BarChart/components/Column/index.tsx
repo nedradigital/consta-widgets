@@ -37,15 +37,6 @@ type Props = {
   onChangeLabelSize?: (size: number) => void
 }
 
-const sizeClasses: Record<ColumnSize, string> = {
-  s: css.sizeS,
-  m: css.sizeM,
-  l: css.sizeL,
-  xl: css.sizeXL,
-  '2xl': css.size2XL,
-  '3xl': css.size3XL,
-}
-
 export const Column: React.FC<Props> = ({
   group,
   total,
@@ -63,6 +54,37 @@ export const Column: React.FC<Props> = ({
   onChangeLabelSize,
 }) => {
   const textRef = React.useRef<HTMLDivElement>(null)
+
+  const handleMouseEnter: React.MouseEventHandler = event => {
+    if (!(event.currentTarget instanceof HTMLElement)) {
+      return
+    }
+    const children = event.currentTarget.parentElement?.children || []
+    const { left, top } = children[isHorizontal ? 0 : children.length - 1].getBoundingClientRect()
+    const { height, width } = Array.from(children).reduce(
+      (prev, element) =>
+        isHorizontal
+          ? {
+              width: prev.width + element.getBoundingClientRect().width,
+              height: element.getBoundingClientRect().height,
+            }
+          : {
+              width: element.getBoundingClientRect().width,
+              height: prev.height + element.getBoundingClientRect().height,
+            },
+      { width: 0, height: 0 }
+    )
+
+    const x = left + width / 2
+    const y = top + height / 2
+    const selectedSections = sections.filter(isDefined)
+
+    onMouseEnterColumn({
+      x,
+      y,
+      sections: isHorizontal ? selectedSections : [...selectedSections].reverse(),
+    })
+  }
 
   const renderSection = (item: SectionItem | undefined, index: number) => {
     if (!item || item.length === undefined) {
@@ -99,26 +121,9 @@ export const Column: React.FC<Props> = ({
         isActive={isActive}
         label={getLabel()}
         labelRef={isColumnLabel ? textRef : undefined}
+        onMouseEnter={handleMouseEnter}
       />
     )
-  }
-
-  const handleMouseEnter: React.MouseEventHandler = event => {
-    if (!(event.currentTarget instanceof HTMLElement)) {
-      return
-    }
-
-    const { height, left, top, width } = event.currentTarget.getBoundingClientRect()
-
-    const x = left + width / 2
-    const y = top + height / 2
-    const selectedSections = sections.filter(isDefined)
-
-    onMouseEnterColumn({
-      x,
-      y,
-      sections: isHorizontal ? selectedSections : [...selectedSections].reverse(),
-    })
   }
 
   React.useLayoutEffect(() => {
@@ -129,8 +134,11 @@ export const Column: React.FC<Props> = ({
 
   return (
     <div
-      className={classnames(css.column, isHorizontal && css.isHorizontal, sizeClasses[size])}
-      onMouseEnter={handleMouseEnter}
+      className={classnames(
+        css.column,
+        isHorizontal && css.isHorizontal,
+        isReversed && css.isReversed
+      )}
       onMouseLeave={onMouseLeaveColumn}
     >
       {sections.map(renderSection)}

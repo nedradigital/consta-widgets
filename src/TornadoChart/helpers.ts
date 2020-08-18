@@ -1,8 +1,8 @@
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
+import { ShowPositions } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
-import { ShowPositions } from '@/BarChartAxis'
 
 import { Column, Group, XAxisShowPosition, YAxisShowPosition } from './'
 

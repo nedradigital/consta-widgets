@@ -4,6 +4,7 @@ import {
   getColumnSize,
   getEveryNTick,
   getGraphStepSize,
+  getGridSettings,
   getGroupsDomain,
   getRange,
   getScaler,
@@ -199,21 +200,200 @@ describe('defaultGetValuesDomain', () => {
 })
 
 describe('getScaler', () => {
-  it('', () => {
+  it('возвращает отскалированное значение', () => {
     const scaler = getScaler({ maxValue: 100, showReversed: false })
 
     expect(scaler(200, 50)).toEqual(100)
+    expect(scaler(200, 200)).toEqual(200)
   })
 
-  it('', () => {
+  it('возвращает отскалированное значение при наличии отрицательных данных', () => {
     const scaler = getScaler({ maxValue: 100, showReversed: true })
 
     expect(scaler(200, 50)).toEqual(50)
   })
+})
 
-  it('', () => {
-    const scaler = getScaler({ maxValue: 100, showReversed: false })
+describe('getGridSettings', () => {
+  describe('горизонтальный график', () => {
+    it('возвращает настройки для грида', () => {
+      const result = getGridSettings({
+        isHorizontal: true,
+        countGroups: 3,
+        showReversed: false,
+        showUnitBottom: false,
+        showUnitLeft: false,
+        maxColumn: 3,
+      })
 
-    expect(scaler(200, 200)).toEqual(200)
+      expect(result).toEqual({
+        gridTemplateRows: '1fr 1fr 1fr auto',
+        gridTemplateColumns: 'auto 1fr',
+        gridTemplateAreas:
+          '"labelLeft0 group0" ' +
+          '"labelLeft1 group1" ' +
+          '"labelLeft2 group2" ' +
+          '"bottomLeft bottomTicks" ',
+      })
+    })
+
+    it('возвращает настройки для грида с отрицательными значениями', () => {
+      const result = getGridSettings({
+        isHorizontal: true,
+        countGroups: 3,
+        showReversed: true,
+        showUnitBottom: false,
+        showUnitLeft: false,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: '1fr 1fr 1fr auto',
+        gridTemplateColumns: 'auto 1fr auto',
+        gridTemplateAreas:
+          '"labelLeft0 group0 labelRight0" ' +
+          '"labelLeft1 group1 labelRight1" ' +
+          '"labelLeft2 group2 labelRight2" ' +
+          '"bottomLeft bottomTicks bottomRight" ',
+      })
+    })
+
+    it('возвращает настройки для грида с юнитами', () => {
+      const result = getGridSettings({
+        isHorizontal: true,
+        countGroups: 3,
+        showReversed: false,
+        showUnitBottom: true,
+        showUnitLeft: true,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr 1fr 1fr auto auto',
+        gridTemplateColumns: 'auto 1fr',
+        gridTemplateAreas:
+          '"topLeft topLeft" ' +
+          '"labelLeft0 group0" ' +
+          '"labelLeft1 group1" ' +
+          '"labelLeft2 group2" ' +
+          '"bottomLeft bottomTicks" ' +
+          '"bottomLeft bottomUnit"',
+      })
+    })
+
+    it('возвращает настройки для грида с отрицательными значениями и юнитами', () => {
+      const result = getGridSettings({
+        isHorizontal: true,
+        countGroups: 3,
+        showReversed: true,
+        showUnitBottom: true,
+        showUnitLeft: true,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr 1fr 1fr auto auto',
+        gridTemplateColumns: 'auto 1fr auto',
+        gridTemplateAreas:
+          '"topLeft topLeft topLeft" ' +
+          '"labelLeft0 group0 labelRight0" ' +
+          '"labelLeft1 group1 labelRight1" ' +
+          '"labelLeft2 group2 labelRight2" ' +
+          '"bottomLeft bottomTicks bottomRight" ' +
+          '"bottomLeft bottomUnit bottomUnit"',
+      })
+    })
+  })
+
+  describe('вертикальный график', () => {
+    it('возвращает настройки для грида', () => {
+      const result = getGridSettings({
+        isHorizontal: false,
+        countGroups: 3,
+        showReversed: false,
+        showUnitBottom: false,
+        showUnitLeft: false,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr auto',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+        gridTemplateAreas:
+          '"topLeft labelTop0 labelTop1 labelTop2" ' +
+          '"leftTicks group0 group1 group2" ' +
+          '"bottomLeft labelBottom0 labelBottom1 labelBottom2" ',
+      })
+    })
+
+    it('возвращает настройки для грида с отрицательными значениями', () => {
+      const result = getGridSettings({
+        isHorizontal: false,
+        countGroups: 3,
+        showReversed: true,
+        showUnitBottom: false,
+        showUnitLeft: false,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr auto',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+        gridTemplateAreas:
+          '"topLeft labelTop0 labelTop1 labelTop2" ' +
+          '"leftTicks group0 group1 group2" ' +
+          '"bottomLeft labelBottom0 labelBottom1 labelBottom2" ',
+      })
+    })
+
+    it('возвращает настройки для грида с юнитами', () => {
+      const result = getGridSettings({
+        isHorizontal: false,
+        countGroups: 3,
+        showReversed: false,
+        showUnitBottom: true,
+        showUnitLeft: true,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr auto auto',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+        gridTemplateAreas:
+          '"topLeft labelTop0 labelTop1 labelTop2" ' +
+          '"leftTicks group0 group1 group2" ' +
+          '"bottomLeft labelBottom0 labelBottom1 labelBottom2" ' +
+          '"bottomLeft bottomUnit bottomUnit bottomUnit"',
+      })
+    })
+
+    it('возвращает настройки для грида с отрицательными значениями и юнитами', () => {
+      const result = getGridSettings({
+        isHorizontal: false,
+        countGroups: 3,
+        showReversed: false,
+        showUnitBottom: true,
+        showUnitLeft: true,
+        maxColumn: 3,
+      })
+
+      expect(result).toEqual({
+        gridTemplateRows: 'auto 1fr auto auto',
+        gridTemplateColumns:
+          'auto' +
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+        gridTemplateAreas:
+          '"topLeft labelTop0 labelTop1 labelTop2" ' +
+          '"leftTicks group0 group1 group2" ' +
+          '"bottomLeft labelBottom0 labelBottom1 labelBottom2" ' +
+          '"bottomLeft bottomUnit bottomUnit bottomUnit"',
+      })
+    })
   })
 })

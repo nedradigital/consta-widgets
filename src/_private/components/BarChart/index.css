@@ -1,16 +1,88 @@
 .main {
+  --grid-row-gap: var(--space-xs);
+  --grid-column-gap: var(--space-m);
+
   position: relative;
+
+  display: grid;
 
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+
+  grid-gap: var(--grid-row-gap) var(--grid-column-gap);
+
+  &.asixSizeS {
+    --grid-row-gap: var(--space-2xs);
+    --grid-column-gap: var(--space-xs);
+  }
+
+  &.asixSizeM {
+    --grid-row-gap: var(--space-xs);
+    --grid-column-gap: var(--space-m);
+  }
+
+  &.isHorizontal.asixSizeS {
+    --grid-row-gap: var(--space-xs);
+    --grid-column-gap: var(--space-xs);
+  }
+
+  &.isHorizontal.asixSizeM {
+    --grid-row-gap: var(--space-m);
+    --grid-column-gap: var(--space-m);
+  }
+
+  &.isHorizontal {
+    padding-right: var(--space-m);
+  }
+
+  &.isDense {
+    --grid-row-gap: 0;
+  }
+
+  &.columnSizeS {
+    --column-size: var(--space-2xs);
+    --column-padding: var(--space-3xs);
+  }
+
+  &.columnSizeM {
+    --column-size: calc-size(12);
+    --column-padding: var(--space-2xs);
+  }
+
+  &.columnSizeL {
+    --column-size: calc-size(16);
+    --column-padding: var(--space-2xs);
+  }
+
+  &.columnSizeXL {
+    --column-size: calc-size(24);
+    --column-padding: var(--space-2xs);
+  }
+
+  &.columnSize2XL {
+    --column-size: calc-size(36);
+    --column-padding: var(--space-2xs);
+  }
+
+  &.columnSize3XL {
+    --column-size: calc-size(42);
+    --column-padding: var(--space-2xs);
+  }
 }
 
 .svg {
   position: absolute;
-  z-index: -1;
 
   overflow: visible;
+
+  &.isRight {
+    right: 0;
+  }
+
+  &.isLeft {
+    left: 0;
+  }
 }
 
 .chart {
@@ -22,4 +94,53 @@
   &.isHorizontal {
     flex-direction: column;
   }
+}
+
+.topTicks,
+.rightTicks,
+.bottomTicks,
+.leftTicks {
+  position: relative;
+}
+
+.bottomLeft {
+  grid-area: bottomLeft;
+}
+
+.bottomRight {
+  grid-area: bottomRight;
+}
+
+.leftTicks,
+.rightTicks {
+  max-width: calc-size(160);
+}
+
+.topLeftUnit {
+  grid-area: topLeft;
+
+  margin-right: var(--space-m);
+  margin-bottom: var(--space-xs);
+}
+
+.leftTicks {
+  grid-area: leftTicks;
+
+  justify-self: end;
+}
+
+.graph {
+  grid-area: graph;
+}
+
+.rightTicks {
+  grid-area: rightTicks;
+}
+
+.bottomUnit {
+  grid-area: bottomUnit;
+
+  margin-top: var(--space-2xs);
+
+  text-align: right;
 }

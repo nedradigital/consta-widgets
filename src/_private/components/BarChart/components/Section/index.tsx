@@ -13,6 +13,7 @@ type Props = {
   isActive: boolean
   label?: string
   labelRef?: React.Ref<HTMLDivElement>
+  onMouseEnter: React.MouseEventHandler
 }
 
 export const Section: React.FC<Props> = ({
@@ -24,6 +25,7 @@ export const Section: React.FC<Props> = ({
   isActive,
   label,
   labelRef,
+  onMouseEnter,
 }) => (
   <div
     className={classnames(
@@ -37,6 +39,7 @@ export const Section: React.FC<Props> = ({
       ...getSize(length, isHorizontal),
       background: color,
     }}
+    onMouseEnter={onMouseEnter}
   >
     {(label || labelRef) && (
       <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">

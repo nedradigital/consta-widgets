@@ -1,5 +1,5 @@
 export const getSize = (length: number, isHorizontal: boolean) => {
-  const size = Math.abs(length)
+  const size = `${Math.abs(length)}%`
 
   return {
     width: isHorizontal ? size : undefined,
