@@ -2240,10 +2240,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@csssr/gpn-configs@0.2.25":
-  version "0.2.25"
-  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/0.2.25/f313d24a9d4aac5ab9393d11844c6c5afd26dbfddd89f21a693c072e5e453f72#80244abed1a0953e7134b6f2fbde490823a25f85"
-  integrity sha512-7F+5uDAaweU228/iqg3NZTAhBCdTG7+NAr0NxNUR3lI6KJaO7lBr5QEQ8hOAh+Mx8KlCa+K/npNS7MifUV3h8g==
+"@csssr/gpn-configs@1.0.0":
+  version "1.0.0"
+  resolved "https://npm.pkg.github.com/download/@csssr/gpn-configs/1.0.0/d8984ab251c565b964fd353773522d761607a58a7dd6bd821c123e95de615ae3#448858492aec3343df36743496b39b8a9c4265ce"
+  integrity sha512-i9E/NlMaO2Z91Cu8jLivj+9NaQsVEKagyE4Cf0dQbio1rZpmX9JUnqsK/aKgoe7kfddQtF9byyEWEdTg3ob6JQ==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -2271,7 +2271,6 @@
     core-js "3.6.4"
     css-loader "3.0.0"
     css-modules-typescript-loader "2.0.4"
-    cssnano "4.1.10"
     eslint "6.5.1"
     eslint-plugin-import "github:evless/eslint-plugin-import#2.17.3-1"
     eslint-plugin-prefer-arrow "1.1.6"
@@ -2290,9 +2289,6 @@
     mini-css-extract-plugin "0.7.0"
     ora "3.4.0"
     postcss-loader "3.0.0"
-    postcss-mixins "6.2.3"
-    postcss-nested "4.2.1"
-    postcss-preset-env "6.6.0"
     prettier "1.19.1"
     react-docgen-typescript-loader "3.3.0"
     react-hot-loader "4.12.0"
