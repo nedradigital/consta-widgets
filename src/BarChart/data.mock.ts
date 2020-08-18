@@ -20,6 +20,7 @@ export const minimalData = {
       values: [1200],
     },
   ],
+  threshold: { value: 410, color: 'var(--color-bg-normal)' },
   unit: 'тыс. м³',
 }
 

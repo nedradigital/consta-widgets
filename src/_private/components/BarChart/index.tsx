@@ -13,6 +13,7 @@ import { useBaseSize } from '@/BaseSizeContext'
 
 import { ColumnSize } from './components/Column'
 import { ColumnItem, Group, RenderColumn, RenderSection } from './components/Group'
+import { Threshold } from './components/Threshold'
 import { Position, Size as TicksSize, Ticks } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
 import {
@@ -45,6 +46,11 @@ export type Groups = readonly Group[]
 
 export type OnMouseHoverColumn = (groupName: string) => void
 
+export type Threshold = {
+  value: number
+  color: string
+}
+
 export type Props = {
   groups: Groups
   gridTicks: number
@@ -57,6 +63,7 @@ export type Props = {
   isDense?: boolean
   activeSectionIndex?: number
   activeGroup?: string
+  threshold?: Threshold
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
   renderColumn?: RenderColumn
@@ -98,6 +105,7 @@ export const CoreBarChart: React.FC<Props> = props => {
     isDense,
     activeSectionIndex,
     activeGroup,
+    threshold,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel,
     renderColumn = defaultRenderColumn,
@@ -120,12 +128,12 @@ export const CoreBarChart: React.FC<Props> = props => {
 
   const isMultiColumn = groups.some(group => group.columns.length > 1)
   const showValues = showValuesProp && (isHorizontal || !isMultiColumn)
-  const showReversed = groups.some(group =>
-    group.reversedColumns.some(column => column && column.sections)
-  )
+  const showReversed =
+    groups.some(group => group.reversedColumns.some(column => column && column.sections)) ||
+    Boolean(threshold && threshold.value < 0)
 
   const groupsDomain = getGroupsDomain(groups)
-  const valuesDomain = getValuesDomain(groups, showReversed)
+  const valuesDomain = getValuesDomain({ groups, showReversed, threshold })
   const maxValue = valuesDomain[1]
   const maxColumn = Math.max(...groups.map(group => group.columns.length))
   const columnSize = getColumnSize({
@@ -295,6 +303,14 @@ export const CoreBarChart: React.FC<Props> = props => {
           width={gridStyle.width}
           height={gridStyle.height}
         />
+        {threshold && (
+          <Threshold
+            valuesScale={valuesScale}
+            isHorizontal={isHorizontal}
+            color={threshold.color}
+            value={threshold.value}
+          />
+        )}
       </svg>
       {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, toAxisSize(columnSize))}
       {axisShowPositions.top && renderHorizontal('top')}
