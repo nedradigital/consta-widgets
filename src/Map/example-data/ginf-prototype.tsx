@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { ChoiceGroup } from '@gpn-design/uikit/ChoiceGroup'
 import { noop } from 'lodash'
 

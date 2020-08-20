@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { CoreBarChart, UnitPosition } from '@/_private/components/BarChart'
 import { FormatValue } from '@/_private/types'
 

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Button } from '@gpn-design/uikit/Button'
 import { IconBackward } from '@gpn-design/uikit/IconBackward'
 import { IconForward } from '@gpn-design/uikit/IconForward'

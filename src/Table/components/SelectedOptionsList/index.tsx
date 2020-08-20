@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Button } from '@gpn-design/uikit/Button'
 import { IconClose } from '@gpn-design/uikit/IconClose'
 

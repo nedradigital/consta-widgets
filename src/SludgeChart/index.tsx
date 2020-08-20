@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { CoreBarChart, OnMouseHoverColumn } from '@/_private/components/BarChart'
 import { FormatValue } from '@/_private/types'
 import { Group } from '@/MultiBarChart'

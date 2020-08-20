@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { XLabelsPosition, YLabelsPosition } from '../Axis'
 
 const getLinePosition = ({

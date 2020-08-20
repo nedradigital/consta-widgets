@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { presetGpnDark, presetGpnDefault, presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
 
 import { presetGpnScaling } from '@/theme'

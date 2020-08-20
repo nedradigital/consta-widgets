@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { action } from '@storybook/addon-actions'
 import { object, select } from '@storybook/addon-knobs'
 import { zipObject } from 'lodash'

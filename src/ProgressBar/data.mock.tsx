@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { Text } from '@gpn-design/uikit/Text'
 

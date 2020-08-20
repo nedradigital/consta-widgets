@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { CoreDonutChart } from '@/_private/components/DonutChart'
 import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
 import { isHalfDonutHorizontal } from '@/_private/components/DonutChart/helpers'

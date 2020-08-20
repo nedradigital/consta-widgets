@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 

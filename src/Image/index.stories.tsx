@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory } from '@/_private/storybook'
