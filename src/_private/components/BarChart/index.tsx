@@ -12,7 +12,7 @@ import { getTicks } from '@/_private/utils/ticks'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { ColumnSize } from './components/Column'
-import { ColumnItem, Group } from './components/Group'
+import { ColumnItem, Group, RenderColumn, RenderSection } from './components/Group'
 import { Position, Size as TicksSize, Ticks } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
 import {
@@ -30,6 +30,7 @@ import {
   toAxisSize,
 } from './helpers'
 import css from './index.css'
+import { defaultRenderColumn, defaultRenderSection } from './renders'
 
 export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 export type UnitPosition = typeof unitPositions[number]
@@ -58,6 +59,8 @@ export type Props = {
   activeGroup?: string
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
+  renderColumn?: RenderColumn
+  renderSection?: RenderSection
   onMouseEnterColumn?: OnMouseHoverColumn
   onMouseLeaveColumn?: OnMouseHoverColumn
 }
@@ -97,6 +100,8 @@ export const CoreBarChart: React.FC<Props> = props => {
     activeGroup,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel,
+    renderColumn = defaultRenderColumn,
+    renderSection = defaultRenderSection,
     onMouseEnterColumn,
     onMouseLeaveColumn,
   } = props
@@ -314,8 +319,11 @@ export const CoreBarChart: React.FC<Props> = props => {
             maxValue={maxValue}
             style={getGroupStyles(idx, firstGroup, lastGroup)}
             formatValueForLabel={formatValueForLabel}
+            renderColumn={renderColumn}
+            renderSection={renderSection}
             onMouseEnterColumn={params => handleMouseEnterColumn(group.name, params)}
             onMouseLeaveColumn={() => handleMouseLeaveColumn(group.name)}
+            onMouseLeaveSection={() => setTooltipData(undefined)}
           />
         )
       })}
