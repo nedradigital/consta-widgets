@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { Button } from '@gpn-design/uikit/Button'
 import { IconFunnel } from '@gpn-design/uikit/IconFunnel'

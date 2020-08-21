@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'

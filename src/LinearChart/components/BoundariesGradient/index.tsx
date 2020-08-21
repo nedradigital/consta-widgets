@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { sortBy } from 'lodash'
 
 import { Boundary, DirectionX, DirectionY, ScaleLinear } from '@/LinearChart'

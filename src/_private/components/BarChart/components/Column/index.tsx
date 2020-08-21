@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import classnames from 'classnames'
 import { isNumber } from 'lodash'

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import classnames from 'classnames'
 

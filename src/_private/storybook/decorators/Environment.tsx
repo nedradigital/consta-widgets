@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { DEFAULT_BASE_SIZE } from '@csssr/gpn-utils/lib/css'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
 import { number, text } from '@storybook/addon-knobs'

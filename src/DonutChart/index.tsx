@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { CoreDonutChart } from '@/_private/components/DonutChart'
 import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
 import { Data as DonutTextData } from '@/_private/components/DonutChart/components/Text'

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { Text } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
 

@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { updateAt } from '@csssr/gpn-utils/lib/array'
 import { Checkbox } from '@gpn-design/uikit/Checkbox'
 import { boolean, number, object, text } from '@storybook/addon-knobs'

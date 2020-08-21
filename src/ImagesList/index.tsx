@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import { Button } from '@gpn-design/uikit/Button'
