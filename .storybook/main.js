@@ -4,7 +4,7 @@ const omit = require('lodash/omit')
 const flowRight = require('lodash/flowRight')
 const glob = require('fast-glob')
 
-const { withCustomRules, withMdxRules } = require('../webpack/helpers')
+const { withMdxRules } = require('../webpack/helpers')
 
 module.exports = {
   addons: [
@@ -29,7 +29,7 @@ module.exports = {
     // Exclude default module rules to fix svg import issue: https://github.com/storybooks/storybook/issues/5926
     const baseSBConfig = omit(config, ['module'])
 
-    const projectConfig = flowRight([withMdxRules, withCustomRules])(
+    const projectConfig = flowRight([withMdxRules])(
       getCommonConfig({ withDocgen: true })
     )
 

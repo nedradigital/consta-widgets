@@ -1,5 +1,4 @@
 const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin')
-const { calcSize } = require('@csssr/gpn-utils/lib/css')
 const remarkExternalLinks = require('remark-external-links')
 const remarkSlug = require('remark-slug')
 
@@ -23,32 +22,6 @@ const createRuleForMdx = (options = {}) => ({
 })
 
 module.exports = {
-  withCustomRules(config) {
-    let postcssLoaderConfig
-    config.module.rules.forEach(rule => {
-      postcssLoaderConfig =
-        postcssLoaderConfig ||
-        rule.use.find(loader => loader && loader.loader && loader.loader.includes('postcss-loader'))
-    })
-
-    if (postcssLoaderConfig) {
-      const originalPlugins = postcssLoaderConfig.options.plugins()
-      postcssLoaderConfig.options.plugins = () => {
-        return [
-          require('postcss-functions')({
-            functions: {
-              'calc-size': function(size) {
-                return calcSize(size, isNaN(size))
-              },
-            },
-          }),
-          ...originalPlugins,
-        ]
-      }
-    }
-
-    return config
-  },
   withMdxRules(config) {
     // Для сборки mdx файлов, которые мы импортируем внутри index.stories.tsx
     config.module.rules.push({
