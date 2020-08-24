@@ -33,8 +33,13 @@ module.exports = ctx => ({
       generateScopedName: '[folder]__[local]--[hash:base64:5]',
     }),
     process.env.NODE_ENV === 'production' &&
-      // Из-за cssnano при сборке js класс columns (в компоненте Group барчарта) превращается в column-count (при сборке css всё ок)
-      !process.env.BUILDING_JS &&
-      require('cssnano')(),
+      require('cssnano')({
+        preset: [
+          'default',
+          {
+            mergeLonghand: false,
+          },
+        ],
+      }),
   ],
 })
