@@ -26,18 +26,9 @@ type Props = {
 }
 
 export const BarChart: React.FC<Props> = props => {
-  const { groups, showValues, size = 'm', isHorizontal, colors, ...rest } = props
-
-  const isMultiColumn = groups.some(group => group.values.length > 2)
-  const isVerticalMultiColumn = !isHorizontal && isMultiColumn
+  const { groups, size = 'm', colors, ...rest } = props
 
   return (
-    <CoreBarChart
-      {...rest}
-      groups={transformGroupsToCommonGroups(groups, colors)}
-      showValues={showValues && !isVerticalMultiColumn}
-      size={size}
-      isHorizontal={isHorizontal}
-    />
+    <CoreBarChart {...rest} groups={transformGroupsToCommonGroups(groups, colors)} size={size} />
   )
 }
