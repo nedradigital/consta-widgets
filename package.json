@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "build:css": "NODE_ENV=production postcss 'src/**/*.css' --base src --dir lib",
-    "build:js": "NODE_ENV=production BUILDING_JS=true babel src --out-dir lib --extensions '.ts,.tsx'",
+    "build:js": "NODE_ENV=production BUILDING_JS=true babel src --out-dir lib --extensions '.ts,.tsx' --source-maps",
     "build:types": "NODE_ENV=production ttsc --declaration --outDir lib/ --emitDeclarationOnly -p tsconfig.build.json",
     "build:package.json": "node scripts/prepare-package-json.js",
     "build:docs": "cp README.md lib/README.md",
@@ -82,7 +82,7 @@
     "@babel/cli": "7.10.5",
     "@babel/plugin-transform-react-jsx": "7.3.0",
     "@babel/preset-typescript": "7.10.4",
-    "@csssr/gpn-configs": "1.0.0",
+    "@csssr/gpn-configs": "1.0.1",
     "@mdx-js/loader": "1.5.9",
     "@storybook/addon-actions": "5.3.18",
     "@storybook/addon-docs": "5.3.18",
