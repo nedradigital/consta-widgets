@@ -2,12 +2,13 @@ import React from 'react'
 
 import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import classnames from 'classnames'
+import _ from 'lodash'
 
 import { FormatValue } from '@/_private/types'
 
-import { Column, ColumnSize, OnMouseEnterColumn, SectionItem } from '../Column'
+import { ColumnSize, OnMouseEnterColumn, SectionItem } from '../Column'
 
-import { getSections } from './helpers'
+import { getSectionsForColumns } from './helpers'
 import css from './index.css'
 
 export type ColumnItem = {
@@ -15,24 +16,64 @@ export type ColumnItem = {
   sections?: readonly SectionItem[]
 }
 
-type Props = {
-  name: string
+type BaseProps = {
   group: string
+  isHorizontal: boolean
+  isDense?: boolean
+}
+
+type RenderBaseProps = {
+  isReversed: boolean
+  index: number
+  sections: readonly SectionItem[]
+} & BaseProps
+
+export type RenderColumn = (
+  props: {
+    total?: number
+    /**
+     * Подготовленные элементы секций через `renderSection`
+     */
+    children: React.ReactNode
+    onMouseEnterColumn: OnMouseEnterColumn
+    onMouseLeaveColumn: React.MouseEventHandler
+  } & RenderBaseProps
+) => React.ReactNode
+
+export type RenderSection = (
+  props: {
+    isLast: boolean
+    columnSize: ColumnSize
+    showValues: boolean
+    activeGroup?: string
+    activeSectionIndex?: number
+    columnTotal?: number
+    formatValueForLabel: FormatValue
+    onMouseEnterSection: OnMouseEnterColumn
+    onMouseLeaveSection: React.MouseEventHandler
+    onChangeLabelSize?: (size: number) => void
+  } & RenderBaseProps &
+    SectionItem
+) => React.ReactNode
+
+type Props = BaseProps & {
+  name: string
   columns: ReadonlyArray<ColumnItem | undefined>
   reversedColumns: ReadonlyArray<ColumnItem | undefined>
   maxValue: number
-  isHorizontal: boolean
   isNegative: boolean
   size: ColumnSize
-  isDense?: boolean
   activeGroup?: string
   activeSectionIndex?: number
   showValues: boolean
   scaler: (size: number, value: number) => number
+  renderColumn: RenderColumn
+  renderSection: RenderSection
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
   onChangeLabelSize?: (size: number) => void
+  onMouseLeaveSection: React.MouseEventHandler
   className?: string
   style?: React.CSSProperties
 }
@@ -51,48 +92,76 @@ export const Group = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
     activeSectionIndex,
     showValues,
     scaler,
-    formatValueForLabel,
+    formatValueForLabel = String,
     onMouseEnterColumn,
     onMouseLeaveColumn,
+    onMouseLeaveSection,
     onChangeLabelSize,
     className,
     style,
+    renderColumn,
+    renderSection,
   } = props
   const columnsRef = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(columnsRef)
   const scalerSize = isHorizontal ? width : height
 
-  const renderColumn = (column: ColumnItem | undefined, index: number, isReversed?: boolean) => {
-    if (!column) {
-      return null
+  const sectionForColumns = getSectionsForColumns({
+    columns,
+    scalerSize,
+    maxValue,
+    scaler,
+  })
+  const sectionsForReversedColumns = getSectionsForColumns({
+    columns: reversedColumns,
+    scalerSize,
+    maxValue,
+    scaler,
+  })
+
+  const getRenderColumn = (
+    sectionsById: Record<number, readonly SectionItem[]>,
+    isReversed: boolean
+  ) => {
+    return (column: ColumnItem | undefined, columnIdx: number) => {
+      const sectionsForColumn = sectionsById[columnIdx]
+      const baseProps = {
+        group,
+        isHorizontal,
+        isDense,
+        isReversed,
+        sections: sectionsForColumn,
+      }
+      const sectionsProps = {
+        ...baseProps,
+        activeGroup,
+        activeSectionIndex,
+        showValues,
+        columnSize: size,
+        formatValueForLabel,
+        onMouseEnterSection: onMouseEnterColumn,
+        onMouseLeaveSection,
+        onChangeLabelSize,
+      }
+      const columnProps = {
+        ...baseProps,
+        index: columnIdx,
+        total: column?.total,
+        onMouseEnterColumn,
+        onMouseLeaveColumn,
+        children: sectionsForColumn.map((section, sectionIdx) =>
+          renderSection({
+            ...sectionsProps,
+            ...section,
+            index: sectionIdx,
+            columnTotal: column?.total,
+            isLast: isReversed ? sectionIdx === 0 : sectionIdx === sectionsForColumn.length - 1,
+          })
+        ),
+      }
+
+      return renderColumn(columnProps)
     }
-
-    const sections = getSections({
-      size: scalerSize,
-      sections: column.sections,
-      scaler,
-      maxValue,
-    })
-
-    return (
-      <Column
-        key={index}
-        group={group}
-        total={column.total}
-        sections={sections}
-        size={size}
-        isHorizontal={isHorizontal}
-        isReversed={isReversed}
-        isDense={isDense}
-        showValues={showValues}
-        activeGroup={activeGroup}
-        activeSectionIndex={activeSectionIndex}
-        formatValueForLabel={formatValueForLabel}
-        onMouseEnterColumn={onMouseEnterColumn}
-        onMouseLeaveColumn={onMouseLeaveColumn}
-        onChangeLabelSize={index === 0 ? onChangeLabelSize : undefined}
-      />
-    )
   }
 
   return (
@@ -102,12 +171,10 @@ export const Group = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       ref={ref}
     >
       <div ref={columnsRef} className={css.columns}>
-        <div className={css.wrapper}>
-          {columns.map((column, index) => renderColumn(column, index))}
-        </div>
+        <div className={css.wrapper}>{columns.map(getRenderColumn(sectionForColumns, false))}</div>
         {isNegative && (
           <div className={classnames(css.wrapper, css.isReversed)}>
-            {reversedColumns.map((column, index) => renderColumn(column, index, true))}
+            {reversedColumns.map(getRenderColumn(sectionsForReversedColumns, true))}
           </div>
         )}
       </div>

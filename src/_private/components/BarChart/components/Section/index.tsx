@@ -15,7 +15,10 @@ type Props = {
   isActive: boolean
   label?: string
   labelRef?: React.Ref<HTMLDivElement>
-  onMouseEnter: React.MouseEventHandler
+  onMouseEnter?: React.MouseEventHandler
+  onMouseMove?: React.MouseEventHandler
+  onMouseLeave?: React.MouseEventHandler
+  onChangeLabelSize?: (size: number) => void
 }
 
 export const Section: React.FC<Props> = ({
@@ -26,27 +29,43 @@ export const Section: React.FC<Props> = ({
   isRounded,
   isActive,
   label,
-  labelRef,
   onMouseEnter,
-}) => (
-  <div
-    className={classnames(
-      css.section,
-      isHorizontal && css.isHorizontal,
-      isReversed && css.isReversed,
-      isRounded && css.isRounded,
-      isActive && css.isActive
-    )}
-    style={{
-      ...getSize(length, isHorizontal),
-      background: color,
-    }}
-    onMouseEnter={onMouseEnter}
-  >
-    {(label || labelRef) && (
-      <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">
-        {label}
-      </Text>
-    )}
-  </div>
-)
+  onMouseMove,
+  onMouseLeave,
+  onChangeLabelSize,
+}) => {
+  const labelRef = React.useRef<HTMLDivElement>(null)
+
+  React.useLayoutEffect(() => {
+    if (!label || !labelRef.current) {
+      return
+    }
+
+    onChangeLabelSize && onChangeLabelSize(labelRef.current.getBoundingClientRect().height)
+  }, [label, labelRef, onChangeLabelSize])
+
+  return (
+    <div
+      className={classnames(
+        css.section,
+        isHorizontal && css.isHorizontal,
+        isReversed && css.isReversed,
+        isRounded && css.isRounded,
+        isActive && css.isActive
+      )}
+      style={{
+        ...getSize(length, isHorizontal),
+        background: color,
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+    >
+      {label && (
+        <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">
+          {label}
+        </Text>
+      )}
+    </div>
+  )
+}
