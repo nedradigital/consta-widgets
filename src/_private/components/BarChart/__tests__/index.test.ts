@@ -6,6 +6,7 @@ import {
   getGraphStepSize,
   getGridSettings,
   getGroupsDomain,
+  getLabelGridAreaName,
   getRange,
   getScaler,
   getTotalByColumn,
@@ -412,5 +413,13 @@ describe('getGridSettings', () => {
           '"bottomLeft bottomUnit bottomUnit bottomUnit"',
       })
     })
+  })
+})
+
+describe('getLabelGridAreaName', () => {
+  it('получение названия области сетки для подписи группы', () => {
+    const result = getLabelGridAreaName('top')(0)
+
+    expect(result).toEqual('labelTop0')
   })
 })

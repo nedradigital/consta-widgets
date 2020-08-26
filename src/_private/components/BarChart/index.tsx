@@ -14,7 +14,7 @@ import { useBaseSize } from '@/BaseSizeContext'
 import { ColumnSize } from './components/Column'
 import { ColumnItem, Group, RenderColumn, RenderSection } from './components/Group'
 import { Threshold } from './components/Threshold'
-import { Position, Size as TicksSize, Ticks } from './components/Ticks'
+import { Position, Size as TicksSize } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
@@ -24,6 +24,7 @@ import {
   getEveryNTick,
   getGridSettings,
   getGroupsDomain,
+  getLabelGridAreaName,
   getRange,
   getScaler,
   getValuesDomain,
@@ -31,7 +32,14 @@ import {
   toAxisSize,
 } from './helpers'
 import css from './index.css'
-import { defaultRenderColumn, defaultRenderSection } from './renders'
+import {
+  defaultRenderAxisValues,
+  defaultRenderColumn,
+  defaultRenderGroupsLabels,
+  defaultRenderSection,
+  RenderAxisValues,
+  RenderGroupsLabels,
+} from './renders'
 
 export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 export type UnitPosition = typeof unitPositions[number]
@@ -68,6 +76,8 @@ export type Props = {
   formatValueForLabel?: FormatValue
   renderColumn?: RenderColumn
   renderSection?: RenderSection
+  renderGroupsLabels?: RenderGroupsLabels
+  renderAxisValues?: RenderAxisValues
   onMouseEnterColumn?: OnMouseHoverColumn
   onMouseLeaveColumn?: OnMouseHoverColumn
 }
@@ -84,6 +94,13 @@ const columnSizeClasses: Record<ColumnSize, string> = {
   xl: css.columnSizeXL,
   '2xl': css.columnSize2XL,
   '3xl': css.columnSize3XL,
+}
+
+const axisTicksPositionsClasses = {
+  left: css.leftTicks,
+  bottom: css.bottomTicks,
+  right: css.rightTicks,
+  top: css.topTicks,
 }
 
 const renderUnit = (className: string, unit: string, size: TicksSize) => (
@@ -110,6 +127,8 @@ export const CoreBarChart: React.FC<Props> = props => {
     formatValueForLabel,
     renderColumn = defaultRenderColumn,
     renderSection = defaultRenderSection,
+    renderAxisValues = defaultRenderAxisValues,
+    renderGroupsLabels = defaultRenderGroupsLabels,
     onMouseEnterColumn,
     onMouseLeaveColumn,
   } = props
@@ -213,10 +232,6 @@ export const CoreBarChart: React.FC<Props> = props => {
     groupsRef,
   ])
 
-  const getTicksStyles = (position: Position) => {
-    return position === 'top' || position === 'bottom' ? horizontalStyles : verticalStyles
-  }
-
   const getGroupStyles = (index: number, isFirst: boolean, isLast: boolean) => ({
     gridArea: `group${index}`,
     ...horizontalStyles,
@@ -228,41 +243,33 @@ export const CoreBarChart: React.FC<Props> = props => {
     minHeight: !isHorizontal ? chartMinHeight : undefined,
   })
 
-  const renderValues = (position: Position) => (
+  const getRenderGroupsLabels = (position: Position) =>
+    renderGroupsLabels({
+      values: groupsDomain,
+      position,
+      size: columnSize,
+      isDense: !!isDense,
+      getGridAreaName: getLabelGridAreaName(position),
+    })
+
+  const getRenderAxisValues = (position: Position) => (
     <div
-      className={
-        { left: css.leftTicks, bottom: css.bottomTicks, right: css.rightTicks, top: css.topTicks }[
-          position
-        ]
-      }
+      className={axisTicksPositionsClasses[position]}
+      style={['top', 'bottom'].includes(position) ? horizontalStyles : verticalStyles}
     >
-      <Ticks
-        values={axisValues}
-        scaler={valuesScale}
-        position={position}
-        size={toAxisSize(columnSize)}
-        showLine
-        formatValueForLabel={formatValueForLabel}
-        style={getTicksStyles(position)}
-      />
+      {renderAxisValues({
+        values: axisValues,
+        scaler: valuesScale,
+        position,
+        size: columnSize,
+        isDense: !!isDense,
+        formatValueForLabel,
+      })}
     </div>
   )
 
-  const renderLabels = (position: Position) => (
-    <Ticks
-      values={groupsDomain}
-      isLabel
-      position={position}
-      size={toAxisSize(columnSize)}
-      showLine
-      style={getTicksStyles(position)}
-      isDense={isDense}
-      gridAreaName={`label${_.startCase(position)}`}
-    />
-  )
-
-  const renderHorizontal = isHorizontal ? renderValues : renderLabels
-  const renderVertical = isHorizontal ? renderLabels : renderValues
+  const renderHorizontal = isHorizontal ? getRenderAxisValues : getRenderGroupsLabels
+  const renderVertical = isHorizontal ? getRenderGroupsLabels : getRenderAxisValues
 
   const showUnitLeft =
     unitPosition !== 'none' && (unitPosition === 'left' || unitPosition === 'left-and-bottom')

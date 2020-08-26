@@ -3,9 +3,14 @@ import React from 'react'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
+import { FormatValue } from '@/_private/types'
+import { Scaler } from '@/_private/utils/scale'
+
 import { Column } from './components/Column'
 import { RenderColumn, RenderSection } from './components/Group'
 import { Section } from './components/Section'
+import { Position, Ticks } from './components/Ticks'
+import { Size, toAxisSize } from './helpers'
 
 export const defaultRenderColumn: RenderColumn = props => <Column {...props} />
 
@@ -79,4 +84,29 @@ export const defaultRenderSection: RenderSection = props => {
       onChangeLabelSize={props.onChangeLabelSize}
     />
   )
+}
+
+export type RenderGroupsLabels = (props: {
+  values: readonly string[]
+  position: Position
+  size: Size
+  isDense: boolean
+  getGridAreaName: (index: number) => string
+}) => React.ReactNode
+
+export const defaultRenderGroupsLabels: RenderGroupsLabels = ({ size, ...rest }) => {
+  return <Ticks {...rest} isLabel size={toAxisSize(size)} showLine />
+}
+
+export type RenderAxisValues = (props: {
+  values: readonly number[]
+  scaler: Scaler<number>
+  position: Position
+  size: Size
+  isDense: boolean
+  formatValueForLabel?: FormatValue
+}) => React.ReactNode
+
+export const defaultRenderAxisValues: RenderAxisValues = ({ size, ...rest }) => {
+  return <Ticks {...rest} size={toAxisSize(size)} showLine />
 }
