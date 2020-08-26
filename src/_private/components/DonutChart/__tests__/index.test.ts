@@ -91,6 +91,10 @@ describe('defaultGetCirclesCount', () => {
     expect(defaultGetCirclesCount([{ name: '', color: '', values: [0, 0] }])).toBe(2)
   })
 
+  it('возвращает количество линий, если данные пустые', () => {
+    expect(defaultGetCirclesCount([])).toEqual(0)
+  })
+
   it('возвращает количество линий не больше максимального', () => {
     expect(defaultGetCirclesCount([{ name: '', color: '', values: times(10, () => 0) }])).toBe(
       MAX_CIRCLES_TO_RENDER

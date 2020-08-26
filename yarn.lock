@@ -15033,10 +15033,9 @@ react-textarea-autosize@^7.1.0:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.0"
 
-react-textfit@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-textfit/-/react-textfit-1.1.0.tgz#088855580f2e7aad269efc81b734bf636877d0e1"
-  integrity sha512-iznFbj7fCizuo3Xof9iv57I8GZFiYp8vUFj+4qihHJZpzNwxWad7JZu7ALTAnwaiq/H0p60g8G4ifeEJYmfJuw==
+"react-textfit@https://github.com/al-fyodorov/react-textfit#v1.1.1":
+  version "1.1.1"
+  resolved "https://github.com/al-fyodorov/react-textfit#81e650632e25cfacf21d3d62088b3674e39cd50b"
   dependencies:
     process "^0.11.9"
     prop-types "^15.5.10"

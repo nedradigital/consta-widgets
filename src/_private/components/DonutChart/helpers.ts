@@ -78,6 +78,10 @@ export const getDonutRadius = (mainRadius: number, index: number, countLines: nu
 }
 
 export const defaultGetCirclesCount: GetCirclesCount = data => {
+  if (!data.length) {
+    return 0
+  }
+
   return Math.min(Math.max(...data.map(i => i.values.length)), MAX_CIRCLES_TO_RENDER)
 }
 
