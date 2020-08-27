@@ -105,13 +105,14 @@ export const GinfPrototype = () => {
   return (
     <div className={css.ginfWrapper}>
       <ChoiceGroup
+        name="Выбор региона"
         className={css.ginfSwitcher}
         size="m"
         items={[...pointsTypes]}
-        getItemKey={item => item.name}
-        getItemLabel={item => item.name}
-        value={[pointsType]}
-        onChange={({ value }) => value && setPointsType(value[0])}
+        getLabel={item => item.name}
+        value={pointsType}
+        onChange={({ value }) => value && setPointsType(value)}
+        multiple={false}
       />
       <Map
         points={pointsType.points}
