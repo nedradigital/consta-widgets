@@ -18,6 +18,7 @@ type Props = {
   valuesTicks: number
   unit?: string
   unitPosition?: UnitPosition
+  showValues?: boolean
   isHorizontal?: boolean
   size?: 's' | 'm'
   formatValueForLabel?: FormatValue

@@ -91,7 +91,7 @@ export const CoreBarChart: React.FC<Props> = props => {
     gridTicks,
     valuesTicks,
     isHorizontal = false,
-    showValues = false,
+    showValues: showValuesProp = false,
     size,
     unit,
     unitPosition = 'none',
@@ -118,6 +118,8 @@ export const CoreBarChart: React.FC<Props> = props => {
   const [tooltipData, setTooltipData] = useState<TooltipData>()
   const [labelSize, changeLabelSize] = useState<number>(0)
 
+  const isMultiColumn = groups.some(group => group.columns.length > 1)
+  const showValues = showValuesProp && (isHorizontal || !isMultiColumn)
   const showReversed = groups.some(group =>
     group.reversedColumns.some(column => column && column.sections)
   )
