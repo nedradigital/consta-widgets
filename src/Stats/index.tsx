@@ -1,14 +1,17 @@
 import React from 'react'
 
+import { Badge } from '@gpn-design/uikit/Badge'
 import { Text, TextPropLineHeight, TextPropSize } from '@gpn-design/uikit/Text'
 import classnames from 'classnames'
-
-import { Badge, Size as BadgeSize, Status as BadgeStatus } from '@/Badge'
 
 import css from './index.css'
 
 const sizes = ['2xs', 'xs', 's', 'm', 'l'] as const
 type Size = typeof sizes[number]
+
+type BadgeProps = React.ComponentProps<typeof Badge>
+type BadgeStatus = BadgeProps['status']
+type BadgeSize = NonNullable<BadgeProps['size']>
 
 const layouts = [
   'compact-title',
