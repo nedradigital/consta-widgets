@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { select } from '@storybook/addon-knobs'
+import { object, select } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { unitPositions } from '@/_private/components/BarChart'
@@ -66,6 +66,20 @@ export const Minimalistic = createStory(
     />
   ),
   { name: 'минималистичный' }
+)
+
+export const WithThreshold = createStory(
+  () => (
+    <MultiBarChart
+      groups={interactiveData.groups}
+      threshold={object('threshold', interactiveData.threshold)}
+      unit={interactiveData.unit}
+      unitPosition={getUnitPosition()}
+      gridTicks={4}
+      valuesTicks={1}
+    />
+  ),
+  { name: 'с предельным значением' }
 )
 
 export default createMetadata({

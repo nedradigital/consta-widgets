@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { CoreBarChart, UnitPosition } from '@/_private/components/BarChart'
+import { CoreBarChart, Threshold, UnitPosition } from '@/_private/components/BarChart'
 import { FormatValue } from '@/_private/types'
 
 import { transformGroupsToCommonGroups } from './helpers'
@@ -22,6 +22,7 @@ type Props = {
   size?: 's' | 'm' | 'auto'
   showValues?: boolean
   isHorizontal?: boolean
+  threshold?: Threshold
   formatValueForLabel?: FormatValue
 }
 

@@ -3,7 +3,7 @@ import { sum } from 'lodash'
 import { getEveryN } from '@/_private/utils/array'
 import { NumberRange } from '@/_private/utils/scale'
 
-import { Group, Groups } from './'
+import { Group, Groups, Threshold } from './'
 import { ColumnItem } from './components/Group'
 import { Position, Size as TickSize } from './components/Ticks'
 
@@ -20,7 +20,11 @@ export type GetGroupSize = (params: {
   group: Group
 }) => number
 export type GetGroupsDomain = (groups: Groups) => readonly string[]
-export type GetValuesDomain = (groups: Groups, showReversed: boolean) => NumberRange
+export type GetValuesDomain = (params: {
+  groups: Groups
+  showReversed: boolean
+  threshold?: Threshold
+}) => NumberRange
 export type GetAxisShowPositions = (params: {
   isHorizontal: boolean
   showReversed: boolean
@@ -47,12 +51,14 @@ export const getTotalByColumn = (column: ColumnItem | undefined) => {
   return column ? Math.abs(column.total) : 0
 }
 
-export const getValuesDomain: GetValuesDomain = (groups, showReversed) => {
+export const getValuesDomain: GetValuesDomain = ({ groups, showReversed, threshold }) => {
   const numbers = groups
     .map(({ columns, reversedColumns }) => columns.concat(reversedColumns).map(getTotalByColumn))
     .flat()
 
-  const maxNumber = Math.max(...numbers, 0)
+  const thresholdValue = threshold?.value ?? 0
+
+  const maxNumber = Math.max(...numbers, Math.abs(thresholdValue), 0)
 
   return showReversed ? [-maxNumber, maxNumber] : [0, maxNumber]
 }

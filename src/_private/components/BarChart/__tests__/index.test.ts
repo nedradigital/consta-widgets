@@ -1,4 +1,4 @@
-import { Groups } from '../'
+import { Groups, Threshold } from '../'
 import {
   defaultGetAxisShowPositions,
   getColumnSize,
@@ -186,16 +186,33 @@ describe('defaultGetValuesDomain', () => {
     },
   ]
 
+  const threshold: Threshold = {
+    value: 120,
+    color: 'var(--color-bg-normal)',
+  }
+
   it('возвращает значение для домена', () => {
-    const result = getValuesDomain(groups, false)
+    const result = getValuesDomain({ groups, showReversed: false })
 
     expect(result).toEqual([0, 100])
   })
 
   it('возвращает значения для домена с перевернутыми колонками', () => {
-    const result = getValuesDomain(groups, true)
+    const result = getValuesDomain({ groups, showReversed: true })
 
     expect(result).toEqual([-100, 100])
+  })
+
+  it('возвращает значения для домена с предельным значением', () => {
+    const result = getValuesDomain({ groups, showReversed: false, threshold })
+
+    expect(result).toEqual([0, 120])
+  })
+
+  it('возвращает значения для домена с предельным значением с перевернутыми колонками', () => {
+    const result = getValuesDomain({ groups, showReversed: true, threshold })
+
+    expect(result).toEqual([-120, 120])
   })
 })
 

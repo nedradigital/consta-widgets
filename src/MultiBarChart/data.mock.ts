@@ -31,6 +31,7 @@ export const interactiveData = {
       ],
     },
   ],
+  threshold: { value: 750, color: 'var(--color-bg-normal)' },
   unit: 'тыс. м³',
 }
 

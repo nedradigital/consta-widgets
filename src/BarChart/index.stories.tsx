@@ -77,6 +77,21 @@ export const Minimalistic = createStory(
   { name: 'минималистичный' }
 )
 
+export const WithThreshold = createStory(
+  () => (
+    <BarChart
+      colors={object('colors', minimalData.colors)}
+      groups={minimalData.groups}
+      threshold={object('threshold', minimalData.threshold)}
+      unit={minimalData.unit}
+      unitPosition={getUnitPosition()}
+      gridTicks={4}
+      valuesTicks={1}
+    />
+  ),
+  { name: 'с предельным значением' }
+)
+
 export default createMetadata({
   title: 'components/BarChart',
   decorators: [withSmartKnobs()],
