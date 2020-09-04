@@ -71,6 +71,8 @@ export const directionsX = ['toRight', 'toLeft'] as const
 export type DirectionX = typeof directionsX[number]
 export const directionsY = ['toTop', 'toBottom'] as const
 export type DirectionY = typeof directionsY[number]
+export const axes = ['x', 'y'] as const
+export type Axis = typeof axes[number]
 
 type Props = {
   directionX?: DirectionX
@@ -93,6 +95,7 @@ type Props = {
     }
   | {
       boundaries: readonly Boundary[]
+      boundariesAxis: Axis
       showBoundariesOnAxis: boolean
     }
 )
@@ -250,10 +253,12 @@ export class LinearChart extends React.Component<Props, State> {
           hoveredMainValue={hoveredMainValue}
           anchorEl={this.svgWrapperRef.current}
           threshold={threshold}
-          boundaries={props.boundaries}
           formatValueForLabel={formatValueForLabel}
           formatValueForTooltip={formatValueForTooltip}
           formatValueForTooltipTitle={formatValueForTooltipTitle}
+          {...(props.boundaries
+            ? { boundaries: props.boundaries, boundariesAxis: props.boundariesAxis }
+            : {})}
         />
         {title && (
           <div className={css.title} style={{ paddingLeft: paddingX }}>
@@ -289,6 +294,7 @@ export class LinearChart extends React.Component<Props, State> {
                   id={boundariesGradientId}
                   color={getColorFromFirstLineWithBoundaries(lines)}
                   boundaries={props.boundaries}
+                  axis={props.boundariesAxis}
                   svgWidth={svgWidth}
                   svgHeight={svgHeight}
                   scaleX={scaleX}
@@ -358,6 +364,7 @@ export class LinearChart extends React.Component<Props, State> {
                 props.boundaries && line.withBoundaries
                   ? {
                       boundaries: props.boundaries,
+                      boundariesAxis: props.boundariesAxis,
                       boundariesGradientId,
                     }
                   : {}
@@ -382,6 +389,7 @@ export class LinearChart extends React.Component<Props, State> {
             })}
             {props.boundaries && props.showBoundariesOnAxis && (
               <BoundariesAxisLine
+                axis={props.boundariesAxis}
                 isHorizontal={isHorizontal}
                 xLabelsPos={xLabelsPos}
                 yLabelsPos={yLabelsPos}

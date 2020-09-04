@@ -2,7 +2,9 @@ import React from 'react'
 
 import { sortBy } from 'lodash'
 
-import { Boundary, DirectionX, DirectionY, ScaleLinear } from '@/LinearChart'
+import { isBoundariesHorizontal } from '@/LinearChart/helpers'
+
+import { Axis, Boundary, DirectionX, DirectionY, ScaleLinear } from '../..'
 
 import { getBoundaries, getOffsets } from './helpers'
 
@@ -10,6 +12,7 @@ type Props = {
   id: string
   color: string
   boundaries: readonly Boundary[]
+  axis: Axis
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   svgHeight: number
@@ -23,6 +26,7 @@ export const BoundariesGradient: React.FC<Props> = ({
   id,
   color,
   boundaries,
+  axis,
   scaleX,
   scaleY,
   svgHeight,
@@ -31,12 +35,13 @@ export const BoundariesGradient: React.FC<Props> = ({
   directionY,
   isHorizontal,
 }) => {
-  const scale = isHorizontal ? scaleY : scaleX
-  const chartSize = isHorizontal ? svgHeight : svgWidth
-  const domain = isHorizontal ? scaleY.domain() : scaleX.domain()
-  const direction = isHorizontal
-    ? { x1: '0%', x2: '0%', y1: '0%', y2: '100%' }
-    : { x1: '0%', x2: '100%', y1: '0%', y2: '0%' }
+  const gradientIsHorizontal = isBoundariesHorizontal(axis, isHorizontal)
+  const scale = gradientIsHorizontal ? scaleX : scaleY
+  const domain = scale.domain()
+  const chartSize = gradientIsHorizontal ? svgWidth : svgHeight
+  const direction = gradientIsHorizontal
+    ? { x1: '0%', x2: '100%', y1: '0%', y2: '0%' }
+    : { x1: '0%', x2: '0%', y1: '0%', y2: '100%' }
 
   return (
     <linearGradient id={id} gradientUnits="userSpaceOnUse" {...direction}>

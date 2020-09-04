@@ -1,35 +1,23 @@
 import React from 'react'
 
+import { Axis } from '../..'
+import { isBoundariesHorizontal as getIsBoundariesHorizontal } from '../../helpers'
 import { XLabelsPosition, YLabelsPosition } from '../Axis'
 
 const getLinePosition = ({
+  axis,
   isHorizontal,
   xLabelsPos,
   yLabelsPos,
 }: {
+  axis: Axis
   isHorizontal: boolean
   xLabelsPos?: XLabelsPosition
   yLabelsPos?: YLabelsPosition
 }) => {
-  if (isHorizontal && yLabelsPos === 'right') {
-    return {
-      x1: '100%',
-      y1: '0%',
-      x2: '100%',
-      y2: '100%',
-    }
-  }
+  const isBoundariesHorizontal = getIsBoundariesHorizontal(axis, isHorizontal)
 
-  if (isHorizontal && yLabelsPos === 'left') {
-    return {
-      x1: '0%',
-      y1: '0%',
-      x2: '0%',
-      y2: '100%',
-    }
-  }
-
-  if (!isHorizontal && xLabelsPos === 'top') {
+  if (isBoundariesHorizontal && xLabelsPos === 'top') {
     return {
       x1: '0%',
       y1: '0%',
@@ -38,7 +26,7 @@ const getLinePosition = ({
     }
   }
 
-  if (!isHorizontal && xLabelsPos === 'bottom') {
+  if (isBoundariesHorizontal && xLabelsPos === 'bottom') {
     return {
       x1: '0%',
       y1: '100%',
@@ -46,9 +34,28 @@ const getLinePosition = ({
       y2: '100%',
     }
   }
+
+  if (!isBoundariesHorizontal && yLabelsPos === 'right') {
+    return {
+      x1: '100%',
+      y1: '0%',
+      x2: '100%',
+      y2: '100%',
+    }
+  }
+
+  if (!isBoundariesHorizontal && yLabelsPos === 'left') {
+    return {
+      x1: '0%',
+      y1: '0%',
+      x2: '0%',
+      y2: '100%',
+    }
+  }
 }
 
 type Props = {
+  axis: Axis
   isHorizontal: boolean
   xLabelsPos?: XLabelsPosition
   yLabelsPos?: YLabelsPosition
@@ -56,12 +63,13 @@ type Props = {
 }
 
 export const BoundariesAxisLine: React.FC<Props> = ({
+  axis,
   isHorizontal,
   xLabelsPos,
   yLabelsPos,
   boundariesGradientId,
 }) => {
-  const position = getLinePosition({ isHorizontal, xLabelsPos, yLabelsPos })
+  const position = getLinePosition({ axis, isHorizontal, xLabelsPos, yLabelsPos })
 
   if (!position) {
     return null

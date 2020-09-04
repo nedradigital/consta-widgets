@@ -2,9 +2,16 @@ import React from 'react'
 
 import classnames from 'classnames'
 
-import { Boundary, DirectionX, DirectionY } from '@/LinearChart'
-
-import { HoveredMainValue, Item, itemIsNotEmpty, ScaleLinear } from '../../'
+import {
+  Axis,
+  Boundary,
+  DirectionX,
+  DirectionY,
+  HoveredMainValue,
+  Item,
+  itemIsNotEmpty,
+  ScaleLinear,
+} from '../..'
 import { getBoundary } from '../../helpers'
 import { Area } from '../Area'
 import { Line } from '../Line'
@@ -28,6 +35,7 @@ type BoundariesProps =
     }
   | {
       boundaries: readonly Boundary[]
+      boundariesAxis: Axis
       boundariesGradientId: string
     }
 
@@ -97,7 +105,12 @@ export const LineWithDots: React.FC<Props> = props => {
           const radiusCircle = isActive ? radius * 2 : radius
           const boundaryColor =
             props.boundaries &&
-            getBoundary({ boundaries: props.boundaries, item, isHorizontal })?.color
+            getBoundary({
+              axis: props.boundariesAxis,
+              boundaries: props.boundaries,
+              item,
+              isHorizontal,
+            })?.color
           const circleColor = boundaryColor || color
 
           return (
