@@ -1,7 +1,9 @@
-import { Groups, Threshold } from '../'
+import { Threshold } from '../'
+import { GroupItem } from '../components/Group'
 import {
   defaultGetAxisShowPositions,
   getColumnSize,
+  getCommonGroupsMaxColumns,
   getEveryNTick,
   getGraphStepSize,
   getGridSettings,
@@ -11,6 +13,8 @@ import {
   getScaler,
   getTotalByColumn,
   getValuesDomain,
+  isMultiColumn,
+  isShowReversed,
   toAxisSize,
 } from '../helpers'
 
@@ -75,7 +79,7 @@ describe('getTotalByColumn', () => {
 })
 
 describe('defaultGetGroupsDomain', () => {
-  const groups: Groups = [
+  const groups: readonly GroupItem[] = [
     {
       name: 'группа 1',
       columns: [],
@@ -179,7 +183,7 @@ describe('defaultGetAxisShowPositions', () => {
 })
 
 describe('defaultGetValuesDomain', () => {
-  const groups: Groups = [
+  const groups: readonly GroupItem[] = [
     {
       name: '1',
       columns: [{ total: 50 }, { total: 45 }],
@@ -219,16 +223,10 @@ describe('defaultGetValuesDomain', () => {
 
 describe('getScaler', () => {
   it('возвращает отскалированное значение', () => {
-    const scaler = getScaler({ maxValue: 100, showReversed: false })
+    const scaler = getScaler(100)
 
-    expect(scaler(200, 50)).toEqual(100)
-    expect(scaler(200, 200)).toEqual(200)
-  })
-
-  it('возвращает отскалированное значение при наличии отрицательных данных', () => {
-    const scaler = getScaler({ maxValue: 100, showReversed: true })
-
-    expect(scaler(200, 50)).toEqual(50)
+    expect(scaler(50)).toEqual(50)
+    expect(scaler(200)).toEqual(100)
   })
 })
 
@@ -421,5 +419,155 @@ describe('getLabelGridAreaName', () => {
     const result = getLabelGridAreaName('top')(0)
 
     expect(result).toEqual('labelTop0')
+  })
+})
+
+describe('isShowReversed', () => {
+  it('определяет необходимость отображения перевернутых групп, если список групп пустой', () => {
+    const result = isShowReversed({
+      groups: [],
+    })
+
+    expect(result).toBeFalse()
+  })
+
+  it('определяет необходимость отображения перевернутых групп, если список колонок пустой', () => {
+    const result = isShowReversed({
+      groups: [{ name: 'Группа 1', columns: [], reversedColumns: [] }],
+    })
+
+    expect(result).toBeFalse()
+  })
+
+  it('определяет необходимость отображения перевернутых групп, если список колонок пустой и порог положительный', () => {
+    const result = isShowReversed({
+      groups: [{ name: 'Группа 1', columns: [], reversedColumns: [] }],
+      threshold: {
+        color: 'red',
+        value: 100,
+      },
+    })
+
+    expect(result).toBeFalse()
+  })
+
+  it('определяет необходимость отображения перевернутых групп', () => {
+    const result = isShowReversed({
+      groups: [
+        {
+          name: 'Группа 1',
+          columns: [],
+          reversedColumns: [
+            {
+              total: 100,
+              sections: [{ color: 'red', value: 100, length: 100 }],
+            },
+          ],
+        },
+      ],
+    })
+
+    expect(result).toBeTrue()
+  })
+
+  it('определяет необходимость отображения перевернутых групп, если список колонок пустой и порог отрицательный', () => {
+    const result = isShowReversed({
+      groups: [{ name: 'Группа 1', columns: [], reversedColumns: [] }],
+      threshold: {
+        color: 'red',
+        value: -100,
+      },
+    })
+
+    expect(result).toBeTrue()
+  })
+})
+
+describe('isMultiColumn', () => {
+  it('возвращает false, если список групп пустой', () => {
+    const result = isMultiColumn([])
+
+    expect(result).toBeFalse()
+  })
+
+  it('возвращает false, если список колонок пуст', () => {
+    const result = isMultiColumn([
+      {
+        name: 'Группа 1',
+        columns: [],
+        reversedColumns: [],
+      },
+    ])
+
+    expect(result).toBeFalse()
+  })
+
+  it('возвращает false, если в списках не больше одной колонки', () => {
+    const result = isMultiColumn([
+      {
+        name: 'Группа 1',
+        columns: [{ total: 0, sections: [] }],
+        reversedColumns: [{ total: 0, sections: [] }],
+      },
+    ])
+
+    expect(result).toBeFalse()
+  })
+
+  it('возвращает true, если длина списка обычных колонок больше одного', () => {
+    const result = isMultiColumn([
+      {
+        name: 'Группа 1',
+        columns: [
+          { total: 0, sections: [] },
+          { total: 0, sections: [] },
+        ],
+        reversedColumns: [{ total: 0, sections: [] }],
+      },
+    ])
+
+    expect(result).toBeTrue()
+  })
+
+  it('возвращает true, если длина списка перевернутых колонок больше одного', () => {
+    const result = isMultiColumn([
+      {
+        name: 'Группа 1',
+        columns: [{ total: 0, sections: [] }],
+        reversedColumns: [
+          { total: 0, sections: [] },
+          { total: 0, sections: [] },
+        ],
+      },
+    ])
+
+    expect(result).toBeTrue()
+  })
+})
+
+describe('getCommonGroupsMaxColumns', () => {
+  it('получение максимального количества колонок в группах, если список групп пуст', () => {
+    const result = getCommonGroupsMaxColumns([])
+
+    expect(result).toEqual(0)
+  })
+
+  it('получение максимального количества колонок в группах', () => {
+    const result = getCommonGroupsMaxColumns([
+      {
+        name: 'Группа 1',
+        columns: [
+          { total: 0, sections: [] },
+          { total: 0, sections: [] },
+        ],
+        reversedColumns: [
+          { total: 0, sections: [] },
+          { total: 0, sections: [] },
+          { total: 0, sections: [] },
+        ],
+      },
+    ])
+
+    expect(result).toEqual(3)
   })
 })

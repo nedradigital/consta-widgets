@@ -3,8 +3,8 @@ import { startCase, sum } from 'lodash'
 import { getEveryN } from '@/_private/utils/array'
 import { NumberRange } from '@/_private/utils/scale'
 
-import { Group, Groups, Threshold } from './'
-import { ColumnItem } from './components/Group'
+import { Threshold } from './'
+import { ColumnItem, GroupItem } from './components/Group'
 import { Position, Size as TickSize } from './components/Ticks'
 
 export const barCharSizes = ['s', 'm', 'l', 'xl', '2xl', '3xl', 'auto'] as const
@@ -17,11 +17,11 @@ export type ShowPositions = {
 export type GetGroupSize = (params: {
   columnPadding: number
   columnWidth: number
-  group: Group
+  group: GroupItem
 }) => number
-export type GetGroupsDomain = (groups: Groups) => readonly string[]
+export type GetGroupsDomain = (groups: readonly GroupItem[]) => readonly string[]
 export type GetValuesDomain = (params: {
-  groups: Groups
+  groups: readonly GroupItem[]
   showReversed: boolean
   threshold?: Threshold
 }) => NumberRange
@@ -158,17 +158,9 @@ export const defaultGetAxisShowPositions: GetAxisShowPositions = ({
   left: true,
 })
 
-export const getScaler = ({
-  maxValue,
-  showReversed,
-}: {
-  maxValue: number
-  showReversed: boolean
-}) => (size: number, value: number) => {
-  const percent = Math.abs(value) / maxValue
-  const maxLength = showReversed ? size / 2 : size
-  const length = maxLength * percent
-  return length > maxLength ? maxLength : length
+export const getScaler = (maxValue: number) => (value: number) => {
+  const percent = (Math.abs(value) / maxValue) * 100
+  return percent > 100 ? 100 : percent
 }
 
 const getAreaNames = (count: number, handler: (i: number) => string) =>
@@ -221,4 +213,31 @@ export const getGridSettings = ({
 
 export const getLabelGridAreaName = (position: Position) => (index: number) => {
   return `label${startCase(position)}${index}`
+}
+
+export const isShowReversed = ({
+  groups,
+  threshold,
+}: {
+  groups: readonly GroupItem[]
+  threshold?: Threshold
+}) => {
+  return (
+    Boolean(threshold && threshold.value < 0) ||
+    groups.some(group => group.reversedColumns.some(column => column && column.sections))
+  )
+}
+
+export const isMultiColumn = (groups: readonly GroupItem[]) => {
+  return groups.some(group => group.columns.length > 1 || group.reversedColumns.length > 1)
+}
+
+export const getCommonGroupsMaxColumns = (groups: readonly GroupItem[]) => {
+  if (!groups.length) {
+    return 0
+  }
+
+  return Math.max(
+    ...groups.map(group => Math.max(group.columns.length, group.reversedColumns.length))
+  )
 }
