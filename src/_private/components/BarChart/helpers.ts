@@ -1,4 +1,4 @@
-import { sum } from 'lodash'
+import { startCase, sum } from 'lodash'
 
 import { getEveryN } from '@/_private/utils/array'
 import { NumberRange } from '@/_private/utils/scale'
@@ -218,3 +218,7 @@ export const getGridSettings = ({
           `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}" ` +
           (showUnitBottom ? `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"` : ''),
       }
+
+export const getLabelGridAreaName = (position: Position) => (index: number) => {
+  return `label${startCase(position)}${index}`
+}

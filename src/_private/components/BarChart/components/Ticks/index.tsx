@@ -27,7 +27,7 @@ type Props<T> = {
 } & (
   | {
       isLabel: true
-      gridAreaName: string
+      getGridAreaName: (index: number) => string
       isDense?: boolean
     }
   | {
@@ -114,7 +114,7 @@ export function Ticks<T>(props: Props<T>) {
         style={{
           transform,
           alignItems,
-          gridArea: props.isLabel ? `${props.gridAreaName}${idx}` : '',
+          gridArea: props.isLabel ? props.getGridAreaName(idx) : '',
         }}
       >
         <Text

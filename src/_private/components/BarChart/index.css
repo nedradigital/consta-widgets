@@ -103,17 +103,35 @@
   position: relative;
 }
 
+.leftTicks,
+.rightTicks {
+  max-width: calc-size(160);
+}
+
+.topTicks {
+  grid-area: topTicks;
+}
+
+.rightTicks {
+  grid-area: rightTicks;
+}
+
+.bottomTicks {
+  grid-area: bottomTicks;
+}
+
+.leftTicks {
+  grid-area: leftTicks;
+
+  justify-self: end;
+}
+
 .bottomLeft {
   grid-area: bottomLeft;
 }
 
 .bottomRight {
   grid-area: bottomRight;
-}
-
-.leftTicks,
-.rightTicks {
-  max-width: calc-size(160);
 }
 
 .topLeftUnit {
@@ -123,18 +141,8 @@
   margin-bottom: var(--space-xs);
 }
 
-.leftTicks {
-  grid-area: leftTicks;
-
-  justify-self: end;
-}
-
 .graph {
   grid-area: graph;
-}
-
-.rightTicks {
-  grid-area: rightTicks;
 }
 
 .bottomUnit {
