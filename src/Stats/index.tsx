@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { Badge } from '@gpn-design/uikit/Badge'
-import { Text, TextPropLineHeight, TextPropSize } from '@gpn-design/uikit/Text'
+import { Badge } from '@consta/uikit/Badge'
+import { Text, TextPropLineHeight, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
 import css from './index.css'

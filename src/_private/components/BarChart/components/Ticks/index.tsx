@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text, TextPropSize } from '@gpn-design/uikit/Text'
+import { Text, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
 import _ from 'lodash'
 

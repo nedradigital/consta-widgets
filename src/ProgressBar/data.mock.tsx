@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { Text } from '@consta/uikit/Text'
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
-import { Text } from '@gpn-design/uikit/Text'
 
 import { Data } from './'
 

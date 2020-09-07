@@ -5,7 +5,7 @@ import russiaLow from '@amcharts/amcharts4-geodata/russiaCrimeaLow'
 import worldHigh from '@amcharts/amcharts4-geodata/worldHigh'
 import worldLow from '@amcharts/amcharts4-geodata/worldLow'
 import worldUltra from '@amcharts/amcharts4-geodata/worldUltra'
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import * as d3 from 'd3'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { Button } from '@consta/uikit/Button'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { Button } from '@gpn-design/uikit/Button'
 import classnames from 'classnames'
 import { ExtendedFeature, ExtendedFeatureCollection } from 'd3'
 import * as d3 from 'd3'

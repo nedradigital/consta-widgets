@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { IconWarning } from '@gpn-design/uikit/IconWarning'
-import { Text } from '@gpn-design/uikit/Text'
+import { IconWarning } from '@consta/uikit/IconWarning'
+import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
 import { useBaseSize } from '@/BaseSizeContext'

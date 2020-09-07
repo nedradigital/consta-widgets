@@ -1,4 +1,4 @@
-import { TableFilters } from '@gpn-design/uikit/Table'
+import { TableFilters } from '@consta/uikit/Table'
 
 import { Props as Data, RoadmapRow } from '.'
 

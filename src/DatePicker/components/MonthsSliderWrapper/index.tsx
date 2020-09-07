@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Button } from '@gpn-design/uikit/Button'
-import { IconBackward } from '@gpn-design/uikit/IconBackward'
-import { IconForward } from '@gpn-design/uikit/IconForward'
+import { Button } from '@consta/uikit/Button'
+import { IconBackward } from '@consta/uikit/IconBackward'
+import { IconForward } from '@consta/uikit/IconForward'
 
 import css from './index.css'
 

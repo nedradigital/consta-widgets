@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
-import { Button } from '@gpn-design/uikit/Button'
-import { IconArrowLeft } from '@gpn-design/uikit/IconArrowLeft'
-import { IconArrowRight } from '@gpn-design/uikit/IconArrowRight'
+import { useComponentSize } from '@consta/uikit/useComponentSize'
+import { Button } from '@consta/uikit/Button'
+import { IconArrowLeft } from '@consta/uikit/IconArrowLeft'
+import { IconArrowRight } from '@consta/uikit/IconArrowRight'
 import classnames from 'classnames'
 import * as _ from 'lodash'
 

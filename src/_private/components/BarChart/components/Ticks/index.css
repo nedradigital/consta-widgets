@@ -96,7 +96,6 @@
   display: flex;
 
   &:--isHorizontal {
-
     justify-content: center;
 
     padding: var(--space-2xs) 0;

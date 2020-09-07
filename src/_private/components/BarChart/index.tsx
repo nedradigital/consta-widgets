@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
-import { Text, TextPropSize } from '@gpn-design/uikit/Text'
+import { useComponentSize } from '@consta/uikit/useComponentSize'
+import { Text, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
 import _ from 'lodash'
 
