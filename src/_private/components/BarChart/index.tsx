@@ -314,6 +314,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               ...horizontalStyles,
               ...verticalStyles,
             }}
+            className={css.groupWrapper}
           >
             {renderGroup({
               item: group,

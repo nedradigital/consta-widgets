@@ -1,0 +1,22 @@
+.section {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  width: 100%;
+  height: 100%;
+
+  &.alignEnd.isHorizontal {
+    left: var(--total-background-size);
+
+    transform: translateX(calc(-1 * var(--total-section-size)));
+  }
+
+  &.alignEnd:not(.isHorizontal) {
+    bottom: var(--total-background-size);
+
+    transform: translateY(var(--total-section-size));
+  }
+}

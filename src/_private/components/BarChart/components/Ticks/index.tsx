@@ -17,6 +17,7 @@ export type Position = typeof positions[number]
 
 type Props<T> = {
   values: readonly T[]
+  disabledValues?: readonly T[]
   scaler?: Scaler<T>
   position: Position
   size?: Size
@@ -54,6 +55,7 @@ export function Ticks<T>(props: Props<T>) {
     isXAxisLabelsSlanted,
     className,
     values,
+    disabledValues = [],
     scaler,
     position,
     size = 'm',
@@ -117,6 +119,8 @@ export function Ticks<T>(props: Props<T>) {
     return 'center'
   }
 
+  const isDisabled = (value: T) => disabledValues.includes(value)
+
   const children = values.map((value, idx) => {
     const transform = scaler && tickTransform(value)
     const alignItems = getAlignItems(idx, values.length)
@@ -145,7 +149,7 @@ export function Ticks<T>(props: Props<T>) {
           size={textSizes[size]}
           align={textAlign}
           title={textValue}
-          className={classnames(css.text)}
+          className={classnames(css.text, isDisabled(value) && css.isDisabled)}
           lineHeight={props.isLabel && props.isDense ? 's' : undefined}
         >
           {(isXAxisLabelsSlanted && (

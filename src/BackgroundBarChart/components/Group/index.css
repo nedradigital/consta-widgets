@@ -1,0 +1,58 @@
+.main {
+  --background-column-size: 24px;
+
+  position: absolute;
+
+  height: 100%;
+
+  &.isHorizontal {
+    top: 50%;
+
+    width: 100%;
+    height: auto;
+  }
+}
+
+.columns {
+  position: relative;
+}
+
+.baseColumn {
+  position: absolute;
+  left: 50%;
+
+  height: 100%;
+
+  transform: translateX(-50%);
+
+  .isHorizontal & {
+    top: 50%;
+    left: auto;
+
+    width: 100%;
+
+    transform: translateY(-50%);
+  }
+}
+
+.backgroundColumn {
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+
+  width: var(--background-column-size);
+
+  .isHorizontal & {
+    flex-direction: row;
+
+    height: var(--background-column-size);
+  }
+}
+
+.column {
+  pointer-events: none;
+
+  .isHorizontal & {
+    height: auto;
+  }
+}
