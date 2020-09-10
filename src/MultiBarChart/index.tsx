@@ -16,7 +16,7 @@ export type Column = ReadonlyArray<{ value: number | undefined; color: string }>
 
 export type Group = {
   groupName: string
-  values: readonly Column[]
+  values: ReadonlyArray<Column | undefined | null>
 }
 
 type Props = {

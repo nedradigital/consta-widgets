@@ -2,12 +2,17 @@ import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
 import { Column, Group } from './'
 
+const defaultColumnItem = {
+  total: 0,
+  sections: undefined,
+}
+
 const getTransformColumn = (colors: readonly string[], filter: (value: number) => boolean) => (
   column: Column,
   index: number
 ) => {
   if (!isNotNil(column)) {
-    return
+    return defaultColumnItem
   }
 
   return filter(column)
@@ -15,10 +20,7 @@ const getTransformColumn = (colors: readonly string[], filter: (value: number) =
         total: column,
         sections: [{ color: colors[index], value: column }],
       }
-    : {
-        total: 0,
-        section: undefined,
-      }
+    : defaultColumnItem
 }
 
 export const transformGroupsToCommonGroups = (

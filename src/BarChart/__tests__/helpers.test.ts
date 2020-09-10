@@ -20,12 +20,12 @@ describe('transformGroupsToCoreGroups', () => {
         columns: [
           { total: 4, sections: [{ color: 'red', value: 4 }] },
           { total: 2, sections: [{ color: 'blue', value: 2 }] },
-          undefined,
+          { total: 0, sections: undefined },
         ],
         reversedColumns: [
           { total: 0, sections: undefined },
           { total: 0, sections: undefined },
-          undefined,
+          { total: 0, sections: undefined },
         ],
       },
     ]

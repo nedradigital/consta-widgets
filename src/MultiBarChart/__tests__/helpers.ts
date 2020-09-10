@@ -5,7 +5,7 @@ describe('transformGroupsToCommonGroups', () => {
   const groups: readonly Group[] = [
     {
       groupName: 'март',
-      values: [[{ value: 4, color: 'red' }], [{ value: 2, color: 'blue' }]],
+      values: [[{ value: 4, color: 'red' }], [{ value: 2, color: 'blue' }], undefined],
     },
     {
       groupName: 'апрель',
@@ -29,14 +29,25 @@ describe('transformGroupsToCommonGroups', () => {
             total: 2,
             sections: [{ color: 'blue', value: 2 }],
           },
+          { total: 0, sections: undefined },
         ],
-        reversedColumns: [undefined, undefined],
+        reversedColumns: [
+          { total: 0, sections: undefined },
+          { total: 0, sections: undefined },
+          { total: 0, sections: undefined },
+        ],
       },
       {
         name: 'апрель',
         total: 5,
-        columns: [undefined, { total: 5, sections: [{ color: 'blue', value: 5 }] }],
-        reversedColumns: [undefined, undefined],
+        columns: [
+          { total: 0, sections: undefined },
+          { total: 5, sections: [{ color: 'blue', value: 5 }] },
+        ],
+        reversedColumns: [
+          { total: 0, sections: undefined },
+          { total: 0, sections: undefined },
+        ],
       },
     ])
   })
