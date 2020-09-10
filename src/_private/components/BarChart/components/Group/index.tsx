@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import classnames from 'classnames'
 import _ from 'lodash'
 

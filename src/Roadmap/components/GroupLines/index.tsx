@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Position } from '@gpn-design/uikit/Popover'
+import { Position } from '@consta/uikit/Popover'
 
 import { Group } from '../..'
 import { Line } from '../Line'

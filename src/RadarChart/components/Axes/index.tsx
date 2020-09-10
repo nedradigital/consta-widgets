@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 
-import { Text, TextPropSize } from '@gpn-design/uikit/Text'
+import { Text, TextPropSize } from '@consta/uikit/Text'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/_private/types'

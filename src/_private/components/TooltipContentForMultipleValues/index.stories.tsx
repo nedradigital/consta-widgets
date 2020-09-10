@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Tooltip } from '@gpn-design/uikit/Tooltip'
+import { Tooltip } from '@consta/uikit/Tooltip'
 import { object, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory } from '@/_private/storybook'

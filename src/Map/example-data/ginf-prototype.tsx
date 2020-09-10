@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { ChoiceGroup } from '@gpn-design/uikit/ChoiceGroup'
+import { ChoiceGroup } from '@consta/uikit/ChoiceGroup'
 import { noop } from 'lodash'
 
 import { GeoPoint, Map } from '../'

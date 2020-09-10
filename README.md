@@ -19,7 +19,7 @@ $ yarn add @csssr/gpn-components
 
 ### Зависимости
 
-Для работы пакета необходимо установить библиотеку [`@gpn-design/uikit`](https://www.npmjs.com/package/@gpn-design/uikit) и [настроить тему](https://gpn-prototypes.github.io/ui-kit/?path=/docsx/ui-kit-theme--documentation).
+Для работы пакета необходимо установить библиотеку [`@consta/uikit`](https://www.npmjs.com/package/@consta/uikit) и [настроить тему](https://consta-uikit.vercel.app/?path=/docs/components-theme--playground).
 
 ### Настройка скейлинга
 
@@ -28,7 +28,7 @@ $ yarn add @csssr/gpn-components
 ```tsx
 import { presetGpnScaling } from '@csssr/gpn-components/theme'
 import { BaseSizeProvider } from '@csssr/gpn-components/BaseSizeContext'
-import { presetGpnDisplay, Theme } from '@gpn-design/uikit/Theme'
+import { presetGpnDisplay, Theme } from '@consta/uikit/Theme'
 
 const themePreset = {
   ...presetGpnDisplay,

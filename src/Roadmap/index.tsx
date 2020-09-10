@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
+import { Position } from '@consta/uikit/Popover'
+import { Table, TableColumn, TableFilters, TableRow } from '@consta/uikit/Table'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
-import { Position } from '@gpn-design/uikit/Popover'
-import { Table, TableColumn, TableFilters, TableRow } from '@gpn-design/uikit/Table'
 import classnames from 'classnames'
 
 import { MonthsTitles } from '@/Roadmap/components/MonthsTitles'

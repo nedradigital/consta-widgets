@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDrag, useDrop } from 'react-dnd'
 
-import { Text } from '@gpn-design/uikit/Text'
+import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 import {
   addMonths,

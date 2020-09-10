@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button } from '@gpn-design/uikit/Button'
+import { Button } from '@consta/uikit/Button'
 
 import { DateLimitProps, DateRange } from '../../'
 

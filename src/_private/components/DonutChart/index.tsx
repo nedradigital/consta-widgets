@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
+import { Position } from '@consta/uikit/Popover'
+import { Tooltip } from '@consta/uikit/Tooltip'
 import { createArrayOfIndexes } from '@csssr/gpn-utils/lib/array'
 import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
-import { Position } from '@gpn-design/uikit/Popover'
-import { Tooltip } from '@gpn-design/uikit/Tooltip'
 import classnames from 'classnames'
 import { zip } from 'lodash'
 

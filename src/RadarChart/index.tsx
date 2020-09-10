@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { useUID } from 'react-uid'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { useComponentSize } from '@gpn-design/uikit/useComponentSize'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/_private/types'

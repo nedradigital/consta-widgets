@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Text } from '@gpn-design/uikit/Text'
+import { Text } from '@consta/uikit/Text'
 
 import { getMonths } from '../../helpers'
 

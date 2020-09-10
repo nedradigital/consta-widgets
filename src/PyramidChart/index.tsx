@@ -1,7 +1,7 @@
 import React from 'react'
 
+import { Text } from '@consta/uikit/Text'
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Text } from '@gpn-design/uikit/Text'
 
 import { useBaseSize } from '@/BaseSizeContext'
 

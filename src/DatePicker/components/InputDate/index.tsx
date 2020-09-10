@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { IconCalendar } from '@gpn-design/uikit/IconCalendar'
-import { TextField, TextFieldPropOnChange } from '@gpn-design/uikit/TextField'
-import { Tooltip } from '@gpn-design/uikit/Tooltip'
+import { IconCalendar } from '@consta/uikit/IconCalendar'
+import { TextField, TextFieldPropOnChange } from '@consta/uikit/TextField'
+import { Tooltip } from '@consta/uikit/Tooltip'
 
 import { isValidDate } from '@/_private/utils/type-guards'
 

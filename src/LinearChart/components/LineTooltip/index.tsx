@@ -1,8 +1,8 @@
 import React from 'react'
 
+import { Position } from '@consta/uikit/Popover'
+import { Tooltip } from '@consta/uikit/Tooltip'
 import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
-import { Position } from '@gpn-design/uikit/Popover'
-import { Tooltip } from '@gpn-design/uikit/Tooltip'
 
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'
