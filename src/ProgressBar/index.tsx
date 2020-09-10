@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Text, TextPropSize } from '@consta/uikit/Text'
-import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { Legend, Tick } from '@/ProgressBar/components/Legend'

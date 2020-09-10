@@ -15,7 +15,6 @@ const lastReview = reviews[reviews.length - 1]
 const wasReviewed = reviews.length >= 2 && new Date(lastReview.submitted_at) < new Date(pr.updated_at)
 
 markdown(`Задача в Jira: ${pr.head.ref}`)
-markdown(`Ссылка на стенд: http://${pr.head.ref}.gpn-components.csssr.cloud`)
 
 if (pr.title.length < 10) {
   fail('Заголовок PR должен быть осмысленным (длиной не менее 10 символов)')

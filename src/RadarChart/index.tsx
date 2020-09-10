@@ -2,7 +2,7 @@ import * as React from 'react'
 import { useUID } from 'react-uid'
 
 import { useComponentSize } from '@consta/uikit/useComponentSize'
-import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { FormatValue } from '@/_private/types'

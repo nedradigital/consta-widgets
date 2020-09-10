@@ -3,7 +3,7 @@ import React, { RefObject } from 'react'
 import { Position, usePopoverReposition } from '@consta/uikit/Popover'
 import { Text } from '@consta/uikit/Text'
 import { Tooltip } from '@consta/uikit/Tooltip'
-import { getDayPlural } from '@csssr/gpn-utils/lib/pluralization'
+import { getDayPlural } from '@consta/widgets-utils/lib/pluralization'
 import classnames from 'classnames'
 
 import { daysDiff, formatDate, getEndOfDay, getStartOfDay } from '@/_private/utils/time'

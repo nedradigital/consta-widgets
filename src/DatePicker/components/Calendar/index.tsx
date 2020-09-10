@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Text } from '@consta/uikit/Text'
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 import {
   addDays,

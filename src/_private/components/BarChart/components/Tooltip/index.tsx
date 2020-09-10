@@ -1,7 +1,7 @@
 import * as React from 'react'
 
 import { Tooltip as BaseTooltip } from '@consta/uikit/Tooltip'
-import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'
