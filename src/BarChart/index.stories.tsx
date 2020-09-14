@@ -21,6 +21,7 @@ export const WithThreeColumns = createStory(
       gridTicks={5}
       valuesTicks={1}
       groups={withThreeColumnsData.groups}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с группами по три столбца' }
@@ -38,6 +39,7 @@ export const WithNegativeValue = createStory(
       groups={withNegativeValueData.groups}
       isHorizontal={true}
       showValues={true}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с отрицательными значениями' }
@@ -55,6 +57,7 @@ export const WithShowValuesOnTopBar = createStory(
       groups={minimalData.groups}
       isHorizontal={false}
       showValues={true}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с подписью над столбцами' }
@@ -72,6 +75,7 @@ export const Minimalistic = createStory(
       groups={minimalData.groups}
       isHorizontal={true}
       showValues={false}
+      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'минималистичный' }

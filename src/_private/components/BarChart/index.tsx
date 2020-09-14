@@ -58,6 +58,7 @@ export type Props<T> = {
   isHorizontal?: boolean
   showValues?: boolean
   showReversed?: boolean
+  isXAxisLabelsSlanted?: boolean
   unit?: string
   unitPosition?: UnitPosition
   isDense?: boolean
@@ -128,6 +129,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     renderGroup,
     renderAxisValues = defaultRenderAxisValues,
     renderGroupsLabels = defaultRenderGroupsLabels,
+    isXAxisLabelsSlanted,
     onMouseEnterColumn,
     onMouseLeaveColumn,
   } = props
@@ -229,6 +231,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
       size: columnSize,
       isDense,
       getGridAreaName: getLabelGridAreaName(position),
+      isXAxisLabelsSlanted,
     })
 
   const getRenderAxisValues = (position: Position) => (

@@ -30,6 +30,7 @@ type Props = {
   size?: 's' | 'm'
   threshold?: Threshold
   formatValueForLabel?: FormatValue
+  isXAxisLabelsSlanted?: boolean
 }
 
 export const MultiBarChart: React.FC<Props> = props => {
