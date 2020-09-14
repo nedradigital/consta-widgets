@@ -151,8 +151,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     isHorizontal,
   })
   const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
-  const padding = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
-  const paddingCount = showReversed ? 2 : 1
+  const paddingRight = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
+  const paddingLeft = showReversed ? paddingRight : 0
   const paddingTop = !isHorizontal && showValues ? labelSize : 0
   const paddingBottom = showReversed ? paddingTop : 0
   const scaler = getScaler(maxValue)
@@ -169,8 +169,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const gridYTickValues = isHorizontal ? [] : gridItems
   const axisShowPositions = getAxisShowPositions({ isHorizontal, showReversed })
   const horizontalStyles = {
-    paddingLeft: showReversed ? padding : 0,
-    paddingRight: padding,
+    paddingLeft,
+    paddingRight,
   }
   const verticalStyles = {
     paddingTop,
@@ -204,10 +204,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         lastGroup.getBoundingClientRect().right - firstGroup.getBoundingClientRect().left
 
       changeGridStyle({
-        left: left + padding,
+        left: left + paddingLeft,
         top: top + paddingTop,
         height: newHeight - paddingTop - paddingBottom,
-        width: newWidth - padding * paddingCount,
+        width: newWidth - paddingLeft - paddingRight,
       })
     }
   }, [
@@ -215,8 +215,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     isHorizontal,
     width,
     height,
-    padding,
-    paddingCount,
+    paddingLeft,
+    paddingRight,
     paddingTop,
     paddingBottom,
     groupsRef,
