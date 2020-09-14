@@ -1,6 +1,12 @@
 import React from 'react'
 
 import { CoreBarChart, UnitPosition } from '@/_private/components/BarChart'
+import {
+  getCommonGroupsMaxColumns,
+  getGroupsDomain,
+  getValuesDomain,
+} from '@/_private/components/BarChart/helpers'
+import { defaultRenderGroup } from '@/_private/components/BarChart/renders'
 import { FormatValue } from '@/_private/types'
 
 import { getAxisShowPositions, getFormatter, transformGroupsToCommonGroups } from './helpers'
@@ -41,16 +47,28 @@ export const TornadoChart: React.FC<Props> = props => {
     ...rest
   } = props
 
+  const commonGroups = transformGroupsToCommonGroups(groups, colors)
+  const groupsDomain = getGroupsDomain(commonGroups)
+  const valuesDomain = getValuesDomain({
+    groups: commonGroups,
+    showReversed: true,
+  })
+  const maxColumn = getCommonGroupsMaxColumns(commonGroups)
   const axisShowPositions = getAxisShowPositions(xAxisShowPosition, yAxisShowPosition)
 
   return (
     <CoreBarChart
       {...rest}
-      groups={transformGroupsToCommonGroups(groups, colors)}
+      groups={commonGroups}
+      groupsDomain={groupsDomain}
+      valuesDomain={valuesDomain}
+      maxColumn={maxColumn}
       isHorizontal={true}
       size={size}
+      showReversed
       formatValueForLabel={getFormatter(formatValueForLabel)}
       getAxisShowPositions={() => axisShowPositions}
+      renderGroup={defaultRenderGroup}
     />
   )
 }

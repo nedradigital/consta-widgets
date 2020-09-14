@@ -1,90 +1,14 @@
 import React from 'react'
 
-import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 import _ from 'lodash'
 
 import { FormatValue } from '@/_private/types'
 import { Scaler } from '@/_private/utils/scale'
 
-import { Column } from './components/Column'
-import { RenderColumn, RenderSection } from './components/Group'
-import { Section } from './components/Section'
+import { Group, GroupItem } from './components/Group'
 import { Position, Ticks } from './components/Ticks'
-import { Size, toAxisSize } from './helpers'
-
-export const defaultRenderColumn: RenderColumn = props => <Column {...props} />
-
-export const defaultRenderSection: RenderSection = props => {
-  if (props.length === undefined) {
-    return null
-  }
-
-  const isRounded = props.columnSize !== 's' && !props.isDense && props.isLast
-  const isColumnLabel = props.showValues && props.isLast
-  const isSectionLabel =
-    _.isNumber(props.activeSectionIndex) && props.activeSectionIndex === props.index
-  const isActive =
-    isSectionLabel ||
-    (props.activeGroup && props.activeGroup === props.group) ||
-    (!props.activeGroup && !_.isNumber(props.activeSectionIndex))
-
-  const getLabel = () => {
-    if (isColumnLabel && isNotNil(props.columnTotal)) {
-      return props.formatValueForLabel(props.columnTotal)
-    }
-
-    if (isSectionLabel && isNotNil(props.value)) {
-      return props.formatValueForLabel(props.value)
-    }
-  }
-
-  return (
-    <Section
-      isActive={isActive}
-      isRounded={isRounded}
-      color={props.color}
-      isHorizontal={props.isHorizontal}
-      onMouseLeave={props.onMouseLeaveSection}
-      onMouseMove={event => {
-        if (!(event.currentTarget instanceof HTMLElement)) {
-          return
-        }
-
-        const children = event.currentTarget.parentElement?.children || []
-        const { left, top } = children[
-          props.isHorizontal ? 0 : children.length - 1
-        ].getBoundingClientRect()
-        const { width, height } = Array.from(children).reduce(
-          (prev, element) =>
-            props.isHorizontal
-              ? {
-                  width: prev.width + element.getBoundingClientRect().width,
-                  height: element.getBoundingClientRect().height,
-                }
-              : {
-                  width: element.getBoundingClientRect().width,
-                  height: prev.height + element.getBoundingClientRect().height,
-                },
-          { width: 0, height: 0 }
-        )
-
-        const x = left + width / 2
-        const y = top + height / 2
-        const selectedSections = props.sections.filter(isDefined)
-
-        props.onMouseEnterSection({
-          x,
-          y,
-          sections: props.isHorizontal ? selectedSections : [...selectedSections].reverse(),
-        })
-      }}
-      isReversed={props.isReversed}
-      length={props.length}
-      label={getLabel()}
-      onChangeLabelSize={props.onChangeLabelSize}
-    />
-  )
-}
+import { TooltipData } from './components/Tooltip'
+import { ColumnSize, Size, toAxisSize } from './helpers'
 
 export type RenderGroupsLabels = (props: {
   values: readonly string[]
@@ -109,4 +33,48 @@ export type RenderAxisValues = (props: {
 
 export const defaultRenderAxisValues: RenderAxisValues = ({ size, ...rest }) => {
   return <Ticks {...rest} size={toAxisSize(size)} showLine />
+}
+
+export type RenderGroup<T> = (props: {
+  item: T
+  index: number
+  isLast: boolean
+  isFirst: boolean
+  isDense: boolean
+  columnSize: ColumnSize
+  showValues: boolean
+  showReversed: boolean
+  isHorizontal: boolean
+  activeGroup?: string
+  activeSectionIndex?: number
+  scaler: (value: number) => number
+  onMouseEnterColumn: (groupName: string, params: TooltipData) => void
+  onMouseLeaveColumn: (groupName: string) => void
+  formatValueForLabel: FormatValue
+  onChangeLabelSize?: (size: number) => void
+}) => React.ReactNode
+
+const getGroupStyles = ({
+  isHorizontal,
+  isFirst,
+  isLast,
+}: {
+  isHorizontal: boolean
+  isFirst: boolean
+  isLast: boolean
+}) => ({
+  ...(!isHorizontal && isFirst ? { paddingLeft: 'var(--group-outer-padding)' } : {}),
+  ...(!isHorizontal && isLast ? { paddingRight: 'var(--group-outer-padding)' } : {}),
+  ...(isHorizontal && isFirst ? { paddingTop: 'var(--group-outer-padding)' } : {}),
+  ...(isHorizontal && isLast ? { paddingBottom: 'var(--group-outer-padding)' } : {}),
+})
+
+export const defaultRenderGroup: RenderGroup<GroupItem> = props => {
+  const style = getGroupStyles({
+    isHorizontal: props.isHorizontal,
+    isFirst: props.isFirst,
+    isLast: props.isLast,
+  })
+
+  return <Group {...props} style={style} />
 }

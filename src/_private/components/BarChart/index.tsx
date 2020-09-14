@@ -7,12 +7,11 @@ import _ from 'lodash'
 
 import { Grid } from '@/_private/components/Grid'
 import { FormatValue } from '@/_private/types'
-import { scaleLinear } from '@/_private/utils/scale'
+import { NumberRange, scaleLinear } from '@/_private/utils/scale'
 import { getTicks } from '@/_private/utils/ticks'
 import { useBaseSize } from '@/BaseSizeContext'
 
 import { ColumnSize } from './components/Column'
-import { ColumnItem, Group, RenderColumn, RenderSection } from './components/Group'
 import { Threshold } from './components/Threshold'
 import { Position, Size as TicksSize } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
@@ -23,34 +22,23 @@ import {
   getColumnSize,
   getEveryNTick,
   getGridSettings,
-  getGroupsDomain,
   getLabelGridAreaName,
   getRange,
   getScaler,
-  getValuesDomain,
   Size,
   toAxisSize,
 } from './helpers'
 import css from './index.css'
 import {
   defaultRenderAxisValues,
-  defaultRenderColumn,
   defaultRenderGroupsLabels,
-  defaultRenderSection,
   RenderAxisValues,
+  RenderGroup,
   RenderGroupsLabels,
 } from './renders'
 
 export const unitPositions = ['left', 'bottom', 'left-and-bottom', 'none'] as const
 export type UnitPosition = typeof unitPositions[number]
-
-export type Group = {
-  name: string
-  columns: ReadonlyArray<ColumnItem | undefined>
-  reversedColumns: ReadonlyArray<ColumnItem | undefined>
-}
-
-export type Groups = readonly Group[]
 
 export type OnMouseHoverColumn = (groupName: string) => void
 
@@ -59,23 +47,26 @@ export type Threshold = {
   color: string
 }
 
-export type Props = {
-  groups: Groups
+export type Props<T> = {
+  groupsDomain: readonly string[]
+  valuesDomain: NumberRange
+  groups: readonly T[]
+  maxColumn: number
   gridTicks: number
   valuesTicks: number
   size: Size
   isHorizontal?: boolean
   showValues?: boolean
+  showReversed?: boolean
   unit?: string
   unitPosition?: UnitPosition
   isDense?: boolean
   activeSectionIndex?: number
   activeGroup?: string
   threshold?: Threshold
+  renderGroup: RenderGroup<T>
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
-  renderColumn?: RenderColumn
-  renderSection?: RenderSection
   renderGroupsLabels?: RenderGroupsLabels
   renderAxisValues?: RenderAxisValues
   onMouseEnterColumn?: OnMouseHoverColumn
@@ -103,30 +94,38 @@ const axisTicksPositionsClasses = {
   top: css.topTicks,
 }
 
+const axisSizeClasses: Record<TicksSize, string> = {
+  m: css.asixSizeM,
+  s: css.asixSizeS,
+}
+
 const renderUnit = (className: string, unit: string, size: TicksSize) => (
   <Text as="div" size={unitSize[size]} view="secondary" className={className}>
     {unit}
   </Text>
 )
 
-export const CoreBarChart: React.FC<Props> = props => {
+export const CoreBarChart = <T,>(props: Props<T>) => {
   const {
+    groupsDomain,
+    valuesDomain,
     groups,
+    maxColumn,
     gridTicks,
     valuesTicks,
     isHorizontal = false,
-    showValues: showValuesProp = false,
+    showValues = false,
+    showReversed = false,
     size,
     unit,
     unitPosition = 'none',
-    isDense,
+    isDense = false,
     activeSectionIndex,
     activeGroup,
     threshold,
     getAxisShowPositions = defaultGetAxisShowPositions,
-    formatValueForLabel,
-    renderColumn = defaultRenderColumn,
-    renderSection = defaultRenderSection,
+    formatValueForLabel = String,
+    renderGroup,
     renderAxisValues = defaultRenderAxisValues,
     renderGroupsLabels = defaultRenderGroupsLabels,
     onMouseEnterColumn,
@@ -145,16 +144,7 @@ export const CoreBarChart: React.FC<Props> = props => {
   const [tooltipData, setTooltipData] = useState<TooltipData>()
   const [labelSize, changeLabelSize] = useState<number>(0)
 
-  const isMultiColumn = groups.some(group => group.columns.length > 1)
-  const showValues = showValuesProp && (isHorizontal || !isMultiColumn)
-  const showReversed =
-    groups.some(group => group.reversedColumns.some(column => column && column.sections)) ||
-    Boolean(threshold && threshold.value < 0)
-
-  const groupsDomain = getGroupsDomain(groups)
-  const valuesDomain = getValuesDomain({ groups, showReversed, threshold })
   const maxValue = valuesDomain[1]
-  const maxColumn = Math.max(...groups.map(group => group.columns.length))
   const columnSize = getColumnSize({
     size,
     valueLength: maxValue.toString().length,
@@ -165,7 +155,7 @@ export const CoreBarChart: React.FC<Props> = props => {
   const paddingCount = showReversed ? 2 : 1
   const paddingTop = !isHorizontal && showValues ? labelSize : 0
   const paddingBottom = showReversed ? paddingTop : 0
-  const scaler = getScaler({ maxValue, showReversed })
+  const scaler = getScaler(maxValue)
   const valuesScale = scaleLinear({
     domain: valuesDomain,
     range: getRange(
@@ -232,23 +222,12 @@ export const CoreBarChart: React.FC<Props> = props => {
     groupsRef,
   ])
 
-  const getGroupStyles = (index: number, isFirst: boolean, isLast: boolean) => ({
-    gridArea: `group${index}`,
-    ...horizontalStyles,
-    ...verticalStyles,
-    ...(!isHorizontal && isFirst ? { paddingLeft: 'var(--group-outer-padding)' } : {}),
-    ...(!isHorizontal && isLast ? { paddingRight: 'var(--group-outer-padding)' } : {}),
-    ...(isHorizontal && isFirst ? { paddingTop: 'var(--group-outer-padding)' } : {}),
-    ...(isHorizontal && isLast ? { paddingBottom: 'var(--group-outer-padding)' } : {}),
-    minHeight: !isHorizontal ? chartMinHeight : undefined,
-  })
-
   const getRenderGroupsLabels = (position: Position) =>
     renderGroupsLabels({
       values: groupsDomain,
       position,
       size: columnSize,
-      isDense: !!isDense,
+      isDense,
       getGridAreaName: getLabelGridAreaName(position),
     })
 
@@ -262,7 +241,7 @@ export const CoreBarChart: React.FC<Props> = props => {
         scaler: valuesScale,
         position,
         size: columnSize,
-        isDense: !!isDense,
+        isDense,
         formatValueForLabel,
       })}
     </div>
@@ -283,11 +262,7 @@ export const CoreBarChart: React.FC<Props> = props => {
         css.main,
         isHorizontal && css.isHorizontal,
         isDense && css.isDense,
-        size &&
-          {
-            s: css.asixSizeS,
-            m: css.asixSizeM,
-          }[toAxisSize(columnSize)],
+        size && axisSizeClasses[toAxisSize(columnSize)],
         columnSizeClasses[columnSize]
       )}
       style={{
@@ -322,34 +297,40 @@ export const CoreBarChart: React.FC<Props> = props => {
       {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, toAxisSize(columnSize))}
       {axisShowPositions.top && renderHorizontal('top')}
       {axisShowPositions.right && renderVertical('right')}
-      {groups.map((group, idx) => {
-        const lastGroup = idx === groups.length - 1
-        const firstGroup = idx === 0
+      {groups.map((group, groupIdx) => {
+        const isFirstGroup = groupIdx === 0
+        const isLastGroup = groupIdx === groups.length - 1
 
         return (
-          <Group
-            {...group}
-            ref={firstGroup || lastGroup ? groupsRef.current[firstGroup ? 0 : 1] : undefined}
-            key={group.name}
-            group={group.name}
-            size={columnSize}
-            isHorizontal={isHorizontal}
-            isNegative={showReversed}
-            showValues={showValues}
-            scaler={scaler}
-            isDense={isDense}
-            activeGroup={activeGroup}
-            activeSectionIndex={activeSectionIndex}
-            onChangeLabelSize={idx === 0 ? changeLabelSize : undefined}
-            maxValue={maxValue}
-            style={getGroupStyles(idx, firstGroup, lastGroup)}
-            formatValueForLabel={formatValueForLabel}
-            renderColumn={renderColumn}
-            renderSection={renderSection}
-            onMouseEnterColumn={params => handleMouseEnterColumn(group.name, params)}
-            onMouseLeaveColumn={() => handleMouseLeaveColumn(group.name)}
-            onMouseLeaveSection={() => setTooltipData(undefined)}
-          />
+          <div
+            key={groupIdx}
+            ref={isFirstGroup || isLastGroup ? groupsRef.current[isFirstGroup ? 0 : 1] : undefined}
+            style={{
+              gridArea: `group${groupIdx}`,
+              minHeight: !isHorizontal ? chartMinHeight : undefined,
+              ...horizontalStyles,
+              ...verticalStyles,
+            }}
+          >
+            {renderGroup({
+              item: group,
+              index: groupIdx,
+              isLast: isLastGroup,
+              isFirst: isFirstGroup,
+              isDense,
+              columnSize,
+              showValues,
+              showReversed,
+              isHorizontal,
+              activeGroup,
+              activeSectionIndex,
+              scaler,
+              onMouseEnterColumn: handleMouseEnterColumn,
+              onMouseLeaveColumn: handleMouseLeaveColumn,
+              formatValueForLabel,
+              onChangeLabelSize: groupIdx === 0 ? changeLabelSize : undefined,
+            })}
+          </div>
         )
       })}
       {axisShowPositions.bottom && renderHorizontal('bottom')}

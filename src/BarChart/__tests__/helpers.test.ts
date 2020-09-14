@@ -1,4 +1,4 @@
-import { Group as CoreGroup } from '@/_private/components/BarChart'
+import { GroupItem as CoreGroup } from '@/_private/components/BarChart/components/Group'
 
 import { Group } from '../'
 import { transformGroupsToCommonGroups } from '../helpers'
@@ -20,12 +20,12 @@ describe('transformGroupsToCoreGroups', () => {
         columns: [
           { total: 4, sections: [{ color: 'red', value: 4 }] },
           { total: 2, sections: [{ color: 'blue', value: 2 }] },
-          undefined,
+          { total: 0, sections: undefined },
         ],
         reversedColumns: [
           { total: 0, sections: undefined },
           { total: 0, sections: undefined },
-          undefined,
+          { total: 0, sections: undefined },
         ],
       },
     ]

@@ -14,9 +14,7 @@ type Props = {
   isRounded: boolean
   isActive: boolean
   label?: string
-  labelRef?: React.Ref<HTMLDivElement>
   onMouseEnter?: React.MouseEventHandler
-  onMouseMove?: React.MouseEventHandler
   onMouseLeave?: React.MouseEventHandler
   onChangeLabelSize?: (size: number) => void
 }
@@ -30,7 +28,6 @@ export const Section: React.FC<Props> = ({
   isActive,
   label,
   onMouseEnter,
-  onMouseMove,
   onMouseLeave,
   onChangeLabelSize,
 }) => {
@@ -58,7 +55,6 @@ export const Section: React.FC<Props> = ({
         background: color,
       }}
       onMouseEnter={onMouseEnter}
-      onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
       {label && (
