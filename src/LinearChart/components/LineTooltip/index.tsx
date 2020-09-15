@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Position } from '@consta/uikit/Popover'
 import { Tooltip } from '@consta/uikit/Tooltip'
-import { isDefined, isNotNil } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'

@@ -10,8 +10,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
-        node-version: 13
-        registry-url: 'https://npm.pkg.github.com'
+        node-version: 12
 
     - name: Установка yarn
       id: yarn-setup
@@ -27,10 +26,12 @@ jobs:
           ${{ runner.os }}-yarn-
     - name: Установка зависимостей
       run: yarn --frozen-lockfile
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
     - name: Сборка пакета
       run: yarn build
+    - name: Установка npm токена
+      uses: filipstefansson/set-npm-token-action@v1
+      with:
+        token: ${{ secrets.NPM_REGISTRY_TOKEN }}
     - name: Публикация пакета
       run: npm publish lib
       env:

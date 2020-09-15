@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Text } from '@consta/uikit/Text'
 import { Tooltip } from '@consta/uikit/Tooltip'
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined } from '@consta/widgets-utils/lib/type-guards'
 import * as _ from 'lodash'
 
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'

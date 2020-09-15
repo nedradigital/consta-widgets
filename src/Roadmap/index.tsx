@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { Position } from '@consta/uikit/Popover'
 import { Table, TableColumn, TableFilters, TableRow } from '@consta/uikit/Table'
-import { isDefined } from '@csssr/gpn-utils/lib/type-guards'
+import { isDefined } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import { MonthsTitles } from '@/Roadmap/components/MonthsTitles'

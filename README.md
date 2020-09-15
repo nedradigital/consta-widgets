@@ -11,10 +11,10 @@
 
 ```sh
 # NPM
-$ npm i @csssr/gpn-components
+$ npm i @consta/widgets
 
 # Yarn
-$ yarn add @csssr/gpn-components
+$ yarn add @consta/widgets
 ```
 
 ### Зависимости
@@ -26,8 +26,8 @@ $ yarn add @csssr/gpn-components
 Для корректной работы скейлинга компонентов не в порталах необходимо в корневой компонент добавить Provider для управления скейлингом, пример настройки скейлинга компонентов с установкой темы:
 
 ```tsx
-import { presetGpnScaling } from '@csssr/gpn-components/theme'
-import { BaseSizeProvider } from '@csssr/gpn-components/BaseSizeContext'
+import { presetGpnScaling } from '@consta/widgets/theme'
+import { BaseSizeProvider } from '@consta/widgets/BaseSizeContext'
 import { presetGpnDisplay, Theme } from '@consta/uikit/Theme'
 
 const themePreset = {
@@ -53,7 +53,7 @@ export const App = () => {
 Пример импорта компонента:
 
 ```js
-import { BarChart } from '@csssr/gpn-components/Barchart'
+import { BarChart } from '@consta/widgets/Barchart'
 ```
 
 ## Разработка
@@ -62,9 +62,7 @@ import { BarChart } from '@csssr/gpn-components/Barchart'
 
 Рабочее окружение должно содержать NodeJS и Yarn, необходимые версии можно узнать в файле [package.json](./package.json) в блоке **engines**.
 
-Для установки пакетов из GitHub Packages необходимо пройти авторизацию, подробнее про то как авторизоваться и настроить пакетный менеджер на использование GitHub Packages можно прочитать в [официальной документации](https://help.github.com/en/packages/using-github-packages-with-your-projects-ecosystem/configuring-npm-for-use-with-github-packages).
-
-После авторизации в GitHub Packages у Вас будет достаточно прав на скачивание пакета из реестра и установки зависимостей проекта, для этого можно выполнить команду:
+Для установки зависимостей следует выполнить команду:
 
 ```sh
 $ yarn install
@@ -72,7 +70,7 @@ $ yarn install
 
 ### Публикация
 
-Способы публикации новой версии пакета в GitHub Packages описаны в разделе документации [Обновление версии и публикация пакета](http://master.gpn-components.csssr.cloud/?path=/docs/документация-обновление-версии-и-публикация-пакета--page).
+Способы публикации новой версии пакета в npm описаны в разделе документации [Обновление версии и публикация пакета](https://consta-widgets-git-master.consta.vercel.app/?path=/docs/документация-обновление-версии-и-публикация-пакета--page).
 
 ### Основные команды
 
@@ -98,4 +96,4 @@ $ yarn test
 
 ## Документация
 
-См. [раздел «Документация»](http://master.gpn-components.csssr.cloud/?path=/docs/документация-договоренности-по-оформлению-кода--page) в Storybook.
+См. [раздел «Документация»](https://consta-widgets-git-master.consta.vercel.app/?path=/docs/документация-договоренности-по-оформлению-кода--page) в Storybook.
