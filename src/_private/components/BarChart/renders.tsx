@@ -55,27 +55,4 @@ export type RenderGroup<T> = (props: {
   onChangeLabelSize?: (size: number) => void
 }) => React.ReactNode
 
-const getGroupStyles = ({
-  isHorizontal,
-  isFirst,
-  isLast,
-}: {
-  isHorizontal: boolean
-  isFirst: boolean
-  isLast: boolean
-}) => ({
-  ...(!isHorizontal && isFirst ? { paddingLeft: 'var(--group-outer-padding)' } : {}),
-  ...(!isHorizontal && isLast ? { paddingRight: 'var(--group-outer-padding)' } : {}),
-  ...(isHorizontal && isFirst ? { paddingTop: 'var(--group-outer-padding)' } : {}),
-  ...(isHorizontal && isLast ? { paddingBottom: 'var(--group-outer-padding)' } : {}),
-})
-
-export const defaultRenderGroup: RenderGroup<GroupItem> = props => {
-  const style = getGroupStyles({
-    isHorizontal: props.isHorizontal,
-    isFirst: props.isFirst,
-    isLast: props.isLast,
-  })
-
-  return <Group {...props} style={style} />
-}
+export const defaultRenderGroup: RenderGroup<GroupItem> = Group
