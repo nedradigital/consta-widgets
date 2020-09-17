@@ -229,7 +229,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
       values: groupsDomain,
       position,
       size: columnSize,
-      isDense,
       getGridAreaName: getLabelGridAreaName(position),
       isXAxisLabelsSlanted,
     })
@@ -244,7 +243,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         scaler: valuesScale,
         position,
         size: columnSize,
-        isDense,
         formatValueForLabel,
       })}
     </div>
