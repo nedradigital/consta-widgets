@@ -1,6 +1,6 @@
 .line {
-  --chart-line-height: calc-size(8);
-  --space-between-lines: calc-size(1);
+  --chart-line-height: 8px;
+  --space-between-lines: 1px;
 
   position: absolute;
   top: calc(var(--line-height-text-m) / 2);

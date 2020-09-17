@@ -3,7 +3,7 @@
 
 .group {
   --tick-line-color: var(--color-bg-border);
-  --tick-line-size: calc-size(4);
+  --tick-line-size: 4px;
   --tick-line-margin: var(--space-2xs);
 
   display: flex;
@@ -100,11 +100,11 @@
   &.isLeft {
     justify-content: flex-end;
 
-    max-width: calc-size(160);
+    max-width: 160px;
   }
 
   &.isRight {
-    max-width: calc-size(160);
+    max-width: 160px;
   }
 
   &.isXAxisLabelsSlanted {
@@ -128,7 +128,7 @@
 
     overflow: hidden;
 
-    height: calc-size(15);
+    height: 15px;
 
     white-space: pre;
 

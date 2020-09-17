@@ -32,13 +32,13 @@
 }
 
 .icon {
-  margin-bottom: calc-size(-3);
+  margin-bottom: -3px;
 
   vertical-align: baseline;
 
   :--extra-small &,
   :--small & {
-    margin-bottom: calc-size(-1);
+    margin-bottom: -1px;
   }
 }
 
@@ -49,20 +49,20 @@
 
   :--extra-small &,
   :--small & {
-    margin-bottom: calc-size(-1);
+    margin-bottom: -1px;
   }
 }
 
 .line {
-  width: calc-size(20);
-  height: calc-size(2);
+  width: 20px;
+  height: 2px;
 
   :--left & {
     vertical-align: middle;
   }
 
   &.isBold {
-    height: calc-size(4);
+    height: 4px;
   }
 }
 

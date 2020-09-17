@@ -26,14 +26,14 @@
 
   &.sizeXS,
   &.sizeS {
-    --chart-line-size: calc-size(4);
+    --chart-line-size: 4px;
   }
 
   &.sizeM {
-    --chart-line-size: calc-size(12);
+    --chart-line-size: 12px;
   }
 
   &.sizeL {
-    --chart-line-size: calc-size(20);
+    --chart-line-size: 20px;
   }
 }

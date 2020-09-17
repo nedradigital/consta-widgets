@@ -9,7 +9,6 @@ import { Grid } from '@/_private/components/Grid'
 import { FormatValue } from '@/_private/types'
 import { NumberRange, scaleLinear } from '@/_private/utils/scale'
 import { getTicks } from '@/_private/utils/ticks'
-import { useBaseSize } from '@/BaseSizeContext'
 
 import { ColumnSize } from './components/Column'
 import { Threshold } from './components/Threshold'
@@ -142,7 +141,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const { width, height } = useComponentSize(ref)
   const [gridStyle, changeGridStyle] = useState({ width: 0, height: 0, left: 0, top: 0 })
 
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const [tooltipData, setTooltipData] = useState<TooltipData>()
   const [labelSize, changeLabelSize] = useState<number>(0)
 
@@ -152,8 +150,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     valueLength: maxValue.toString().length,
     isHorizontal,
   })
-  const chartMinHeight = getCalculatedSizeWithBaseSize(CHART_MIN_HEIGHT)
-  const paddingRight = isHorizontal && showValues ? getCalculatedSizeWithBaseSize(50) : 0
+  const paddingRight = isHorizontal && showValues ? 50 : 0
   const paddingLeft = showReversed ? paddingRight : 0
   const paddingTop = !isHorizontal && showValues ? labelSize : 0
   const paddingBottom = showReversed ? paddingTop : 0
@@ -310,7 +307,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             ref={isFirstGroup || isLastGroup ? groupsRef.current[isFirstGroup ? 0 : 1] : undefined}
             style={{
               gridArea: `group${groupIdx}`,
-              minHeight: !isHorizontal ? chartMinHeight : undefined,
+              minHeight: !isHorizontal ? CHART_MIN_HEIGHT : undefined,
               ...horizontalStyles,
               ...verticalStyles,
             }}
