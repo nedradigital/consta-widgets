@@ -1,3 +1,4 @@
+import { isTruthy } from '@consta/widgets-utils/lib/type-guards'
 import { startCase, sum } from 'lodash'
 
 import { getEveryN } from '@/_private/utils/array'
@@ -166,50 +167,82 @@ export const getScaler = (maxValue: number) => (value: number) => {
 const getAreaNames = (count: number, handler: (i: number) => string) =>
   [...Array(count).keys()].map(handler).join(' ')
 
-export const getGridSettings = ({
-  isHorizontal,
-  countGroups,
-  showReversed,
-  showUnitBottom,
-  showUnitLeft,
-  maxColumn,
-}: {
-  isHorizontal: boolean
-  countGroups: number
-  showReversed: boolean
-  showUnitBottom: boolean
-  showUnitLeft: boolean
-  maxColumn: number
-}): React.CSSProperties =>
-  isHorizontal
-    ? {
-        gridTemplateRows: `${showUnitLeft ? 'auto ' : ''}${getAreaNames(
-          countGroups,
-          () => '1fr'
-        )} auto${showUnitBottom ? ' auto' : ''}`,
-        gridTemplateColumns: `auto 1fr${showReversed ? ' auto' : ''}`,
-        gridTemplateAreas:
-          (showUnitLeft ? `"topLeft topLeft${showReversed ? ' topLeft' : ''}" ` : '') +
-          getAreaNames(
-            countGroups,
-            index => `"labelLeft${index} group${index}${showReversed ? ` labelRight${index}` : ''}"`
-          ) +
-          ` "bottomLeft bottomTicks${showReversed ? ' bottomRight' : ''}" ` +
-          `${showUnitBottom ? `"bottomLeft bottomUnit${showReversed ? ' bottomUnit' : ''}"` : ''}`,
-      }
-    : {
-        gridTemplateRows: `auto 1fr auto${showUnitBottom ? ' auto' : ''}`,
-        gridTemplateColumns: `auto ${getAreaNames(
-          countGroups,
-          () =>
-            `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn})), 1fr)`
-        )}`,
-        gridTemplateAreas:
-          `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}" ` +
-          `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}" ` +
-          `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}" ` +
-          (showUnitBottom ? `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"` : ''),
-      }
+const joinStrings = (arr: ReadonlyArray<string | boolean | undefined>): string =>
+  arr.filter(isTruthy).join(' ')
+
+const joinAreasRow: typeof joinStrings = arr => `"${joinStrings(arr)}"`
+
+export const getGridSettings = (
+  params: {
+    countGroups: number
+    showUnitBottom: boolean
+    showUnitLeft: boolean
+    maxColumn: number
+  } & ({ isHorizontal: true; axisShowPositions: ShowPositions } | { isHorizontal: false })
+): React.CSSProperties => {
+  const { countGroups, showUnitBottom, showUnitLeft, maxColumn } = params
+
+  if (params.isHorizontal) {
+    const { axisShowPositions } = params
+    const withTopRow = axisShowPositions.top || showUnitLeft
+    const withBottomTicksRow = axisShowPositions.bottom
+    const withBottomUnitRow = showUnitBottom
+    const withLeftColumn = axisShowPositions.left || showUnitLeft
+    const withRightColumn = axisShowPositions.right
+
+    return {
+      gridTemplateRows: joinStrings([
+        withTopRow && 'auto',
+        getAreaNames(countGroups, () => '1fr'),
+        withBottomTicksRow && 'auto',
+        withBottomUnitRow && 'auto',
+      ]),
+      gridTemplateColumns: joinStrings([
+        withLeftColumn && 'auto',
+        '1fr',
+        withRightColumn && 'auto',
+      ]),
+      gridTemplateAreas: joinStrings([
+        withTopRow &&
+          joinAreasRow([withLeftColumn && 'topLeft', 'topTicks', withRightColumn && 'topRight']),
+        getAreaNames(countGroups, index =>
+          joinAreasRow([
+            withLeftColumn && `labelLeft${index}`,
+            `group${index}`,
+            withRightColumn && `labelRight${index}`,
+          ])
+        ),
+        withBottomTicksRow &&
+          joinAreasRow([
+            withLeftColumn && 'bottomLeft',
+            'bottomTicks',
+            withRightColumn && 'bottomRight',
+          ]),
+        withBottomUnitRow &&
+          joinAreasRow([
+            withLeftColumn && 'bottomLeft',
+            'bottomUnit',
+            withRightColumn && 'bottomUnit',
+          ]),
+      ]),
+    }
+  }
+
+  return {
+    gridTemplateRows: joinStrings(['auto', '1fr', 'auto', showUnitBottom && 'auto']),
+    gridTemplateColumns: `auto ${getAreaNames(
+      countGroups,
+      () =>
+        `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn})), 1fr)`
+    )}`,
+    gridTemplateAreas: joinStrings([
+      `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,
+      `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}"`,
+      `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}"`,
+      showUnitBottom && `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"`,
+    ]),
+  }
+}
 
 export const getLabelGridAreaName = (position: Position) => (index: number) => {
   return `label${startCase(position)}${index}`

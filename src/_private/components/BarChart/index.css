@@ -75,25 +75,6 @@
   position: absolute;
 
   overflow: visible;
-
-  &.isRight {
-    right: 0;
-  }
-
-  &.isLeft {
-    left: 0;
-  }
-}
-
-.chart {
-  display: flex;
-
-  width: 100%;
-  height: 100%;
-
-  &.isHorizontal {
-    flex-direction: column;
-  }
 }
 
 .topTicks,
@@ -126,23 +107,11 @@
   justify-self: end;
 }
 
-.bottomLeft {
-  grid-area: bottomLeft;
-}
-
-.bottomRight {
-  grid-area: bottomRight;
-}
-
 .topLeftUnit {
   grid-area: topLeft;
 
   margin-right: var(--space-m);
   margin-bottom: var(--space-xs);
-}
-
-.graph {
-  grid-area: graph;
 }
 
 .bottomUnit {
