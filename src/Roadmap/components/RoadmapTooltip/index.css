@@ -2,8 +2,8 @@
   display: inline-flex;
 
   box-sizing: border-box;
-  width: calc-size(12);
-  height: calc-size(12);
+  width: 12px;
+  height: 12px;
 
   vertical-align: middle;
 

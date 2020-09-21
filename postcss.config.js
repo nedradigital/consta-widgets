@@ -1,18 +1,10 @@
 const path = require('path')
-const { calcSize } = require('@consta/widgets-utils/lib/css')
 
 // При локальной сборке после изменений в этом конфиге нужно удалить кэш babel-плагина (папка /tmp/bptp-*)
 // https://github.com/wbyoung/babel-plugin-transform-postcss#caching
 
 module.exports = ctx => ({
   plugins: [
-    require('postcss-functions')({
-      functions: {
-        'calc-size': function (size) {
-          return calcSize(size, isNaN(size))
-        },
-      },
-    }),
     require('postcss-mixins')({
       mixinsFiles: path.join(process.cwd(), 'src/styles/mixins/**/*.css'),
     }),

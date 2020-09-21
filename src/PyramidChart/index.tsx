@@ -3,8 +3,6 @@ import React from 'react'
 import { Text } from '@consta/uikit/Text'
 import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 
-import { useBaseSize } from '@/BaseSizeContext'
-
 import css from './index.css'
 
 export type Data = {
@@ -79,15 +77,9 @@ export const PyramidChart: React.FC<Props> = ({
   constraint = true,
   fontSize = 's',
 }) => {
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
-
-  const pyramidWidth = getCalculatedSizeWithBaseSize(PYRAMID_WIDTH)
-  const sectionHeight = getCalculatedSizeWithBaseSize(SECTION_HEIGHT)
-  const sectionTextWidth = getCalculatedSizeWithBaseSize(SECTION_TEXT_WIDTH)
-
-  const containerHeightResponsive = data.length * sectionHeight
-  const pyramidWidthHalf = pyramidWidth / 2
-  const tableWidthResponsive = constraint ? pyramidWidth : '100%'
+  const containerHeightResponsive = data.length * SECTION_HEIGHT
+  const pyramidWidthHalf = PYRAMID_WIDTH / 2
+  const tableWidthResponsive = constraint ? PYRAMID_WIDTH : '100%'
 
   const items = data.map(item => {
     const value = isNotNil(item.value) ? item.value : '–'
@@ -102,18 +94,18 @@ export const PyramidChart: React.FC<Props> = ({
     <div className={css.main}>
       <div
         className={css.svgWrapper}
-        style={{ width: pyramidWidth, height: containerHeightResponsive }}
+        style={{ width: PYRAMID_WIDTH, height: containerHeightResponsive }}
       >
-        <svg viewBox={`0 0 ${pyramidWidth} ${containerHeightResponsive}`}>
-          {buildTriangleSectionPath(data, containerHeightResponsive, pyramidWidth, false, colors)}
-          {buildTriangleSectionPath(data, containerHeightResponsive, pyramidWidth, true, colors)}
+        <svg viewBox={`0 0 ${PYRAMID_WIDTH} ${containerHeightResponsive}`}>
+          {buildTriangleSectionPath(data, containerHeightResponsive, PYRAMID_WIDTH, false, colors)}
+          {buildTriangleSectionPath(data, containerHeightResponsive, PYRAMID_WIDTH, true, colors)}
         </svg>
       </div>
       <table
         className={css.table}
         style={{
-          minWidth: pyramidWidth,
-          maxWidth: pyramidWidthHalf + sectionTextWidth,
+          minWidth: PYRAMID_WIDTH,
+          maxWidth: pyramidWidthHalf + SECTION_TEXT_WIDTH,
           width: tableWidthResponsive,
           height: containerHeightResponsive,
         }}

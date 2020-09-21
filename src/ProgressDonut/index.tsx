@@ -3,7 +3,6 @@ import React from 'react'
 import { CoreDonutChart } from '@/_private/components/DonutChart'
 import { HalfDonut } from '@/_private/components/DonutChart/components/Donut'
 import { isHalfDonutHorizontal } from '@/_private/components/DonutChart/helpers'
-import { useBaseSize } from '@/BaseSizeContext'
 import { getValueRatio } from '@/ProgressBar'
 
 import { DEFAULT_DATA, getData, getMinChartSize, getTextData } from './helpers'
@@ -37,7 +36,6 @@ export const ProgressDonut: React.FC<Props> = ({
   halfDonut,
   ...rest
 }) => {
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
   const data = { ...DEFAULT_DATA, ...rest.data }
   const donutTextData = getTextData(title, rest.data)
   const { value, valueMin, valueMax } = data
@@ -48,9 +46,7 @@ export const ProgressDonut: React.FC<Props> = ({
       {...rest}
       data={getData({ title, data, halfDonut, colors })}
       textData={donutTextData}
-      textPaddingFromBorder={
-        isHalfDonutHorizontal(halfDonut) ? getCalculatedSizeWithBaseSize(8) : 0
-      }
+      textPaddingFromBorder={isHalfDonutHorizontal(halfDonut) ? 8 : 0}
       titlePosition={halfDonut === 'top' ? 'top' : 'bottom'}
       getCirclesCount={() => PROGRESS_DONUT_CIRCLES_COUNT}
       getMinChartSize={() => getMinChartSize(halfDonut, showText, showTitle)}

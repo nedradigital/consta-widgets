@@ -1,13 +1,9 @@
 import React from 'react'
 
-import { DEFAULT_BASE_SIZE } from '@consta/widgets-utils/lib/css'
-import { isDefined } from '@consta/widgets-utils/lib/type-guards'
-import { number, text } from '@storybook/addon-knobs'
+import { text } from '@storybook/addon-knobs'
 import { DecoratorFn } from '@storybook/react'
 import { EnvironmentDecoratorParams } from '@storybook/types'
 import { withThemes } from 'storybook-addon-themes'
-
-import { BaseSizeProvider } from '@/BaseSizeContext'
 
 export const ENVIRONMENT_GROUP_ID = 'environment'
 
@@ -34,12 +30,8 @@ const getValue = (value?: number | string) => {
 }
 
 export const environmentDecorator = (): DecoratorFn => (storyFn, context) => {
-  const { scaling = true, style } = (context.parameters.environment ||
-    {}) as EnvironmentDecoratorParams
+  const { style } = (context.parameters.environment || {}) as EnvironmentDecoratorParams
 
-  const baseSize = scaling
-    ? number('base-size', DEFAULT_BASE_SIZE, undefined, ENVIRONMENT_GROUP_ID)
-    : undefined
   const Wrapper: React.FC = ({ children }) =>
     style ? (
       <div
@@ -72,9 +64,5 @@ export const environmentDecorator = (): DecoratorFn => (storyFn, context) => {
     context
   )
 
-  return isDefined(baseSize) ? (
-    <BaseSizeProvider value={baseSize}>{content}</BaseSizeProvider>
-  ) : (
-    content
-  )
+  return content
 }
