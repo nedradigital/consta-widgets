@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { object, select } from '@storybook/addon-knobs'
+import { object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { unitPositions } from '@/_private/components/BarChart'
@@ -9,17 +9,26 @@ import { createMetadata, createStory } from '@/_private/storybook'
 import { TornadoChart } from './'
 import { interactiveData } from './data.mock'
 
-const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+const getCommonProps = () => {
+  const unit = text('unit', interactiveData.unit)
+  const unitPosition = select('unitPosition', unitPositions, 'none')
+  const colors = object('colors', interactiveData.colors)
+
+  return {
+    unit,
+    unitPosition,
+    size: 'm',
+    colors,
+    groups: interactiveData.groups,
+    formatValueForTooltip: (v: number) => `${v} ${unit}`,
+  } as const
+}
 
 export const Interactive = createStory(() => (
   <TornadoChart
-    colors={object('colors', interactiveData.colors)}
-    groups={interactiveData.groups}
-    unit={interactiveData.unit}
-    unitPosition={getUnitPosition()}
+    {...getCommonProps()}
     gridTicks={5}
     valuesTicks={1}
-    size="m"
     xAxisShowPosition="bottom"
     yAxisShowPosition="both"
   />
@@ -28,13 +37,9 @@ export const Interactive = createStory(() => (
 export const Minimalistic = createStory(
   () => (
     <TornadoChart
-      colors={object('colors', interactiveData.colors)}
-      groups={interactiveData.groups}
-      unit={interactiveData.unit}
-      unitPosition={getUnitPosition()}
+      {...getCommonProps()}
       gridTicks={0}
       valuesTicks={0}
-      size="m"
       xAxisShowPosition="none"
       yAxisShowPosition="left"
     />

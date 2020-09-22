@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { object, select } from '@storybook/addon-knobs'
+import { object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { unitPositions } from '@/_private/components/BarChart'
@@ -9,19 +9,26 @@ import { createMetadata, createStory } from '@/_private/storybook'
 import { BarChart } from './'
 import { minimalData, withNegativeValueData, withThreeColumnsData } from './data.mock'
 
-const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+const getCommonProps = (initialUnit: string) => {
+  const unit = text('unit', initialUnit)
+  const unitPosition = select('unitPosition', unitPositions, 'none')
+
+  return {
+    gridTicks: 5,
+    valuesTicks: 1,
+    size: 'm',
+    formatValueForTooltip: (v: number) => `${v} ${unit}`,
+    unit,
+    unitPosition,
+  } as const
+}
 
 export const WithThreeColumns = createStory(
   () => (
     <BarChart
+      {...getCommonProps(withThreeColumnsData.unit)}
       colors={object('colors', withThreeColumnsData.colors)}
-      unit={withThreeColumnsData.unit}
-      unitPosition={getUnitPosition()}
-      size="m"
-      gridTicks={5}
-      valuesTicks={1}
       groups={withThreeColumnsData.groups}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с группами по три столбца' }
@@ -30,16 +37,11 @@ export const WithThreeColumns = createStory(
 export const WithNegativeValue = createStory(
   () => (
     <BarChart
+      {...getCommonProps(withNegativeValueData.unit)}
       colors={object('colors', withNegativeValueData.colors)}
-      unit={withNegativeValueData.unit}
-      unitPosition={getUnitPosition()}
-      size="m"
-      gridTicks={5}
-      valuesTicks={1}
       groups={withNegativeValueData.groups}
       isHorizontal={true}
       showValues={true}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с отрицательными значениями' }
@@ -48,16 +50,12 @@ export const WithNegativeValue = createStory(
 export const WithShowValuesOnTopBar = createStory(
   () => (
     <BarChart
+      {...getCommonProps(minimalData.unit)}
       colors={object('colors', minimalData.colors)}
-      unit={minimalData.unit}
-      unitPosition={getUnitPosition()}
       size="auto"
-      gridTicks={5}
-      valuesTicks={1}
       groups={minimalData.groups}
       isHorizontal={false}
       showValues={true}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с подписью над столбцами' }
@@ -66,16 +64,13 @@ export const WithShowValuesOnTopBar = createStory(
 export const Minimalistic = createStory(
   () => (
     <BarChart
+      {...getCommonProps(minimalData.unit)}
       colors={object('colors', minimalData.colors)}
-      unit={minimalData.unit}
-      unitPosition={getUnitPosition()}
-      size="m"
       gridTicks={0}
       valuesTicks={0}
       groups={minimalData.groups}
       isHorizontal={true}
       showValues={false}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'минималистичный' }
@@ -84,13 +79,12 @@ export const Minimalistic = createStory(
 export const WithThreshold = createStory(
   () => (
     <BarChart
+      {...getCommonProps(minimalData.unit)}
       colors={object('colors', minimalData.colors)}
       groups={minimalData.groups}
       threshold={object('threshold', minimalData.threshold)}
-      unit={minimalData.unit}
-      unitPosition={getUnitPosition()}
       gridTicks={4}
-      valuesTicks={1}
+      isXAxisLabelsSlanted
     />
   ),
   { name: 'с предельным значением' }

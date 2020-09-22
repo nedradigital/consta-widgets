@@ -16,6 +16,7 @@ type Props = {
   activeSectionIndex?: number
   activeGroup?: string
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
   onMouseEnterColumn?: OnMouseHoverColumn
   onMouseLeaveColumn?: OnMouseHoverColumn
 }
