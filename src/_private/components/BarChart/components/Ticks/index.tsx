@@ -30,7 +30,6 @@ type Props<T> = {
   | {
       isLabel: true
       getGridAreaName: (index: number) => string
-      isDense?: boolean
     }
   | {
       isLabel?: never
@@ -146,7 +145,7 @@ export function Ticks<T>(props: Props<T>) {
           align={textAlign}
           title={textValue}
           className={classnames(css.text)}
-          lineHeight={props.isLabel && props.isDense ? 's' : undefined}
+          lineHeight="s"
         >
           {(isXAxisLabelsSlanted && (
             <span ref={refs[idx]}>{cropText(textValue, SLANTED_TEXT_MAX_LENGTH)}</span>
