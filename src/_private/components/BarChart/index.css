@@ -46,27 +46,27 @@
   }
 
   &.columnSizeM {
-    --column-size: calc-size(12);
+    --column-size: 12px;
     --column-padding: var(--space-2xs);
   }
 
   &.columnSizeL {
-    --column-size: calc-size(16);
+    --column-size: 16px;
     --column-padding: var(--space-2xs);
   }
 
   &.columnSizeXL {
-    --column-size: calc-size(24);
+    --column-size: 24px;
     --column-padding: var(--space-2xs);
   }
 
   &.columnSize2XL {
-    --column-size: calc-size(36);
+    --column-size: 36px;
     --column-padding: var(--space-2xs);
   }
 
   &.columnSize3XL {
-    --column-size: calc-size(42);
+    --column-size: 42px;
     --column-padding: var(--space-2xs);
   }
 }
@@ -86,7 +86,7 @@
 
 .leftTicks,
 .rightTicks {
-  max-width: calc-size(160);
+  max-width: 160px;
 }
 
 .topTicks {

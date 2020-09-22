@@ -2,8 +2,6 @@ import React from 'react'
 
 import { presetGpnDark, presetGpnDefault, presetGpnDisplay, Theme } from '@consta/uikit/Theme'
 
-import { presetGpnScaling } from '@/theme'
-
 type ThemeName = 'gpnDefault' | 'gpnDark' | 'gpnDisplay'
 type Theme = {
   name: ThemeName
@@ -45,14 +43,7 @@ export const listOfThemes: readonly Theme[] = [
 
 export const ThemeDecorator: React.FC<Props> = ({ children, themeName }) => {
   return (
-    <Theme
-      className="Theme_gpnScaling"
-      preset={{
-        ...getTheme(themeName),
-        ...presetGpnScaling,
-      }}
-      style={{ background: 'var(--color-bg-default)' }}
-    >
+    <Theme preset={getTheme(themeName)} style={{ background: 'var(--color-bg-default)' }}>
       {children}
     </Theme>
   )

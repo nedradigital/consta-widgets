@@ -233,7 +233,8 @@ export const getGridSettings = (
     gridTemplateColumns: `auto ${getAreaNames(
       countGroups,
       () =>
-        `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn})), 1fr)`
+        `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn -
+          1})), 1fr)`
     )}`,
     gridTemplateAreas: joinStrings([
       `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,

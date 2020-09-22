@@ -405,7 +405,7 @@ describe('getGridSettings', () => {
         gridTemplateRows: 'auto 1fr auto',
         gridTemplateColumns:
           'auto' +
-          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 2)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +
@@ -426,7 +426,7 @@ describe('getGridSettings', () => {
         gridTemplateRows: 'auto 1fr auto auto',
         gridTemplateColumns:
           'auto' +
-          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 3)), 1fr)'.repeat(3),
+          ' minmax(calc((var(--column-size) * 3) + (var(--column-padding) * 2)), 1fr)'.repeat(3),
         gridTemplateAreas:
           '"topLeft labelTop0 labelTop1 labelTop2" ' +
           '"leftTicks group0 group1 group2" ' +

@@ -38,12 +38,12 @@
   }
 
   &.isProgressCell {
-    --progress-min-width: calc-size(160);
+    --progress-min-width: 160px;
 
     min-width: var(--progress-min-width);
 
     .sizeXS & {
-      --progress-min-width: calc-size(100);
+      --progress-min-width: 100px;
     }
   }
 

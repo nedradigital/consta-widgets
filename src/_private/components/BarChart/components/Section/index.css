@@ -6,7 +6,7 @@
 @custom-selector :--straight :not(.isReversed);
 
 .section {
-  --round-radius: calc-size(2);
+  --round-radius: 2px;
 
   position: relative;
 

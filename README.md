@@ -21,32 +21,6 @@ $ yarn add @consta/widgets
 
 Для работы пакета необходимо установить библиотеку [`@consta/uikit`](https://www.npmjs.com/package/@consta/uikit) и [настроить тему](https://consta-uikit.vercel.app/?path=/docs/components-theme--playground).
 
-### Настройка скейлинга
-
-Для корректной работы скейлинга компонентов не в порталах необходимо в корневой компонент добавить Provider для управления скейлингом, пример настройки скейлинга компонентов с установкой темы:
-
-```tsx
-import { presetGpnScaling } from '@consta/widgets/theme'
-import { BaseSizeProvider } from '@consta/widgets/BaseSizeContext'
-import { presetGpnDisplay, Theme } from '@consta/uikit/Theme'
-
-const themePreset = {
-  ...presetGpnDisplay,
-  ...presetGpnScaling,
-}
-
-export const App = () => {
-  return (
-    <BaseSizeProvider value={16}>
-      <Theme className="Theme_gpnScaling" preset={themePreset}>
-        Some components
-      </Theme>
-    </BaseSizeProvider>
-  )
-}
-```
-
-> Компонент `<Theme/>` обязательно должен идти после `<BaseSizeProvider/>`, так как в случае использования скейлинга тема `themePresetGpnScaling` использует значение из `<BaseSizeProvider/>`.
 
 ### Использование компонентов
 

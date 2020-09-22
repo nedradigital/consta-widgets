@@ -4,8 +4,6 @@ import { IconWarning } from '@consta/uikit/IconWarning'
 import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
-import { useBaseSize } from '@/BaseSizeContext'
-
 import css from './index.css'
 
 export const labelTypes = ['dot', 'line', 'warning'] as const
@@ -51,11 +49,8 @@ export const LegendItem: React.FC<Props> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
-
   const positionClass = ['dot', 'warning'].includes(type) ? css.left : css[position]
-  const dotSize = getCalculatedSizeWithBaseSize(DOT_SIZE)
-  const dotStyle = type === 'dot' ? { width: dotSize, height: dotSize } : {}
+  const dotStyle = type === 'dot' ? { width: DOT_SIZE, height: DOT_SIZE } : {}
 
   return (
     <div

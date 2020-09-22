@@ -4,8 +4,6 @@ import { Textfit } from 'react-textfit'
 import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 
-import { useBaseSize } from '@/BaseSizeContext'
-
 import {
   isHalfDonutHorizontal as getIsHalfDonutHorizontal,
   isHalfDonutVertical as getIsHalfDonutVertical,
@@ -57,12 +55,11 @@ export const DonutText: React.FC<Props> = ({
   valueSize,
 }) => {
   const [baseFontSize, setBaseFontSize] = React.useState(0)
-  const { getCalculatedSizeWithBaseSize } = useBaseSize()
 
   const isHalfDonutHorizontal = getIsHalfDonutHorizontal(halfDonut)
   const isHalfDonutVertical = getIsHalfDonutVertical(halfDonut)
   const diameter = radius * 2
-  const paddingFromLine = halfDonut ? lineWidth : getCalculatedSizeWithBaseSize(7)
+  const paddingFromLine = halfDonut ? lineWidth : 7
   const titleFontSize = Math.max(
     Math.round(baseFontSize * TITLE_FONT_SIZE_RATIO),
     TITLE_MIN_FONT_SIZE
