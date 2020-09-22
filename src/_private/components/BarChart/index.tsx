@@ -267,10 +267,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         ...getGridSettings({
           isHorizontal,
           countGroups: groups.length,
-          showReversed,
           showUnitBottom,
           showUnitLeft,
           maxColumn,
+          axisShowPositions,
         }),
       }}
     >
@@ -333,7 +333,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
       })}
       {axisShowPositions.bottom && renderHorizontal('bottom')}
       {axisShowPositions.left && renderVertical('left')}
-      <div className={css.bottomLeft} />
       {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, toAxisSize(columnSize))}
       {tooltipData && (
         <Tooltip data={tooltipData} isHorizontal={isHorizontal} formatValue={formatValueForLabel} />
