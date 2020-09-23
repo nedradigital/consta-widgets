@@ -1,14 +1,27 @@
 import React from 'react'
 
+import classnames from 'classnames'
+
 import { SectionItem } from '@/_private/components/BarChart/components/Column'
 import { Section } from '@/_private/components/BarChart/components/Section'
+
+import css from './index.css'
 
 type Props = {
   sections: readonly SectionItem[] | undefined
   isHorizontal: boolean
+  isDisabled?: boolean
+  onMouseEnter: React.MouseEventHandler
+  onMouseLeave: React.MouseEventHandler
 }
 
-export const BackgroundColumn: React.FC<Props> = ({ sections = [], isHorizontal }) => {
+export const BackgroundColumn: React.FC<Props> = ({
+  sections = [],
+  isHorizontal,
+  isDisabled,
+  onMouseEnter,
+  onMouseLeave,
+}) => {
   const renderSection = (item: SectionItem | undefined, index: number) => {
     if (!item || item.length === undefined) {
       return null
@@ -27,5 +40,17 @@ export const BackgroundColumn: React.FC<Props> = ({ sections = [], isHorizontal 
     )
   }
 
-  return <>{sections.map(renderSection)}</>
+  return (
+    <div
+      className={classnames(
+        css.main,
+        isHorizontal && css.isHorizontal,
+        isDisabled && css.isDisabled
+      )}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {sections.map(renderSection)}
+    </div>
+  )
 }

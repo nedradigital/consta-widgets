@@ -44,7 +44,7 @@ type Props = {
 
 export const Group: React.FC<Props> = props => {
   const {
-    item: { name: group, column, backgroundColumn },
+    item: { name: group, column, backgroundColumn, isDisabled },
     isHorizontal,
     showValues,
     align,
@@ -107,12 +107,14 @@ export const Group: React.FC<Props> = props => {
       }}
     >
       <div className={classnames(baseCss.columns, css.columns)}>
-        <div
-          className={classnames(css.baseColumn, css.backgroundColumn)}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={() => onMouseLeaveColumn(group)}
-        >
-          <BackgroundColumn sections={backgroundSections} isHorizontal={isHorizontal} />
+        <div className={classnames(css.baseColumn, css.backgroundColumn)}>
+          <BackgroundColumn
+            sections={backgroundSections}
+            isHorizontal={isHorizontal}
+            isDisabled={isDisabled}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={() => onMouseLeaveColumn(group)}
+          />
         </div>
         <div className={classnames(css.baseColumn, css.column)}>
           <Column

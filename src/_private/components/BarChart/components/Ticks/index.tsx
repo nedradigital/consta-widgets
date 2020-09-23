@@ -9,7 +9,7 @@ import { Scaler } from '@/_private/utils/scale'
 import { cropText, getTextAlign, getTransformTranslate, SLANTED_TEXT_MAX_LENGTH } from './helpers'
 import css from './index.css'
 
-export const sizes = ['s', 'm'] as const
+export const sizes = ['s', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
 export const positions = ['top', 'right', 'bottom', 'left'] as const
@@ -41,6 +41,7 @@ type Props<T> = {
 const textSizes: Record<Size, TextPropSize> = {
   s: '2xs',
   m: 'xs',
+  l: 's',
 }
 
 const positionClasses: Record<Position, string> = {

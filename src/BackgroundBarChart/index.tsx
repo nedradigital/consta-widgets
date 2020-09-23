@@ -2,7 +2,6 @@ import React from 'react'
 
 import { CoreBarChart, Threshold, UnitPosition } from '@/_private/components/BarChart'
 import { Ticks } from '@/_private/components/BarChart/components/Ticks'
-import { toAxisSize } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
 import { ColumnItem as BaseColumnItem } from '@/MultiBarChart'
 
@@ -61,13 +60,7 @@ export const BackgroundBarChart: React.FC<Props> = props => {
       threshold={threshold && threshold.value >= 0 ? threshold : undefined}
       renderGroup={groupProps => <Group {...groupProps} align={align} />}
       renderGroupsLabels={({ size, ...restTickProps }) => (
-        <Ticks
-          {...restTickProps}
-          isLabel
-          size={toAxisSize(size)}
-          showLine
-          disabledValues={disabledGroups}
-        />
+        <Ticks {...restTickProps} isLabel size="l" showLine disabledValues={disabledGroups} />
       )}
     />
   )
