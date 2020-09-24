@@ -18,9 +18,33 @@ export type SectionItem = {
   color: string
   value?: number
   length?: number
+  name?: string
 }
 
 export type OnMouseEnterColumn = (params: TooltipData) => void
+
+export const getColumnCenter = (collection: HTMLCollection | undefined, isHorizontal: boolean) => {
+  const children = collection || []
+  const { left, top } = children[isHorizontal ? 0 : children.length - 1].getBoundingClientRect()
+  const { height, width } = Array.from(children).reduce(
+    (prev, element) =>
+      isHorizontal
+        ? {
+            width: prev.width + element.getBoundingClientRect().width,
+            height: element.getBoundingClientRect().height,
+          }
+        : {
+            width: element.getBoundingClientRect().width,
+            height: prev.height + element.getBoundingClientRect().height,
+          },
+    { width: 0, height: 0 }
+  )
+
+  const x = left + width / 2
+  const y = top + height / 2
+
+  return { x, y }
+}
 
 type Props = {
   group: string
@@ -59,30 +83,14 @@ export const Column: React.FC<Props> = ({
     if (!(event.currentTarget instanceof HTMLElement)) {
       return
     }
-    const children = event.currentTarget.parentElement?.children || []
-    const { left, top } = children[isHorizontal ? 0 : children.length - 1].getBoundingClientRect()
-    const { height, width } = Array.from(children).reduce(
-      (prev, element) =>
-        isHorizontal
-          ? {
-              width: prev.width + element.getBoundingClientRect().width,
-              height: element.getBoundingClientRect().height,
-            }
-          : {
-              width: element.getBoundingClientRect().width,
-              height: prev.height + element.getBoundingClientRect().height,
-            },
-      { width: 0, height: 0 }
-    )
 
-    const x = left + width / 2
-    const y = top + height / 2
+    const { x, y } = getColumnCenter(event.currentTarget.parentElement?.children, isHorizontal)
     const selectedSections = sections.filter(isDefined)
 
     onMouseEnterColumn({
       x,
       y,
-      sections: isHorizontal ? selectedSections : [...selectedSections].reverse(),
+      items: isHorizontal ? selectedSections : [...selectedSections].reverse(),
     })
   }
 

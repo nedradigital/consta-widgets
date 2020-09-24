@@ -182,7 +182,7 @@ describe('defaultGetAxisShowPositions', () => {
   })
 })
 
-describe('defaultGetValuesDomain', () => {
+describe('getValuesDomain', () => {
   const groups: readonly GroupItem[] = [
     {
       name: '1',

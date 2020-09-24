@@ -3,15 +3,16 @@ import * as React from 'react'
 import { Tooltip as BaseTooltip } from '@consta/uikit/Tooltip'
 import { isNotNil } from '@csssr/gpn-utils/lib/type-guards'
 
-import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
+import {
+  Item,
+  TooltipContentForMultipleValues,
+} from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'
-
-import { SectionItem } from '../Column'
 
 export type TooltipData = {
   x: number
   y: number
-  sections: readonly SectionItem[]
+  items: readonly Item[]
 }
 
 type Props = {
@@ -20,9 +21,8 @@ type Props = {
   formatValue?: FormatValue
 }
 
-const sectionHasValue = (
-  section: SectionItem
-): section is SectionItem & { value: NonNullable<SectionItem['value']> } => isNotNil(section.value)
+const itemHasValue = (item: Item): item is Item & { value: NonNullable<Item['value']> } =>
+  isNotNil(item.value)
 
 export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = String }) => {
   return (
@@ -33,10 +33,7 @@ export const Tooltip: React.FC<Props> = ({ data, isHorizontal, formatValue = Str
       isInteractive={false}
     >
       <TooltipContentForMultipleValues
-        items={data.sections.filter(sectionHasValue).map(section => ({
-          value: section.value,
-          color: section.color,
-        }))}
+        items={data.items.filter(itemHasValue)}
         formatValueForTooltip={formatValue}
       />
     </BaseTooltip>

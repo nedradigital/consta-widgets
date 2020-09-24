@@ -9,7 +9,7 @@ import { Scaler } from '@/_private/utils/scale'
 import { cropText, getTextAlign, getTransformTranslate, SLANTED_TEXT_MAX_LENGTH } from './helpers'
 import css from './index.css'
 
-export const sizes = ['s', 'm'] as const
+export const sizes = ['s', 'm', 'l'] as const
 export type Size = typeof sizes[number]
 
 export const positions = ['top', 'right', 'bottom', 'left'] as const
@@ -17,6 +17,7 @@ export type Position = typeof positions[number]
 
 type Props<T> = {
   values: readonly T[]
+  disabledValues?: readonly T[]
   scaler?: Scaler<T>
   position: Position
   size?: Size
@@ -40,6 +41,7 @@ type Props<T> = {
 const textSizes: Record<Size, TextPropSize> = {
   s: '2xs',
   m: 'xs',
+  l: 's',
 }
 
 const positionClasses: Record<Position, string> = {
@@ -54,6 +56,7 @@ export function Ticks<T>(props: Props<T>) {
     isXAxisLabelsSlanted,
     className,
     values,
+    disabledValues = [],
     scaler,
     position,
     size = 'm',
@@ -117,6 +120,8 @@ export function Ticks<T>(props: Props<T>) {
     return 'center'
   }
 
+  const isDisabled = (value: T) => disabledValues.includes(value)
+
   const children = values.map((value, idx) => {
     const transform = scaler && tickTransform(value)
     const alignItems = getAlignItems(idx, values.length)
@@ -145,7 +150,7 @@ export function Ticks<T>(props: Props<T>) {
           size={textSizes[size]}
           align={textAlign}
           title={textValue}
-          className={classnames(css.text)}
+          className={classnames(css.text, isDisabled(value) && css.isDisabled)}
           lineHeight={props.isLabel && props.isDense ? 's' : undefined}
         >
           {(isXAxisLabelsSlanted && (
