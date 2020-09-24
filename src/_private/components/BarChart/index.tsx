@@ -76,6 +76,7 @@ export type Props<T> = {
 const unitSize: Record<TicksSize, TextPropSize> = {
   s: '2xs',
   m: 'xs',
+  l: 'xs',
 }
 
 const columnSizeClasses: Record<ColumnSize, string> = {
@@ -95,8 +96,9 @@ const axisTicksPositionsClasses = {
 }
 
 const axisSizeClasses: Record<TicksSize, string> = {
-  m: css.asixSizeM,
   s: css.asixSizeS,
+  m: css.asixSizeM,
+  l: css.asixSizeM,
 }
 
 const renderUnit = (className: string, unit: string, size: TicksSize) => (
@@ -309,6 +311,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               ...horizontalStyles,
               ...verticalStyles,
             }}
+            className={css.groupWrapper}
           >
             {renderGroup({
               item: group,

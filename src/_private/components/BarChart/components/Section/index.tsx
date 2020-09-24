@@ -14,6 +14,7 @@ type Props = {
   isRounded: boolean
   isActive: boolean
   label?: string
+  className?: string
   onMouseEnter?: React.MouseEventHandler
   onMouseLeave?: React.MouseEventHandler
   onChangeLabelSize?: (size: number) => void
@@ -27,6 +28,7 @@ export const Section: React.FC<Props> = ({
   isRounded,
   isActive,
   label,
+  className,
   onMouseEnter,
   onMouseLeave,
   onChangeLabelSize,
@@ -48,7 +50,8 @@ export const Section: React.FC<Props> = ({
         isHorizontal && css.isHorizontal,
         isReversed && css.isReversed,
         isRounded && css.isRounded,
-        isActive && css.isActive
+        isActive && css.isActive,
+        className
       )}
       style={{
         ...getSize(length, isHorizontal),

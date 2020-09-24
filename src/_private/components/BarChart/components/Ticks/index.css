@@ -121,6 +121,10 @@
     overflow: hidden;
   }
 
+  &.isDisabled {
+    color: var(--color-typo-ghost);
+  }
+
   .isXAxisLabelsSlanted.label & {
     position: absolute;
     top: 0;

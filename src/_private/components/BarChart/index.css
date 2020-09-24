@@ -121,3 +121,7 @@
 
   text-align: right;
 }
+
+.groupWrapper {
+  position: relative;
+}

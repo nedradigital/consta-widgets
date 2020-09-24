@@ -12,7 +12,12 @@ import { FormatValue } from '@/_private/types'
 
 import { transformGroupsToCommonGroups } from './helpers'
 
-export type Column = ReadonlyArray<{ value: number | undefined; color: string }>
+export type ColumnItem = {
+  value: number | undefined
+  color: string
+}
+
+export type Column = readonly ColumnItem[]
 
 export type Group = {
   groupName: string
