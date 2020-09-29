@@ -1,7 +1,7 @@
 import React from 'react'
-import { Textfit } from 'react-textfit'
 
 import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
+import { Textfit } from '@evless/react-textfit'
 import classnames from 'classnames'
 
 import {

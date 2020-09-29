@@ -63,6 +63,7 @@
   "dependencies": {
     "@amcharts/amcharts4-geodata": "4.1.9",
     "@consta/widgets-utils": "0.2.14",
+    "@evless/react-textfit": "1.1.1",
     "@types/d3": "5.7.2",
     "@types/resize-observer-browser": "0.1.2",
     "classnames": "2.2.6",
@@ -71,7 +72,6 @@
     "lodash": "4.17.19",
     "react-dnd": "9.3.2",
     "react-dnd-html5-backend": "9.3.2",
-    "react-textfit": "https://github.com/al-fyodorov/react-textfit#v1.1.1",
     "react-uid": "2.2.0"
   },
   "resolutions": {
