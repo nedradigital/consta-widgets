@@ -2542,6 +2542,14 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.5.tgz#8eed982e2ee6f7f4e44c253e12962980791efd46"
   integrity sha512-6U71C2Wp7r5XtFtQzYrW5iKFT67OixrSxjI4MptCHzdSVlgabczzqLe0ZSgnub/5Kp4hSbpDB1tMytZY9pwxxA==
 
+"@evless/react-textfit@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@evless/react-textfit/-/react-textfit-1.1.1.tgz#e581e739618350d8f35c2430e95a72ac18565537"
+  integrity sha512-RV1XKlBJCzxrvvEXGkBn9quaIIttPnE5Glfrdw+6YzlOI2Yje1rE+VECl3NaP8LZTWxBZ+VYoHOEgl7t7K7LyQ==
+  dependencies:
+    process "^0.11.9"
+    prop-types "^15.5.10"
+
 "@hot-loader/react-dom@16.8.6":
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/@hot-loader/react-dom/-/react-dom-16.8.6.tgz#7923ba27db1563a7cc48d4e0b2879a140df461ea"
@@ -15156,13 +15164,6 @@ react-textarea-autosize@^7.1.0:
   dependencies:
     "@babel/runtime" "^7.1.2"
     prop-types "^15.6.0"
-
-"react-textfit@https://github.com/al-fyodorov/react-textfit#v1.1.1":
-  version "1.1.1"
-  resolved "https://github.com/al-fyodorov/react-textfit#81e650632e25cfacf21d3d62088b3674e39cd50b"
-  dependencies:
-    process "^0.11.9"
-    prop-types "^15.5.10"
 
 react-transition-group@^2.2.1:
   version "2.9.0"

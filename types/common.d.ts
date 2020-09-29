@@ -62,7 +62,7 @@ declare module '*.geojson' {
   export = content
 }
 
-declare module 'react-textfit' {
+declare module '@evless/react-textfit' {
   import React from 'react'
 
   type TextfitProps = {
