@@ -9,9 +9,7 @@ module.exports = {
     [
       require('babel-preset-minify'),
       {
-        builtIns: false,
-        evaluate: false,
-        mangle: false,
+        builtIns: false  // // FIXME проблема с babel-plugin-minify-builtins, апдейтнуть когда пофиксят https://github.com/babel/minify/issues/904
       },
     ],
   ],
