@@ -8,7 +8,7 @@ import { HoveredMainValue, Line, ScaleLinear } from '../../'
 
 import css from './index.css'
 
-export type Function = (newValue: HoveredMainValue) => void
+export type Handler = (newValue: HoveredMainValue) => void
 
 type Props = {
   lines: readonly Line[]
@@ -18,7 +18,7 @@ type Props = {
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   hoveredMainValue: HoveredMainValue
-  onChangeHoveredMainValue: Function
+  onChangeHoveredMainValue: Handler
   onClickLine?: (value: number) => void
 }
 
@@ -26,7 +26,7 @@ type LineProps = {
   position: Position
   lineClassName: string | boolean
   value?: number
-  onHover: Function
+  onHover: Handler
   onClick?: () => void
 }
 
