@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { TextPropAlign } from '@consta/uikit/Text'
 
 export const SLANTED_TEXT_MAX_LENGTH = 20
