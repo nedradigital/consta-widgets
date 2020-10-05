@@ -36,6 +36,7 @@ export type Props = {
   align?: Align
   threshold?: Threshold
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
 }
 
 export const BackgroundBarChart: React.FC<Props> = props => {
