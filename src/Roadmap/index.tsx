@@ -154,7 +154,7 @@ export const Roadmap: React.FC<Props> = ({
         stickyColumns={columns.length}
         size="l"
         borderBetweenColumns
-        zebraStriped="odd"
+        zebraStriped="even"
       />
     </div>
   )
