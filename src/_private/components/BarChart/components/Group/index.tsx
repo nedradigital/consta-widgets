@@ -57,8 +57,6 @@ export const Group: React.FC<Props> = props => {
     className,
     style,
   } = props
-  const columnsRef = React.useRef<HTMLDivElement>(null)
-
   const renderColumn = (column: ColumnItem | undefined, index: number, isReversed?: boolean) => {
     if (!column) {
       return null
@@ -95,7 +93,7 @@ export const Group: React.FC<Props> = props => {
       className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
       style={style}
     >
-      <div ref={columnsRef} className={css.columns}>
+      <div className={css.columns}>
         <div className={css.wrapper}>
           {columns.map((column, index) => renderColumn(column, index))}
         </div>

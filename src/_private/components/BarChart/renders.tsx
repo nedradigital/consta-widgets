@@ -53,4 +53,4 @@ export type RenderGroup<T> = (props: {
   onChangeLabelSize?: (size: number) => void
 }) => React.ReactNode
 
-export const defaultRenderGroup: RenderGroup<GroupItem> = Group
+export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />
