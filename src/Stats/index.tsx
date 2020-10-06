@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Badge } from '@consta/uikit/Badge'
 import { Text, TextPropLineHeight, TextPropSize } from '@consta/uikit/Text'
+import { isDefined } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 
 import css from './index.css'
@@ -23,9 +24,11 @@ const layouts = [
 type Layout = typeof layouts[number]
 
 export type Data = {
-  value: number
+  value?: number
+  placeholder?: string
   title?: string
   badge?: {
+    withSign?: boolean
     percentage: number
     status: BadgeStatus
   }
@@ -102,6 +105,10 @@ const formatValue = (value: number) => {
   return String(value).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ')
 }
 
+const formatNumber = (value: number, withSign?: boolean) => {
+  return getNumberSign(value, withSign) + formatValue(value)
+}
+
 export const Stats: React.FC<Props> = ({
   value,
   title,
@@ -110,7 +117,10 @@ export const Stats: React.FC<Props> = ({
   size,
   layout = 'full',
   withSign,
+  placeholder,
 }) => {
+  const text = isDefined(value) ? formatNumber(value, withSign) : placeholder
+
   return (
     <div className={classnames(css.container, sizeClass[size], layoutClass[layout])}>
       <Text as="div" size={titleSizes[size]} lineHeight="s" view="primary" className={css.title}>
@@ -125,13 +135,12 @@ export const Stats: React.FC<Props> = ({
         weight="bold"
         className={css.number}
       >
-        {getNumberSign(value, withSign)}
-        {formatValue(value)}
+        {text}
       </Text>
 
       {badge && (
         <Badge
-          label={`${getNumberSign(badge.percentage, withSign)} ${badge.percentage}%`}
+          label={`${getNumberSign(badge.percentage, badge.withSign)} ${badge.percentage}%`}
           view="filled"
           size={badgeSizes[size]}
           status={badge.status}

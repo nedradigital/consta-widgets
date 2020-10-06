@@ -16,6 +16,7 @@ export const Interactive = createStory(() => (
     title="Сроки"
     value={217}
     badge={getBadgeKnob({
+      withSign: false,
       percentage: 2.1,
       status: 'normal',
     })}
@@ -31,6 +32,7 @@ export const WithLineBreak = createStory(
       title="Сроки срочные сроки срочные сроки срочные"
       value={217000}
       badge={getBadgeKnob({
+        withSign: false,
         percentage: 2.1,
         status: 'normal',
       })}
