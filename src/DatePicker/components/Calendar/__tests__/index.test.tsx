@@ -11,7 +11,7 @@ describe('isValueSelected', () => {
       ).toBeTruthy()
     })
 
-    it('возвращет false, если значение календарно не совпадает с переданной датой', () => {
+    it('возвращает false, если значение календарно не совпадает с переданной датой', () => {
       expect(
         isValueSelected({
           date: new Date(2019, 0, 2),
@@ -20,7 +20,7 @@ describe('isValueSelected', () => {
       ).toBeFalsy()
     })
 
-    it('возвращет false, если значение не задано', () => {
+    it('возвращает false, если значение не задано', () => {
       expect(
         isValueSelected({
           date: new Date(2019, 0, 2),
@@ -65,7 +65,7 @@ describe('isValueSelected', () => {
       expect(isValueSelected({ date: range[0], value: [undefined, range[1]] })).toBeFalsy()
     })
 
-    it('возвращет false, если значение не задано', () => {
+    it('возвращает false, если значение не задано', () => {
       expect(isValueSelected({ date: new Date(2019, 0, 10), value: undefined })).toBeFalsy()
       expect(
         isValueSelected({ date: new Date(2019, 0, 10), value: [undefined, undefined] })

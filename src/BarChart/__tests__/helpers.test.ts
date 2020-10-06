@@ -11,7 +11,7 @@ describe('transformGroupsToCoreGroups', () => {
     },
   ]
 
-  it('преобразует BarChart группы к основным гуппам', () => {
+  it('преобразует BarChart группы к основным группам', () => {
     const received = transformGroupsToCommonGroups(groups, ['red', 'blue', 'green'])
 
     const expected: readonly CoreGroup[] = [

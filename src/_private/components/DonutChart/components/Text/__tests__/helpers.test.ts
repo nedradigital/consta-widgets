@@ -25,7 +25,7 @@ describe('getContentBorderRadius', () => {
     expect(getContentBorderRadius(50, 'bottom')).toEqual('50px 50px 0px 0px')
   })
 
-  it('получние значения border-radius для графика обрезанного слева', () => {
+  it('получение значения border-radius для графика обрезанного слева', () => {
     expect(getContentBorderRadius(50, 'left')).toEqual('0px 50px 50px 0px')
   })
 })

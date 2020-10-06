@@ -2255,10 +2255,10 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@consta/widgets-configs@1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@consta/widgets-configs/-/widgets-configs-1.2.0.tgz#494d4ec511ae39d39a086500f9eb4c32f792038e"
-  integrity sha512-y4gQnDASPFZe7TnQJw2uCZKNqdMtn+aiTTcQZyRGbgxQuaeZh+VByxK4eZ32lKtimp4rMoSONnj9JHDElFm7gw==
+"@consta/widgets-configs@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@consta/widgets-configs/-/widgets-configs-1.3.2.tgz#e9684ceeab874a8b9a5ccbad66039326097f76df"
+  integrity sha512-RIVN+5qwpeL9FXvPAzec4QgxpFfQ1NAgT6xYMvNdo6an7pSG2WcooQgU8nmZWqznh5BCw3hhyDXdFhyd9Efpgw==
   dependencies:
     "@babel/core" "7.4.5"
     "@babel/plugin-proposal-class-properties" "7.4.4"
@@ -2292,6 +2292,7 @@
     eslint-plugin-prettier "3.1.2"
     eslint-plugin-react "7.19.0"
     eslint-plugin-react-hooks "2.3.0"
+    eslint-plugin-spellcheck "github:typeetfunc/eslint-plugin-spellcheck#v0.0.17-multilang-1.0.2"
     eslint-plugin-unicorn "12.1.0"
     file-loader "4.0.0"
     fork-ts-checker-webpack-plugin "1.3.7"
@@ -8186,6 +8187,14 @@ eslint-plugin-react@7.19.0:
     string.prototype.matchall "^4.0.2"
     xregexp "^4.3.0"
 
+"eslint-plugin-spellcheck@github:typeetfunc/eslint-plugin-spellcheck#v0.0.17-multilang-1.0.2":
+  version "0.0.17"
+  resolved "https://codeload.github.com/typeetfunc/eslint-plugin-spellcheck/tar.gz/05713db6acbc53d09de8f3f3d620c0a0ffae2ba3"
+  dependencies:
+    globals "^13.0.0"
+    hunspell-spellchecker "^1.0.2"
+    lodash "^4.17.15"
+
 eslint-plugin-todo-plz@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-todo-plz/-/eslint-plugin-todo-plz-1.1.0.tgz#e2d83ab6d865427eba9bf1c1563858c9d521048d"
@@ -9329,6 +9338,13 @@ globals@^11.1.0, globals@^11.7.0:
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
   integrity sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==
 
+globals@^13.0.0:
+  version "13.2.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-13.2.0.tgz#30b6814a1b7945d0b5b3795f81c275342bb17129"
+  integrity sha512-OjvFbGDlR7aIsLqFrraxoqIP3bb+wgp+Aarel5S56lwS3se4uUrwKkChnv1MqsMIv/Opexbmu7qCfHL9T0mBEg==
+  dependencies:
+    type-fest "^0.8.1"
+
 globals@^9.18.0:
   version "9.18.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-9.18.0.tgz#aa3896b3e69b487f17e31ed2143d69a8e30c2d8a"
@@ -9831,6 +9847,11 @@ humps@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/humps/-/humps-2.0.1.tgz#dd02ea6081bd0568dc5d073184463957ba9ef9aa"
   integrity sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=
+
+hunspell-spellchecker@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/hunspell-spellchecker/-/hunspell-spellchecker-1.0.2.tgz#a10b0bd2fa00a65ab62a4c6b734ce496d318910e"
+  integrity sha1-oQsL0voAplq2Kkxrc0zkltMYkQ4=
 
 husky@3.0.0:
   version "3.0.0"

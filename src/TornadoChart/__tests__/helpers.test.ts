@@ -2,7 +2,7 @@ import { Group } from '../'
 import { getAxisShowPositions, getFormatter, transformGroupsToCommonGroups } from '../helpers'
 
 describe('getFormatter', () => {
-  it('получение фукнции форматирования значения для подписей', () => {
+  it('получение функции форматирования значения для подписей', () => {
     const formatter = getFormatter()
 
     expect(formatter(-10)).toEqual('10')
@@ -61,7 +61,7 @@ describe('transformGroupsToCommonGroups', () => {
 
   const colors = ['red', 'blue'] as const
 
-  it('преобразует TornadoChart группы к основным гуппам', () => {
+  it('преобразует TornadoChart группы к основным группам', () => {
     const result = transformGroupsToCommonGroups(groups, colors)
 
     expect(result).toEqual([
