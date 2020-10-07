@@ -48,7 +48,7 @@ describe('getValuesDomain', () => {
 })
 
 describe('transformGroupsToCommonGroups', () => {
-  it('преобразует BackgroundBarChart группы к основным гуппам', () => {
+  it('преобразует BackgroundBarChart группы к основным группам', () => {
     const result = transformGroupsToCommonGroups(groups)
 
     expect(result).toEqual([

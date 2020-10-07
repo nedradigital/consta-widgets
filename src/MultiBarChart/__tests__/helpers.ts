@@ -13,7 +13,7 @@ describe('transformGroupsToCommonGroups', () => {
     },
   ]
 
-  it('преобразует MultiBarChart группы к основным гуппам', () => {
+  it('преобразует MultiBarChart группы к основным группам', () => {
     const result = transformGroupsToCommonGroups(groups)
 
     expect(result).toEqual([

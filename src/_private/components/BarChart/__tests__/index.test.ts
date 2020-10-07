@@ -73,7 +73,7 @@ describe('getTotalByColumn', () => {
     expect(getTotalByColumn({ total: 45 })).toEqual(45)
   })
 
-  it('возвращает сумму значений секций с отрицаиельными значениями', () => {
+  it('возвращает сумму значений секций с отрицательными значениями', () => {
     expect(getTotalByColumn({ total: -40 })).toEqual(40)
   })
 })
