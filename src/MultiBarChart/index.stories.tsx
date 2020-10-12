@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { object, select } from '@storybook/addon-knobs'
+import { object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { unitPositions } from '@/_private/components/BarChart'
@@ -9,33 +9,30 @@ import { createMetadata, createStory } from '@/_private/storybook'
 import { MultiBarChart } from './'
 import { interactiveData, withPercentColumnsData, withTwoColumnsData } from './data.mock'
 
-const getUnitPosition = () => select('unitPosition', unitPositions, 'none')
+const getCommonProps = (initialUnit: string) => {
+  const unit = text('unit', initialUnit)
+  const unitPosition = select('unitPosition', unitPositions, 'none')
+
+  return {
+    gridTicks: 4,
+    valuesTicks: 1,
+    unit,
+    unitPosition,
+    isHorizontal: false,
+    formatValueForTooltip: (v: number) => `${v} ${unit}`,
+  } as const
+}
 
 export const Interactive = createStory(
-  () => (
-    <MultiBarChart
-      groups={interactiveData.groups}
-      unit={interactiveData.unit}
-      unitPosition={getUnitPosition()}
-      gridTicks={4}
-      valuesTicks={1}
-      isHorizontal={false}
-      isXAxisLabelsSlanted={false}
-    />
-  ),
+  () => <MultiBarChart {...getCommonProps(interactiveData.unit)} groups={interactiveData.groups} />,
   { name: 'с одним столбцом' }
 )
 
 export const WithTwoColumns = createStory(
   () => (
     <MultiBarChart
+      {...getCommonProps(withTwoColumnsData.unit)}
       groups={withTwoColumnsData.groups}
-      unit={withTwoColumnsData.unit}
-      unitPosition={getUnitPosition()}
-      gridTicks={4}
-      valuesTicks={1}
-      isHorizontal={false}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'с двумя столбцами' }
@@ -44,14 +41,9 @@ export const WithTwoColumns = createStory(
 export const HasRatio = createStory(
   () => (
     <MultiBarChart
+      {...getCommonProps(withTwoColumnsData.unit)}
       groups={withPercentColumnsData.groups}
-      unit={withTwoColumnsData.unit}
-      unitPosition={getUnitPosition()}
-      gridTicks={4}
-      valuesTicks={1}
-      isHorizontal={false}
       formatValueForLabel={v => `${v}%`}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'в процентах' }
@@ -60,13 +52,11 @@ export const HasRatio = createStory(
 export const Minimalistic = createStory(
   () => (
     <MultiBarChart
+      {...getCommonProps(interactiveData.unit)}
       groups={interactiveData.groups}
-      unit={interactiveData.unit}
-      unitPosition={getUnitPosition()}
       gridTicks={0}
       valuesTicks={0}
       isHorizontal={true}
-      isXAxisLabelsSlanted={false}
     />
   ),
   { name: 'минималистичный' }
@@ -75,12 +65,9 @@ export const Minimalistic = createStory(
 export const WithThreshold = createStory(
   () => (
     <MultiBarChart
+      {...getCommonProps(interactiveData.unit)}
       groups={interactiveData.groups}
       threshold={object('threshold', interactiveData.threshold)}
-      unit={interactiveData.unit}
-      unitPosition={getUnitPosition()}
-      gridTicks={4}
-      valuesTicks={1}
     />
   ),
   { name: 'с предельным значением' }

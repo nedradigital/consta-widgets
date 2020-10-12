@@ -35,6 +35,7 @@ type Props = {
   size?: 's' | 'm'
   threshold?: Threshold
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
   isXAxisLabelsSlanted?: boolean
 }
 

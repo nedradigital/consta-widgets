@@ -67,6 +67,7 @@ export type Props<T> = {
   renderGroup: RenderGroup<T>
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
   renderGroupsLabels?: RenderGroupsLabels
   renderAxisValues?: RenderAxisValues
   onMouseEnterColumn?: OnMouseHoverColumn
@@ -127,6 +128,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     threshold,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel = String,
+    formatValueForTooltip,
     renderGroup,
     renderAxisValues = defaultRenderAxisValues,
     renderGroupsLabels = defaultRenderGroupsLabels,
@@ -338,7 +340,11 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
       {axisShowPositions.left && renderVertical('left')}
       {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, toAxisSize(columnSize))}
       {tooltipData && (
-        <Tooltip data={tooltipData} isHorizontal={isHorizontal} formatValue={formatValueForLabel} />
+        <Tooltip
+          data={tooltipData}
+          isHorizontal={isHorizontal}
+          formatValue={formatValueForTooltip || formatValueForLabel}
+        />
       )}
     </div>
   )

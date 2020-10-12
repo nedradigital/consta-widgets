@@ -32,6 +32,7 @@ type Props = {
   isXAxisLabelsSlanted?: boolean
   threshold?: Threshold
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
 }
 
 export const BarChart: React.FC<Props> = props => {

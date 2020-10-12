@@ -34,6 +34,7 @@ type Props = {
   unitPosition?: UnitPosition
   showValues?: boolean
   formatValueForLabel?: FormatValue
+  formatValueForTooltip?: FormatValue
 }
 
 export const TornadoChart: React.FC<Props> = props => {
