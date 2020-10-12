@@ -125,9 +125,19 @@ export const RoadmapTooltip: React.FC<Props> = ({
       ref={ref}
       direction="upRight"
       size="l"
-      possibleDirections={['downLeft', 'downRight', 'upLeft', 'upRight']}
+      possibleDirections={[
+        'downLeft',
+        'downRight',
+        'upLeft',
+        'upRight',
+        'downStartLeft',
+        'downStartRight',
+        'upStartLeft',
+        'upStartRight',
+      ]}
       position={position}
       onClickOutside={onRequestClose}
+      spareDirection="downStartLeft"
     >
       <Dates color={color} title={title} fact={fact} plan={plan} forecast={forecast} />
       <Comment comment={comment} />
