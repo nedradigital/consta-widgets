@@ -2,6 +2,7 @@ import React from 'react'
 
 import { CoreBarChart, Threshold, UnitPosition } from '@/_private/components/BarChart'
 import { Ticks } from '@/_private/components/BarChart/components/Ticks'
+import { GRID_GAP_SPACE } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
 import { ColumnItem as BaseColumnItem } from '@/MultiBarChart'
 
@@ -54,6 +55,8 @@ export const BackgroundBarChart: React.FC<Props> = props => {
   return (
     <CoreBarChart
       {...rest}
+      gridRowGap={GRID_GAP_SPACE.s}
+      gridColumnGap={GRID_GAP_SPACE.m}
       size="m"
       groups={commonGroups}
       valuesDomain={valuesDomain}

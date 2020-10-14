@@ -1,9 +1,6 @@
 .main {
   --background-column-size: 24px;
 
-  position: absolute;
-  bottom: 0;
-
   height: 100%;
 
   &.isHorizontal {
@@ -11,33 +8,30 @@
     bottom: auto;
 
     width: 100%;
-    height: auto;
+    height: var(--background-column-size);
   }
 }
 
 .columns {
   position: relative;
+
+  align-items: center;
+  justify-content: center;
+
+  height: 100%;
 }
 
 .baseColumn {
-  position: absolute;
-  left: 50%;
-
   height: 100%;
 
-  transform: translateX(-50%);
-
   .isHorizontal & {
-    top: 50%;
-    left: auto;
-
     width: 100%;
-
-    transform: translateY(-50%);
   }
 }
 
 .backgroundColumn {
+  position: absolute;
+
   display: flex;
   align-items: center;
   flex-direction: column-reverse;
@@ -46,8 +40,6 @@
 
   .isHorizontal & {
     flex-direction: row;
-
-    height: var(--background-column-size);
   }
 }
 

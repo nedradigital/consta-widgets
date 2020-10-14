@@ -275,3 +275,34 @@ export const getCommonGroupsMaxColumns = (groups: readonly GroupItem[]) => {
     ...groups.map(group => Math.max(group.columns.length, group.reversedColumns.length))
   )
 }
+
+export const GRID_GAP_SPACE = {
+  '2xs': 'var(--space-2xs)',
+  xs: 'var(--space-xs)',
+  m: 'var(--space-m)',
+  s: 'var(--space-s)',
+}
+
+export const getGridRowGap = (axisSize: Size, isHorizontal?: boolean): string => {
+  if (isHorizontal && axisSize === 's') {
+    return GRID_GAP_SPACE.xs
+  }
+
+  if (isHorizontal && axisSize === 'm') {
+    return GRID_GAP_SPACE.m
+  }
+
+  if (axisSize === 's') {
+    return GRID_GAP_SPACE['2xs']
+  }
+
+  return GRID_GAP_SPACE.xs
+}
+
+export const getGridColumnGap = (axisSize: Size): string => {
+  if (axisSize === 's') {
+    return GRID_GAP_SPACE.xs
+  }
+
+  return GRID_GAP_SPACE.m
+}

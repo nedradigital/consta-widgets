@@ -6,6 +6,8 @@ import {
   getCommonGroupsMaxColumns,
   getEveryNTick,
   getGraphStepSize,
+  getGridColumnGap,
+  getGridRowGap,
   getGridSettings,
   getGroupsDomain,
   getLabelGridAreaName,
@@ -592,5 +594,27 @@ describe('getCommonGroupsMaxColumns', () => {
     ])
 
     expect(result).toEqual(3)
+  })
+})
+
+describe('getGridRowGap', () => {
+  it('получение отступов для грида', () => {
+    expect(getGridRowGap('s')).toEqual('var(--space-2xs)')
+    expect(getGridRowGap('m')).toEqual('var(--space-xs)')
+    expect(getGridRowGap('l')).toEqual('var(--space-xs)')
+  })
+
+  it('получение отступов для горизонтального грида', () => {
+    expect(getGridRowGap('s', true)).toEqual('var(--space-xs)')
+    expect(getGridRowGap('m', true)).toEqual('var(--space-m)')
+    expect(getGridRowGap('l', true)).toEqual('var(--space-xs)')
+  })
+})
+
+describe('getGridColumnGap', () => {
+  it('получение отступов для грида', () => {
+    expect(getGridColumnGap('s')).toEqual('var(--space-xs)')
+    expect(getGridColumnGap('m')).toEqual('var(--space-m)')
+    expect(getGridColumnGap('l')).toEqual('var(--space-m)')
   })
 })
