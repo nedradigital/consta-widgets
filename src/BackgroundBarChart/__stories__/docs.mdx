@@ -1,0 +1,31 @@
+import { SimpleExample } from './examples/SimpleExample'
+
+# BackgroundBarChart
+
+Документация
+
+<SimpleExample />
+
+## Свойства
+
+<!-- props:start -->
+
+| Свойство          | Тип      | По умолчанию | Описание |
+| ----------------- | -------- | ------------ | -------- |
+| [`prop`](#ссылка) | `string` | -            | Описание |
+| `prop`            | `string` | -            | Описание |
+
+```tsx
+export const SimpleExample = () => (
+  <div className={classnames(css.main)}>
+    <BackgroundBarChart
+      groups={groups}
+      gridTicks={4}
+      valuesTicks={1}
+      isHorizontal={true}
+      showValues={false}
+      align="start"
+    />
+  </div>
+)
+```

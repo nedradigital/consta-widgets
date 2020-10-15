@@ -4,8 +4,10 @@ import { boolean, number, object, select, text } from '@storybook/addon-knobs'
 
 import { createMetadata, createStory, environmentDecorator } from '@/_private/storybook'
 
-import { aligns, BackgroundBarChart } from '.'
-import { groups } from './data.mock'
+import { aligns, BackgroundBarChart } from '..'
+import { groups } from '../data.mock'
+
+import docs from './docs.mdx'
 
 const getCommonProps = (initialUnit: string) => {
   const unit = text('unit', initialUnit)
@@ -30,6 +32,9 @@ export default createMetadata({
   title: 'components/BackgroundBarChart',
   decorators: [environmentDecorator()],
   parameters: {
+    docs: {
+      page: docs,
+    },
     environment: {
       style: {
         width: '40vw',
