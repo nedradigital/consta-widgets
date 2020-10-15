@@ -11,7 +11,7 @@ import { Align } from '@/BackgroundBarChart'
 
 import css from './index.css'
 
-type Props = {
+type DataProps = {
   group: string
   total: number
   sections: readonly SectionItem[] | undefined
@@ -22,61 +22,70 @@ type Props = {
   onChangeLabelSize?: (size: number) => void
 }
 
-export const Column: React.FC<Props> = ({
-  total,
-  sections = [],
-  isHorizontal,
-  showValues,
-  align,
-  formatValueForLabel = String,
-  onChangeLabelSize,
-}) => {
-  const ref = React.useRef<HTMLDivElement>(null)
+type Props = DataProps & { ref: React.Ref<HTMLDivElement> }
 
-  const totalSectionSize = Array.from(ref.current?.children ?? []).reduce((acc, curr) => {
-    const { width, height } = curr.getBoundingClientRect()
-
-    return (isHorizontal ? width : height) + acc
-  }, 0)
-
-  const renderSection = (item: SectionItem | undefined, index: number) => {
-    if (!item || item.length === undefined) {
+export const Column = React.forwardRef<HTMLDivElement, Props>(
+  (
+    {
+      total,
+      sections = [],
+      isHorizontal,
+      showValues,
+      align,
+      formatValueForLabel = String,
+      onChangeLabelSize,
+    }: DataProps,
+    ref: React.Ref<HTMLDivElement>
+  ) => {
+    if (typeof ref === 'function') {
       return null
     }
 
-    const isLastItem = index === sections.length - 1
-    const label =
-      isLastItem && isNotNil(total) && showValues ? formatValueForLabel(total) : undefined
+    const totalSectionSize = Array.from(ref?.current?.children ?? []).reduce((acc, curr) => {
+      const { width, height } = curr.getBoundingClientRect()
+
+      return (isHorizontal ? width : height) + acc
+    }, 0)
+
+    const renderSection = (item: SectionItem | undefined, index: number) => {
+      if (!item || item.length === undefined) {
+        return null
+      }
+
+      const isLastItem = index === sections.length - 1
+      const label =
+        isLastItem && isNotNil(total) && showValues ? formatValueForLabel(total) : undefined
+
+      return (
+        <Section
+          color={item.color}
+          length={item.length}
+          key={index}
+          isHorizontal={isHorizontal}
+          isReversed={false}
+          isRounded={isLastItem}
+          isActive={true}
+          label={label}
+          className={classnames(
+            css.section,
+            isHorizontal && css.isHorizontal,
+            align === 'end' && css.alignEnd
+          )}
+          onChangeLabelSize={onChangeLabelSize}
+        />
+      )
+    }
 
     return (
-      <Section
-        color={item.color}
-        length={item.length}
-        key={index}
-        isHorizontal={isHorizontal}
-        isReversed={false}
-        isRounded={isLastItem}
-        isActive={true}
-        label={label}
-        className={classnames(
-          css.section,
-          isHorizontal && css.isHorizontal,
-          align === 'end' && css.alignEnd
-        )}
-        onChangeLabelSize={onChangeLabelSize}
-      />
+      <div
+        ref={ref}
+        style={{
+          ['--total-section-size' as string]: `${totalSectionSize}px`,
+        }}
+        className={classnames(baseCss.column, isHorizontal && baseCss.isHorizontal)}
+      >
+        {sections.map(renderSection)}
+      </div>
     )
   }
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        ['--total-section-size' as string]: `${totalSectionSize}px`,
-      }}
-      className={classnames(baseCss.column, isHorizontal && baseCss.isHorizontal)}
-    >
-      {sections.map(renderSection)}
-    </div>
-  )
-}
+)

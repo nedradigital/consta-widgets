@@ -43,6 +43,8 @@ type Props = {
 }
 
 export const Group: React.FC<Props> = props => {
+  const columnsRef = React.useRef<HTMLDivElement>(null)
+
   const {
     item: { name: group, column, backgroundColumn, isDisabled },
     isHorizontal,
@@ -71,11 +73,11 @@ export const Group: React.FC<Props> = props => {
   })
 
   const handleMouseEnter: React.MouseEventHandler = event => {
-    if (!(event.currentTarget instanceof HTMLElement)) {
+    if (!(event.currentTarget instanceof HTMLElement) || !columnsRef.current) {
       return
     }
 
-    const { x, y } = getColumnCenter(event.currentTarget.children, isHorizontal)
+    const { x, y } = getColumnCenter(columnsRef.current.children, isHorizontal)
 
     const columnSections = column?.sections ?? []
     const backgroundColumnSections = backgroundColumn?.sections ?? []
@@ -118,6 +120,7 @@ export const Group: React.FC<Props> = props => {
         </div>
         <div className={classnames(css.baseColumn, css.column)}>
           <Column
+            ref={columnsRef}
             group={group}
             total={column.total}
             sections={sections}
