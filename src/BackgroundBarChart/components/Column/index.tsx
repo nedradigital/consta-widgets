@@ -23,61 +23,71 @@ type Props = {
   onChangeLabelSize?: (size: LabelSize) => void
 }
 
-export const Column: React.FC<Props> = ({
-  total,
-  sections = [],
-  isHorizontal,
-  showValues,
-  align,
-  formatValueForLabel = String,
-  onChangeLabelSize,
-}) => {
-  const ref = React.useRef<HTMLDivElement>(null)
+export const Column = React.forwardRef<HTMLDivElement, Props>(
+  (
+    {
+      total,
+      sections = [],
+      isHorizontal,
+      showValues,
+      align,
+      formatValueForLabel = String,
+      onChangeLabelSize,
+    },
+    ref
+  ) => {
+    const sectionsRef = React.useRef(sections.map(() => React.createRef<HTMLDivElement>()))
 
-  const totalSectionSize = Array.from(ref.current?.children ?? []).reduce((acc, curr) => {
-    const { width, height } = curr.getBoundingClientRect()
+    const totalSectionSize = sectionsRef.current.reduce((acc, sectionRef) => {
+      if (!sectionRef.current) {
+        return acc
+      }
 
-    return (isHorizontal ? width : height) + acc
-  }, 0)
+      const { width, height } = sectionRef.current.getBoundingClientRect()
 
-  const renderSection = (item: SectionItem | undefined, index: number) => {
-    if (!item || item.length === undefined) {
-      return null
+      return (isHorizontal ? width : height) + acc
+    }, 0)
+
+    const renderSection = (item: SectionItem | undefined, index: number) => {
+      if (!item || item.length === undefined) {
+        return null
+      }
+
+      const isLastItem = index === sections.length - 1
+      const label =
+        isLastItem && isNotNil(total) && showValues ? formatValueForLabel(total) : undefined
+
+      return (
+        <Section
+          ref={sectionsRef.current[index]}
+          color={item.color}
+          length={item.length}
+          key={index}
+          isHorizontal={isHorizontal}
+          isReversed={false}
+          isRounded={isLastItem}
+          isActive={true}
+          label={label}
+          className={classnames(
+            css.section,
+            isHorizontal && css.isHorizontal,
+            align === 'end' && css.alignEnd
+          )}
+          onChangeLabelSize={onChangeLabelSize}
+        />
+      )
     }
 
-    const isLastItem = index === sections.length - 1
-    const label =
-      isLastItem && isNotNil(total) && showValues ? formatValueForLabel(total) : undefined
-
     return (
-      <Section
-        color={item.color}
-        length={item.length}
-        key={index}
-        isHorizontal={isHorizontal}
-        isReversed={false}
-        isRounded={isLastItem}
-        isActive={true}
-        label={label}
-        className={classnames(
-          css.section,
-          isHorizontal && css.isHorizontal,
-          align === 'end' && css.alignEnd
-        )}
-        onChangeLabelSize={onChangeLabelSize}
-      />
+      <div
+        ref={ref}
+        style={{
+          ['--total-section-size' as string]: `${totalSectionSize}px`,
+        }}
+        className={classnames(baseCss.column, isHorizontal && baseCss.isHorizontal)}
+      >
+        {sections.map(renderSection)}
+      </div>
     )
   }
-
-  return (
-    <div
-      ref={ref}
-      style={{
-        ['--total-section-size' as string]: `${totalSectionSize}px`,
-      }}
-      className={classnames(baseCss.column, isHorizontal && baseCss.isHorizontal)}
-    >
-      {sections.map(renderSection)}
-    </div>
-  )
-}
+)
