@@ -6,6 +6,7 @@ import { isNumber } from 'lodash'
 
 import { FormatValue } from '@/_private/types'
 
+import { LabelSize } from '../..'
 import { Size } from '../../helpers'
 import { Section } from '../Section'
 import { TooltipData } from '../Tooltip'
@@ -60,7 +61,7 @@ type Props = {
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
 }
 
 export const Column: React.FC<Props> = ({

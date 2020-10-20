@@ -4,6 +4,7 @@ import { isDefined } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 import { omit, sumBy } from 'lodash'
 
+import { LabelSize } from '@/_private/components/BarChart'
 import { getColumnCenter, SectionItem } from '@/_private/components/BarChart/components/Column'
 import { getSections } from '@/_private/components/BarChart/components/Group/helpers'
 import baseCss from '@/_private/components/BarChart/components/Group/index.css'
@@ -37,7 +38,7 @@ type Props = {
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void
   onMouseLeaveColumn: (groupName: string) => void
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
   className?: string
   style?: React.CSSProperties
 }

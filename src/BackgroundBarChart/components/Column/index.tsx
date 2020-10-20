@@ -3,6 +3,7 @@ import React from 'react'
 import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 
+import { LabelSize } from '@/_private/components/BarChart'
 import { SectionItem } from '@/_private/components/BarChart/components/Column'
 import baseCss from '@/_private/components/BarChart/components/Column/index.css'
 import { Section } from '@/_private/components/BarChart/components/Section'
@@ -19,7 +20,7 @@ type Props = {
   isHorizontal: boolean
   align: Align
   formatValueForLabel?: FormatValue
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
 }
 
 export const Column: React.FC<Props> = ({

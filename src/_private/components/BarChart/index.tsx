@@ -46,6 +46,11 @@ export type Threshold = {
   color: string
 }
 
+export type LabelSize = {
+  width: number
+  height: number
+}
+
 export type Props<T> = {
   groupsDomain: readonly string[]
   valuesDomain: NumberRange
@@ -146,7 +151,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const [gridStyle, changeGridStyle] = useState({ width: 0, height: 0, left: 0, top: 0 })
 
   const [tooltipData, setTooltipData] = useState<TooltipData>()
-  const [labelSize, changeLabelSize] = useState<number>(0)
+  const [maxLabelSize, setMaxLabelSize] = useState<LabelSize>({
+    width: 0,
+    height: 0,
+  })
 
   const maxValue = valuesDomain[1]
   const columnSize = getColumnSize({
@@ -154,9 +162,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     valueLength: maxValue.toString().length,
     isHorizontal,
   })
-  const paddingRight = isHorizontal && showValues ? 50 : 0
+
+  const paddingRight = isHorizontal && showValues ? maxLabelSize.width : 0
   const paddingLeft = showReversed ? paddingRight : 0
-  const paddingTop = !isHorizontal && showValues ? labelSize : 0
+  const paddingTop = !isHorizontal && showValues ? maxLabelSize.height : 0
   const paddingBottom = showReversed ? paddingTop : 0
   const scaler = getScaler(maxValue)
   const valuesScale = scaleLinear({
@@ -190,6 +199,17 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     setTooltipData(undefined)
 
     onMouseLeaveColumn && onMouseLeaveColumn(groupName)
+  }
+
+  const changeLabelSize = (labelSize: LabelSize) => {
+    if (maxLabelSize.width >= labelSize.width && maxLabelSize.height >= labelSize.height) {
+      return
+    }
+
+    setMaxLabelSize({
+      width: labelSize.width,
+      height: labelSize.height,
+    })
   }
 
   useLayoutEffect(() => {
@@ -331,7 +351,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               onMouseEnterColumn: handleMouseEnterColumn,
               onMouseLeaveColumn: handleMouseLeaveColumn,
               formatValueForLabel,
-              onChangeLabelSize: groupIdx === 0 ? changeLabelSize : undefined,
+              onChangeLabelSize: changeLabelSize,
             })}
           </div>
         )
