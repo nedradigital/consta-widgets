@@ -8,11 +8,15 @@ const defaultColumnItem = {
   sections: undefined,
 }
 
-const getTransformColumn = (filter: (value: number) => boolean) => (
-  column: Column | undefined | null
-) => {
+const getTransformColumn = ({
+  skipEmptyColumns,
+  filter,
+}: {
+  skipEmptyColumns?: boolean
+  filter: (value: number) => boolean
+}) => (column: Column | undefined | null) => {
   if (!isNotNil(column)) {
-    return defaultColumnItem
+    return skipEmptyColumns ? undefined : defaultColumnItem
   }
 
   const total = _.sum(column.map(item => item.value))
@@ -37,20 +41,30 @@ const getTransformColumn = (filter: (value: number) => boolean) => (
     : defaultColumnItem
 }
 
-export const transformGroupsToCommonGroups = (groups: ReadonlyArray<Group | undefined | null>) => {
-  const getColumns = getTransformColumn(v => v >= 0)
-  const getReversedColumns = getTransformColumn(v => v < 0)
+export const transformGroupsToCommonGroups = ({
+  groups,
+  skipEmptyColumns,
+  skipEmptyGroups,
+}: {
+  groups: ReadonlyArray<Group | undefined | null>
+  skipEmptyColumns?: boolean
+  skipEmptyGroups?: boolean
+}) => {
+  const getColumns = getTransformColumn({ skipEmptyColumns, filter: v => v >= 0 })
+  const getReversedColumns = getTransformColumn({ skipEmptyColumns, filter: v => v < 0 })
 
-  return groups.filter(isNotNil).map(group => {
+  const result = groups.filter(isNotNil).map(group => {
     const columns = group.values.map(getColumns)
     const reversedColumns = group.values.map(getReversedColumns)
-    const total = _.sum(_.concat(columns, reversedColumns).flatMap(column => column.total))
 
     return {
       name: group.groupName,
-      total,
-      columns,
-      reversedColumns,
+      columns: skipEmptyColumns ? columns.filter(Boolean) : columns,
+      reversedColumns: skipEmptyColumns ? reversedColumns.filter(Boolean) : reversedColumns,
     }
   })
+
+  return skipEmptyGroups
+    ? result.filter(group => group.columns.length && group.reversedColumns.length)
+    : result
 }

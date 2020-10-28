@@ -22,7 +22,7 @@ type Props = {
 }
 
 export const SludgeChart: React.FC<Props> = ({ groups, ...rest }) => {
-  const commonGroups = transformGroupsToCommonGroups(groups)
+  const commonGroups = transformGroupsToCommonGroups({ groups })
   const groupsDomain = getGroupsDomain(commonGroups)
   const valuesDomain = getValuesDomain({
     groups: commonGroups,

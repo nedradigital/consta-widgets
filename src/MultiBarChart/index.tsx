@@ -34,15 +34,25 @@ type Props = {
   isHorizontal?: boolean
   size?: 's' | 'm'
   threshold?: Threshold
+  skipEmptyColumns?: boolean
+  skipEmptyGroups?: boolean
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   isXAxisLabelsSlanted?: boolean
 }
 
 export const MultiBarChart: React.FC<Props> = props => {
-  const { size = 'm', groups, threshold, showValues, ...rest } = props
+  const {
+    size = 'm',
+    groups,
+    threshold,
+    showValues,
+    skipEmptyColumns,
+    skipEmptyGroups,
+    ...rest
+  } = props
 
-  const commonGroups = transformGroupsToCommonGroups(groups)
+  const commonGroups = transformGroupsToCommonGroups({ groups, skipEmptyColumns, skipEmptyGroups })
   const isMultiColumn = commonGroups.some(group => group.columns.length > 1)
   const computedShowValues = showValues && (rest.isHorizontal || !isMultiColumn)
   const showReversed = isShowReversed({ groups: commonGroups, threshold: props.threshold })
