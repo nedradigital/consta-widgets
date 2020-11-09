@@ -43,7 +43,7 @@ type RenderControls<V> = (
     isCalendarOpened: boolean
   } & ValueProps<V> &
     StyleProps
-) => React.ReactNode
+) => React.ReactElement
 
 type SingleProps = {
   type: 'date'
