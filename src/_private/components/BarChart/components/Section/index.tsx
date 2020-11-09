@@ -3,6 +3,8 @@ import React from 'react'
 import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
+import { LabelSize } from '../..'
+
 import { getSize } from './helpers'
 import css from './index.css'
 
@@ -17,7 +19,7 @@ type Props = {
   className?: string
   onMouseEnter?: React.MouseEventHandler
   onMouseLeave?: React.MouseEventHandler
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
 }
 
 export const Section: React.FC<Props> = ({
@@ -40,7 +42,9 @@ export const Section: React.FC<Props> = ({
       return
     }
 
-    onChangeLabelSize && onChangeLabelSize(labelRef.current.getBoundingClientRect().height)
+    const { width, height } = labelRef.current.getBoundingClientRect()
+
+    onChangeLabelSize && onChangeLabelSize({ width: Math.round(width), height: Math.round(height) })
   }, [label, labelRef, onChangeLabelSize])
 
   return (

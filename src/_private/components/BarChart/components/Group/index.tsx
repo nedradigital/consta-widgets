@@ -4,6 +4,7 @@ import classnames from 'classnames'
 
 import { FormatValue } from '@/_private/types'
 
+import { LabelSize } from '../..'
 import { Column, ColumnSize, SectionItem } from '../Column'
 import { TooltipData } from '../Tooltip'
 
@@ -34,7 +35,7 @@ type Props = {
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void
   onMouseLeaveColumn: (groupName: string) => void
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
   className?: string
   style?: React.CSSProperties
 }
@@ -83,7 +84,7 @@ export const Group: React.FC<Props> = props => {
         formatValueForLabel={formatValueForLabel}
         onMouseEnterColumn={params => onMouseEnterColumn(group, params)}
         onMouseLeaveColumn={() => onMouseLeaveColumn(group)}
-        onChangeLabelSize={index === 0 ? onChangeLabelSize : undefined}
+        onChangeLabelSize={onChangeLabelSize}
       />
     )
   }

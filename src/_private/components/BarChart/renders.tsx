@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { FormatValue } from '@/_private/types'
 import { Scaler } from '@/_private/utils/scale'
 
+import { LabelSize } from '.'
 import { Group, GroupItem } from './components/Group'
 import { Position, Ticks } from './components/Ticks'
 import { TooltipData } from './components/Tooltip'
@@ -50,7 +51,7 @@ export type RenderGroup<T> = (props: {
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void
   onMouseLeaveColumn: (groupName: string) => void
   formatValueForLabel: FormatValue
-  onChangeLabelSize?: (size: number) => void
+  onChangeLabelSize?: (size: LabelSize) => void
 }) => React.ReactNode
 
 export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />
