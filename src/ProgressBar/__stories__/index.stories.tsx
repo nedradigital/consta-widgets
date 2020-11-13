@@ -5,8 +5,10 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory } from '@/_private/storybook'
 
-import { ProgressBar } from './'
-import { convertItemToDataItem, progressBarData, progressBarDataWithNullValue } from './data.mock'
+import { ProgressBar } from '..'
+import { convertItemToDataItem, progressBarData, progressBarDataWithNullValue } from '../data.mock'
+
+import docs from './docs.mdx'
 
 export const Interactive = createStory(() => {
   const data = object('data', progressBarData.data).map(convertItemToDataItem)
@@ -29,6 +31,9 @@ export default createMetadata({
   title: 'components/ProgressBar',
   decorators: [withSmartKnobs({ ignoreProps: ['data'] })],
   parameters: {
+    docs: {
+      page: docs,
+    },
     environment: {
       style: {
         width: 300,
