@@ -16,7 +16,9 @@ jobs:
         with:
           node-version: 12
 
-      - uses: ./.github/workflows/actions/yarn-install
+      - uses: octocat/say-hello@v1
+        with:
+          name: OctoCat
       - name: Тесты
         run: yarn test
 
