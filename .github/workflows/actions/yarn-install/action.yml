@@ -1,8 +1,4 @@
 runs:
   using: "composite"
   steps:
-      run: |
-        yarn policies set-version 1.19.1
-        echo "::set-output name=cache_dir::$(yarn cache dir)"
-    - run: echo Hello job done!.
-      shell: bash
+    - run: yarn policies set-version 1.19.1
