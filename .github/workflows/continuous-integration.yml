@@ -16,5 +16,5 @@ jobs:
         with:
           node-version: 12
 
-      - uses: ./.github/workflows/actions/yarn-install@v1
+      - uses: ./.github/workflows/actions/yarn-install
 
