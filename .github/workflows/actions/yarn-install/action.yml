@@ -1,6 +1,5 @@
 runs:
   using: "composite"
   steps:
-    - name: Установка yarn
     - run: echo Hello job done!.
       shell: bash
