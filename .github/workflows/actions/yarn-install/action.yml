@@ -2,9 +2,5 @@ runs:
   using: "composite"
   steps:
     - name: Установка yarn
-      id: yarn-setup
-      run: |
-        yarn policies set-version 1.19.1
-        echo "::set-output name=cache_dir::$(yarn cache dir)"
     - run: echo Hello job done!.
       shell: bash
