@@ -1,0 +1,260 @@
+import {
+  TornadoChartExample,
+  TornadoChartExampleGroup,
+  TornadoChartExampleShowValues,
+  TornadoChartExampleTooltip,
+  TornadoChartExampleGrid,
+  TornadoChartExampleGrid2,
+  TornadoChartExampleFormat,
+  TornadoChartExampleSizeS,
+  TornadoChartExampleSizeM,
+  TornadoChartExampleUnitLeft,
+  TornadoChartExampleUnitBottom,
+  TornadoChartExampleUnitLeftBottom,
+  TornadoChartExampleUnitNone,
+  TornadoChartExampleXPosTop,
+  TornadoChartExampleXPosBoth,
+  TornadoChartExampleXPosBottom,
+  TornadoChartExampleXPosNone,
+  TornadoChartExampleYPosBoth,
+  TornadoChartExampleYPosLeft,
+  TornadoChartExampleYPosRight,
+  TornadoChartExampleYPosNone,
+} from './examples/TornadoChartExample'
+
+# TornadoChart
+
+Диаграмма «торнадо». Подходит, чтобы сравнить две группы данных по одной категории.
+
+<TornadoChartExample />
+
+- [Данные](#данные)
+  - [Группы и столбцы](#группы-и-столбцы)
+  - [Цвет столбцов](#цвет-столбцов)
+  - [Название группы](#название-группы)
+  - [Значения у столбцов](#значения-у-столбцов)
+  - [Тултип](#тултип)
+- [Сетка](#сетка)
+  - [Сколько делений показывать](#сколько-делений-показывать)
+  - [Как часто ставить подписи](#как-часто-ставить-подписи)
+  - [Формат подписи к делениям](#формат-подписи-к-делениям)
+  - [Где показывать подписи](#где-показывать-подписи-к-делениям)
+- [Свойства графика](#свойства-графика)
+  - [Размер элементов](#размер-элементов)
+  - [Единицы измерения](#единицы-измерения)
+- [Список свойств](#свойства)
+- [Пример использования](#пример)
+
+## Данные
+
+### Группы и столбцы
+
+Группы и их содержимое можно описать в объекте `groups`. В него входит:
+
+- название группы — оно будет показываться на графике (задается в `groupName`),
+- описание значений для столбцов, которые будут показываться в этой группе (задается в массиве `values`).
+
+В группе всегда два столбца, первый показывается в левой части диаграммы,
+второй - в правой части.
+
+Например:
+
+```ts
+// groups
+[
+  {
+    groupName: 'АО Мессояханефтегаз',
+    values: [10, 6],
+  },
+  {
+    groupName: 'ООО ГПН-Оренбург',
+    values: [6, 3],
+  },
+  {
+    groupName: 'ООО ГПН-Заполярьег',
+    values: [4, 3],
+  },
+  {
+    groupName: 'ООО ГПН-Ямал',
+    values: [1, 2],
+  },
+  {
+    groupName: 'ООО ГПН-Восток',
+    values: [7, 13],
+  },
+  {
+    groupName: 'ООО Газпром-инвест',
+    values: [4, 12],
+  },
+]
+```
+
+### Цвет столбцов
+
+За цвет столбцов отвечает массив `colors`. Цвета применяются к значениям по порядку — так, как указаны.
+
+```ts
+// colors
+[ "#E5437C", "#9F0CE9" ]
+```
+
+<TornadoChartExampleGroup />
+
+### Название группы
+
+Название группы можно расположить в разных местах, за его расположение отвечает `yAxisShowPosition`.
+Варианты: `left`, `right`, `both`, `none`.
+
+| `yAxisShowPosition="left"`      | `yAxisShowPosition="right"`      |
+| ------------------------------- | -------------------------------- |
+| <TornadoChartExampleYPosLeft /> | <TornadoChartExampleYPosRight /> |
+
+| `yAxisShowPosition="both"`      | `yAxisShowPosition="none"`      |
+| ------------------------------- | ------------------------------- |
+| <TornadoChartExampleYPosBoth /> | <TornadoChartExampleYPosNone /> |
+
+### Значения у столбцов
+
+Чтобы показать значения рядом со столбцами, добавьте `showValues={true}`.
+
+<TornadoChartExampleShowValues />
+
+### Тултип
+
+При наведении на столбец показывается тултип — всплывающее окно с дополнительной информацией об этом столбце.
+
+Вы можете поменять формат значения в тултипе (за это отвечает свойство `formatValueForTooltip`). Например, добавить к значению единицы измерения.
+
+<TornadoChartExampleTooltip />
+
+```ts
+formatValueForTooltip={v => `${v} км`}
+```
+
+## Сетка
+
+### Сколько делений показывать
+
+За количество делений на графике отвечает `gridTicks`.
+
+### Как часто ставить подписи
+
+Вы можете указать, как часто ставить подписи рядом с делениями: у каждого, у каждого второго, третьего и т. д.
+За это отвечает `valuesTicks`.
+
+```ts
+gridTicks={5} // показываем 5 делений на графике
+valuesTicks={2} // ставим подпись у каждого второго деления
+```
+
+<TornadoChartExampleGrid />
+
+```ts
+gridTicks={10} // показываем 10 делений на графике
+valuesTicks={2} // ставим подпись у каждого второго деления
+```
+
+<TornadoChartExampleGrid2 />
+
+### Формат подписи к делениям
+
+Формат подписи указывается в `formatValueForLabel`, по умолчанию число — номер деления,
+но вы можете показать что-то другое, например, процент или дату.
+
+```ts
+formatValueForLabel={v => `${v}%`} //добавляем к числу в подписи знак %
+```
+
+<TornadoChartExampleFormat />
+
+### Где показывать подписи к делениям
+
+За расположение подписей к делениям отвечает `xAxisShowPosition`.
+Варианты: `top`, `bottom`, `both`, `none` .
+
+| `xAxisShowPosition="top"`      | `xAxisShowPosition="bottom"`      |
+| ------------------------------ | --------------------------------- |
+| <TornadoChartExampleXPosTop /> | <TornadoChartExampleXPosBottom /> |
+
+| `xAxisShowPosition="both"`      | `xAxisShowPosition="none"`      |
+| ------------------------------- | ------------------------------- |
+| <TornadoChartExampleXPosBoth /> | <TornadoChartExampleXPosNone /> |
+
+## Свойства графика
+
+### Размер элементов
+
+Вы можете менять размер элементов на графике с помощью свойства `size`.
+Варианты: `'s'` или `'m'`.
+
+| `size='s'`                   | `size='m`'                   |
+| ---------------------------- | ---------------------------- |
+| <TornadoChartExampleSizeS /> | <TornadoChartExampleSizeM /> |
+
+### Единицы измерения
+
+За единицы измерения отвечает свойство `unit`.
+
+Вы можете расположить их как удобно, за расположение единиц отвечает `unitPosition`.
+Варианты: `left`, `bottom`, `left-and-bottom`, `none`.
+
+| `unitPosition="left"`           | `unitPosition="bottom"`           |
+| ------------------------------- | --------------------------------- |
+| <TornadoChartExampleUnitLeft /> | <TornadoChartExampleUnitBottom /> |
+
+| `unitPosition="left-and-bottom"`      | `unitPosition="none"`           |
+| ------------------------------------- | ------------------------------- |
+| <TornadoChartExampleUnitLeftBottom /> | <TornadoChartExampleUnitNone /> |
+
+## Свойства
+
+<!-- props:start -->
+
+| Свойство                                               | Тип                                         | По умолчанию | Описание                                                                   |
+| ------------------------------------------------------ | ------------------------------------------- | ------------ | -------------------------------------------------------------------------- |
+| [`groups`](#группы-и-столбцы)                          | [`Group[]`](#group)                         | -            | Группы значения                                                            |
+| [`colors`](#цвет-столбцов)                             | `[string, string]`                          | -            | Цвета столбцов                                                             |
+| [`gridTicks`](#сколько-делений-показывать)             | `number`                                    | -            | Количество делений на графике                                              |
+| [`valuesTicks`](#как-часто-ставить-подписи)            | `number`                                    | -            | Когда ставить надписи рядом с делением: у каждого, у каждого второго и пр. |
+| [`size`](#размер-элементов)                            | `'s'`, `'m'`                                | `'m'`        | Размер графика                                                             |
+| [`xAxisShowPosition`](#название-группы)                | `top`, `bottom`, `both`, `none`             | -            | Где показывать названия групп                                              |
+| [`yAxisShowPosition`](#где-ставить-подписи-к-делениям) | `left`, `right`, `both`, `none`             | -            | Где показывать подписи к делениям                                          |
+| [`unit?`](#единицы-измерения)                          | `string`                                    | -            | Единицы измерения                                                          |
+| [`unitPosition?`](#единицы-измерения)                  | `left`, `bottom`, `left-and-bottom`, `none` | -            | Где показывать единицы измерения                                           |
+| [`showValues?`](#значения-у-столбцов)                  | `(value: number) => string`                 | -            | Показывает значения рядом со столбцами                                     |
+| [`formatValueForLabel?`](#формат-подписи-к-делениям)   | `(value: number) => string`                 | -            | Формат значений для подписи к делениям                                     |
+| [`formatValueForTooltip?`](#тултип)                    | `(value: number) => string`                 | -            | Формат значений в тултипе                                                  |
+
+### Group
+
+| Свойство                         | Тип                | По умолчанию | Описание              |
+| -------------------------------- | ------------------ | ------------ | --------------------- |
+| [`groupName`](#группы-и-столбцы) | `string`           | -            | Название группы       |
+| [`values`](#группы-и-столбцы)    | `[number, number]` | -            | Значения для столбцов |
+
+## Пример
+
+```tsx
+import { TornadoChart } from '@consta/widgets/TornadoChart'
+
+<TornadoChart
+  groups={[
+    {
+      groupName: 'АО Мессояханефтегаз',
+      values: [10, 6],
+    },
+    {
+      groupName: 'ООО ГПН-Оренбург',
+      values: [6, 3],
+    },
+  ]}
+  colors={['#E5437C', '#9F0CE9']}
+  gridTicks={5}
+  valuesTicks={1}
+  unit="млн руб."
+  unitPosition="bottom"
+  xAxisShowPosition="bottom"
+  yAxisShowPosition="both"
+  formatValueForTooltip={(v: number) => `${v} млн руб.`}
+/>
+```

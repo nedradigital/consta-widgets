@@ -12,7 +12,7 @@ export const interactiveData = {
       values: [6, 3],
     },
     {
-      groupName: 'ООО ГПН-Заполярьег',
+      groupName: 'ООО ГПН-Заполярье',
       values: [4, 3],
     },
     {
@@ -28,5 +28,5 @@ export const interactiveData = {
       values: [4, 12],
     },
   ],
-  unit: 'млн. руб.',
+  unit: 'млн руб.',
 } as const

@@ -7,8 +7,10 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { unitPositions } from '@/_private/components/BarChart'
 import { createMetadata, createStory } from '@/_private/storybook'
 
-import { TornadoChart } from './'
-import { interactiveData } from './data.mock'
+import { TornadoChart } from '..'
+import { interactiveData } from '../data.mock'
+
+import docs from './docs.mdx'
 
 const getCommonProps = () => {
   const unit = text('unit', interactiveData.unit)
@@ -74,6 +76,9 @@ export default createMetadata({
   title: 'components/TornadoChart',
   decorators: [withSmartKnobs({ ignoreProps: ['title'] })],
   parameters: {
+    docs: {
+      page: docs,
+    },
     environment: { style: { width: '60vw', height: '80vh' } },
   },
 })
