@@ -6,3 +6,9 @@ runs:
         yarn policies set-version 1.19.1
         echo "::set-output name=cache_dir::$(yarn cache dir)"
       shell: bash
+    - name: Установка зависимостей
+      run: yarn --frozen-lockfile
+        shell: bash
+    - name: Сборка пакета
+      run: yarn build
+        shell: bash
