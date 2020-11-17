@@ -5,3 +5,4 @@ runs:
       run: |
         yarn policies set-version 1.19.1
         echo "::set-output name=cache_dir::$(yarn cache dir)"
+      shell: bash
