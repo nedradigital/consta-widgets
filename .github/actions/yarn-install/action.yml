@@ -8,7 +8,7 @@ runs:
       shell: bash
     - name: Установка зависимостей
       run: yarn --frozen-lockfile
-        shell: bash
+      shell: bash
     - name: Сборка пакета
       run: yarn build
-        shell: bash
+      shell: bash
