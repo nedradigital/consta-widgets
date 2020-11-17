@@ -24,6 +24,7 @@ const getCommonProps = () => {
     colors,
     groups: interactiveData.groups,
     formatValueForTooltip: (v: number) => `${v} ${unit}`,
+    withScroll: false,
   } as const
 }
 

@@ -1,10 +1,11 @@
 import React from 'react'
 
 import { action } from '@storybook/addon-actions'
-import { object, select } from '@storybook/addon-knobs'
+import { select } from '@storybook/addon-knobs'
 import { Dictionary, zipObject } from 'lodash'
+import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, environmentDecorator } from '@/_private/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 import { Group } from '@/MultiBarChart'
 
 import { SludgeChart } from '.'
@@ -80,23 +81,25 @@ const activeSectionIndexSelectList = getSelectList(sectionIndexes)
 export const Interactive = createStory(() => {
   return (
     <SludgeChart
-      groups={object('groups', groups)}
+      groups={groups}
       activeSectionIndex={select('activeSectionIndex', activeSectionIndexSelectList, undefined)}
       activeGroup={select('activeGroup', activeGroupSelectList, undefined)}
       formatValueForLabel={value => `${value}%`}
       onMouseEnterColumn={action('onMouseEnterColumn')}
       onMouseLeaveColumn={action('onMouseLeaveColumn')}
+      withScroll={false}
     />
   )
 })
 
 export default createMetadata({
   title: 'components/SludgeChart',
-  decorators: [environmentDecorator()],
+  decorators: [withSmartKnobs()],
   parameters: {
     environment: {
       style: {
         width: '40vw',
+        height: '30vh',
       },
     },
   },
