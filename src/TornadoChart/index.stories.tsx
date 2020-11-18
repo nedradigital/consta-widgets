@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Text } from '@consta/uikit/Text'
 import { object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -47,9 +48,31 @@ export const Minimalistic = createStory(
   { name: 'минималистичный' }
 )
 
+export const WithTitle = createStory(
+  () => {
+    return (
+      <TornadoChart
+        {...getCommonProps()}
+        gridTicks={5}
+        valuesTicks={1}
+        xAxisShowPosition="bottom"
+        yAxisShowPosition="both"
+        title={
+          <Text as="div" view="primary" size="m">
+            {text('title', 'Заголовок')}
+          </Text>
+        }
+      />
+    )
+  },
+  {
+    name: 'с заголовком',
+  }
+)
+
 export default createMetadata({
   title: 'components/TornadoChart',
-  decorators: [withSmartKnobs()],
+  decorators: [withSmartKnobs({ ignoreProps: ['title'] })],
   parameters: {
     environment: { style: { width: '60vw', height: '80vh' } },
   },

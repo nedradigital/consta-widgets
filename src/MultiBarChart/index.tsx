@@ -34,6 +34,7 @@ type Props = {
   isHorizontal?: boolean
   size?: 's' | 'm'
   threshold?: Threshold
+  title?: React.ReactNode
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   isXAxisLabelsSlanted?: boolean

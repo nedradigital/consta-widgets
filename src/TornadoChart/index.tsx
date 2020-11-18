@@ -33,6 +33,7 @@ type Props = {
   unit?: string
   unitPosition?: UnitPosition
   showValues?: boolean
+  title?: React.ReactNode
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
 }
