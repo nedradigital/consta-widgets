@@ -33,6 +33,7 @@ export const SludgeChart: React.FC<Props> = ({ groups, ...rest }) => {
   return (
     <CoreBarChart
       {...rest}
+      gridRowGap={0}
       groups={commonGroups}
       groupsDomain={groupsDomain}
       valuesDomain={valuesDomain}
@@ -41,7 +42,6 @@ export const SludgeChart: React.FC<Props> = ({ groups, ...rest }) => {
       valuesTicks={0}
       size="l"
       isHorizontal
-      isDense
       renderGroup={defaultRenderGroup}
     />
   )

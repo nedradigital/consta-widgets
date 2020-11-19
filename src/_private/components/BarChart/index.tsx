@@ -3,7 +3,6 @@ import React, { useLayoutEffect, useRef, useState } from 'react'
 import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { Text, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
-import _ from 'lodash'
 
 import { Grid } from '@/_private/components/Grid'
 import { FormatValue } from '@/_private/types'
@@ -20,6 +19,8 @@ import {
   GetAxisShowPositions,
   getColumnSize,
   getEveryNTick,
+  getGridColumnGap,
+  getGridRowGap,
   getGridSettings,
   getLabelGridAreaName,
   getRange,
@@ -78,6 +79,8 @@ export type Props<T> = {
   renderAxisValues?: RenderAxisValues
   onMouseEnterColumn?: OnMouseHoverColumn
   onMouseLeaveColumn?: OnMouseHoverColumn
+  gridRowGap?: number | string
+  gridColumnGap?: number | string
 }
 
 const unitSize: Record<TicksSize, TextPropSize> = {
@@ -100,12 +103,6 @@ const axisTicksPositionsClasses = {
   bottom: css.bottomTicks,
   right: css.rightTicks,
   top: css.topTicks,
-}
-
-const axisSizeClasses: Record<TicksSize, string> = {
-  s: css.asixSizeS,
-  m: css.asixSizeM,
-  l: css.asixSizeM,
 }
 
 const renderUnit = (className: string, unit: string, size: TicksSize) => (
@@ -142,6 +139,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     isXAxisLabelsSlanted,
     onMouseEnterColumn,
     onMouseLeaveColumn,
+    gridRowGap,
+    gridColumnGap,
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const svgRef = useRef(null)
@@ -283,6 +282,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const showUnitBottom =
     unitPosition !== 'none' && (unitPosition === 'bottom' || unitPosition === 'left-and-bottom')
 
+  const axisSize = toAxisSize(columnSize)
+  const computedGridRowGap = gridRowGap ?? getGridRowGap(axisSize, isHorizontal)
+  const computedGridColumnGap = gridColumnGap ?? getGridColumnGap(axisSize)
+
   /**
    * Из за различий в построении осей для горизонтального и вертикального режима
    * пришлось задублировать рендер axisShowPositions
@@ -297,8 +300,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         className={classnames(
           css.chart,
           isHorizontal && css.isHorizontal,
-          isDense && css.isDense,
-          size && axisSizeClasses[toAxisSize(columnSize)],
           columnSizeClasses[columnSize]
         )}
         style={{
@@ -310,6 +311,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             maxColumn,
             axisShowPositions,
           }),
+          gridGap: `${computedGridRowGap} ${computedGridColumnGap}`,
         }}
       >
         <svg className={css.svg} ref={svgRef} style={gridStyle}>
@@ -330,7 +332,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             />
           )}
         </svg>
-        {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, toAxisSize(columnSize))}
+        {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, axisSize)}
         {!isHorizontal && axisShowPositions.top && renderHorizontal('top')}
         {axisShowPositions.right && renderVertical('right')}
         {groups.map((group, groupIdx) => {
@@ -374,7 +376,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         })}
         {axisShowPositions.left && renderVertical('left')}
         {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
-        {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, toAxisSize(columnSize))}
+        {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, axisSize)}
       </div>
       {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
       {tooltipData && (
