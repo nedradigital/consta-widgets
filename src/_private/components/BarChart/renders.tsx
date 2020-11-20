@@ -1,7 +1,5 @@
 import React from 'react'
 
-import _ from 'lodash'
-
 import { FormatValue } from '@/_private/types'
 import { Scaler } from '@/_private/utils/scale'
 
@@ -17,7 +15,7 @@ export type RenderGroupsLabels = (props: {
   size: Size
   isXAxisLabelsSlanted?: boolean
   getGridAreaName: (index: number) => string
-}) => React.ReactNode
+}) => React.ReactElement | null
 
 export const defaultRenderGroupsLabels: RenderGroupsLabels = ({ size, ...rest }) => {
   return <Ticks {...rest} isLabel size={toAxisSize(size)} showLine />
@@ -29,7 +27,7 @@ export type RenderAxisValues = (props: {
   position: Position
   size: Size
   formatValueForLabel?: FormatValue
-}) => React.ReactNode
+}) => React.ReactElement | null
 
 export const defaultRenderAxisValues: RenderAxisValues = ({ size, ...rest }) => {
   return <Ticks {...rest} size={toAxisSize(size)} showLine />
@@ -52,6 +50,6 @@ export type RenderGroup<T> = (props: {
   onMouseLeaveColumn: (groupName: string) => void
   formatValueForLabel: FormatValue
   onChangeLabelSize?: (size: LabelSize) => void
-}) => React.ReactNode
+}) => React.ReactElement | null
 
 export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />

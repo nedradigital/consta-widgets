@@ -175,3 +175,14 @@ switch (value) {
         return <ul>{items.map(item => <ListItem {...item} />)}</ul>
     }
 ```
+## Оформление render props
+Render props должен возвращать тип `React.ReactElement | null`
+Это поможет избежать проблем с `Warning: React has detected a change in the order of Hooks
+called by ...` см [TSUB-1337](https://jira.csssr.io/browse/TSUB-1337)
+
+Пример:
+```typescript
+type Props = {
+  renderItem: () => React.ReactElement | null
+}
+```

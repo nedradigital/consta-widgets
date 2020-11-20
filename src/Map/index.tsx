@@ -70,10 +70,10 @@ export type RenderObjectPoint = (
     onMouseEnter: (e: React.MouseEvent) => void
     onMouseLeave: (e: React.MouseEvent) => void
   }
-) => React.ReactNode
-export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactNode
-export type RenderConnectionLine = (connectionLine: ConnectionLine) => React.ReactNode
-export type RenderZoomOutButton = (o: { onClick: () => void }) => React.ReactNode
+) => React.ReactElement | null
+export type RenderConnectionPoint = (connectionPoint: ConnectionPoint) => React.ReactElement | null
+export type RenderConnectionLine = (connectionLine: ConnectionLine) => React.ReactElement | null
+export type RenderZoomOutButton = (o: { onClick: () => void }) => React.ReactElement | null
 export type SelectedObjectId = string | undefined
 
 export type MapPadding = readonly [number, number]
