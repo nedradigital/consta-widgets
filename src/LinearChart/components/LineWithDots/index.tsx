@@ -128,6 +128,21 @@ export const LineWithDots: React.FC<Props> = props => {
           )
         })}
       </g>
+      <g>
+        {values.filter(itemIsNotEmpty).map((item, idx) => {
+          return (
+            <text
+              key={idx}
+              x={scaleX(item.x)}
+              y={scaleY(item.y)}
+              className={css.dotLabel}
+              text-anchor="middle"
+            >
+              {item.y}
+            </text>
+          )
+        })}
+      </g>
     </g>
   )
 }

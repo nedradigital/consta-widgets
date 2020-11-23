@@ -9,3 +9,11 @@
     stroke: var(--color-bg-default);
   }
 }
+
+.dotLabel {
+  font-size: var(--size-text-xs);
+
+  fill: var(--color-typo-secondary);
+
+  transform: translateY(calc(-1 * var(--axis-tick-offset)));
+}
