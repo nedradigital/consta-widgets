@@ -31,6 +31,7 @@ type Props = {
   isHorizontal?: boolean
   isXAxisLabelsSlanted?: boolean
   threshold?: Threshold
+  title?: React.ReactNode
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   isEmptyColumnsHidden?: boolean

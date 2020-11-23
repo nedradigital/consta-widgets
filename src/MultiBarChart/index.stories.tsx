@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { Text } from '@consta/uikit/Text'
 import { object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -73,9 +74,28 @@ export const WithThreshold = createStory(
   { name: 'с предельным значением' }
 )
 
+export const WithTitle = createStory(
+  () => {
+    return (
+      <MultiBarChart
+        {...getCommonProps(interactiveData.unit)}
+        groups={interactiveData.groups}
+        title={
+          <Text as="div" view="primary" size="m">
+            {text('title', 'Заголовок')}
+          </Text>
+        }
+      />
+    )
+  },
+  {
+    name: 'с заголовком',
+  }
+)
+
 export default createMetadata({
   title: 'components/MultiBarChart',
-  decorators: [withSmartKnobs()],
+  decorators: [withSmartKnobs({ ignoreProps: ['title'] })],
   parameters: {
     environment: { style: { width: '60vw', height: '80vh' } },
   },

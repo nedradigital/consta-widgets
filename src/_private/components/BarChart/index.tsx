@@ -71,6 +71,7 @@ export type Props<T> = {
   activeSectionIndex?: number
   activeGroup?: string
   threshold?: Threshold
+  title?: React.ReactNode
   renderGroup: RenderGroup<T>
   getAxisShowPositions?: GetAxisShowPositions
   formatValueForLabel?: FormatValue
@@ -130,6 +131,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     activeSectionIndex,
     activeGroup,
     threshold,
+    title,
     getAxisShowPositions = defaultGetAxisShowPositions,
     formatValueForLabel = String,
     formatValueForTooltip,
@@ -293,99 +295,106 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
    * Для !isHorizontal рендерится внутри обертки, для того, чтобы лейблы строились по grid сетке.
    */
   return (
-    <div className={classnames(css.main, withScroll && isHorizontal && css.withVerticalScroll)}>
-      {isHorizontal && axisShowPositions.top && renderHorizontal('top')}
-      <div
-        ref={ref}
-        className={classnames(
-          css.chart,
-          isHorizontal && css.isHorizontal,
-          columnSizeClasses[columnSize]
-        )}
-        style={{
-          ...getGridSettings({
-            isHorizontal,
-            countGroups: groups.length,
-            showUnitBottom,
-            showUnitLeft,
-            maxColumn,
-            axisShowPositions,
-          }),
-          gridGap: `${computedGridRowGap} ${computedGridColumnGap}`,
-        }}
-      >
-        <svg className={css.svg} ref={svgRef} style={gridStyle}>
-          <Grid
-            scalerX={valuesScale}
-            scalerY={valuesScale}
-            xTickValues={gridXTickValues}
-            yTickValues={gridYTickValues}
-            width={gridStyle.width}
-            height={gridStyle.height}
-          />
-          {threshold && (
-            <Threshold
-              valuesScale={valuesScale}
-              isHorizontal={isHorizontal}
-              color={threshold.color}
-              value={threshold.value}
-            />
-          )}
-        </svg>
-        {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, axisSize)}
-        {!isHorizontal && axisShowPositions.top && renderHorizontal('top')}
-        {axisShowPositions.right && renderVertical('right')}
-        {groups.map((group, groupIdx) => {
-          const isFirstGroup = groupIdx === 0
-          const isLastGroup = groupIdx === groups.length - 1
-
-          return (
-            <div
-              key={groupIdx}
-              ref={
-                isFirstGroup || isLastGroup ? groupsRef.current[isFirstGroup ? 0 : 1] : undefined
-              }
-              style={{
-                gridArea: `group${groupIdx}`,
-                minHeight: !isHorizontal ? CHART_MIN_HEIGHT : undefined,
-                ...horizontalStyles,
-                ...verticalStyles,
-              }}
-              className={css.groupWrapper}
-            >
-              {renderGroup({
-                item: group,
-                index: groupIdx,
-                isLast: isLastGroup,
-                isFirst: isFirstGroup,
-                isDense,
-                columnSize,
-                showValues,
-                showReversed,
-                isHorizontal,
-                activeGroup,
-                activeSectionIndex,
-                scaler,
-                onMouseEnterColumn: handleMouseEnterColumn,
-                onMouseLeaveColumn: handleMouseLeaveColumn,
-                formatValueForLabel,
-                onChangeLabelSize: changeLabelSize,
-              })}
-            </div>
-          )
-        })}
-        {axisShowPositions.left && renderVertical('left')}
-        {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
-        {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, axisSize)}
-      </div>
-      {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
-      {tooltipData && (
-        <Tooltip
-          data={tooltipData}
-          isHorizontal={isHorizontal}
-          formatValue={formatValueForTooltip || formatValueForLabel}
-        />
+    <div className={css.wrapper}>
+      {title && (
+        <div className={css.title} style={{ paddingLeft: gridStyle.left }}>
+          {title}
+        </div>
       )}
+      <div className={classnames(css.main, withScroll && isHorizontal && css.withVerticalScroll)}>
+        {isHorizontal && axisShowPositions.top && renderHorizontal('top')}
+        <div
+          ref={ref}
+          className={classnames(
+            css.chart,
+            isHorizontal && css.isHorizontal,
+            columnSizeClasses[columnSize]
+          )}
+          style={{
+            ...getGridSettings({
+              isHorizontal,
+              countGroups: groups.length,
+              showUnitBottom,
+              showUnitLeft,
+              maxColumn,
+              axisShowPositions,
+            }),
+            gridGap: `${computedGridRowGap} ${computedGridColumnGap}`,
+          }}
+        >
+          <svg className={css.svg} ref={svgRef} style={gridStyle}>
+            <Grid
+              scalerX={valuesScale}
+              scalerY={valuesScale}
+              xTickValues={gridXTickValues}
+              yTickValues={gridYTickValues}
+              width={gridStyle.width}
+              height={gridStyle.height}
+            />
+            {threshold && (
+              <Threshold
+                valuesScale={valuesScale}
+                isHorizontal={isHorizontal}
+                color={threshold.color}
+                value={threshold.value}
+              />
+            )}
+          </svg>
+          {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, axisSize)}
+          {!isHorizontal && axisShowPositions.top && renderHorizontal('top')}
+          {axisShowPositions.right && renderVertical('right')}
+          {groups.map((group, groupIdx) => {
+            const isFirstGroup = groupIdx === 0
+            const isLastGroup = groupIdx === groups.length - 1
+
+            return (
+              <div
+                key={groupIdx}
+                ref={
+                  isFirstGroup || isLastGroup ? groupsRef.current[isFirstGroup ? 0 : 1] : undefined
+                }
+                style={{
+                  gridArea: `group${groupIdx}`,
+                  minHeight: !isHorizontal ? CHART_MIN_HEIGHT : undefined,
+                  ...horizontalStyles,
+                  ...verticalStyles,
+                }}
+                className={css.groupWrapper}
+              >
+                {renderGroup({
+                  item: group,
+                  index: groupIdx,
+                  isLast: isLastGroup,
+                  isFirst: isFirstGroup,
+                  isDense,
+                  columnSize,
+                  showValues,
+                  showReversed,
+                  isHorizontal,
+                  activeGroup,
+                  activeSectionIndex,
+                  scaler,
+                  onMouseEnterColumn: handleMouseEnterColumn,
+                  onMouseLeaveColumn: handleMouseLeaveColumn,
+                  formatValueForLabel,
+                  onChangeLabelSize: changeLabelSize,
+                })}
+              </div>
+            )
+          })}
+          {axisShowPositions.left && renderVertical('left')}
+          {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
+          {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, axisSize)}
+        </div>
+        {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
+        {tooltipData && (
+          <Tooltip
+            data={tooltipData}
+            isHorizontal={isHorizontal}
+            formatValue={formatValueForTooltip || formatValueForLabel}
+          />
+        )}
+      </div>
     </div>
   )
 }
