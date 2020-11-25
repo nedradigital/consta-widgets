@@ -2,7 +2,7 @@ import React from 'react'
 
 import { action } from '@storybook/addon-actions'
 import { object, select } from '@storybook/addon-knobs'
-import { zipObject } from 'lodash'
+import { Dictionary, zipObject } from 'lodash'
 
 import { createMetadata, createStory, environmentDecorator } from '@/_private/storybook'
 import { Group } from '@/MultiBarChart'
@@ -68,7 +68,8 @@ const groups: readonly Group[] = [
   },
 ]
 
-const getSelectList = (list: readonly any[]) => zipObject(['--', ...list], [undefined, ...list])
+const getSelectList = <T extends string | number>(list: T[]): Dictionary<T | undefined> =>
+  zipObject(['--', ...list], [undefined, ...list])
 
 const groupNames = groups.map(({ groupName }) => groupName)
 const activeGroupSelectList = getSelectList(groupNames)
