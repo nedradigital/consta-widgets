@@ -95,3 +95,58 @@ export const progressBarDataWithNullValue: MockData = {
     },
   ],
 }
+
+export const progressBarDataMin: MockData = {
+  data: [
+    {
+      value: 50,
+      valueMin: 0,
+      valueMax: 100,
+      summary: '50 штук',
+      color: colors.first,
+    },
+  ],
+}
+
+export const progressBarDataCaption: MockData = {
+  data: [
+    {
+      value: 30,
+      valueMin: 0,
+      valueMax: 100,
+      summary: '30 марсиан',
+      color: colors.third,
+      caption: 'Прилетело с Марса',
+    },
+    {
+      value: 50,
+      valueMin: 0,
+      valueMax: 100,
+      summary: '50 венериан',
+      color: colors.second,
+      caption: 'Прилетело с Венеры',
+    },
+    {
+      value: 70,
+      valueMin: 0,
+      valueMax: 100,
+      summary: '70 человек',
+      color: colors.first,
+      caption: 'Прилетело с Земли',
+    },
+  ],
+}
+
+export const progressBarDataTicks: MockData = {
+  data: [
+    {
+      value: 70,
+      valueMin: 0,
+      valueMax: 100,
+      summary: 70,
+      color: colors.first,
+      caption: 'Выросло капустки',
+      ticks,
+    },
+  ],
+}
