@@ -64,6 +64,7 @@ export type Line = {
   withBoundaries?: boolean
   lineName: string
   color: string
+  showValues?: boolean
 }
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
@@ -372,6 +373,7 @@ export class LinearChart extends React.Component<Props, State> {
                   values={[...line.values]}
                   color={line.color}
                   hasDotRadius={line.dots}
+                  showValues={line.showValues}
                   defaultDotRadius={dotRadius}
                   scaleX={scaleX}
                   scaleY={scaleY}
