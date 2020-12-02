@@ -828,3 +828,131 @@ export const monochromeData: Data = {
   ],
   filters: monochromeDataFilters,
 }
+
+export const exampleDataFilters: TableFilters<RoadmapRow> = [
+  {
+    id: 'cheb',
+    name: 'Выбрать Чебурашку',
+    filterer: (value: string) => value === 'Чебурашка',
+    field: 'builder',
+  },
+  {
+    id: 'shap',
+    name: 'Выбрать Шапокляк',
+    filterer: (value: string) => value === 'Шапокляк',
+    field: 'builder',
+  },
+  {
+    id: 'croc',
+    name: 'Крокодил',
+    filterer: (value: string) => value === 'Домик для крокодила',
+    field: 'building',
+  },
+  {
+    id: 'rat',
+    name: 'Крыса',
+    filterer: (value: string) => value === 'Будка для крысы',
+    field: 'building',
+  },
+]
+
+export const exampleData: Data = {
+  startDate: Date.UTC(2020, 0, 1),
+  currentDay: Date.UTC(2020, 3, 10),
+  endDate: Date.UTC(2020, 3, 10),
+  columns: [
+    {
+      title: 'Что строим',
+      accessor: 'building',
+      width: 150,
+    },
+    {
+      title: 'Кто строит',
+      accessor: 'builder',
+      align: 'center',
+      width: 120,
+    },
+  ],
+  rows: [
+    {
+      id: 'row1',
+      building: 'Дом для крокодила',
+      builder: 'Чебурашка',
+      groups: [
+        {
+          title: 'Фундамент',
+          plan: {
+            startDate: Date.UTC(2020, 0, 1),
+            endDate: Date.UTC(2020, 2, 5),
+          },
+          fact: {
+            startDate: Date.UTC(2020, 0, 19),
+            endDate: Date.UTC(2020, 2, 27),
+          },
+          color: 'var(--color-bg-success)',
+        },
+        {
+          title: 'Стены',
+          plan: {
+            startDate: Date.UTC(2020, 2, 5),
+            endDate: Date.UTC(2020, 3, 12),
+          },
+          fact: {
+            startDate: Date.UTC(2020, 2, 27),
+            endDate: Date.UTC(2020, 3, 10),
+          },
+          color: '#A13DFF',
+        },
+        {
+          title: 'Крыша',
+          plan: {
+            startDate: Date.UTC(2020, 3, 12),
+            endDate: Date.UTC(2020, 3, 22),
+          },
+          fact: {
+            startDate: Date.UTC(2020, 3, 10),
+            endDate: Date.UTC(2020, 3, 10),
+          },
+          color: 'var(--color-bg-normal)',
+        },
+      ],
+    },
+    {
+      id: 'row2',
+      building: 'Будка для крысы',
+      builder: 'Шапокляк',
+      groups: [
+        {
+          title: 'Фундамент',
+          plan: {
+            startDate: Date.UTC(2020, 0, 1),
+            endDate: Date.UTC(2020, 2, 5),
+          },
+          fact: {
+            startDate: Date.UTC(2020, 0, 1),
+            endDate: Date.UTC(2020, 1, 20),
+          },
+          color: 'var(--color-bg-success)',
+        },
+        {
+          title: 'Стены',
+          plan: {
+            startDate: Date.UTC(2020, 2, 5),
+            endDate: Date.UTC(2020, 3, 1),
+          },
+          fact: {
+            startDate: Date.UTC(2020, 1, 20),
+            endDate: Date.UTC(2020, 3, 10),
+          },
+          forecast: {
+            startDate: Date.UTC(2020, 1, 20),
+            endDate: Date.UTC(2020, 3, 22),
+          },
+          comment: 'Задерживаемся: проблемы с кирпичами',
+          color: '#A13DFF',
+        },
+      ],
+    },
+  ],
+  filters: exampleDataFilters,
+}

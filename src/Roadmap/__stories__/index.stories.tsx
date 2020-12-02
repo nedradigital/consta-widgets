@@ -5,8 +5,10 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
 import { createMetadata, createStory } from '@/_private/storybook'
 
-import { Roadmap } from '.'
-import { data, minimalData, monochromeData } from './data.mock'
+import { Roadmap } from '..'
+import { data, minimalData, monochromeData } from '../data.mock'
+
+import docs from './docs.mdx'
 
 export const Interactive = createStory(() => {
   const { columns, rows, currentDay, startDate, endDate, filters } = data
@@ -63,6 +65,9 @@ export default createMetadata({
   title: 'components/Roadmap',
   decorators: [withSmartKnobs()],
   parameters: {
+    docs: {
+      page: docs,
+    },
     environment: {
       style: {
         width: '80vw',
