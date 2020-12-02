@@ -32,6 +32,7 @@ type Props = {
   unitPosition?: UnitPosition
   showValues?: boolean
   isHorizontal?: boolean
+  withScroll?: boolean
   size?: 's' | 'm'
   threshold?: Threshold
   title?: React.ReactNode

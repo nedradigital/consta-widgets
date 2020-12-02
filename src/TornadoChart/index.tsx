@@ -34,6 +34,7 @@ type Props = {
   unitPosition?: UnitPosition
   showValues?: boolean
   title?: React.ReactNode
+  withScroll?: boolean
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
 }

@@ -15,6 +15,7 @@ type Props = {
   groups: readonly Group[]
   activeSectionIndex?: number
   activeGroup?: string
+  withScroll?: boolean
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   onMouseEnterColumn?: OnMouseHoverColumn

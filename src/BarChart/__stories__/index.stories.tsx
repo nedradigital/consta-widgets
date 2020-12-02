@@ -23,6 +23,7 @@ const getCommonProps = (initialUnit: string) => {
     formatValueForTooltip: (v: number) => `${v} ${unit}`,
     unit,
     unitPosition,
+    withScroll: false,
   } as const
 }
 

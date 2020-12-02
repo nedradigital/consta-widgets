@@ -29,6 +29,7 @@ type Props = {
   size?: 's' | 'm' | 'auto'
   showValues?: boolean
   isHorizontal?: boolean
+  withScroll?: boolean
   isXAxisLabelsSlanted?: boolean
   threshold?: Threshold
   title?: React.ReactNode
