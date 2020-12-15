@@ -24,7 +24,7 @@
   &.isPlan {
     opacity: 0.4;
 
-    transform: translateY(calc((var(--chart-line-height) + var(--space-between-lines)) * -1));
+    transform: translateY(calc(-1 * (var(--chart-line-height) + var(--space-between-lines))));
   }
 
   &.isActive {
