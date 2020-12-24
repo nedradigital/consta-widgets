@@ -7,8 +7,10 @@ import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 import { createMetadata, createStory } from '@/_private/storybook'
 import { getFormattedValue } from '@/_private/utils/chart'
 
-import { RadarChart } from './'
-import { axesLabels, emptyFigures, figures } from './data.mock'
+import { RadarChart } from '..'
+import { axesLabels, emptyFigures, figures } from '../data.mock'
+
+import docs from './docs.mdx'
 
 const formattersLabel = ['--', 'Как проценты'] as const
 type FormatterLabelName = typeof formattersLabel[number]
@@ -46,6 +48,9 @@ const getFormattersForTooltip = () => {
 const decorators = [withSmartKnobs({ ignoreProps: ['backgroundColor', 'title'] })] as const
 
 const parameters = {
+  docs: {
+    page: docs,
+  },
   environment: {
     style: {
       width: '550px',
@@ -171,6 +176,9 @@ export const FontSizeReduction = createStory(
   {
     name: 'уменьшение размера шрифта',
     parameters: {
+      docs: {
+        page: docs,
+      },
       environment: {
         style: {
           width: '100vw',
