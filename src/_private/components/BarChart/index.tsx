@@ -20,7 +20,6 @@ import {
   defaultGetAxisShowPositions,
   GetAxisShowPositions,
   getColumnSize,
-  getEveryNTick,
   getGridColumnGap,
   getGridRowGap,
   getGridSettings,
@@ -60,7 +59,6 @@ export type Props<T> = {
   groups: readonly T[]
   maxColumn: number
   gridTicks: number
-  valuesTicks: number
   size: Size
   isHorizontal?: boolean
   withScroll?: boolean
@@ -121,7 +119,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     groups,
     maxColumn,
     gridTicks,
-    valuesTicks,
     isHorizontal = false,
     withScroll = false,
     showValues = false,
@@ -181,7 +178,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     ),
   })
   const gridItems = getTicks(valuesDomain, gridTicks)
-  const axisValues = getEveryNTick(gridItems, valuesTicks)
+  const axisValues = gridItems
   const gridXTickValues = isHorizontal ? gridItems : []
   const gridYTickValues = isHorizontal ? [] : gridItems
   const axisShowPositions = getAxisShowPositions({ isHorizontal, showReversed })

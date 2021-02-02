@@ -23,7 +23,6 @@ type Props = {
   groups: readonly Group[]
   colors: readonly string[]
   gridTicks: number
-  valuesTicks: number
   unit?: string
   unitPosition?: UnitPosition
   size?: 's' | 'm' | 'auto'
