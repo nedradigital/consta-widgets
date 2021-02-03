@@ -397,9 +397,9 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
           })}
           {axisShowPositions.left && renderVertical('left')}
           {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
-          {unit && isHorizontal && renderUnit(css.bottomUnit, unit, axisSize)}
         </div>
         {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
+        {unit && isHorizontal && renderUnit(css.bottomUnit, unit, axisSize)}
         {tooltipData && (
           <Tooltip
             data={tooltipData}

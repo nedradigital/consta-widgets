@@ -106,7 +106,6 @@
 .topLeftUnit {
   grid-area: topLeft;
 
-  margin-right: var(--space-m);
   margin-bottom: var(--space-xs);
 }
 
