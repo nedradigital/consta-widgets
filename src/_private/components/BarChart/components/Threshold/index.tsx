@@ -8,7 +8,6 @@ type Props = {
   valuesScale: Scaler<number>
   isHorizontal: boolean
   value: number
-  color: string
 }
 
 const getLinePosition = (value: number, isHorizontal: boolean) => {
@@ -29,9 +28,9 @@ const getLinePosition = (value: number, isHorizontal: boolean) => {
   }
 }
 
-export const Threshold: React.FC<Props> = ({ valuesScale, isHorizontal, value, color }) => {
+export const Threshold: React.FC<Props> = ({ valuesScale, isHorizontal, value }) => {
   const scaledValue = valuesScale.scale(value)
   const linePos = getLinePosition(scaledValue, isHorizontal)
 
-  return <line stroke={color} className={css.main} {...linePos} />
+  return <line stroke={'var(--color-bg-warning)'} className={css.main} {...linePos} />
 }

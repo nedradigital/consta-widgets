@@ -46,7 +46,6 @@ export type OnMouseHoverColumn = (groupName: string) => void
 
 export type Threshold = {
   value: number
-  color: string
 }
 
 export type LabelSize = {
@@ -348,7 +347,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               <Threshold
                 valuesScale={valuesScale}
                 isHorizontal={isHorizontal}
-                color={threshold.color}
                 value={threshold.value}
               />
             )}
