@@ -175,19 +175,20 @@ const joinAreasRow: typeof joinStrings = arr => `"${joinStrings(arr)}"`
 export const getGridSettings = (
   params: {
     countGroups: number
-    showUnitBottom: boolean
-    showUnitLeft: boolean
+    // showUnitBottom: boolean
+    // showUnitLeft: boolean
     maxColumn: number
   } & ({ isHorizontal: true; axisShowPositions: ShowPositions } | { isHorizontal: false })
 ): React.CSSProperties => {
-  const { countGroups, showUnitBottom, showUnitLeft, maxColumn } = params
+  // const { countGroups, showUnitBottom, showUnitLeft, maxColumn } = params
+  const { countGroups, maxColumn } = params
 
   if (params.isHorizontal) {
     const { axisShowPositions } = params
-    const withTopRow = axisShowPositions.top || showUnitLeft
+    const withTopRow = axisShowPositions.top
     const withBottomTicksRow = axisShowPositions.bottom
-    const withBottomUnitRow = showUnitBottom
-    const withLeftColumn = axisShowPositions.left || showUnitLeft
+    // const withBottomUnitRow = showUnitBottom
+    const withLeftColumn = axisShowPositions.left
     const withRightColumn = axisShowPositions.right
 
     return {
@@ -195,7 +196,7 @@ export const getGridSettings = (
         withTopRow && 'auto',
         getAreaNames(countGroups, () => '1fr'),
         withBottomTicksRow && 'auto',
-        withBottomUnitRow && 'auto',
+        'auto',
       ]),
       gridTemplateColumns: joinStrings([
         withLeftColumn && 'auto',
@@ -218,18 +219,17 @@ export const getGridSettings = (
             'bottomTicks',
             withRightColumn && 'bottomRight',
           ]),
-        withBottomUnitRow &&
-          joinAreasRow([
-            withLeftColumn && 'bottomLeft',
-            'bottomUnit',
-            withRightColumn && 'bottomUnit',
-          ]),
+        joinAreasRow([
+          withLeftColumn && 'bottomLeft',
+          'bottomUnit',
+          withRightColumn && 'bottomUnit',
+        ]),
       ]),
     }
   }
 
   return {
-    gridTemplateRows: joinStrings(['auto', '1fr', 'auto', showUnitBottom && 'auto']),
+    gridTemplateRows: joinStrings(['auto', '1fr', 'auto', 'auto']),
     gridTemplateColumns: `auto ${getAreaNames(
       countGroups,
       () =>
@@ -240,7 +240,7 @@ export const getGridSettings = (
       `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,
       `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}"`,
       `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}"`,
-      showUnitBottom && `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"`,
+      `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"`,
     ]),
   }
 }

@@ -125,7 +125,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     showReversed = false,
     size,
     unit,
-    unitPosition = 'none',
     isDense = false,
     activeSectionIndex,
     activeGroup,
@@ -278,10 +277,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const renderHorizontal = isHorizontal ? getRenderAxisValues : getRenderGroupsLabels
   const renderVertical = isHorizontal ? getRenderGroupsLabels : getRenderAxisValues
 
-  const showUnitLeft =
-    unitPosition !== 'none' && (unitPosition === 'left' || unitPosition === 'left-and-bottom')
-  const showUnitBottom =
-    unitPosition !== 'none' && (unitPosition === 'bottom' || unitPosition === 'left-and-bottom')
+  // const showUnitLeft =
+  //   unitPosition !== 'none' && (unitPosition === 'left' || unitPosition === 'left-and-bottom')
+  // const showUnitBottom =
+  //   unitPosition !== 'none' && (unitPosition === 'bottom' || unitPosition === 'left-and-bottom')
 
   const axisSize = toAxisSize(columnSize)
   const computedGridRowGap = gridRowGap ?? getGridRowGap(axisSize, isHorizontal)
@@ -309,8 +308,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             ...getGridSettings({
               isHorizontal,
               countGroups: groups.length,
-              showUnitBottom,
-              showUnitLeft,
               maxColumn,
               axisShowPositions,
             }),
@@ -335,7 +332,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               />
             )}
           </svg>
-          {unit && showUnitLeft && renderUnit(css.topLeftUnit, unit, axisSize)}
+          {unit && !isHorizontal && renderUnit(css.topLeftUnit, unit, axisSize)}
           {!isHorizontal && axisShowPositions.top && renderHorizontal('top')}
           {axisShowPositions.right && renderVertical('right')}
           {groups.map((group, groupIdx) => {
@@ -379,7 +376,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
           })}
           {axisShowPositions.left && renderVertical('left')}
           {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
-          {unit && showUnitBottom && renderUnit(css.bottomUnit, unit, axisSize)}
+          {unit && isHorizontal && renderUnit(css.bottomUnit, unit, axisSize)}
         </div>
         {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
         {tooltipData && (
