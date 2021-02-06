@@ -2,6 +2,7 @@ import React from 'react'
 
 import classnames from 'classnames'
 
+import { getScaler } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
 
 import { LabelSize } from '../..'
@@ -31,7 +32,10 @@ type Props = {
   activeGroup?: string
   activeSectionIndex?: number
   showValues: boolean
-  scaler: (value: number) => number
+  scalerMaxValue: (value: number) => number
+  scalerMinValue: (value: number) => number
+  columnLength: number
+  reversedColumnLength: number
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void
   onMouseLeaveColumn: (groupName: string) => void
@@ -50,7 +54,10 @@ export const Group: React.FC<Props> = props => {
     activeGroup,
     activeSectionIndex,
     showValues,
-    scaler,
+    scalerMaxValue,
+    scalerMinValue,
+    columnLength,
+    reversedColumnLength,
     formatValueForLabel,
     onMouseEnterColumn,
     onMouseLeaveColumn,
@@ -65,8 +72,10 @@ export const Group: React.FC<Props> = props => {
 
     const sections = getSections({
       sections: column.sections,
-      scaler,
+      scaler: column.total >= 0 ? scalerMaxValue : scalerMinValue,
     })
+
+    const lengthColumns = !sections[0] || sections[0] === undefined ? 0 : sections[0].length
 
     return (
       <Column
@@ -75,6 +84,7 @@ export const Group: React.FC<Props> = props => {
         total={column.total}
         sections={sections}
         size={columnSize}
+        lengthColumns={lengthColumns}
         isHorizontal={isHorizontal}
         isReversed={isReversed}
         isDense={isDense}
@@ -89,17 +99,30 @@ export const Group: React.FC<Props> = props => {
     )
   }
 
+  const scalerCommonColumnsLength = getScaler(columnLength + Math.abs(reversedColumnLength))
+
+  const styleOrientation = (column: number) => {
+    if (!isHorizontal) {
+      return { minHeight: `${scalerCommonColumnsLength(column)}%` }
+    } else {
+      return { minWidth: `${scalerCommonColumnsLength(column)}%` }
+    }
+  }
+
   return (
     <div
       className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
       style={style}
     >
       <div className={css.columns}>
-        <div className={css.wrapper}>
+        <div className={css.wrapper} style={styleOrientation(columnLength)}>
           {columns.map((column, index) => renderColumn(column, index))}
         </div>
         {showReversed && (
-          <div className={classnames(css.wrapper, css.isReversed)}>
+          <div
+            className={classnames(css.wrapper, css.isReversed)}
+            style={styleOrientation(reversedColumnLength)}
+          >
             {reversedColumns.map((column, index) => renderColumn(column, index, true))}
           </div>
         )}

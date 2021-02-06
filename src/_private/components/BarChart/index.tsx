@@ -4,6 +4,7 @@ import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { Text, TextPropSize } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
+import { ZeroLine } from '@/_private/components/BarChart/components/ZeroLine'
 import { Grid } from '@/_private/components/Grid'
 import { FormatValue } from '@/_private/types'
 import { NumberRange, scaleLinear } from '@/_private/utils/scale'
@@ -53,6 +54,8 @@ export type LabelSize = {
   height: number
 }
 
+export type TypeColumn = 'columns' | 'reversedColumns'
+
 export type Props<T> = {
   groupsDomain: readonly string[]
   valuesDomain: NumberRange
@@ -64,6 +67,8 @@ export type Props<T> = {
   withScroll?: boolean
   showValues?: boolean
   showReversed?: boolean
+  maxColumnLength: number
+  minReversedColumnLength: number
   isXAxisLabelsSlanted?: boolean
   unit?: string
   unitPosition?: UnitPosition
@@ -123,6 +128,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     withScroll = false,
     showValues = false,
     showReversed = false,
+    maxColumnLength,
+    minReversedColumnLength,
     size,
     unit,
     isDense = false,
@@ -168,16 +175,19 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const paddingLeft = showReversed ? paddingRight : 0
   const paddingTop = !isHorizontal && showValues ? maxLabelSize.height : 0
   const paddingBottom = showReversed ? paddingTop : 0
-  const scaler = getScaler(maxValue)
+  const gridItems = getTicks(valuesDomain, gridTicks)
+  const axisValues = gridItems
+
+  const scalerMaxValue = getScaler(gridItems[gridItems.length - 1])
+  const scalerMinValue = getScaler(Math.abs(gridItems[0]))
+
   const valuesScale = scaleLinear({
-    domain: valuesDomain,
+    domain: [gridItems[0], gridItems[gridItems.length - 1]],
     range: getRange(
       isHorizontal ? Math.round(gridStyle.width) : Math.round(gridStyle.height),
       !isHorizontal
     ),
   })
-  const gridItems = getTicks(valuesDomain, gridTicks)
-  const axisValues = gridItems
   const gridXTickValues = isHorizontal ? gridItems : []
   const gridYTickValues = isHorizontal ? [] : gridItems
   const axisShowPositions = getAxisShowPositions({ isHorizontal, showReversed })
@@ -276,16 +286,26 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
 
   const renderHorizontal = isHorizontal ? getRenderAxisValues : getRenderGroupsLabels
   const renderVertical = isHorizontal ? getRenderGroupsLabels : getRenderAxisValues
-
-  // const showUnitLeft =
-  //   unitPosition !== 'none' && (unitPosition === 'left' || unitPosition === 'left-and-bottom')
-  // const showUnitBottom =
-  //   unitPosition !== 'none' && (unitPosition === 'bottom' || unitPosition === 'left-and-bottom')
-
   const axisSize = toAxisSize(columnSize)
   const computedGridRowGap = gridRowGap ?? getGridRowGap(axisSize, isHorizontal)
   const computedGridColumnGap = gridColumnGap ?? getGridColumnGap(axisSize)
 
+  const getColumnLength = (columnLength: number, gridItem: number, typeColumn: TypeColumn) => {
+    switch (typeColumn) {
+      case 'columns':
+        return columnLength >= gridItem ? gridItem : columnLength
+      case 'reversedColumns':
+        return columnLength >= gridItem ? columnLength : gridItem
+      default:
+        throw new Error(`Неизвестный тип typeColumn: ${typeColumn}`)
+    }
+  }
+  const columnLength = getColumnLength(maxColumnLength, gridItems[gridItems.length - 1], 'columns')
+  const reversedColumnLength = getColumnLength(
+    minReversedColumnLength,
+    gridItems[0],
+    'reversedColumns'
+  )
   /**
    * Из за различий в построении осей для горизонтального и вертикального режима
    * пришлось задублировать рендер axisShowPositions
@@ -323,6 +343,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               width={gridStyle.width}
               height={gridStyle.height}
             />
+            <ZeroLine valuesScale={valuesScale} isHorizontal={isHorizontal} />
             {threshold && (
               <Threshold
                 valuesScale={valuesScale}
@@ -338,7 +359,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
           {groups.map((group, groupIdx) => {
             const isFirstGroup = groupIdx === 0
             const isLastGroup = groupIdx === groups.length - 1
-
             return (
               <div
                 key={groupIdx}
@@ -365,7 +385,10 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                   isHorizontal,
                   activeGroup,
                   activeSectionIndex,
-                  scaler,
+                  columnLength,
+                  reversedColumnLength,
+                  scalerMaxValue,
+                  scalerMinValue,
                   onMouseEnterColumn: handleMouseEnterColumn,
                   onMouseLeaveColumn: handleMouseLeaveColumn,
                   formatValueForLabel,

@@ -54,6 +54,7 @@ type Props = {
   size: ColumnSize
   showValues: boolean
   isHorizontal: boolean
+  lengthColumns?: number
   isReversed?: boolean
   isDense?: boolean
   activeGroup?: string
@@ -69,6 +70,7 @@ export const Column: React.FC<Props> = ({
   total,
   sections = [],
   size,
+  lengthColumns,
   showValues,
   isHorizontal,
   isReversed = false,
@@ -136,6 +138,14 @@ export const Column: React.FC<Props> = ({
     )
   }
 
+  const styleOrientation = () => {
+    if (!isHorizontal) {
+      return { minHeight: `${lengthColumns}%` }
+    } else {
+      return { minWidth: `${lengthColumns}%` }
+    }
+  }
+
   return (
     <div
       className={classnames(
@@ -143,6 +153,7 @@ export const Column: React.FC<Props> = ({
         isHorizontal && css.isHorizontal,
         isReversed && css.isReversed
       )}
+      style={styleOrientation()}
     >
       {sections.map(renderSection)}
     </div>

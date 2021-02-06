@@ -1,6 +1,7 @@
 import React from 'react'
 
-import { CoreBarChart, Threshold, UnitPosition } from '@/_private/components/BarChart'
+import { CoreBarChart, Threshold, TypeColumn, UnitPosition } from '@/_private/components/BarChart'
+import { GroupItem } from '@/_private/components/BarChart/components/Group'
 import {
   getCommonGroupsMaxColumns,
   getGroupsDomain,
@@ -21,6 +22,8 @@ export type Group = {
 
 type Props = {
   groups: readonly Group[]
+  minValueY: number
+  maxValueY: number
   colors: readonly string[]
   gridTicks: number
   unit?: string
@@ -40,6 +43,8 @@ type Props = {
 export const BarChart: React.FC<Props> = props => {
   const {
     groups,
+    minValueY,
+    maxValueY,
     size = 'm',
     colors,
     showValues,
@@ -53,10 +58,40 @@ export const BarChart: React.FC<Props> = props => {
   const groupsDomain = getGroupsDomain(commonGroups)
   const valuesDomain = getValuesDomain({
     groups: commonGroups,
+    minValueY,
+    maxValueY,
     threshold: props.threshold,
-    showReversed,
   })
   const maxColumn = getCommonGroupsMaxColumns(commonGroups)
+
+  const getColumnsLengthArray = (group: GroupItem[], typeColumn: TypeColumn) => {
+    let columnsLengthArray: number[] = []
+    let tmp: number[] = []
+
+    group.map((obj: GroupItem) =>
+      obj[typeColumn].map(column => {
+        if (
+          column &&
+          column.sections &&
+          column.sections !== undefined &&
+          column !== undefined &&
+          column.sections[0].value &&
+          column.sections[0].value !== undefined
+        ) {
+          tmp = columnsLengthArray.concat(column.sections[0].value)
+          columnsLengthArray = tmp
+        }
+      })
+    )
+
+    return columnsLengthArray
+  }
+  const columnsLengthArray = getColumnsLengthArray(commonGroups, 'columns')
+  const reversedColumnsLengthArray = getColumnsLengthArray(commonGroups, 'reversedColumns')
+  const maxColumnLength =
+    columnsLengthArray.length > 0 ? Math.max.apply(null, columnsLengthArray) : 0
+  const minReversedColumnLength =
+    reversedColumnsLengthArray.length > 0 ? Math.min.apply(null, reversedColumnsLengthArray) : 0
 
   return (
     <CoreBarChart
@@ -69,6 +104,8 @@ export const BarChart: React.FC<Props> = props => {
       showValues={showValues}
       showReversed={showReversed}
       threshold={threshold}
+      maxColumnLength={maxColumnLength}
+      minReversedColumnLength={minReversedColumnLength}
       renderGroup={defaultRenderGroup}
     />
   )

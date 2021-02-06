@@ -23,7 +23,8 @@ export type GetGroupSize = (params: {
 export type GetGroupsDomain = (groups: readonly GroupItem[]) => readonly string[]
 export type GetValuesDomain = (params: {
   groups: readonly GroupItem[]
-  showReversed: boolean
+  minValueY: number
+  maxValueY: number
   threshold?: Threshold
 }) => NumberRange
 export type GetAxisShowPositions = (params: {
@@ -49,10 +50,18 @@ export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
 }
 
 export const getTotalByColumn = (column: ColumnItem | undefined) => {
-  return column ? Math.abs(column.total) : 0
+  return column ? column.total : 0
 }
 
-export const getValuesDomain: GetValuesDomain = ({ groups, showReversed, threshold }) => {
+const getValueY = (value: number, filter: (value: number) => void) => {
+  if (value !== null && filter(value)) {
+    return value
+  }
+
+  return null
+}
+
+export const getValuesDomain: GetValuesDomain = ({ groups, minValueY, maxValueY, threshold }) => {
   const numbers = groups
     .map(({ columns, reversedColumns }) => columns.concat(reversedColumns).map(getTotalByColumn))
     .flat()
@@ -60,8 +69,20 @@ export const getValuesDomain: GetValuesDomain = ({ groups, showReversed, thresho
   const thresholdValue = threshold?.value ?? 0
 
   const maxNumber = Math.max(...numbers, Math.abs(thresholdValue), 0)
+  const minNumber = Math.min(...numbers, Math.abs(thresholdValue))
 
-  return showReversed ? [-maxNumber, maxNumber] : [0, maxNumber]
+  const maxValue = getValueY(maxValueY, v => v >= 0)
+  const minValue = getValueY(minValueY, v => v < 0)
+
+  if ((maxValue || maxValue === 0) && minValue) {
+    return [minValue, maxValue]
+  } else if (!maxValue && minValue) {
+    return [minValue, maxNumber]
+  } else if ((maxValue || maxValue === 0) && !minValue) {
+    return [minNumber, maxValue]
+  } else {
+    return [minNumber, maxNumber]
+  }
 }
 
 export const getGroupsDomain: GetGroupsDomain = groups => {
@@ -175,19 +196,15 @@ const joinAreasRow: typeof joinStrings = arr => `"${joinStrings(arr)}"`
 export const getGridSettings = (
   params: {
     countGroups: number
-    // showUnitBottom: boolean
-    // showUnitLeft: boolean
     maxColumn: number
   } & ({ isHorizontal: true; axisShowPositions: ShowPositions } | { isHorizontal: false })
 ): React.CSSProperties => {
-  // const { countGroups, showUnitBottom, showUnitLeft, maxColumn } = params
   const { countGroups, maxColumn } = params
 
   if (params.isHorizontal) {
     const { axisShowPositions } = params
     const withTopRow = axisShowPositions.top
     const withBottomTicksRow = axisShowPositions.bottom
-    // const withBottomUnitRow = showUnitBottom
     const withLeftColumn = axisShowPositions.left
     const withRightColumn = axisShowPositions.right
 

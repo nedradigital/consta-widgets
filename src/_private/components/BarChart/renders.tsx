@@ -45,7 +45,10 @@ export type RenderGroup<T> = (props: {
   isHorizontal: boolean
   activeGroup?: string
   activeSectionIndex?: number
-  scaler: (value: number) => number
+  scalerMaxValue: (value: number) => number
+  scalerMinValue: (value: number) => number
+  columnLength: number
+  reversedColumnLength: number
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void
   onMouseLeaveColumn: (groupName: string) => void
   formatValueForLabel: FormatValue
