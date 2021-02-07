@@ -14,6 +14,7 @@ export type RenderGroupsLabels = (props: {
   position: Position
   size: Size
   isXAxisLabelsSlanted?: boolean
+  showGroupsLabels?: boolean
   getGridAreaName: (index: number) => string
 }) => React.ReactElement | null
 
@@ -27,6 +28,7 @@ export type RenderAxisValues = (props: {
   position: Position
   size: Size
   formatValueForLabel?: FormatValue
+  showGroupsLabels?: boolean
 }) => React.ReactElement | null
 
 export const defaultRenderAxisValues: RenderAxisValues = ({ size, ...rest }) => {

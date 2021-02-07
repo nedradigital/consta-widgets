@@ -66,6 +66,9 @@ export type Props<T> = {
   withScroll?: boolean
   showValues?: boolean
   showReversed?: boolean
+  showGrid?: boolean
+  showLineAtZero?: boolean
+  showGroupsLabels?: boolean
   maxColumnLength: number
   minReversedColumnLength: number
   isXAxisLabelsSlanted?: boolean
@@ -127,6 +130,9 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     withScroll = false,
     showValues = false,
     showReversed = false,
+    showGrid = true,
+    showLineAtZero = true,
+    showGroupsLabels = true,
     maxColumnLength,
     minReversedColumnLength,
     size,
@@ -262,6 +268,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
       size: columnSize,
       getGridAreaName: getLabelGridAreaName(position),
       isXAxisLabelsSlanted,
+      showGroupsLabels,
     })
 
   const getRenderAxisValues = (position: Position) => (
@@ -334,15 +341,17 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
           }}
         >
           <svg className={css.svg} ref={svgRef} style={gridStyle}>
-            <Grid
-              scalerX={valuesScale}
-              scalerY={valuesScale}
-              xTickValues={gridXTickValues}
-              yTickValues={gridYTickValues}
-              width={gridStyle.width}
-              height={gridStyle.height}
-            />
-            <ZeroLine valuesScale={valuesScale} isHorizontal={isHorizontal} />
+            {showGrid && showLineAtZero && (
+              <Grid
+                scalerX={valuesScale}
+                scalerY={valuesScale}
+                xTickValues={gridXTickValues}
+                yTickValues={gridYTickValues}
+                width={gridStyle.width}
+                height={gridStyle.height}
+              />
+            )}
+            {showLineAtZero && <ZeroLine valuesScale={valuesScale} isHorizontal={isHorizontal} />}
             {threshold && (
               <Threshold
                 valuesScale={valuesScale}
@@ -352,8 +361,8 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             )}
           </svg>
           {unit && !isHorizontal && renderUnit(css.topLeftUnit, unit, axisSize)}
-          {!isHorizontal && axisShowPositions.top && renderHorizontal('top')}
-          {axisShowPositions.right && renderVertical('right')}
+          {!isHorizontal && axisShowPositions.top && showGroupsLabels && renderHorizontal('top')}
+          {axisShowPositions.right && showGroupsLabels && renderVertical('right')}
           {groups.map((group, groupIdx) => {
             const isFirstGroup = groupIdx === 0
             const isLastGroup = groupIdx === groups.length - 1
@@ -395,10 +404,13 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               </div>
             )
           })}
-          {axisShowPositions.left && renderVertical('left')}
-          {!isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
+          {axisShowPositions.left && showGroupsLabels && renderVertical('left')}
+          {!isHorizontal &&
+            axisShowPositions.bottom &&
+            showGroupsLabels &&
+            renderHorizontal('bottom')}
         </div>
-        {isHorizontal && axisShowPositions.bottom && renderHorizontal('bottom')}
+        {isHorizontal && axisShowPositions.bottom && showGroupsLabels && renderHorizontal('bottom')}
         {unit && isHorizontal && renderUnit(css.bottomUnit, unit, axisSize)}
         {tooltipData && (
           <Tooltip

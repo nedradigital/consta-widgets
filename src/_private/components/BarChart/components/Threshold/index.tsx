@@ -10,7 +10,6 @@ type Props = {
   valuesScale: Scaler<number>
   isHorizontal: boolean
   value: number
-  color: string
 }
 
 const getLinePosition = (value: number, isHorizontal: boolean) => {

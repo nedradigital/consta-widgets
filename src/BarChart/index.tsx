@@ -38,6 +38,9 @@ type Props = {
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   isEmptyColumnsHidden?: boolean
+  showGrid?: boolean
+  showLineAtZero?: boolean
+  showGroupsLabels?: boolean
 }
 
 export const BarChart: React.FC<Props> = props => {
@@ -47,8 +50,11 @@ export const BarChart: React.FC<Props> = props => {
     maxValueY,
     size = 'm',
     colors,
-    showValues,
     threshold,
+    showValues,
+    showGrid,
+    showLineAtZero,
+    showGroupsLabels,
     isEmptyColumnsHidden = false,
     ...rest
   } = props
@@ -98,6 +104,9 @@ export const BarChart: React.FC<Props> = props => {
       maxColumnLength={maxColumnLength}
       minReversedColumnLength={minReversedColumnLength}
       renderGroup={defaultRenderGroup}
+      showGrid={showGrid}
+      showLineAtZero={showLineAtZero}
+      showGroupsLabels={showGroupsLabels}
     />
   )
 }
