@@ -21,12 +21,14 @@ export type GetGroupSize = (params: {
   group: GroupItem
 }) => number
 export type GetGroupsDomain = (groups: readonly GroupItem[]) => readonly string[]
+
 export type GetValuesDomain = (params: {
   groups: readonly GroupItem[]
   minValueY: number
   maxValueY: number
   threshold?: Threshold
 }) => NumberRange
+
 export type GetAxisShowPositions = (params: {
   isHorizontal: boolean
   showReversed: boolean
@@ -194,12 +196,12 @@ const joinStrings = (arr: ReadonlyArray<string | boolean | undefined>): string =
 const joinAreasRow: typeof joinStrings = arr => `"${joinStrings(arr)}"`
 
 export const getGridSettings = (
-  params: {
-    countGroups: number
-    maxColumn: number
-  } & ({ isHorizontal: true; axisShowPositions: ShowPositions } | { isHorizontal: false })
+  params: { countGroups: number } & (
+    | { isHorizontal: true; axisShowPositions: ShowPositions }
+    | { isHorizontal: false }
+  )
 ): React.CSSProperties => {
-  const { countGroups, maxColumn } = params
+  const { countGroups } = params
 
   if (params.isHorizontal) {
     const { axisShowPositions } = params
@@ -247,12 +249,7 @@ export const getGridSettings = (
 
   return {
     gridTemplateRows: joinStrings(['auto', '1fr', 'auto', 'auto']),
-    gridTemplateColumns: `auto ${getAreaNames(
-      countGroups,
-      () =>
-        `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn -
-          1})), 1fr)`
-    )}`,
+    gridTemplateColumns: 'auto 1fr 1fr 1fr',
     gridTemplateAreas: joinStrings([
       `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,
       `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}"`,

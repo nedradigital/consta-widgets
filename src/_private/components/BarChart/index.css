@@ -107,6 +107,8 @@
   grid-area: topLeft;
 
   margin-bottom: var(--space-xs);
+
+  text-align: right;
 }
 
 .bottomUnit {

@@ -49,6 +49,7 @@ export type RenderGroup<T> = (props: {
   activeSectionIndex?: number
   scalerMaxValue: (value: number) => number
   scalerMinValue: (value: number) => number
+  maxNumberGroups: number
   columnLength: number
   reversedColumnLength: number
   onMouseEnterColumn: (groupName: string, params: TooltipData) => void

@@ -59,7 +59,6 @@ export type Props<T> = {
   groupsDomain: readonly string[]
   valuesDomain: NumberRange
   groups: readonly T[]
-  maxColumn: number
   gridTicks: number
   size: Size
   isHorizontal?: boolean
@@ -71,6 +70,7 @@ export type Props<T> = {
   showGroupsLabels?: boolean
   maxColumnLength: number
   minReversedColumnLength: number
+  maxNumberGroups: number
   isXAxisLabelsSlanted?: boolean
   unit?: string
   unitPosition?: UnitPosition
@@ -124,7 +124,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     groupsDomain,
     valuesDomain,
     groups,
-    maxColumn,
     gridTicks,
     isHorizontal = false,
     withScroll = false,
@@ -135,6 +134,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     showGroupsLabels = true,
     maxColumnLength,
     minReversedColumnLength,
+    maxNumberGroups,
     size,
     unit,
     isDense = false,
@@ -334,7 +334,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             ...getGridSettings({
               isHorizontal,
               countGroups: groups.length,
-              maxColumn,
               axisShowPositions,
             }),
             gridGap: `${computedGridRowGap} ${computedGridColumnGap}`,
@@ -394,6 +393,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                   activeSectionIndex,
                   columnLength,
                   reversedColumnLength,
+                  maxNumberGroups,
                   scalerMaxValue,
                   scalerMinValue,
                   onMouseEnterColumn: handleMouseEnterColumn,

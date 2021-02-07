@@ -63,6 +63,7 @@ type Props = {
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
   onChangeLabelSize?: (size: LabelSize) => void
+  maxNumberGroups: number
 }
 
 export const Column: React.FC<Props> = ({
@@ -81,6 +82,7 @@ export const Column: React.FC<Props> = ({
   onMouseEnterColumn,
   onMouseLeaveColumn,
   onChangeLabelSize,
+  maxNumberGroups,
 }) => {
   const handleMouseEnter: React.MouseEventHandler = event => {
     if (!(event.currentTarget instanceof HTMLElement)) {
@@ -138,11 +140,21 @@ export const Column: React.FC<Props> = ({
     )
   }
 
+  const padding = (70 / maxNumberGroups) * 0.2
+
   const styleOrientation = () => {
     if (!isHorizontal) {
-      return { minHeight: `${lengthColumns}%` }
+      return {
+        minHeight: `${lengthColumns}%`,
+        minWidth: `${70 / maxNumberGroups - padding}%`,
+        padding: `0 ${padding}% 0 0`,
+      }
     } else {
-      return { minWidth: `${lengthColumns}%` }
+      return {
+        minWidth: `${lengthColumns}%`,
+        minHeight: `${70 / maxNumberGroups - padding}%`,
+        padding: `0 0 ${padding}% 0`,
+      }
     }
   }
 

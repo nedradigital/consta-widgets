@@ -34,6 +34,7 @@ type Props = {
   showValues: boolean
   scalerMaxValue: (value: number) => number
   scalerMinValue: (value: number) => number
+  maxNumberGroups: number
   columnLength: number
   reversedColumnLength: number
   formatValueForLabel?: FormatValue
@@ -56,6 +57,7 @@ export const Group: React.FC<Props> = props => {
     showValues,
     scalerMaxValue,
     scalerMinValue,
+    maxNumberGroups,
     columnLength,
     reversedColumnLength,
     formatValueForLabel,
@@ -95,6 +97,7 @@ export const Group: React.FC<Props> = props => {
         onMouseEnterColumn={params => onMouseEnterColumn(group, params)}
         onMouseLeaveColumn={() => onMouseLeaveColumn(group)}
         onChangeLabelSize={onChangeLabelSize}
+        maxNumberGroups={maxNumberGroups}
       />
     )
   }
@@ -103,9 +106,9 @@ export const Group: React.FC<Props> = props => {
 
   const styleOrientation = (column: number) => {
     if (!isHorizontal) {
-      return { minHeight: `${scalerCommonColumnsLength(column)}%` }
+      return { minHeight: `${scalerCommonColumnsLength(column)}%`, maxWidth: '70%' }
     } else {
-      return { minWidth: `${scalerCommonColumnsLength(column)}%` }
+      return { minWidth: `${scalerCommonColumnsLength(column)}%`, maxHeight: '70%' }
     }
   }
 

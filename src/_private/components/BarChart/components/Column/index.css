@@ -8,7 +8,7 @@
 
   &.isHorizontal {
     width: 100%;
-    height: var(--column-size);
+    height: 100%;
 
     & + & {
       margin-top: var(--column-padding);
@@ -24,7 +24,7 @@
       flex-direction: column-reverse;
     }
 
-    width: var(--column-size);
+    width: 100%;
     height: 100%;
 
     & + & {
