@@ -64,28 +64,19 @@ export const BarChart: React.FC<Props> = props => {
   })
   const maxColumn = getCommonGroupsMaxColumns(commonGroups)
 
-  const getColumnsLengthArray = (group: GroupItem[], typeColumn: TypeColumn) => {
+  const getColumnsLengthArray = (groupsItem: GroupItem[], typeColumn: TypeColumn) => {
     let columnsLengthArray: number[] = []
-    let tmp: number[] = []
 
-    group.map((obj: GroupItem) =>
-      obj[typeColumn].map(column => {
-        if (
-          column &&
-          column.sections &&
-          column.sections !== undefined &&
-          column !== undefined &&
-          column.sections[0].value &&
-          column.sections[0].value !== undefined
-        ) {
-          tmp = columnsLengthArray.concat(column.sections[0].value)
-          columnsLengthArray = tmp
+    groupsItem.map((group: GroupItem) =>
+      group[typeColumn].map(column => {
+        if (column?.sections?.[0]?.value && column?.sections?.[0]?.value !== undefined) {
+          columnsLengthArray = columnsLengthArray.concat(column.sections[0].value)
         }
       })
     )
-
     return columnsLengthArray
   }
+
   const columnsLengthArray = getColumnsLengthArray(commonGroups, 'columns')
   const reversedColumnsLengthArray = getColumnsLengthArray(commonGroups, 'reversedColumns')
   const maxColumnLength =
