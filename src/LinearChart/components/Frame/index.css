@@ -26,7 +26,7 @@
   }
 
   & > :--tick-line {
-    color: var(--color-bg-border);
+    display: none;
   }
 
   &.isAxisX.isPositionBottom > :--tick-line {

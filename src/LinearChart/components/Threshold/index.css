@@ -11,3 +11,11 @@
 
   opacity: 0.05;
 }
+
+.label {
+  font-size: var(--size-text-xs);
+
+  fill: currentColor;
+
+  transform: translate(var(--axis-tick-offset), calc(var(--size-text-xs) / 3));
+}

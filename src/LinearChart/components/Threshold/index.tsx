@@ -13,8 +13,9 @@ type Props = {
   scaleY: ScaleLinear
   maxPoints: readonly NotEmptyItem[]
   minPoints?: readonly NotEmptyItem[]
+  maxLabel?: string
+  minLabel?: string
   clipPath?: string
-  isHorizontal: boolean
 }
 
 export const THRESHOLD_COLOR = 'var(--color-bg-caution)'
@@ -48,8 +49,9 @@ export const Threshold: React.FC<Props> = ({
   scaleY,
   maxPoints,
   minPoints,
+  maxLabel,
+  minLabel,
   clipPath,
-  isHorizontal,
 }) => {
   const getRectPath = d3
     .line<NotEmptyItem>()
@@ -65,8 +67,8 @@ export const Threshold: React.FC<Props> = ({
       points={points}
       scaleX={scaleX}
       scaleY={scaleY}
-      shapeRendering={isStraightLine(points, isHorizontal) ? 'crispEdges' : undefined}
-      transform={`translate(${isHorizontal ? '0, 0.5' : '0.5, 0'})`}
+      shapeRendering={isStraightLine(points, true) ? 'crispEdges' : undefined}
+      transform={'translate(0, 0.5)'}
       stroke={THRESHOLD_COLOR}
     />
   )
@@ -74,10 +76,31 @@ export const Threshold: React.FC<Props> = ({
   return (
     <g className={css.wrapper} clipPath={clipPath} style={{ color: THRESHOLD_COLOR }}>
       {renderLine(maxPoints)}
+      {maxLabel && (
+        <g>
+          <text
+            className={css.label}
+            x={scaleX(maxPoints[maxPoints.length - 1].x)} // TODO is hidden by <defs> clipPath from LinearChart/index.tsx
+            y={scaleY(maxPoints[maxPoints.length - 1].y)} // TODO is hidden by <defs> clipPath from LinearChart/index.tsx
+          >
+            {maxLabel}
+          </text>
+        </g>
+      )}
+
       {minPoints && (
         <>
           <path className={css.fill} d={fillPath} />
           {renderLine(minPoints)}
+          {minLabel && (
+            <text
+              className={css.label}
+              x={scaleX(minPoints[minPoints.length - 1].x)} // TODO is hidden by <defs> clipPath from LinearChart/index.tsx
+              y={scaleY(minPoints[minPoints.length - 1].y)} // TODO is hidden by <defs> clipPath from LinearChart/index.tsx
+            >
+              {minLabel}
+            </text>
+          )}
         </>
       )}
     </g>
