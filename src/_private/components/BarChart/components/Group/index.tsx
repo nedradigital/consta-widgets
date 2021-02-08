@@ -10,7 +10,7 @@ import { LabelSize } from '../..'
 import { Column, SectionItem } from '../Column'
 import { TooltipData } from '../Tooltip'
 
-import { getSections } from './helpers'
+import { getSections, styleOrientation } from './helpers'
 import css from './index.css'
 
 export type ColumnItem = {
@@ -66,6 +66,19 @@ export const Group: React.FC<Props> = props => {
     style,
     getNumberGridTicks,
   } = props
+  const ref = useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(ref)
+
+  const scalerCommonColumnsLength = getScaler(columnLength + Math.abs(reversedColumnLength))
+
+  useLayoutEffect(() => {
+    if (isHorizontal) {
+      getNumberGridTicks(width)
+    } else {
+      getNumberGridTicks(height)
+    }
+  }, [width, height, ref, getNumberGridTicks, isHorizontal])
+
   const renderColumn = (column: ColumnItem | undefined, index: number, isReversed?: boolean) => {
     if (!column) {
       return null
@@ -99,26 +112,6 @@ export const Group: React.FC<Props> = props => {
     )
   }
 
-  const scalerCommonColumnsLength = getScaler(columnLength + Math.abs(reversedColumnLength))
-
-  const styleOrientation = (column: number) => {
-    if (!isHorizontal) {
-      return { minHeight: `${scalerCommonColumnsLength(column)}%`, maxWidth: '70%' }
-    } else {
-      return { minWidth: `${scalerCommonColumnsLength(column)}%`, maxHeight: '70%' }
-    }
-  }
-  const ref = useRef<HTMLDivElement>(null)
-  const { width, height } = useComponentSize(ref)
-
-  useLayoutEffect(() => {
-    if (isHorizontal) {
-      getNumberGridTicks(width)
-    } else {
-      getNumberGridTicks(height)
-    }
-  }, [width, height, ref, getNumberGridTicks, isHorizontal])
-
   return (
     <div
       className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
@@ -126,13 +119,16 @@ export const Group: React.FC<Props> = props => {
       ref={ref}
     >
       <div className={css.columns}>
-        <div className={css.wrapper} style={styleOrientation(columnLength)}>
+        <div
+          className={css.wrapper}
+          style={styleOrientation(columnLength, isHorizontal, scalerCommonColumnsLength)}
+        >
           {columns.map((column, index) => renderColumn(column, index))}
         </div>
         {showReversed && (
           <div
             className={classnames(css.wrapper, css.isReversed)}
-            style={styleOrientation(reversedColumnLength)}
+            style={styleOrientation(reversedColumnLength, isHorizontal, scalerCommonColumnsLength)}
           >
             {reversedColumns.map((column, index) => renderColumn(column, index, true))}
           </div>

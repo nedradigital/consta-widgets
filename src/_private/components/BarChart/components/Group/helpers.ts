@@ -18,3 +18,15 @@ export const getSections = ({
     }
   })
 }
+
+export const styleOrientation = (
+  column: number,
+  isHorizontal: boolean,
+  scaler: (column: number) => void
+) => {
+  if (!isHorizontal) {
+    return { minHeight: `${scaler(column)}%`, maxWidth: '70%' }
+  } else {
+    return { minWidth: `${scaler(column)}%`, maxHeight: '70%' }
+  }
+}

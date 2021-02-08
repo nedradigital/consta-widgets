@@ -19,6 +19,7 @@ import {
   CHART_MIN_HEIGHT,
   defaultGetAxisShowPositions,
   GetAxisShowPositions,
+  getColumnLength,
   getGridColumnGap,
   getGridRowGap,
   getGridSettings,
@@ -48,8 +49,6 @@ export type LabelSize = {
   width: number
   height: number
 }
-
-export type TypeColumn = 'columns' | 'reversedColumns'
 
 export type Props<T> = {
   groupsDomain: readonly string[]
@@ -269,16 +268,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const computedGridRowGap = gridRowGap ?? getGridRowGap(axisSize, isHorizontal)
   const computedGridColumnGap = gridColumnGap ?? getGridColumnGap(axisSize)
 
-  const getColumnLength = (columnLength: number, gridItem: number, typeColumn: TypeColumn) => {
-    switch (typeColumn) {
-      case 'columns':
-        return columnLength >= gridItem ? gridItem : columnLength
-      case 'reversedColumns':
-        return columnLength >= gridItem ? columnLength : gridItem
-      default:
-        throw new Error(`Неизвестный тип typeColumn: ${typeColumn}`)
-    }
-  }
   const columnLength = getColumnLength(maxColumnLength, gridItems[gridItems.length - 1], 'columns')
   const reversedColumnLength = getColumnLength(
     minReversedColumnLength,

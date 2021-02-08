@@ -1,5 +1,8 @@
 import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 
+import { TypeColumn } from '@/_private/components/BarChart'
+import { GroupItem } from '@/_private/components/BarChart/components/Group'
+
 import { Column, Group } from './'
 
 const getDefaultColumnItem = (isEmptyColumnsHidden: boolean) =>
@@ -47,4 +50,28 @@ export const transformGroupsToCommonGroups = (
       reversedColumns: isEmptyColumnsHidden ? reversedColumns.filter(Boolean) : reversedColumns,
     }
   })
+}
+
+export const getColumnsLengthArray = (groupsItem: GroupItem[], typeColumn: TypeColumn) => {
+  let columnsLengthArray: number[] = []
+
+  groupsItem.map((group: GroupItem) =>
+    group[typeColumn].map(column => {
+      if (column?.sections?.[0]?.value && column?.sections?.[0]?.value !== undefined) {
+        columnsLengthArray = columnsLengthArray.concat(column.sections[0].value)
+      }
+    })
+  )
+  return columnsLengthArray
+}
+
+export const getMaxNumberGroupsArray = (groupsItem: GroupItem[]) => {
+  let columnsArray: number[] = []
+
+  groupsItem.map((group: GroupItem) => {
+    if (group?.columns) {
+      columnsArray = columnsArray.concat(group.columns.length)
+    }
+  })
+  return columnsArray
 }

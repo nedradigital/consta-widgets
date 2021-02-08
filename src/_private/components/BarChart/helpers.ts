@@ -15,11 +15,6 @@ export type ShowPositions = {
   [key in Position]: boolean
 }
 
-export type GetGroupSize = (params: {
-  columnPadding: number
-  columnWidth: number
-  group: GroupItem
-}) => number
 export type GetGroupsDomain = (groups: readonly GroupItem[]) => readonly string[]
 
 export type GetValuesDomain = (params: {
@@ -36,16 +31,7 @@ export type GetAxisShowPositions = (params: {
 
 export const CHART_MIN_HEIGHT = 153
 
-export const GROUP_INNER_PADDING: Record<ColumnSize, number> = {
-  s: 8,
-  m: 18,
-  l: 18,
-  xl: 18,
-  '2xl': 18,
-  '3xl': 18,
-}
-
-export const OUTER_PADDING = 2
+export type TypeColumn = 'columns' | 'reversedColumns'
 
 export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
   return shouldFlip ? [size, 0] : [0, size]
@@ -311,4 +297,15 @@ export const getGridColumnGap = (axisSize: Size): string => {
   }
 
   return GRID_GAP_SPACE.m
+}
+
+export const getColumnLength = (columnLength: number, gridItem: number, typeColumn: TypeColumn) => {
+  switch (typeColumn) {
+    case 'columns':
+      return columnLength >= gridItem ? gridItem : columnLength
+    case 'reversedColumns':
+      return columnLength >= gridItem ? columnLength : gridItem
+    default:
+      throw new Error(`Неизвестный тип typeColumn: ${typeColumn}`)
+  }
 }

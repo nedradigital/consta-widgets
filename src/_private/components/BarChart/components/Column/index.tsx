@@ -5,6 +5,7 @@ import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 import { isNumber } from 'lodash'
 
+import { styleOrientation } from '@/_private/components/BarChart/components/Column/helpers'
 import { FormatValue } from '@/_private/types'
 
 import { LabelSize } from '../..'
@@ -89,6 +90,10 @@ export const Column: React.FC<Props> = ({
   const ref = React.useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
   const columnProperty: ColumnProperty = { width, height }
+
+  const padding = (70 / maxNumberGroups) * 0.2
+  const lengthColumn = lengthColumns ?? 0
+
   const handleMouseEnter: React.MouseEventHandler = event => {
     if (!(event.currentTarget instanceof HTMLElement)) {
       return
@@ -144,24 +149,6 @@ export const Column: React.FC<Props> = ({
     )
   }
 
-  const padding = (70 / maxNumberGroups) * 0.2
-
-  const styleOrientation = () => {
-    if (!isHorizontal) {
-      return {
-        minHeight: `${lengthColumns}%`,
-        minWidth: `${70 / maxNumberGroups - padding}%`,
-        padding: `0 ${padding}% 0 0`,
-      }
-    } else {
-      return {
-        minWidth: `${lengthColumns}%`,
-        minHeight: `${70 / maxNumberGroups - padding}%`,
-        padding: `0 0 ${padding}% 0`,
-      }
-    }
-  }
-
   return (
     <div
       className={classnames(
@@ -169,7 +156,7 @@ export const Column: React.FC<Props> = ({
         isHorizontal && css.isHorizontal,
         isReversed && css.isReversed
       )}
-      style={styleOrientation()}
+      style={styleOrientation(lengthColumn, maxNumberGroups, padding, isHorizontal)}
       ref={ref}
     >
       {sections.map(renderSection)}
