@@ -14,7 +14,6 @@ type Props = {
   maxPoints: readonly NotEmptyItem[]
   minPoints?: readonly NotEmptyItem[]
   clipPath?: string
-  isHorizontal: boolean
 }
 
 export const THRESHOLD_COLOR = 'var(--color-bg-caution)'
@@ -43,14 +42,7 @@ export const isStraightLine = (items: readonly NotEmptyItem[], isHorizontal: boo
   return items.every(item => getSecondaryValue(item) === getSecondaryValue(items[0]))
 }
 
-export const Threshold: React.FC<Props> = ({
-  scaleX,
-  scaleY,
-  maxPoints,
-  minPoints,
-  clipPath,
-  isHorizontal,
-}) => {
+export const Threshold: React.FC<Props> = ({ scaleX, scaleY, maxPoints, minPoints, clipPath }) => {
   const getRectPath = d3
     .line<NotEmptyItem>()
     .x(({ x }) => scaleX(x))
@@ -65,8 +57,8 @@ export const Threshold: React.FC<Props> = ({
       points={points}
       scaleX={scaleX}
       scaleY={scaleY}
-      shapeRendering={isStraightLine(points, isHorizontal) ? 'crispEdges' : undefined}
-      transform={`translate(${isHorizontal ? '0, 0.5' : '0.5, 0'})`}
+      shapeRendering={isStraightLine(points, true) ? 'crispEdges' : undefined}
+      transform={'translate(0, 0.5)'}
       stroke={THRESHOLD_COLOR}
     />
   )

@@ -12,7 +12,6 @@ type Props = {
   color: string
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  isHorizontal: boolean
   areaBottom: number
   directionX: DirectionX
   directionY: DirectionY
@@ -69,30 +68,23 @@ export const Area: React.FC<Props> = ({
   color,
   scaleX,
   scaleY,
-  isHorizontal,
   areaBottom,
   directionX,
   directionY,
 }) => {
   const uid = useUID()
   const linearGradientId = `line_area_${uid}`
-  const area = isHorizontal
-    ? d3
-        .area<NotEmptyItem>()
-        .x(({ x }) => scaleX(x))
-        .y1(({ y }) => scaleY(y))
-        .y0(scaleY(areaBottom))
-    : d3
-        .area<NotEmptyItem>()
-        .y(({ y }) => scaleY(y))
-        .x0(({ x }) => scaleX(x))
-        .x1(scaleX(areaBottom))
+  const area = d3
+    .area<NotEmptyItem>()
+    .x(({ x }) => scaleX(x))
+    .y1(({ y }) => scaleY(y))
+    .y0(scaleY(areaBottom))
 
   return (
     <>
       <linearGradient
         id={linearGradientId}
-        {...getGradientDirection({ isHorizontal, directionX, directionY })}
+        {...getGradientDirection({ isHorizontal: true, directionX, directionY })}
       >
         <stop offset="0%" stopColor={color} stopOpacity="0.4" />
         <stop offset="100%" stopColor={color} stopOpacity="0" />

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Text } from '@consta/uikit/Text'
+// import { Text } from '@consta/uikit/Text'
 import { getArrayWithRandomInt } from '@consta/widgets-utils/lib/array'
-import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
+// import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import { boolean, number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
@@ -111,295 +111,909 @@ const parameters = {
   },
 } as const
 
-export const Horizontal = createStory(
+// export const Horizontal = createStory(
+//   () => {
+//     return <LinearChart {...getCommonProps()} isHorizontal />
+//   },
+//   {
+//     name: 'горизонтальный',
+//     decorators,
+//     parameters,
+//   }
+// )
+
+// export const WithNullData = createStory(
+//   () => {
+//     return (
+//       <LinearChart
+//         lines={[
+//           {
+//             values: [
+//               { x: 0, y: null },
+//               { x: 1, y: 1 },
+//               { x: 2, y: 0 },
+//               { x: 3, y: null },
+//               { x: 4, y: null },
+//               { x: 5, y: 3 },
+//               { x: 6, y: null },
+//               { x: 7, y: 1 },
+//               { x: 8, y: 2 },
+//               { x: 9, y: null },
+//             ],
+//             dots: true,
+//             lineName: 'Северный бур',
+//             withGradient: true,
+//             color: colors.first,
+//           },
+//         ]}
+//         gridConfig={getGridConfig()}
+//         formatValueForLabel={String}
+//         isHorizontal
+//         withZoom
+//       />
+//     )
+//   },
+//   {
+//     name: 'с пропусками',
+//     decorators,
+//     parameters,
+//   }
+// )
+//
+// export const WithClickHandler = createStory(
+//   () => {
+//     return (
+//       <LinearChart
+//         {...getCommonProps()}
+//         isHorizontal
+//         onClickHoverLine={value => alert(new Date(value))}
+//       />
+//     )
+//   },
+//   {
+//     name: 'с обработкой клика',
+//     decorators,
+//     parameters,
+//   }
+// )
+
+export const LinearChartSimple = createStory(
   () => {
-    return <LinearChart {...getCommonProps()} isHorizontal />
-  },
-  {
-    name: 'горизонтальный',
-    decorators,
-    parameters,
-  }
-)
-
-export const WithNullData = createStory(
-  () => {
-    return (
-      <LinearChart
-        lines={[
-          {
-            values: [
-              { x: 0, y: null },
-              { x: 1, y: 1 },
-              { x: 2, y: 0 },
-              { x: 3, y: null },
-              { x: 4, y: null },
-              { x: 5, y: 3 },
-              { x: 6, y: null },
-              { x: 7, y: 1 },
-              { x: 8, y: 2 },
-              { x: 9, y: null },
-            ],
-            dots: true,
-            lineName: 'Северный бур',
-            withGradient: true,
-            color: colors.first,
-          },
-        ]}
-        gridConfig={getGridConfig()}
-        formatValueForLabel={String}
-        isHorizontal
-        withZoom
-      />
-    )
-  },
-  {
-    name: 'с пропусками',
-    decorators,
-    parameters,
-  }
-)
-
-export const WithClickHandler = createStory(
-  () => {
-    return (
-      <LinearChart
-        {...getCommonProps()}
-        isHorizontal
-        onClickHoverLine={value => alert(new Date(value))}
-      />
-    )
-  },
-  {
-    name: 'с обработкой клика',
-    decorators,
-    parameters,
-  }
-)
-
-const renderTitle = (defaultText: string = '') => {
-  const title = text('title', defaultText)
-
-  return title ? (
-    <Text as="div" view="primary" size="m">
-      {title}
-    </Text>
-  ) : null
-}
-
-export const WithTitle = createStory(
-  () => {
-    return <LinearChart {...getCommonProps()} isHorizontal title={renderTitle('LTIF')} />
-  },
-  {
-    name: 'с заголовком',
-    decorators,
-    parameters,
-  }
-)
-
-export const WithNumbers = createStory(
-  () => {
-    const values: ReadonlyArray<{ x: number; y: number }> = [
-      { x: 0, y: -1 },
-      { x: 1, y: 3 },
-      { x: 2, y: 1 },
-      { x: 3, y: 4 },
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
     ]
-    const thresholdMin = number('Порог: нижняя грань', -1)
-    const thresholdMax = number('Порог: верхняя грань', 4)
 
-    return (
-      <LinearChart
-        {...getDirectionKnobs()}
-        lines={[
-          {
-            values,
-            dots: true,
-            lineName: 'Северный бур',
-            withGradient: true,
-            color: colors.first,
-          },
-          {
-            values: [
-              { x: 0, y: -2 },
-              { x: 1, y: 4 },
-              { x: 2, y: 0 },
-              { x: 3, y: 5 },
-            ],
-            lineName: 'Южное месторождение',
-            color: colors.second,
-          },
-        ]}
-        gridConfig={getGridConfig()}
-        threshold={
-          isNotNil(thresholdMax)
-            ? {
-                max: {
-                  values: values.map(({ x }) => ({ x, y: thresholdMax })),
-                },
-                min: isNotNil(thresholdMin)
-                  ? {
-                      values: values.map(({ x }) => ({ x, y: thresholdMin })),
-                    }
-                  : undefined,
-              }
-            : undefined
-        }
-        isHorizontal
-      />
-    )
-  },
-  { name: 'с числами по x', decorators, parameters }
-)
-
-export const Vertical = createStory(
-  () => {
-    return <LinearChart {...getCommonProps()} isHorizontal={false} />
+    const gridConfig = {
+      x: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
   },
   {
-    name: 'вертикальный',
-    decorators: [withSmartKnobs({ ignoreProps: IGNORE_PROPS })],
-    parameters: {
-      docs: {
-        page: docs,
-      },
-      environment: {
-        style: {
-          width: 300,
-          height: '80vh',
-        },
-      },
-    },
-  }
-)
-
-export const WithBoundaries = createStory(
-  () => {
-    return (
-      <LinearChart
-        {...getDirectionKnobs()}
-        lines={[
-          {
-            values: [
-              { x: 0, y: null },
-              { x: 1, y: -10 },
-              { x: 2, y: 30 },
-              { x: 3, y: 5 },
-              { x: 4, y: 25 },
-              { x: 5, y: -30 },
-              { x: 6, y: 25 },
-              { x: 7, y: null },
-            ],
-            dots: true,
-            lineName: 'Южное месторождение',
-            color: '#3B4D5B',
-          },
-          {
-            values: [
-              { x: 0, y: null },
-              { x: 1, y: 50 },
-              { x: 2, y: -45 },
-              { x: 3, y: 35 },
-              { x: 4, y: 35 },
-              { x: 5, y: -10 },
-              { x: 6, y: 10 },
-              { x: 7, y: null },
-            ],
-            dots: true,
-            lineName: 'Северный бур',
-            color: 'var(--color-bg-success)',
-            withBoundaries: true,
-          },
-        ]}
-        gridConfig={getGridConfig()}
-        isHorizontal
-        background="linear-gradient(to right, #f54d4d48, transparent)"
-        showBoundariesOnAxis={boolean('showBoundariesOnAxis', true)}
-        boundariesAxis={select('boundariesAxis', axes, 'y')}
-        boundaries={[
-          {
-            value: [-25, -35],
-            color: 'var(--color-bg-caution)',
-          },
-          {
-            value: [-35, -51],
-            color: 'var(--color-bg-alert)',
-          },
-          {
-            value: [35, 51],
-            color: 'var(--color-bg-alert)',
-          },
-          {
-            value: [25, 35],
-            color: 'var(--color-bg-caution)',
-          },
-          {
-            value: [25, -25],
-            color: 'var(--color-bg-success)',
-          },
-        ]}
-      />
-    )
-  },
-  { name: 'с лимитами', decorators, parameters }
-)
-
-export const WithValueLabels = createStory(
-  () => {
-    return (
-      <LinearChart
-        {...getDirectionKnobs()}
-        gridConfig={object('gridConfig', {
-          x: {
-            labels: 'bottom',
-            labelTicks: 1,
-            gridTicks: 10,
-            guide: true,
-            withPaddings: true,
-          },
-          y: {
-            labels: 'left',
-            labelTicks: 1,
-            gridTicks: 4,
-            guide: true,
-            withPaddings: true,
-          },
-        } as const)}
-        lines={[
-          {
-            values: [
-              { x: 0, y: -1 },
-              { x: 1, y: 3 },
-              { x: 2, y: 1 },
-              { x: 3, y: 4 },
-            ],
-            lineName: 'Северный бур',
-            color: colors.first,
-            showValues: true,
-          },
-          {
-            values: [
-              { x: 0, y: -2 },
-              { x: 1, y: 4 },
-              { x: 2, y: 0 },
-              { x: 3, y: 5 },
-            ],
-            lineName: 'Южное месторождение',
-            color: colors.second,
-            showValues: true,
-          },
-        ]}
-        isHorizontal
-      />
-    )
-  },
-  {
-    name: 'со значениями точек',
+    name: 'стандартный',
     decorators,
     parameters,
   }
 )
+
+export const LinearChartWithDots = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: true,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с точками в значениях',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithHideOY = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        showGrid: false,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'скрытие сетки ординат',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithHideOX = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 4,
+        showGuide: false,
+        showGrid: false,
+        withPaddings: false,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'скрытие сетки абсцисс',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithPaddings = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 5,
+        showGuide: false,
+        withPaddings: true,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: true,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с отступами внутри',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithHide1stLabel = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 5,
+        showGuide: false,
+        withPaddings: true,
+      },
+      y: {
+        gridTicks: 4,
+        showGuide: false,
+        withPaddings: true,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} xHideFirstLabel={true} />
+  },
+  {
+    name: 'с пропуском первого лейбла по Ox',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithMinMax = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: false,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: false,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с min, max по (Ox, Oy)',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithGuideOX = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с выделением оси Ox',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithGuideOY = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с выделением оси Oy',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithGuideAll = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с выделением осей Ox, Oy',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithNull = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 3.5, y: null },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с пропуском значений',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithDashed = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        dashed: true,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с пунктирной линией',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithGradient = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: true,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'с градиентом',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithPercentage = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 0.1 },
+          { x: 2, y: 0.2 },
+          { x: 3, y: 0.4 },
+          { x: 4, y: 0.4 },
+          { x: 5, y: 0.3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -0.1,
+        max: 0.6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} yLabelsShowInPercent={true} />
+  },
+  {
+    name: 'с % по Oy',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithRotateXLables = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} xLabelsShowVertical={true} />
+  },
+  {
+    name: 'с повёрнутыми лейблами по Ox',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithUnit = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} yDimensionUnit="г/моль" />
+  },
+  {
+    name: 'с размерностью по Oy',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithTreshold = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1.5 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    const threshold = {
+      max: {
+        values: [
+          { x: 1, y: 5 },
+          { x: 2, y: 4 },
+          { x: 3, y: 5 },
+          { x: 4, y: 5 },
+          { x: 5, y: 5 },
+        ],
+      },
+      min: {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 1 },
+          { x: 3, y: 1 },
+          { x: 4, y: 1 },
+          { x: 5, y: 1 },
+        ],
+      },
+    }
+
+    return <LinearChart lines={lines} gridConfig={gridConfig} threshold={threshold} />
+  },
+  {
+    name: 'с пределами',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithLegend = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 4 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+      {
+        values: [
+          { x: 0, y: 2 },
+          { x: 1, y: 4 },
+          { x: 3, y: 5 },
+        ],
+        dots: false,
+        lineName: 'Южная нора',
+        withGradient: false,
+        color: colors.second,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 8,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    const legendData = [
+      {
+        color: colors.first,
+        text: 'Успех',
+      },
+      {
+        color: colors.second,
+        text: 'Болъ',
+      },
+    ]
+
+    return <LinearChart lines={lines} gridConfig={gridConfig} legend={legendData} />
+  },
+  {
+    name: 'с легендой',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithValues = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 4, y: 3 },
+        ],
+        dots: false,
+        showValues: true,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -1,
+        max: 6,
+        gridTicks: 6,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    return <LinearChart lines={lines} gridConfig={gridConfig} />
+  },
+  {
+    name: 'со значениями',
+    decorators,
+    parameters,
+  }
+)
+
+//
+// const renderTitle = (defaultText: string = '') => {
+//   const title = text('title', defaultText)
+//
+//   return title ? (
+//     <Text as="div" view="primary" size="m">
+//       {title}
+//     </Text>
+//   ) : null
+// }
+//
 
 export default createMetadata({
   title: 'components/LinearChart',
