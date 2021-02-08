@@ -59,7 +59,6 @@ export type Props<T> = {
   groupsDomain: readonly string[]
   valuesDomain: NumberRange
   groups: readonly T[]
-  gridTicks: number
   size: Size
   isHorizontal?: boolean
   withScroll?: boolean
@@ -124,7 +123,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     groupsDomain,
     valuesDomain,
     groups,
-    gridTicks,
     isHorizontal = false,
     withScroll = false,
     showValues = false,
@@ -162,7 +160,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
    */
   const { width, height } = useComponentSize(ref)
   const [gridStyle, changeGridStyle] = useState({ width: 0, height: 0, left: 0, top: 0 })
-
   const [tooltipData, setTooltipData] = useState<TooltipData>()
   const [maxLabelSize, setMaxLabelSize] = useState<LabelSize>({
     width: 0,
@@ -180,6 +177,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const paddingLeft = showReversed ? paddingRight : 0
   const paddingTop = !isHorizontal && showValues ? maxLabelSize.height : 0
   const paddingBottom = showReversed ? paddingTop : 0
+  const gridTicks = Math.round(isHorizontal && width && height ? width / 50 : height / 50) + 1
   const gridItems = getTicks(valuesDomain, gridTicks)
   const axisValues = gridItems
 

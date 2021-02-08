@@ -24,7 +24,6 @@ type Props = {
   minValueY: number
   maxValueY: number
   colors: readonly string[]
-  gridTicks: number
   unit?: string
   unitPosition?: UnitPosition
   size?: 's' | 'm' | 'auto'
