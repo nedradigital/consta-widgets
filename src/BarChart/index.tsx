@@ -26,7 +26,6 @@ type Props = {
   colors: readonly string[]
   unit?: string
   unitPosition?: UnitPosition
-  size?: 's' | 'm' | 'auto'
   showValues?: boolean
   isHorizontal?: boolean
   withScroll?: boolean
@@ -46,7 +45,6 @@ export const BarChart: React.FC<Props> = props => {
     groups,
     minValueY,
     maxValueY,
-    size = 'm',
     colors,
     threshold,
     showValues,
@@ -107,7 +105,6 @@ export const BarChart: React.FC<Props> = props => {
       groups={commonGroups}
       groupsDomain={groupsDomain}
       valuesDomain={valuesDomain}
-      size={size}
       showValues={showValues}
       showReversed={showReversed}
       threshold={threshold}

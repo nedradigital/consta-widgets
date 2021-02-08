@@ -35,36 +35,6 @@
   &.isHorizontal {
     padding-right: var(--space-m);
   }
-
-  &.columnSizeS {
-    --column-size: var(--space-2xs);
-    --column-padding: var(--space-3xs);
-  }
-
-  &.columnSizeM {
-    --column-size: 12px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSizeL {
-    --column-size: 16px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSizeXL {
-    --column-size: 24px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSize2XL {
-    --column-size: 36px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSize3XL {
-    --column-size: 42px;
-    --column-padding: var(--space-2xs);
-  }
 }
 
 .svg {

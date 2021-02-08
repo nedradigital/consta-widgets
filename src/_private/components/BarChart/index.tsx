@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useRef, useState } from 'react'
 
 import { useComponentSize } from '@consta/uikit/useComponentSize'
-import { Text, TextPropSize } from '@consta/uikit/Text'
+import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
 import { ZeroLine } from '@/_private/components/BarChart/components/ZeroLine'
@@ -12,23 +12,19 @@ import { getTicks } from '@/_private/utils/ticks'
 
 import { Title } from '../Title'
 
-import { ColumnSize } from './components/Column'
 import { Threshold } from './components/Threshold'
-import { Position, Size as TicksSize } from './components/Ticks'
+import { Position } from './components/Ticks'
 import { Tooltip, TooltipData } from './components/Tooltip'
 import {
   CHART_MIN_HEIGHT,
   defaultGetAxisShowPositions,
   GetAxisShowPositions,
-  getColumnSize,
   getGridColumnGap,
   getGridRowGap,
   getGridSettings,
   getLabelGridAreaName,
   getRange,
   getScaler,
-  Size,
-  toAxisSize,
 } from './helpers'
 import css from './index.css'
 import {
@@ -59,7 +55,6 @@ export type Props<T> = {
   groupsDomain: readonly string[]
   valuesDomain: NumberRange
   groups: readonly T[]
-  size: Size
   isHorizontal?: boolean
   withScroll?: boolean
   showValues?: boolean
@@ -73,7 +68,6 @@ export type Props<T> = {
   isXAxisLabelsSlanted?: boolean
   unit?: string
   unitPosition?: UnitPosition
-  isDense?: boolean
   activeSectionIndex?: number
   activeGroup?: string
   threshold?: Threshold
@@ -90,21 +84,6 @@ export type Props<T> = {
   gridColumnGap?: number | string
 }
 
-const unitSize: Record<TicksSize, TextPropSize> = {
-  s: '2xs',
-  m: 'xs',
-  l: 'xs',
-}
-
-const columnSizeClasses: Record<ColumnSize, string> = {
-  s: css.columnSizeS,
-  m: css.columnSizeM,
-  l: css.columnSizeL,
-  xl: css.columnSizeXL,
-  '2xl': css.columnSize2XL,
-  '3xl': css.columnSize3XL,
-}
-
 const axisTicksPositionsClasses = {
   left: css.leftTicks,
   bottom: css.bottomTicks,
@@ -112,8 +91,8 @@ const axisTicksPositionsClasses = {
   top: css.topTicks,
 }
 
-const renderUnit = (className: string, unit: string, size: TicksSize) => (
-  <Text as="div" size={unitSize[size]} view="secondary" className={className}>
+const renderUnit = (className: string, unit: string) => (
+  <Text as="div" size={'xs'} view="secondary" className={className}>
     {unit}
   </Text>
 )
@@ -133,9 +112,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     maxColumnLength,
     minReversedColumnLength,
     maxNumberGroups,
-    size,
     unit,
-    isDense = false,
     activeSectionIndex,
     activeGroup,
     threshold,
@@ -175,13 +152,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   }
   const gridItems = getTicks(valuesDomain, gridTicks)
   const axisValues = gridItems
-
-  const maxValue = valuesDomain[1]
-  const columnSize = getColumnSize({
-    size,
-    valueLength: maxValue.toString().length,
-    isHorizontal,
-  })
 
   const paddingRight = isHorizontal && showValues ? maxLabelSize.width : 0
   const paddingLeft = showReversed ? paddingRight : 0
@@ -270,7 +240,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     renderGroupsLabels({
       values: groupsDomain,
       position,
-      size: columnSize,
       getGridAreaName: getLabelGridAreaName(position),
       isXAxisLabelsSlanted,
       showGroupsLabels,
@@ -289,7 +258,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         values: axisValues,
         scaler: valuesScale,
         position,
-        size: columnSize,
         formatValueForLabel,
       })}
     </div>
@@ -297,7 +265,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
 
   const renderHorizontal = isHorizontal ? getRenderAxisValues : getRenderGroupsLabels
   const renderVertical = isHorizontal ? getRenderGroupsLabels : getRenderAxisValues
-  const axisSize = toAxisSize(columnSize)
+  const axisSize = 'm'
   const computedGridRowGap = gridRowGap ?? getGridRowGap(axisSize, isHorizontal)
   const computedGridColumnGap = gridColumnGap ?? getGridColumnGap(axisSize)
 
@@ -330,11 +298,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
         {isHorizontal && axisShowPositions.top && renderHorizontal('top')}
         <div
           ref={ref}
-          className={classnames(
-            css.chart,
-            isHorizontal && css.isHorizontal,
-            columnSizeClasses[columnSize]
-          )}
+          className={classnames(css.chart, isHorizontal && css.isHorizontal)}
           style={{
             ...getGridSettings({
               isHorizontal,
@@ -364,7 +328,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
               />
             )}
           </svg>
-          {unit && !isHorizontal && renderUnit(css.topLeftUnit, unit, axisSize)}
+          {unit && !isHorizontal && renderUnit(css.topLeftUnit, unit)}
           {!isHorizontal && axisShowPositions.top && showGroupsLabels && renderHorizontal('top')}
           {axisShowPositions.right && showGroupsLabels && renderVertical('right')}
           {groups.map((group, groupIdx) => {
@@ -389,8 +353,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                   index: groupIdx,
                   isLast: isLastGroup,
                   isFirst: isFirstGroup,
-                  isDense,
-                  columnSize,
                   showValues,
                   showReversed,
                   isHorizontal,
@@ -417,7 +379,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
             renderHorizontal('bottom')}
         </div>
         {isHorizontal && axisShowPositions.bottom && showGroupsLabels && renderHorizontal('bottom')}
-        {unit && isHorizontal && renderUnit(css.bottomUnit, unit, axisSize)}
+        {unit && isHorizontal && renderUnit(css.bottomUnit, unit)}
         {tooltipData && (
           <Tooltip
             data={tooltipData}

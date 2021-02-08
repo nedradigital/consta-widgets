@@ -7,7 +7,7 @@ import { getScaler } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
 
 import { LabelSize } from '../..'
-import { Column, ColumnSize, SectionItem } from '../Column'
+import { Column, SectionItem } from '../Column'
 import { TooltipData } from '../Tooltip'
 
 import { getSections } from './helpers'
@@ -28,8 +28,6 @@ type Props = {
   item: GroupItem
   isHorizontal: boolean
   showReversed: boolean
-  columnSize: ColumnSize
-  isDense?: boolean
   activeGroup?: string
   activeSectionIndex?: number
   showValues: boolean
@@ -52,8 +50,6 @@ export const Group: React.FC<Props> = props => {
     item: { name: group, columns, reversedColumns },
     isHorizontal,
     showReversed,
-    columnSize,
-    isDense,
     activeGroup,
     activeSectionIndex,
     showValues,
@@ -88,11 +84,9 @@ export const Group: React.FC<Props> = props => {
         group={group}
         total={column.total}
         sections={sections}
-        size={columnSize}
         lengthColumns={lengthColumns}
         isHorizontal={isHorizontal}
         isReversed={isReversed}
-        isDense={isDense}
         showValues={showValues}
         activeGroup={activeGroup}
         activeSectionIndex={activeSectionIndex}

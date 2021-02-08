@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 import { isNumber } from 'lodash'
@@ -20,6 +21,11 @@ export type SectionItem = {
   value?: number
   length?: number
   name?: string
+}
+
+export type ColumnProperty = {
+  width: number
+  height: number
 }
 
 export type OnMouseEnterColumn = (params: TooltipData) => void
@@ -51,12 +57,10 @@ type Props = {
   group: string
   total: number
   sections: readonly SectionItem[] | undefined
-  size: ColumnSize
   showValues: boolean
   isHorizontal: boolean
   lengthColumns?: number
   isReversed?: boolean
-  isDense?: boolean
   activeGroup?: string
   activeSectionIndex?: number
   formatValueForLabel?: FormatValue
@@ -70,12 +74,10 @@ export const Column: React.FC<Props> = ({
   group,
   total,
   sections = [],
-  size,
   lengthColumns,
   showValues,
   isHorizontal,
   isReversed = false,
-  isDense,
   activeGroup,
   activeSectionIndex,
   formatValueForLabel = String,
@@ -84,6 +86,9 @@ export const Column: React.FC<Props> = ({
   onChangeLabelSize,
   maxNumberGroups,
 }) => {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(ref)
+  const columnProperty: ColumnProperty = { width, height }
   const handleMouseEnter: React.MouseEventHandler = event => {
     if (!(event.currentTarget instanceof HTMLElement)) {
       return
@@ -105,7 +110,6 @@ export const Column: React.FC<Props> = ({
     }
 
     const isLastItem = isReversed ? index === 0 : index === sections.length - 1
-    const isRounded = size !== 's' && !isDense && isLastItem
     const isColumnLabel = showValues && isLastItem
     const isSectionLabel = isNumber(activeSectionIndex) && activeSectionIndex === index
     const isActive =
@@ -130,12 +134,12 @@ export const Column: React.FC<Props> = ({
         key={index}
         isHorizontal={isHorizontal}
         isReversed={isReversed}
-        isRounded={isRounded}
         isActive={isActive}
         label={getLabel()}
         onChangeLabelSize={onChangeLabelSize}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={onMouseLeaveColumn}
+        columnProperty={columnProperty}
       />
     )
   }
@@ -166,6 +170,7 @@ export const Column: React.FC<Props> = ({
         isReversed && css.isReversed
       )}
       style={styleOrientation()}
+      ref={ref}
     >
       {sections.map(renderSection)}
     </div>

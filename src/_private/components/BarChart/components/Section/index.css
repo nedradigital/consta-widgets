@@ -1,7 +1,5 @@
 @custom-selector :--horizontal-section .section.isHorizontal;
 @custom-selector :--vertical-section .section:not(.isHorizontal);
-@custom-selector :--horizontal-rounded :--horizontal-section.isRounded;
-@custom-selector :--vertical-rounded :--vertical-section.isRounded;
 @custom-selector :--reversed .isReversed;
 @custom-selector :--straight :not(.isReversed);
 
@@ -27,22 +25,6 @@
 
   &:not(.isHorizontal) {
     min-height: 5px;
-  }
-
-  &:--horizontal-rounded:--reversed {
-    border-radius: var(--round-radius) 0 0 var(--round-radius);
-  }
-
-  &:--horizontal-rounded:--straight {
-    border-radius: 0 var(--round-radius) var(--round-radius) 0;
-  }
-
-  &:--vertical-rounded:--reversed {
-    border-radius: 0 0 var(--round-radius) var(--round-radius);
-  }
-
-  &:--vertical-rounded:--straight {
-    border-radius: var(--round-radius) var(--round-radius) 0 0;
   }
 }
 

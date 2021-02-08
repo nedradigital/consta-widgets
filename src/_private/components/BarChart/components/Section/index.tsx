@@ -3,9 +3,11 @@ import React from 'react'
 import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
+import { ColumnProperty } from '@/_private/components/BarChart/components/Column'
+
 import { LabelSize } from '../..'
 
-import { getSize } from './helpers'
+import { getRoundedBorder, getSize } from './helpers'
 import css from './index.css'
 
 type Props = {
@@ -13,13 +15,13 @@ type Props = {
   length: number
   isHorizontal: boolean
   isReversed: boolean
-  isRounded: boolean
   isActive: boolean
   label?: string
   className?: string
   onMouseEnter?: React.MouseEventHandler
   onMouseLeave?: React.MouseEventHandler
   onChangeLabelSize?: (size: LabelSize) => void
+  columnProperty: ColumnProperty
 }
 
 export const Section = React.forwardRef<HTMLDivElement, Props>(
@@ -29,13 +31,13 @@ export const Section = React.forwardRef<HTMLDivElement, Props>(
       length,
       isHorizontal,
       isReversed,
-      isRounded,
       isActive,
       label,
       className,
       onMouseEnter,
       onMouseLeave,
       onChangeLabelSize,
+      columnProperty,
     },
     ref
   ) => {
@@ -59,12 +61,12 @@ export const Section = React.forwardRef<HTMLDivElement, Props>(
           css.section,
           isHorizontal && css.isHorizontal,
           isReversed && css.isReversed,
-          isRounded && css.isRounded,
           isActive && css.isActive,
           className
         )}
         style={{
           ...getSize(length, isHorizontal),
+          ...getRoundedBorder(columnProperty, isHorizontal),
           background: color,
         }}
         onMouseEnter={onMouseEnter}

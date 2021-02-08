@@ -6,7 +6,7 @@ import { NumberRange } from '@/_private/utils/scale'
 
 import { Threshold } from './'
 import { ColumnItem, GroupItem } from './components/Group'
-import { Position, Size as TickSize } from './components/Ticks'
+import { Position } from './components/Ticks'
 
 export const barCharSizes = ['s', 'm', 'l', 'xl', '2xl', '3xl', 'auto'] as const
 export type Size = typeof barCharSizes[number]
@@ -131,14 +131,6 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
     nextGraphSize,
     groupsSizes.filter(size => size <= step)
   )
-}
-
-export const toAxisSize = (size: Size): TickSize => {
-  if (size === 's') {
-    return 's'
-  }
-
-  return 'm'
 }
 
 type GetColumnSizeParams = {
