@@ -56,6 +56,7 @@ export type RenderGroup<T> = (props: {
   onMouseLeaveColumn: (groupName: string) => void
   formatValueForLabel: FormatValue
   onChangeLabelSize?: (size: LabelSize) => void
+  getNumberGridTicks: (length: number) => void
 }) => React.ReactElement | null
 
 export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />

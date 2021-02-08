@@ -166,6 +166,16 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     height: 0,
   })
 
+  const numberGridTicks = Math.round(isHorizontal && width && height ? width / 50 : height / 50)
+  const [gridTicks, setGridTicks] = useState<number>(numberGridTicks)
+  const getNumberGridTicks = (length: number) => {
+    if (length) {
+      setGridTicks(Math.round(length / 50))
+    }
+  }
+  const gridItems = getTicks(valuesDomain, gridTicks)
+  const axisValues = gridItems
+
   const maxValue = valuesDomain[1]
   const columnSize = getColumnSize({
     size,
@@ -177,9 +187,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const paddingLeft = showReversed ? paddingRight : 0
   const paddingTop = !isHorizontal && showValues ? maxLabelSize.height : 0
   const paddingBottom = showReversed ? paddingTop : 0
-  const gridTicks = Math.round(isHorizontal && width && height ? width / 50 : height / 50) + 1
-  const gridItems = getTicks(valuesDomain, gridTicks)
-  const axisValues = gridItems
 
   const scalerMaxValue = getScaler(gridItems[gridItems.length - 1])
   const scalerMinValue = getScaler(Math.abs(gridItems[0]))
@@ -398,6 +405,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                   onMouseLeaveColumn: handleMouseLeaveColumn,
                   formatValueForLabel,
                   onChangeLabelSize: changeLabelSize,
+                  getNumberGridTicks,
                 })}
               </div>
             )

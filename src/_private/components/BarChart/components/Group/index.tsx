@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useLayoutEffect, useRef } from 'react'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import classnames from 'classnames'
 
 import { getScaler } from '@/_private/components/BarChart/helpers'
@@ -43,6 +44,7 @@ type Props = {
   onChangeLabelSize?: (size: LabelSize) => void
   className?: string
   style?: React.CSSProperties
+  getNumberGridTicks: (length: number) => void
 }
 
 export const Group: React.FC<Props> = props => {
@@ -66,6 +68,7 @@ export const Group: React.FC<Props> = props => {
     onChangeLabelSize,
     className,
     style,
+    getNumberGridTicks,
   } = props
   const renderColumn = (column: ColumnItem | undefined, index: number, isReversed?: boolean) => {
     if (!column) {
@@ -111,11 +114,22 @@ export const Group: React.FC<Props> = props => {
       return { minWidth: `${scalerCommonColumnsLength(column)}%`, maxHeight: '70%' }
     }
   }
+  const ref = useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(ref)
+
+  useLayoutEffect(() => {
+    if (isHorizontal) {
+      getNumberGridTicks(width)
+    } else {
+      getNumberGridTicks(height)
+    }
+  }, [width, height, ref, getNumberGridTicks, isHorizontal])
 
   return (
     <div
       className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
       style={style}
+      ref={ref}
     >
       <div className={css.columns}>
         <div className={css.wrapper} style={styleOrientation(columnLength)}>
