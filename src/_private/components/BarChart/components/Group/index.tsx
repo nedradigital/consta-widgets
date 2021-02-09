@@ -1,16 +1,16 @@
-import React, { useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { useComponentSize } from '@consta/uikit/useComponentSize'
 import classnames from 'classnames'
 
-import { getScaler } from '@/_private/components/BarChart/helpers'
 import { FormatValue } from '@/_private/types'
+import { NumberRange } from '@/_private/utils/scale'
 
 import { LabelSize } from '../..'
 import { Column, SectionItem } from '../Column'
 import { TooltipData } from '../Tooltip'
 
-import { getSections, styleOrientation } from './helpers'
+import { getSections, scalerCommonColumnsGroups, styleOrientation } from './helpers'
 import css from './index.css'
 
 export type ColumnItem = {
@@ -27,7 +27,6 @@ export type GroupItem = {
 type Props = {
   item: GroupItem
   isHorizontal: boolean
-  showReversed: boolean
   activeGroup?: string
   activeSectionIndex?: number
   showValues: boolean
@@ -43,13 +42,13 @@ type Props = {
   className?: string
   style?: React.CSSProperties
   getNumberGridTicks: (length: number) => void
+  gridDomain: NumberRange
 }
 
 export const Group: React.FC<Props> = props => {
   const {
     item: { name: group, columns, reversedColumns },
     isHorizontal,
-    showReversed,
     activeGroup,
     activeSectionIndex,
     showValues,
@@ -65,13 +64,18 @@ export const Group: React.FC<Props> = props => {
     className,
     style,
     getNumberGridTicks,
+    gridDomain,
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
 
-  const scalerCommonColumnsLength = getScaler(columnLength + Math.abs(reversedColumnLength))
+  const scalerColumnsGroups = scalerCommonColumnsGroups(
+    columnLength,
+    reversedColumnLength,
+    gridDomain
+  )
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (isHorizontal) {
       getNumberGridTicks(width)
     } else {
@@ -121,18 +125,21 @@ export const Group: React.FC<Props> = props => {
       <div className={css.columns}>
         <div
           className={css.wrapper}
-          style={styleOrientation(columnLength, isHorizontal, scalerCommonColumnsLength)}
+          style={styleOrientation(columnLength, isHorizontal, scalerColumnsGroups, gridDomain)}
         >
           {columns.map((column, index) => renderColumn(column, index))}
         </div>
-        {showReversed && (
-          <div
-            className={classnames(css.wrapper, css.isReversed)}
-            style={styleOrientation(reversedColumnLength, isHorizontal, scalerCommonColumnsLength)}
-          >
-            {reversedColumns.map((column, index) => renderColumn(column, index, true))}
-          </div>
-        )}
+        <div
+          className={classnames(css.wrapper, css.isReversed)}
+          style={styleOrientation(
+            reversedColumnLength,
+            isHorizontal,
+            scalerColumnsGroups,
+            gridDomain
+          )}
+        >
+          {reversedColumns.map((column, index) => renderColumn(column, index, true))}
+        </div>
       </div>
     </div>
   )

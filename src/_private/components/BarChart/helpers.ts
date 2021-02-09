@@ -55,18 +55,22 @@ export const getValuesDomain: GetValuesDomain = ({ groups, minValueY, maxValueY,
     .flat()
 
   const thresholdValue = threshold?.value ?? 0
-
   const maxNumber = Math.max(...numbers, Math.abs(thresholdValue), 0)
   const minNumber = Math.min(...numbers, Math.abs(thresholdValue))
 
   const maxValue = getValueY(maxValueY, v => v >= 0)
   const minValue = getValueY(minValueY, v => v < 0)
 
-  if ((maxValue || maxValue === 0) && minValue) {
+  if (
+    (maxValue || maxValue === 0) &&
+    minValue &&
+    thresholdValue > minValue &&
+    thresholdValue < maxValue
+  ) {
     return [minValue, maxValue]
-  } else if (!maxValue && minValue) {
+  } else if (!maxValue && minValue && thresholdValue > minValue) {
     return [minValue, maxNumber]
-  } else if ((maxValue || maxValue === 0) && !minValue) {
+  } else if ((maxValue || maxValue === 0) && !minValue && thresholdValue < maxValue) {
     return [minNumber, maxValue]
   } else {
     return [minNumber, maxNumber]

@@ -29,7 +29,11 @@ const getLinePosition = (value: number, isHorizontal: boolean) => {
 
 export const ZeroLine: React.FC<Props> = ({ valuesScale, isHorizontal }) => {
   const scaledValue = valuesScale.scale(0)
-  const linePos = getLinePosition(scaledValue, isHorizontal)
+  let linePos
+
+  if (scaledValue) {
+    linePos = getLinePosition(scaledValue, isHorizontal)
+  }
 
   return (
     <svg className={css.main}>

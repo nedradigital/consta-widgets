@@ -141,7 +141,6 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     width: 0,
     height: 0,
   })
-
   const numberGridTicks = Math.round(isHorizontal && width && height ? width / 50 : height / 50)
   const [gridTicks, setGridTicks] = useState<number>(numberGridTicks)
   const getNumberGridTicks = (length: number) => {
@@ -150,6 +149,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
     }
   }
   const gridItems = getTicks(valuesDomain, gridTicks)
+  const gridDomain: NumberRange = [gridItems[0], gridItems[gridItems.length - 1]]
   const axisValues = gridItems
 
   const paddingRight = isHorizontal && showValues ? maxLabelSize.width : 0
@@ -357,6 +357,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                   formatValueForLabel,
                   onChangeLabelSize: changeLabelSize,
                   getNumberGridTicks,
+                  gridDomain,
                 })}
               </div>
             )

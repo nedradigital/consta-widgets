@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { FormatValue } from '@/_private/types'
-import { Scaler } from '@/_private/utils/scale'
+import { NumberRange, Scaler } from '@/_private/utils/scale'
 
 import { LabelSize } from '.'
 import { Group, GroupItem } from './components/Group'
@@ -52,6 +52,7 @@ export type RenderGroup<T> = (props: {
   formatValueForLabel: FormatValue
   onChangeLabelSize?: (size: LabelSize) => void
   getNumberGridTicks: (length: number) => void
+  gridDomain: NumberRange
 }) => React.ReactElement | null
 
 export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />
