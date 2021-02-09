@@ -53,7 +53,6 @@ export function Ticks<T>(props: Props<T>) {
     style,
     formatValueForLabel = String,
   } = props
-
   const isTop = position === 'top'
   const isBottom = position === 'bottom'
   const isHorizontal = isTop || isBottom
@@ -115,7 +114,6 @@ export function Ticks<T>(props: Props<T>) {
     const alignItems = getAlignItems(idx, values.length)
     const textValue = formatValueForLabel(value)
     const textAlign = getTextAlign({ isXAxisLabelsSlanted, isHorizontal })
-
     return (
       <div
         key={idx}

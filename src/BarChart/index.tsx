@@ -41,6 +41,7 @@ type Props = {
   showGrid?: boolean
   showLineAtZero?: boolean
   showGroupsLabels?: boolean
+  limitMinimumCategorySize?: boolean
 }
 
 export const BarChart: React.FC<Props> = props => {

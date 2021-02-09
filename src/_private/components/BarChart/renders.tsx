@@ -53,6 +53,7 @@ export type RenderGroup<T> = (props: {
   onChangeLabelSize?: (size: LabelSize) => void
   getNumberGridTicks: (length: number) => void
   gridDomain: NumberRange
+  limitMinimumCategorySize?: boolean
 }) => React.ReactElement | null
 
 export const defaultRenderGroup: RenderGroup<GroupItem> = props => <Group {...props} />

@@ -10,7 +10,7 @@ import { LabelSize } from '../..'
 import { Column, SectionItem } from '../Column'
 import { TooltipData } from '../Tooltip'
 
-import { getSections, scalerCommonColumnsGroups, styleOrientation } from './helpers'
+import { getSections, scalerCommonColumnsGroups, styleGroups, styleOrientation } from './helpers'
 import css from './index.css'
 
 export type ColumnItem = {
@@ -22,6 +22,11 @@ export type GroupItem = {
   name: string
   columns: ReadonlyArray<ColumnItem | undefined>
   reversedColumns: ReadonlyArray<ColumnItem | undefined>
+}
+
+export type SizeGraphic = {
+  width: number
+  height: number
 }
 
 type Props = {
@@ -43,6 +48,7 @@ type Props = {
   style?: React.CSSProperties
   getNumberGridTicks: (length: number) => void
   gridDomain: NumberRange
+  limitMinimumCategorySize?: boolean
 }
 
 export const Group: React.FC<Props> = props => {
@@ -62,9 +68,9 @@ export const Group: React.FC<Props> = props => {
     onMouseLeaveColumn,
     onChangeLabelSize,
     className,
-    style,
     getNumberGridTicks,
     gridDomain,
+    limitMinimumCategorySize = false,
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
@@ -115,11 +121,10 @@ export const Group: React.FC<Props> = props => {
       />
     )
   }
-
   return (
     <div
       className={classnames(css.group, isHorizontal && css.isHorizontal, className)}
-      style={style}
+      style={styleGroups(isHorizontal, limitMinimumCategorySize)}
       ref={ref}
     >
       <div className={css.columns}>

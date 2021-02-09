@@ -70,3 +70,13 @@ export const scalerCommonColumnsGroups = (
     return scaler
   }
 }
+
+export const styleGroups = (isHorizontal: boolean, limitMinimumCategorySize: boolean) => {
+  if (!isHorizontal && limitMinimumCategorySize) {
+    return { minWidth: '30px', minHeight: '100%' }
+  } else if (isHorizontal && limitMinimumCategorySize) {
+    return { minHeight: '30px', minWidth: '100%' }
+  } else {
+    return {}
+  }
+}
