@@ -67,7 +67,7 @@ export const Section = React.forwardRef<HTMLDivElement, Props>(
         style={{
           ...getSize(length, isHorizontal),
           ...getRoundedBorder(columnProperty, isHorizontal),
-          background: color,
+          background: length > 0 ? color : 'rgba(0,0,0,0)',
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
