@@ -50,3 +50,13 @@
 
   pointer-events: all;
 }
+
+.wrapper {
+  z-index: 99;
+
+  overflow-y: hidden;
+}
+
+.isVisible {
+  overflow: visible;
+}

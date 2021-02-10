@@ -903,7 +903,8 @@ export const LinearChartWithThreshold = createStory(
         lineName: 'Северный бур',
         withGradient: false,
         color: colors.first,
-      },{
+      },
+      {
         values: [
           { x: 1, y: 4 },
           { x: 1.5, y: -1 },
@@ -965,6 +966,91 @@ export const LinearChartWithThreshold = createStory(
   },
   {
     name: 'с пределами',
+    decorators,
+    parameters,
+  }
+)
+
+export const LinearChartWithLimitedSteps = createStory(
+  () => {
+    const lines = [
+      {
+        values: [
+          { x: 1, y: 1.5 },
+          { x: 2, y: 2 },
+          { x: 3, y: 4 },
+          { x: 3.5, y: 0 },
+          { x: 4, y: 10 },
+          { x: 5, y: 3 },
+        ],
+        dots: false,
+        lineName: 'Северный бур',
+        withGradient: false,
+        color: colors.first,
+      },
+      {
+        values: [
+          { x: 1, y: 4 },
+          { x: 1.5, y: -1 },
+          { x: 2, y: 6 },
+          { x: 3, y: 2 },
+          { x: 3.5, y: 6 },
+          { x: 4, y: 2 },
+          { x: 4.5, y: 8 },
+          { x: 5, y: 6 },
+        ],
+        dots: true,
+        lineName: 'Южная нора',
+        withGradient: false,
+        color: colors.second,
+      },
+    ]
+
+    const gridConfig = {
+      x: {
+        showGuide: true,
+        withPaddings: false,
+      },
+      y: {
+        min: -2,
+        max: 12,
+        showGuide: true,
+        withPaddings: false,
+      },
+    }
+    const threshold = {
+      max: {
+        values: [
+          { x: 1, y: 5 },
+          { x: 2, y: 4 },
+          { x: 5, y: 10 },
+        ],
+        label: 'Максимум',
+      },
+      min: {
+        values: [
+          { x: 1, y: 1 },
+          { x: 2, y: 1 },
+          { x: 3, y: 1 },
+          { x: 4, y: 1 },
+          { x: 5, y: 1 },
+        ],
+        label: 'Минимум',
+      },
+    }
+
+    return (
+      <LinearChart
+        lines={lines}
+        gridConfig={gridConfig}
+        threshold={threshold}
+        yDimensionUnit={'килограммы'}
+        limitMinimumStepSize={true}
+      />
+    )
+  },
+  {
+    name: 'с ограниченным размером шага по Ox',
     decorators,
     parameters,
   }

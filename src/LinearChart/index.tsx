@@ -15,6 +15,8 @@ import {
   Size as LegendSize,
 } from '@/LegendItem'
 import { Frame, GridConfig, UNIT_Y_MARGIN } from '@/LinearChart/components/Frame'
+import { HoverLines } from '@/LinearChart/components/HoverLines'
+import { LineTooltip } from '@/LinearChart/components/LineTooltip'
 import { LineWithDots } from '@/LinearChart/components/LineWithDots'
 import {
   flipPointsOnAxes,
@@ -26,8 +28,7 @@ import {
   INITIAL_DOMAIN,
   padDomain,
 } from '@/LinearChart/helpers'
-import { LineTooltip } from "@/LinearChart/components/LineTooltip";
-import { HoverLines } from "@/LinearChart/components/HoverLines";
+
 import { Threshold } from './components/Threshold'
 import css from './index.css'
 
@@ -89,6 +90,7 @@ type Props = {
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
   onClickHoverLine?: (value: number) => void
+  limitMinimumStepSize?: boolean
 }
 
 type State = {
@@ -103,6 +105,8 @@ type State = {
 }
 
 const DOT_SIZE = 5
+const SCROLL_OFFSET = 38
+const MIN_STEP_SIZE = 30
 const TRANSITION_SIZE = 600
 
 const positionLegendClass = {
@@ -136,6 +140,7 @@ export const LinearChart: React.FC<Props> = props => {
     formatValueForTooltipTitle,
     legend,
     onClickHoverLine,
+    limitMinimumStepSize = false,
   } = props
 
   const [state, setState] = React.useState<State>({
@@ -353,9 +358,10 @@ export const LinearChart: React.FC<Props> = props => {
 
   const { xDomain, yDomain } = state
   const { svgWidth, svgHeight } = getSvgSize()
-  const scaleX = getXScale(xDomain, svgWidth)
-  const scaleY = getYScale(yDomain, svgHeight)
   const { xGridTickValues, yGridTickValues } = getTicks()
+  const widthWithLimitedStep = svgWidth + xGridTickValues.length * MIN_STEP_SIZE
+  const scaleX = getXScale(xDomain, limitMinimumStepSize ? widthWithLimitedStep : svgWidth)
+  const scaleY = getYScale(yDomain, svgHeight)
   const lineClipPath = `url(#${lineClipId})`
   const dotsClipPath = `url(#${dotsClipId})`
   const threshold = getThreshold()
@@ -393,92 +399,135 @@ export const LinearChart: React.FC<Props> = props => {
         </div>
       )}
       <div ref={ref} className={css.graph}>
-        <svg ref={svgWrapperRef} className={css.svg} width={svgWidth} height={svgHeight} style={{ top: UNIT_Y_MARGIN }}>
-          {/* <defs>*/}
-          {/*  <clipPath id={lineClipId}>*/}
-          {/*    <rect width={svgWidth} height={svgHeight} />*/}
-          {/*  </clipPath>*/}
-          {/*  <clipPath id={dotsClipId}>*/}
-          {/*    <rect*/}
-          {/*      width={svgWidth + 2 * dotRadius}*/}
-          {/*      height={svgHeight + 2 * dotRadius}*/}
-          {/*      x={-1 * dotRadius}*/}
-          {/*      y={-1 * dotRadius}*/}
-          {/*    />*/}
-          {/*  </clipPath>*/}
-          {/* </defs>*/}
-          <Frame
+        {limitMinimumStepSize && (
+          <svg
+            className={css.svg}
             width={svgWidth}
             height={svgHeight}
-            gridConfig={gridConfig}
-            scales={{
-              x: scaleX,
-              y: scaleY,
-            }}
-            xGridTickValues={xGridTickValues}
-            yGridTickValues={yGridTickValues}
-            yDimensionUnit={yDimensionUnit}
-            yLabelsShowInPercent={yLabelsShowInPercent}
-            xLabelsShowVertical={xLabelsShowVertical}
-            xHideFirstLabel={xHideFirstLabel}
-            formatValueForLabel={formatValueForLabel}
-            onFrameSizeChange={onFrameSizeChange}
-          />
-
-          <HoverLines
-            lines={lines}
-            scaleX={scaleX}
-            height={svgHeight}
-            hoveredMainValue={hoveredMainValue}
-            onChangeHoveredMainValue={setHoveredMainValue}
-            onClickLine={onClickHoverLine}
-          />
-
-          {threshold && (
-            <Threshold
-              scaleX={scaleX}
-              scaleY={scaleY}
-              maxPoints={threshold.max.values}
-              minPoints={threshold.min?.values}
-              maxLabel={threshold.max.label}
-              minLabel={threshold.min?.label}
-              clipPath={lineClipPath}
+            style={{ top: UNIT_Y_MARGIN }}
+          >
+            <Frame
+              width={widthWithLimitedStep}
+              height={svgHeight}
+              gridConfig={gridConfig}
+              scales={{
+                x: scaleX,
+                y: scaleY,
+              }}
+              xGridTickValues={xGridTickValues}
+              yGridTickValues={yGridTickValues}
+              yDimensionUnit={yDimensionUnit}
+              yLabelsShowInPercent={yLabelsShowInPercent}
+              xLabelsShowVertical={xLabelsShowVertical}
+              xHideFirstLabel={xHideFirstLabel}
+              formatValueForLabel={formatValueForLabel}
+              onFrameSizeChange={onFrameSizeChange}
+              showOnlyY={true}
             />
-          )}
+          </svg>
+        )}
+        <div
+          style={{
+            width: svgWidth,
+            height: svgHeight + UNIT_Y_MARGIN + SCROLL_OFFSET,
+            paddingTop: UNIT_Y_MARGIN,
+          }}
+          className={classnames(css.svg, css.wrapper, !limitMinimumStepSize && css.isVisible)}
+        >
+          <svg
+            ref={svgWrapperRef}
+            className={css.svg}
+            width={limitMinimumStepSize ? widthWithLimitedStep : svgWidth}
+            height={svgHeight}
+            style={limitMinimumStepSize ? { left: 0 } : { top: UNIT_Y_MARGIN }}
+          >
+            {/* <defs>*/}
+            {/*  <clipPath id={lineClipId}>*/}
+            {/*    <rect width={svgWidth} height={svgHeight} />*/}
+            {/*  </clipPath>*/}
+            {/*  <clipPath id={dotsClipId}>*/}
+            {/*    <rect*/}
+            {/*      width={svgWidth + 2 * dotRadius}*/}
+            {/*      height={svgHeight + 2 * dotRadius}*/}
+            {/*      x={-1 * dotRadius}*/}
+            {/*      y={-1 * dotRadius}*/}
+            {/*    />*/}
+            {/*  </clipPath>*/}
+            {/* </defs>*/}
+            <Frame
+              width={limitMinimumStepSize ? widthWithLimitedStep : svgWidth}
+              height={svgHeight}
+              gridConfig={gridConfig}
+              scales={{
+                x: scaleX,
+                y: scaleY,
+              }}
+              xGridTickValues={xGridTickValues}
+              yGridTickValues={yGridTickValues}
+              yDimensionUnit={yDimensionUnit}
+              yLabelsShowInPercent={yLabelsShowInPercent}
+              xLabelsShowVertical={xLabelsShowVertical}
+              xHideFirstLabel={xHideFirstLabel}
+              formatValueForLabel={formatValueForLabel}
+              onFrameSizeChange={onFrameSizeChange}
+              hideYLabels={limitMinimumStepSize}
+            />
 
-          {lines.map(line => {
-            const gradientProps = line.withGradient
-              ? ({
-                  withGradient: true,
-                  areaBottom: Math.max(
-                    Math.min(..._.flatten(line.values.map(v => v.y).filter(isNotNil))),
-                    0
-                  ),
-                  gradientDirectionY: 'toTop',
-                } as const)
-              : ({
-                  withGradient: false,
-                } as const)
+            <HoverLines
+              lines={lines}
+              scaleX={scaleX}
+              height={svgHeight}
+              hoveredMainValue={hoveredMainValue}
+              onChangeHoveredMainValue={setHoveredMainValue}
+              onClickLine={onClickHoverLine}
+            />
 
-            return (
-              <LineWithDots
-                key={line.lineName}
-                values={[...line.values]}
-                color={line.color}
-                hasDotRadius={line.dots}
-                showValues={line.showValues}
-                dashed={line.dashed}
-                defaultDotRadius={dotRadius}
+            {threshold && (
+              <Threshold
                 scaleX={scaleX}
                 scaleY={scaleY}
+                maxPoints={threshold.max.values}
+                minPoints={threshold.min?.values}
+                maxLabel={threshold.max.label}
+                minLabel={threshold.min?.label}
                 lineClipPath={lineClipPath}
-                dotsClipPath={dotsClipPath}
-                hoveredMainValue={hoveredMainValue}
-                {...gradientProps}
               />
-            )
-          })}
-        </svg>
+            )}
+
+            {lines.map(line => {
+              const gradientProps = line.withGradient
+                ? ({
+                    withGradient: true,
+                    areaBottom: Math.max(
+                      Math.min(..._.flatten(line.values.map(v => v.y).filter(isNotNil))),
+                      0
+                    ),
+                    gradientDirectionY: 'toTop',
+                  } as const)
+                : ({
+                    withGradient: false,
+                  } as const)
+
+              return (
+                <LineWithDots
+                  key={line.lineName}
+                  values={[...line.values]}
+                  color={line.color}
+                  hasDotRadius={line.dots}
+                  showValues={line.showValues}
+                  dashed={line.dashed}
+                  defaultDotRadius={dotRadius}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  lineClipPath={lineClipPath}
+                  dotsClipPath={dotsClipPath}
+                  hoveredMainValue={hoveredMainValue}
+                  {...gradientProps}
+                />
+              )
+            })}
+          </svg>
+        </div>
       </div>
     </div>
   )

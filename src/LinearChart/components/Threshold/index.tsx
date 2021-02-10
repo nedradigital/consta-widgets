@@ -15,7 +15,7 @@ type Props = {
   minPoints?: readonly NotEmptyItem[]
   maxLabel?: string
   minLabel?: string
-  clipPath?: string
+  lineClipPath?: string
 }
 
 export const THRESHOLD_COLOR = 'var(--color-bg-caution)'
@@ -51,7 +51,7 @@ export const Threshold: React.FC<Props> = ({
   minPoints,
   maxLabel,
   minLabel,
-  clipPath,
+  lineClipPath,
 }) => {
   const getRectPath = d3
     .line<NotEmptyItem>()
@@ -74,7 +74,7 @@ export const Threshold: React.FC<Props> = ({
   )
 
   return (
-    <g className={css.wrapper} clipPath={clipPath} style={{ color: THRESHOLD_COLOR }}>
+    <g className={css.wrapper} clipPath={lineClipPath} style={{ color: THRESHOLD_COLOR }}>
       {renderLine(maxPoints)}
       {maxLabel && (
         <g>

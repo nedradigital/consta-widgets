@@ -57,3 +57,7 @@
     transform: translateY(calc(-1 * var(--space-m)));
   }
 }
+
+.isYLabelsHidden {
+  opacity: 0;
+}

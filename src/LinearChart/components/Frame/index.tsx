@@ -50,6 +50,8 @@ type Props = {
   xHideFirstLabel: boolean
   formatValueForLabel?: FormatValue
   onFrameSizeChange: (sizes: { xAxisHeight: number; yAxisWidth: number }) => void
+  hideYLabels?: boolean
+  showOnlyY?: boolean
 }
 
 const defaultFormatLabel = (v: number) => String(v)
@@ -99,6 +101,8 @@ export const Frame: React.FC<Props> = props => {
     xHideFirstLabel,
     formatValueForLabel = defaultFormatLabel,
     onFrameSizeChange,
+    hideYLabels = false,
+    showOnlyY = false,
   } = props
 
   const xGridRef = React.useRef<SVGGElement>(null)
@@ -287,11 +291,11 @@ export const Frame: React.FC<Props> = props => {
   })
 
   React.useEffect(() => {
-    xShowLabels && resizeObserver.observe(xLabelsRef.current!)
+    xShowLabels && !showOnlyY && resizeObserver.observe(xLabelsRef.current!)
     yShowLabels && resizeObserver.observe(yLabelsRef.current!)
 
     return () => {
-      xShowLabels && resizeObserver.unobserve(xLabelsRef.current!)
+      xShowLabels && !showOnlyY && resizeObserver.unobserve(xLabelsRef.current!)
       yShowLabels && resizeObserver.unobserve(yLabelsRef.current!)
     }
   }, [])
@@ -300,17 +304,12 @@ export const Frame: React.FC<Props> = props => {
     onFrameSizeChange({ xAxisHeight, yAxisWidth })
   }, [xAxisHeight, yAxisWidth])
 
-  return (
-    <g className={css.main}>
-      {(xShowGrid || areGridsHidden) && <g className={css.grid} ref={xGridRef} />}
-      {(yShowGrid || areGridsHidden) && <g className={css.grid} ref={yGridRef} />}
-
-      {xShowLabels && <g ref={xLabelsRef} />}
-
-      {yShowLabels && (
+  const renderY = () => {
+    return (
+      yShowLabels && (
         <>
-          <g ref={yLabelsRef} />
-          <g ref={yUnitRef}>
+          <g ref={yLabelsRef} className={(hideYLabels && css.isYLabelsHidden) || undefined} />
+          <g ref={yUnitRef} className={(hideYLabels && css.isYLabelsHidden) || undefined}>
             {yDimensionUnit && (
               <text className={classnames(css.labels, css.unit, css.isAxisY)}>
                 {yDimensionUnit}
@@ -318,7 +317,20 @@ export const Frame: React.FC<Props> = props => {
             )}
           </g>
         </>
-      )}
+      )
+    )
+  }
+
+  return showOnlyY ? (
+    <g className={css.main}>{renderY()}</g>
+  ) : (
+    <g className={css.main}>
+      {(xShowGrid || areGridsHidden) && <g className={css.grid} ref={xGridRef} />}
+      {(yShowGrid || areGridsHidden) && <g className={css.grid} ref={yGridRef} />}
+
+      {xShowLabels && <g ref={xLabelsRef} />}
+
+      {renderY()}
     </g>
   )
 }
