@@ -34,7 +34,7 @@ describe('divideBySegments', () => {
         ],
       },
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 1, y: 1 },
           { x: 3, y: 3 },
@@ -59,7 +59,7 @@ describe('divideBySegments', () => {
 
     expect(divideBySegments(points)).toEqual([
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 0, y: 0 },
           { x: 2, y: 2 },
@@ -87,7 +87,7 @@ describe('divideBySegments', () => {
         ],
       },
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 1, y: 1 },
           { x: 4, y: 4 },
@@ -115,7 +115,7 @@ describe('divideBySegments', () => {
 
     expect(divideBySegments(points)).toEqual([
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 0, y: 0 },
           { x: 4, y: 4 },
@@ -165,14 +165,14 @@ describe('divideBySegments', () => {
 
     expect(divideBySegments(points)).toEqual([
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 0, y: 0 },
           { x: 2, y: 2 },
         ],
       },
       {
-        type: 'hidden',
+        type: 'dashed',
         points: [
           { x: 2, y: 2 },
           { x: 4, y: 4 },

@@ -63,31 +63,4 @@ describe('getGridTicksWithGuide', () => {
       })
     })
   })
-
-  describe('вертикальный график', () => {
-    it('возвращает направляющие как есть, если нет гайд-линии', () => {
-      expect(
-        getGridTicksWithGuide({
-          xTickValues: [1, 2, 3],
-          yTickValues: [4, 5, 6],
-          xGuideValue: undefined,
-          yGuideValue: undefined,
-        })
-      ).toEqual({
-        x: [4, 5, 6],
-        y: [1, 2, 3],
-      })
-    })
-
-    it('добавляет гайд-линию к направляющим', () => {
-      expect(
-        getGridTicksWithGuide({
-          xTickValues: [1, 2, 3],
-          yTickValues: [-5, 5, 15],
-          xGuideValue: 10,
-          yGuideValue: 0,
-        })
-      ).toEqual({ x: [-5, 5, 10, 15], y: [0, 1, 2, 3] })
-    })
-  })
 })

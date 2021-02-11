@@ -1,94 +1,21 @@
 import React from 'react'
 
-// import { Text } from '@consta/uikit/Text'
-import { getArrayWithRandomInt } from '@consta/widgets-utils/lib/array'
+// import { getArrayWithRandomInt } from '@consta/widgets-utils/lib/array'
 // import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
-import { boolean, number, object, select, text } from '@storybook/addon-knobs'
+// import { boolean, number, object, select, text } from '@storybook/addon-knobs'
 import { withSmartKnobs } from 'storybook-addon-smart-knobs'
 
-import { createMetadata, createStory, optionalSelect } from '@/_private/storybook'
+import { createMetadata, createStory } from '@/_private/storybook'
 
-import { axes, directionsX, directionsY, LegendAlign, LinearChart } from '..'
+import { LegendAlign, LinearChart } from '..'
 
 import docs from './docs.mdx'
-
-const MIN = -2
-const MAX = 8
-const COUNT_POINTS = 51
 
 const IGNORE_PROPS = ['title', 'directionX', 'directionY'] as const
 
 const colors = {
   first: 'var(--color-bg-success)',
   second: 'var(--color-bg-normal)',
-}
-
-const getGridConfig = () =>
-  object('gridConfig', {
-    x: {
-      labels: 'bottom',
-      labelTicks: 1,
-      guide: true,
-      withPaddings: false,
-    },
-    y: {
-      labels: 'left',
-      labelTicks: 1,
-      guide: true,
-      withPaddings: false,
-    },
-  } as const)
-
-const getDirectionKnobs = () => ({
-  directionX: optionalSelect('directionX', directionsX),
-  directionY: optionalSelect('directionY', directionsY),
-})
-
-const getCommonProps = () => {
-  const now = Date.now()
-  const unit = text('unit', 'тыс м3')
-  const valueMapper = (y: number, x: number) => ({
-    x: now + x * 1000 * 60 * 60 * 24,
-    y,
-  })
-
-  return {
-    ...getDirectionKnobs(),
-    lines: [
-      {
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS - 1).map(valueMapper),
-        dots: true,
-        lineName: 'Северный бур',
-        withGradient: true,
-        color: colors.first,
-      },
-      {
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map(valueMapper),
-        lineName: 'Южное месторождение',
-        color: colors.second,
-      },
-    ],
-    threshold: object('threshold', {
-      max: {
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => valueMapper(6, x)),
-      },
-      min: {
-        values: getArrayWithRandomInt(MIN, MAX, COUNT_POINTS).map((_, x) => valueMapper(1, x)),
-      },
-    }),
-    gridConfig: getGridConfig(),
-    withZoom: true,
-    formatValueForLabel: (v: number) => new Date(v).toLocaleDateString(),
-    foematValueForTooltip: (v: number) => `${v} ${unit}`,
-    formatValueForTooltipTitle: (v: number) => {
-      const title = new Date(v)
-        .toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' })
-        .replace('г.', '')
-
-      return title[0].toUpperCase() + title.slice(1)
-    },
-    unit,
-  }
 }
 
 const decorators = [
@@ -1111,7 +1038,6 @@ export const LinearChartWithLimitedSteps = createStory(
           { x: 2, y: 4 },
           { x: 5, y: 10 },
         ],
-        label: 'Максимум',
       },
       min: {
         values: [
@@ -1121,7 +1047,6 @@ export const LinearChartWithLimitedSteps = createStory(
           { x: 4, y: 1 },
           { x: 5, y: 1 },
         ],
-        label: 'Минимум',
       },
     }
 
