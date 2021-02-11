@@ -1,0 +1,9 @@
+.hoverDot {
+  fill: transparent;
+
+  cursor: pointer;
+
+  &.isHoverable {
+    stroke-width: 10;
+  }
+}

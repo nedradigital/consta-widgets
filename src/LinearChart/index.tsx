@@ -15,6 +15,7 @@ import {
   Size as LegendSize,
 } from '@/LegendItem'
 import { Frame, GridConfig, UNIT_Y_MARGIN } from '@/LinearChart/components/Frame'
+import { HoverDots } from '@/LinearChart/components/HoverDots'
 import { HoverLines } from '@/LinearChart/components/HoverLines'
 import { LineTooltip } from '@/LinearChart/components/LineTooltip'
 import { LineWithDots } from '@/LinearChart/components/LineWithDots'
@@ -49,6 +50,8 @@ export const legendPositions = ['top', 'bottom'] as const
 export type LegendPosition = typeof legendPositions[number]
 export const legendAligns = ['left', 'center', 'right'] as const
 export type LegendAlign = typeof legendAligns[number]
+export const tooltipVariants = ['line', 'dot'] as const
+export type TooltipVariant = typeof tooltipVariants[number]
 export type Line = {
   values: readonly Item[]
   dots?: boolean
@@ -70,6 +73,7 @@ export type Threshold = {
 }
 
 export type HoveredMainValue = number | undefined
+export type HoveredDotValue = NotEmptyItem | undefined
 
 type LegendProps = {
   data: LegendData
@@ -90,7 +94,9 @@ type Props = {
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
   onClickHoverLine?: (value: number) => void
+  onClickHoverDot?: (value: Item) => void
   limitMinimumStepSize?: boolean
+  tooltipVariant?: TooltipVariant
 }
 
 type State = {
@@ -140,7 +146,9 @@ export const LinearChart: React.FC<Props> = props => {
     formatValueForTooltipTitle,
     legend,
     onClickHoverLine,
+    onClickHoverDot,
     limitMinimumStepSize = false,
+    tooltipVariant = tooltipVariants[0],
   } = props
 
   const [state, setState] = React.useState<State>({
@@ -154,6 +162,7 @@ export const LinearChart: React.FC<Props> = props => {
     yGuideValue: 0,
   })
   const [hoveredMainValue, setHoveredMainValue] = React.useState<HoveredMainValue>(undefined)
+  const [hoveredDotValue, setHoveredDotValue] = React.useState<HoveredDotValue>(undefined)
   const ref = React.useRef<HTMLDivElement>(null)
   const svgWrapperRef = React.useRef<SVGSVGElement>(null)
   const resizeObserver = new ResizeObserver(() => updateSize())
@@ -381,6 +390,7 @@ export const LinearChart: React.FC<Props> = props => {
         scaleX={scaleX}
         scaleY={scaleY}
         hoveredMainValue={hoveredMainValue}
+        hoveredDotValue={hoveredDotValue}
         anchorEl={svgWrapperRef.current}
         threshold={threshold}
         formatValueForLabel={formatValueForLabel}
@@ -473,14 +483,26 @@ export const LinearChart: React.FC<Props> = props => {
               hideYLabels={limitMinimumStepSize}
             />
 
-            <HoverLines
-              lines={lines}
-              scaleX={scaleX}
-              height={svgHeight}
-              hoveredMainValue={hoveredMainValue}
-              onChangeHoveredMainValue={setHoveredMainValue}
-              onClickLine={onClickHoverLine}
-            />
+            {tooltipVariant === tooltipVariants[0] ? (
+              <HoverLines
+                lines={lines}
+                scaleX={scaleX}
+                height={svgHeight}
+                hoveredMainValue={hoveredMainValue}
+                onChangeHoveredMainValue={setHoveredMainValue}
+                onClickLine={onClickHoverLine}
+              />
+            ) : (
+              <HoverDots
+                lines={lines}
+                scaleX={scaleX}
+                scaleY={scaleY}
+                dotsClipPath={dotsClipPath}
+                defaultDotRadius={dotRadius}
+                onChangeHoveredDotValue={setHoveredDotValue}
+                onClickDot={onClickHoverDot}
+              />
+            )}
 
             {threshold && (
               <Threshold
@@ -522,6 +544,7 @@ export const LinearChart: React.FC<Props> = props => {
                   lineClipPath={lineClipPath}
                   dotsClipPath={dotsClipPath}
                   hoveredMainValue={hoveredMainValue}
+                  hoveredDotValue={hoveredDotValue}
                   {...gradientProps}
                 />
               )

@@ -1,10 +1,12 @@
 import React from 'react'
 
 import classnames from 'classnames'
+import * as _ from 'lodash'
 
 import {
   DirectionX,
   DirectionY,
+  HoveredDotValue,
   HoveredMainValue,
   Item,
   itemIsNotEmpty,
@@ -36,12 +38,17 @@ type Props = {
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   hoveredMainValue: HoveredMainValue
+  hoveredDotValue: HoveredDotValue
   showValues?: boolean
   dashed?: boolean
 } & GradientProps
 
-const isActiveCircle = (position: Item, isHorizontal: boolean, activeValue?: number) => {
-  return (isHorizontal ? position.x : position.y) === activeValue
+const isActiveLineCircle = (position: Item, activeValue?: number) => {
+  return position.x === activeValue
+}
+
+const isActiveDotCircle = (position: Item, activeValue?: Item) => {
+  return _.isEqual(position, activeValue)
 }
 
 export const LINE_WIDTH = 2
@@ -57,6 +64,7 @@ export const LineWithDots: React.FC<Props> = props => {
     lineClipPath,
     dotsClipPath,
     hoveredMainValue,
+    hoveredDotValue,
     showValues,
     dashed,
   } = props
@@ -88,7 +96,8 @@ export const LineWithDots: React.FC<Props> = props => {
 
       <g clipPath={dotsClipPath}>
         {values.filter(itemIsNotEmpty).map((item, idx, items) => {
-          const isActive = isActiveCircle(item, true, hoveredMainValue)
+          const isActive =
+            isActiveLineCircle(item, hoveredMainValue) || isActiveDotCircle(item, hoveredDotValue)
           const radius = hasDotRadius || isActive || items.length === 1 ? defaultDotRadius : 0
           const radiusCircle = isActive ? radius * 2 : radius
 
