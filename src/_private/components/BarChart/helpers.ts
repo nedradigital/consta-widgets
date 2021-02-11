@@ -200,9 +200,9 @@ export const getGridSettings = (
         'auto',
       ]),
       gridTemplateColumns: joinStrings([
-        withLeftColumn && 'auto',
+        withLeftColumn && 'fit-content(25%)',
         '1fr',
-        withRightColumn && 'auto',
+        withRightColumn && 'fit-content(25%)',
       ]),
       gridTemplateAreas: joinStrings([
         withTopRow &&
@@ -230,8 +230,8 @@ export const getGridSettings = (
   }
 
   return {
-    gridTemplateRows: joinStrings(['auto', '1fr', 'auto', 'auto']),
-    gridTemplateColumns: 'auto 1fr 1fr 1fr',
+    gridTemplateRows: joinStrings(['fit-content(20%)', '1fr', 'auto', 'auto']),
+    gridTemplateColumns: 'fit-content(20%) 1fr 1fr 1fr',
     gridTemplateAreas: joinStrings([
       `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,
       `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}"`,

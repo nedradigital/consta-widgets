@@ -49,6 +49,7 @@ type Props = {
   getNumberGridTicks: (length: number) => void
   gridDomain: NumberRange
   limitMinimumCategorySize?: boolean
+  maxLabelSize: LabelSize
 }
 
 export const Group: React.FC<Props> = props => {
@@ -71,6 +72,7 @@ export const Group: React.FC<Props> = props => {
     getNumberGridTicks,
     gridDomain,
     limitMinimumCategorySize = false,
+    maxLabelSize,
   } = props
   const ref = useRef<HTMLDivElement>(null)
   const { width, height } = useComponentSize(ref)
@@ -118,6 +120,8 @@ export const Group: React.FC<Props> = props => {
         onMouseLeaveColumn={() => onMouseLeaveColumn(group)}
         onChangeLabelSize={onChangeLabelSize}
         maxNumberGroups={maxNumberGroups}
+        gridDomain={gridDomain}
+        maxLabelSize={maxLabelSize}
       />
     )
   }

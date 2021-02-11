@@ -147,10 +147,31 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
   const gridItems = getTicks(valuesDomain, gridTicks)
   const gridDomain: NumberRange = [gridItems[0], gridItems[gridItems.length - 1]]
   const axisValues = gridItems
+  const isColumnOverflow =
+    (!showReversed && gridDomain[1] < maxColumnLength) ||
+    (showReversed && gridDomain[0] > minReversedColumnLength)
 
-  const paddingRight = isHorizontal && showValues ? maxLabelSize.width : 0
+  const getPaddingRight = () => {
+    if (isHorizontal && showValues) {
+      return maxLabelSize.width
+    } else if (isHorizontal && isColumnOverflow) {
+      return maxLabelSize.width + 10
+    } else {
+      return 0
+    }
+  }
+  const getPaddingTop = () => {
+    if (!isHorizontal && showValues) {
+      return maxLabelSize.height
+    } else if (!isHorizontal && isColumnOverflow) {
+      return maxLabelSize.height + 10
+    } else {
+      return 0
+    }
+  }
+  const paddingRight = getPaddingRight()
   const paddingLeft = showReversed ? paddingRight : 0
-  const paddingTop = !isHorizontal && showValues ? maxLabelSize.height : 0
+  const paddingTop = getPaddingTop()
   const paddingBottom = showReversed ? paddingTop : 0
 
   const scalerMaxValue = getScaler(gridItems[gridItems.length - 1])
@@ -355,6 +376,7 @@ export const CoreBarChart = <T,>(props: Props<T>) => {
                     getNumberGridTicks,
                     gridDomain,
                     limitMinimumCategorySize,
+                    maxLabelSize,
                   })}
                 </div>
               )

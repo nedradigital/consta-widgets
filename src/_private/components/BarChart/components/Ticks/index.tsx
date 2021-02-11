@@ -104,6 +104,13 @@ export function Ticks<T>(props: Props<T>) {
       return 'flex-end'
     }
 
+    if (
+      (isHorizontal && !isTicksSnuggleOnEdge && props.isLabel) ||
+      (isHorizontal && !isTicksSnuggleOnEdge && props.isLabel)
+    ) {
+      return 'baseline'
+    }
+
     return 'center'
   }
 
@@ -126,7 +133,7 @@ export function Ticks<T>(props: Props<T>) {
         style={{
           transform,
           alignItems,
-          height: isXAxisLabelsSlanted ? maxLabelHeight : undefined,
+          minHeight: isXAxisLabelsSlanted ? maxLabelHeight : undefined,
           gridArea: props.isLabel ? props.getGridAreaName(idx) : '',
         }}
       >
@@ -136,7 +143,11 @@ export function Ticks<T>(props: Props<T>) {
           size={'xs'}
           align={textAlign}
           title={textValue}
-          className={classnames(css.text, isDisabled(value) && css.isDisabled)}
+          className={classnames(
+            css.text,
+            isDisabled(value) && css.isDisabled,
+            isHorizontal && css.isHorizontal
+          )}
           lineHeight="s"
         >
           {(isXAxisLabelsSlanted && (

@@ -54,7 +54,7 @@
     top: 0;
     left: 50%;
 
-    padding-bottom: var(--space-2xs);
+    padding-bottom: var(--space-3xs);
 
     transform: translate(-50%, -100%);
   }
@@ -66,5 +66,28 @@
     padding-top: var(--space-2xs);
 
     transform: translate(-50%, 100%);
+  }
+}
+
+.overflow {
+  position: absolute;
+  z-index: 999999;
+
+  :--horizontal-section:--straight & {
+    right: 0%;
+  }
+
+  :--horizontal-section:--reversed & {
+    left: 0%;
+  }
+
+  :--vertical-section:--straight & {
+    top: 0;
+    left: 50%;
+  }
+
+  :--vertical-section:--reversed & {
+    bottom: 0;
+    left: 50%;
   }
 }

@@ -4,10 +4,11 @@ import { Text } from '@consta/uikit/Text'
 import classnames from 'classnames'
 
 import { ColumnProperty } from '@/_private/components/BarChart/components/Column'
+import { NumberRange } from '@/_private/utils/scale'
 
 import { LabelSize } from '../..'
 
-import { getRoundedBorder, getSize } from './helpers'
+import { getBackground, getColor, getRoundedBorder, getSize, getTriangle } from './helpers'
 import css from './index.css'
 
 type Props = {
@@ -22,6 +23,8 @@ type Props = {
   onMouseLeave?: React.MouseEventHandler
   onChangeLabelSize?: (size: LabelSize) => void
   columnProperty: ColumnProperty
+  gridDomain: NumberRange
+  maxLabelSize: LabelSize
 }
 
 export const Section = React.forwardRef<HTMLDivElement, Props>(
@@ -38,10 +41,15 @@ export const Section = React.forwardRef<HTMLDivElement, Props>(
       onMouseLeave,
       onChangeLabelSize,
       columnProperty,
+      gridDomain,
+      maxLabelSize,
     },
     ref
   ) => {
     const labelRef = React.useRef<HTMLDivElement>(null)
+    const isOverflow =
+      (!isReversed && gridDomain[1] < Number(label)) ||
+      (isReversed && gridDomain[0] > Number(label))
 
     React.useLayoutEffect(() => {
       if (!label || !labelRef.current) {
@@ -67,13 +75,30 @@ export const Section = React.forwardRef<HTMLDivElement, Props>(
         style={{
           ...getSize(length, isHorizontal),
           ...getRoundedBorder(columnProperty, isHorizontal),
-          background: length > 0 ? color : 'rgba(0,0,0,0)',
+          ...getBackground(color, length, isOverflow, isHorizontal, isReversed),
         }}
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
       >
+        {isOverflow && (
+          <div
+            className={classnames(
+              css.overflow,
+              css.isHorizontal && isHorizontal,
+              css.isReversed && isReversed
+            )}
+            style={getTriangle(color, isOverflow, isHorizontal, isReversed, maxLabelSize)}
+          />
+        )}
         {label && (
-          <Text ref={labelRef} as="div" view="primary" className={css.label} size="xs">
+          <Text
+            ref={labelRef}
+            as="div"
+            view="primary"
+            className={css.label}
+            size="xs"
+            style={getColor(color, isOverflow)}
+          >
             {label}
           </Text>
         )}
