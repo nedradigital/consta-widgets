@@ -6,7 +6,7 @@ import { NumberRange } from '@/_private/utils/scale'
 
 import { Threshold } from './'
 import { ColumnItem, GroupItem } from './components/Group'
-import { Position, Size as TickSize } from './components/Ticks'
+import { Position } from './components/Ticks'
 
 export const barCharSizes = ['s', 'm', 'l', 'xl', '2xl', '3xl', 'auto'] as const
 export type Size = typeof barCharSizes[number]
@@ -15,17 +15,15 @@ export type ShowPositions = {
   [key in Position]: boolean
 }
 
-export type GetGroupSize = (params: {
-  columnPadding: number
-  columnWidth: number
-  group: GroupItem
-}) => number
 export type GetGroupsDomain = (groups: readonly GroupItem[]) => readonly string[]
+
 export type GetValuesDomain = (params: {
   groups: readonly GroupItem[]
-  showReversed: boolean
+  minValueY: number
+  maxValueY: number
   threshold?: Threshold
 }) => NumberRange
+
 export type GetAxisShowPositions = (params: {
   isHorizontal: boolean
   showReversed: boolean
@@ -33,35 +31,50 @@ export type GetAxisShowPositions = (params: {
 
 export const CHART_MIN_HEIGHT = 153
 
-export const GROUP_INNER_PADDING: Record<ColumnSize, number> = {
-  s: 8,
-  m: 18,
-  l: 18,
-  xl: 18,
-  '2xl': 18,
-  '3xl': 18,
-}
-
-export const OUTER_PADDING = 2
+export type TypeColumn = 'columns' | 'reversedColumns'
 
 export const getRange = (size: number, shouldFlip?: boolean): NumberRange => {
   return shouldFlip ? [size, 0] : [0, size]
 }
 
 export const getTotalByColumn = (column: ColumnItem | undefined) => {
-  return column ? Math.abs(column.total) : 0
+  return column ? column.total : 0
 }
 
-export const getValuesDomain: GetValuesDomain = ({ groups, showReversed, threshold }) => {
+const getValueY = (value: number, filter: (value: number) => void) => {
+  if (value !== null && filter(value)) {
+    return value
+  }
+
+  return null
+}
+
+export const getValuesDomain: GetValuesDomain = ({ groups, minValueY, maxValueY, threshold }) => {
   const numbers = groups
     .map(({ columns, reversedColumns }) => columns.concat(reversedColumns).map(getTotalByColumn))
     .flat()
 
   const thresholdValue = threshold?.value ?? 0
-
   const maxNumber = Math.max(...numbers, Math.abs(thresholdValue), 0)
+  const minNumber = Math.min(...numbers, Math.abs(thresholdValue))
 
-  return showReversed ? [-maxNumber, maxNumber] : [0, maxNumber]
+  const maxValue = getValueY(maxValueY, v => v >= 0)
+  const minValue = getValueY(minValueY, v => v < 0)
+
+  if (
+    (maxValue || maxValue === 0) &&
+    minValue &&
+    thresholdValue > minValue &&
+    thresholdValue < maxValue
+  ) {
+    return [minValue, maxValue]
+  } else if (!maxValue && minValue && thresholdValue > minValue) {
+    return [minValue, maxNumber]
+  } else if ((maxValue || maxValue === 0) && !minValue && thresholdValue < maxValue) {
+    return [minNumber, maxValue]
+  } else {
+    return [minNumber, maxNumber]
+  }
 }
 
 export const getGroupsDomain: GetGroupsDomain = groups => {
@@ -108,14 +121,6 @@ export const getGraphStepSize = (graphSize: number, groupsSizes: readonly number
     nextGraphSize,
     groupsSizes.filter(size => size <= step)
   )
-}
-
-export const toAxisSize = (size: Size): TickSize => {
-  if (size === 's') {
-    return 's'
-  }
-
-  return 'm'
 }
 
 type GetColumnSizeParams = {
@@ -173,21 +178,18 @@ const joinStrings = (arr: ReadonlyArray<string | boolean | undefined>): string =
 const joinAreasRow: typeof joinStrings = arr => `"${joinStrings(arr)}"`
 
 export const getGridSettings = (
-  params: {
-    countGroups: number
-    showUnitBottom: boolean
-    showUnitLeft: boolean
-    maxColumn: number
-  } & ({ isHorizontal: true; axisShowPositions: ShowPositions } | { isHorizontal: false })
+  params: { countGroups: number } & (
+    | { isHorizontal: true; axisShowPositions: ShowPositions }
+    | { isHorizontal: false }
+  )
 ): React.CSSProperties => {
-  const { countGroups, showUnitBottom, showUnitLeft, maxColumn } = params
+  const { countGroups } = params
 
   if (params.isHorizontal) {
     const { axisShowPositions } = params
-    const withTopRow = axisShowPositions.top || showUnitLeft
+    const withTopRow = axisShowPositions.top
     const withBottomTicksRow = axisShowPositions.bottom
-    const withBottomUnitRow = showUnitBottom
-    const withLeftColumn = axisShowPositions.left || showUnitLeft
+    const withLeftColumn = axisShowPositions.left
     const withRightColumn = axisShowPositions.right
 
     return {
@@ -195,12 +197,12 @@ export const getGridSettings = (
         withTopRow && 'auto',
         getAreaNames(countGroups, () => '1fr'),
         withBottomTicksRow && 'auto',
-        withBottomUnitRow && 'auto',
+        'auto',
       ]),
       gridTemplateColumns: joinStrings([
-        withLeftColumn && 'auto',
+        withLeftColumn && 'fit-content(25%)',
         '1fr',
-        withRightColumn && 'auto',
+        withRightColumn && 'fit-content(25%)',
       ]),
       gridTemplateAreas: joinStrings([
         withTopRow &&
@@ -218,29 +220,23 @@ export const getGridSettings = (
             'bottomTicks',
             withRightColumn && 'bottomRight',
           ]),
-        withBottomUnitRow &&
-          joinAreasRow([
-            withLeftColumn && 'bottomLeft',
-            'bottomUnit',
-            withRightColumn && 'bottomUnit',
-          ]),
+        joinAreasRow([
+          withLeftColumn && 'bottomLeft',
+          'bottomUnit',
+          withRightColumn && 'bottomUnit',
+        ]),
       ]),
     }
   }
 
   return {
-    gridTemplateRows: joinStrings(['auto', '1fr', 'auto', showUnitBottom && 'auto']),
-    gridTemplateColumns: `auto ${getAreaNames(
-      countGroups,
-      () =>
-        `minmax(calc((var(--column-size) * ${maxColumn}) + (var(--column-padding) * ${maxColumn -
-          1})), 1fr)`
-    )}`,
+    gridTemplateRows: joinStrings(['fit-content(20%)', '1fr', 'auto', 'auto']),
+    gridTemplateColumns: 'fit-content(20%) 1fr 1fr 1fr',
     gridTemplateAreas: joinStrings([
       `"topLeft ${getAreaNames(countGroups, index => `labelTop${index}`)}"`,
       `"leftTicks ${getAreaNames(countGroups, index => `group${index}`)}"`,
       `"bottomLeft ${getAreaNames(countGroups, index => `labelBottom${index}`)}"`,
-      showUnitBottom && `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"`,
+      `"bottomLeft ${getAreaNames(countGroups, () => 'bottomUnit')}"`,
     ]),
   }
 }
@@ -305,4 +301,15 @@ export const getGridColumnGap = (axisSize: Size): string => {
   }
 
   return GRID_GAP_SPACE.m
+}
+
+export const getColumnLength = (columnLength: number, gridItem: number, typeColumn: TypeColumn) => {
+  switch (typeColumn) {
+    case 'columns':
+      return columnLength >= gridItem ? gridItem : columnLength
+    case 'reversedColumns':
+      return columnLength >= gridItem ? columnLength : gridItem
+    default:
+      throw new Error(`Неизвестный тип typeColumn: ${typeColumn}`)
+  }
 }

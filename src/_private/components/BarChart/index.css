@@ -1,9 +1,18 @@
+.scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  width: 100%;
+  height: 100%;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
 
   width: 100%;
   height: 100%;
+  margin-bottom: 15px;
 }
 
 .main {
@@ -34,36 +43,6 @@
 
   &.isHorizontal {
     padding-right: var(--space-m);
-  }
-
-  &.columnSizeS {
-    --column-size: var(--space-2xs);
-    --column-padding: var(--space-3xs);
-  }
-
-  &.columnSizeM {
-    --column-size: 12px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSizeL {
-    --column-size: 16px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSizeXL {
-    --column-size: 24px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSize2XL {
-    --column-size: 36px;
-    --column-padding: var(--space-2xs);
-  }
-
-  &.columnSize3XL {
-    --column-size: 42px;
-    --column-padding: var(--space-2xs);
   }
 }
 
@@ -106,8 +85,9 @@
 .topLeftUnit {
   grid-area: topLeft;
 
-  margin-right: var(--space-m);
   margin-bottom: var(--space-xs);
+
+  text-align: right;
 }
 
 .bottomUnit {
@@ -115,7 +95,7 @@
 
   margin-top: var(--space-2xs);
 
-  text-align: right;
+  text-align: center;
 }
 
 .groupWrapper {

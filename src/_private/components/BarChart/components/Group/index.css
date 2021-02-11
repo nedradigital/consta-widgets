@@ -3,7 +3,6 @@
 
 .group {
   display: flex;
-  flex-grow: 1;
 
   box-sizing: border-box;
   width: 100%;
@@ -23,7 +22,10 @@
 
 .columns {
   display: flex;
-  flex-grow: 1;
+  align-items: center;
+
+  width: 100%;
+  height: 100%;
 
   :--horizontal-group & {
     flex-direction: row-reverse;
@@ -36,9 +38,10 @@
 
 .wrapper {
   display: flex;
-  flex-basis: 0;
-  flex-grow: 1;
   justify-content: center;
+
+  width: 100%;
+  height: 100%;
 
   :--horizontal-group & {
     align-items: flex-start;

@@ -1,10 +1,13 @@
 import React from 'react'
 
+import { useComponentSize } from '@consta/uikit/useComponentSize'
 import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
 import classnames from 'classnames'
 import { isNumber } from 'lodash'
 
+import { styleOrientation } from '@/_private/components/BarChart/components/Column/helpers'
 import { FormatValue } from '@/_private/types'
+import { NumberRange } from '@/_private/utils/scale'
 
 import { LabelSize } from '../..'
 import { Size } from '../../helpers'
@@ -20,6 +23,11 @@ export type SectionItem = {
   value?: number
   length?: number
   name?: string
+}
+
+export type ColumnProperty = {
+  width: number
+  height: number
 }
 
 export type OnMouseEnterColumn = (params: TooltipData) => void
@@ -51,35 +59,46 @@ type Props = {
   group: string
   total: number
   sections: readonly SectionItem[] | undefined
-  size: ColumnSize
   showValues: boolean
   isHorizontal: boolean
+  lengthColumns?: number
   isReversed?: boolean
-  isDense?: boolean
   activeGroup?: string
   activeSectionIndex?: number
   formatValueForLabel?: FormatValue
   onMouseEnterColumn: OnMouseEnterColumn
   onMouseLeaveColumn: React.MouseEventHandler
   onChangeLabelSize?: (size: LabelSize) => void
+  maxNumberGroups: number
+  gridDomain: NumberRange
+  maxLabelSize: LabelSize
 }
 
 export const Column: React.FC<Props> = ({
   group,
   total,
   sections = [],
-  size,
+  lengthColumns,
   showValues,
   isHorizontal,
   isReversed = false,
-  isDense,
   activeGroup,
   activeSectionIndex,
   formatValueForLabel = String,
   onMouseEnterColumn,
   onMouseLeaveColumn,
   onChangeLabelSize,
+  maxNumberGroups,
+  gridDomain,
+  maxLabelSize,
 }) => {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const { width, height } = useComponentSize(ref)
+  const columnProperty: ColumnProperty = { width, height }
+
+  const padding = (70 / maxNumberGroups) * 0.2
+  const lengthColumn = lengthColumns ?? 0
+
   const handleMouseEnter: React.MouseEventHandler = event => {
     if (!(event.currentTarget instanceof HTMLElement)) {
       return
@@ -101,8 +120,10 @@ export const Column: React.FC<Props> = ({
     }
 
     const isLastItem = isReversed ? index === 0 : index === sections.length - 1
-    const isRounded = size !== 's' && !isDense && isLastItem
-    const isColumnLabel = showValues && isLastItem
+    const isColumnLabel =
+      (showValues && isLastItem) ||
+      (!isReversed && gridDomain[1] < Number(total)) ||
+      (isReversed && gridDomain[0] > Number(total))
     const isSectionLabel = isNumber(activeSectionIndex) && activeSectionIndex === index
     const isActive =
       isSectionLabel ||
@@ -126,12 +147,14 @@ export const Column: React.FC<Props> = ({
         key={index}
         isHorizontal={isHorizontal}
         isReversed={isReversed}
-        isRounded={isRounded}
         isActive={isActive}
         label={getLabel()}
         onChangeLabelSize={onChangeLabelSize}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={onMouseLeaveColumn}
+        columnProperty={columnProperty}
+        gridDomain={gridDomain}
+        maxLabelSize={maxLabelSize}
       />
     )
   }
@@ -143,6 +166,8 @@ export const Column: React.FC<Props> = ({
         isHorizontal && css.isHorizontal,
         isReversed && css.isReversed
       )}
+      style={styleOrientation(lengthColumn, maxNumberGroups, padding, isHorizontal)}
+      ref={ref}
     >
       {sections.map(renderSection)}
     </div>

@@ -2,7 +2,6 @@ import React from 'react'
 
 import { CoreBarChart, Threshold, UnitPosition } from '@/_private/components/BarChart'
 import {
-  getCommonGroupsMaxColumns,
   getGroupsDomain,
   getValuesDomain,
   isShowReversed,
@@ -10,7 +9,11 @@ import {
 import { defaultRenderGroup } from '@/_private/components/BarChart/renders'
 import { FormatValue } from '@/_private/types'
 
-import { transformGroupsToCommonGroups } from './helpers'
+import {
+  getColumnsLengthArray,
+  getMaxNumberGroupsArray,
+  transformGroupsToCommonGroups,
+} from './helpers'
 
 export type Column = number | undefined
 
@@ -21,12 +24,11 @@ export type Group = {
 
 type Props = {
   groups: readonly Group[]
+  minValueY: number
+  maxValueY: number
   colors: readonly string[]
-  gridTicks: number
-  valuesTicks: number
   unit?: string
   unitPosition?: UnitPosition
-  size?: 's' | 'm' | 'auto'
   showValues?: boolean
   isHorizontal?: boolean
   withScroll?: boolean
@@ -36,15 +38,23 @@ type Props = {
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   isEmptyColumnsHidden?: boolean
+  showGrid?: boolean
+  showLineAtZero?: boolean
+  showGroupsLabels?: boolean
+  limitMinimumCategorySize?: boolean
 }
 
 export const BarChart: React.FC<Props> = props => {
   const {
     groups,
-    size = 'm',
+    minValueY,
+    maxValueY,
     colors,
-    showValues,
     threshold,
+    showValues,
+    showGrid,
+    showLineAtZero,
+    showGroupsLabels,
     isEmptyColumnsHidden = false,
     ...rest
   } = props
@@ -54,10 +64,21 @@ export const BarChart: React.FC<Props> = props => {
   const groupsDomain = getGroupsDomain(commonGroups)
   const valuesDomain = getValuesDomain({
     groups: commonGroups,
+    minValueY,
+    maxValueY,
     threshold: props.threshold,
-    showReversed,
   })
-  const maxColumn = getCommonGroupsMaxColumns(commonGroups)
+
+  const columnsLengthArray = getColumnsLengthArray(commonGroups, 'columns')
+  const reversedColumnsLengthArray = getColumnsLengthArray(commonGroups, 'reversedColumns')
+  const maxColumnLength =
+    columnsLengthArray.length > 0 ? Math.max.apply(null, columnsLengthArray) : 0
+  const minReversedColumnLength =
+    reversedColumnsLengthArray.length > 0 ? Math.min.apply(null, reversedColumnsLengthArray) : 0
+
+  const maxNumberGroupsArray = getMaxNumberGroupsArray(commonGroups)
+  const maxNumberGroups: number =
+    maxNumberGroupsArray.length > 0 ? Math.max.apply(null, maxNumberGroupsArray) : 0
 
   return (
     <CoreBarChart
@@ -65,12 +86,16 @@ export const BarChart: React.FC<Props> = props => {
       groups={commonGroups}
       groupsDomain={groupsDomain}
       valuesDomain={valuesDomain}
-      maxColumn={maxColumn}
-      size={size}
       showValues={showValues}
       showReversed={showReversed}
       threshold={threshold}
+      maxColumnLength={maxColumnLength}
+      minReversedColumnLength={minReversedColumnLength}
       renderGroup={defaultRenderGroup}
+      showGrid={showGrid}
+      showLineAtZero={showLineAtZero}
+      showGroupsLabels={showGroupsLabels}
+      maxNumberGroups={maxNumberGroups}
     />
   )
 }
