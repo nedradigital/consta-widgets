@@ -13,7 +13,7 @@ export const gridConfigSimple = {
     guide: true,
     withPaddings: false,
   },
-} as const
+}
 
 export const gridConfigPaddings = {
   x: {
@@ -30,7 +30,7 @@ export const gridConfigPaddings = {
     guide: true,
     withPaddings: true,
   },
-} as const
+}
 
 export const gridConfigFormat = {
   x: {
@@ -47,7 +47,7 @@ export const gridConfigFormat = {
     guide: true,
     withPaddings: false,
   },
-} as const
+}
 
 export const gridConfigLabel = {
   x: {
@@ -64,7 +64,7 @@ export const gridConfigLabel = {
     guide: true,
     withPaddings: false,
   },
-} as const
+}
 
 export const linesSimple = [
   {
@@ -81,7 +81,7 @@ export const linesSimple = [
     withGradient: true,
     color: 'var(--color-bg-success)',
   },
-] as const
+]
 
 export const linesWithoutGradient = [
   {
@@ -96,7 +96,7 @@ export const linesWithoutGradient = [
     lineName: 'Простая зеленая линия',
     color: 'var(--color-bg-success)',
   },
-] as const
+]
 
 export const linesFeatures = [
   {
@@ -114,7 +114,7 @@ export const linesFeatures = [
     withGradient: true,
     color: 'var(--color-bg-normal)',
   },
-] as const
+]
 
 export const linesFormat = [
   {
@@ -131,7 +131,7 @@ export const linesFormat = [
     withGradient: true,
     color: 'var(--color-bg-success)',
   },
-] as const
+]
 
 export const linesNull = [
   {
@@ -182,7 +182,7 @@ export const linesNull = [
     withGradient: true,
     color: 'var(--color-bg-success)',
   },
-] as const
+]
 
 export const linesBoundaries = [
   {
@@ -264,7 +264,7 @@ export const linesBoundaries = [
     color: 'var(--color-bg-success)',
     withBoundaries: true,
   },
-] as const
+]
 
 export const boundaries = [
   {
@@ -287,7 +287,7 @@ export const boundaries = [
     value: [25, -25],
     color: 'var(--color-bg-success)',
   },
-] as const
+]
 
 export const threshold = {
   max: {
@@ -706,7 +706,7 @@ export const threshold = {
       },
     ],
   },
-} as const
+}
 
 export const linesThreshold = [
   {
@@ -1127,4 +1127,4 @@ export const linesThreshold = [
     lineName: 'Южное месторождение',
     color: 'var(--color-bg-normal)',
   },
-] as const
+]

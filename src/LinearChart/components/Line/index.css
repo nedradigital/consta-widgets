@@ -5,3 +5,7 @@
 .isDashed {
   stroke-dasharray: 6, 6;
 }
+
+.isHidden {
+  stroke: none;
+}

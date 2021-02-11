@@ -1,71 +1,42 @@
 import React from 'react'
-import { uid } from 'react-uid'
+import { useUID } from 'react-uid'
 
 import { isNotNil } from '@consta/widgets-utils/lib/type-guards'
+import classnames from 'classnames'
 import * as d3 from 'd3'
 import * as _ from 'lodash'
 
-import { Title } from '@/_private/components/Title'
 import { FormatValue } from '@/_private/types'
 import { getEveryN } from '@/_private/utils/array'
-
-import { Axis, GridConfig } from './components/Axis'
-import { BoundariesAxisLine } from './components/BoundariesAxisLine'
-import { BoundariesGradient } from './components/BoundariesGradient'
-import { HoverLines } from './components/HoverLines'
-import { LineTooltip } from './components/LineTooltip'
-import { LineWithDots } from './components/LineWithDots'
-import { Threshold } from './components/Threshold'
-import { defaultZoom, getZoomScale, isDefaultZoom, Zoom, ZoomState } from './components/Zoom'
+import { Data as LegendData, Direction as LegendDirection, Legend } from '@/Legend'
 import {
-  calculateSecondaryDomain,
+  LabelPosition as LegendLabelPosition,
+  LabelType as LegendType,
+  Size as LegendSize,
+} from '@/LegendItem'
+import { Frame, GridConfig, UNIT_Y_MARGIN } from '@/LinearChart/components/Frame'
+import { HoverDots } from '@/LinearChart/components/HoverDots'
+import { HoverLines } from '@/LinearChart/components/HoverLines'
+import { LineTooltip } from '@/LinearChart/components/LineTooltip'
+import { LineWithDots } from '@/LinearChart/components/LineWithDots'
+import {
   flipPointsOnAxes,
-  getColorFromFirstLineWithBoundaries,
+  getDomainWithLimits,
   getMainTickValues,
   getSecondaryTickValues,
   getXScale,
   getYScale,
   INITIAL_DOMAIN,
-  invertDomain,
   padDomain,
-  zoomDomain,
-} from './helpers'
+} from '@/LinearChart/helpers'
+
+import { Threshold } from './components/Threshold'
 import css from './index.css'
 
 export type Item = { x: number | null; y: number | null }
 export type NotEmptyItem = { x: number; y: number }
 export const itemIsNotEmpty = (item: Item): item is NotEmptyItem =>
   isNotNil(item.x) && isNotNil(item.y)
-
-const DEFAULT_DIRECTION_X: DirectionX = 'toRight'
-
-const getDefaultDirectionY = (isHorizontal: boolean): DirectionY => {
-  return isHorizontal ? 'toTop' : 'toBottom'
-}
-
-type ThresholdLine = {
-  name?: string
-  values: readonly NotEmptyItem[]
-}
-export type Threshold = {
-  max: ThresholdLine
-  min?: ThresholdLine
-}
-
-export type Boundary = {
-  color: string
-  value: readonly [number, number]
-}
-
-export type Line = {
-  values: readonly Item[]
-  dots?: boolean
-  withGradient?: boolean
-  withBoundaries?: boolean
-  lineName: string
-  color: string
-  showValues?: boolean
-}
 export type NumberRange = readonly [number, number]
 export type TickValues = readonly number[]
 export type ScaleLinear = d3.ScaleLinear<number, number>
@@ -75,34 +46,58 @@ export const directionsY = ['toTop', 'toBottom'] as const
 export type DirectionY = typeof directionsY[number]
 export const axes = ['x', 'y'] as const
 export type Axis = typeof axes[number]
+export const legendPositions = ['top', 'bottom'] as const
+export type LegendPosition = typeof legendPositions[number]
+export const legendAligns = ['left', 'center', 'right'] as const
+export type LegendAlign = typeof legendAligns[number]
+export const tooltipVariants = ['line', 'dot'] as const
+export type TooltipVariant = typeof tooltipVariants[number]
+export type Line = {
+  values: readonly Item[]
+  dots?: boolean
+  dashed?: boolean
+  withGradient?: boolean
+  lineName: string
+  color: string
+  showValues?: boolean
+}
+
+type ThresholdLine = {
+  name?: string
+  label?: string
+  values: readonly NotEmptyItem[]
+}
+export type Threshold = {
+  max: ThresholdLine
+  min?: ThresholdLine
+}
+
+export type HoveredMainValue = number | undefined
+export type HoveredDotValue = NotEmptyItem | undefined
+
+type LegendProps = {
+  data: LegendData
+  position?: LegendPosition
+  align?: LegendAlign
+}
 
 type Props = {
-  directionX?: DirectionX
-  directionY?: DirectionY
-  lines: readonly Line[]
+  lines: Line[]
   gridConfig: GridConfig
   threshold?: Threshold
-  withZoom?: boolean
-  isHorizontal: boolean
+  legend?: LegendProps
+  yDimensionUnit?: string
+  yLabelsShowInPercent?: boolean
+  xLabelsShowVertical?: boolean
+  xHideFirstLabel?: boolean
   formatValueForLabel?: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
-  unit?: string
-  title?: React.ReactNode
   onClickHoverLine?: (value: number) => void
-  background?: string
-} & (
-  | {
-      boundaries?: never
-    }
-  | {
-      boundaries: readonly Boundary[]
-      boundariesAxis: Axis
-      showBoundariesOnAxis: boolean
-    }
-)
-
-export type HoveredMainValue = number | undefined
+  onClickHoverDot?: (value: Item) => void
+  limitMinimumStepSize?: boolean
+  tooltipVariant?: TooltipVariant
+}
 
 type State = {
   xDomain: NumberRange
@@ -111,387 +106,205 @@ type State = {
   height: number
   paddingX: number
   paddingY: number
-  zoom: ZoomState
   xGuideValue: number
   yGuideValue: number
-  hoveredMainValue: HoveredMainValue
-}
-
-export const TRANSITION_DURATIONS = {
-  ZOOM: 750,
-  SIZE: 600,
 }
 
 const DOT_SIZE = 5
+const SCROLL_OFFSET = 38
+const MIN_STEP_SIZE = 30
+const TRANSITION_SIZE = 600
 
-export const domainPaddings = {
-  horizontal: {
-    top: 0.055,
-    right: 0.06,
-    bottom: 0,
-    left: 0,
-  },
-  vertical: {
-    top: 0.04,
-    bottom: 0.04,
-    right: 0.06,
-    left: 0.06,
-  },
+const positionLegendClass = {
+  top: css.legendTop,
+  bottom: css.legendBottom,
 }
 
-export class LinearChart extends React.Component<Props, State> {
-  ref = React.createRef<HTMLDivElement>()
-  svgWrapperRef = React.createRef<SVGSVGElement>()
+const alignLegendClass = {
+  left: css.legendLeft,
+  center: css.legendCenter,
+  right: css.legendRight,
+}
 
-  resizeObserver = new ResizeObserver(() => this.updateSize())
+export const domainPaddings = {
+  top: 0.055,
+  right: 0.06,
+  bottom: 0,
+  left: 0,
+}
 
-  // d3 ограничивает по 1 анимации на элемент, поэтому создаём фэйковые элементы для твинов стэйта
-  paddingTransitionEl = {} as Element
-  secondaryDomainTransitionEl = {} as Element
+export const LinearChart: React.FC<Props> = props => {
+  const {
+    lines,
+    gridConfig,
+    yDimensionUnit,
+    yLabelsShowInPercent = false,
+    xLabelsShowVertical = false,
+    xHideFirstLabel = false,
+    formatValueForLabel = String,
+    formatValueForTooltip,
+    formatValueForTooltipTitle,
+    legend,
+    onClickHoverLine,
+    onClickHoverDot,
+    limitMinimumStepSize = false,
+    tooltipVariant = tooltipVariants[0],
+  } = props
 
-  uid = uid(this)
-  lineClipId = `line_clipPath_${this.uid}`
-  dotsClipId = `dots_clipPath_${this.uid}`
-  boundariesGradientId = `boundaries_gradient_${this.uid}`
-
-  state: State = {
+  const [state, setState] = React.useState<State>({
     xDomain: INITIAL_DOMAIN,
     yDomain: INITIAL_DOMAIN,
     width: 0,
     height: 0,
     paddingX: 0,
     paddingY: 0,
-    zoom: defaultZoom,
     xGuideValue: 0,
     yGuideValue: 0,
-    hoveredMainValue: undefined,
-  }
+  })
+  const [hoveredMainValue, setHoveredMainValue] = React.useState<HoveredMainValue>(undefined)
+  const [hoveredDotValue, setHoveredDotValue] = React.useState<HoveredDotValue>(undefined)
+  const ref = React.useRef<HTMLDivElement>(null)
+  const svgWrapperRef = React.useRef<SVGSVGElement>(null)
+  const resizeObserver = new ResizeObserver(() => updateSize())
+  const paddingTransitionEl = {} as Element
+  const uid = useUID()
+  const dotRadius = DOT_SIZE / 2
+  const lineClipId = `line_clipPath_${uid}`
+  const dotsClipId = `dots_clipPath_${uid}`
 
-  targetSecondaryDomain = this.state.xDomain
-  targetPaddings = {
-    paddingX: this.state.paddingX,
-    paddingY: this.state.paddingY,
-  }
+  const getAllValues = (): readonly Item[] => _.flatten(lines.map((l: Line) => l.values))
 
-  componentDidMount() {
-    this.updateDomains()
-    this.updateSize()
-
-    this.resizeObserver.observe(this.ref.current!)
-  }
-
-  componentDidUpdate(prevProps: Props) {
-    const {
-      props: { lines, threshold, isHorizontal, directionX, directionY },
-    } = this
-
-    if (
-      lines !== prevProps.lines ||
-      isHorizontal !== prevProps.isHorizontal ||
-      threshold !== prevProps.threshold ||
-      directionX !== prevProps.directionX ||
-      directionY !== prevProps.directionY
-    ) {
-      this.updateDomains()
-    }
-  }
-
-  componentWillUnmount() {
-    this.resizeObserver.unobserve(this.ref.current!)
-  }
-
-  render() {
-    const {
-      props,
-      state: { paddingX, paddingY, xDomain, yDomain, xGuideValue, yGuideValue, hoveredMainValue },
-      boundariesGradientId,
-    } = this
-
-    const {
-      gridConfig,
-      gridConfig: {
-        x: { labels: xLabelsPos },
-        y: { labels: yLabelsPos },
-      },
-      directionX = DEFAULT_DIRECTION_X,
-      directionY = getDefaultDirectionY(props.isHorizontal),
-      withZoom,
-      isHorizontal,
-      lines,
-      formatValueForLabel = String,
-      formatValueForTooltip,
-      formatValueForTooltipTitle,
-      unit,
-      title,
-      onClickHoverLine,
-      background,
-    } = props
-
-    const { svgWidth, svgHeight } = this.getSvgSize()
-    const { secondary: secondaryAxis } = this.getAxis()
-    const {
-      mainLabelTickValues,
-      mainGridTickValues,
-      secondaryLabelTickValues,
-      secondaryGridTickValues,
-    } = this.getTicks()
-    const threshold = this.getThreshold()
-
-    const lineClipPath = `url(#${this.lineClipId})`
-    const dotsClipPath = `url(#${this.dotsClipId})`
-    const scaleX = getXScale(xDomain, svgWidth)
-    const scaleY = getYScale(yDomain, svgHeight)
-    const dotRadius = DOT_SIZE / 2
-    const xOnBottom = xLabelsPos === 'bottom'
-    const yOnLeft = yLabelsPos === 'left'
-
-    return (
-      <div className={css.main}>
-        <LineTooltip
-          lines={this.getLines()}
-          isHorizontal={isHorizontal}
-          scaleX={scaleX}
-          scaleY={scaleY}
-          hoveredMainValue={hoveredMainValue}
-          anchorEl={this.svgWrapperRef.current}
-          threshold={threshold}
-          formatValueForLabel={formatValueForLabel}
-          formatValueForTooltip={formatValueForTooltip}
-          formatValueForTooltipTitle={formatValueForTooltipTitle}
-          {...(props.boundaries
-            ? { boundaries: props.boundaries, boundariesAxis: props.boundariesAxis }
-            : {})}
-        />
-        <Title style={{ paddingLeft: paddingX }}>{title}</Title>
-        <div ref={this.ref} className={css.graph}>
-          <svg
-            ref={this.svgWrapperRef}
-            className={css.svg}
-            width={svgWidth}
-            height={svgHeight}
-            style={{
-              ...(xOnBottom ? { top: 0 } : { bottom: 0 }),
-              ...(yOnLeft ? { right: 0 } : { left: 0 }),
-              background,
-            }}
-          >
-            <defs>
-              <clipPath id={this.lineClipId}>
-                <rect width={svgWidth} height={svgHeight} />
-              </clipPath>
-              <clipPath id={this.dotsClipId}>
-                <rect
-                  width={svgWidth + 2 * dotRadius}
-                  height={svgHeight + 2 * dotRadius}
-                  x={-1 * dotRadius}
-                  y={-1 * dotRadius}
-                />
-              </clipPath>
-              {props.boundaries && (
-                <BoundariesGradient
-                  id={boundariesGradientId}
-                  color={getColorFromFirstLineWithBoundaries(lines)}
-                  boundaries={props.boundaries}
-                  axis={props.boundariesAxis}
-                  svgWidth={svgWidth}
-                  svgHeight={svgHeight}
-                  scaleX={scaleX}
-                  scaleY={scaleY}
-                  isHorizontal={isHorizontal}
-                  directionX={directionX}
-                  directionY={directionY}
-                />
-              )}
-            </defs>
-            <Axis
-              width={svgWidth}
-              height={svgHeight}
-              scales={{
-                x: scaleX,
-                y: scaleY,
-              }}
-              gridConfig={gridConfig}
-              onAxisSizeChange={this.onAxisSizeChange}
-              mainLabelTickValues={mainLabelTickValues}
-              mainGridTickValues={mainGridTickValues}
-              secondaryLabelTickValues={secondaryLabelTickValues}
-              secondaryGridTickValues={secondaryGridTickValues}
-              isHorizontal={isHorizontal}
-              formatValueForLabel={formatValueForLabel}
-              secondaryScaleUnit={unit}
-              xGuideValue={xGuideValue}
-              yGuideValue={yGuideValue}
-            />
-
-            <HoverLines
-              lines={this.getLines()}
-              scaleX={scaleX}
-              scaleY={scaleY}
-              width={svgWidth}
-              height={svgHeight}
-              isHorizontal={isHorizontal}
-              hoveredMainValue={hoveredMainValue}
-              onChangeHoveredMainValue={this.setHoveredMainValue}
-              onClickLine={onClickHoverLine}
-            />
-
-            {threshold && (
-              <Threshold
-                scaleX={scaleX}
-                scaleY={scaleY}
-                maxPoints={threshold.max.values}
-                minPoints={threshold.min?.values}
-                clipPath={lineClipPath}
-                isHorizontal={isHorizontal}
-              />
-            )}
-
-            {this.getLines().map(line => {
-              const gradientProps = line.withGradient
-                ? ({
-                    withGradient: true,
-                    areaBottom: secondaryAxis.currentDomain[secondaryAxis.isInverted ? 1 : 0],
-                    gradientDirectionX: directionX,
-                    gradientDirectionY: directionY,
-                  } as const)
-                : ({
-                    withGradient: false,
-                  } as const)
-
-              const boundariesProps =
-                props.boundaries && line.withBoundaries
-                  ? {
-                      boundaries: props.boundaries,
-                      boundariesAxis: props.boundariesAxis,
-                      boundariesGradientId,
-                    }
-                  : {}
-
-              return (
-                <LineWithDots
-                  key={line.lineName}
-                  values={[...line.values]}
-                  color={line.color}
-                  hasDotRadius={line.dots}
-                  showValues={line.showValues}
-                  defaultDotRadius={dotRadius}
-                  scaleX={scaleX}
-                  scaleY={scaleY}
-                  lineClipPath={lineClipPath}
-                  dotsClipPath={dotsClipPath}
-                  hoveredMainValue={hoveredMainValue}
-                  isHorizontal={isHorizontal}
-                  {...gradientProps}
-                  {...boundariesProps}
-                />
-              )
-            })}
-            {props.boundaries && props.showBoundariesOnAxis && (
-              <BoundariesAxisLine
-                axis={props.boundariesAxis}
-                isHorizontal={isHorizontal}
-                xLabelsPos={xLabelsPos}
-                yLabelsPos={yLabelsPos}
-                boundariesGradientId={boundariesGradientId}
-              />
-            )}
-          </svg>
-
-          {withZoom && (
-            <Zoom
-              value={this.state.zoom}
-              onChange={this.onZoom}
-              isHorizontal={isHorizontal}
-              paddingX={paddingX}
-              paddingY={paddingY}
-              xLabelsPos={xLabelsPos}
-              yLabelsPos={yLabelsPos}
-            />
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  isXInverted = () => (this.props.directionX || DEFAULT_DIRECTION_X) === 'toLeft'
-  isYInverted = () =>
-    (this.props.directionY || getDefaultDirectionY(this.props.isHorizontal)) === 'toBottom'
-
-  getXDomain = (items: readonly Item[]): NumberRange => {
+  const getXDomain = (items: readonly Item[]): NumberRange => {
     const {
       gridConfig: {
         x: { withPaddings },
       },
-      isHorizontal,
-    } = this.props
-    const { zoom } = this.state
-    const { left, right } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
+    } = props
+    const { left, right } = domainPaddings
 
     return _.flow(
       () => d3.extent(items, v => v.x) as NumberRange,
-      domain => (this.isXInverted() ? invertDomain(domain) : domain),
-      domain => (isHorizontal ? zoomDomain(domain, zoom) : domain),
       domain =>
         padDomain({
           domain,
           paddingStart: withPaddings ? left : 0,
           paddingEnd: withPaddings ? right : 0,
-          zoomScale: getZoomScale(zoom),
+          zoomScale: 1,
         })
     )()
   }
 
-  getYDomain = (items: readonly Item[]): NumberRange => {
+  const getYDomain = (items: readonly Item[]): NumberRange => {
     const {
       gridConfig: {
         y: { withPaddings },
       },
-      isHorizontal,
-    } = this.props
-    const { zoom } = this.state
-    const { top, bottom } = domainPaddings[isHorizontal ? 'horizontal' : 'vertical']
+    } = props
+    const { top, bottom } = domainPaddings
 
     return _.flow(
       () => d3.extent(items, v => v.y) as NumberRange,
-      domain => (this.isYInverted() ? invertDomain(domain) : domain),
-      domain => (isHorizontal ? domain : zoomDomain(domain, zoom)),
       domain =>
         padDomain({
           domain,
           paddingStart: withPaddings ? bottom : 0,
           paddingEnd: withPaddings ? top : 0,
-          zoomScale: getZoomScale(zoom),
+          zoomScale: 1,
         })
     )()
   }
 
-  getThresholdLines = () => {
-    const { threshold, isHorizontal } = this.props
+  const updateSize = () => {
+    const { width, height } = ref.current!.getBoundingClientRect()
+    const newSize = { width, height }
 
-    if (!threshold) {
-      return []
+    if (!_.isEqual(_.pick(state, ['width', 'height']), newSize)) {
+      setState(prevState => ({
+        ...prevState,
+        ...newSize,
+      }))
     }
-
-    const { max, min = { values: [] } } = threshold
-
-    return [flipPointsOnAxes(max.values, isHorizontal), flipPointsOnAxes(min.values, isHorizontal)]
   }
 
-  getAllThresholdValues = (): readonly Item[] => _.flatten(this.getThresholdLines())
+  const onFrameSizeChange = ({
+    xAxisHeight,
+    yAxisWidth,
+  }: {
+    xAxisHeight: number
+    yAxisWidth: number
+  }) => {
+    const newPaddings = {
+      paddingX: yAxisWidth,
+      paddingY: xAxisHeight,
+    }
+    const { paddingX, paddingY } = state
+    const targetPaddings = { paddingX, paddingY }
 
-  getLines = (): readonly Line[] => {
-    const { lines, isHorizontal } = this.props
+    if (!_.isEqual(newPaddings, targetPaddings)) {
+      const currentPaddings = _.pick(state, ['paddingX', 'paddingY'])
 
-    return isHorizontal
-      ? lines
-      : lines.map(line => ({
-          ...line,
-          values: _.sortBy(flipPointsOnAxes(line.values, isHorizontal), 'y'),
+      if (!currentPaddings.paddingX || !currentPaddings.paddingY) {
+        setState(prevState => ({
+          ...prevState,
+          ...newPaddings,
         }))
+      } else {
+        d3.select(paddingTransitionEl)
+          .interrupt()
+          .transition()
+          .duration(TRANSITION_SIZE)
+          .tween('paddings', () => {
+            const i = d3.interpolateObject(currentPaddings, newPaddings)
+
+            return (t: number) => {
+              setState(prevState => ({
+                ...prevState,
+                ...i(t),
+              }))
+            }
+          })
+      }
+    }
   }
 
-  getThreshold = (): Threshold | undefined => {
-    const { threshold, isHorizontal } = this.props
+  const getSvgSize = () => {
+    const { width, height, paddingX, paddingY } = state
+
+    return {
+      svgWidth: Math.round(width - paddingX),
+      svgHeight: Math.round(height - paddingY),
+    }
+  }
+
+  const getTicks = () => {
+    const { xDomain, yDomain } = state
+    const { svgWidth, svgHeight } = getSvgSize()
+
+    const xGridTicks = gridConfig.x.gridTicks
+    const yGridTicks = gridConfig.y.gridTicks
+
+    const xGridTickValues = getMainTickValues({
+      items: getAllValues(),
+      domain: xDomain,
+      ticksCount: xGridTicks ?? Math.round(svgWidth / 50),
+    })
+
+    const yGridTickValues = getSecondaryTickValues({
+      items: getAllValues(),
+      domain: yDomain,
+      ticksCount: yGridTicks ?? Math.round(svgHeight / 50),
+    })
+
+    return {
+      xGridTickValues,
+      xLabelTickValues: xGridTickValues,
+      yGridTickValues,
+      yLabelTickValues: getEveryN(yGridTickValues, 1),
+    }
+  }
+
+  const getThreshold = (): Threshold | undefined => {
+    const { threshold } = props
 
     if (!threshold) {
       return undefined
@@ -500,206 +313,245 @@ export class LinearChart extends React.Component<Props, State> {
     return {
       max: {
         ...threshold.max,
-        values: flipPointsOnAxes(threshold.max.values, isHorizontal),
+        values: flipPointsOnAxes(threshold.max.values, true),
       },
       min: threshold.min && {
         ...threshold.min,
-        values: flipPointsOnAxes(threshold.min.values, isHorizontal),
+        values: flipPointsOnAxes(threshold.min.values, true),
       },
     }
   }
 
-  getAllValues = (): readonly Item[] => _.flatten(this.getLines().map(l => l.values))
+  const getThresholdLines = () => {
+    const { threshold } = props
 
-  getSvgSize = () => {
-    const {
-      state: { width, height, paddingX, paddingY },
-    } = this
-
-    return {
-      svgWidth: Math.round(width - paddingX),
-      svgHeight: Math.round(height - paddingY),
+    if (!threshold) {
+      return []
     }
+
+    const { max, min = { values: [] } } = threshold
+
+    return [flipPointsOnAxes(max.values, true), flipPointsOnAxes(min.values, true)]
   }
 
-  getTicks = () => {
-    const { isHorizontal, gridConfig } = this.props
-    const { xDomain, yDomain } = this.state
+  const getAllThresholdValues = (): readonly Item[] => _.flatten(getThresholdLines())
 
-    const mainGridConfig = gridConfig[isHorizontal ? 'x' : 'y']
-    const secondaryGridConfig = gridConfig[isHorizontal ? 'y' : 'x']
-
-    const mainGridTickValues = getMainTickValues({
-      items: this.getAllValues(),
-      domain: isHorizontal ? xDomain : yDomain,
-      ticksCount: mainGridConfig.gridTicks,
-      isHorizontal,
-    })
-
-    const secondaryGridTickValues = getSecondaryTickValues({
-      items: this.getAllValues(),
-      domain: isHorizontal ? yDomain : xDomain,
-      ticksCount: secondaryGridConfig.gridTicks,
-      isHorizontal,
-    })
-
-    return {
-      mainGridTickValues,
-      mainLabelTickValues: getEveryN(mainGridTickValues, mainGridConfig.labelTicks || 0),
-      secondaryGridTickValues,
-      secondaryLabelTickValues: getEveryN(
-        secondaryGridTickValues,
-        secondaryGridConfig.labelTicks || 0
-      ),
-    }
-  }
-
-  updateDomains() {
-    const { zoom } = this.state
-
-    /**
-     * Включаем в расчеты значения из линий порога только при первоначальной
-     * отрисовке или при изменениях данных с учетом того что зум равняется 1.
-     */
-    const linesValues = this.getAllValues()
-    const thresholdValues = isDefaultZoom(zoom) ? this.getAllThresholdValues() : []
+  const updateDomains = () => {
+    const linesValues = getAllValues()
+    const thresholdValues = getAllThresholdValues()
     const values: readonly Item[] = [...linesValues, ...thresholdValues]
 
-    const xDomain = this.getXDomain(values)
-    const yDomain = this.getYDomain(values)
+    const xDomain = getDomainWithLimits(getXDomain(values), gridConfig.x.min, gridConfig.x.max)
+    const yDomain = getDomainWithLimits(getYDomain(values), gridConfig.y.min, gridConfig.y.max)
+
     const [xGuideValue] = d3.extent(values, v => v.x) as NumberRange
     const [yGuideValue] = d3.extent(values, v => v.y) as NumberRange
 
-    this.setState({
+    setState(prevState => ({
+      ...prevState,
       xDomain,
       yDomain,
       xGuideValue,
       yGuideValue,
-    })
+    }))
   }
 
-  updateSize = () => {
-    const { width, height } = this.ref.current!.getBoundingClientRect()
-    const newSize = { width, height }
+  React.useEffect(() => {
+    updateSize()
+    updateDomains()
 
-    if (!_.isEqual(_.pick(this.state, ['width', 'height']), newSize)) {
-      this.setState(newSize)
-    }
+    resizeObserver.observe(ref.current!)
+
+    return () => resizeObserver.unobserve(ref.current!)
+  }, [])
+
+  const { xDomain, yDomain } = state
+  const { svgWidth, svgHeight } = getSvgSize()
+  const { xGridTickValues, yGridTickValues } = getTicks()
+  const widthWithLimitedStep = svgWidth + xGridTickValues.length * MIN_STEP_SIZE
+  const scaleX = getXScale(xDomain, limitMinimumStepSize ? widthWithLimitedStep : svgWidth)
+  const scaleY = getYScale(yDomain, svgHeight)
+  const lineClipPath = `url(#${lineClipId})`
+  const dotsClipPath = `url(#${dotsClipId})`
+  const threshold = getThreshold()
+  const legendPosition = legend?.position || 'top'
+  const legendAlign = legend?.align || 'center'
+  const legendProps = {
+    direction: 'row' as LegendDirection,
+    labelType: 'dot' as LegendType,
+    fontSize: 's' as LegendSize,
+    labelPosition: 'left' as LegendLabelPosition,
   }
 
-  onAxisSizeChange = ({ xAxisHeight, yAxisWidth }: { xAxisHeight: number; yAxisWidth: number }) => {
-    const newPaddings = {
-      paddingX: yAxisWidth,
-      paddingY: xAxisHeight,
-    }
+  return (
+    <div className={css.main}>
+      <LineTooltip
+        lines={lines}
+        scaleX={scaleX}
+        scaleY={scaleY}
+        hoveredMainValue={hoveredMainValue}
+        hoveredDotValue={hoveredDotValue}
+        anchorEl={svgWrapperRef.current}
+        threshold={threshold}
+        formatValueForLabel={formatValueForLabel}
+        formatValueForTooltip={formatValueForTooltip}
+        formatValueForTooltipTitle={formatValueForTooltipTitle}
+      />
+      {legend && (
+        <div
+          className={classnames(
+            css.legend,
+            positionLegendClass[legendPosition as LegendPosition],
+            alignLegendClass[legendAlign as LegendAlign]
+          )}
+        >
+          <Legend data={legend.data} {...legendProps} />
+        </div>
+      )}
+      <div ref={ref} className={css.graph}>
+        {limitMinimumStepSize && (
+          <svg
+            className={css.svg}
+            width={svgWidth}
+            height={svgHeight}
+            style={{ top: UNIT_Y_MARGIN }}
+          >
+            <Frame
+              width={widthWithLimitedStep}
+              height={svgHeight}
+              gridConfig={gridConfig}
+              scales={{
+                x: scaleX,
+                y: scaleY,
+              }}
+              xGridTickValues={xGridTickValues}
+              yGridTickValues={yGridTickValues}
+              yDimensionUnit={yDimensionUnit}
+              yLabelsShowInPercent={yLabelsShowInPercent}
+              xLabelsShowVertical={xLabelsShowVertical}
+              xHideFirstLabel={xHideFirstLabel}
+              formatValueForLabel={formatValueForLabel}
+              onFrameSizeChange={onFrameSizeChange}
+              showOnlyY={true}
+            />
+          </svg>
+        )}
+        <div
+          style={{
+            width: svgWidth,
+            height: svgHeight + UNIT_Y_MARGIN + SCROLL_OFFSET,
+            paddingTop: UNIT_Y_MARGIN,
+          }}
+          className={classnames(css.svg, css.wrapper, !limitMinimumStepSize && css.isVisible)}
+        >
+          <svg
+            ref={svgWrapperRef}
+            className={css.svg}
+            width={limitMinimumStepSize ? widthWithLimitedStep : svgWidth}
+            height={svgHeight}
+            style={limitMinimumStepSize ? { left: 0 } : { top: UNIT_Y_MARGIN }}
+          >
+            {/* <defs>*/}
+            {/*  <clipPath id={lineClipId}>*/}
+            {/*    <rect width={svgWidth} height={svgHeight} />*/}
+            {/*  </clipPath>*/}
+            {/*  <clipPath id={dotsClipId}>*/}
+            {/*    <rect*/}
+            {/*      width={svgWidth + 2 * dotRadius}*/}
+            {/*      height={svgHeight + 2 * dotRadius}*/}
+            {/*      x={-1 * dotRadius}*/}
+            {/*      y={-1 * dotRadius}*/}
+            {/*    />*/}
+            {/*  </clipPath>*/}
+            {/* </defs>*/}
+            <Frame
+              width={limitMinimumStepSize ? widthWithLimitedStep : svgWidth}
+              height={svgHeight}
+              gridConfig={gridConfig}
+              scales={{
+                x: scaleX,
+                y: scaleY,
+              }}
+              xGridTickValues={xGridTickValues}
+              yGridTickValues={yGridTickValues}
+              yDimensionUnit={yDimensionUnit}
+              yLabelsShowInPercent={yLabelsShowInPercent}
+              xLabelsShowVertical={xLabelsShowVertical}
+              xHideFirstLabel={xHideFirstLabel}
+              formatValueForLabel={formatValueForLabel}
+              onFrameSizeChange={onFrameSizeChange}
+              hideYLabels={limitMinimumStepSize}
+            />
 
-    if (!_.isEqual(newPaddings, this.targetPaddings)) {
-      this.targetPaddings = newPaddings
+            {tooltipVariant === tooltipVariants[0] ? (
+              <HoverLines
+                lines={lines}
+                scaleX={scaleX}
+                height={svgHeight}
+                hoveredMainValue={hoveredMainValue}
+                onChangeHoveredMainValue={setHoveredMainValue}
+                onClickLine={onClickHoverLine}
+              />
+            ) : (
+              <HoverDots
+                lines={lines}
+                scaleX={scaleX}
+                scaleY={scaleY}
+                dotsClipPath={dotsClipPath}
+                defaultDotRadius={dotRadius}
+                onChangeHoveredDotValue={setHoveredDotValue}
+                onClickDot={onClickHoverDot}
+              />
+            )}
 
-      const currentPaddings = _.pick(this.state, ['paddingX', 'paddingY'])
+            {threshold && (
+              <Threshold
+                scaleX={scaleX}
+                scaleY={scaleY}
+                maxPoints={threshold.max.values}
+                minPoints={threshold.min?.values}
+                maxLabel={threshold.max.label}
+                minLabel={threshold.min?.label}
+                lineClipPath={lineClipPath}
+              />
+            )}
 
-      if (!currentPaddings.paddingX || !currentPaddings.paddingY) {
-        this.setState(newPaddings)
-      } else {
-        d3.select(this.paddingTransitionEl)
-          .interrupt()
-          .transition()
-          .duration(TRANSITION_DURATIONS.SIZE)
-          .tween('paddings', () => {
-            const i = d3.interpolateObject(currentPaddings, newPaddings)
+            {lines.map(line => {
+              const gradientProps = line.withGradient
+                ? ({
+                    withGradient: true,
+                    areaBottom: Math.max(
+                      Math.min(..._.flatten(line.values.map(v => v.y).filter(isNotNil))),
+                      0
+                    ),
+                    gradientDirectionY: 'toTop',
+                  } as const)
+                : ({
+                    withGradient: false,
+                  } as const)
 
-            return (t: number) => {
-              this.setState({ ...i(t) })
-            }
-          })
-      }
-    }
-  }
-
-  getAxis = () => {
-    const {
-      state: { xDomain, yDomain },
-      props: { isHorizontal },
-    } = this
-    const setXDomain = (domain: NumberRange) => this.setState({ xDomain: domain })
-    const setYDomain = (domain: NumberRange) => this.setState({ yDomain: domain })
-
-    return isHorizontal
-      ? {
-          main: {
-            currentDomain: xDomain,
-            getDomain: this.getXDomain,
-            setDomain: setXDomain,
-            getValue: (v: NotEmptyItem) => v.x,
-          },
-          secondary: {
-            currentDomain: yDomain,
-            getDomain: this.getYDomain,
-            setDomain: setYDomain,
-            isInverted: this.isYInverted(),
-          },
-        }
-      : {
-          main: {
-            currentDomain: yDomain,
-            getDomain: this.getYDomain,
-            setDomain: setYDomain,
-            getValue: (v: NotEmptyItem) => v.y,
-          },
-          secondary: {
-            currentDomain: xDomain,
-            getDomain: this.getXDomain,
-            setDomain: setXDomain,
-            isInverted: this.isXInverted(),
-          },
-        }
-  }
-
-  onZoom = (newZoom: ZoomState) => {
-    this.setState({ zoom: newZoom }, () => {
-      const { main: mainAxis, secondary: secondaryAxis } = this.getAxis()
-      const newMainDomain = mainAxis.getDomain(this.getAllValues())
-
-      if (!_.isEqual(mainAxis.currentDomain, newMainDomain)) {
-        mainAxis.setDomain(newMainDomain)
-      }
-
-      /**
-       * Включаем в расчет домена значения из линий порогов только если зум
-       * возвращается к стандартному значению.
-       */
-      const secondaryDomainValues = [
-        ...this.getLines().map(item => item.values),
-        ...(isDefaultZoom(newZoom) ? this.getThresholdLines() : []),
-      ].filter(item => item.length)
-
-      const newSecondaryDomain = calculateSecondaryDomain({
-        mainDomainMin: Math.min(...newMainDomain),
-        mainDomainMax: Math.max(...newMainDomain),
-        linesValues: secondaryDomainValues,
-        getValue: mainAxis.getValue,
-        getDomain: secondaryAxis.getDomain,
-        isInverted: secondaryAxis.isInverted,
-      })
-
-      if (!_.isEqual(newSecondaryDomain, this.targetSecondaryDomain)) {
-        this.targetSecondaryDomain = newSecondaryDomain
-
-        d3.select(this.secondaryDomainTransitionEl)
-          .transition()
-          .duration(TRANSITION_DURATIONS.ZOOM)
-          .tween('secondaryDomainTween', () => {
-            const i = d3.interpolateArray([...secondaryAxis.currentDomain], [...newSecondaryDomain])
-
-            return (t: number) => {
-              // убеждаемся, что setDomain получит на входе массив с нужной длиной
-              secondaryAxis.setDomain([i(t)[0], i(t)[1]] as NumberRange)
-            }
-          })
-      }
-    })
-  }
-
-  setHoveredMainValue = (newValue: HoveredMainValue) =>
-    this.setState({ hoveredMainValue: newValue })
+              return (
+                <LineWithDots
+                  key={line.lineName}
+                  values={[...line.values]}
+                  color={line.color}
+                  hasDotRadius={line.dots}
+                  showValues={line.showValues}
+                  dashed={line.dashed}
+                  defaultDotRadius={dotRadius}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  lineClipPath={lineClipPath}
+                  dotsClipPath={dotsClipPath}
+                  hoveredMainValue={hoveredMainValue}
+                  hoveredDotValue={hoveredDotValue}
+                  {...gradientProps}
+                />
+              )
+            })}
+          </svg>
+        </div>
+      </div>
+    </div>
+  )
 }

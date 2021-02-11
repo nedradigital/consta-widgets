@@ -4,7 +4,6 @@ import { Example } from '@/_private/storybook'
 
 import { LinearChart } from '../../'
 import {
-  boundaries,
   gridConfigFormat,
   gridConfigLabel,
   gridConfigPaddings,
@@ -22,12 +21,10 @@ import {
 export const LinearChartExampleWithoutGradient = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      title="Название графика"
+      // title="Название графика"
       lines={linesWithoutGradient}
       gridConfig={gridConfigSimple}
-      isHorizontal
-      unit="единицы"
-      background="linear-gradient(to right, #f54d4d48, transparent)"
+      yDimensionUnit="единицы"
     />
   </Example>
 )
@@ -35,12 +32,10 @@ export const LinearChartExampleWithoutGradient = () => (
 export const LinearChartExampleLinesFeatures = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      title="Название графика"
+      // title="Название графика"
       lines={linesFeatures}
       gridConfig={gridConfigPaddings}
-      isHorizontal
-      unit="единицы"
-      background="linear-gradient(to right, #f54d4d48, transparent)"
+      yDimensionUnit="единицы"
     />
   </Example>
 )
@@ -48,12 +43,10 @@ export const LinearChartExampleLinesFeatures = () => (
 export const LinearChartExampleGeneral = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      title="Название графика"
+      // title="Название графика"
       lines={linesSimple}
       gridConfig={gridConfigSimple}
-      isHorizontal
-      unit="единицы"
-      background="linear-gradient(to right, #f54d4d48, transparent)"
+      yDimensionUnit="единицы"
     />
   </Example>
 )
@@ -61,10 +54,9 @@ export const LinearChartExampleGeneral = () => (
 export const LinearChartExampleFormatLabelTooltip = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      unit="км"
+      yDimensionUnit="км"
       lines={linesFormat}
       gridConfig={gridConfigFormat}
-      isHorizontal
       formatValueForLabel={v => new Date(v).toLocaleDateString()}
       formatValueForTooltip={v => `${v} км`}
       formatValueForTooltipTitle={v => {
@@ -82,7 +74,6 @@ export const LinearChartExampleFormatLabelData = () => (
     <LinearChart
       lines={linesFormat}
       gridConfig={gridConfigFormat}
-      isHorizontal
       formatValueForLabel={v => new Date(v).toLocaleDateString()}
     />
   </Example>
@@ -93,7 +84,6 @@ export const LinearChartExampleFormatLabelProcent = () => (
     <LinearChart
       lines={linesSimple}
       gridConfig={gridConfigSimple}
-      isHorizontal
       formatValueForLabel={v => `${v} %`}
     />
   </Example>
@@ -121,88 +111,57 @@ export const LinearChartExampleNotHorizontal = () => (
 export const LinearChartExampleLabel = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      title="Очень красивый график"
+      // title="Очень красивый график"
       lines={linesSimple}
       gridConfig={gridConfigLabel}
-      isHorizontal
-      unit="км"
+      yDimensionUnit="км"
     />
   </Example>
 )
 
 export const LinearChartExampleDirectionXtoLeft = () => (
   <Example width="300px" height="150px" margin="l">
-    <LinearChart
-      directionX="toLeft"
-      lines={linesSimple}
-      gridConfig={gridConfigSimple}
-      isHorizontal
-    />
+    <LinearChart lines={linesSimple} gridConfig={gridConfigSimple} />
   </Example>
 )
 
 export const LinearChartExampleDirectionXtoRight = () => (
   <Example width="300px" height="150px" margin="l">
-    <LinearChart
-      directionX="toRight"
-      lines={linesSimple}
-      gridConfig={gridConfigSimple}
-      isHorizontal
-    />
+    <LinearChart lines={linesSimple} gridConfig={gridConfigSimple} />
   </Example>
 )
 
 export const LinearChartExampleDirectionYtoTop = () => (
   <Example width="300px" height="150px" margin="l">
-    <LinearChart
-      directionY="toTop"
-      lines={linesSimple}
-      gridConfig={gridConfigSimple}
-      isHorizontal
-    />
+    <LinearChart lines={linesSimple} gridConfig={gridConfigSimple} />
   </Example>
 )
 
 export const LinearChartExampleDirectionYtoBottom = () => (
   <Example width="300px" height="150px" margin="l">
-    <LinearChart
-      directionY="toBottom"
-      lines={linesSimple}
-      gridConfig={gridConfigSimple}
-      isHorizontal
-      unit="км"
-    />
+    <LinearChart lines={linesSimple} gridConfig={gridConfigSimple} yDimensionUnit="км" />
   </Example>
 )
 
 export const LinearChartExampleNull = () => (
   <Example width="300px" height="150px" margin="l">
-    <LinearChart lines={linesNull} gridConfig={gridConfigSimple} isHorizontal />
+    <LinearChart lines={linesNull} gridConfig={gridConfigSimple} />
   </Example>
 )
 
 export const LinearChartExampleBoundaries = () => (
   <Example width="600px" height="300px" margin="l">
-    <LinearChart
-      lines={linesBoundaries}
-      gridConfig={gridConfigSimple}
-      boundaries={boundaries}
-      boundariesAxis="y"
-      showBoundariesOnAxis
-      isHorizontal
-    />
+    <LinearChart lines={linesBoundaries} gridConfig={gridConfigSimple} />
   </Example>
 )
 
 export const LinearChartExampleZoom = () => (
   <Example width="300px" height="150px" margin="l">
     <LinearChart
-      title="Очень красивый график"
+      // title="Очень красивый график"
       lines={linesSimple}
       gridConfig={gridConfigSimple}
-      isHorizontal
-      unit="км"
-      withZoom
+      yDimensionUnit="км"
     />
   </Example>
 )
@@ -210,12 +169,11 @@ export const LinearChartExampleZoom = () => (
 export const LinearChartExampleThreshold = () => (
   <Example width="700px" height="300px" margin="l">
     <LinearChart
-      title="График с предельными значениями"
+      // title="График с предельными значениями"
       lines={linesThreshold}
       gridConfig={gridConfigSimple}
       threshold={threshold}
-      isHorizontal
-      unit="тыс. м3"
+      yDimensionUnit="тыс. м3"
       formatValueForLabel={v => new Date(v).toLocaleDateString()}
       formatValueForTooltip={v => `${v} тыс м3`}
       formatValueForTooltipTitle={v => {
@@ -224,7 +182,6 @@ export const LinearChartExampleThreshold = () => (
           .replace('г.', '')
         return title[0].toUpperCase() + title.slice(1)
       }}
-      withZoom
     />
   </Example>
 )

@@ -12,22 +12,19 @@ type Props = {
   color: string
   scaleX: ScaleLinear
   scaleY: ScaleLinear
-  isHorizontal: boolean
   areaBottom: number
-  directionX: DirectionX
+  directionX?: DirectionX
   directionY: DirectionY
 }
 
 const getGradientDirection = ({
-  isHorizontal,
   directionX,
   directionY,
 }: {
-  isHorizontal: boolean
-  directionX: DirectionX
+  directionX: DirectionX | undefined
   directionY: DirectionY
 }) => {
-  if (isHorizontal && directionY === 'toBottom') {
+  if (directionY === 'toBottom') {
     return {
       x1: '0%',
       y1: '100%',
@@ -36,7 +33,7 @@ const getGradientDirection = ({
     }
   }
 
-  if (isHorizontal && directionY === 'toTop') {
+  if (directionY === 'toTop') {
     return {
       x1: '0%',
       y1: '0%',
@@ -45,7 +42,7 @@ const getGradientDirection = ({
     }
   }
 
-  if (!isHorizontal && directionX === 'toLeft') {
+  if (directionX && directionX === 'toLeft') {
     return {
       x1: '0%',
       y1: '0%',
@@ -54,7 +51,7 @@ const getGradientDirection = ({
     }
   }
 
-  if (!isHorizontal && directionX === 'toRight') {
+  if (directionX && directionX === 'toRight') {
     return {
       x1: '100%',
       y1: '0%',
@@ -69,32 +66,26 @@ export const Area: React.FC<Props> = ({
   color,
   scaleX,
   scaleY,
-  isHorizontal,
   areaBottom,
   directionX,
   directionY,
 }) => {
   const uid = useUID()
   const linearGradientId = `line_area_${uid}`
-  const area = isHorizontal
-    ? d3
-        .area<NotEmptyItem>()
-        .x(({ x }) => scaleX(x))
-        .y1(({ y }) => scaleY(y))
-        .y0(scaleY(areaBottom))
-    : d3
-        .area<NotEmptyItem>()
-        .y(({ y }) => scaleY(y))
-        .x0(({ x }) => scaleX(x))
-        .x1(scaleX(areaBottom))
+  const area = d3
+    .area<NotEmptyItem>()
+    .x(({ x }) => scaleX(x))
+    .y1(({ y }) => scaleY(y))
+    .y0(scaleY(areaBottom))
 
   return (
     <>
       <linearGradient
         id={linearGradientId}
-        {...getGradientDirection({ isHorizontal, directionX, directionY })}
+        {...getGradientDirection({ directionX, directionY })}
       >
         <stop offset="0%" stopColor={color} stopOpacity="0.4" />
+        {/* <stop offset="50%" stopColor={color} stopOpacity="0" y={0} />*/} //TODO
         <stop offset="100%" stopColor={color} stopOpacity="0" />
       </linearGradient>
       <path

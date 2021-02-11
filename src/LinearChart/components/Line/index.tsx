@@ -16,6 +16,7 @@ type Props = SVGPPathAttributes & {
   points: readonly Item[]
   scaleX: ScaleLinear
   scaleY: ScaleLinear
+  dashed?: boolean
 }
 
 type Segment = {
@@ -46,7 +47,7 @@ export const divideBySegments = (points: readonly Item[]): readonly Segment[] =>
   }).filter(segment => segment.points.length > 1)
 }
 
-export const Line: React.FC<Props> = ({ points, scaleX, scaleY, className, ...rest }) => {
+export const Line: React.FC<Props> = ({ points, scaleX, scaleY, dashed, className, ...rest }) => {
   const segments = divideBySegments(points)
   const getLinePath = d3
     .line<NotEmptyItem>()
@@ -58,7 +59,12 @@ export const Line: React.FC<Props> = ({ points, scaleX, scaleY, className, ...re
       {segments.map((segment, idx) => (
         <path
           key={idx}
-          className={classnames(className, css.line, segment.type === 'dashed' && css.isDashed)}
+          className={classnames(
+            className,
+            css.line,
+            segment.type === 'dashed' && css.isHidden,
+            dashed && css.isDashed
+          )}
           d={getLinePath([...segment.points]) || undefined}
           {...rest}
         />

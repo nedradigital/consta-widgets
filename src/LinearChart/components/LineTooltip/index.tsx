@@ -3,34 +3,26 @@ import React from 'react'
 import { Position } from '@consta/uikit/Popover'
 import { Tooltip } from '@consta/uikit/Tooltip'
 import { isDefined, isNotNil } from '@consta/widgets-utils/lib/type-guards'
+import * as _ from 'lodash'
 
 import { TooltipContentForMultipleValues } from '@/_private/components/TooltipContentForMultipleValues'
 import { FormatValue } from '@/_private/types'
 
-import { Axis, Boundary, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
-import { getBoundary } from '../../helpers'
+import { HoveredDotValue, HoveredMainValue, Item, Line, ScaleLinear, Threshold } from '../..'
 import { THRESHOLD_COLOR } from '../Threshold'
 
 type Props = {
   lines: readonly Line[]
-  isHorizontal: boolean
   anchorEl: Element | null
   scaleX: ScaleLinear
   scaleY: ScaleLinear
   hoveredMainValue: HoveredMainValue
+  hoveredDotValue: HoveredDotValue
   threshold?: Threshold
   formatValueForLabel: FormatValue
   formatValueForTooltip?: FormatValue
   formatValueForTooltipTitle?: FormatValue
-} & (
-  | {
-      boundaries?: never
-    }
-  | {
-      boundaries: readonly Boundary[]
-      boundariesAxis: Axis
-    }
-)
+}
 
 type TooltipItem = {
   color?: string
@@ -42,48 +34,35 @@ export const LineTooltip: React.FC<Props> = props => {
   const {
     lines,
     anchorEl,
-    isHorizontal,
     scaleX,
     scaleY,
     hoveredMainValue,
+    hoveredDotValue,
     threshold,
     formatValueForLabel,
     formatValueForTooltipTitle,
     formatValueForTooltip = String,
   } = props
-  if (!anchorEl || !isNotNil(hoveredMainValue)) {
+  if (!anchorEl || !isNotNil(hoveredMainValue ?? hoveredDotValue)) {
     return null
   }
 
-  const mainValueKey = isHorizontal ? 'x' : 'y'
-  const secondaryValueKey = isHorizontal ? 'y' : 'x'
-  const isItemHovered = (item: Item) => item[mainValueKey] === hoveredMainValue
+  const mainValueKey = 'x'
+  const secondaryValueKey = 'y'
+  const isItemHovered = (item: Item) =>
+    item[mainValueKey] === hoveredMainValue || _.isEqual(item, hoveredDotValue)
   const getSecondaryValue = (item?: Item) => (item ? item[secondaryValueKey] : null)
 
-  const tooltipItems: readonly TooltipItem[] = lines.map(line => {
+  const tooltipLines = isNotNil(hoveredMainValue)
+    ? lines
+    : lines.filter(line => line.values.find(item => _.isEqual(item, hoveredDotValue)))
+
+  const tooltipItems: readonly TooltipItem[] = tooltipLines.map(line => {
     const item = line.values.find(isItemHovered)
     const secondaryValue = getSecondaryValue(item)
 
-    const getItemColor = () => {
-      if (line.withBoundaries) {
-        const boundaryColor =
-          (props.boundaries &&
-            item &&
-            getBoundary({
-              axis: props.boundariesAxis,
-              boundaries: props.boundaries,
-              item,
-              isHorizontal,
-            })?.color) ??
-          line.color
-
-        return isNotNil(secondaryValue) ? boundaryColor : undefined
-      }
-
-      return line.color
-    }
     return {
-      color: getItemColor(),
+      color: line.color,
       name: line.lineName,
       value: secondaryValue,
     }
@@ -91,14 +70,14 @@ export const LineTooltip: React.FC<Props> = props => {
 
   const thresholdItems: readonly TooltipItem[] = threshold
     ? [threshold.max, threshold.min].filter(isDefined).map((thresholdLine, idx) => {
-        const item = thresholdLine.values.find(isItemHovered)
+        const item = thresholdLine.values.find(v => isItemHovered(v) || v.x === hoveredDotValue?.x)
         const defaultName = threshold.min
           ? `${idx === 0 ? 'Верхнее' : 'Нижнее'} пороговое значение`
           : 'Пороговое значение'
 
         return {
           color: THRESHOLD_COLOR,
-          name: thresholdLine.name || defaultName,
+          name: thresholdLine.name || thresholdLine.label || defaultName,
           value: getSecondaryValue(item),
         }
       })
@@ -123,17 +102,20 @@ export const LineTooltip: React.FC<Props> = props => {
     }
   }
 
-  const position = isHorizontal
-    ? getTooltipPosition({ xValue: hoveredMainValue, yValue: maxSecondaryValue })
-    : getTooltipPosition({ xValue: maxSecondaryValue, yValue: hoveredMainValue })
+  const position = getTooltipPosition({
+    xValue: hoveredMainValue ?? hoveredDotValue?.x,
+    yValue: isNotNil(hoveredMainValue) ? maxSecondaryValue : hoveredDotValue?.y,
+  })
 
-  const title = (formatValueForTooltipTitle || formatValueForLabel)(hoveredMainValue)
+  const title = (formatValueForTooltipTitle || formatValueForLabel)(
+    (hoveredMainValue as number) ?? hoveredDotValue?.x
+  )
 
   return (
     <Tooltip
       size="l"
       position={position}
-      direction={isHorizontal ? 'upCenter' : 'rightCenter'}
+      direction={isNotNil(hoveredMainValue) ? 'upCenter' : 'rightCenter'}
       isInteractive={false}
     >
       <TooltipContentForMultipleValues

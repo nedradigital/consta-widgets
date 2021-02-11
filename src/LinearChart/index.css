@@ -10,6 +10,31 @@
   min-height: 90px;
 }
 
+.legend {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.legendTop {
+  order: 0;
+}
+
+.legendBottom {
+  order: 1;
+}
+
+.legendLeft {
+  justify-content: flex-start;
+}
+
+.legendCenter {
+  justify-content: center;
+}
+
+.legendRight {
+  justify-content: flex-end;
+}
+
 .graph {
   position: relative;
 
@@ -19,8 +44,19 @@
 .svg {
   position: absolute;
   z-index: 10;
+  right: 0;
 
   overflow: visible;
 
   pointer-events: all;
+}
+
+.wrapper {
+  z-index: 99;
+
+  overflow-y: hidden;
+}
+
+.isVisible {
+  overflow: visible;
 }
